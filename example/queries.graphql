@@ -1,0 +1,6 @@
+"GetViewer gets the current user's name."
+query GetUser($login: String!) {
+  User: user(login: $login) {
+    Name: name
+  }
+}

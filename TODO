@@ -1,0 +1,15 @@
+Query structures to support:
+- arguments
+- repeated fields
+- interfaces
+
+Config options:
+- schema location (http or file)
+- use http client or not
+- use ctx or not, maybe
+- target url (const or maybe allow it to be dynamic at runtime?
+- auth (maybe via client + roundtripper)
+- HTTP calling convention???
+
+Misc:
+- replace __ with some unicode garbage

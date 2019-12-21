@@ -1,0 +1,41 @@
+package {{.PackageName}}
+
+import (
+	"context"
+	"encoding/json"
+	"io/ioutil"
+	"net/http"
+	"strings"
+)
+
+type {{.ResponseName}} = {{.ResponseType}}
+
+// {{.QueryDoc}}
+func {{.QueryName}}(ctx context.Context) (*{{.ResponseName}}, error) {
+	req, err := http.NewRequestWithContext(
+		ctx, http.MethodPost,
+		`{{.Endpoint}}`,
+		strings.NewReader(`{{.Query}}`))
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	retval := {{.ResponseName}}{}
+	err = json.Unmarshal(body, &retval)
+	if err != nil {
+		return nil, err
+	}
+
+	return &retval, nil
+}
