@@ -47,6 +47,8 @@ type OperationParams struct {
 }
 
 func Generate(specFilename, schemaFilename, generatedFilename string) error {
+	// TODO: all the read-parse-and-validate stuff can probably get factored
+	// out a bit
 	// TODO: IRL we have to get the schema from GraphQL (maybe we can generate
 	// that once we can bootstrap) where it comes as JSON, not SDL, so we have
 	// to convert (or add gqlparser support to convert)
@@ -98,8 +100,13 @@ func Generate(specFilename, schemaFilename, generatedFilename string) error {
 	packageName := "example"
 	endpoint := "https://api.github.com/graphql"
 
+	// TODO: this should probably get factored out
 	operations := make([]OperationParams, len(document.Operations))
 	for i, operation := range document.Operations {
+		// TODO: we may have to actually get the precise query text, in case we
+		// want to be hashing it or something like that.  Although maybe
+		// there's no reasonable way to do that with several queries in one
+		// file.
 		var builder strings.Builder
 		f := formatter.NewFormatter(&builder)
 		f.FormatQueryDocument(&ast.QueryDocument{
@@ -114,7 +121,7 @@ func Generate(specFilename, schemaFilename, generatedFilename string) error {
 			// the comment, or omit doc-comments for now.
 			OperationDoc: "TODO",
 
-			// TODO: configure this
+			// TODO: configure ResponseName format
 			ResponseName: operation.Name + "Response",
 			ResponseType: typeFor(operation, schema),
 
