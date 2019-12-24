@@ -20,11 +20,10 @@ func GetViewer(ctx context.Context) (*GetViewerResponse, error) {
 		http.MethodPost,
 		`https://api.github.com/graphql`,
 		strings.NewReader(`
-"GetViewer gets the current user's name."
 query GetViewer {
-  Viewer: viewer {
-    Name: name
-  }
+	Viewer: viewer {
+		Name: name
+	}
 }
 `))
 	if err != nil {

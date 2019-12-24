@@ -8,6 +8,7 @@ import (
 	"strings"
 )
 
+{{range .Operations}}
 type {{.ResponseName}} = {{.ResponseType}}
 
 // {{.OperationDoc}}
@@ -20,7 +21,7 @@ func {{.OperationName}}(ctx context.Context) (*{{.ResponseName}}, error) {
 		return nil, err
 	}
 
-    req = req.WithContext(ctx)
+	req = req.WithContext(ctx)
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return nil, err
@@ -40,3 +41,4 @@ func {{.OperationName}}(ctx context.Context) (*{{.ResponseName}}, error) {
 
 	return &retval, nil
 }
+{{end}}
