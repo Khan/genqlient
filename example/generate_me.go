@@ -16,8 +16,8 @@ type GetViewerResponse = struct {
 
 // GetViewer gets the current user's name.
 func GetViewer(ctx context.Context) (*GetViewerResponse, error) {
-	req, err := http.NewRequestWithContext(
-		ctx, http.MethodPost,
+	req, err := http.NewRequest(
+		http.MethodPost,
 		`https://api.github.com/graphql`,
 		strings.NewReader(`
 "GetViewer gets the current user's name."
@@ -31,6 +31,7 @@ query GetViewer {
 		return nil, err
 	}
 
+	req = req.WithContext(ctx)
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return nil, err

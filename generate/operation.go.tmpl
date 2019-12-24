@@ -10,16 +10,17 @@ import (
 
 type {{.ResponseName}} = {{.ResponseType}}
 
-// {{.QueryDoc}}
-func {{.QueryName}}(ctx context.Context) (*{{.ResponseName}}, error) {
-	req, err := http.NewRequestWithContext(
-		ctx, http.MethodPost,
+// {{.OperationDoc}}
+func {{.OperationName}}(ctx context.Context) (*{{.ResponseName}}, error) {
+	req, err := http.NewRequest(
+		http.MethodPost,
 		`{{.Endpoint}}`,
-		strings.NewReader(`{{.Query}}`))
+		strings.NewReader(`{{.Operation}}`))
 	if err != nil {
 		return nil, err
 	}
 
+    req = req.WithContext(ctx)
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return nil, err
