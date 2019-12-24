@@ -1,5 +1,5 @@
-# GetViewer gets the current user's name.
-query GetViewer {
+# getViewer gets the current user's name.
+query getViewer {
   Viewer: viewer {
     Name: name
   }

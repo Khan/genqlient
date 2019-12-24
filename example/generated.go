@@ -3,6 +3,7 @@ package example
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"strings"
@@ -10,19 +11,19 @@ import (
 	"github.com/vektah/gqlparser/gqlerror"
 )
 
-type GetViewerResponse = struct {
+type getViewerResponse = struct {
 	Viewer struct {
 		Name *string
 	}
 }
 
 // TODO
-func GetViewer(ctx context.Context) (*GetViewerResponse, error) {
+func getViewer(ctx context.Context) (*getViewerResponse, error) {
 	req, err := http.NewRequest(
 		http.MethodPost,
 		`https://api.github.com/graphql`,
 		strings.NewReader(`
-query GetViewer {
+query getViewer {
 	Viewer: viewer {
 		Name: name
 	}
@@ -44,8 +45,12 @@ query GetViewer {
 		return nil, err
 	}
 
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("returned error %v: %v", resp.Status, string(body))
+	}
+
 	var retval struct {
-		Data   GetViewerResponse `json:"data"`
+		Data   getViewerResponse `json:"data"`
 		Errors gqlerror.List     `json:"errors"`
 	}
 	err = json.Unmarshal(body, &retval)

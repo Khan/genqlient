@@ -3,6 +3,7 @@ package {{.PackageName}}
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"strings"
@@ -33,6 +34,10 @@ func {{.OperationName}}(ctx context.Context) (*{{.ResponseName}}, error) {
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("returned error %v: %v", resp.Status, string(body))
 	}
 
 	var retval struct {
