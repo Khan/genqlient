@@ -13,3 +13,4 @@ Config options:
 
 Misc:
 - replace __ with some unicode garbage
+- handle graphql errors in a reasonable way

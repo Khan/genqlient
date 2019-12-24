@@ -6,6 +6,8 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strings"
+
+	"github.com/vektah/gqlparser/gqlerror"
 )
 
 {{range .Operations}}
@@ -33,12 +35,19 @@ func {{.OperationName}}(ctx context.Context) (*{{.ResponseName}}, error) {
 		return nil, err
 	}
 
-	retval := {{.ResponseName}}{}
+	var retval struct {
+		Data   {{.ResponseName}} `json:"data"`
+		Errors gqlerror.List     `json:"errors"`
+	}
 	err = json.Unmarshal(body, &retval)
 	if err != nil {
 		return nil, err
 	}
 
-	return &retval, nil
+	if len(retval.Errors) > 0 {
+		return nil, retval.Errors
+	}
+
+	return &retval.Data, nil
 }
 {{end}}

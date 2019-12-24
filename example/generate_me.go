@@ -6,12 +6,14 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strings"
+
+	"github.com/vektah/gqlparser/gqlerror"
 )
 
 type GetViewerResponse = struct {
 	Viewer struct {
-		Name string `json:"name"`
-	} `json:"viewer"`
+		Name *string
+	}
 }
 
 // GetViewer gets the current user's name.
@@ -42,11 +44,18 @@ query GetViewer {
 		return nil, err
 	}
 
-	retval := GetViewerResponse{}
+	var retval struct {
+		Data   GetViewerResponse `json:"data"`
+		Errors gqlerror.List     `json:"errors"`
+	}
 	err = json.Unmarshal(body, &retval)
 	if err != nil {
 		return nil, err
 	}
 
-	return &retval, nil
+	if len(retval.Errors) > 0 {
+		return nil, retval.Errors
+	}
+
+	return &retval.Data, nil
 }

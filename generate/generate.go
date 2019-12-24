@@ -1,16 +1,20 @@
 package generate
 
 import (
+	"bytes"
 	"fmt"
+	"go/format"
 	"io"
 	"io/ioutil"
 	"os"
 	"strings"
 	"text/template"
 
+	"github.com/vektah/gqlparser"
 	"github.com/vektah/gqlparser/ast"
 	"github.com/vektah/gqlparser/formatter"
 	"github.com/vektah/gqlparser/parser"
+	"github.com/vektah/gqlparser/validator"
 )
 
 // TODO: package template into the binary using one of those asset thingies
@@ -42,18 +46,41 @@ type OperationParams struct {
 	Operation string
 }
 
-func Generate(specFilename, generatedFilename string) error {
-	text, err := ioutil.ReadFile(specFilename)
+func Generate(specFilename, schemaFilename, generatedFilename string) error {
+	// TODO: IRL we have to get the schema from GraphQL (maybe we can generate
+	// that once we can bootstrap) where it comes as JSON, not SDL, so we have
+	// to convert (or add gqlparser support to convert)
+	text, err := ioutil.ReadFile(schemaFilename)
 	if err != nil {
-		return fmt.Errorf("could not open query-spec file %v: %v",
+		return fmt.Errorf("unreadable schema file %v: %v",
+			schemaFilename, err)
+	}
+
+	schema, graphqlError := gqlparser.LoadSchema(
+		&ast.Source{Name: schemaFilename, Input: string(text)})
+	if graphqlError != nil {
+		return fmt.Errorf("invalid schema file %v: %v",
+			schemaFilename, graphqlError)
+	}
+
+	text, err = ioutil.ReadFile(specFilename)
+	if err != nil {
+		return fmt.Errorf("unreadable query-spec file %v: %v",
 			specFilename, err)
 	}
 
+	// The following is more or less gqlparser.LoadQuery, but we can provide a
+	// name so we might as well (and we break out the two errors).
 	document, graphqlError := parser.ParseQuery(
 		&ast.Source{Name: specFilename, Input: string(text)})
 	if graphqlError != nil { // ParseQuery returns type *graphql.Error, yuck
-		return fmt.Errorf("could not parse query-spec file %v: %v",
+		return fmt.Errorf("invalid query-spec file %v: %v",
 			specFilename, graphqlError)
+	}
+
+	graphqlErrors := validator.Validate(schema, document)
+	if graphqlErrors != nil {
+		return fmt.Errorf("query-spec does not match schema: %v", graphqlErrors)
 	}
 
 	var out io.Writer
@@ -82,11 +109,14 @@ func Generate(specFilename, generatedFilename string) error {
 		operations[i] = OperationParams{
 			OperationType: operation.Operation,
 			OperationName: operation.Name,
-			OperationDoc:  "TODO",
+			// TODO: this is actually awkward, because GraphQL doesn't allow
+			// for docstrings on queries (only schemas).  So we have to extract
+			// the comment, or omit doc-comments for now.
+			OperationDoc: "TODO",
 
 			// TODO: configure this
 			ResponseName: operation.Name + "Response",
-			ResponseType: "struct{} // TODO",
+			ResponseType: typeFor(operation, schema),
 
 			Endpoint: endpoint,
 			// The newline just makes it format a little nicer
@@ -99,11 +129,19 @@ func Generate(specFilename, generatedFilename string) error {
 		Operations:  operations,
 	}
 
-	err = tmpl.Execute(out, data)
+	var buf bytes.Buffer
+	err = tmpl.Execute(&buf, data)
 	if err != nil {
 		return fmt.Errorf("could not render template: %v", err)
 	}
-	return nil
+
+	formatted, err := format.Source(buf.Bytes())
+	if err != nil {
+		return fmt.Errorf("could not gofmt template: %v", err)
+	}
+
+	_, err = out.Write(formatted)
+	return err
 }
 
 func Main() {
@@ -115,9 +153,10 @@ func Main() {
 		}
 	}()
 
-	if len(os.Args) != 3 {
-		err = fmt.Errorf("usage: %s queries.graphql generated.go", os.Args[0])
+	if len(os.Args) != 4 {
+		err = fmt.Errorf("usage: %s queries.graphql schema.graphqll generated.go",
+			os.Args[0])
 		return
 	}
-	err = Generate(os.Args[1], os.Args[2])
+	err = Generate(os.Args[1], os.Args[2], os.Args[3])
 }
