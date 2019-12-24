@@ -16,7 +16,7 @@ type GetViewerResponse = struct {
 	}
 }
 
-// GetViewer gets the current user's name.
+// TODO
 func GetViewer(ctx context.Context) (*GetViewerResponse, error) {
 	req, err := http.NewRequest(
 		http.MethodPost,
