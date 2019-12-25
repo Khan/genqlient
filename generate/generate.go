@@ -40,8 +40,6 @@ type OperationParams struct {
 	OperationName string
 	// The documentation for the operation, from GraphQL.
 	OperationDoc string
-	// The endpoint to which to send queries.
-	Endpoint string
 	// The body of the operation to send.
 	Operation string
 }
@@ -89,16 +87,15 @@ func Generate(specFilename, schemaFilename, generatedFilename string) error {
 	if generatedFilename == "-" {
 		out = os.Stdout
 	} else {
-		out, err = os.OpenFile(generatedFilename, os.O_RDWR|os.O_CREATE, 0755)
+		out, err = os.OpenFile(generatedFilename, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0755)
 		if err != nil {
 			return fmt.Errorf("could not open generated file %v: %v",
 				generatedFilename, err)
 		}
 	}
 
-	// TODO: configure these
+	// TODO: configure this
 	packageName := "example"
-	endpoint := "https://api.github.com/graphql"
 
 	// TODO: this should probably get factored out
 	operations := make([]OperationParams, len(document.Operations))
@@ -125,7 +122,6 @@ func Generate(specFilename, schemaFilename, generatedFilename string) error {
 			ResponseName: operation.Name + "Response",
 			ResponseType: typeFor(operation, schema),
 
-			Endpoint: endpoint,
 			// The newline just makes it format a little nicer
 			Operation: "\n" + builder.String(),
 		}

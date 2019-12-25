@@ -2,57 +2,17 @@ package {{.PackageName}}
 
 import (
 	"context"
-	"encoding/json"
-	"fmt"
-	"io/ioutil"
-	"net/http"
-	"strings"
 
-	"github.com/vektah/gqlparser/gqlerror"
+    "github.com/Khan/genql/graphql"
 )
 
 {{range .Operations}}
 type {{.ResponseName}} = {{.ResponseType}}
 
 // {{.OperationDoc}}
-func {{.OperationName}}(ctx context.Context) (*{{.ResponseName}}, error) {
-	req, err := http.NewRequest(
-		http.MethodPost,
-		`{{.Endpoint}}`,
-		strings.NewReader(`{{.Operation}}`))
-	if err != nil {
-		return nil, err
-	}
-
-	req = req.WithContext(ctx)
-	resp, err := http.DefaultClient.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return nil, err
-	}
-
-	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("returned error %v: %v", resp.Status, string(body))
-	}
-
-	var retval struct {
-		Data   {{.ResponseName}} `json:"data"`
-		Errors gqlerror.List     `json:"errors"`
-	}
-	err = json.Unmarshal(body, &retval)
-	if err != nil {
-		return nil, err
-	}
-
-	if len(retval.Errors) > 0 {
-		return nil, retval.Errors
-	}
-
-	return &retval.Data, nil
+func {{.OperationName}}(ctx context.Context, client *graphql.Client) (*{{.ResponseName}}, error) {
+	var retval {{.ResponseName}}
+    err := client.MakeRequest(ctx, `{{.Operation}}`, &retval)
+    return &retval, err
 }
 {{end}}
