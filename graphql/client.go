@@ -1,12 +1,12 @@
 package graphql
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"strings"
 
 	"github.com/vektah/gqlparser/gqlerror"
 )
@@ -24,11 +24,24 @@ func NewClient(endpoint string, httpClient *http.Client) *Client {
 	return &Client{endpoint, http.MethodPost, httpClient}
 }
 
+type payload struct {
+	Query     string            `json:"query"`
+	Variables map[string]string `json:"variables"`
+}
+
 func (client *Client) MakeRequest(ctx context.Context, query string, retval interface{}) error {
+	body, err := json.Marshal(payload{
+		Query:     query,
+		Variables: nil, // TODO
+	})
+	if err != nil {
+		return err
+	}
+
 	req, err := http.NewRequest(
 		client.method,
 		client.endpoint,
-		strings.NewReader(query))
+		bytes.NewReader(body))
 	if err != nil {
 		return err
 	}
@@ -40,7 +53,7 @@ func (client *Client) MakeRequest(ctx context.Context, query string, retval inte
 	}
 	defer resp.Body.Close()
 
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err = ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return err
 	}
