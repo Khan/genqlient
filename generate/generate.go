@@ -4,17 +4,11 @@ import (
 	"bytes"
 	"fmt"
 	"go/format"
-	"io"
-	"io/ioutil"
-	"os"
 	"strings"
 	"text/template"
 
-	"github.com/vektah/gqlparser"
 	"github.com/vektah/gqlparser/ast"
 	"github.com/vektah/gqlparser/formatter"
-	"github.com/vektah/gqlparser/parser"
-	"github.com/vektah/gqlparser/validator"
 )
 
 // TODO: package template into the binary using one of those asset thingies
@@ -22,14 +16,14 @@ const tmplFilename = "generate/operation.go.tmpl"
 
 var tmpl = template.Must(template.ParseFiles(tmplFilename))
 
-type TemplateParams struct {
+type templateParams struct {
 	// The name of the package into which to generate the operation-helpers.
 	PackageName string
 	// The list of operations for which to generate code.
-	Operations []Operation
+	Operations []operation
 }
 
-type Operation struct {
+type operation struct {
 	// The type of the operation (query, mutation, or subscription).
 	Type ast.Operation
 	// The name of the operation, from GraphQL.
@@ -39,7 +33,7 @@ type Operation struct {
 	// The body of the operation to send.
 	Body string
 	// The arguments to the operation.
-	Args []Argument
+	Args []argument
 
 	// The type-name for the operation's response type.
 	ResponseName string
@@ -47,138 +41,77 @@ type Operation struct {
 	ResponseType string
 }
 
-type Argument struct {
+type argument struct {
 	GoName      string
 	GoType      string
 	GraphQLName string
 }
 
-func Generate(specFilename, schemaFilename, generatedFilename string) error {
-	// TODO: all the read-parse-and-validate stuff can probably get factored
-	// out a bit
-	// TODO: IRL we have to get the schema from GraphQL (maybe we can generate
-	// that once we can bootstrap) where it comes as JSON, not SDL, so we have
-	// to convert (or add gqlparser support to convert)
-	text, err := ioutil.ReadFile(schemaFilename)
-	if err != nil {
-		return fmt.Errorf("unreadable schema file %v: %v",
-			schemaFilename, err)
+func fromASTArg(arg *ast.VariableDefinition, schema *ast.Schema) argument {
+	return argument{
+		GraphQLName: arg.Variable,
+		GoName:      arg.Variable, // TODO: normalize this to go-style
+		GoType:      typeForInputType(arg.Type, schema),
+		// TODO: figure out what to do about defaults
 	}
+}
 
-	schema, graphqlError := gqlparser.LoadSchema(
-		&ast.Source{Name: schemaFilename, Input: string(text)})
-	if graphqlError != nil {
-		return fmt.Errorf("invalid schema file %v: %v",
-			schemaFilename, graphqlError)
+func fromASTOperation(op *ast.OperationDefinition, schema *ast.Schema) operation {
+	// TODO: we may have to actually get the precise query text, in case we
+	// want to be hashing it or something like that.  Although maybe
+	// there's no reasonable way to do that with several queries in one
+	// file.
+	var builder strings.Builder
+	f := formatter.NewFormatter(&builder)
+	f.FormatQueryDocument(&ast.QueryDocument{
+		Operations: ast.OperationList{op},
+		// TODO: handle fragments
+	})
+
+	args := make([]argument, len(op.VariableDefinitions))
+	for i, arg := range op.VariableDefinitions {
+		args[i] = fromASTArg(arg, schema)
 	}
+	return operation{
+		Type: op.Operation,
+		Name: op.Name,
+		// TODO: this is actually awkward, because GraphQL doesn't allow
+		// for docstrings on queries (only schemas).  So we have to extract
+		// the comment, or omit doc-comments for now.
+		Doc: "TODO",
+		// The newline just makes it format a little nicer
+		Body: "\n" + builder.String(),
+		Args: args,
 
-	text, err = ioutil.ReadFile(specFilename)
-	if err != nil {
-		return fmt.Errorf("unreadable query-spec file %v: %v",
-			specFilename, err)
+		// TODO: configure ResponseName format
+		ResponseName: op.Name + "Response",
+		ResponseType: typeForOperation(op, schema),
 	}
+}
 
-	// The following is more or less gqlparser.LoadQuery, but we can provide a
-	// name so we might as well (and we break out the two errors).
-	document, graphqlError := parser.ParseQuery(
-		&ast.Source{Name: specFilename, Input: string(text)})
-	if graphqlError != nil { // ParseQuery returns type *graphql.Error, yuck
-		return fmt.Errorf("invalid query-spec file %v: %v",
-			specFilename, graphqlError)
-	}
-
-	graphqlErrors := validator.Validate(schema, document)
-	if graphqlErrors != nil {
-		return fmt.Errorf("query-spec does not match schema: %v", graphqlErrors)
-	}
-
-	var out io.Writer
-	if generatedFilename == "-" {
-		out = os.Stdout
-	} else {
-		out, err = os.OpenFile(generatedFilename, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
-		if err != nil {
-			return fmt.Errorf("could not open generated file %v: %v",
-				generatedFilename, err)
-		}
-	}
-
-	// TODO: configure this
-	packageName := "example"
-
+func Generate(schema *ast.Schema, document *ast.QueryDocument) ([]byte, error) {
 	// TODO: this should probably get factored out
-	operations := make([]Operation, len(document.Operations))
-	for i, operation := range document.Operations {
-		// TODO: we may have to actually get the precise query text, in case we
-		// want to be hashing it or something like that.  Although maybe
-		// there's no reasonable way to do that with several queries in one
-		// file.
-		var builder strings.Builder
-		f := formatter.NewFormatter(&builder)
-		f.FormatQueryDocument(&ast.QueryDocument{
-			Operations: ast.OperationList{operation},
-			// TODO: handle fragments
-		})
-
-		args := make([]Argument, len(operation.VariableDefinitions))
-		for i, arg := range operation.VariableDefinitions {
-			args[i] = Argument{
-				GraphQLName: arg.Variable,
-				GoName:      arg.Variable, // TODO: normalize this to go-style
-				GoType:      typeForInputType(arg.Type, schema),
-				// TODO: figure out what to do about defaults
-			}
-		}
-		operations[i] = Operation{
-			Type: operation.Operation,
-			Name: operation.Name,
-			// TODO: this is actually awkward, because GraphQL doesn't allow
-			// for docstrings on queries (only schemas).  So we have to extract
-			// the comment, or omit doc-comments for now.
-			Doc: "TODO",
-			// The newline just makes it format a little nicer
-			Body: "\n" + builder.String(),
-			Args: args,
-
-			// TODO: configure ResponseName format
-			ResponseName: operation.Name + "Response",
-			ResponseType: typeForOperation(operation, schema),
-		}
+	operations := make([]operation, len(document.Operations))
+	for i, op := range document.Operations {
+		operations[i] = fromASTOperation(op, schema)
 	}
 
-	data := TemplateParams{
-		PackageName: packageName,
+	data := templateParams{
+		// TODO: configure PackageName
+		PackageName: "example",
 		Operations:  operations,
 	}
 
 	var buf bytes.Buffer
-	err = tmpl.Execute(&buf, data)
+	err := tmpl.Execute(&buf, data)
 	if err != nil {
-		return fmt.Errorf("could not render template: %v", err)
+		return nil, fmt.Errorf("could not render template: %v", err)
 	}
 
 	formatted, err := format.Source(buf.Bytes())
 	if err != nil {
-		return fmt.Errorf("could not gofmt template: %v", err)
+		return nil, fmt.Errorf("could not gofmt template: %v", err)
 	}
 
-	_, err = out.Write(formatted)
-	return err
-}
-
-func Main() {
-	var err error
-	defer func() {
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-	}()
-
-	if len(os.Args) != 4 {
-		err = fmt.Errorf("usage: %s queries.graphql schema.graphql generated.go",
-			os.Args[0])
-		return
-	}
-	err = Generate(os.Args[1], os.Args[2], os.Args[3])
+	return formatted, nil
 }
