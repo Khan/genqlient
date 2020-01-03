@@ -87,7 +87,7 @@ func Generate(specFilename, schemaFilename, generatedFilename string) error {
 	if generatedFilename == "-" {
 		out = os.Stdout
 	} else {
-		out, err = os.OpenFile(generatedFilename, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0755)
+		out, err = os.OpenFile(generatedFilename, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
 		if err != nil {
 			return fmt.Errorf("could not open generated file %v: %v",
 				generatedFilename, err)
@@ -157,7 +157,7 @@ func Main() {
 	}()
 
 	if len(os.Args) != 4 {
-		err = fmt.Errorf("usage: %s queries.graphql schema.graphqll generated.go",
+		err = fmt.Errorf("usage: %s queries.graphql schema.graphql generated.go",
 			os.Args[0])
 		return
 	}
