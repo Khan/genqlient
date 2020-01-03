@@ -7,10 +7,20 @@ import (
 	"github.com/vektah/gqlparser/ast"
 )
 
-func typeFor(operation *ast.OperationDefinition, schema *ast.Schema) string {
+func typeForOperation(operation *ast.OperationDefinition, schema *ast.Schema) string {
 	var builder strings.Builder
 
 	writeSelectionSetStruct(&builder, operation.SelectionSet, schema)
+
+	return builder.String()
+}
+
+func typeForInputType(typ *ast.Type, schema *ast.Schema) string {
+	var builder strings.Builder
+
+	// TODO: handle non-scalar types (by passing ...something... as the
+	// SelectionSet?)
+	writeType(&builder, typ, nil, schema)
 
 	return builder.String()
 }

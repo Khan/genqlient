@@ -26,22 +26,31 @@ type TemplateParams struct {
 	// The name of the package into which to generate the operation-helpers.
 	PackageName string
 	// The list of operations for which to generate code.
-	Operations []OperationParams
+	Operations []Operation
 }
 
-type OperationParams struct {
+type Operation struct {
+	// The type of the operation (query, mutation, or subscription).
+	Type ast.Operation
+	// The name of the operation, from GraphQL.
+	Name string
+	// The documentation for the operation, from GraphQL.
+	Doc string
+	// The body of the operation to send.
+	Body string
+	// The arguments to the operation.
+	Args []Argument
+
 	// The type-name for the operation's response type.
 	ResponseName string
 	// The body of the operation's response type (e.g. struct { ... }).
 	ResponseType string
-	// The type of the operation (query, mutation, or subscription).
-	OperationType ast.Operation
-	// The name of the operation, from GraphQL.
-	OperationName string
-	// The documentation for the operation, from GraphQL.
-	OperationDoc string
-	// The body of the operation to send.
-	Operation string
+}
+
+type Argument struct {
+	GoName      string
+	GoType      string
+	GraphQLName string
 }
 
 func Generate(specFilename, schemaFilename, generatedFilename string) error {
@@ -98,7 +107,7 @@ func Generate(specFilename, schemaFilename, generatedFilename string) error {
 	packageName := "example"
 
 	// TODO: this should probably get factored out
-	operations := make([]OperationParams, len(document.Operations))
+	operations := make([]Operation, len(document.Operations))
 	for i, operation := range document.Operations {
 		// TODO: we may have to actually get the precise query text, in case we
 		// want to be hashing it or something like that.  Although maybe
@@ -110,20 +119,30 @@ func Generate(specFilename, schemaFilename, generatedFilename string) error {
 			Operations: ast.OperationList{operation},
 			// TODO: handle fragments
 		})
-		operations[i] = OperationParams{
-			OperationType: operation.Operation,
-			OperationName: operation.Name,
+
+		args := make([]Argument, len(operation.VariableDefinitions))
+		for i, arg := range operation.VariableDefinitions {
+			args[i] = Argument{
+				GraphQLName: arg.Variable,
+				GoName:      arg.Variable, // TODO: normalize this to go-style
+				GoType:      typeForInputType(arg.Type, schema),
+				// TODO: figure out what to do about defaults
+			}
+		}
+		operations[i] = Operation{
+			Type: operation.Operation,
+			Name: operation.Name,
 			// TODO: this is actually awkward, because GraphQL doesn't allow
 			// for docstrings on queries (only schemas).  So we have to extract
 			// the comment, or omit doc-comments for now.
-			OperationDoc: "TODO",
+			Doc: "TODO",
+			// The newline just makes it format a little nicer
+			Body: "\n" + builder.String(),
+			Args: args,
 
 			// TODO: configure ResponseName format
 			ResponseName: operation.Name + "Response",
-			ResponseType: typeFor(operation, schema),
-
-			// The newline just makes it format a little nicer
-			Operation: "\n" + builder.String(),
+			ResponseType: typeForOperation(operation, schema),
 		}
 	}
 

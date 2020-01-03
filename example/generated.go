@@ -14,6 +14,7 @@ type getViewerResponse = struct {
 
 // TODO
 func getViewer(ctx context.Context, client *graphql.Client) (*getViewerResponse, error) {
+
 	var retval getViewerResponse
 	err := client.MakeRequest(ctx, `
 query getViewer {
@@ -21,6 +22,31 @@ query getViewer {
 		Name: name
 	}
 }
-`, &retval)
+`, &retval, nil)
+	return &retval, err
+}
+
+type getUserResponse = struct {
+	User *struct {
+		Name *string
+	}
+}
+
+// TODO
+func getUser(ctx context.Context, client *graphql.Client, login string) (*getUserResponse, error) {
+
+	variables := map[string]interface{}{
+
+		"login": login,
+	}
+
+	var retval getUserResponse
+	err := client.MakeRequest(ctx, `
+query getUser ($login: String!) {
+	User: user(login: $login) {
+		Name: name
+	}
+}
+`, &retval, variables)
 	return &retval, err
 }

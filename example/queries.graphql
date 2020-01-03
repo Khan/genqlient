@@ -4,3 +4,10 @@ query getViewer {
     Name: name
   }
 }
+
+# getUser gets the given user's name.
+query getUser($login: String!) {
+  User: user(login: $login) {
+    Name: name
+  }
+}

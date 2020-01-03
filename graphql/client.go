@@ -25,14 +25,14 @@ func NewClient(endpoint string, httpClient *http.Client) *Client {
 }
 
 type payload struct {
-	Query     string            `json:"query"`
-	Variables map[string]string `json:"variables"`
+	Query     string                 `json:"query"`
+	Variables map[string]interface{} `json:"variables"`
 }
 
-func (client *Client) MakeRequest(ctx context.Context, query string, retval interface{}) error {
+func (client *Client) MakeRequest(ctx context.Context, query string, retval interface{}, variables map[string]interface{}) error {
 	body, err := json.Marshal(payload{
 		Query:     query,
-		Variables: nil, // TODO
+		Variables: variables,
 	})
 	if err != nil {
 		return err

@@ -34,6 +34,12 @@ func Main() {
 		return
 	}
 
+	if len(os.Args) != 2 {
+		err = fmt.Errorf("usage: %v <username>", os.Args[0])
+		return
+	}
+	username := os.Args[1]
+
 	httpClient := http.Client{
 		Transport: &authedTransport{
 			key:     key,
@@ -41,10 +47,16 @@ func Main() {
 		},
 	}
 	graphqlClient := graphql.NewClient("https://api.github.com/graphql", &httpClient)
-	resp, err := getViewer(context.Background(), graphqlClient)
+
+	viewerResp, err := getViewer(context.Background(), graphqlClient)
 	if err != nil {
 		return
 	}
+	fmt.Println("you are", *viewerResp.Viewer.Name)
 
-	fmt.Println("you are:", *resp.Viewer.Name)
+	userResp, err := getUser(context.Background(), graphqlClient, username)
+	if err != nil {
+		return
+	}
+	fmt.Println(username, "is", *userResp.User.Name)
 }
