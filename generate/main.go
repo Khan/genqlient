@@ -2,30 +2,27 @@ package generate
 
 import (
 	"fmt"
-	"io"
 	"os"
 )
 
-func outputWriter(filename string) (io.Writer, error) {
-	if filename == "-" {
-		return os.Stdout, nil
-	}
-
-	f, err := os.OpenFile(filename, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
-	if err != nil {
-		return nil, fmt.Errorf("could not open generated file %v: %v",
-			filename, err)
-	}
-	return f, nil
-}
-
-func ParseGenerateAndWrite(specFilename, schemaFilename string, out io.Writer) error {
-	schema, err := getSchema(schemaFilename)
+func parseGenerateAndWrite(configFilename string) error {
+	config, err := ReadAndValidateConfig(configFilename)
 	if err != nil {
 		return err
 	}
 
-	document, err := getAndValidateQueries(specFilename, schema)
+	out, err := os.OpenFile(config.Generated, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
+	if err != nil {
+		return fmt.Errorf("could not open generated file %v: %v",
+			config.Generated, err)
+	}
+
+	schema, err := getSchema(config.Schema)
+	if err != nil {
+		return err
+	}
+
+	document, err := getAndValidateQueries(config.Queries, schema)
 	if err != nil {
 		return err
 	}
@@ -48,16 +45,10 @@ func Main() {
 		}
 	}()
 
-	if len(os.Args) != 4 {
-		err = fmt.Errorf("usage: %s queries.graphql schema.graphql generated.go",
-			os.Args[0])
+	if len(os.Args) != 2 {
+		err = fmt.Errorf("usage: %s genql.yaml", os.Args[0])
 		return
 	}
 
-	out, err := outputWriter(os.Args[3])
-	if err != nil {
-		return
-	}
-
-	err = ParseGenerateAndWrite(os.Args[1], os.Args[2], out)
+	err = parseGenerateAndWrite(os.Args[1])
 }

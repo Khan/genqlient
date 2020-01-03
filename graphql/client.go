@@ -30,6 +30,7 @@ type payload struct {
 }
 
 func (client *Client) MakeRequest(ctx context.Context, query string, retval interface{}, variables map[string]interface{}) error {
+	// TODO: streaming reads and writes
 	body, err := json.Marshal(payload{
 		Query:     query,
 		Variables: variables,

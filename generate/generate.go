@@ -90,7 +90,6 @@ func fromASTOperation(op *ast.OperationDefinition, schema *ast.Schema) operation
 }
 
 func Generate(schema *ast.Schema, document *ast.QueryDocument) ([]byte, error) {
-	// TODO: this should probably get factored out
 	operations := make([]operation, len(document.Operations))
 	for i, op := range document.Operations {
 		operations[i] = fromASTOperation(op, schema)
