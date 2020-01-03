@@ -8,8 +8,8 @@ import (
 
 type getViewerResponse = struct {
 	Viewer struct {
-		Name *string
-	}
+		MyName *string
+	} `json:"viewer"`
 }
 
 // TODO
@@ -17,8 +17,8 @@ func getViewer(ctx context.Context, client *graphql.Client) (*getViewerResponse,
 	var retval getViewerResponse
 	err := client.MakeRequest(ctx, `
 query getViewer {
-	Viewer: viewer {
-		Name: name
+	viewer {
+		MyName: name
 	}
 }
 `, &retval, nil)
@@ -27,8 +27,8 @@ query getViewer {
 
 type getUserResponse = struct {
 	User *struct {
-		Name *string
-	}
+		TheirName *string `json:"theirName"`
+	} `json:"user"`
 }
 
 // TODO
@@ -40,8 +40,8 @@ func getUser(ctx context.Context, client *graphql.Client, login string) (*getUse
 	var retval getUserResponse
 	err := client.MakeRequest(ctx, `
 query getUser ($login: String!) {
-	User: user(login: $login) {
-		Name: name
+	user(login: $login) {
+		theirName: name
 	}
 }
 `, &retval, variables)

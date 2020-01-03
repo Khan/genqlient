@@ -30,20 +30,25 @@ func writeSelectionSetStruct(builder *strings.Builder, selectionSet ast.Selectio
 	for _, selection := range selectionSet {
 		switch selection := selection.(type) {
 		case *ast.Field:
-			// TODO: assert it starts with uppercase (or do automatically if
-			// alias is not provided; in this case we may need json tags to
-			// avoid munging the query)
+			var jsonName string
 			if selection.Alias != "" {
-				builder.WriteString(selection.Alias)
+				jsonName = selection.Alias
 			} else {
-				builder.WriteString(selection.Name)
+				jsonName = selection.Name
 			}
+			// We need an exportable name for JSON-marshaling.
+			goName := strings.Title(jsonName)
+
+			builder.WriteString(goName)
 			builder.WriteRune(' ')
 
 			writeType(builder, selection.Definition.Type, selection.SelectionSet, schema)
 
-			// We don't need a json tag -- we just have GraphQL do the
-			// aliasing.
+			if jsonName != goName {
+				builder.WriteString("`json:\"")
+				builder.WriteString(jsonName)
+				builder.WriteString("\"`")
+			}
 			builder.WriteRune('\n')
 
 		case *ast.FragmentSpread, *ast.InlineFragment:

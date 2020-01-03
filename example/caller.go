@@ -52,11 +52,11 @@ func Main() {
 	if err != nil {
 		return
 	}
-	fmt.Println("you are", *viewerResp.Viewer.Name)
+	fmt.Println("you are", *viewerResp.Viewer.MyName)
 
 	userResp, err := getUser(context.Background(), graphqlClient, username)
 	if err != nil {
 		return
 	}
-	fmt.Println(username, "is", *userResp.User.Name)
+	fmt.Println(username, "is", *userResp.User.TheirName)
 }
