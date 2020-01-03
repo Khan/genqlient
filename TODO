@@ -1,16 +1,8 @@
 Query structures to support:
-- arguments
 - repeated fields
 - interfaces
 
 Config options:
-- schema location (http or file)
-- use http client or not
-- use ctx or not, maybe
-- target url (const or maybe allow it to be dynamic at runtime?
-- auth (maybe via client + roundtripper)
-- HTTP calling convention???
-
-Misc:
-- replace __ with some unicode garbage
-- handle graphql errors in a reasonable way
+- file locations (queries, generated, schema (or get via HTTP))
+- use ctx or not, maybe (i.e. how to wrap this for kacontext)
+- HTTP calling convention (is there enough variation to matter?)
