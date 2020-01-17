@@ -56,7 +56,7 @@ Query structures to support:
 
 Config options:
 - file locations (queries, generated, schema (or get via HTTP))
-- use ctx or not, incl. complexities of how Khan uses context
+- use ctx or not, including complexities of how Khan uses context
 - HTTP calling convention (is there enough variation to matter?)
 
 Other:
@@ -64,3 +64,4 @@ Other:
 - error-checking/validation/etc. everywhere
 - tests
 - documentation
+- a name that's more clearly distinct from other libraries out there
