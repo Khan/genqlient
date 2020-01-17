@@ -62,7 +62,7 @@ func ReadAndValidateConfig(filename string) (*Config, error) {
 	}
 
 	var config Config
-	err = yaml.Unmarshal(text, config)
+	err = yaml.Unmarshal(text, &config)
 	if err != nil {
 		return nil, fmt.Errorf("invalid config file %v: %v", filename, err)
 	}
@@ -71,6 +71,13 @@ func ReadAndValidateConfig(filename string) (*Config, error) {
 	if err != nil {
 		return nil, fmt.Errorf("invalid config file %v: %v", filename, err)
 	}
+
+	// Make paths relative to config dir
+	// TODO: more principled typing here?
+	basename := filepath.Dir(filename)
+	config.Schema = filepath.Join(basename, config.Schema)
+	config.Queries = filepath.Join(basename, config.Queries)
+	config.Generated = filepath.Join(basename, config.Generated)
 
 	return &config, nil
 }

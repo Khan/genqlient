@@ -1,0 +1,5 @@
+# These are the defaults.
+package: example
+schema: schema.graphql
+queries: queries.graphql
+generated: generated.go

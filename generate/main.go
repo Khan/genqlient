@@ -46,6 +46,7 @@ func Main() {
 	}()
 
 	if len(os.Args) != 2 {
+		// TODO: omit config to get it from genql.yaml, or to use the defaults.
 		err = fmt.Errorf("usage: %s genql.yaml", os.Args[0])
 		return
 	}
