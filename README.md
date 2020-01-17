@@ -47,8 +47,6 @@ fmt.Println("you are", *viewerResp.Viewer.MyName)
 
 For a complete working example, see `example/`.
 
-TODO: maybe make this example slightly more complete; clean up and link to godoc
-
 ## Major TODOs
 
 Query structures to support:
@@ -65,3 +63,4 @@ Other:
 - figure out and document go generate syntax
 - error-checking/validation/etc. everywhere
 - tests
+- documentation
