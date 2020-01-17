@@ -25,11 +25,8 @@ This is a proof-of-concept of a GraphQL client that does the same sort of thing:
 
 ## Usage
 
-TODO: make this actually complete enough to be usable!
-TODO: clean up and link to godoc
-
-To send a query
 ```graphql
+# queries.graphql
 query getViewer {
   viewer {
     MyName: name
@@ -37,19 +34,20 @@ query getViewer {
 }
 ```
 
-put it in a file `queries.graphql`, then run `genql` to create `generated.go` with a function `getViewer`.  Then, in another file, call it like this:
-
 ```go
+// generated.go (auto-generated):
+type getViewerResponse struct { ... }
+func getViewer(ctx context.Context, client *graphql.Client) (*getViewerResponse, error) { ... }
+
+// your code (error handling omitted for brevity)
 graphqlClient := graphql.NewClient("https://example.com/graphql", http.DefaultClient)
-viewerResp, err := getViewer(context.Background(), graphqlClient)
-if err != nil {
-    fmt.Println("oh no: ", err)
-    return
-}
+viewerResp, _ := getViewer(context.Background(), graphqlClient)
 fmt.Println("you are", *viewerResp.Viewer.MyName)
 ```
 
 For a complete working example, see `example/`.
+
+TODO: maybe make this example slightly more complete; clean up and link to godoc
 
 ## Major TODOs
 
