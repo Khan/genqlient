@@ -25,13 +25,38 @@ This is a proof-of-concept of a GraphQL client that does the same sort of thing:
 
 ## Usage
 
-See `example/`.
+TODO: make this actually complete enough to be usable!
+TODO: clean up and link to godoc
+
+To send a query
+```graphql
+query getViewer {
+  viewer {
+    MyName: name
+  }
+}
+```
+
+put it in a file `queries.graphql`, then run `genql` to create `generated.go` with a function `getViewer`.  Then, in another file, call it like this:
+
+```go
+graphqlClient := graphql.NewClient("https://example.com/graphql", http.DefaultClient)
+viewerResp, err := getViewer(context.Background(), graphqlClient)
+if err != nil {
+    fmt.Println("oh no: ", err)
+    return
+}
+fmt.Println("you are", *viewerResp.Viewer.MyName)
+```
+
+For a complete working example, see `example/`.
 
 ## Major TODOs
 
 Query structures to support:
 - repeated fields
 - interfaces
+- fragments
 
 Config options:
 - file locations (queries, generated, schema (or get via HTTP))
@@ -40,3 +65,5 @@ Config options:
 
 Other:
 - figure out and document go generate syntax
+- error-checking/validation/etc. everywhere
+- tests
