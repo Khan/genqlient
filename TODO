@@ -1,8 +1,0 @@
-Query structures to support:
-- repeated fields
-- interfaces
-
-Config options:
-- file locations (queries, generated, schema (or get via HTTP))
-- use ctx or not, maybe (i.e. how to wrap this for kacontext)
-- HTTP calling convention (is there enough variation to matter?)
