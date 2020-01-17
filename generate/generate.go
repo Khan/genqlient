@@ -56,7 +56,7 @@ func fromASTArg(arg *ast.VariableDefinition, schema *ast.Schema) argument {
 	}
 }
 
-func fromASTOperation(op *ast.OperationDefinition, schema *ast.Schema) operation {
+func fromASTOperation(op *ast.OperationDefinition, schema *ast.Schema) (operation, error) {
 	// TODO: we may have to actually get the precise query text, in case we
 	// want to be hashing it or something like that.  Although maybe
 	// there's no reasonable way to do that with several queries in one
@@ -72,6 +72,12 @@ func fromASTOperation(op *ast.OperationDefinition, schema *ast.Schema) operation
 	for i, arg := range op.VariableDefinitions {
 		args[i] = fromASTArg(arg, schema)
 	}
+
+	typ, err := typeForOperation(op, schema)
+	if err != nil {
+		return operation{}, fmt.Errorf("could not compute return-type for query: %v", err)
+	}
+
 	return operation{
 		Type: op.Operation,
 		Name: op.Name,
@@ -85,14 +91,18 @@ func fromASTOperation(op *ast.OperationDefinition, schema *ast.Schema) operation
 
 		// TODO: configure ResponseName format
 		ResponseName: op.Name + "Response",
-		ResponseType: typeForOperation(op, schema),
-	}
+		ResponseType: typ,
+	}, nil
 }
 
 func Generate(schema *ast.Schema, document *ast.QueryDocument) ([]byte, error) {
+	var err error
 	operations := make([]operation, len(document.Operations))
 	for i, op := range document.Operations {
-		operations[i] = fromASTOperation(op, schema)
+		operations[i], err = fromASTOperation(op, schema)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	data := templateParams{
@@ -102,7 +112,7 @@ func Generate(schema *ast.Schema, document *ast.QueryDocument) ([]byte, error) {
 	}
 
 	var buf bytes.Buffer
-	err := tmpl.Execute(&buf, data)
+	err = tmpl.Execute(&buf, data)
 	if err != nil {
 		return nil, fmt.Errorf("could not render template: %v", err)
 	}

@@ -7,12 +7,10 @@ import (
 	"github.com/vektah/gqlparser/ast"
 )
 
-func typeForOperation(operation *ast.OperationDefinition, schema *ast.Schema) string {
+func typeForOperation(operation *ast.OperationDefinition, schema *ast.Schema) (string, error) {
 	var builder strings.Builder
-
-	writeSelectionSetStruct(&builder, operation.SelectionSet, schema)
-
-	return builder.String()
+	err := writeSelectionSetStruct(&builder, operation.SelectionSet, schema)
+	return builder.String(), err
 }
 
 func typeForInputType(typ *ast.Type, schema *ast.Schema) string {
@@ -25,7 +23,7 @@ func typeForInputType(typ *ast.Type, schema *ast.Schema) string {
 	return builder.String()
 }
 
-func writeSelectionSetStruct(builder *strings.Builder, selectionSet ast.SelectionSet, schema *ast.Schema) {
+func writeSelectionSetStruct(builder *strings.Builder, selectionSet ast.SelectionSet, schema *ast.Schema) error {
 	builder.WriteString("struct {\n")
 	for _, selection := range selectionSet {
 		switch selection := selection.(type) {
@@ -52,15 +50,29 @@ func writeSelectionSetStruct(builder *strings.Builder, selectionSet ast.Selectio
 			builder.WriteRune('\n')
 
 		case *ast.FragmentSpread, *ast.InlineFragment:
-			panic("TODO")
+			return fmt.Errorf("not implemented: %T", selection)
 		default:
-			panic(fmt.Errorf("invalid selection type: %v", selection))
+			return fmt.Errorf("invalid selection type: %v", selection)
 		}
 	}
 	builder.WriteString("}")
+	return nil
 }
 
-func writeType(builder *strings.Builder, typ *ast.Type, selectionSet ast.SelectionSet, schema *ast.Schema) {
+var graphQLNameToGoName = map[string]string{
+	"Int":     "int", // TODO: technically int32 is always enough, use that?
+	"Float":   "float64",
+	"String":  "string",
+	"Boolean": "bool",
+	"ID":      "string", // TODO: named type for IDs?
+}
+
+func writeType(builder *strings.Builder, typ *ast.Type, selectionSet ast.SelectionSet, schema *ast.Schema) error {
+	// gqlgen does slightly different things here since it defines names for
+	// all the intermediate types, but its implementation may be useful to crib
+	// from:
+	// https://github.com/99designs/gqlgen/blob/master/plugin/modelgen/models.go#L113
+	// TODO: or maybe we should do that?
 	if typ.Elem != nil {
 		// Type is a list.
 		builder.WriteString("[]")
@@ -70,12 +82,14 @@ func writeType(builder *strings.Builder, typ *ast.Type, selectionSet ast.Selecti
 	}
 
 	if selectionSet != nil {
-		writeSelectionSetStruct(builder, selectionSet, schema)
-		return
+		return writeSelectionSetStruct(builder, selectionSet, schema)
 	}
 
-	// TODO: actually handle scalars.  or can we instead use gqlgen's
-	// converter?  they're doing mostly the same thing.  if not, crib from it:
-	// https://github.com/99designs/gqlgen/blob/master/plugin/modelgen/models.go#L113
-	builder.WriteString(strings.ToLower(typ.Name()))
+	// TODO: handle enums better.  (do unions need special handling?)
+	goName := graphQLNameToGoName[typ.Name()]
+	if goName == "" {
+		return fmt.Errorf("unknown scalar name: %s", typ.Name())
+	}
+	builder.WriteString(goName)
+	return nil
 }
