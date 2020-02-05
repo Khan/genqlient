@@ -47,6 +47,10 @@ fmt.Println("you are", *viewerResp.Viewer.MyName)
 
 For a complete working example, see `example/`.
 
+## Tests
+
+None yet -- instead just follow `example/README.md`'s instructions, and ensure that any diffs in that directory are intentional, and that the example still works.
+
 ## Major TODOs
 
 Query structures to support:
