@@ -1,3 +1,4 @@
+// package main is at the root to allow "go run github.com/Khan/genql"
 package main
 
 import (

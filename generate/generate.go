@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"fmt"
 	"go/format"
+	"path/filepath"
+	"runtime"
 	"strings"
 	"text/template"
 
@@ -12,9 +14,11 @@ import (
 )
 
 // TODO: package template into the binary using one of those asset thingies
-const tmplFilename = "generate/operation.go.tmpl"
+var _, thisFilename, _, _ = runtime.Caller(0)
+var tmplRelFilename = "operation.go.tmpl"
+var tmplAbsFilename = filepath.Join(filepath.Dir(thisFilename), tmplRelFilename)
 
-var tmpl = template.Must(template.ParseFiles(tmplFilename))
+var tmpl = template.Must(template.ParseFiles(tmplAbsFilename))
 
 type templateParams struct {
 	// The name of the package into which to generate the operation-helpers.

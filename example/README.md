@@ -17,8 +17,7 @@ csilvers is Craig Silverstein
 
 It's already checked in to github, but to generate `generated.go`:
 ```sh
-rm example/generated.go
-go run ./cmd/genql/main.go example/genql.yaml
+go generate ./...
 ```
 
 ## Generating the schema files

@@ -60,3 +60,5 @@ func Main() {
 	}
 	fmt.Println(username, "is", *userResp.User.TheirName)
 }
+
+//go:generate go run github.com/Khan/genql genql.yaml
