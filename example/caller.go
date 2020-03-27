@@ -28,9 +28,9 @@ func Main() {
 		}
 	}()
 
-	key := os.Getenv("KEY")
+	key := os.Getenv("GITHUB_TOKEN")
 	if key == "" {
-		err = fmt.Errorf("must set KEY=<github token>")
+		err = fmt.Errorf("must set GITHUB_TOKEN=<github token>")
 		return
 	}
 
