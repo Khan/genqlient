@@ -49,7 +49,9 @@ For a complete working example, see `example/`.
 
 ## Tests
 
-None yet -- instead just follow `example/README.md`'s instructions, and ensure that any diffs in that directory are intentional, and that the example still works.
+`go test ./...` does some perfunctory tests.  (This is run by GitHub Actions.)
+
+TODO(benkraft): Figure out how to get GitHub Actions to run the example -- it needs a token.
 
 ## Major TODOs
 
@@ -64,8 +66,7 @@ Config options:
 - HTTP calling convention (is there enough variation to matter?)
 
 Other:
-- figure out and document go generate syntax
 - error-checking/validation/etc. everywhere
-- tests
+- more tests
 - documentation
 - a name that's more clearly distinct from other libraries out there

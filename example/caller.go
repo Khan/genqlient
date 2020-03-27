@@ -48,6 +48,12 @@ func Main() {
 	}
 	graphqlClient := graphql.NewClient("https://api.github.com/graphql", &httpClient)
 
+	viewerResp, err := getViewer(context.Background(), graphqlClient)
+	if err != nil {
+		return
+	}
+	fmt.Println("you are", *viewerResp.Viewer.MyName)
+
 	userResp, err := getUser(context.Background(), graphqlClient, username)
 	if err != nil {
 		return

@@ -27,7 +27,3 @@ jobs:
     - name: Run tests
       run: |
         go test -v ./...
-   
-    - name: Run example
-      run: |
-        GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} go run ./example/cmd/example/main.go benkraft
