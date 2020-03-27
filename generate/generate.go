@@ -99,8 +99,17 @@ func fromASTOperation(op *ast.OperationDefinition, schema *ast.Schema) (operatio
 	}, nil
 }
 
-func Generate(schema *ast.Schema, document *ast.QueryDocument) ([]byte, error) {
-	var err error
+func Generate(config *Config) ([]byte, error) {
+	schema, err := getSchema(config.Schema)
+	if err != nil {
+		return nil, err
+	}
+
+	document, err := getAndValidateQueries(config.Queries, schema)
+	if err != nil {
+		return nil, err
+	}
+
 	operations := make([]operation, len(document.Operations))
 	for i, op := range document.Operations {
 		operations[i], err = fromASTOperation(op, schema)

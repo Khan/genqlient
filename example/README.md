@@ -8,7 +8,7 @@ Get a token from [GitHub](https://github.com/settings/tokens/new) (no scopes nee
 To run the example:
 
 ```sh
-$ KEY=<your token> go run ./cmd/example/main.go <username>
+$ GITHUB_TOKEN=<your token> go run ./cmd/example/main.go <username>
 you are Ben Kraft
 csilvers is Craig Silverstein
 ```

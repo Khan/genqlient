@@ -5,7 +5,7 @@ import (
 	"os"
 )
 
-func parseGenerateAndWrite(configFilename string) error {
+func readConfigGenerateAndWrite(configFilename string) error {
 	config, err := ReadAndValidateConfig(configFilename)
 	if err != nil {
 		return err
@@ -17,17 +17,7 @@ func parseGenerateAndWrite(configFilename string) error {
 			config.Generated, err)
 	}
 
-	schema, err := getSchema(config.Schema)
-	if err != nil {
-		return err
-	}
-
-	document, err := getAndValidateQueries(config.Queries, schema)
-	if err != nil {
-		return err
-	}
-
-	code, err := Generate(schema, document)
+	code, err := Generate(config)
 	if err != nil {
 		return err
 	}
@@ -51,5 +41,5 @@ func Main() {
 		return
 	}
 
-	err = parseGenerateAndWrite(os.Args[1])
+	err = readConfigGenerateAndWrite(os.Args[1])
 }
