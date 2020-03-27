@@ -56,18 +56,22 @@ func (c *Config) ValidateAndFillDefaults() error {
 }
 
 func ReadAndValidateConfig(filename string) (*Config, error) {
-	text, err := ioutil.ReadFile(filename)
-	if err != nil {
-		return nil, fmt.Errorf("unreadable config file %v: %v", filename, err)
-	}
-
 	var config Config
-	err = yaml.Unmarshal(text, &config)
-	if err != nil {
-		return nil, fmt.Errorf("invalid config file %v: %v", filename, err)
+	if filename == "" {
+		config = *defaultConfig
+	} else {
+		text, err := ioutil.ReadFile(filename)
+		if err != nil {
+			return nil, fmt.Errorf("unreadable config file %v: %v", filename, err)
+		}
+
+		err = yaml.Unmarshal(text, &config)
+		if err != nil {
+			return nil, fmt.Errorf("invalid config file %v: %v", filename, err)
+		}
 	}
 
-	err = config.ValidateAndFillDefaults()
+	err := config.ValidateAndFillDefaults()
 	if err != nil {
 		return nil, fmt.Errorf("invalid config file %v: %v", filename, err)
 	}

@@ -1,5 +1,5 @@
 example:
-	go run . example/genql.yaml
+	go generate ./...
 	go run ./example/cmd/example/main.go csilvers
 
 .PHONY: example

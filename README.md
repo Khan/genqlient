@@ -43,6 +43,8 @@ func getViewer(ctx context.Context, client *graphql.Client) (*getViewerResponse,
 graphqlClient := graphql.NewClient("https://example.com/graphql", http.DefaultClient)
 viewerResp, _ := getViewer(context.Background(), graphqlClient)
 fmt.Println("you are", *viewerResp.Viewer.MyName)
+
+//go:generate go run github.com/Khan/genql
 ```
 
 For a complete working example, see `example/`.
@@ -64,6 +66,7 @@ Config options:
 - file locations (queries, generated, schema (or get via HTTP))
 - use ctx or not, including complexities of how Khan uses context
 - HTTP calling convention (is there enough variation to matter?)
+- proper config/arguments setup (e.g. with [viper](https://github.com/spf13/viper)
 
 Other:
 - error-checking/validation/etc. everywhere

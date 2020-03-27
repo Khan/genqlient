@@ -35,11 +35,12 @@ func Main() {
 		}
 	}()
 
-	if len(os.Args) != 2 {
-		// TODO: omit config to get it from genql.yaml, or to use the defaults.
-		err = fmt.Errorf("usage: %s genql.yaml", os.Args[0])
-		return
+	switch len(os.Args) {
+	case 2:
+		err = readConfigGenerateAndWrite(os.Args[1])
+	case 1:
+		err = readConfigGenerateAndWrite("")
+	default:
+		err = fmt.Errorf("usage: %s [config]", os.Args[0])
 	}
-
-	err = readConfigGenerateAndWrite(os.Args[1])
 }
