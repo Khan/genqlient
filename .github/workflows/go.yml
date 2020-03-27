@@ -1,0 +1,33 @@
+name: Go
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go: [ '1.13', '1.14' ]
+
+    steps:
+    - name: Set up Go
+      uses: actions/setup-go@v1
+      with:
+        go-version: ${{ matrix.go }}
+      id: go
+
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v2
+
+    - name: Run tests
+      run: |
+        go test -v ./...
+   
+    - name: Run example
+      run: |
+        go run ./example/cmd/example/main.go benkraft
