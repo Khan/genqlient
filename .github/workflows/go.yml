@@ -30,4 +30,4 @@ jobs:
    
     - name: Run example
       run: |
-        go run ./example/cmd/example/main.go benkraft
+        GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} go run ./example/cmd/example/main.go benkraft
