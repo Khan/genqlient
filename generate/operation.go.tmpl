@@ -11,7 +11,7 @@ import (
 {{range .Operations}}
 type {{.ResponseName}} = {{.ResponseType}}
 
-// {{.Doc}}
+{{.Doc}}
 func {{.Name}}(ctx context.Context, client *graphql.Client{{range .Args}}, {{.GoName}} {{.GoType}}{{end}}) (*{{.ResponseName}}, error) {
     {{- if .Args -}}
     variables := map[string]interface{}{

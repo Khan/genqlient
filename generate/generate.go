@@ -60,11 +60,35 @@ func fromASTArg(arg *ast.VariableDefinition, schema *ast.Schema) argument {
 	}
 }
 
+func reverse(slice []string) {
+	for left, right := 0, len(slice)-1; left < right; left, right = left+1, right-1 {
+		slice[left], slice[right] = slice[right], slice[left]
+	}
+}
+
+func getDocComment(op *ast.OperationDefinition) string {
+	var commentLines []string
+	var sourceLines = strings.Split(op.Position.Src.Input, "\n")
+	for i := op.Position.Line - 1; i > 0; i-- {
+		line := sourceLines[i-1]
+		if strings.HasPrefix(line, "#") {
+			commentLines = append(commentLines,
+				"// "+strings.TrimSpace(strings.TrimPrefix(line, "#")))
+		} else {
+			break
+		}
+	}
+
+	reverse(commentLines)
+
+	return strings.Join(commentLines, "\n")
+}
+
 func fromASTOperation(op *ast.OperationDefinition, schema *ast.Schema) (operation, error) {
 	// TODO: we may have to actually get the precise query text, in case we
-	// want to be hashing it or something like that.  Although maybe
-	// there's no reasonable way to do that with several queries in one
-	// file.
+	// want to be hashing it or something like that.  This is a bit tricky
+	// because gqlparser's ast doesn't provide node end-position (only
+	// token end-position).
 	var builder strings.Builder
 	f := formatter.NewFormatter(&builder)
 	f.FormatQueryDocument(&ast.QueryDocument{
@@ -85,10 +109,7 @@ func fromASTOperation(op *ast.OperationDefinition, schema *ast.Schema) (operatio
 	return operation{
 		Type: op.Operation,
 		Name: op.Name,
-		// TODO: this is actually awkward, because GraphQL doesn't allow
-		// for docstrings on queries (only schemas).  So we have to extract
-		// the comment, or omit doc-comments for now.
-		Doc: "TODO",
+		Doc:  getDocComment(op),
 		// The newline just makes it format a little nicer
 		Body: "\n" + builder.String(),
 		Args: args,
@@ -130,9 +151,11 @@ func Generate(config *Config) ([]byte, error) {
 		return nil, fmt.Errorf("could not render template: %v", err)
 	}
 
-	formatted, err := format.Source(buf.Bytes())
+	unformatted := buf.Bytes()
+	formatted, err := format.Source(unformatted)
 	if err != nil {
-		return nil, fmt.Errorf("could not gofmt template: %v", err)
+		return nil, fmt.Errorf("could not gofmt code: %v\n---unformatted code---\n%v",
+			err, string(unformatted))
 	}
 
 	return formatted, nil

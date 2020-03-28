@@ -1,11 +1,10 @@
-# getViewer gets the current user's name.
 query getViewer {
   viewer {
     MyName: name
   }
 }
 
-# getUser gets the given user's name.
+# getUser gets the given user's name from their username.
 query getUser($login: String!) {
   user(login: $login) {
     theirName: name
