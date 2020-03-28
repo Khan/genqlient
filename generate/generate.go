@@ -140,8 +140,7 @@ func Generate(config *Config) ([]byte, error) {
 	}
 
 	data := templateParams{
-		// TODO: configure PackageName
-		PackageName: "example",
+		PackageName: config.Package,
 		Operations:  operations,
 	}
 
