@@ -5,8 +5,8 @@ query getViewer {
 }
 
 # getUser gets the given user's name from their username.
-query getUser($login: String!) {
-  user(login: $login) {
+query getUser($Login: String!) {
+  user(login: $Login) {
     theirName: name
   }
 }

@@ -35,13 +35,13 @@ type getUserResponse = struct {
 // getUser gets the given user's name from their username.
 func getUser(ctx context.Context, client *graphql.Client, login string) (*getUserResponse, error) {
 	variables := map[string]interface{}{
-		"login": login,
+		"Login": login,
 	}
 
 	var retval getUserResponse
 	err := client.MakeRequest(ctx, `
-query getUser ($login: String!) {
-	user(login: $login) {
+query getUser ($Login: String!) {
+	user(login: $Login) {
 		theirName: name
 	}
 }

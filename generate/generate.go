@@ -52,11 +52,13 @@ type argument struct {
 }
 
 func fromASTArg(arg *ast.VariableDefinition, schema *ast.Schema) argument {
+	graphQLName := arg.Variable
+	firstRest := strings.SplitN(graphQLName, "", 2)
+	goName := strings.ToLower(firstRest[0]) + firstRest[1]
 	return argument{
-		GraphQLName: arg.Variable,
-		GoName:      arg.Variable, // TODO: normalize this to go-style
+		GraphQLName: graphQLName,
+		GoName:      goName,
 		GoType:      typeForInputType(arg.Type, schema),
-		// TODO: figure out what to do about defaults
 	}
 }
 
