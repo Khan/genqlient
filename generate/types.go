@@ -96,15 +96,21 @@ func (builder *typeBuilder) writeType(typ *ast.Type, selectionSet ast.SelectionS
 		builder.WriteString("*")
 	}
 
-	if selectionSet != nil {
+	typedef := builder.schema.Types[typ.Name()]
+	switch typedef.Kind {
+	case ast.Object, ast.InputObject:
 		return builder.writeSelectionSetStruct(selectionSet)
+	case ast.Scalar, ast.Enum:
+		goName := graphQLNameToGoName[typ.Name()]
+		// TODO(benkraft): Handle custom scalars and enums.
+		if goName == "" {
+			return fmt.Errorf("unknown scalar name: %s", typ.Name())
+		}
+		builder.WriteString(goName)
+		return nil
+	case ast.Union, ast.Interface:
+		return fmt.Errorf("not implemented: %v", typedef.Kind)
+	default:
+		return fmt.Errorf("unexpected kind: %v", typedef.Kind)
 	}
-
-	// TODO: handle enums better.  (do unions need special handling?)
-	goName := graphQLNameToGoName[typ.Name()]
-	if goName == "" {
-		return fmt.Errorf("unknown scalar name: %s", typ.Name())
-	}
-	builder.WriteString(goName)
-	return nil
 }
