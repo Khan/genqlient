@@ -7,23 +7,28 @@ import (
 	"github.com/vektah/gqlparser/ast"
 )
 
+type typeBuilder struct {
+	strings.Builder
+	schema *ast.Schema
+}
+
 func typeForOperation(operation *ast.OperationDefinition, schema *ast.Schema) (string, error) {
-	var builder strings.Builder
-	err := writeSelectionSetStruct(&builder, operation.SelectionSet, schema)
+	builder := &typeBuilder{schema: schema}
+	err := builder.writeSelectionSetStruct(operation.SelectionSet)
 	return builder.String(), err
 }
 
 func typeForInputType(typ *ast.Type, schema *ast.Schema) (string, error) {
-	var builder strings.Builder
+	builder := &typeBuilder{schema: schema}
 
 	// TODO: handle non-scalar types (by passing ...something... as the
 	// SelectionSet?)
-	err := writeType(&builder, typ, nil, schema)
+	err := builder.writeType(typ, nil)
 
 	return builder.String(), err
 }
 
-func writeSelectionSetStruct(builder *strings.Builder, selectionSet ast.SelectionSet, schema *ast.Schema) error {
+func (builder *typeBuilder) writeSelectionSetStruct(selectionSet ast.SelectionSet) error {
 	builder.WriteString("struct {\n")
 	for _, selection := range selectionSet {
 		switch selection := selection.(type) {
@@ -46,7 +51,7 @@ func writeSelectionSetStruct(builder *strings.Builder, selectionSet ast.Selectio
 				// but empirically it might not.
 				return fmt.Errorf("undefined selection %v", selection)
 			}
-			err := writeType(builder, selection.Definition.Type, selection.SelectionSet, schema)
+			err := builder.writeType(selection.Definition.Type, selection.SelectionSet)
 			if err != nil {
 				return err
 			}
@@ -76,7 +81,7 @@ var graphQLNameToGoName = map[string]string{
 	"ID":      "string", // TODO: named type for IDs?
 }
 
-func writeType(builder *strings.Builder, typ *ast.Type, selectionSet ast.SelectionSet, schema *ast.Schema) error {
+func (builder *typeBuilder) writeType(typ *ast.Type, selectionSet ast.SelectionSet) error {
 	// gqlgen does slightly different things here since it defines names for
 	// all the intermediate types, but its implementation may be useful to crib
 	// from:
@@ -92,7 +97,7 @@ func writeType(builder *strings.Builder, typ *ast.Type, selectionSet ast.Selecti
 	}
 
 	if selectionSet != nil {
-		return writeSelectionSetStruct(builder, selectionSet, schema)
+		return builder.writeSelectionSetStruct(selectionSet)
 	}
 
 	// TODO: handle enums better.  (do unions need special handling?)
