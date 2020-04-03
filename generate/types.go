@@ -12,9 +12,23 @@ type typeBuilder struct {
 	schema *ast.Schema
 }
 
+func (builder *typeBuilder) baseTypeForOperation(operation ast.Operation) *ast.Definition {
+	switch operation {
+	case ast.Query:
+		return builder.schema.Query
+	case ast.Mutation:
+		return builder.schema.Mutation
+	case ast.Subscription:
+		return builder.schema.Subscription
+	default:
+		panic(fmt.Sprintf("unexpected operation: %v", operation))
+	}
+}
+
 func typeForOperation(operation *ast.OperationDefinition, schema *ast.Schema) (string, error) {
 	builder := &typeBuilder{schema: schema}
-	err := builder.writeSelectionSetStruct(operation.SelectionSet)
+	err := builder.writeTypedef(
+		builder.baseTypeForOperation(operation.Operation), operation.SelectionSet)
 	return builder.String(), err
 }
 
@@ -28,48 +42,36 @@ func typeForInputType(typ *ast.Type, schema *ast.Schema) (string, error) {
 	return builder.String(), err
 }
 
-func (builder *typeBuilder) writeSelectionSetStruct(selectionSet ast.SelectionSet) error {
-	builder.WriteString("struct {\n")
-	for _, selection := range selectionSet {
-		switch selection := selection.(type) {
-		case *ast.Field:
-			var jsonName string
-			if selection.Alias != "" {
-				jsonName = selection.Alias
-			} else {
-				// TODO: is this case needed? tests don't seem to get here.
-				jsonName = selection.Name
-			}
-			// We need an exportable name for JSON-marshaling.
-			goName := strings.Title(jsonName)
-
-			builder.WriteString(goName)
-			builder.WriteRune(' ')
-
-			if selection.Definition == nil {
-				// Unclear why gqlparser hasn't already rejected this,
-				// but empirically it might not.
-				return fmt.Errorf("undefined selection %v", selection)
-			}
-			err := builder.writeType(selection.Definition.Type, selection.SelectionSet)
-			if err != nil {
-				return err
-			}
-
-			if jsonName != goName {
-				builder.WriteString("`json:\"")
-				builder.WriteString(jsonName)
-				builder.WriteString("\"`")
-			}
-			builder.WriteRune('\n')
-
-		case *ast.FragmentSpread, *ast.InlineFragment:
-			return fmt.Errorf("not implemented: %T", selection)
-		default:
-			return fmt.Errorf("invalid selection type: %v", selection)
-		}
+func (builder *typeBuilder) writeField(field *ast.Field) error {
+	var jsonName string
+	if field.Alias != "" {
+		jsonName = field.Alias
+	} else {
+		// TODO: is this case needed? tests don't seem to get here.
+		jsonName = field.Name
 	}
-	builder.WriteString("}")
+	// We need an exportable name for JSON-marshaling.
+	goName := strings.Title(jsonName)
+
+	builder.WriteString(goName)
+	builder.WriteRune(' ')
+
+	if field.Definition == nil {
+		// Unclear why gqlparser hasn't already rejected this,
+		// but empirically it might not.
+		return fmt.Errorf("undefined field %v", field)
+	}
+	err := builder.writeType(field.Definition.Type, field.SelectionSet)
+	if err != nil {
+		return err
+	}
+
+	if jsonName != goName {
+		builder.WriteString("`json:\"")
+		builder.WriteString(jsonName)
+		builder.WriteString("\"`")
+	}
+	builder.WriteRune('\n')
 	return nil
 }
 
@@ -96,15 +98,30 @@ func (builder *typeBuilder) writeType(typ *ast.Type, selectionSet ast.SelectionS
 		builder.WriteString("*")
 	}
 
-	typedef := builder.schema.Types[typ.Name()]
+	return builder.writeTypedef(builder.schema.Types[typ.Name()], selectionSet)
+}
+
+func (builder *typeBuilder) writeTypedef(typedef *ast.Definition, selectionSet ast.SelectionSet) error {
 	switch typedef.Kind {
 	case ast.Object, ast.InputObject:
-		return builder.writeSelectionSetStruct(selectionSet)
+		builder.WriteString("struct {\n")
+		for _, selection := range selectionSet {
+			switch selection := selection.(type) {
+			case *ast.Field:
+				builder.writeField(selection)
+			case *ast.FragmentSpread, *ast.InlineFragment:
+				return fmt.Errorf("not implemented: %T", selection)
+			default:
+				return fmt.Errorf("invalid selection type: %v", selection)
+			}
+		}
+		builder.WriteString("}")
+		return nil
 	case ast.Scalar, ast.Enum:
-		goName := graphQLNameToGoName[typ.Name()]
+		goName := graphQLNameToGoName[typedef.Name]
 		// TODO(benkraft): Handle custom scalars and enums.
 		if goName == "" {
-			return fmt.Errorf("unknown scalar name: %s", typ.Name())
+			return fmt.Errorf("unknown scalar name: %s", typedef.Name)
 		}
 		builder.WriteString(goName)
 		return nil
