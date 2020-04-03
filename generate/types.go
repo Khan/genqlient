@@ -32,6 +32,7 @@ func writeSelectionSetStruct(builder *strings.Builder, selectionSet ast.Selectio
 			if selection.Alias != "" {
 				jsonName = selection.Alias
 			} else {
+				// TODO: is this case needed? tests don't seem to get here.
 				jsonName = selection.Name
 			}
 			// We need an exportable name for JSON-marshaling.
@@ -40,6 +41,11 @@ func writeSelectionSetStruct(builder *strings.Builder, selectionSet ast.Selectio
 			builder.WriteString(goName)
 			builder.WriteRune(' ')
 
+			if selection.Definition == nil {
+				// Unclear why gqlparser hasn't already rejected this,
+				// but empirically it might not.
+				return fmt.Errorf("undefined selection %v", selection)
+			}
 			writeType(builder, selection.Definition.Type, selection.SelectionSet, schema)
 
 			if jsonName != goName {
@@ -77,7 +83,8 @@ func writeType(builder *strings.Builder, typ *ast.Type, selectionSet ast.Selecti
 		// Type is a list.
 		builder.WriteString("[]")
 		typ = typ.Elem
-	} else if !typ.NonNull { // no need for pointer if we have a list
+	}
+	if !typ.NonNull {
 		builder.WriteString("*")
 	}
 
