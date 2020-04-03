@@ -13,14 +13,14 @@ func typeForOperation(operation *ast.OperationDefinition, schema *ast.Schema) (s
 	return builder.String(), err
 }
 
-func typeForInputType(typ *ast.Type, schema *ast.Schema) string {
+func typeForInputType(typ *ast.Type, schema *ast.Schema) (string, error) {
 	var builder strings.Builder
 
 	// TODO: handle non-scalar types (by passing ...something... as the
 	// SelectionSet?)
-	writeType(&builder, typ, nil, schema)
+	err := writeType(&builder, typ, nil, schema)
 
-	return builder.String()
+	return builder.String(), err
 }
 
 func writeSelectionSetStruct(builder *strings.Builder, selectionSet ast.SelectionSet, schema *ast.Schema) error {
@@ -46,7 +46,10 @@ func writeSelectionSetStruct(builder *strings.Builder, selectionSet ast.Selectio
 				// but empirically it might not.
 				return fmt.Errorf("undefined selection %v", selection)
 			}
-			writeType(builder, selection.Definition.Type, selection.SelectionSet, schema)
+			err := writeType(builder, selection.Definition.Type, selection.SelectionSet, schema)
+			if err != nil {
+				return err
+			}
 
 			if jsonName != goName {
 				builder.WriteString("`json:\"")

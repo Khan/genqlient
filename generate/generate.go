@@ -51,15 +51,19 @@ type argument struct {
 	GraphQLName string
 }
 
-func fromASTArg(arg *ast.VariableDefinition, schema *ast.Schema) argument {
+func fromASTArg(arg *ast.VariableDefinition, schema *ast.Schema) (argument, error) {
 	graphQLName := arg.Variable
 	firstRest := strings.SplitN(graphQLName, "", 2)
 	goName := strings.ToLower(firstRest[0]) + firstRest[1]
+	goType, err := typeForInputType(arg.Type, schema)
+	if err != nil {
+		return argument{}, err
+	}
 	return argument{
 		GraphQLName: graphQLName,
 		GoName:      goName,
-		GoType:      typeForInputType(arg.Type, schema),
-	}
+		GoType:      goType,
+	}, nil
 }
 
 func reverse(slice []string) {
@@ -100,7 +104,11 @@ func fromASTOperation(op *ast.OperationDefinition, schema *ast.Schema) (operatio
 
 	args := make([]argument, len(op.VariableDefinitions))
 	for i, arg := range op.VariableDefinitions {
-		args[i] = fromASTArg(arg, schema)
+		var err error
+		args[i], err = fromASTArg(arg, schema)
+		if err != nil {
+			return operation{}, err
+		}
 	}
 
 	typ, err := typeForOperation(op, schema)
