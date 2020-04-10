@@ -25,8 +25,9 @@ func (builder *typeBuilder) baseTypeForOperation(operation ast.Operation) *ast.D
 	}
 }
 
-func typeForOperation(operation *ast.OperationDefinition, schema *ast.Schema) (string, error) {
+func typeForOperation(name string, operation *ast.OperationDefinition, schema *ast.Schema) (string, error) {
 	builder := &typeBuilder{schema: schema}
+	fmt.Fprintf(builder, "type %s ", name)
 	err := builder.writeTypedef(
 		builder.baseTypeForOperation(operation.Operation), operation.SelectionSet)
 	return builder.String(), err

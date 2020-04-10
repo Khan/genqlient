@@ -111,7 +111,9 @@ func fromASTOperation(op *ast.OperationDefinition, schema *ast.Schema) (operatio
 		}
 	}
 
-	typ, err := typeForOperation(op, schema)
+	// TODO: configure ResponseName format
+	responseName := op.Name + "Response"
+	typ, err := typeForOperation(responseName, op, schema)
 	if err != nil {
 		return operation{}, fmt.Errorf("could not compute return-type for query: %v", err)
 	}
@@ -124,8 +126,7 @@ func fromASTOperation(op *ast.OperationDefinition, schema *ast.Schema) (operatio
 		Body: "\n" + builder.String(),
 		Args: args,
 
-		// TODO: configure ResponseName format
-		ResponseName: op.Name + "Response",
+		ResponseName: responseName,
 		ResponseType: typ,
 	}, nil
 }

@@ -48,7 +48,7 @@ func TestTypeForOperation(t *testing.T) {
 	}{{
 		"SimpleQuery",
 		`{ user { id } }`,
-		`struct{
+		`type Response struct{
 			User *struct {
 				Id string ` + "`json:\"id\"`" + `
 			} ` + "`json:\"user\"`" + `
@@ -56,7 +56,7 @@ func TestTypeForOperation(t *testing.T) {
 	}, {
 		"QueryWithAlias",
 		`{ User: user { ID: id } }`,
-		`struct{
+		`type Response struct{
 			User *struct {
 				ID string
 			}
@@ -73,7 +73,7 @@ func TestTypeForOperation(t *testing.T) {
 				EmailsWithNullsOrNull: emailsWithNullsOrNull
 			}
 		}`,
-		`struct{
+		`type Response struct{
 			User *struct {
 				Emails                []string
 				EmailsOrNull          []string
@@ -91,7 +91,7 @@ func TestTypeForOperation(t *testing.T) {
 				}
 			}
 		}`,
-		`struct{
+		`type Response struct{
 			User *struct {
 				AuthMethods []struct {
 					Provider *string
@@ -104,7 +104,7 @@ func TestTypeForOperation(t *testing.T) {
 	for _, test := range tests {
 		test := test
 		t.Run(test.name, func(t *testing.T) {
-			expectedGoType, err := gofmt("type Response " + test.expectedGoType)
+			expectedGoType, err := gofmt(test.expectedGoType)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -118,13 +118,13 @@ func TestTypeForOperation(t *testing.T) {
 				t.Fatalf("got %v operations, want 1", len(queryDoc.Operations))
 			}
 
-			goType, err := typeForOperation(queryDoc.Operations[0], schema)
+			goType, err := typeForOperation("Response", queryDoc.Operations[0], schema)
 			if err != nil {
 				t.Error(err)
 			}
 
 			// gofmt before comparing.
-			goType, err = gofmt("type Response " + goType)
+			goType, err = gofmt(goType)
 			if err != nil {
 				t.Error(err)
 			}

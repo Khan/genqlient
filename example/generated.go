@@ -8,7 +8,7 @@ import (
 	"github.com/Khan/genql/graphql"
 )
 
-type getViewerResponse = struct {
+type getViewerResponse struct {
 	Viewer struct {
 		MyName *string
 	} `json:"viewer"`
@@ -26,7 +26,7 @@ query getViewer {
 	return &retval, err
 }
 
-type getUserResponse = struct {
+type getUserResponse struct {
 	User *struct {
 		TheirName *string `json:"theirName"`
 	} `json:"user"`
