@@ -14,6 +14,12 @@ type getViewerResponse struct {
 	} `json:"viewer"`
 }
 
+type getUserResponse struct {
+	User *struct {
+		TheirName *string `json:"theirName"`
+	} `json:"user"`
+}
+
 func getViewer(ctx context.Context, client *graphql.Client) (*getViewerResponse, error) {
 	var retval getViewerResponse
 	err := client.MakeRequest(ctx, `
@@ -24,12 +30,6 @@ query getViewer {
 }
 `, &retval, nil)
 	return &retval, err
-}
-
-type getUserResponse struct {
-	User *struct {
-		TheirName *string `json:"theirName"`
-	} `json:"user"`
 }
 
 // getUser gets the given user's name from their username.

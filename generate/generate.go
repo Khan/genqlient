@@ -20,11 +20,16 @@ var tmplAbsFilename = filepath.Join(filepath.Dir(thisFilename), tmplRelFilename)
 
 var tmpl = template.Must(template.ParseFiles(tmplAbsFilename))
 
-type templateParams struct {
+// generator is the context for the codegen process (and ends up getting passed
+// to the template).
+type generator struct {
 	// The name of the package into which to generate the operation-helpers.
 	PackageName string
 	// The list of operations for which to generate code.
 	Operations []operation
+	// The types needed for these operations.
+	typeMap map[string]string
+	schema  *ast.Schema
 }
 
 type operation struct {
@@ -38,11 +43,8 @@ type operation struct {
 	Body string
 	// The arguments to the operation.
 	Args []argument
-
 	// The type-name for the operation's response type.
 	ResponseName string
-	// The body of the operation's response type (e.g. struct { ... }).
-	ResponseType string
 }
 
 type argument struct {
@@ -51,11 +53,27 @@ type argument struct {
 	GraphQLName string
 }
 
-func fromASTArg(arg *ast.VariableDefinition, schema *ast.Schema) (argument, error) {
+func newGenerator(packageName string, schema *ast.Schema) *generator {
+	return &generator{
+		PackageName: packageName,
+		typeMap:     map[string]string{},
+		schema:      schema,
+	}
+}
+
+func (g *generator) Types() string {
+	defs := make([]string, 0, len(g.typeMap))
+	for _, def := range g.typeMap {
+		defs = append(defs, def)
+	}
+	return strings.Join(defs, "\n\n")
+}
+
+func (g *generator) getArgument(arg *ast.VariableDefinition) (argument, error) {
 	graphQLName := arg.Variable
 	firstRest := strings.SplitN(graphQLName, "", 2)
 	goName := strings.ToLower(firstRest[0]) + firstRest[1]
-	goType, err := typeForInputType(arg.Type, schema)
+	goType, err := g.addTypeForInputType(arg.Type)
 	if err != nil {
 		return argument{}, err
 	}
@@ -66,13 +84,7 @@ func fromASTArg(arg *ast.VariableDefinition, schema *ast.Schema) (argument, erro
 	}, nil
 }
 
-func reverse(slice []string) {
-	for left, right := 0, len(slice)-1; left < right; left, right = left+1, right-1 {
-		slice[left], slice[right] = slice[right], slice[left]
-	}
-}
-
-func getDocComment(op *ast.OperationDefinition) string {
+func (g *generator) getDocComment(op *ast.OperationDefinition) string {
 	var commentLines []string
 	var sourceLines = strings.Split(op.Position.Src.Input, "\n")
 	for i := op.Position.Line - 1; i > 0; i-- {
@@ -90,7 +102,7 @@ func getDocComment(op *ast.OperationDefinition) string {
 	return strings.Join(commentLines, "\n")
 }
 
-func fromASTOperation(op *ast.OperationDefinition, schema *ast.Schema) (operation, error) {
+func (g *generator) addOperation(op *ast.OperationDefinition) error {
 	// TODO: we may have to actually get the precise query text, in case we
 	// want to be hashing it or something like that.  This is a bit tricky
 	// because gqlparser's ast doesn't provide node end-position (only
@@ -105,30 +117,28 @@ func fromASTOperation(op *ast.OperationDefinition, schema *ast.Schema) (operatio
 	args := make([]argument, len(op.VariableDefinitions))
 	for i, arg := range op.VariableDefinitions {
 		var err error
-		args[i], err = fromASTArg(arg, schema)
+		args[i], err = g.getArgument(arg)
 		if err != nil {
-			return operation{}, err
+			return err
 		}
 	}
 
-	// TODO: configure ResponseName format
-	responseName := op.Name + "Response"
-	typ, err := typeForOperation(responseName, op, schema)
+	responseName, err := g.addTypeForOperation(op)
 	if err != nil {
-		return operation{}, fmt.Errorf("could not compute return-type for query: %v", err)
+		return err
 	}
 
-	return operation{
+	g.Operations = append(g.Operations, operation{
 		Type: op.Operation,
 		Name: op.Name,
-		Doc:  getDocComment(op),
+		Doc:  g.getDocComment(op),
 		// The newline just makes it format a little nicer
-		Body: "\n" + builder.String(),
-		Args: args,
-
+		Body:         "\n" + builder.String(),
+		Args:         args,
 		ResponseName: responseName,
-		ResponseType: typ,
-	}, nil
+	})
+
+	return nil
 }
 
 func Generate(config *Config) ([]byte, error) {
@@ -142,21 +152,15 @@ func Generate(config *Config) ([]byte, error) {
 		return nil, err
 	}
 
-	operations := make([]operation, len(document.Operations))
-	for i, op := range document.Operations {
-		operations[i], err = fromASTOperation(op, schema)
-		if err != nil {
+	g := newGenerator(config.Package, schema)
+	for _, op := range document.Operations {
+		if err = g.addOperation(op); err != nil {
 			return nil, err
 		}
 	}
 
-	data := templateParams{
-		PackageName: config.Package,
-		Operations:  operations,
-	}
-
 	var buf bytes.Buffer
-	err = tmpl.Execute(&buf, data)
+	err = tmpl.Execute(&buf, g)
 	if err != nil {
 		return nil, fmt.Errorf("could not render template: %v", err)
 	}

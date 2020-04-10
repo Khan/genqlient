@@ -9,32 +9,46 @@ import (
 
 type typeBuilder struct {
 	strings.Builder
-	schema *ast.Schema
+	*generator
 }
 
-func (builder *typeBuilder) baseTypeForOperation(operation ast.Operation) *ast.Definition {
+func (g *generator) baseTypeForOperation(operation ast.Operation) *ast.Definition {
 	switch operation {
 	case ast.Query:
-		return builder.schema.Query
+		return g.schema.Query
 	case ast.Mutation:
-		return builder.schema.Mutation
+		return g.schema.Mutation
 	case ast.Subscription:
-		return builder.schema.Subscription
+		return g.schema.Subscription
 	default:
 		panic(fmt.Sprintf("unexpected operation: %v", operation))
 	}
 }
 
-func typeForOperation(name string, operation *ast.OperationDefinition, schema *ast.Schema) (string, error) {
-	builder := &typeBuilder{schema: schema}
+func (g *generator) addTypeForOperation(operation *ast.OperationDefinition) (name string, err error) {
+	// TODO: configure ResponseName format
+	name = operation.Name + "Response"
+
+	if def, ok := g.typeMap[name]; ok {
+		// TODO: if the name is taken, maybe try to find another?
+		return "", fmt.Errorf("%s already defined:\n%s", name, def)
+	}
+
+	builder := &typeBuilder{generator: g}
 	fmt.Fprintf(builder, "type %s ", name)
-	err := builder.writeTypedef(
-		builder.baseTypeForOperation(operation.Operation), operation.SelectionSet)
-	return builder.String(), err
+	err = builder.writeTypedef(
+		g.baseTypeForOperation(operation.Operation), operation.SelectionSet)
+	if err != nil {
+		return "", err
+	}
+
+	def := builder.String()
+	g.typeMap[name] = def
+	return name, nil
 }
 
-func typeForInputType(typ *ast.Type, schema *ast.Schema) (string, error) {
-	builder := &typeBuilder{schema: schema}
+func (g *generator) addTypeForInputType(typ *ast.Type) (string, error) {
+	builder := &typeBuilder{generator: g}
 
 	// TODO: handle non-scalar types (by passing ...something... as the
 	// SelectionSet?)

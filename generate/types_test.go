@@ -118,13 +118,14 @@ func TestTypeForOperation(t *testing.T) {
 				t.Fatalf("got %v operations, want 1", len(queryDoc.Operations))
 			}
 
-			goType, err := typeForOperation("Response", queryDoc.Operations[0], schema)
+			g := newGenerator("test_package", schema)
+			name, err := g.addTypeForOperation(queryDoc.Operations[0])
 			if err != nil {
 				t.Error(err)
 			}
 
 			// gofmt before comparing.
-			goType, err = gofmt(goType)
+			goType, err := gofmt(g.typeMap[name])
 			if err != nil {
 				t.Error(err)
 			}
