@@ -1,7 +1,9 @@
 package generate
 
 import (
+	"fmt"
 	"go/format"
+	"strings"
 	"testing"
 
 	"github.com/vektah/gqlparser"
@@ -16,31 +18,34 @@ func gofmt(src string) (string, error) {
 	return string(formatted), nil
 }
 
-func TestTypeForOperation(t *testing.T) {
-	schema, err := gqlparser.LoadSchema(&ast.Source{Name: "test schema", Input: `
-		type AuthMethod {
-			provider: String
-			email: String
-		}
-
-		type User {
-			id: ID!
-			name: String
-			emails: [String!]!
-			emailsOrNull: [String!]
-			emailsWithNulls: [String]!
-			emailsWithNullsOrNull: [String]
-			authMethods: [AuthMethod!]!
-		}
-
-		type Query {
-			user: User
-		}
-	`})
-	if err != nil {
-		t.Fatal(err)
+var schemaText = `
+	input UserQueryInput {
+		email: String
+		name: String
+		id: ID
 	}
 
+	type AuthMethod {
+		provider: String
+		email: String
+	}
+
+	type User {
+		id: ID!
+		name: String
+		emails: [String!]!
+		emailsOrNull: [String!]
+		emailsWithNulls: [String]!
+		emailsWithNullsOrNull: [String]
+		authMethods: [AuthMethod!]!
+	}
+
+	type Query {
+		user: User
+	}
+`
+
+func TestTypeForOperation(t *testing.T) {
 	tests := []struct {
 		name           string
 		operation      string
@@ -109,9 +114,15 @@ func TestTypeForOperation(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			queryDoc, graphqlError := gqlparser.LoadQuery(schema, test.operation)
+			schema, graphqlError := gqlparser.LoadSchema(
+				&ast.Source{Name: "test schema", Input: schemaText})
 			if graphqlError != nil {
 				t.Fatal(graphqlError)
+			}
+
+			queryDoc, graphqlListError := gqlparser.LoadQuery(schema, test.operation)
+			if graphqlListError != nil {
+				t.Fatal(graphqlListError)
 			}
 
 			if len(queryDoc.Operations) != 1 {
@@ -119,7 +130,7 @@ func TestTypeForOperation(t *testing.T) {
 			}
 
 			g := newGenerator("test_package", schema)
-			name, err := g.addTypeForOperation(queryDoc.Operations[0])
+			name, err := g.getTypeForOperation(queryDoc.Operations[0])
 			if err != nil {
 				t.Error(err)
 			}
@@ -132,6 +143,83 @@ func TestTypeForOperation(t *testing.T) {
 
 			if goType != expectedGoType {
 				t.Errorf("got:\n%v\nwant:\n%v\n", goType, expectedGoType)
+			}
+		})
+	}
+}
+
+func TestTypeForInputType(t *testing.T) {
+	tests := []struct {
+		name           string
+		graphQLType    string
+		expectedGoType string
+		otherTypes     []string
+	}{{
+		`RequiredBuiltin`,
+		`String!`,
+		`string`,
+		nil,
+	}, {
+		`ListOfBuiltin`,
+		`[String]`,
+		`[]*string`,
+		nil,
+	}, {
+		`DefinedType`,
+		`UserQueryInput`,
+		`*userQueryInput`,
+		[]string{`type userQueryInput struct {
+			Email    *string ` + "`json:\"email\"`" + `
+			Name     *string ` + "`json:\"name\"`" + `
+			Id       *string ` + "`json:\"id\"`" + `
+		}`},
+	}}
+
+	for _, test := range tests {
+		test := test
+		t.Run(test.name, func(t *testing.T) {
+			expectedGoCode := fmt.Sprintf(
+				"type Input %s\n\n%s", test.expectedGoType,
+				strings.Join(test.otherTypes, "\n\n"))
+			expectedGoCode, err := gofmt(expectedGoCode)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			extraSchemaText := fmt.Sprintf(
+				"extend type Query { testQuery(var: %s): User }", test.graphQLType)
+			schema, graphqlError := gqlparser.LoadSchema(
+				&ast.Source{Name: "test schema", Input: schemaText},
+				&ast.Source{Name: "test schema extension", Input: extraSchemaText},
+			)
+			if graphqlError != nil {
+				t.Fatal(graphqlError)
+			}
+
+			operation := fmt.Sprintf(
+				"query($var: %s) { testQuery(var: $var) { id } }", test.graphQLType)
+			queryDoc, graphqlListError := gqlparser.LoadQuery(schema, operation)
+			if graphqlListError != nil {
+				t.Fatal(graphqlListError)
+			}
+
+			g := newGenerator("test_package", schema)
+			goType, err := g.getTypeForInputType(
+				queryDoc.Operations[0].VariableDefinitions[0].Type)
+			if err != nil {
+				t.Error(err)
+			}
+
+			goCode := fmt.Sprintf("type Input %s\n\n%s", goType, g.Types())
+
+			// gofmt before comparing.
+			goCode, err = gofmt(goCode)
+			if err != nil {
+				t.Error(err)
+			}
+
+			if goCode != expectedGoCode {
+				t.Errorf("got:\n%v\nwant:\n%v\n", goCode, expectedGoCode)
 			}
 		})
 	}

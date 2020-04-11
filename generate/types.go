@@ -25,58 +25,131 @@ func (g *generator) baseTypeForOperation(operation ast.Operation) *ast.Definitio
 	}
 }
 
-func (g *generator) addTypeForOperation(operation *ast.OperationDefinition) (name string, err error) {
+func (g *generator) getTypeForOperation(operation *ast.OperationDefinition) (name string, err error) {
 	// TODO: configure ResponseName format
 	name = operation.Name + "Response"
 
 	if def, ok := g.typeMap[name]; ok {
-		// TODO: if the name is taken, maybe try to find another?
-		return "", fmt.Errorf("%s already defined:\n%s", name, def)
+		// TODO: check for and handle conflicts a better way
+		return name, fmt.Errorf("%s already defined:\n%s", name, def)
 	}
 
-	builder := &typeBuilder{generator: g}
-	fmt.Fprintf(builder, "type %s ", name)
-	err = builder.writeTypedef(
-		g.baseTypeForOperation(operation.Operation), operation.SelectionSet)
+	selectionSet, err := selections(operation.SelectionSet)
 	if err != nil {
-		return "", err
+		return name, err
 	}
 
-	def := builder.String()
-	g.typeMap[name] = def
-	return name, nil
+	err = g.addTypeForDefinition(
+		name, g.baseTypeForOperation(operation.Operation), selectionSet)
+
+	return name, err
 }
 
-func (g *generator) addTypeForInputType(typ *ast.Type) (string, error) {
+func (g *generator) addTypeForDefinition(name string, typ *ast.Definition, selectionSet []selection) error {
 	builder := &typeBuilder{generator: g}
+	fmt.Fprintf(builder, "type %s ", name)
+	err := builder.writeTypedef(typ, selectionSet)
+	if err != nil {
+		return err
+	}
 
-	// TODO: handle non-scalar types (by passing ...something... as the
-	// SelectionSet?)
-	err := builder.writeType(typ, nil)
+	g.typeMap[name] = builder.String()
+	return nil
+}
 
+func (g *generator) getTypeForInputType(typ *ast.Type) (string, error) {
+	builder := &typeBuilder{generator: g}
+	err := builder.writeType(typ, selectionsForType(g, typ), false)
 	return builder.String(), err
 }
 
-func (builder *typeBuilder) writeField(field *ast.Field) error {
+type selection interface {
+	Alias() string
+	Name() string
+	Type() *ast.Type
+	SelectionSet() ([]selection, error)
+}
+
+type field struct{ field *ast.Field }
+
+func (s field) Alias() string { return s.field.Alias }
+func (s field) Name() string  { return s.field.Name }
+
+func (s field) Type() *ast.Type {
+	if s.field.Definition == nil {
+		return nil
+	}
+	return s.field.Definition.Type
+}
+
+func (s field) SelectionSet() ([]selection, error) {
+	return selections(s.field.SelectionSet)
+}
+
+func selections(selectionSet ast.SelectionSet) ([]selection, error) {
+	retval := make([]selection, len(selectionSet))
+	for i, selection := range selectionSet {
+		switch selection := selection.(type) {
+		case *ast.Field:
+			retval[i] = field{selection}
+		case *ast.FragmentSpread, *ast.InlineFragment:
+			return nil, fmt.Errorf("not implemented: %T", selection)
+		default:
+			return nil, fmt.Errorf("invalid selection type: %v", selection)
+		}
+	}
+	return retval, nil
+}
+
+type inputField struct {
+	*generator
+	field *ast.FieldDefinition
+}
+
+func (s inputField) Alias() string   { return s.field.Name }
+func (s inputField) Name() string    { return s.field.Name }
+func (s inputField) Type() *ast.Type { return s.field.Type }
+
+func (s inputField) SelectionSet() ([]selection, error) {
+	return selectionsForType(s.generator, s.field.Type), nil
+}
+
+func selectionsForType(g *generator, typ *ast.Type) []selection {
+	def := g.schema.Types[typ.Name()]
+	selectionSet := make([]selection, len(def.Fields))
+	for i, field := range def.Fields {
+		selectionSet[i] = inputField{g, field}
+	}
+	return selectionSet
+}
+
+func (builder *typeBuilder) writeField(selection selection) error {
 	var jsonName string
-	if field.Alias != "" {
-		jsonName = field.Alias
+	if selection.Alias() != "" {
+		jsonName = selection.Alias()
 	} else {
 		// TODO: is this case needed? tests don't seem to get here.
-		jsonName = field.Name
+		jsonName = selection.Name()
 	}
 	// We need an exportable name for JSON-marshaling.
-	goName := strings.Title(jsonName)
+	goName := upperFirst(jsonName)
 
 	builder.WriteString(goName)
 	builder.WriteRune(' ')
 
-	if field.Definition == nil {
+	typ := selection.Type()
+	if typ == nil {
 		// Unclear why gqlparser hasn't already rejected this,
 		// but empirically it might not.
-		return fmt.Errorf("undefined field %v", field)
+		return fmt.Errorf("undefined field %v", selection.Name())
 	}
-	err := builder.writeType(field.Definition.Type, field.SelectionSet)
+
+	selectionSet, err := selection.SelectionSet()
+	if err != nil {
+		return err
+	}
+
+	err = builder.writeType(typ, selectionSet, true)
 	if err != nil {
 		return err
 	}
@@ -90,7 +163,7 @@ func (builder *typeBuilder) writeField(field *ast.Field) error {
 	return nil
 }
 
-var graphQLNameToGoName = map[string]string{
+var builtinTypes = map[string]string{
 	"Int":     "int", // TODO: technically int32 is always enough, use that?
 	"Float":   "float64",
 	"String":  "string",
@@ -98,7 +171,7 @@ var graphQLNameToGoName = map[string]string{
 	"ID":      "string", // TODO: named type for IDs?
 }
 
-func (builder *typeBuilder) writeType(typ *ast.Type, selectionSet ast.SelectionSet) error {
+func (builder *typeBuilder) writeType(typ *ast.Type, selectionSet []selection, inline bool) error {
 	// gqlgen does slightly different things here since it defines names for
 	// all the intermediate types, but its implementation may be useful to crib
 	// from:
@@ -113,27 +186,36 @@ func (builder *typeBuilder) writeType(typ *ast.Type, selectionSet ast.SelectionS
 		builder.WriteString("*")
 	}
 
-	return builder.writeTypedef(builder.schema.Types[typ.Name()], selectionSet)
+	_, ok := builtinTypes[typ.Name()]
+	def := builder.schema.Types[typ.Name()]
+	if ok || inline {
+		return builder.writeTypedef(def, selectionSet)
+	}
+
+	// TODO: casing should be configurable?
+	name := lowerFirst(typ.Name())
+	builder.WriteString(name)
+	if _, ok := builder.typeMap[name]; ok {
+		return nil
+	}
+	// Writes a typedef elsewhere
+	return builder.addTypeForDefinition(name, def, selectionSet)
 }
 
-func (builder *typeBuilder) writeTypedef(typedef *ast.Definition, selectionSet ast.SelectionSet) error {
+func (builder *typeBuilder) writeTypedef(typedef *ast.Definition, selectionSet []selection) error {
 	switch typedef.Kind {
 	case ast.Object, ast.InputObject:
 		builder.WriteString("struct {\n")
-		for _, selection := range selectionSet {
-			switch selection := selection.(type) {
-			case *ast.Field:
-				builder.writeField(selection)
-			case *ast.FragmentSpread, *ast.InlineFragment:
-				return fmt.Errorf("not implemented: %T", selection)
-			default:
-				return fmt.Errorf("invalid selection type: %v", selection)
+		for _, field := range selectionSet {
+			err := builder.writeField(field)
+			if err != nil {
+				return err
 			}
 		}
 		builder.WriteString("}")
 		return nil
 	case ast.Scalar, ast.Enum:
-		goName := graphQLNameToGoName[typedef.Name]
+		goName := builtinTypes[typedef.Name]
 		// TODO(benkraft): Handle custom scalars and enums.
 		if goName == "" {
 			return fmt.Errorf("unknown scalar name: %s", typedef.Name)

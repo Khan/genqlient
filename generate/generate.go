@@ -73,7 +73,7 @@ func (g *generator) getArgument(arg *ast.VariableDefinition) (argument, error) {
 	graphQLName := arg.Variable
 	firstRest := strings.SplitN(graphQLName, "", 2)
 	goName := strings.ToLower(firstRest[0]) + firstRest[1]
-	goType, err := g.addTypeForInputType(arg.Type)
+	goType, err := g.getTypeForInputType(arg.Type)
 	if err != nil {
 		return argument{}, err
 	}
@@ -123,7 +123,7 @@ func (g *generator) addOperation(op *ast.OperationDefinition) error {
 		}
 	}
 
-	responseName, err := g.addTypeForOperation(op)
+	responseName, err := g.getTypeForOperation(op)
 	if err != nil {
 		return err
 	}
