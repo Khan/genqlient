@@ -1,6 +1,7 @@
 package generate
 
 import (
+	"strings"
 	"unicode"
 	"unicode/utf8"
 )
@@ -25,4 +26,22 @@ func lowerFirst(s string) string {
 
 func upperFirst(s string) string {
 	return changeFirst(s, unicode.ToUpper)
+}
+
+func goConstName(s string) string {
+	var prev rune
+	return strings.Map(func(r rune) rune {
+		var ret rune
+		if prev == 0 && r == '_' {
+			return '_' // still treat next char as first
+		} else if r == '_' {
+			ret = -1
+		} else if prev == '_' {
+			ret = unicode.ToUpper(r)
+		} else {
+			ret = unicode.ToLower(r)
+		}
+		prev = r
+		return ret
+	}, s)
 }

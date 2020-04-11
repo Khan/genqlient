@@ -8,6 +8,7 @@ import (
 )
 
 type typeBuilder struct {
+	typeName string
 	strings.Builder
 	*generator
 }
@@ -31,34 +32,43 @@ func (g *generator) getTypeForOperation(operation *ast.OperationDefinition) (nam
 
 	if def, ok := g.typeMap[name]; ok {
 		// TODO: check for and handle conflicts a better way
-		return name, fmt.Errorf("%s already defined:\n%s", name, def)
+		return "", fmt.Errorf("%s already defined:\n%s", name, def)
 	}
 
 	selectionSet, err := selections(operation.SelectionSet)
 	if err != nil {
-		return name, err
+		return "", err
 	}
 
-	err = g.addTypeForDefinition(
+	return g.addTypeForDefinition(
 		name, g.baseTypeForOperation(operation.Operation), selectionSet)
-
-	return name, err
 }
 
-func (g *generator) addTypeForDefinition(name string, typ *ast.Definition, selectionSet []selection) error {
-	builder := &typeBuilder{generator: g}
+func (g *generator) addTypeForDefinition(nameOverride string, typ *ast.Definition, selectionSet []selection) (name string, err error) {
+	if nameOverride != "" {
+		name = nameOverride
+	} else {
+		// TODO: casing should be configurable
+		name = lowerFirst(typ.Name)
+	}
+
+	if _, ok := g.typeMap[name]; ok {
+		return name, nil
+	}
+
+	builder := &typeBuilder{typeName: name, generator: g}
 	fmt.Fprintf(builder, "type %s ", name)
-	err := builder.writeTypedef(typ, selectionSet)
+	err = builder.writeTypedef(typ, selectionSet)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	g.typeMap[name] = builder.String()
-	return nil
+	return name, nil
 }
 
 func (g *generator) getTypeForInputType(typ *ast.Type) (string, error) {
-	builder := &typeBuilder{generator: g}
+	builder := &typeBuilder{typeName: lowerFirst(typ.Name()), generator: g}
 	err := builder.writeType(typ, selectionsForType(g, typ), false)
 	return builder.String(), err
 }
@@ -186,20 +196,28 @@ func (builder *typeBuilder) writeType(typ *ast.Type, selectionSet []selection, i
 		builder.WriteString("*")
 	}
 
-	_, ok := builtinTypes[typ.Name()]
 	def := builder.schema.Types[typ.Name()]
-	if ok || inline {
+	// TODO: set inline = false for nested types
+	switch def.Kind {
+	case ast.Enum, ast.Union, ast.Interface:
+		inline = false
+	case ast.Scalar:
+		// TODO: this makes no sense!  refactor builtin type handling.
+		inline = true
+	}
+
+	if inline {
 		return builder.writeTypedef(def, selectionSet)
 	}
 
-	// TODO: casing should be configurable?
-	name := lowerFirst(typ.Name())
-	builder.WriteString(name)
-	if _, ok := builder.typeMap[name]; ok {
-		return nil
+	// Writes a typedef elsewhere (if not already defined)
+	name, err := builder.addTypeForDefinition("", def, selectionSet)
+	if err != nil {
+		return err
 	}
-	// Writes a typedef elsewhere
-	return builder.addTypeForDefinition(name, def, selectionSet)
+
+	builder.WriteString(name)
+	return nil
 }
 
 func (builder *typeBuilder) writeTypedef(typedef *ast.Definition, selectionSet []selection) error {
@@ -214,13 +232,25 @@ func (builder *typeBuilder) writeTypedef(typedef *ast.Definition, selectionSet [
 		}
 		builder.WriteString("}")
 		return nil
-	case ast.Scalar, ast.Enum:
+	case ast.Scalar:
 		goName := builtinTypes[typedef.Name]
 		// TODO(benkraft): Handle custom scalars and enums.
 		if goName == "" {
 			return fmt.Errorf("unknown scalar name: %s", typedef.Name)
 		}
 		builder.WriteString(goName)
+		return nil
+	case ast.Enum:
+		// All GraphQL enums have underlying type string (in the Go sense).
+		builder.WriteString("string\n")
+		builder.WriteString("const (\n")
+		for _, val := range typedef.EnumValues {
+			// TODO: casing should be configurable
+			fmt.Fprintf(builder, "%s %s = \"%s\"\n",
+				goConstName(val.Name+"_"+builder.typeName),
+				builder.typeName, val.Name)
+		}
+		builder.WriteString(")\n")
 		return nil
 	case ast.Union, ast.Interface:
 		return fmt.Errorf("not implemented: %v", typedef.Kind)

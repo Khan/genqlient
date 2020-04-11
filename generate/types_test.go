@@ -3,6 +3,7 @@ package generate
 import (
 	"fmt"
 	"go/format"
+	"sort"
 	"strings"
 	"testing"
 
@@ -11,6 +12,7 @@ import (
 )
 
 func gofmt(src string) (string, error) {
+	src = strings.TrimSpace(src)
 	formatted, err := format.Source([]byte(src))
 	if err != nil {
 		return src, err
@@ -19,10 +21,16 @@ func gofmt(src string) (string, error) {
 }
 
 var schemaText = `
+	enum Role {
+		STUDENT
+		TEACHER
+	}
+
 	input UserQueryInput {
 		email: String
 		name: String
 		id: ID
+		role: Role
 	}
 
 	type AuthMethod {
@@ -32,6 +40,7 @@ var schemaText = `
 
 	type User {
 		id: ID!
+		roles: [Role!]
 		name: String
 		emails: [String!]!
 		emailsOrNull: [String!]
@@ -69,6 +78,20 @@ func TestTypeForOperation(t *testing.T) {
 		// Here on out, we use aliases, just because aliases are a lot less
 		// annoying to write in Go strings than Go struct tags.
 	}, {
+		"QueryWithDoubleAlias",
+		`{
+			User: user {
+				ID: id
+				AlsoID: id
+			}
+		}`,
+		`type Response struct{
+			User *struct {
+				ID string
+				AlsoID string
+			}
+		}`,
+	}, {
 		"QueryWithSlices",
 		`{
 			User: user {
@@ -104,6 +127,24 @@ func TestTypeForOperation(t *testing.T) {
 				}
 			}
 		}`,
+	}, {
+		"QueryWithEnums",
+		`{
+			User: user {
+				Roles: roles
+			}
+		}`,
+		`type Response struct{
+			User *struct {
+				Roles []role
+			}
+		}
+
+		type role string
+		const (
+			studentRole role = "STUDENT"
+			teacherRole role = "TEACHER"
+		)`,
 	}}
 
 	for _, test := range tests {
@@ -130,13 +171,13 @@ func TestTypeForOperation(t *testing.T) {
 			}
 
 			g := newGenerator("test_package", schema)
-			name, err := g.getTypeForOperation(queryDoc.Operations[0])
+			_, err = g.getTypeForOperation(queryDoc.Operations[0])
 			if err != nil {
 				t.Error(err)
 			}
 
 			// gofmt before comparing.
-			goType, err := gofmt(g.typeMap[name])
+			goType, err := gofmt(g.Types())
 			if err != nil {
 				t.Error(err)
 			}
@@ -168,16 +209,25 @@ func TestTypeForInputType(t *testing.T) {
 		`DefinedType`,
 		`UserQueryInput`,
 		`*userQueryInput`,
-		[]string{`type userQueryInput struct {
-			Email    *string ` + "`json:\"email\"`" + `
-			Name     *string ` + "`json:\"name\"`" + `
-			Id       *string ` + "`json:\"id\"`" + `
-		}`},
+		[]string{
+			`type role string
+			const (
+				studentRole role = "STUDENT"
+				teacherRole role = "TEACHER"
+			)`,
+			`type userQueryInput struct {
+				Email    *string ` + "`json:\"email\"`" + `
+				Name     *string ` + "`json:\"name\"`" + `
+				Id       *string ` + "`json:\"id\"`" + `
+				Role     *role   ` + "`json:\"role\"`" + `
+			}`,
+		},
 	}}
 
 	for _, test := range tests {
 		test := test
 		t.Run(test.name, func(t *testing.T) {
+			sort.Strings(test.otherTypes) // To match generator.Types()
 			expectedGoCode := fmt.Sprintf(
 				"type Input %s\n\n%s", test.expectedGoType,
 				strings.Join(test.otherTypes, "\n\n"))

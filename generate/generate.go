@@ -6,6 +6,7 @@ import (
 	"go/format"
 	"path/filepath"
 	"runtime"
+	"sort"
 	"strings"
 	"text/template"
 
@@ -66,6 +67,10 @@ func (g *generator) Types() string {
 	for _, def := range g.typeMap {
 		defs = append(defs, def)
 	}
+	// Make sure we have a stable order.  (It's somewhat
+	// arbitrary but in practice mostly alphabetical.)
+	// TODO: ideally we'd do a nice semantic ordering.
+	sort.Strings(defs)
 	return strings.Join(defs, "\n\n")
 }
 
