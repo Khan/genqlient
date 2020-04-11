@@ -45,6 +45,11 @@ func (g *generator) getTypeForOperation(operation *ast.OperationDefinition) (nam
 }
 
 func (g *generator) addTypeForDefinition(nameOverride string, typ *ast.Definition, selectionSet []selection) (name string, err error) {
+	goName, ok := builtinTypes[typ.Name]
+	if ok {
+		return goName, nil
+	}
+
 	if nameOverride != "" {
 		name = nameOverride
 	} else {
@@ -199,11 +204,8 @@ func (builder *typeBuilder) writeType(typ *ast.Type, selectionSet []selection, i
 	def := builder.schema.Types[typ.Name()]
 	// TODO: set inline = false for nested types
 	switch def.Kind {
-	case ast.Enum, ast.Union, ast.Interface:
+	case ast.Scalar, ast.Enum, ast.Union, ast.Interface:
 		inline = false
-	case ast.Scalar:
-		// TODO: this makes no sense!  refactor builtin type handling.
-		inline = true
 	}
 
 	if inline {
@@ -232,14 +234,6 @@ func (builder *typeBuilder) writeTypedef(typedef *ast.Definition, selectionSet [
 		}
 		builder.WriteString("}")
 		return nil
-	case ast.Scalar:
-		goName := builtinTypes[typedef.Name]
-		// TODO(benkraft): Handle custom scalars and enums.
-		if goName == "" {
-			return fmt.Errorf("unknown scalar name: %s", typedef.Name)
-		}
-		builder.WriteString(goName)
-		return nil
 	case ast.Enum:
 		// All GraphQL enums have underlying type string (in the Go sense).
 		builder.WriteString("string\n")
@@ -252,7 +246,8 @@ func (builder *typeBuilder) writeTypedef(typedef *ast.Definition, selectionSet [
 		}
 		builder.WriteString(")\n")
 		return nil
-	case ast.Union, ast.Interface:
+	case ast.Scalar, ast.Union, ast.Interface:
+		// TODO(benkraft): Handle custom scalars, unions, and interfaces.
 		return fmt.Errorf("not implemented: %v", typedef.Kind)
 	default:
 		return fmt.Errorf("unexpected kind: %v", typedef.Kind)
