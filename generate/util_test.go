@@ -58,7 +58,7 @@ func TestGoConstName(t *testing.T) {
 		{"AllCaps", "ASDF", "asdf"},
 		{"AllCapsWithUnderscore", "ASDF_GH", "asdfGh"},
 		{"JustUnderscore", "_", "_"},
-		{"LeadingUnderscore", "_ASDF", "_asdf"},
+		{"LeadingUnderscore", "_ASDF_GH", "_asdfGh"},
 	}
 
 	testStringFunc(t, goConstName, tests)
