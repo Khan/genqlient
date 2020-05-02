@@ -53,6 +53,8 @@ For a complete working example, see `example/`.
 
 `go test ./...` does some perfunctory tests.  (This is run by GitHub Actions.)
 
+`make example` tests that everything wires up to a real API correctly.
+
 TODO(benkraft): Figure out how to get GitHub Actions to run the example -- it needs a token.
 
 ## Major TODOs
@@ -62,9 +64,7 @@ Query structures to support:
 - fragments
 
 Config options:
-- file locations (queries, generated, schema (or get via HTTP))
-- use ctx or not, including complexities of how Khan uses context
-- HTTP calling convention (is there enough variation to matter?)
+- get schema via HTTP (perhaps even via GraphQL introspection)
 - proper config/arguments setup (e.g. with [viper](https://github.com/spf13/viper)
 
 Other:

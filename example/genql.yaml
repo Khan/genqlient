@@ -1,5 +1,6 @@
-# These are the defaults.
+# These are the defaults, and are just included to be explicit.
 package: example
 schema: schema.graphql
 queries: queries.graphql
 generated: generated.go
+use_context: true

@@ -24,8 +24,8 @@ var tmpl = template.Must(template.ParseFiles(tmplAbsFilename))
 // generator is the context for the codegen process (and ends up getting passed
 // to the template).
 type generator struct {
-	// The name of the package into which to generate the operation-helpers.
-	PackageName string
+	// The config for which we are generating code.
+	Config *Config
 	// The list of operations for which to generate code.
 	Operations []operation
 	// The types needed for these operations.
@@ -54,11 +54,11 @@ type argument struct {
 	GraphQLName string
 }
 
-func newGenerator(packageName string, schema *ast.Schema) *generator {
+func newGenerator(config *Config, schema *ast.Schema) *generator {
 	return &generator{
-		PackageName: packageName,
-		typeMap:     map[string]string{},
-		schema:      schema,
+		Config:  config,
+		typeMap: map[string]string{},
+		schema:  schema,
 	}
 }
 
@@ -157,7 +157,7 @@ func Generate(config *Config) ([]byte, error) {
 		return nil, err
 	}
 
-	g := newGenerator(config.Package, schema)
+	g := newGenerator(config, schema)
 	for _, op := range document.Operations {
 		if err = g.addOperation(op); err != nil {
 			return nil, err
