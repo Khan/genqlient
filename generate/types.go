@@ -170,9 +170,7 @@ func (builder *typeBuilder) writeField(selection selection) error {
 	}
 
 	if jsonName != goName {
-		builder.WriteString("`json:\"")
-		builder.WriteString(jsonName)
-		builder.WriteString("\"`")
+		fmt.Fprintf(builder, " `json:\"%s\"`", jsonName)
 	}
 	builder.WriteRune('\n')
 	return nil
