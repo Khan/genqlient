@@ -170,7 +170,7 @@ func TestTypeForOperation(t *testing.T) {
 				t.Fatalf("got %v operations, want 1", len(queryDoc.Operations))
 			}
 
-			g := newGenerator("test_package", schema)
+			g := newGenerator(&Config{Package: "test_package"}, schema)
 			_, err = g.getTypeForOperation(queryDoc.Operations[0])
 			if err != nil {
 				t.Error(err)
@@ -253,7 +253,7 @@ func TestTypeForInputType(t *testing.T) {
 				t.Fatal(graphqlListError)
 			}
 
-			g := newGenerator("test_package", schema)
+			g := newGenerator(&Config{Package: "test_package"}, schema)
 			goType, err := g.getTypeForInputType(
 				queryDoc.Operations[0].VariableDefinitions[0].Type)
 			if err != nil {
