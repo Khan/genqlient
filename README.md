@@ -72,4 +72,4 @@ Other:
 - more tests
 - documentation
 - a name that's more clearly distinct from other libraries out there
-- tests will want to construct response values, and will need them to not have anonymous structs so as to do that (but that runs into even more naming collisions, if the same file has several queries with different fields of a type
+- what to do about usages in tests -- tests will want to construct response values, and will need them to not have anonymous structs so as to do that (but that runs into even more naming collisions, if the same file has several queries with different fields of a type)
