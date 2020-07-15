@@ -32,6 +32,8 @@ interface Content {
   parent: Topic
 }
 
+union LeafContent = Article | Video
+
 type Article implements Content {
   id: ID!
   name: String!
@@ -56,4 +58,5 @@ type Topic implements Content {
 type Query {
   user(query: UserQueryInput): User
   root: Topic!
+  randomLeaf: LeafContent!
 }
