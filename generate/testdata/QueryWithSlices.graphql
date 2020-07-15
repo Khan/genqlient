@@ -1,0 +1,8 @@
+{
+  user {
+    emails
+    emailsOrNull
+    emailsWithNulls
+    emailsWithNullsOrNull
+  }
+}

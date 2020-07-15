@@ -3,6 +3,8 @@ package generate
 import (
 	"fmt"
 	"go/format"
+	"io/ioutil"
+	"path/filepath"
 	"sort"
 	"strings"
 	"testing"
@@ -11,146 +13,53 @@ import (
 	"github.com/vektah/gqlparser/ast"
 )
 
+const dataDir = "testdata"
+
+func readFile(t *testing.T, filename string) string {
+	data, err := ioutil.ReadFile(filepath.Join(dataDir, filename))
+	if err != nil {
+		t.Fatal(err)
+	}
+	return string(data)
+}
+
 func gofmt(src string) (string, error) {
 	src = strings.TrimSpace(src)
 	formatted, err := format.Source([]byte(src))
 	if err != nil {
-		return src, err
+		return src, fmt.Errorf("go parse error: %w", err)
 	}
 	return string(formatted), nil
 }
 
-var schemaText = `
-	enum Role {
-		STUDENT
-		TEACHER
-	}
-
-	input UserQueryInput {
-		email: String
-		name: String
-		id: ID
-		role: Role
-	}
-
-	type AuthMethod {
-		provider: String
-		email: String
-	}
-
-	type User {
-		id: ID!
-		roles: [Role!]
-		name: String
-		emails: [String!]!
-		emailsOrNull: [String!]
-		emailsWithNulls: [String]!
-		emailsWithNullsOrNull: [String]
-		authMethods: [AuthMethod!]!
-	}
-
-	type Query {
-		user: User
-	}
-`
-
 func TestTypeForOperation(t *testing.T) {
-	tests := []struct {
-		name           string
-		operation      string
-		expectedGoType string
-	}{{
-		"SimpleQuery",
-		`{ user { id } }`,
-		`type Response struct{
-			User *struct {
-				Id string ` + "`json:\"id\"`" + `
-			} ` + "`json:\"user\"`" + `
-		}`,
-	}, {
-		"QueryWithAlias",
-		`{ User: user { ID: id } }`,
-		`type Response struct{
-			User *struct {
-				ID string
-			}
-		}`,
-		// Here on out, we use aliases, just because aliases are a lot less
-		// annoying to write in Go strings than Go struct tags.
-	}, {
-		"QueryWithDoubleAlias",
-		`{
-			User: user {
-				ID: id
-				AlsoID: id
-			}
-		}`,
-		`type Response struct{
-			User *struct {
-				ID string
-				AlsoID string
-			}
-		}`,
-	}, {
-		"QueryWithSlices",
-		`{
-			User: user {
-				Emails: emails
-				EmailsOrNull: emailsOrNull
-				EmailsWithNulls: emailsWithNulls
-				EmailsWithNullsOrNull: emailsWithNullsOrNull
-			}
-		}`,
-		`type Response struct{
-			User *struct {
-				Emails                []string
-				EmailsOrNull          []string
-				EmailsWithNulls       []*string
-				EmailsWithNullsOrNull []*string
-			}
-		}`,
-	}, {
-		"QueryWithStructs",
-		`{
-			User: user {
-				AuthMethods: authMethods {
-					Provider: provider
-					Email: email
-				}
-			}
-		}`,
-		`type Response struct{
-			User *struct {
-				AuthMethods []struct {
-					Provider *string
-					Email    *string
-				}
-			}
-		}`,
-	}, {
-		"QueryWithEnums",
-		`{
-			User: user {
-				Roles: roles
-			}
-		}`,
-		`type Response struct{
-			User *struct {
-				Roles []role
-			}
+	// This test uses the schema, queries, and expected-output in ./testdata.
+	// The schema is in schema.graphql.  The queries are in TestName.graphql;
+	// the test asserts that such queries, when run through the type-generator,
+	// produce the types in TestName.go (the name of the overall response type
+	// will be Response).
+	//
+	// Change update on the next line to true to update all the expected output
+	// files to match current output.
+	// TODO(benkraft): Make this a flag or something.
+	update := false
+
+	files, err := ioutil.ReadDir(dataDir)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	schemaText := readFile(t, "schema.graphql")
+
+	for _, file := range files {
+		graphqlFilename := file.Name()
+		if graphqlFilename == "schema.graphql" || !strings.HasSuffix(graphqlFilename, ".graphql") {
+			continue
 		}
+		goFilename := graphqlFilename + ".go"
 
-		type role string
-		const (
-			studentRole role = "STUDENT"
-			teacherRole role = "TEACHER"
-		)`,
-	}}
-
-	for _, test := range tests {
-		test := test
-		t.Run(test.name, func(t *testing.T) {
-			expectedGoType, err := gofmt(test.expectedGoType)
+		t.Run(graphqlFilename, func(t *testing.T) {
+			expectedGoType, err := gofmt(readFile(t, goFilename))
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -161,7 +70,8 @@ func TestTypeForOperation(t *testing.T) {
 				t.Fatal(graphqlError)
 			}
 
-			queryDoc, graphqlListError := gqlparser.LoadQuery(schema, test.operation)
+			queryDoc, graphqlListError := gqlparser.LoadQuery(
+				schema, readFile(t, graphqlFilename))
 			if graphqlListError != nil {
 				t.Fatal(graphqlListError)
 			}
@@ -171,7 +81,7 @@ func TestTypeForOperation(t *testing.T) {
 			}
 
 			g := newGenerator(&Config{Package: "test_package"}, schema)
-			_, err = g.getTypeForOperation(queryDoc.Operations[0])
+			err = g.addOperation(queryDoc.Operations[0])
 			if err != nil {
 				t.Error(err)
 			}
@@ -184,11 +94,25 @@ func TestTypeForOperation(t *testing.T) {
 
 			if goType != expectedGoType {
 				t.Errorf("got:\n%v\nwant:\n%v\n", goType, expectedGoType)
+				if update {
+					t.Log("Updating testdata dir to match")
+					err = ioutil.WriteFile(
+						filepath.Join(dataDir, goFilename), []byte(goType), 0644)
+					if err != nil {
+						t.Errorf("Unable to update testdata dir: %v", err)
+					}
+				}
 			}
 		})
 	}
+
+	if update {
+		// This is an error to ensure we don't commit update := true
+		t.Error("Updated testdata dir")
+	}
 }
 
+// TODO(benkraft): Figure out how to do this with testdata-files
 func TestTypeForInputType(t *testing.T) {
 	tests := []struct {
 		name           string
@@ -223,6 +147,8 @@ func TestTypeForInputType(t *testing.T) {
 			}`,
 		},
 	}}
+
+	schemaText := readFile(t, "schema.graphql")
 
 	for _, test := range tests {
 		test := test

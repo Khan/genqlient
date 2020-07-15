@@ -1,0 +1,8 @@
+{
+  user {
+    authMethods {
+      provider
+      email
+    }
+  }
+}

@@ -1,0 +1,31 @@
+enum Role {
+  STUDENT
+  TEACHER
+}
+
+input UserQueryInput {
+  email: String
+  name: String
+  id: ID
+  role: Role
+}
+
+type AuthMethod {
+  provider: String
+  email: String
+}
+
+type User {
+  id: ID!
+  roles: [Role!]
+  name: String
+  emails: [String!]!
+  emailsOrNull: [String!]
+  emailsWithNulls: [String]!
+  emailsWithNullsOrNull: [String]
+  authMethods: [AuthMethod!]!
+}
+
+type Query {
+  user(query: UserQueryInput): User
+}

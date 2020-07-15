@@ -1,0 +1,6 @@
+{
+  user {
+    ID: id
+    AlsoID: id
+  }
+}
