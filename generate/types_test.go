@@ -55,8 +55,6 @@ func TestTypeForOperation(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	schemaText := readFile(t, "schema.graphql", false)
-
 	for _, file := range files {
 		graphqlFilename := file.Name()
 		if graphqlFilename == "schema.graphql" || !strings.HasSuffix(graphqlFilename, ".graphql") {
@@ -70,27 +68,10 @@ func TestTypeForOperation(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			schema, graphqlError := gqlparser.LoadSchema(
-				&ast.Source{Name: "test schema", Input: schemaText})
-			if graphqlError != nil {
-				t.Fatal(graphqlError)
-			}
-
-			queryDoc, graphqlListError := gqlparser.LoadQuery(
-				schema, readFile(t, graphqlFilename, false))
-			if graphqlListError != nil {
-				t.Fatal(graphqlListError)
-			}
-
-			if len(queryDoc.Operations) != 1 {
-				t.Fatalf("got %v operations, want 1", len(queryDoc.Operations))
-			}
-
-			g := newGenerator(&Config{Package: "test_package"}, schema)
-			err = g.addOperation(queryDoc.Operations[0])
-			if err != nil {
-				t.Error(err)
-			}
+			g, err := generate(&Config{
+				Schema:  filepath.Join("testdata", "schema.graphql"),
+				Queries: filepath.Join("testdata", graphqlFilename),
+			})
 
 			// gofmt before comparing.
 			goType, err := gofmt(g.Types())

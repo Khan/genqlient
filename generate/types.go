@@ -44,6 +44,18 @@ func (g *generator) getTypeForOperation(operation *ast.OperationDefinition) (nam
 		name, g.baseTypeForOperation(operation.Operation), selectionSet)
 }
 
+func (g *generator) addFragment(frag *ast.FragmentDefinition) error {
+	g.fragments = append(g.fragments, frag)
+
+	selectionSet, err := selections(frag.SelectionSet)
+	if err != nil {
+		return err
+	}
+
+	_, err = g.addTypeForDefinition(upperFirst(frag.Name), frag.Definition, selectionSet)
+	return err
+}
+
 func (g *generator) addTypeForDefinition(nameOverride string, typ *ast.Definition, selectionSet []selection) (name string, err error) {
 	goName, ok := builtinTypes[typ.Name]
 	if ok {
@@ -101,13 +113,25 @@ func (s field) SelectionSet() ([]selection, error) {
 	return selections(s.field.SelectionSet)
 }
 
+type fragmentSpread struct{ frag *ast.FragmentSpread }
+
+func (s fragmentSpread) Name() string { return upperFirst(s.frag.Name) }
+
+// TODO(benkraft): These methods aren't actually called; refactor so that they
+// aren't needed
+func (s fragmentSpread) Alias() string                      { panic("TODO") }
+func (s fragmentSpread) Type() *ast.Type                    { panic("TODO") }
+func (s fragmentSpread) SelectionSet() ([]selection, error) { panic("TODO") }
+
 func selections(selectionSet ast.SelectionSet) ([]selection, error) {
 	retval := make([]selection, len(selectionSet))
 	for i, selection := range selectionSet {
 		switch selection := selection.(type) {
 		case *ast.Field:
 			retval[i] = field{selection}
-		case *ast.FragmentSpread, *ast.InlineFragment:
+		case *ast.FragmentSpread:
+			retval[i] = fragmentSpread{selection}
+		case *ast.InlineFragment:
 			return nil, fmt.Errorf("not implemented: %T", selection)
 		default:
 			return nil, fmt.Errorf("invalid selection type: %v", selection)
@@ -139,6 +163,15 @@ func selectionsForType(g *generator, typ *ast.Type) []selection {
 }
 
 func (builder *typeBuilder) writeField(selection selection) error {
+	// Fragments have no GraphQL type to write; and the Go type is already
+	// defined, so we just handle that specially.
+	// TODO(benkraft): This is a terrible hack; refactor so it's not necessary.
+	if frag, ok := selection.(fragmentSpread); ok {
+		builder.WriteString(frag.Name())
+		builder.WriteRune('\n')
+		return nil
+	}
+
 	var jsonName string
 	if selection.Alias() != "" {
 		jsonName = selection.Alias()

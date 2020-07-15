@@ -29,8 +29,9 @@ type generator struct {
 	// The list of operations for which to generate code.
 	Operations []operation
 	// The types needed for these operations.
-	typeMap map[string]string
-	schema  *ast.Schema
+	typeMap   map[string]string
+	schema    *ast.Schema
+	fragments []*ast.FragmentDefinition
 }
 
 type operation struct {
@@ -111,12 +112,15 @@ func (g *generator) addOperation(op *ast.OperationDefinition) error {
 	// TODO: we may have to actually get the precise query text, in case we
 	// want to be hashing it or something like that.  This is a bit tricky
 	// because gqlparser's ast doesn't provide node end-position (only
-	// token end-position).
+	// token end-position).  (And with fragments it's not even clear what would
+	// be right.)  Maybe add as a config option, and allow only if the document
+	// has exactly one query?
 	var builder strings.Builder
 	f := formatter.NewFormatter(&builder)
 	f.FormatQueryDocument(&ast.QueryDocument{
 		Operations: ast.OperationList{op},
-		// TODO: handle fragments
+		// TODO(benkraft): Only include relevant fragments.
+		Fragments: g.fragments,
 	})
 
 	args := make([]argument, len(op.VariableDefinitions))
@@ -146,7 +150,7 @@ func (g *generator) addOperation(op *ast.OperationDefinition) error {
 	return nil
 }
 
-func Generate(config *Config) ([]byte, error) {
+func generate(config *Config) (*generator, error) {
 	schema, err := getSchema(config.Schema)
 	if err != nil {
 		return nil, err
@@ -158,10 +162,24 @@ func Generate(config *Config) ([]byte, error) {
 	}
 
 	g := newGenerator(config, schema)
+	for _, frag := range document.Fragments {
+		if err = g.addFragment(frag); err != nil {
+			return nil, err
+		}
+	}
 	for _, op := range document.Operations {
 		if err = g.addOperation(op); err != nil {
 			return nil, err
 		}
+	}
+
+	return g, nil
+}
+
+func Generate(config *Config) ([]byte, error) {
+	g, err := generate(config)
+	if err != nil {
+		return nil, err
 	}
 
 	var buf bytes.Buffer

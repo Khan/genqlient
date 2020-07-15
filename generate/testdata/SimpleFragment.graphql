@@ -1,0 +1,11 @@
+fragment profileData on User {
+  name
+  emails
+}
+
+query {
+  user {
+    id
+    ...profileData
+  }
+}
