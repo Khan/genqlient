@@ -26,6 +26,34 @@ type User {
   authMethods: [AuthMethod!]!
 }
 
+interface Content {
+  id: ID!
+  name: String!
+  parent: Topic
+}
+
+type Article implements Content {
+  id: ID!
+  name: String!
+  parent: Topic!
+  text: String!
+}
+
+type Video implements Content {
+  id: ID!
+  name: String!
+  parent: Topic!
+  duration: Int!
+}
+
+type Topic implements Content {
+  id: ID!
+  name: String!
+  parent: Topic
+  children: [Content!]!
+}
+
 type Query {
   user(query: UserQueryInput): User
+  root: Topic!
 }

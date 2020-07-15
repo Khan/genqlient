@@ -222,7 +222,7 @@ func (builder *typeBuilder) writeType(typ *ast.Type, selectionSet []selection, i
 
 func (builder *typeBuilder) writeTypedef(typedef *ast.Definition, selectionSet []selection) error {
 	switch typedef.Kind {
-	case ast.Object, ast.InputObject:
+	case ast.Object, ast.InputObject, ast.Interface:
 		builder.WriteString("struct {\n")
 		for _, field := range selectionSet {
 			err := builder.writeField(field)
@@ -244,7 +244,7 @@ func (builder *typeBuilder) writeTypedef(typedef *ast.Definition, selectionSet [
 		}
 		builder.WriteString(")\n")
 		return nil
-	case ast.Scalar, ast.Union, ast.Interface:
+	case ast.Scalar, ast.Union:
 		// TODO(benkraft): Handle custom scalars, unions, and interfaces.
 		return fmt.Errorf("not implemented: %v", typedef.Kind)
 	default:

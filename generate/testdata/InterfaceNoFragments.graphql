@@ -1,0 +1,10 @@
+{
+  root {
+    id
+    name
+    children {
+      id
+      name
+    }
+  }
+}
