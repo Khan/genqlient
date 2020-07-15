@@ -86,42 +86,13 @@ func (g *generator) addTypeForDefinition(nameOverride string, typ *ast.Definitio
 
 func (g *generator) getTypeForInputType(typ *ast.Type) (string, error) {
 	builder := &typeBuilder{typeName: lowerFirst(typ.Name()), generator: g}
-	err := builder.writeType(typ, selectionsForType(g, typ), false)
+	err := builder.writeType(typ, g.selectionsForInputType(typ), false)
 	return builder.String(), err
 }
 
 type selection interface {
-	Alias() string
-	Name() string
-	Type() *ast.Type
-	SelectionSet() ([]selection, error)
+	Write(builder *typeBuilder) error
 }
-
-type field struct{ field *ast.Field }
-
-func (s field) Alias() string { return s.field.Alias }
-func (s field) Name() string  { return s.field.Name }
-
-func (s field) Type() *ast.Type {
-	if s.field.Definition == nil {
-		return nil
-	}
-	return s.field.Definition.Type
-}
-
-func (s field) SelectionSet() ([]selection, error) {
-	return selections(s.field.SelectionSet)
-}
-
-type fragmentSpread struct{ frag *ast.FragmentSpread }
-
-func (s fragmentSpread) Name() string { return upperFirst(s.frag.Name) }
-
-// TODO(benkraft): These methods aren't actually called; refactor so that they
-// aren't needed
-func (s fragmentSpread) Alias() string                      { panic("TODO") }
-func (s fragmentSpread) Type() *ast.Type                    { panic("TODO") }
-func (s fragmentSpread) SelectionSet() ([]selection, error) { panic("TODO") }
 
 func selections(selectionSet ast.SelectionSet) ([]selection, error) {
 	retval := make([]selection, len(selectionSet))
@@ -140,20 +111,47 @@ func selections(selectionSet ast.SelectionSet) ([]selection, error) {
 	return retval, nil
 }
 
+type field struct{ field *ast.Field }
+
+func (s field) Write(builder *typeBuilder) error {
+	if s.field.Definition == nil || s.field.Definition.Type == nil {
+		// Unclear why gqlparser hasn't already rejected this,
+		// but empirically it might not.
+		return fmt.Errorf("undefined field %v", s.field.Name)
+	}
+
+	jsonName := s.field.Alias
+	if jsonName == "" {
+		// TODO(benkraft): Does this actually happen?  Tests suggest not.
+		jsonName = s.field.Name
+	}
+
+	selectionSet, err := selections(s.field.SelectionSet)
+	if err != nil {
+		return err
+	}
+
+	return builder.writeField(jsonName, s.field.Definition.Type, selectionSet)
+}
+
+type fragmentSpread struct{ frag *ast.FragmentSpread }
+
+func (s fragmentSpread) Write(builder *typeBuilder) error {
+	builder.WriteString(upperFirst(s.frag.Name))
+	return nil
+}
+
 type inputField struct {
-	*generator
+	g     *generator
 	field *ast.FieldDefinition
 }
 
-func (s inputField) Alias() string   { return s.field.Name }
-func (s inputField) Name() string    { return s.field.Name }
-func (s inputField) Type() *ast.Type { return s.field.Type }
-
-func (s inputField) SelectionSet() ([]selection, error) {
-	return selectionsForType(s.generator, s.field.Type), nil
+func (s inputField) Write(builder *typeBuilder) error {
+	selectionSet := s.g.selectionsForInputType(s.field.Type)
+	return builder.writeField(s.field.Name, s.field.Type, selectionSet)
 }
 
-func selectionsForType(g *generator, typ *ast.Type) []selection {
+func (g *generator) selectionsForInputType(typ *ast.Type) []selection {
 	def := g.schema.Types[typ.Name()]
 	selectionSet := make([]selection, len(def.Fields))
 	for i, field := range def.Fields {
@@ -162,42 +160,14 @@ func selectionsForType(g *generator, typ *ast.Type) []selection {
 	return selectionSet
 }
 
-func (builder *typeBuilder) writeField(selection selection) error {
-	// Fragments have no GraphQL type to write; and the Go type is already
-	// defined, so we just handle that specially.
-	// TODO(benkraft): This is a terrible hack; refactor so it's not necessary.
-	if frag, ok := selection.(fragmentSpread); ok {
-		builder.WriteString(frag.Name())
-		builder.WriteRune('\n')
-		return nil
-	}
-
-	var jsonName string
-	if selection.Alias() != "" {
-		jsonName = selection.Alias()
-	} else {
-		// TODO: is this case needed? tests don't seem to get here.
-		jsonName = selection.Name()
-	}
+func (builder *typeBuilder) writeField(jsonName string, typ *ast.Type, selectionSet []selection) error {
 	// We need an exportable name for JSON-marshaling.
 	goName := upperFirst(jsonName)
 
 	builder.WriteString(goName)
 	builder.WriteRune(' ')
 
-	typ := selection.Type()
-	if typ == nil {
-		// Unclear why gqlparser hasn't already rejected this,
-		// but empirically it might not.
-		return fmt.Errorf("undefined field %v", selection.Name())
-	}
-
-	selectionSet, err := selection.SelectionSet()
-	if err != nil {
-		return err
-	}
-
-	err = builder.writeType(typ, selectionSet, true)
+	err := builder.writeType(typ, selectionSet, true)
 	if err != nil {
 		return err
 	}
@@ -205,7 +175,6 @@ func (builder *typeBuilder) writeField(selection selection) error {
 	if jsonName != goName {
 		fmt.Fprintf(builder, " `json:\"%s\"`", jsonName)
 	}
-	builder.WriteRune('\n')
 	return nil
 }
 
@@ -257,7 +226,8 @@ func (builder *typeBuilder) writeTypedef(typedef *ast.Definition, selectionSet [
 	case ast.Object, ast.InputObject, ast.Interface, ast.Union:
 		builder.WriteString("struct {\n")
 		for _, field := range selectionSet {
-			err := builder.writeField(field)
+			err := field.Write(builder)
+			builder.WriteRune('\n')
 			if err != nil {
 				return err
 			}
