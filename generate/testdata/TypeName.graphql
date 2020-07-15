@@ -1,0 +1,6 @@
+{
+  user {
+    __typename
+    id
+  }
+}

@@ -62,7 +62,6 @@ TODO(benkraft): Figure out how to get GitHub Actions to run the example -- it ne
 Query structures to support:
 - unions
 - fragments
-- `__typename`
 
 Config options:
 - get schema via HTTP (perhaps even via GraphQL introspection)

@@ -1,9 +1,11 @@
 package generate
 
 import (
+	"errors"
 	"fmt"
 	"go/format"
 	"io/ioutil"
+	"os"
 	"path/filepath"
 	"sort"
 	"strings"
@@ -15,9 +17,13 @@ import (
 
 const dataDir = "testdata"
 
-func readFile(t *testing.T, filename string) string {
+func readFile(t *testing.T, filename string, allowNotExist bool) string {
+	t.Helper()
 	data, err := ioutil.ReadFile(filepath.Join(dataDir, filename))
 	if err != nil {
+		if allowNotExist && errors.Is(err, os.ErrNotExist) {
+			return ""
+		}
 		t.Fatal(err)
 	}
 	return string(data)
@@ -49,7 +55,7 @@ func TestTypeForOperation(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	schemaText := readFile(t, "schema.graphql")
+	schemaText := readFile(t, "schema.graphql", false)
 
 	for _, file := range files {
 		graphqlFilename := file.Name()
@@ -59,7 +65,7 @@ func TestTypeForOperation(t *testing.T) {
 		goFilename := graphqlFilename + ".go"
 
 		t.Run(graphqlFilename, func(t *testing.T) {
-			expectedGoType, err := gofmt(readFile(t, goFilename))
+			expectedGoType, err := gofmt(readFile(t, goFilename, update))
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -71,7 +77,7 @@ func TestTypeForOperation(t *testing.T) {
 			}
 
 			queryDoc, graphqlListError := gqlparser.LoadQuery(
-				schema, readFile(t, graphqlFilename))
+				schema, readFile(t, graphqlFilename, false))
 			if graphqlListError != nil {
 				t.Fatal(graphqlListError)
 			}
@@ -148,7 +154,7 @@ func TestTypeForInputType(t *testing.T) {
 		},
 	}}
 
-	schemaText := readFile(t, "schema.graphql")
+	schemaText := readFile(t, "schema.graphql", false)
 
 	for _, test := range tests {
 		test := test

@@ -21,11 +21,11 @@ func changeFirst(s string, f func(rune) rune) string {
 }
 
 func lowerFirst(s string) string {
-	return changeFirst(s, unicode.ToLower)
+	return changeFirst(strings.TrimLeft(s, "_"), unicode.ToLower)
 }
 
 func upperFirst(s string) string {
-	return changeFirst(s, unicode.ToUpper)
+	return changeFirst(strings.TrimLeft(s, "_"), unicode.ToUpper)
 }
 
 func goConstName(s string) string {
