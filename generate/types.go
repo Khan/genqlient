@@ -52,7 +52,7 @@ func (g *generator) addFragment(frag *ast.FragmentDefinition) error {
 		return err
 	}
 
-	_, err = g.addTypeForDefinition(upperFirst(frag.Name), frag.Definition, selectionSet)
+	_, err = g.addTypeForDefinition(lowerFirst(frag.Name), frag.Definition, selectionSet)
 	return err
 }
 
@@ -137,7 +137,7 @@ func (s field) Write(builder *typeBuilder) error {
 type fragmentSpread struct{ frag *ast.FragmentSpread }
 
 func (s fragmentSpread) Write(builder *typeBuilder) error {
-	builder.WriteString(upperFirst(s.frag.Name))
+	builder.WriteString(lowerFirst(s.frag.Name))
 	return nil
 }
 
