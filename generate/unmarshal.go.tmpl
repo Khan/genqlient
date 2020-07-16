@@ -1,0 +1,35 @@
+func (v *{{.Type}}) UnmarshalJSON(b []byte) error {
+	var firstPass struct{
+		*{{.Type}}
+        {{range .Fields -}}
+		{{.GoName}} json.RawMessage `json:"{{.JSONName}}"`
+        {{end}}
+	}
+	firstPass.{{.Type}} = v
+
+	err := json.Unmarshal(b, &typenames)
+    if err != nil {
+        return err
+    }
+
+    {{range .Fields -}}
+	var tn struct { TypeName string `json:"__typename"` }
+	err = json.Unmarshal(firstPass.{{.GoName}}, &tn)
+    if err != nil {
+        return err
+    }
+	switch tn.TypeName {
+    {{with $field := .}}
+    {{range $field.ConcreteTypes}}
+	case "{{.GraphQLName}}":
+		v.{{$field.GoName}} = {{.GoName}}{}
+		err = json.Unmarshal(
+			firstPass.{{$field.GoName}}, &v.{{$field.GoName}})
+    {{end}}
+    {{end}}
+	}
+    if err != nil {
+        return err
+    }
+    {{end}}
+}

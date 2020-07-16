@@ -1,4 +1,4 @@
-{
+query TypeNameQuery {
   user {
     __typename
     id

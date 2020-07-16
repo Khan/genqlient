@@ -1,1 +1,1 @@
-{ User: user { ID: id } }
+query QueryWithAlias { User: user { ID: id } }

@@ -2,6 +2,7 @@ package generate
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/vektah/gqlparser/ast"
@@ -54,11 +55,16 @@ func (g *generator) addTypeForDefinition(nameOverride string, typ *ast.Definitio
 		name = nameOverride
 	} else {
 		// TODO: casing should be configurable
-		name = lowerFirst(typ.Name)
+		name = upperFirst(typ.Name)
 	}
 
-	if _, ok := g.typeMap[name]; ok {
-		return name, nil
+	// TODO: in some cases we can deduplicate, do that
+	// TODO: nicer naming scheme
+	i := 0
+	origName := name
+	for g.typeMap[name] != "" {
+		i++
+		name = origName + strconv.Itoa(i)
 	}
 
 	builder := &typeBuilder{typeName: name, generator: g}
@@ -73,22 +79,27 @@ func (g *generator) addTypeForDefinition(nameOverride string, typ *ast.Definitio
 }
 
 func (g *generator) getTypeForInputType(typ *ast.Type) (string, error) {
-	builder := &typeBuilder{typeName: lowerFirst(typ.Name()), generator: g}
-	err := builder.writeType(typ, selectionsForType(g, typ), false)
+	builder := &typeBuilder{typeName: upperFirst(typ.Name()), generator: g}
+	err := builder.writeType(typ, selectionsForType(g, typ))
 	return builder.String(), err
 }
 
+// TODO: this is really "field" now, rename it
 type selection interface {
 	Alias() string
-	Name() string
 	Type() *ast.Type
 	SelectionSet() ([]selection, error)
 }
 
 type field struct{ field *ast.Field }
 
-func (s field) Alias() string { return s.field.Alias }
-func (s field) Name() string  { return s.field.Name }
+func (s field) Alias() string {
+	if s.field.Alias != "" {
+		return s.field.Alias
+	}
+	// TODO: is this case needed? tests don't seem to get here.
+	return s.field.Name
+}
 
 func (s field) Type() *ast.Type {
 	if s.field.Definition == nil {
@@ -122,7 +133,6 @@ type inputField struct {
 }
 
 func (s inputField) Alias() string   { return s.field.Name }
-func (s inputField) Name() string    { return s.field.Name }
 func (s inputField) Type() *ast.Type { return s.field.Type }
 
 func (s inputField) SelectionSet() ([]selection, error) {
@@ -139,13 +149,7 @@ func selectionsForType(g *generator, typ *ast.Type) []selection {
 }
 
 func (builder *typeBuilder) writeField(selection selection) error {
-	var jsonName string
-	if selection.Alias() != "" {
-		jsonName = selection.Alias()
-	} else {
-		// TODO: is this case needed? tests don't seem to get here.
-		jsonName = selection.Name()
-	}
+	jsonName := selection.Alias()
 	// We need an exportable name for JSON-marshaling.
 	goName := upperFirst(jsonName)
 
@@ -156,7 +160,7 @@ func (builder *typeBuilder) writeField(selection selection) error {
 	if typ == nil {
 		// Unclear why gqlparser hasn't already rejected this,
 		// but empirically it might not.
-		return fmt.Errorf("undefined field %v", selection.Name())
+		return fmt.Errorf("undefined field %v", selection.Alias())
 	}
 
 	selectionSet, err := selection.SelectionSet()
@@ -164,12 +168,15 @@ func (builder *typeBuilder) writeField(selection selection) error {
 		return err
 	}
 
-	err = builder.writeType(typ, selectionSet, true)
+	err = builder.writeType(typ, selectionSet)
 	if err != nil {
 		return err
 	}
 
-	if jsonName != goName {
+	if builder.schema.Types[typ.Name()].IsAbstractType() {
+		// abstract types are handled in our UnmarshalJSON
+		builder.WriteString(" `json:\"-\"`")
+	} else if jsonName != goName {
 		fmt.Fprintf(builder, " `json:\"%s\"`", jsonName)
 	}
 	builder.WriteRune('\n')
@@ -184,7 +191,7 @@ var builtinTypes = map[string]string{
 	"ID":      "string", // TODO: named type for IDs?
 }
 
-func (builder *typeBuilder) writeType(typ *ast.Type, selectionSet []selection, inline bool) error {
+func (builder *typeBuilder) writeType(typ *ast.Type, selectionSet []selection) error {
 	// gqlgen does slightly different things here since it defines names for
 	// all the intermediate types, but its implementation may be useful to crib
 	// from:
@@ -200,16 +207,6 @@ func (builder *typeBuilder) writeType(typ *ast.Type, selectionSet []selection, i
 	}
 
 	def := builder.schema.Types[typ.Name()]
-	// TODO: set inline = false for nested types
-	switch def.Kind {
-	case ast.Scalar, ast.Enum, ast.Union, ast.Interface:
-		inline = false
-	}
-
-	if inline {
-		return builder.writeTypedef(def, selectionSet)
-	}
-
 	// Writes a typedef elsewhere (if not already defined)
 	name, err := builder.addTypeForDefinition("", def, selectionSet)
 	if err != nil {
@@ -231,7 +228,35 @@ func (builder *typeBuilder) writeTypedef(typedef *ast.Definition, selectionSet [
 			}
 		}
 		builder.WriteString("}")
+
+		// If any field is abstract, we need an UnmarshalJSON method to handle
+		// it.
+		return builder.maybeWriteUnmarshal(selectionSet)
+
+	case ast.Interface, ast.Union:
+		// First, write the interface type.
+		builder.WriteString("interface {\n")
+		implementsMethodName := fmt.Sprintf("implementsGraphQLInterface%v", builder.typeName)
+		// TODO: Also write GetX() accessor methods for fields of the interface
+		builder.WriteString(implementsMethodName)
+		builder.WriteString("()\n")
+		builder.WriteString("}")
+
+		// Then, write the implementations.
+		// TODO(benkraft): Put a doc-comment somewhere with the list.
+		for _, impldef := range builder.schema.GetPossibleTypes(typedef) {
+			name, err := builder.addTypeForDefinition("", impldef, selectionSet)
+			if err != nil {
+				return err
+			}
+
+			// HACK HACK HACK
+			builder.typeMap[name] += fmt.Sprintf(
+				"\nfunc (v %v) %v() {}", name, implementsMethodName)
+		}
+
 		return nil
+
 	case ast.Enum:
 		// All GraphQL enums have underlying type string (in the Go sense).
 		builder.WriteString("string\n")
@@ -244,8 +269,8 @@ func (builder *typeBuilder) writeTypedef(typedef *ast.Definition, selectionSet [
 		}
 		builder.WriteString(")\n")
 		return nil
-	case ast.Scalar, ast.Union, ast.Interface:
-		// TODO(benkraft): Handle custom scalars, unions, and interfaces.
+	case ast.Scalar:
+		// TODO(benkraft): Handle custom scalars.
 		return fmt.Errorf("not implemented: %v", typedef.Kind)
 	default:
 		return fmt.Errorf("unexpected kind: %v", typedef.Kind)

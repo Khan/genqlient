@@ -1,4 +1,4 @@
-{
+query QueryWithEnums {
   user {
     roles
   }

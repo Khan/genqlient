@@ -1,4 +1,4 @@
-query ($query: UserQueryInput) {
+query QueryWithInput($query: UserQueryInput) {
   user(query: $query) {
     id
   }

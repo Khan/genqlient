@@ -51,7 +51,7 @@ For a complete working example, see `example/`.
 
 ## Tests
 
-`go test ./...` does some perfunctory tests.  (This is run by GitHub Actions.)
+`go test ./...` tests code generation.  (This is run by GitHub Actions.)
 
 `make example` tests that everything wires up to a real API correctly.
 
@@ -69,6 +69,7 @@ Config options:
 - proper config/arguments setup (e.g. with [viper](https://github.com/spf13/viper)
 
 Other:
+- naming collisions are a mess
 - error-checking/validation/etc. everywhere
 - more tests
 - documentation

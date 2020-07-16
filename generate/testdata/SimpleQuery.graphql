@@ -1,1 +1,1 @@
-{ user { id } }
+query SimpleQuery { user { id } }

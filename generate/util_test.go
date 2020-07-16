@@ -55,10 +55,10 @@ func TestUpperFirst(t *testing.T) {
 func TestGoConstName(t *testing.T) {
 	tests := []test{
 		{"Empty", "", ""},
-		{"AllCaps", "ASDF", "asdf"},
-		{"AllCapsWithUnderscore", "ASDF_GH", "asdfGh"},
+		{"AllCaps", "ASDF", "Asdf"},
+		{"AllCapsWithUnderscore", "ASDF_GH", "AsdfGh"},
 		{"JustUnderscore", "_", "_"},
-		{"LeadingUnderscore", "_ASDF_GH", "_asdfGh"},
+		{"LeadingUnderscore", "_ASDF_GH", "AsdfGh"},
 	}
 
 	testStringFunc(t, goConstName, tests)

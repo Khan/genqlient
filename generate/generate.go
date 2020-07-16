@@ -4,22 +4,14 @@ import (
 	"bytes"
 	"fmt"
 	"go/format"
-	"path/filepath"
-	"runtime"
 	"sort"
 	"strings"
-	"text/template"
 
 	"github.com/vektah/gqlparser/ast"
 	"github.com/vektah/gqlparser/formatter"
 )
 
-// TODO: package template into the binary using one of those asset thingies
-var _, thisFilename, _, _ = runtime.Caller(0)
-var tmplRelFilename = "operation.go.tmpl"
-var tmplAbsFilename = filepath.Join(filepath.Dir(thisFilename), tmplRelFilename)
-
-var tmpl = template.Must(template.ParseFiles(tmplAbsFilename))
+var fileTemplate = mustTemplate("operation.go.tmpl")
 
 // generator is the context for the codegen process (and ends up getting passed
 // to the template).
@@ -29,8 +21,9 @@ type generator struct {
 	// The list of operations for which to generate code.
 	Operations []operation
 	// The types needed for these operations.
-	typeMap map[string]string
-	schema  *ast.Schema
+	typeMap    map[string]string
+	ImportJSON bool
+	schema     *ast.Schema
 }
 
 type operation struct {
@@ -165,7 +158,7 @@ func Generate(config *Config) ([]byte, error) {
 	}
 
 	var buf bytes.Buffer
-	err = tmpl.Execute(&buf, g)
+	err = fileTemplate.Execute(&buf, g)
 	if err != nil {
 		return nil, fmt.Errorf("could not render template: %v", err)
 	}

@@ -8,16 +8,20 @@ import (
 	"github.com/Khan/genql/graphql"
 )
 
+type User struct {
+	MyName *string
+}
+
+type User1 struct {
+	TheirName *string `json:"theirName"`
+}
+
 type getUserResponse struct {
-	User *struct {
-		TheirName *string `json:"theirName"`
-	} `json:"user"`
+	User *User1 `json:"user"`
 }
 
 type getViewerResponse struct {
-	Viewer struct {
-		MyName *string
-	} `json:"viewer"`
+	Viewer User `json:"viewer"`
 }
 
 func getViewer(ctx context.Context, client *graphql.Client) (*getViewerResponse, error) {

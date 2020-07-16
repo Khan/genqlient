@@ -29,14 +29,15 @@ func upperFirst(s string) string {
 }
 
 func goConstName(s string) string {
+	if strings.TrimLeft(s, "_") == "" {
+		return s
+	}
 	var prev rune
 	return strings.Map(func(r rune) rune {
 		var ret rune
-		if prev == 0 && r == '_' {
-			return '_' // still treat next char as first
-		} else if r == '_' {
+		if r == '_' {
 			ret = -1
-		} else if prev == '_' {
+		} else if prev == '_' || prev == 0 {
 			ret = unicode.ToUpper(r)
 		} else {
 			ret = unicode.ToLower(r)

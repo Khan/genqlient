@@ -1,4 +1,4 @@
-{
+query QueryWithStructs {
   user {
     authMethods {
       provider
