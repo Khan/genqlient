@@ -8,7 +8,7 @@ import (
 	"github.com/Khan/genql/graphql"
 )
 
-type QueryWithInputResponse struct {
+type InputObjectQueryResponse struct {
 	User *User `json:"user"`
 }
 
@@ -24,20 +24,21 @@ type User struct {
 }
 
 type UserQueryInput struct {
-	Email *string `json:"email"`
-	Name  *string `json:"name"`
-	Id    *string `json:"id"`
-	Role  *Role   `json:"role"`
+	Email *string   `json:"email"`
+	Name  *string   `json:"name"`
+	Id    *string   `json:"id"`
+	Role  *Role     `json:"role"`
+	Names []*string `json:"names"`
 }
 
-func QueryWithInput(client *graphql.Client, query *UserQueryInput) (*QueryWithInputResponse, error) {
+func InputObjectQuery(client *graphql.Client, query *UserQueryInput) (*InputObjectQueryResponse, error) {
 	variables := map[string]interface{}{
 		"query": query,
 	}
 
-	var retval QueryWithInputResponse
+	var retval InputObjectQueryResponse
 	err := client.MakeRequest(context.Background(), `
-query QueryWithInput ($query: UserQueryInput) {
+query InputObjectQuery ($query: UserQueryInput) {
 	user(query: $query) {
 		id
 	}

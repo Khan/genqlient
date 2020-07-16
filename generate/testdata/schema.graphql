@@ -8,6 +8,7 @@ input UserQueryInput {
   name: String
   id: ID
   role: Role
+  names: [String]
 }
 
 type AuthMethod {

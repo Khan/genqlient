@@ -1,0 +1,5 @@
+query SimpleInputQuery($name: String!) {
+  user(query: {name: $name}) {
+    id
+  }
+}
