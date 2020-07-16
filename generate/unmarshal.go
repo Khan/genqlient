@@ -21,7 +21,7 @@ type concreteType struct {
 	GoName, GraphQLName string
 }
 
-func (builder *typeBuilder) maybeWriteUnmarshal(fields []selection) error {
+func (builder *typeBuilder) maybeWriteUnmarshal(fields []field) error {
 	data := templateData{Type: builder.typeName}
 	for _, field := range fields {
 		typedef := builder.schema.Types[field.Type().Name()]

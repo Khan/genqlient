@@ -36,16 +36,16 @@ func (g *generator) getTypeForOperation(operation *ast.OperationDefinition) (nam
 		return "", fmt.Errorf("%s already defined:\n%s", name, def)
 	}
 
-	selectionSet, err := selections(operation.SelectionSet)
+	fields, err := selections(operation.SelectionSet)
 	if err != nil {
 		return "", err
 	}
 
 	return g.addTypeForDefinition(
-		name, g.baseTypeForOperation(operation.Operation), selectionSet)
+		name, g.baseTypeForOperation(operation.Operation), fields)
 }
 
-func (g *generator) addTypeForDefinition(nameOverride string, typ *ast.Definition, selectionSet []selection) (name string, err error) {
+func (g *generator) addTypeForDefinition(nameOverride string, typ *ast.Definition, fields []field) (name string, err error) {
 	goName, ok := builtinTypes[typ.Name]
 	if ok {
 		return goName, nil
@@ -69,7 +69,7 @@ func (g *generator) addTypeForDefinition(nameOverride string, typ *ast.Definitio
 
 	builder := &typeBuilder{typeName: name, generator: g}
 	fmt.Fprintf(builder, "type %s ", name)
-	err = builder.writeTypedef(typ, selectionSet)
+	err = builder.writeTypedef(typ, fields)
 	if err != nil {
 		return "", err
 	}
@@ -84,16 +84,15 @@ func (g *generator) getTypeForInputType(typ *ast.Type) (string, error) {
 	return builder.String(), err
 }
 
-// TODO: this is really "field" now, rename it
-type selection interface {
+type field interface {
 	Alias() string
 	Type() *ast.Type
-	SelectionSet() ([]selection, error)
+	SubFields() ([]field, error)
 }
 
-type field struct{ field *ast.Field }
+type outputField struct{ field *ast.Field }
 
-func (s field) Alias() string {
+func (s outputField) Alias() string {
 	if s.field.Alias != "" {
 		return s.field.Alias
 	}
@@ -101,23 +100,23 @@ func (s field) Alias() string {
 	return s.field.Name
 }
 
-func (s field) Type() *ast.Type {
+func (s outputField) Type() *ast.Type {
 	if s.field.Definition == nil {
 		return nil
 	}
 	return s.field.Definition.Type
 }
 
-func (s field) SelectionSet() ([]selection, error) {
+func (s outputField) SubFields() ([]field, error) {
 	return selections(s.field.SelectionSet)
 }
 
-func selections(selectionSet ast.SelectionSet) ([]selection, error) {
-	retval := make([]selection, len(selectionSet))
+func selections(selectionSet ast.SelectionSet) ([]field, error) {
+	retval := make([]field, len(selectionSet))
 	for i, selection := range selectionSet {
 		switch selection := selection.(type) {
 		case *ast.Field:
-			retval[i] = field{selection}
+			retval[i] = outputField{selection}
 		case *ast.FragmentSpread, *ast.InlineFragment:
 			return nil, fmt.Errorf("not implemented: %T", selection)
 		default:
@@ -135,40 +134,40 @@ type inputField struct {
 func (s inputField) Alias() string   { return s.field.Name }
 func (s inputField) Type() *ast.Type { return s.field.Type }
 
-func (s inputField) SelectionSet() ([]selection, error) {
+func (s inputField) SubFields() ([]field, error) {
 	return selectionsForType(s.generator, s.field.Type), nil
 }
 
-func selectionsForType(g *generator, typ *ast.Type) []selection {
+func selectionsForType(g *generator, typ *ast.Type) []field {
 	def := g.schema.Types[typ.Name()]
-	selectionSet := make([]selection, len(def.Fields))
+	fields := make([]field, len(def.Fields))
 	for i, field := range def.Fields {
-		selectionSet[i] = inputField{g, field}
+		fields[i] = inputField{g, field}
 	}
-	return selectionSet
+	return fields
 }
 
-func (builder *typeBuilder) writeField(selection selection) error {
-	jsonName := selection.Alias()
+func (builder *typeBuilder) writeField(field field) error {
+	jsonName := field.Alias()
 	// We need an exportable name for JSON-marshaling.
 	goName := upperFirst(jsonName)
 
 	builder.WriteString(goName)
 	builder.WriteRune(' ')
 
-	typ := selection.Type()
+	typ := field.Type()
 	if typ == nil {
 		// Unclear why gqlparser hasn't already rejected this,
 		// but empirically it might not.
-		return fmt.Errorf("undefined field %v", selection.Alias())
+		return fmt.Errorf("undefined field %v", field.Alias())
 	}
 
-	selectionSet, err := selection.SelectionSet()
+	fields, err := field.SubFields()
 	if err != nil {
 		return err
 	}
 
-	err = builder.writeType(typ, selectionSet)
+	err = builder.writeType(typ, fields)
 	if err != nil {
 		return err
 	}
@@ -191,7 +190,7 @@ var builtinTypes = map[string]string{
 	"ID":      "string", // TODO: named type for IDs?
 }
 
-func (builder *typeBuilder) writeType(typ *ast.Type, selectionSet []selection) error {
+func (builder *typeBuilder) writeType(typ *ast.Type, fields []field) error {
 	// gqlgen does slightly different things here since it defines names for
 	// all the intermediate types, but its implementation may be useful to crib
 	// from:
@@ -208,7 +207,7 @@ func (builder *typeBuilder) writeType(typ *ast.Type, selectionSet []selection) e
 
 	def := builder.schema.Types[typ.Name()]
 	// Writes a typedef elsewhere (if not already defined)
-	name, err := builder.addTypeForDefinition("", def, selectionSet)
+	name, err := builder.addTypeForDefinition("", def, fields)
 	if err != nil {
 		return err
 	}
@@ -217,11 +216,11 @@ func (builder *typeBuilder) writeType(typ *ast.Type, selectionSet []selection) e
 	return nil
 }
 
-func (builder *typeBuilder) writeTypedef(typedef *ast.Definition, selectionSet []selection) error {
+func (builder *typeBuilder) writeTypedef(typedef *ast.Definition, fields []field) error {
 	switch typedef.Kind {
 	case ast.Object, ast.InputObject:
 		builder.WriteString("struct {\n")
-		for _, field := range selectionSet {
+		for _, field := range fields {
 			err := builder.writeField(field)
 			if err != nil {
 				return err
@@ -231,7 +230,7 @@ func (builder *typeBuilder) writeTypedef(typedef *ast.Definition, selectionSet [
 
 		// If any field is abstract, we need an UnmarshalJSON method to handle
 		// it.
-		return builder.maybeWriteUnmarshal(selectionSet)
+		return builder.maybeWriteUnmarshal(fields)
 
 	case ast.Interface, ast.Union:
 		// First, write the interface type.
@@ -245,7 +244,7 @@ func (builder *typeBuilder) writeTypedef(typedef *ast.Definition, selectionSet [
 		// Then, write the implementations.
 		// TODO(benkraft): Put a doc-comment somewhere with the list.
 		for _, impldef := range builder.schema.GetPossibleTypes(typedef) {
-			name, err := builder.addTypeForDefinition("", impldef, selectionSet)
+			name, err := builder.addTypeForDefinition("", impldef, fields)
 			if err != nil {
 				return err
 			}
