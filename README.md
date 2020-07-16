@@ -60,6 +60,8 @@ TODO(benkraft): Figure out how to get GitHub Actions to run the example -- it ne
 ## Major TODOs
 
 Query structures to support:
+- interfaces
+- unions
 - fragments
 
 Config options:
