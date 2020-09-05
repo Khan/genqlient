@@ -63,6 +63,7 @@ Query structures to support:
 - interfaces
 - unions
 - fragments
+- (optional) collapsing -- should be able to have `mutation { myMutation { error { code } } }` just return `(code string, err error)`
 
 Config options:
 - get schema via HTTP (perhaps even via GraphQL introspection)
