@@ -59,23 +59,41 @@ TODO(benkraft): Figure out how to get GitHub Actions to run the example -- it ne
 
 ## Major TODOs
 
+(*) denotes things we def need need to use this in prod without support for interfaces, unions, and fragments.
+
 Query structures to support:
 - interfaces
 - unions
 - fragments
 - (optional) collapsing -- should be able to have `mutation { myMutation { error { code } } }` just return `(code string, err error)`
+- (*) decide about named vs. unnamed types
 
 Config options:
 - get schema via HTTP (perhaps even via GraphQL introspection)
-- proper config/arguments setup (e.g. with [viper](https://github.com/spf13/viper)
+- (*) proper config/arguments setup (e.g. with [viper](https://github.com/spf13/viper)
+- (*) figure out Khan-specific wiring -- maybe configure a get-client-from-ctx function, so we can use `ctx.GenQL()` and others can use `ctx.Value()`
 
 Other:
-- naming collisions are a mess
-- error-checking/validation/etc. everywhere
+- (*) error-checking/validation/etc. everywhere
 - more tests
-- documentation
-- a name that's more clearly distinct from other libraries out there
-- what to do about usages in tests -- tests will want to construct response values, and will need them to not have anonymous structs so as to do that (but that runs into even more naming collisions, if the same file has several queries with different fields of a type)
+- (*) documentation
+- (*) a name that's more clearly distinct from other libraries out there and conveys what this does
+- pull some of the below out into DESIGN.md
+
+### Named vs. unnamed types
+
+TODO: fill this in.  Needs to be decided before we can use this even for non-fragment/interface queries.
+
+reasons for named:
+- usages in tests -- tests will want to construct response values, and will want them to not have anonymous structs so as to do that (but that runs into even more naming collisions, if the same file has several queries with different fields of a type)
+- option one for fragments/interfaces requires named types (so they can have methods/interfaces)
+
+reasons for unnamed:
+- naming collisions are a serious mess
+
+misc:
+- look at what other languages do (sadly flow just does everything anonymously becuase that works better in flow)
+- probably have to go with named types, and figure out how to solve naming collsions (at least in theory, can leave as a TODO to start with)
 
 ### How to support fragments and interfaces
 
