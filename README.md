@@ -57,151 +57,29 @@ For a complete working example, see `example/`.
 
 TODO(benkraft): Figure out how to get GitHub Actions to run the example -- it needs a token.
 
+## Design
+
+See [DESIGN.md](DESIGN.md) for documentation of major design decisions in this library.
+
 ## Major TODOs
 
-(*) denotes things we def need need to use this in prod without support for interfaces, unions, and fragments.
+(*) denotes things we need to use this in prod at Khan
+(+) denotes things we further need before recommending anyone else use this in prod
 
-Query structures to support:
-- interfaces
-- unions
-- fragments
+Generated code:
+- (*) decide how to name types (see DESIGN)
+- (*) decide about optionality (see DESIGN)
+- redo support for interfaces, unions, fragments (see DESIGN)
 - (optional) collapsing -- should be able to have `mutation { myMutation { error { code } } }` just return `(code string, err error)`
-- (*) decide about named vs. unnamed types
 
 Config options:
+- (+) proper config/arguments setup (e.g. with [viper](https://github.com/spf13/viper))
+- (+) fix up context/client wiring (see DESIGN)
 - get schema via HTTP (perhaps even via GraphQL introspection)
-- (*) proper config/arguments setup (e.g. with [viper](https://github.com/spf13/viper)
-- (*) figure out Khan-specific wiring -- maybe configure a get-client-from-ctx function, so we can use `ctx.GenQL()` and others can use `ctx.Value()`
+- send hash rather than full query
 
 Other:
 - (*) error-checking/validation/etc. everywhere
-- more tests
-- (*) documentation
 - (*) a name that's more clearly distinct from other libraries out there and conveys what this does
-- pull some of the below out into DESIGN.md
-
-### Named vs. unnamed types
-
-TODO: fill this in.  Needs to be decided before we can use this even for non-fragment/interface queries.
-
-reasons for named:
-- usages in tests -- tests will want to construct response values, and will want them to not have anonymous structs so as to do that (but that runs into even more naming collisions, if the same file has several queries with different fields of a type)
-- option one for fragments/interfaces requires named types (so they can have methods/interfaces)
-
-reasons for unnamed:
-- naming collisions are a serious mess
-
-misc:
-- look at what other languages do (sadly flow just does everything anonymously becuase that works better in flow)
-- probably have to go with named types, and figure out how to solve naming collsions (at least in theory, can leave as a TODO to start with)
-
-### How to support fragments and interfaces
-
-Consider the following query (suppose that `a` returns interface type `I`, which may be implemented by either `T` or `U`):
-
-```graphql
-query { a { __typename b ...f } }
-fragment f on T { c d }
-```
-
-Depending on whether the concrete type returned from `a` is `T`, we can get one of two result structures back:
-
-```json
-{"a": {"__typename": "T", "b": "...", "c": "..." , "d": "..."}}
-{"a": {"__typename": "U", "b": "..."}}
-```
-
-The question is: how do we translate that to Go types?
-
-One natural option is to generate a Go type for every concrete GraphQL type the object might have, and simply inline all the fragments.  So here we would have
-```go
-type T struct{ B, C, D string }
-type U struct{ B string }
-type I interface{ isI() }
-
-func (t T) isI() {}
-func (u U) isI() {}
-
-type Response struct{ A I }
-```
-
-In this approach, the two objects above would look like
-
-```go
-Response{A: T{B: "...", C: "...", D: "..."}}
-Response{A: U{B: "..."}}
-```
-
-Another natural option, which looks more like the way `shurcooL/graphql` does things, is to generate a type for each fragment, and only fill in the relevant ones:
-```go
-type Response struct {
-    A struct{
-        B string
-        F *struct{
-            C, D string
-        }
-    }
-}
-```
-
-In this approach, the two objects above would look like
-
-```go
-Response{A: {B: "...", F: {C: "...", D: "..."}}}
-Response{A: {B: "..."}}
-```
-
-(Note the types are omitted since they're not named.)
-
-Each approach also naturally implies a different way to handle a query that uses interface types without fragments.  In particular, consider the query
-
-```graphql
-query { a { b } }
-```
-
-using the same schema as above.  In the former approach, we still define three types (plus two receivers); and `resp.A` is still of an interface type; it might be either `T` or `U`.  In the latter approach, this looks just like any other query: `resp.A` is a `struct{ B string }`.  This has implications for how we use this data: the latter approach lets us just do `resp.A.B`, whereas the former requires we do a type-switch, or add a `GetB()` method to `I`, and do `resp.A.GetB()`.
-
-
-Pros of the first approach:
-
-- it's the most natural translation of how GraphQL does things
-- you always know what type you got back
-- you always know which fields are there -- you don't have to encode at the application level an assumption that if fragment A was defined, fragment B also will be, because all types that match A also match B
-
-Pros of the second approach:
-
-- the types are simpler: in principle we don't need to define any intermediate named types
-- if you don't care about the types, and don't use fragments, you don't have to worry about anything special
-- we avoid having to have a bunch of interface methods (or push a type switch onto callers)
-- if you're using fragments to share code, rather than to type switch, we can more naturally share that type
-
-Note that both approaches require that we add `__typename` to every selection set which has fragments (unless the types match exactly).  This seems fine since Apollo client also does so for all selection sets.  We also need to define `UnmarshalJSON` on every type with fragment-spreads; in the former case Go doesn't know how to unmarshal into an interface type, while in the latter the Go type structure is too different from that of the JSON.  (Note that `shurcooL/graphql` actually has its own JSON-decoder to solve this problem.)
-
-A third non-approach is to simplify define all the fields on the same struct, with some optional:
-
-```go
-type Response struct {
-    A struct {
-        B string
-        C *string
-        D *string
-    }
-}
-```
-
-Apart from being semantically messy, this doesn't have a good way to handle the case where there are types with conflicting fields, e.g.
-
-```
-interface I {}
-type T implements I { f: Int }
-type U implements I { f: String }
-
-query {
-    a {
-        ... on T { f }
-        ... on U { f }
-    }
-}
-```
-
-What type is `resp.A.F`?  It has to be both `string` and `int`.
+- (+) more tests
+- (+) documentation
