@@ -67,8 +67,8 @@ See [DESIGN.md](DESIGN.md) for documentation of major design decisions in this l
 (+) denotes things we further need before recommending anyone else use this in prod
 
 Generated code:
-- (*) decide how to name types (see DESIGN)
-- (*) decide about optionality (see DESIGN)
+- (*) update type naming for new scheme
+- (*) remove pointers for optionality (or put behind flag)
 - redo support for interfaces, unions, fragments (see DESIGN)
 - (optional) collapsing -- should be able to have `mutation { myMutation { error { code } } }` just return `(code string, err error)`
 
@@ -83,3 +83,4 @@ Other:
 - (*) a name that's more clearly distinct from other libraries out there and conveys what this does
 - (+) more tests
 - (+) documentation
+- custom scalar types

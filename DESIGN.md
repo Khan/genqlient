@@ -34,7 +34,7 @@ Here we can also look at non-GraphQL libraries:
 - Google Cloud Datastore basically follows encoding/json; at Khan Academy we mostly don't use pointers
 - protobuf uses pointers for all structs; proto2 uses pointers for all fields as well (although provides a non-pointer accessor function) whereas proto3 does not use pointers (and application is not supposed to be able to distinguish between zero and unset in any language).
 
-In general I feel uncomfortable using pointers by default, because I think it's bad Go style.  The best option might be to allow them on an opt-in basis?  Then you could use them if you want to pass around intermediate values, or distinguish zero and null, or whatever your reason is.
+**Decision:** I do not want to use pointers by default, because I really think it's just terrible Go style.  I think we can actually get away with just not supporting this at all for v0, and then add config options for pointers (which you can use for distinguishing zero and null, or to pass around intermediate values) and possibly also for presence fields, or anything else you want.
 
 ### Named vs. unnamed types
 
@@ -88,7 +88,7 @@ type User2 struct {
 }
 ```
 
-Moreover, these types names should be as stable as possible: changing one part of a query (or another query) shouldn't change the type-names.  And ideally, we might deduplicate: in a query like `{ self { id } myChildren { id } }` we'd be able to use a single type for both `self` and `myChildren`.  Although maybe, if you want that, you have to use a fragment.
+Moreover, these types names should be as stable as possible: changing one part of a query (or another query) shouldn't change the type-names.  And ideally, we might deduplicate: in a query like `{ self { id } myChildren { id } }` we'd be able to use a single type for both `self` and `myChildren`.  Although maybe, if you want that, you have to use a fragment; it's clearly in conflict with having stable names.  Or we can actually make this configurable!
 
 In other tools:
 - Apollo mostly uses named types (except alternatives of an interface/fragment are inline in TypeScript, but not in Flow), and in the above example names them, respectively, `MyQuery_user_User` and `MyQuery_user_User_children_User`, or maybe in some versions `MyQuery_user` and `MyQuery_user_children` in Flow/TypeScript.  In Java and Scala in some cases they use nested types, e.g. `MyQuery.User.Children`.
@@ -97,7 +97,14 @@ In other tools:
 - gqlgen doesn't have this problem, because on the server each GraphQL type maps to a unique Go type; and to the extent that different queries need different fields this is handled at the level of which fields are serialized or which resolvers are called.
 - shurcooL/graphql allows either way.
 
-In general, it seems like even in languages with better ergonomics for unnamed types, Apollo's approach is somewhat reasonable.  And unnamed types get will get really hairy for large queries in Go.  We'll need to decide the naming scheme, but we can copy Apollo's if needed.  On some level, even if the naming scheme is bad, it won't be as bad as unnamed types!  But it is somewhat hard to change later (at least without some sort of backcompat), as it breaks existing generated code.
+**Decision:** In general, it seems like even in languages with better ergonomics for unnamed types, Apollo's approach is somewhat reasonable.  And unnamed types will get really hairy for large queries in Go.  On some level, even if the naming scheme is bad, it won't be as bad as unnamed types -- if you don't need to refer to the intermediate type, you don't care, and if you do, it's better than a giant inline struct.  (But it's hard to change later without a flag as existing code may depend on those types.)
+
+We'll do something similar to Apollo's naming scheme.  Specifically:
+- The toplevel name will be `MyQueryResponse`, using the query-name.
+- Further names will be `MyQueryFieldTypeFieldType`.  We will not attempt to be super smart about avoiding conflicts.
+- Fragments will have some naming scheme TBD but starting at the fragment.
+
+All of this may be configurable later.
 
 ### How to support fragments and interfaces
 
@@ -218,7 +225,7 @@ In other libraries:
 - shurcooL/graphql uses option 2.
 - protobuf has a similar problem, and uses basically option 1 in Go.
 
-In general, it seems like the GraphQL Way, and perhaps also the Go Way is definitely Option 1; I've always found the way shurcooL/graphql handles this to be questionable, and it requires a custom JSON decoder (although we may end up needing that either way, because Go doesn't have a great way to decode sum types).
+**Decision:** In general, it seems like the GraphQL Way, and perhaps also the Go Way is Option 1; I've always found the way shurcooL/graphql handles this to be a bit strange.  (It also requires a bunch of special handling for JSON decoding, although we may need that either way.)  There's some question as to whether we need to generate types or not, but we can deal with that.
 
 ## Configuration and runtime
 
@@ -233,6 +240,8 @@ One option is to put configuration in GraphQL directives.  The problem is that t
 Instead, we will likely have to do that configuration in comments, which we already extract to use in docstrings.  We'll have to figure out how to support both.
 
 Or, we can figure out how to avoid configuration entirely.  This seems short-sighted but may be possible if we can solve for optionality another way and decide collapsing is a non-issue.
+
+**Decision:** We'll configure with comments on the field of the form `# @genql(...)`, syntax TBD but similar to a GraphQL directive.
 
 ### Query function signatures (context/client)
 
@@ -260,3 +269,9 @@ func GetUser(ctx context.Context, client graphql.Client, id string) (*GetUserRes
 Additionally, users may want to get the client from the context, using a custom method like Khan's KAContext or just ordinary `context.Value`.
 
 This can all be configurable globally -- say you can decide whether to use context and client, and optionally provide the type of your context and/or a function that gets client from it, or something.  We'll want to pick a good default before we have external users, so as not to break them, but it's easy enough to change the Khan-specific parts via codemod later.
+
+### Query extraction (for safelisting)
+
+One thing we want to be able to do is to make it clear exactly what query-document (down to comments and whitespace) we will be sending in the query for the purposes of safelisting and querying based on hash.  In the case where you have one query per file, that's easy, just use the whole file.  But you may want to share fragments between queries, in which case this is trouble: you either need a way to include fragments from another file (and a defined concatenation order), or you need to have several queries per file, and either have genql extract the right parts (in a defined/reproducible way), or have it send up the full file and the operation name to use (in which case we should still encourage you to not do that unless you're hashing, so that you aren't sending up too much data).  We could also allow configuration between the last two options (so if you don't care about hashing/safelisting you can auto-extract).
+
+We can decide this later once we support fragments and safelisting/hashing; it's fine if that's not available at first.
