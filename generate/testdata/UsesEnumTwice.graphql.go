@@ -8,31 +8,31 @@ import (
 	"github.com/Khan/genql/graphql"
 )
 
-type Role string
-
-const (
-	StudentRole Role = "STUDENT"
-	TeacherRole Role = "TEACHER"
-)
-
-type Role1 string
-
-const (
-	StudentRole1 Role1 = "STUDENT"
-	TeacherRole1 Role1 = "TEACHER"
-)
-
-type User struct {
-	Roles []Role `json:"roles"`
+type UsesEnumTwiceQueryMeUser struct {
+	Roles []UsesEnumTwiceQueryMeUserRolesRole `json:"roles"`
 }
 
-type User1 struct {
-	Roles []Role1 `json:"roles"`
+type UsesEnumTwiceQueryMeUserRolesRole string
+
+const (
+	UsesEnumTwiceQueryMeUserRolesRoleStudent UsesEnumTwiceQueryMeUserRolesRole = "STUDENT"
+	UsesEnumTwiceQueryMeUserRolesRoleTeacher UsesEnumTwiceQueryMeUserRolesRole = "TEACHER"
+)
+
+type UsesEnumTwiceQueryOtherUser struct {
+	Roles []UsesEnumTwiceQueryOtherUserRolesRole `json:"roles"`
 }
+
+type UsesEnumTwiceQueryOtherUserRolesRole string
+
+const (
+	UsesEnumTwiceQueryOtherUserRolesRoleStudent UsesEnumTwiceQueryOtherUserRolesRole = "STUDENT"
+	UsesEnumTwiceQueryOtherUserRolesRoleTeacher UsesEnumTwiceQueryOtherUserRolesRole = "TEACHER"
+)
 
 type UsesEnumTwiceQueryResponse struct {
-	Me        *User
-	OtherUser *User1
+	Me        *UsesEnumTwiceQueryMeUser
+	OtherUser *UsesEnumTwiceQueryOtherUser
 }
 
 func UsesEnumTwiceQuery(client *graphql.Client) (*UsesEnumTwiceQueryResponse, error) {

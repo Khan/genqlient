@@ -9,10 +9,10 @@ import (
 )
 
 type ListInputQueryResponse struct {
-	User *User `json:"user"`
+	User *ListInputQueryUser `json:"user"`
 }
 
-type User struct {
+type ListInputQueryUser struct {
 	Id string `json:"id"`
 }
 

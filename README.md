@@ -53,7 +53,9 @@ For a complete working example, see `example/`.
 
 `go test ./...` tests code generation.  (This is run by GitHub Actions.)
 
-`make example` tests that everything wires up to a real API correctly.
+Most of the tests are snapshot-based; they use the schema, queries, and snapshots in `generate/testdata`.  The schema is in `schema.graphql`; the queries are in `TestName.graphql`.  The test by default asserts that the output of the generator matches the snapshot `TestName.graphql.go`.  To update the snapshots, run with `UPDATE_SNAPSHOTS=1`; it will fail the tests and print the diffs, but regenerate the snapshots.  Make sure to check that the output is sensible!
+
+`make example` rebuilds the example, and tests that everything wires up to a real API correctly.
 
 TODO(benkraft): Figure out how to get GitHub Actions to run the example -- it needs a token.
 
@@ -67,7 +69,6 @@ See [DESIGN.md](DESIGN.md) for documentation of major design decisions in this l
 (+) denotes things we further need before recommending anyone else use this in prod
 
 Generated code:
-- (*) update type naming for new scheme
 - (*) remove pointers for optionality (or put behind flag)
 - redo support for interfaces, unions, fragments (see DESIGN)
 - (optional) collapsing -- should be able to have `mutation { myMutation { error { code } } }` just return `(code string, err error)`
@@ -77,6 +78,7 @@ Config options:
 - (+) fix up context/client wiring (see DESIGN)
 - get schema via HTTP (perhaps even via GraphQL introspection)
 - send hash rather than full query
+- whether names should be exported
 
 Other:
 - (*) error-checking/validation/etc. everywhere
@@ -84,3 +86,4 @@ Other:
 - (+) more tests
 - (+) documentation
 - custom scalar types
+- allow mapping a custom type to a particular val (if you want to use a named type for some string, say)

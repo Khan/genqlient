@@ -9,10 +9,10 @@ import (
 )
 
 type QueryWithSlicesResponse struct {
-	User *User `json:"user"`
+	User *QueryWithSlicesUser `json:"user"`
 }
 
-type User struct {
+type QueryWithSlicesUser struct {
 	Emails                []string  `json:"emails"`
 	EmailsOrNull          []string  `json:"emailsOrNull"`
 	EmailsWithNulls       []*string `json:"emailsWithNulls"`

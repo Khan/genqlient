@@ -9,10 +9,10 @@ import (
 )
 
 type TypeNameQueryResponse struct {
-	User *User `json:"user"`
+	User *TypeNameQueryUser `json:"user"`
 }
 
-type User struct {
+type TypeNameQueryUser struct {
 	Typename *string `json:"__typename"`
 	Id       string  `json:"id"`
 }

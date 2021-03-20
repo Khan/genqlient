@@ -8,24 +8,24 @@ import (
 	"github.com/Khan/genql/graphql"
 )
 
-type User struct {
-	MyName *string
+type GetUserResponse struct {
+	User *GetUserUser `json:"user"`
 }
 
-type User1 struct {
+type GetUserUser struct {
 	TheirName *string `json:"theirName"`
 }
 
-type getUserResponse struct {
-	User *User1 `json:"user"`
+type GetViewerResponse struct {
+	Viewer GetViewerViewerUser `json:"viewer"`
 }
 
-type getViewerResponse struct {
-	Viewer User `json:"viewer"`
+type GetViewerViewerUser struct {
+	MyName *string
 }
 
-func getViewer(ctx context.Context, client *graphql.Client) (*getViewerResponse, error) {
-	var retval getViewerResponse
+func getViewer(ctx context.Context, client *graphql.Client) (*GetViewerResponse, error) {
+	var retval GetViewerResponse
 	err := client.MakeRequest(ctx, `
 query getViewer {
 	viewer {
@@ -37,12 +37,12 @@ query getViewer {
 }
 
 // getUser gets the given user's name from their username.
-func getUser(ctx context.Context, client *graphql.Client, login string) (*getUserResponse, error) {
+func getUser(ctx context.Context, client *graphql.Client, login string) (*GetUserResponse, error) {
 	variables := map[string]interface{}{
 		"Login": login,
 	}
 
-	var retval getUserResponse
+	var retval GetUserResponse
 	err := client.MakeRequest(ctx, `
 query getUser ($Login: String!) {
 	user(login: $Login) {

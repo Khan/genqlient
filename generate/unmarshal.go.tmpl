@@ -7,7 +7,7 @@ func (v *{{.Type}}) UnmarshalJSON(b []byte) error {
 	}
 	firstPass.{{.Type}} = v
 
-	err := json.Unmarshal(b, &typenames)
+	err := json.Unmarshal(b, &firstPass)
     if err != nil {
         return err
     }
@@ -22,6 +22,7 @@ func (v *{{.Type}}) UnmarshalJSON(b []byte) error {
     {{with $field := .}}
     {{range $field.ConcreteTypes}}
 	case "{{.GraphQLName}}":
+        {{/* TODO: handle repeated fields! */}}
 		v.{{$field.GoName}} = {{.GoName}}{}
 		err = json.Unmarshal(
 			firstPass.{{$field.GoName}}, &v.{{$field.GoName}})
@@ -32,4 +33,5 @@ func (v *{{.Type}}) UnmarshalJSON(b []byte) error {
         return err
     }
     {{end}}
+    return nil
 }

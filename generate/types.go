@@ -2,14 +2,14 @@ package generate
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 
 	"github.com/vektah/gqlparser/ast"
 )
 
 type typeBuilder struct {
-	typeName string
+	typeName       string
+	typeNamePrefix string
 	strings.Builder
 	*generator
 }
@@ -29,7 +29,8 @@ func (g *generator) baseTypeForOperation(operation ast.Operation) *ast.Definitio
 
 func (g *generator) getTypeForOperation(operation *ast.OperationDefinition) (name string, err error) {
 	// TODO: configure ResponseName format
-	name = operation.Name + "Response"
+	namePrefix := upperFirst(operation.Name)
+	name = namePrefix + "Response"
 
 	if def, ok := g.typeMap[name]; ok {
 		// TODO: check for and handle conflicts a better way
@@ -42,45 +43,68 @@ func (g *generator) getTypeForOperation(operation *ast.OperationDefinition) (nam
 	}
 
 	return g.addTypeForDefinition(
-		name, g.baseTypeForOperation(operation.Operation), fields)
+		namePrefix, name, g.baseTypeForOperation(operation.Operation), fields)
 }
 
-func (g *generator) addTypeForDefinition(nameOverride string, typ *ast.Definition, fields []field) (name string, err error) {
+var builtinTypes = map[string]string{
+	"Int":     "int", // TODO: technically int32 is always enough, use that?
+	"Float":   "float64",
+	"String":  "string",
+	"Boolean": "bool",
+	"ID":      "string", // TODO: named type for IDs?
+}
+
+func (g *generator) addTypeForDefinition(namePrefix, nameOverride string, typ *ast.Definition, fields []field) (name string, err error) {
+	// If this is a builtin type, just refer to it.
 	goName, ok := builtinTypes[typ.Name]
 	if ok {
 		return goName, nil
 	}
 
 	if nameOverride != "" {
+		// if we have an explicit name, the passed-in prefix is what we
+		// propagate forward
 		name = nameOverride
 	} else {
-		// TODO: casing should be configurable
-		name = upperFirst(typ.Name)
+		typeGoName := upperFirst(typ.Name)
+		if strings.HasSuffix(namePrefix, typeGoName) {
+			// If the field and type names are the same, we can avoid the
+			// duplication.  (We include the field name in case there are
+			// multiple fields with the same type, and the type name because
+			// that's the actual name (the rest are really qualifiers); but if
+			// they are the same then including it once suffices for both
+			// purposes.)
+			name = namePrefix
+		} else {
+			name = namePrefix + typeGoName
+		}
+
+		if typ.Kind != ast.Interface && typ.Kind != ast.Union {
+			// for interface/union types, we do not add the type name to the
+			// name prefix; we want to have QueryFieldType rather than
+			// QueryFieldInterfaceType.  Otherwise, the name will also be the
+			// prefix for the next type.
+			namePrefix = name
+		}
+
 	}
 
-	// TODO: in some cases we can deduplicate, do that
-	// TODO: nicer naming scheme
-	i := 0
-	origName := name
-	for g.typeMap[name] != "" {
-		i++
-		name = origName + strconv.Itoa(i)
-	}
-
-	builder := &typeBuilder{typeName: name, generator: g}
+	// Otherwise, build the type, put that in the type-map, and return its
+	// name.
+	builder := &typeBuilder{typeName: name, typeNamePrefix: namePrefix, generator: g}
 	fmt.Fprintf(builder, "type %s ", name)
 	err = builder.writeTypedef(typ, fields)
 	if err != nil {
 		return "", err
 	}
-
 	g.typeMap[name] = builder.String()
 	return name, nil
 }
 
 func (g *generator) getTypeForInputType(typ *ast.Type) (string, error) {
-	builder := &typeBuilder{typeName: upperFirst(typ.Name()), generator: g}
-	err := builder.writeType(typ, selectionsForType(g, typ))
+	typeName := upperFirst(typ.Name())
+	builder := &typeBuilder{typeName: typeName, typeNamePrefix: typeName, generator: g}
+	err := builder.writeType("", typ, selectionsForType(g, typ))
 	return builder.String(), err
 }
 
@@ -167,7 +191,17 @@ func (builder *typeBuilder) writeField(field field) error {
 		return err
 	}
 
-	err = builder.writeType(typ, fields)
+	err = builder.writeType(
+		// Note we don't deduplicate here -- if our prefix is GetUser and the
+		// field name is User, we do GetUserUser.  This is important because if
+		// you have a field called user on a type called User we need
+		// `query q { user { user { id } } }` to generate two types, QUser and
+		// QUserUser.
+		// Note also this is the alias, not the field-name, because if we have
+		// `query q { a: f { b }, c: f { d } }` we need separate types for a
+		// and c, even though they are the same type in GraphQL, because they
+		// have different fields.
+		builder.typeNamePrefix+upperFirst(field.Alias()), typ, fields)
 	if err != nil {
 		return err
 	}
@@ -182,20 +216,10 @@ func (builder *typeBuilder) writeField(field field) error {
 	return nil
 }
 
-var builtinTypes = map[string]string{
-	"Int":     "int", // TODO: technically int32 is always enough, use that?
-	"Float":   "float64",
-	"String":  "string",
-	"Boolean": "bool",
-	"ID":      "string", // TODO: named type for IDs?
-}
-
-func (builder *typeBuilder) writeType(typ *ast.Type, fields []field) error {
-	// gqlgen does slightly different things here since it defines names for
-	// all the intermediate types, but its implementation may be useful to crib
-	// from:
+func (builder *typeBuilder) writeType(namePrefix string, typ *ast.Type, fields []field) error {
+	// gqlgen does slightly different things here, but its implementation may
+	// be useful to crib from:
 	// https://github.com/99designs/gqlgen/blob/master/plugin/modelgen/models.go#L113
-	// TODO: or maybe we should do that?
 	if typ.Elem != nil {
 		// Type is a list.
 		builder.WriteString("[]")
@@ -207,7 +231,7 @@ func (builder *typeBuilder) writeType(typ *ast.Type, fields []field) error {
 
 	def := builder.schema.Types[typ.Name()]
 	// Writes a typedef elsewhere (if not already defined)
-	name, err := builder.addTypeForDefinition("", def, fields)
+	name, err := builder.addTypeForDefinition(namePrefix, "", def, fields)
 	if err != nil {
 		return err
 	}
@@ -244,7 +268,7 @@ func (builder *typeBuilder) writeTypedef(typedef *ast.Definition, fields []field
 		// Then, write the implementations.
 		// TODO(benkraft): Put a doc-comment somewhere with the list.
 		for _, impldef := range builder.schema.GetPossibleTypes(typedef) {
-			name, err := builder.addTypeForDefinition("", impldef, fields)
+			name, err := builder.addTypeForDefinition(builder.typeNamePrefix, "", impldef, fields)
 			if err != nil {
 				return err
 			}
@@ -263,7 +287,7 @@ func (builder *typeBuilder) writeTypedef(typedef *ast.Definition, fields []field
 		for _, val := range typedef.EnumValues {
 			// TODO: casing should be configurable
 			fmt.Fprintf(builder, "%s %s = \"%s\"\n",
-				goConstName(val.Name+"_"+builder.typeName),
+				builder.typeNamePrefix+goConstName(val.Name),
 				builder.typeName, val.Name)
 		}
 		builder.WriteString(")\n")

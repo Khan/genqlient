@@ -9,10 +9,10 @@ import (
 )
 
 type QueryWithAliasResponse struct {
-	User *User
+	User *QueryWithAliasUser
 }
 
-type User struct {
+type QueryWithAliasUser struct {
 	ID string
 }
 

@@ -9,19 +9,19 @@ import (
 )
 
 type QueryWithEnumsResponse struct {
-	User *User `json:"user"`
+	User *QueryWithEnumsUser `json:"user"`
 }
 
-type Role string
+type QueryWithEnumsUser struct {
+	Roles []QueryWithEnumsUserRolesRole `json:"roles"`
+}
+
+type QueryWithEnumsUserRolesRole string
 
 const (
-	StudentRole Role = "STUDENT"
-	TeacherRole Role = "TEACHER"
+	QueryWithEnumsUserRolesRoleStudent QueryWithEnumsUserRolesRole = "STUDENT"
+	QueryWithEnumsUserRolesRoleTeacher QueryWithEnumsUserRolesRole = "TEACHER"
 )
-
-type User struct {
-	Roles []Role `json:"roles"`
-}
 
 func QueryWithEnums(client *graphql.Client) (*QueryWithEnumsResponse, error) {
 	var retval QueryWithEnumsResponse

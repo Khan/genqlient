@@ -9,27 +9,27 @@ import (
 )
 
 type InputObjectQueryResponse struct {
-	User *User `json:"user"`
+	User *InputObjectQueryUser `json:"user"`
 }
 
-type Role string
-
-const (
-	StudentRole Role = "STUDENT"
-	TeacherRole Role = "TEACHER"
-)
-
-type User struct {
+type InputObjectQueryUser struct {
 	Id string `json:"id"`
 }
 
 type UserQueryInput struct {
-	Email *string   `json:"email"`
-	Name  *string   `json:"name"`
-	Id    *string   `json:"id"`
-	Role  *Role     `json:"role"`
-	Names []*string `json:"names"`
+	Email *string             `json:"email"`
+	Name  *string             `json:"name"`
+	Id    *string             `json:"id"`
+	Role  *UserQueryInputRole `json:"role"`
+	Names []*string           `json:"names"`
 }
+
+type UserQueryInputRole string
+
+const (
+	UserQueryInputRoleStudent UserQueryInputRole = "STUDENT"
+	UserQueryInputRoleTeacher UserQueryInputRole = "TEACHER"
+)
 
 func InputObjectQuery(client *graphql.Client, query *UserQueryInput) (*InputObjectQueryResponse, error) {
 	variables := map[string]interface{}{

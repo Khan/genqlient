@@ -8,35 +8,24 @@ import (
 	"github.com/Khan/genql/graphql"
 )
 
-type Article struct {
-	Id   string `json:"id"`
-	Name string `json:"name"`
-}
-
-func (v Article) implementsGraphQLInterfaceContent() {}
-
-type Content interface {
-	implementsGraphQLInterfaceContent()
-}
-
 type InterfaceNoFragmentsQueryResponse struct {
-	Root Topic `json:"root"`
+	Root InterfaceNoFragmentsQueryRootTopic `json:"root"`
 }
 
-type Topic struct {
-	Id       string    `json:"id"`
-	Name     string    `json:"name"`
-	Children []Content `json:"-"`
+type InterfaceNoFragmentsQueryRootTopic struct {
+	Id       string                                              `json:"id"`
+	Name     string                                              `json:"name"`
+	Children []InterfaceNoFragmentsQueryRootTopicChildrenContent `json:"-"`
 }
 
-func (v *Topic) UnmarshalJSON(b []byte) error {
+func (v *InterfaceNoFragmentsQueryRootTopic) UnmarshalJSON(b []byte) error {
 	var firstPass struct {
-		*Topic
+		*InterfaceNoFragmentsQueryRootTopic
 		Children json.RawMessage `json:"children"`
 	}
-	firstPass.Topic = v
+	firstPass.InterfaceNoFragmentsQueryRootTopic = v
 
-	err := json.Unmarshal(b, &typenames)
+	err := json.Unmarshal(b, &firstPass)
 	if err != nil {
 		return err
 	}
@@ -51,17 +40,20 @@ func (v *Topic) UnmarshalJSON(b []byte) error {
 	switch tn.TypeName {
 
 	case "Article":
-		v.Children = Article{}
+
+		v.Children = InterfaceNoFragmentsQueryRootTopicChildrenArticle{}
 		err = json.Unmarshal(
 			firstPass.Children, &v.Children)
 
 	case "Video":
-		v.Children = Video{}
+
+		v.Children = InterfaceNoFragmentsQueryRootTopicChildrenVideo{}
 		err = json.Unmarshal(
 			firstPass.Children, &v.Children)
 
 	case "Topic":
-		v.Children = Topic{}
+
+		v.Children = InterfaceNoFragmentsQueryRootTopicChildrenTopic{}
 		err = json.Unmarshal(
 			firstPass.Children, &v.Children)
 
@@ -70,14 +62,36 @@ func (v *Topic) UnmarshalJSON(b []byte) error {
 		return err
 	}
 
+	return nil
 }
 
-type Video struct {
+type InterfaceNoFragmentsQueryRootTopicChildrenArticle struct {
 	Id   string `json:"id"`
 	Name string `json:"name"`
 }
 
-func (v Video) implementsGraphQLInterfaceContent() {}
+func (v InterfaceNoFragmentsQueryRootTopicChildrenArticle) implementsGraphQLInterfaceInterfaceNoFragmentsQueryRootTopicChildrenContent() {
+}
+
+type InterfaceNoFragmentsQueryRootTopicChildrenContent interface {
+	implementsGraphQLInterfaceInterfaceNoFragmentsQueryRootTopicChildrenContent()
+}
+
+type InterfaceNoFragmentsQueryRootTopicChildrenTopic struct {
+	Id   string `json:"id"`
+	Name string `json:"name"`
+}
+
+func (v InterfaceNoFragmentsQueryRootTopicChildrenTopic) implementsGraphQLInterfaceInterfaceNoFragmentsQueryRootTopicChildrenContent() {
+}
+
+type InterfaceNoFragmentsQueryRootTopicChildrenVideo struct {
+	Id   string `json:"id"`
+	Name string `json:"name"`
+}
+
+func (v InterfaceNoFragmentsQueryRootTopicChildrenVideo) implementsGraphQLInterfaceInterfaceNoFragmentsQueryRootTopicChildrenContent() {
+}
 
 func InterfaceNoFragmentsQuery(client *graphql.Client) (*InterfaceNoFragmentsQueryResponse, error) {
 	var retval InterfaceNoFragmentsQueryResponse

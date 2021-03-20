@@ -35,12 +35,6 @@ func gofmt(src string) (string, error) {
 }
 
 func TestGenerate(t *testing.T) {
-	// This test uses the schema, queries, and expected-output in ./testdata.
-	// The schema is in schema.graphql.  The queries are in TestName.graphql;
-	// the test asserts that the output of the generator for that query is
-	// matches TestName.graphql.go.  To update the expected output, run the
-	// tests with UPDATE_SNAPSHOTS=1 (they will still fail, but also do the
-	// update, so you can see which updates were made).
 	update := (os.Getenv("UPDATE_SNAPSHOTS") == "1")
 
 	files, err := ioutil.ReadDir(dataDir)
@@ -74,12 +68,14 @@ func TestGenerate(t *testing.T) {
 				t.Errorf("got:\n%v\nwant:\n%v\n", string(goCode), expectedGoCode)
 				if update {
 					t.Log("Updating testdata dir to match")
-					err = ioutil.WriteFile(filepath.Join(dataDir, goFilename), goCode, 0644)
+					err = ioutil.WriteFile(filepath.Join(dataDir, goFilename), goCode, 0o644)
 					if err != nil {
 						t.Errorf("Unable to update testdata dir: %v", err)
 					}
 				}
 			}
+
+			// TODO(benkraft): Also check that the code at least builds!
 		})
 	}
 }

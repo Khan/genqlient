@@ -9,10 +9,10 @@ import (
 )
 
 type QueryWithDoubleAliasResponse struct {
-	User *User `json:"user"`
+	User *QueryWithDoubleAliasUser `json:"user"`
 }
 
-type User struct {
+type QueryWithDoubleAliasUser struct {
 	ID     string
 	AlsoID string
 }

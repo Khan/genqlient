@@ -25,6 +25,7 @@ func lowerFirst(s string) string {
 }
 
 func upperFirst(s string) string {
+	// TODO: initialisms
 	return changeFirst(strings.TrimLeft(s, "_"), unicode.ToUpper)
 }
 

@@ -8,18 +8,26 @@ import (
 	"github.com/Khan/genql/graphql"
 )
 
-type Article struct {
+type UnionNoFragmentsQueryRandomLeafArticle struct {
 	Typename *string `json:"__typename"`
 }
 
-func (v Article) implementsGraphQLInterfaceLeafContent() {}
+func (v UnionNoFragmentsQueryRandomLeafArticle) implementsGraphQLInterfaceUnionNoFragmentsQueryRandomLeafLeafContent() {
+}
 
-type LeafContent interface {
-	implementsGraphQLInterfaceLeafContent()
+type UnionNoFragmentsQueryRandomLeafLeafContent interface {
+	implementsGraphQLInterfaceUnionNoFragmentsQueryRandomLeafLeafContent()
+}
+
+type UnionNoFragmentsQueryRandomLeafVideo struct {
+	Typename *string `json:"__typename"`
+}
+
+func (v UnionNoFragmentsQueryRandomLeafVideo) implementsGraphQLInterfaceUnionNoFragmentsQueryRandomLeafLeafContent() {
 }
 
 type UnionNoFragmentsQueryResponse struct {
-	RandomLeaf LeafContent `json:"-"`
+	RandomLeaf UnionNoFragmentsQueryRandomLeafLeafContent `json:"-"`
 }
 
 func (v *UnionNoFragmentsQueryResponse) UnmarshalJSON(b []byte) error {
@@ -29,7 +37,7 @@ func (v *UnionNoFragmentsQueryResponse) UnmarshalJSON(b []byte) error {
 	}
 	firstPass.UnionNoFragmentsQueryResponse = v
 
-	err := json.Unmarshal(b, &typenames)
+	err := json.Unmarshal(b, &firstPass)
 	if err != nil {
 		return err
 	}
@@ -44,12 +52,14 @@ func (v *UnionNoFragmentsQueryResponse) UnmarshalJSON(b []byte) error {
 	switch tn.TypeName {
 
 	case "Article":
-		v.RandomLeaf = Article{}
+
+		v.RandomLeaf = UnionNoFragmentsQueryRandomLeafArticle{}
 		err = json.Unmarshal(
 			firstPass.RandomLeaf, &v.RandomLeaf)
 
 	case "Video":
-		v.RandomLeaf = Video{}
+
+		v.RandomLeaf = UnionNoFragmentsQueryRandomLeafVideo{}
 		err = json.Unmarshal(
 			firstPass.RandomLeaf, &v.RandomLeaf)
 
@@ -58,13 +68,8 @@ func (v *UnionNoFragmentsQueryResponse) UnmarshalJSON(b []byte) error {
 		return err
 	}
 
+	return nil
 }
-
-type Video struct {
-	Typename *string `json:"__typename"`
-}
-
-func (v Video) implementsGraphQLInterfaceLeafContent() {}
 
 func UnionNoFragmentsQuery(client *graphql.Client) (*UnionNoFragmentsQueryResponse, error) {
 	var retval UnionNoFragmentsQueryResponse

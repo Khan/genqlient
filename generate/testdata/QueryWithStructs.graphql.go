@@ -8,17 +8,17 @@ import (
 	"github.com/Khan/genql/graphql"
 )
 
-type AuthMethod struct {
+type QueryWithStructsResponse struct {
+	User *QueryWithStructsUser `json:"user"`
+}
+
+type QueryWithStructsUser struct {
+	AuthMethods []QueryWithStructsUserAuthMethodsAuthMethod `json:"authMethods"`
+}
+
+type QueryWithStructsUserAuthMethodsAuthMethod struct {
 	Provider *string `json:"provider"`
 	Email    *string `json:"email"`
-}
-
-type QueryWithStructsResponse struct {
-	User *User `json:"user"`
-}
-
-type User struct {
-	AuthMethods []AuthMethod `json:"authMethods"`
 }
 
 func QueryWithStructs(client *graphql.Client) (*QueryWithStructsResponse, error) {
