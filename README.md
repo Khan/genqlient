@@ -80,7 +80,7 @@ Config options:
 - send hash rather than full query
 - whether names should be exported
 - default handling for optional fields (pointers, HasFoo, etc.)
-- response/function-name format (e.g. force exported/unexported, change "Response" suffix, etc.)
+- response/function-name format (e.g. force exported/unexported, change "Response" suffix, change how input objects work, etc.)
 - generate mocks?
 
 Other:

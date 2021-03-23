@@ -105,6 +105,7 @@ We'll do something similar to Apollo's naming scheme.  Specifically:
 - The toplevel name will be `MyQueryResponse`, using the query-name.
 - Further names will be `MyQueryFieldTypeFieldType`.  We will not attempt to be super smart about avoiding conflicts.
 - Fragments will have some naming scheme TBD but starting at the fragment.
+- Input objects will have a name starting at the type, since they always have the same fields, and often have naming schemes like "MyFieldInput" already.
 
 All of this may be configurable later.
 

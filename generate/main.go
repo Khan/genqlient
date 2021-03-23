@@ -2,6 +2,7 @@ package generate
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
 )
 
@@ -16,15 +17,12 @@ func readConfigGenerateAndWrite(configFilename string) error {
 		return err
 	}
 
-	// Open out at the end -- decreases the chances we blank it if we err.
-	out, err := os.OpenFile(config.Generated, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
+	err = ioutil.WriteFile(config.Generated, code, 0o644)
 	if err != nil {
-		return fmt.Errorf("could not open generated file %v: %v",
+		return fmt.Errorf("could not write generated file %v: %v",
 			config.Generated, err)
 	}
-
-	_, err = out.Write(code)
-	return err
+	return nil
 }
 
 func Main() {

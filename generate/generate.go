@@ -73,17 +73,15 @@ func (g *generator) Types() string {
 	return strings.Join(defs, "\n\n")
 }
 
-func (g *generator) getArgument(arg *ast.VariableDefinition) (argument, error) {
+func (g *generator) getArgument(opName string, arg *ast.VariableDefinition) (argument, error) {
 	graphQLName := arg.Variable
-	firstRest := strings.SplitN(graphQLName, "", 2)
-	goName := strings.ToLower(firstRest[0]) + firstRest[1]
-	goType, err := g.getTypeForInputType(arg.Type)
+	goType, err := g.getTypeForInputType(opName, arg.Type)
 	if err != nil {
 		return argument{}, err
 	}
 	return argument{
 		GraphQLName: graphQLName,
-		GoName:      goName,
+		GoName:      lowerFirst(graphQLName),
 		GoType:      goType,
 	}, nil
 }
@@ -121,7 +119,7 @@ func (g *generator) addOperation(op *ast.OperationDefinition) error {
 	args := make([]argument, len(op.VariableDefinitions))
 	for i, arg := range op.VariableDefinitions {
 		var err error
-		args[i], err = g.getArgument(arg)
+		args[i], err = g.getArgument(op.Name, arg)
 		if err != nil {
 			return err
 		}

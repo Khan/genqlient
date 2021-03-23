@@ -2,6 +2,7 @@ package generate
 
 import (
 	"fmt"
+	"go/token"
 	"io/ioutil"
 	"path/filepath"
 
@@ -42,7 +43,10 @@ func (c *Config) ValidateAndFillDefaults() error {
 		}
 
 		base := filepath.Base(abs)
-		// TODO: remove/replace bad chars, make sure there's something left?
+		if !token.IsIdentifier(base) {
+			return fmt.Errorf("unable to guess package-name: %v is not a valid identifier", base)
+		}
+
 		c.Package = base
 	}
 
@@ -69,7 +73,6 @@ func ReadAndValidateConfig(filename string) (*Config, error) {
 	}
 
 	// Make paths relative to config dir
-	// TODO: more principled typing here?
 	basename := filepath.Dir(filename)
 	config.Schema = filepath.Join(basename, config.Schema)
 	config.Queries = filepath.Join(basename, config.Queries)

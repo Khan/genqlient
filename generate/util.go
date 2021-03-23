@@ -29,6 +29,21 @@ func upperFirst(s string) string {
 	return changeFirst(strings.TrimLeft(s, "_"), unicode.ToUpper)
 }
 
+func matchFirst(s, tmpl string) string {
+	c, n := utf8.DecodeRuneInString(s)
+	t, _ := utf8.DecodeRuneInString(tmpl)
+	if c == utf8.RuneError || n == utf8.RuneError { // empty or invalid
+		return s
+	}
+
+	if unicode.IsUpper(t) {
+		c = unicode.ToUpper(c)
+	} else {
+		c = unicode.ToLower(c)
+	}
+	return string(c) + s[n:]
+}
+
 func goConstName(s string) string {
 	if strings.TrimLeft(s, "_") == "" {
 		return s

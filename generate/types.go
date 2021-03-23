@@ -101,10 +101,13 @@ func (g *generator) addTypeForDefinition(namePrefix, nameOverride string, typ *a
 	return name, nil
 }
 
-func (g *generator) getTypeForInputType(typ *ast.Type) (string, error) {
-	typeName := upperFirst(typ.Name())
-	builder := &typeBuilder{typeName: typeName, typeNamePrefix: typeName, generator: g}
-	err := builder.writeType("", typ, selectionsForType(g, typ))
+func (g *generator) getTypeForInputType(opName string, typ *ast.Type) (string, error) {
+	// Sort of a hack: case the input type name to match the op-name.
+	name := matchFirst(typ.Name(), opName)
+	// TODO: we have to pass name 4 times, yuck
+	builder := &typeBuilder{typeName: name, typeNamePrefix: name, generator: g}
+	fmt.Println(name)
+	err := builder.writeType(name, name, typ, selectionsForType(g, typ))
 	return builder.String(), err
 }
 
@@ -199,7 +202,7 @@ func (builder *typeBuilder) writeField(field field) error {
 		// `query q { a: f { b }, c: f { d } }` we need separate types for a
 		// and c, even though they are the same type in GraphQL, because they
 		// have different fields.
-		builder.typeNamePrefix+upperFirst(field.Alias()), typ, fields)
+		builder.typeNamePrefix+upperFirst(field.Alias()), "", typ, fields)
 	if err != nil {
 		return err
 	}
@@ -214,7 +217,7 @@ func (builder *typeBuilder) writeField(field field) error {
 	return nil
 }
 
-func (builder *typeBuilder) writeType(namePrefix string, typ *ast.Type, fields []field) error {
+func (builder *typeBuilder) writeType(namePrefix, nameOverride string, typ *ast.Type, fields []field) error {
 	// gqlgen does slightly different things here, but its implementation may
 	// be useful to crib from:
 	// https://github.com/99designs/gqlgen/blob/master/plugin/modelgen/models.go#L113
@@ -229,7 +232,7 @@ func (builder *typeBuilder) writeType(namePrefix string, typ *ast.Type, fields [
 
 	def := builder.schema.Types[typ.Name()]
 	// Writes a typedef elsewhere (if not already defined)
-	name, err := builder.addTypeForDefinition(namePrefix, "", def, fields)
+	name, err := builder.addTypeForDefinition(namePrefix, nameOverride, def, fields)
 	if err != nil {
 		return err
 	}
