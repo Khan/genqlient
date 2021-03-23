@@ -14,18 +14,26 @@ type ListInputQueryUser struct {
 	Id string `json:"id"`
 }
 
-func ListInputQuery(client *graphql.Client, names []string) (*ListInputQueryResponse, error) {
+func ListInputQuery(
+	client *graphql.Client,
+	names []string,
+) (*ListInputQueryResponse, error) {
 	variables := map[string]interface{}{
 		"names": names,
 	}
 
 	var retval ListInputQueryResponse
-	err := client.MakeRequest(nil, `
+	err := client.MakeRequest(
+		nil,
+		`
 query ListInputQuery ($names: [String]) {
 	user(query: {names:$names}) {
 		id
 	}
 }
-`, &retval, variables)
+`,
+		&retval,
+		variables,
+	)
 	return &retval, err
 }

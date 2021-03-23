@@ -15,15 +15,22 @@ type QueryWithDoubleAliasUser struct {
 	AlsoID string
 }
 
-func QueryWithDoubleAlias(client *graphql.Client) (*QueryWithDoubleAliasResponse, error) {
+func QueryWithDoubleAlias(
+	client *graphql.Client,
+) (*QueryWithDoubleAliasResponse, error) {
 	var retval QueryWithDoubleAliasResponse
-	err := client.MakeRequest(nil, `
+	err := client.MakeRequest(
+		nil,
+		`
 query QueryWithDoubleAlias {
 	user {
 		ID: id
 		AlsoID: id
 	}
 }
-`, &retval, nil)
+`,
+		&retval,
+		nil,
+	)
 	return &retval, err
 }

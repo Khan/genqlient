@@ -71,14 +71,21 @@ func (v *UnionNoFragmentsQueryResponse) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func UnionNoFragmentsQuery(client *graphql.Client) (*UnionNoFragmentsQueryResponse, error) {
+func UnionNoFragmentsQuery(
+	client *graphql.Client,
+) (*UnionNoFragmentsQueryResponse, error) {
 	var retval UnionNoFragmentsQueryResponse
-	err := client.MakeRequest(nil, `
+	err := client.MakeRequest(
+		nil,
+		`
 query UnionNoFragmentsQuery {
 	randomLeaf {
 		__typename
 	}
 }
-`, &retval, nil)
+`,
+		&retval,
+		nil,
+	)
 	return &retval, err
 }

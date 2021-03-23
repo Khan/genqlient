@@ -21,14 +21,21 @@ const (
 	QueryWithEnumsUserRolesRoleTeacher QueryWithEnumsUserRolesRole = "TEACHER"
 )
 
-func QueryWithEnums(client *graphql.Client) (*QueryWithEnumsResponse, error) {
+func QueryWithEnums(
+	client *graphql.Client,
+) (*QueryWithEnumsResponse, error) {
 	var retval QueryWithEnumsResponse
-	err := client.MakeRequest(nil, `
+	err := client.MakeRequest(
+		nil,
+		`
 query QueryWithEnums {
 	user {
 		roles
 	}
 }
-`, &retval, nil)
+`,
+		&retval,
+		nil,
+	)
 	return &retval, err
 }

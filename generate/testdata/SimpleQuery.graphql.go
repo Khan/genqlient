@@ -14,14 +14,21 @@ type SimpleQueryUser struct {
 	Id string `json:"id"`
 }
 
-func SimpleQuery(client *graphql.Client) (*SimpleQueryResponse, error) {
+func SimpleQuery(
+	client *graphql.Client,
+) (*SimpleQueryResponse, error) {
 	var retval SimpleQueryResponse
-	err := client.MakeRequest(nil, `
+	err := client.MakeRequest(
+		nil,
+		`
 query SimpleQuery {
 	user {
 		id
 	}
 }
-`, &retval, nil)
+`,
+		&retval,
+		nil,
+	)
 	return &retval, err
 }

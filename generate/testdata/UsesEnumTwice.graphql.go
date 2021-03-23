@@ -33,9 +33,13 @@ type UsesEnumTwiceQueryResponse struct {
 	OtherUser UsesEnumTwiceQueryOtherUser
 }
 
-func UsesEnumTwiceQuery(client *graphql.Client) (*UsesEnumTwiceQueryResponse, error) {
+func UsesEnumTwiceQuery(
+	client *graphql.Client,
+) (*UsesEnumTwiceQueryResponse, error) {
 	var retval UsesEnumTwiceQueryResponse
-	err := client.MakeRequest(nil, `
+	err := client.MakeRequest(
+		nil,
+		`
 query UsesEnumTwiceQuery {
 	Me: user {
 		roles
@@ -44,6 +48,9 @@ query UsesEnumTwiceQuery {
 		roles
 	}
 }
-`, &retval, nil)
+`,
+		&retval,
+		nil,
+	)
 	return &retval, err
 }

@@ -75,7 +75,7 @@ Generated code:
 
 Config options:
 - (+) proper config/arguments setup (e.g. with [viper](https://github.com/spf13/viper))
-- (+) fix up context/client wiring (see DESIGN)
+- make client/context wiring a bit more documented and usable by humans (and allow imports for the client-getter)
 - get schema via HTTP (perhaps even via GraphQL introspection)
 - send hash rather than full query
 - whether names should be exported

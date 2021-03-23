@@ -15,15 +15,22 @@ type TypeNameQueryUser struct {
 	Id       string `json:"id"`
 }
 
-func TypeNameQuery(client *graphql.Client) (*TypeNameQueryResponse, error) {
+func TypeNameQuery(
+	client *graphql.Client,
+) (*TypeNameQueryResponse, error) {
 	var retval TypeNameQueryResponse
-	err := client.MakeRequest(nil, `
+	err := client.MakeRequest(
+		nil,
+		`
 query TypeNameQuery {
 	user {
 		__typename
 		id
 	}
 }
-`, &retval, nil)
+`,
+		&retval,
+		nil,
+	)
 	return &retval, err
 }

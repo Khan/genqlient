@@ -93,9 +93,13 @@ type InterfaceNoFragmentsQueryRootTopicChildrenVideo struct {
 func (v InterfaceNoFragmentsQueryRootTopicChildrenVideo) implementsGraphQLInterfaceInterfaceNoFragmentsQueryRootTopicChildrenContent() {
 }
 
-func InterfaceNoFragmentsQuery(client *graphql.Client) (*InterfaceNoFragmentsQueryResponse, error) {
+func InterfaceNoFragmentsQuery(
+	client *graphql.Client,
+) (*InterfaceNoFragmentsQueryResponse, error) {
 	var retval InterfaceNoFragmentsQueryResponse
-	err := client.MakeRequest(nil, `
+	err := client.MakeRequest(
+		nil,
+		`
 query InterfaceNoFragmentsQuery {
 	root {
 		id
@@ -106,6 +110,9 @@ query InterfaceNoFragmentsQuery {
 		}
 	}
 }
-`, &retval, nil)
+`,
+		&retval,
+		nil,
+	)
 	return &retval, err
 }

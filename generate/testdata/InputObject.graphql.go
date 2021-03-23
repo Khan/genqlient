@@ -29,18 +29,26 @@ const (
 	UserQueryInputRoleTeacher UserQueryInputRole = "TEACHER"
 )
 
-func InputObjectQuery(client *graphql.Client, query UserQueryInput) (*InputObjectQueryResponse, error) {
+func InputObjectQuery(
+	client *graphql.Client,
+	query UserQueryInput,
+) (*InputObjectQueryResponse, error) {
 	variables := map[string]interface{}{
 		"query": query,
 	}
 
 	var retval InputObjectQueryResponse
-	err := client.MakeRequest(nil, `
+	err := client.MakeRequest(
+		nil,
+		`
 query InputObjectQuery ($query: UserQueryInput) {
 	user(query: $query) {
 		id
 	}
 }
-`, &retval, variables)
+`,
+		&retval,
+		variables,
+	)
 	return &retval, err
 }

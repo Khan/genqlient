@@ -19,9 +19,13 @@ type QueryWithStructsUserAuthMethodsAuthMethod struct {
 	Email    string `json:"email"`
 }
 
-func QueryWithStructs(client *graphql.Client) (*QueryWithStructsResponse, error) {
+func QueryWithStructs(
+	client *graphql.Client,
+) (*QueryWithStructsResponse, error) {
 	var retval QueryWithStructsResponse
-	err := client.MakeRequest(nil, `
+	err := client.MakeRequest(
+		nil,
+		`
 query QueryWithStructs {
 	user {
 		authMethods {
@@ -30,6 +34,9 @@ query QueryWithStructs {
 		}
 	}
 }
-`, &retval, nil)
+`,
+		&retval,
+		nil,
+	)
 	return &retval, err
 }

@@ -14,18 +14,26 @@ type SimpleInputQueryUser struct {
 	Id string `json:"id"`
 }
 
-func SimpleInputQuery(client *graphql.Client, name string) (*SimpleInputQueryResponse, error) {
+func SimpleInputQuery(
+	client *graphql.Client,
+	name string,
+) (*SimpleInputQueryResponse, error) {
 	variables := map[string]interface{}{
 		"name": name,
 	}
 
 	var retval SimpleInputQueryResponse
-	err := client.MakeRequest(nil, `
+	err := client.MakeRequest(
+		nil,
+		`
 query SimpleInputQuery ($name: String!) {
 	user(query: {name:$name}) {
 		id
 	}
 }
-`, &retval, variables)
+`,
+		&retval,
+		variables,
+	)
 	return &retval, err
 }

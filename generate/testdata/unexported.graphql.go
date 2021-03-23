@@ -29,18 +29,26 @@ const (
 	userQueryInputRoleTeacher userQueryInputRole = "TEACHER"
 )
 
-func unexported(client *graphql.Client, query userQueryInput) (*unexportedResponse, error) {
+func unexported(
+	client *graphql.Client,
+	query userQueryInput,
+) (*unexportedResponse, error) {
 	variables := map[string]interface{}{
 		"query": query,
 	}
 
 	var retval unexportedResponse
-	err := client.MakeRequest(nil, `
+	err := client.MakeRequest(
+		nil,
+		`
 query unexported ($query: UserQueryInput) {
 	user(query: $query) {
 		id
 	}
 }
-`, &retval, variables)
+`,
+		&retval,
+		variables,
+	)
 	return &retval, err
 }

@@ -17,9 +17,13 @@ type QueryWithSlicesUser struct {
 	EmailsWithNullsOrNull []string `json:"emailsWithNullsOrNull"`
 }
 
-func QueryWithSlices(client *graphql.Client) (*QueryWithSlicesResponse, error) {
+func QueryWithSlices(
+	client *graphql.Client,
+) (*QueryWithSlicesResponse, error) {
 	var retval QueryWithSlicesResponse
-	err := client.MakeRequest(nil, `
+	err := client.MakeRequest(
+		nil,
+		`
 query QueryWithSlices {
 	user {
 		emails
@@ -28,6 +32,9 @@ query QueryWithSlices {
 		emailsWithNullsOrNull
 	}
 }
-`, &retval, nil)
+`,
+		&retval,
+		nil,
+	)
 	return &retval, err
 }

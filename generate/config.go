@@ -35,7 +35,6 @@ type Config struct {
 	// accept and use as the context.Context for HTTP requests.  Defaults to
 	// context.Context; set to the empty string to omit context entirely.
 	ContextType string `yaml:"context_type"`
-	// TODO: implement client-getters
 	// If set, a snippet of Go code to get a *graphql.Client from the context
 	// (which will be named ctx).  For example, this might do
 	// ctx.Value(myKey).(*graphql.Client).  If omitted, client must be
@@ -43,7 +42,7 @@ type Config struct {
 	// TODO: what if you want to do an import in this snippet, e.g. for a
 	// getter function, global var, or a context-key-type?
 	// TODO: what if you want to return err?
-	// ClientGetter string `yaml:"client_getter"`
+	ClientGetter string `yaml:"client_getter"`
 }
 
 func (c *Config) ValidateAndFillDefaults() error {

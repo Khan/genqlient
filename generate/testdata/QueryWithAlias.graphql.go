@@ -14,14 +14,21 @@ type QueryWithAliasUser struct {
 	ID string
 }
 
-func QueryWithAlias(client *graphql.Client) (*QueryWithAliasResponse, error) {
+func QueryWithAlias(
+	client *graphql.Client,
+) (*QueryWithAliasResponse, error) {
 	var retval QueryWithAliasResponse
-	err := client.MakeRequest(nil, `
+	err := client.MakeRequest(
+		nil,
+		`
 query QueryWithAlias {
 	User: user {
 		ID: id
 	}
 }
-`, &retval, nil)
+`,
+		&retval,
+		nil,
+	)
 	return &retval, err
 }
