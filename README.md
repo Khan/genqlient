@@ -42,7 +42,7 @@ func getViewer(ctx context.Context, client *graphql.Client) (*getViewerResponse,
 // your code (error handling omitted for brevity)
 graphqlClient := graphql.NewClient("https://example.com/graphql", http.DefaultClient)
 viewerResp, _ := getViewer(context.Background(), graphqlClient)
-fmt.Println("you are", *viewerResp.Viewer.MyName)
+fmt.Println("you are", viewerResp.Viewer.MyName)
 
 //go:generate go run github.com/Khan/genql
 ```
@@ -80,11 +80,13 @@ Config options:
 - send hash rather than full query
 - whether names should be exported
 - default handling for optional fields (pointers, HasFoo, etc.)
+- response/function-name format (e.g. force exported/unexported, change "Response" suffix, etc.)
+- generate mocks?
 
 Other:
 - (*) error-checking/validation/etc. everywhere
 - (*) a name that's more clearly distinct from other libraries out there and conveys what this does
 - (+) more tests
 - (+) documentation
-- custom scalar types
+- custom scalar types (or custom mappings for standard scalars, if you want a special ID type say)
 - allow mapping a custom type to a particular val (if you want to use a named type for some string, say)

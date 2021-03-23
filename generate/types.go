@@ -29,12 +29,11 @@ func (g *generator) baseTypeForOperation(operation ast.Operation) *ast.Definitio
 
 func (g *generator) getTypeForOperation(operation *ast.OperationDefinition) (name string, err error) {
 	// TODO: configure ResponseName format
-	namePrefix := upperFirst(operation.Name)
-	name = namePrefix + "Response"
+	name = operation.Name + "Response"
 
 	if def, ok := g.typeMap[name]; ok {
 		// TODO: check for and handle conflicts a better way
-		return "", fmt.Errorf("%s already defined:\n%s", name, def)
+		return "", fmt.Errorf("%s defined twice:\n%s", name, def)
 	}
 
 	fields, err := selections(operation.SelectionSet)
@@ -43,15 +42,16 @@ func (g *generator) getTypeForOperation(operation *ast.OperationDefinition) (nam
 	}
 
 	return g.addTypeForDefinition(
-		namePrefix, name, g.baseTypeForOperation(operation.Operation), fields)
+		operation.Name, name, g.baseTypeForOperation(operation.Operation), fields)
 }
 
 var builtinTypes = map[string]string{
-	"Int":     "int", // TODO: technically int32 is always enough, use that?
+	// GraphQL guarantees int32 is enough, but using int seems more idiomatic
+	"Int":     "int",
 	"Float":   "float64",
 	"String":  "string",
 	"Boolean": "bool",
-	"ID":      "string", // TODO: named type for IDs?
+	"ID":      "string",
 }
 
 func (g *generator) addTypeForDefinition(namePrefix, nameOverride string, typ *ast.Definition, fields []field) (name string, err error) {
@@ -117,11 +117,9 @@ type field interface {
 type outputField struct{ field *ast.Field }
 
 func (s outputField) Alias() string {
-	if s.field.Alias != "" {
-		return s.field.Alias
-	}
-	// TODO: is this case needed? tests don't seem to get here.
-	return s.field.Name
+	// gqlparser sets Alias even if the field is not aliased, see e.g.
+	// https://github.com/vektah/gqlparser/blob/c06d8e0d135f285e37e7f1ff397f10e049733eb3/parser/query.go#L150
+	return s.field.Alias
 }
 
 func (s outputField) Type() *ast.Type {
@@ -192,11 +190,11 @@ func (builder *typeBuilder) writeField(field field) error {
 	}
 
 	err = builder.writeType(
-		// Note we don't deduplicate here -- if our prefix is GetUser and the
-		// field name is User, we do GetUserUser.  This is important because if
-		// you have a field called user on a type called User we need
-		// `query q { user { user { id } } }` to generate two types, QUser and
-		// QUserUser.
+		// Note we don't deduplicate suffixes here -- if our prefix is GetUser
+		// and the field name is User, we do GetUserUser.  This is important
+		// because if you have a field called user on a type called User we
+		// need `query q { user { user { id } } }` to generate two types, QUser
+		// and QUserUser.
 		// Note also this is the alias, not the field-name, because if we have
 		// `query q { a: f { b }, c: f { d } }` we need separate types for a
 		// and c, even though they are the same type in GraphQL, because they
@@ -273,7 +271,6 @@ func (builder *typeBuilder) writeTypedef(typedef *ast.Definition, fields []field
 				return err
 			}
 
-			// HACK HACK HACK
 			builder.typeMap[name] += fmt.Sprintf(
 				"\nfunc (v %v) %v() {}", name, implementsMethodName)
 		}
@@ -285,7 +282,6 @@ func (builder *typeBuilder) writeTypedef(typedef *ast.Definition, fields []field
 		builder.WriteString("string\n")
 		builder.WriteString("const (\n")
 		for _, val := range typedef.EnumValues {
-			// TODO: casing should be configurable
 			fmt.Fprintf(builder, "%s %s = \"%s\"\n",
 				builder.typeNamePrefix+goConstName(val.Name),
 				builder.typeName, val.Name)

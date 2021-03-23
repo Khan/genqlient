@@ -56,14 +56,20 @@ func newGenerator(config *Config, schema *ast.Schema) *generator {
 }
 
 func (g *generator) Types() string {
-	defs := make([]string, 0, len(g.typeMap))
-	for _, def := range g.typeMap {
-		defs = append(defs, def)
+	names := make([]string, 0, len(g.typeMap))
+	for name := range g.typeMap {
+		names = append(names, name)
 	}
-	// Make sure we have a stable order.  (It's somewhat
-	// arbitrary but in practice mostly alphabetical.)
-	// TODO: ideally we'd do a nice semantic ordering.
-	sort.Strings(defs)
+	// Sort alphabetically by type-name.  Sorting somehow deterministically is
+	// important to ensure generated code is deterministic.  Alphabetical is
+	// nice because it's easy, and in the current naming scheme, it's even
+	// vaguely aligned to the structure of the queries.
+	sort.Strings(names)
+
+	defs := make([]string, 0, len(g.typeMap))
+	for _, name := range names {
+		defs = append(defs, g.typeMap[name])
+	}
 	return strings.Join(defs, "\n\n")
 }
 
@@ -84,7 +90,7 @@ func (g *generator) getArgument(arg *ast.VariableDefinition) (argument, error) {
 
 func (g *generator) getDocComment(op *ast.OperationDefinition) string {
 	var commentLines []string
-	var sourceLines = strings.Split(op.Position.Src.Input, "\n")
+	sourceLines := strings.Split(op.Position.Src.Input, "\n")
 	for i := op.Position.Line - 1; i > 0; i-- {
 		line := sourceLines[i-1]
 		if strings.HasPrefix(line, "#") {

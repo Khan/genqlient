@@ -97,6 +97,8 @@ In other tools:
 - gqlgen doesn't have this problem, because on the server each GraphQL type maps to a unique Go type; and to the extent that different queries need different fields this is handled at the level of which fields are serialized or which resolvers are called.
 - shurcooL/graphql allows either way.
 
+A side advantage of an approach that prefixes the query name to all the type names, for us, is that it means that the caller can decide in a very simple way whether to make the name exported, and avoids conflicts between queries.
+
 **Decision:** In general, it seems like even in languages with better ergonomics for unnamed types, Apollo's approach is somewhat reasonable.  And unnamed types will get really hairy for large queries in Go.  On some level, even if the naming scheme is bad, it won't be as bad as unnamed types -- if you don't need to refer to the intermediate type, you don't care, and if you do, it's better than a giant inline struct.  (But it's hard to change later without a flag as existing code may depend on those types.)
 
 We'll do something similar to Apollo's naming scheme.  Specifically:

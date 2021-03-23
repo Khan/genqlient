@@ -11,9 +11,6 @@ import (
 )
 
 func getSchema(filename string) (*ast.Schema, error) {
-	// TODO: IRL we have to get the schema from GraphQL (maybe we can generate
-	// that once we can bootstrap) where it comes as JSON, not SDL, so we have
-	// to convert (or add gqlparser support to convert)
 	text, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return nil, fmt.Errorf("unreadable schema file %v: %v", filename, err)

@@ -21,8 +21,8 @@ type Config struct {
 	Package string `yaml:"package"`
 	// The filename with the GraphQL schema (in SDL format); defaults to
 	// schema.graphql
-	// TODO: allow other formats
-	// TODO: allow URLs
+	// TODO: Allow fetching a schema via introspection (will need to figure out
+	// how to convert that to SDL).
 	Schema string `yaml:"schema"`
 	// The filename with the queries; defaults to queries.graphql
 	Queries string `yaml:"queries"`

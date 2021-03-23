@@ -33,7 +33,7 @@ func (builder *typeBuilder) maybeWriteUnmarshal(fields []field) error {
 			for _, typedef := range builder.schema.GetPossibleTypes(typedef) {
 				fieldInfo.ConcreteTypes = append(fieldInfo.ConcreteTypes,
 					concreteType{
-						// TODO: this is quite fragile (and maybe wrong if the
+						// TODO: this is quite fragile (and wrong if the
 						// field name + type name are the same)
 						GoName:      builder.typeNamePrefix + fieldInfo.GoName + upperFirst(typedef.Name),
 						GraphQLName: typedef.Name,
