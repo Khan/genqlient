@@ -106,7 +106,6 @@ func (g *generator) getTypeForInputType(opName string, typ *ast.Type) (string, e
 	name := matchFirst(typ.Name(), opName)
 	// TODO: we have to pass name 4 times, yuck
 	builder := &typeBuilder{typeName: name, typeNamePrefix: name, generator: g}
-	fmt.Println(name)
 	err := builder.writeType(name, name, typ, selectionsForType(g, typ))
 	return builder.String(), err
 }
