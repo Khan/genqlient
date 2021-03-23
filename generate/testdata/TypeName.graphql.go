@@ -9,12 +9,12 @@ import (
 )
 
 type TypeNameQueryResponse struct {
-	User *TypeNameQueryUser `json:"user"`
+	User TypeNameQueryUser `json:"user"`
 }
 
 type TypeNameQueryUser struct {
-	Typename *string `json:"__typename"`
-	Id       string  `json:"id"`
+	Typename string `json:"__typename"`
+	Id       string `json:"id"`
 }
 
 func TypeNameQuery(client *graphql.Client) (*TypeNameQueryResponse, error) {

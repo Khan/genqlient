@@ -9,11 +9,11 @@ import (
 )
 
 type GetUserResponse struct {
-	User *GetUserUser `json:"user"`
+	User GetUserUser `json:"user"`
 }
 
 type GetUserUser struct {
-	TheirName *string `json:"theirName"`
+	TheirName string `json:"theirName"`
 }
 
 type GetViewerResponse struct {
@@ -21,7 +21,7 @@ type GetViewerResponse struct {
 }
 
 type GetViewerViewerUser struct {
-	MyName *string
+	MyName string
 }
 
 func getViewer(ctx context.Context, client *graphql.Client) (*GetViewerResponse, error) {

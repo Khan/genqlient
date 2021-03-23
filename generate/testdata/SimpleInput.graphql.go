@@ -9,7 +9,7 @@ import (
 )
 
 type SimpleInputQueryResponse struct {
-	User *SimpleInputQueryUser `json:"user"`
+	User SimpleInputQueryUser `json:"user"`
 }
 
 type SimpleInputQueryUser struct {

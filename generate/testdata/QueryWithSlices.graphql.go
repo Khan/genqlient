@@ -9,14 +9,14 @@ import (
 )
 
 type QueryWithSlicesResponse struct {
-	User *QueryWithSlicesUser `json:"user"`
+	User QueryWithSlicesUser `json:"user"`
 }
 
 type QueryWithSlicesUser struct {
-	Emails                []string  `json:"emails"`
-	EmailsOrNull          []string  `json:"emailsOrNull"`
-	EmailsWithNulls       []*string `json:"emailsWithNulls"`
-	EmailsWithNullsOrNull []*string `json:"emailsWithNullsOrNull"`
+	Emails                []string `json:"emails"`
+	EmailsOrNull          []string `json:"emailsOrNull"`
+	EmailsWithNulls       []string `json:"emailsWithNulls"`
+	EmailsWithNullsOrNull []string `json:"emailsWithNullsOrNull"`
 }
 
 func QueryWithSlices(client *graphql.Client) (*QueryWithSlicesResponse, error) {

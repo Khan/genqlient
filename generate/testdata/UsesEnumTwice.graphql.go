@@ -31,8 +31,8 @@ const (
 )
 
 type UsesEnumTwiceQueryResponse struct {
-	Me        *UsesEnumTwiceQueryMeUser
-	OtherUser *UsesEnumTwiceQueryOtherUser
+	Me        UsesEnumTwiceQueryMeUser
+	OtherUser UsesEnumTwiceQueryOtherUser
 }
 
 func UsesEnumTwiceQuery(client *graphql.Client) (*UsesEnumTwiceQueryResponse, error) {

@@ -9,7 +9,7 @@ import (
 )
 
 type QueryWithAliasResponse struct {
-	User *QueryWithAliasUser
+	User QueryWithAliasUser
 }
 
 type QueryWithAliasUser struct {

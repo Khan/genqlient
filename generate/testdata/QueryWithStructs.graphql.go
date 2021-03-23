@@ -9,7 +9,7 @@ import (
 )
 
 type QueryWithStructsResponse struct {
-	User *QueryWithStructsUser `json:"user"`
+	User QueryWithStructsUser `json:"user"`
 }
 
 type QueryWithStructsUser struct {
@@ -17,8 +17,8 @@ type QueryWithStructsUser struct {
 }
 
 type QueryWithStructsUserAuthMethodsAuthMethod struct {
-	Provider *string `json:"provider"`
-	Email    *string `json:"email"`
+	Provider string `json:"provider"`
+	Email    string `json:"email"`
 }
 
 func QueryWithStructs(client *graphql.Client) (*QueryWithStructsResponse, error) {

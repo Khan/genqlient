@@ -52,13 +52,13 @@ func Main() {
 	if err != nil {
 		return
 	}
-	fmt.Println("you are", *viewerResp.Viewer.MyName)
+	fmt.Println("you are", viewerResp.Viewer.MyName)
 
 	userResp, err := getUser(context.Background(), graphqlClient, username)
 	if err != nil {
 		return
 	}
-	fmt.Println(username, "is", *userResp.User.TheirName)
+	fmt.Println(username, "is", userResp.User.TheirName)
 }
 
 //go:generate go run github.com/Khan/genql genql.yaml

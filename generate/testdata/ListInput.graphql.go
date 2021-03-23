@@ -9,14 +9,14 @@ import (
 )
 
 type ListInputQueryResponse struct {
-	User *ListInputQueryUser `json:"user"`
+	User ListInputQueryUser `json:"user"`
 }
 
 type ListInputQueryUser struct {
 	Id string `json:"id"`
 }
 
-func ListInputQuery(client *graphql.Client, names []*string) (*ListInputQueryResponse, error) {
+func ListInputQuery(client *graphql.Client, names []string) (*ListInputQueryResponse, error) {
 	variables := map[string]interface{}{
 		"names": names,
 	}

@@ -9,7 +9,7 @@ import (
 )
 
 type UnionNoFragmentsQueryRandomLeafArticle struct {
-	Typename *string `json:"__typename"`
+	Typename string `json:"__typename"`
 }
 
 func (v UnionNoFragmentsQueryRandomLeafArticle) implementsGraphQLInterfaceUnionNoFragmentsQueryRandomLeafLeafContent() {
@@ -20,7 +20,7 @@ type UnionNoFragmentsQueryRandomLeafLeafContent interface {
 }
 
 type UnionNoFragmentsQueryRandomLeafVideo struct {
-	Typename *string `json:"__typename"`
+	Typename string `json:"__typename"`
 }
 
 func (v UnionNoFragmentsQueryRandomLeafVideo) implementsGraphQLInterfaceUnionNoFragmentsQueryRandomLeafLeafContent() {

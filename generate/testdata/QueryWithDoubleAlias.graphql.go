@@ -9,7 +9,7 @@ import (
 )
 
 type QueryWithDoubleAliasResponse struct {
-	User *QueryWithDoubleAliasUser `json:"user"`
+	User QueryWithDoubleAliasUser `json:"user"`
 }
 
 type QueryWithDoubleAliasUser struct {

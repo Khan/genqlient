@@ -9,7 +9,7 @@ import (
 )
 
 type QueryWithEnumsResponse struct {
-	User *QueryWithEnumsUser `json:"user"`
+	User QueryWithEnumsUser `json:"user"`
 }
 
 type QueryWithEnumsUser struct {

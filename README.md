@@ -69,7 +69,7 @@ See [DESIGN.md](DESIGN.md) for documentation of major design decisions in this l
 (+) denotes things we further need before recommending anyone else use this in prod
 
 Generated code:
-- (*) remove pointers for optionality (or put behind flag)
+- add flag(s) to make a field use a pointer (for optionality or perf)
 - redo support for interfaces, unions, fragments (see DESIGN)
 - (optional) collapsing -- should be able to have `mutation { myMutation { error { code } } }` just return `(code string, err error)`
 
@@ -79,6 +79,7 @@ Config options:
 - get schema via HTTP (perhaps even via GraphQL introspection)
 - send hash rather than full query
 - whether names should be exported
+- default handling for optional fields (pointers, HasFoo, etc.)
 
 Other:
 - (*) error-checking/validation/etc. everywhere

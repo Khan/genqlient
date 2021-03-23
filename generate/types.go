@@ -225,9 +225,9 @@ func (builder *typeBuilder) writeType(namePrefix string, typ *ast.Type, fields [
 		builder.WriteString("[]")
 		typ = typ.Elem
 	}
-	if !typ.NonNull {
-		builder.WriteString("*")
-	}
+	// TODO: allow an option to make the Go type a pointer, if you want to do
+	// optionality that way, or perhaps others
+	// if !typ.NonNull { builder.WriteString("*") }
 
 	def := builder.schema.Types[typ.Name()]
 	// Writes a typedef elsewhere (if not already defined)
