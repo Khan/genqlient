@@ -5,15 +5,16 @@ import (
 	"go/token"
 	"io/ioutil"
 	"path/filepath"
+	"strings"
 
 	"gopkg.in/yaml.v2"
 )
 
 var defaultConfig = &Config{
-	Schema:     "schema.graphql",
-	Queries:    "queries.graphql",
-	Generated:  "generated.go",
-	UseContext: true,
+	Schema:      "schema.graphql",
+	Queries:     "queries.graphql",
+	Generated:   "generated.go",
+	ContextType: "context.Context",
 }
 
 type Config struct {
@@ -30,9 +31,19 @@ type Config struct {
 	// The filename to which to write the generated code; defaults to
 	// generated.go
 	Generated string `yaml:"generated"`
-	// Whether the generated helpers should accept a context.Context which will
-	// be used to make the request; defaults to true.
-	UseContext bool `yaml:"use_context"`
+	// Set to the fully-qualified name of a type which generated helpers should
+	// accept and use as the context.Context for HTTP requests.  Defaults to
+	// context.Context; set to the empty string to omit context entirely.
+	ContextType string `yaml:"context_type"`
+	// TODO: implement client-getters
+	// If set, a snippet of Go code to get a *graphql.Client from the context
+	// (which will be named ctx).  For example, this might do
+	// ctx.Value(myKey).(*graphql.Client).  If omitted, client must be
+	// passed to each method explicitly.
+	// TODO: what if you want to do an import in this snippet, e.g. for a
+	// getter function, global var, or a context-key-type?
+	// TODO: what if you want to return err?
+	// ClientGetter string `yaml:"client_getter"`
 }
 
 func (c *Config) ValidateAndFillDefaults() error {
@@ -51,6 +62,15 @@ func (c *Config) ValidateAndFillDefaults() error {
 	}
 
 	return nil
+}
+
+func (c *Config) ContextPackage() string {
+	if c.ContextType == "" {
+		return ""
+	}
+
+	i := strings.LastIndex(c.ContextType, ".")
+	return c.ContextType[:i]
 }
 
 func ReadAndValidateConfig(filename string) (*Config, error) {

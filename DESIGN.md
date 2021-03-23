@@ -273,6 +273,8 @@ Additionally, users may want to get the client from the context, using a custom 
 
 This can all be configurable globally -- say you can decide whether to use context and client, and optionally provide the type of your context and/or a function that gets client from it, or something.  We'll want to pick a good default before we have external users, so as not to break them, but it's easy enough to change the Khan-specific parts via codemod later.
 
+**Decision:** It seems easy enough to allow all of this to be configured: you can specify no context, a specific context type, or the default of context.Context; and then if you want you can specify a way to get the client from context or a global.  We'll need both hooks at Khan, and it's not much harder to add them in a generalizable way.
+
 ### Query extraction (for safelisting)
 
 One thing we want to be able to do is to make it clear exactly what query-document (down to comments and whitespace) we will be sending in the query for the purposes of safelisting and querying based on hash.  In the case where you have one query per file, that's easy, just use the whole file.  But you may want to share fragments between queries, in which case this is trouble: you either need a way to include fragments from another file (and a defined concatenation order), or you need to have several queries per file, and either have genql extract the right parts (in a defined/reproducible way), or have it send up the full file and the operation name to use (in which case we should still encourage you to not do that unless you're hashing, so that you aren't sending up too much data).  We could also allow configuration between the last two options (so if you don't care about hashing/safelisting you can auto-extract).

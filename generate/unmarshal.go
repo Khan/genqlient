@@ -47,6 +47,7 @@ func (builder *typeBuilder) maybeWriteUnmarshal(fields []field) error {
 		return nil
 	}
 
+	builder.ImportJSON = true
 	builder.WriteString("\n\n")
 	return unmarshalTemplate.Execute(builder, data)
 }

@@ -50,7 +50,9 @@ func (client *Client) MakeRequest(ctx context.Context, query string, retval inte
 		return err
 	}
 
-	req = req.WithContext(ctx)
+	if ctx != nil {
+		req = req.WithContext(ctx)
+	}
 	resp, err := client.httpClient.Do(req)
 	if err != nil {
 		return err
