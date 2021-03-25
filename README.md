@@ -69,13 +69,13 @@ See [DESIGN.md](DESIGN.md) for documentation of major design decisions in this l
 (+) denotes things we further need before recommending anyone else use this in prod
 
 Generated code:
-- add flag(s) to make a field use a pointer (for optionality or perf)
+- add flag(s) to make a field use a pointer (for optionality or perf; see DESIGN)
 - redo support for interfaces, unions, fragments (see DESIGN)
 - (optional) collapsing -- should be able to have `mutation { myMutation { error { code } } }` just return `(code string, err error)`
 
 Config options:
 - (+) proper config/arguments setup (e.g. with [viper](https://github.com/spf13/viper))
-- make client/context wiring a bit more documented and usable by humans (and allow imports for the client-getter)
+- (+) improve client_getter to be more usable (and document it), or flag it out for now.
 - get schema via HTTP (perhaps even via GraphQL introspection)
 - send hash rather than full query
 - whether names should be exported

@@ -50,7 +50,7 @@ type client struct {
 // NewClient returns a Client which makes requests to the given endpoint,
 // suitable for most users.
 //
-// The client makes requests to the given GraphQL endpoint using standard
+// The client makes POST requests to the given GraphQL endpoint using standard
 // GraphQL HTTP-over-JSON transport.  It will use the given http client, or
 // http.DefaultClient if a nil client is passed.
 //
@@ -73,7 +73,7 @@ type response struct {
 	Errors gqlerror.List   `json:"errors"`
 }
 
-func (client *client) MakeRequest(ctx context.Context, query string, retval interface{}, variables map[string]interface{}) error {
+func (c *client) MakeRequest(ctx context.Context, query string, retval interface{}, variables map[string]interface{}) error {
 	body, err := json.Marshal(payload{
 		Query:     query,
 		Variables: variables,
@@ -83,8 +83,8 @@ func (client *client) MakeRequest(ctx context.Context, query string, retval inte
 	}
 
 	req, err := http.NewRequest(
-		client.method,
-		client.endpoint,
+		c.method,
+		c.endpoint,
 		bytes.NewReader(body))
 	if err != nil {
 		return err
@@ -93,7 +93,7 @@ func (client *client) MakeRequest(ctx context.Context, query string, retval inte
 	if ctx != nil {
 		req = req.WithContext(ctx)
 	}
-	resp, err := client.httpClient.Do(req)
+	resp, err := c.httpClient.Do(req)
 	if err != nil {
 		return err
 	}
