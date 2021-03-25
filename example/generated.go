@@ -26,7 +26,7 @@ type getViewerViewerUser struct {
 
 func getViewer(
 	ctx context.Context,
-	client *graphql.Client,
+	client graphql.Client,
 ) (*getViewerResponse, error) {
 	var retval getViewerResponse
 	err := client.MakeRequest(
@@ -47,7 +47,7 @@ query getViewer {
 // getUser gets the given user's name from their username.
 func getUser(
 	ctx context.Context,
-	client *graphql.Client,
+	client graphql.Client,
 	login string,
 ) (*getUserResponse, error) {
 	variables := map[string]interface{}{

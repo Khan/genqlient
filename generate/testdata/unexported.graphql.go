@@ -30,7 +30,7 @@ const (
 )
 
 func unexported(
-	client *graphql.Client,
+	client graphql.Client,
 	query userQueryInput,
 ) (*unexportedResponse, error) {
 	variables := map[string]interface{}{

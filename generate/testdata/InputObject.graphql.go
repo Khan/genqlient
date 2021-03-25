@@ -30,7 +30,7 @@ const (
 )
 
 func InputObjectQuery(
-	client *graphql.Client,
+	client graphql.Client,
 	query UserQueryInput,
 ) (*InputObjectQueryResponse, error) {
 	variables := map[string]interface{}{

@@ -72,7 +72,7 @@ func (v *UnionNoFragmentsQueryResponse) UnmarshalJSON(b []byte) error {
 }
 
 func UnionNoFragmentsQuery(
-	client *graphql.Client,
+	client graphql.Client,
 ) (*UnionNoFragmentsQueryResponse, error) {
 	var retval UnionNoFragmentsQueryResponse
 	err := client.MakeRequest(

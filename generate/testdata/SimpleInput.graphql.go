@@ -15,7 +15,7 @@ type SimpleInputQueryUser struct {
 }
 
 func SimpleInputQuery(
-	client *graphql.Client,
+	client graphql.Client,
 	name string,
 ) (*SimpleInputQueryResponse, error) {
 	variables := map[string]interface{}{

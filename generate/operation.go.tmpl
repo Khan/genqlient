@@ -24,7 +24,7 @@ func {{.Name}}(
     ctx {{$.Config.ContextType}},
     {{end}}
     {{- if not $.Config.ClientGetter -}}
-    client *graphql.Client,
+    client graphql.Client,
     {{end}}
     {{- range .Args -}}
     {{.GoName}} {{.GoType}},

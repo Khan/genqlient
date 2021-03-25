@@ -15,7 +15,7 @@ type SimpleQueryUser struct {
 }
 
 func SimpleQuery(
-	client *graphql.Client,
+	client graphql.Client,
 ) (*SimpleQueryResponse, error) {
 	var retval SimpleQueryResponse
 	err := client.MakeRequest(

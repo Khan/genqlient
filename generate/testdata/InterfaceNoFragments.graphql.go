@@ -94,7 +94,7 @@ func (v InterfaceNoFragmentsQueryRootTopicChildrenVideo) implementsGraphQLInterf
 }
 
 func InterfaceNoFragmentsQuery(
-	client *graphql.Client,
+	client graphql.Client,
 ) (*InterfaceNoFragmentsQueryResponse, error) {
 	var retval InterfaceNoFragmentsQueryResponse
 	err := client.MakeRequest(

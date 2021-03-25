@@ -15,7 +15,7 @@ type ListInputQueryUser struct {
 }
 
 func ListInputQuery(
-	client *graphql.Client,
+	client graphql.Client,
 	names []string,
 ) (*ListInputQueryResponse, error) {
 	variables := map[string]interface{}{

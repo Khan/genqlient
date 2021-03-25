@@ -16,7 +16,7 @@ type QueryWithDoubleAliasUser struct {
 }
 
 func QueryWithDoubleAlias(
-	client *graphql.Client,
+	client graphql.Client,
 ) (*QueryWithDoubleAliasResponse, error) {
 	var retval QueryWithDoubleAliasResponse
 	err := client.MakeRequest(

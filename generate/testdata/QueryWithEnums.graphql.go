@@ -22,7 +22,7 @@ const (
 )
 
 func QueryWithEnums(
-	client *graphql.Client,
+	client graphql.Client,
 ) (*QueryWithEnumsResponse, error) {
 	var retval QueryWithEnumsResponse
 	err := client.MakeRequest(

@@ -18,7 +18,7 @@ type QueryWithSlicesUser struct {
 }
 
 func QueryWithSlices(
-	client *graphql.Client,
+	client graphql.Client,
 ) (*QueryWithSlicesResponse, error) {
 	var retval QueryWithSlicesResponse
 	err := client.MakeRequest(

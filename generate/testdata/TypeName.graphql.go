@@ -16,7 +16,7 @@ type TypeNameQueryUser struct {
 }
 
 func TypeNameQuery(
-	client *graphql.Client,
+	client graphql.Client,
 ) (*TypeNameQueryResponse, error) {
 	var retval TypeNameQueryResponse
 	err := client.MakeRequest(
