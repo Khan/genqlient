@@ -12,6 +12,11 @@ import (
 
 // Client is the interface that the generate code calls into to actually make
 // requests.
+//
+// Unstable: This interface is likely to change before v1.0.
+//
+// TODO: figure out what we, and others, actually want to use this for, and
+// consider supporting explicit hooks for that instead.
 type Client interface {
 	// MakeRequest must make a request to the client's GraphQL API.
 	//
@@ -63,14 +68,15 @@ func NewClient(endpoint string, httpClient *http.Client) Client {
 	return &client{endpoint, http.MethodPost, httpClient}
 }
 
+// TODO: set OperationName?
 type payload struct {
 	Query     string                 `json:"query"`
 	Variables map[string]interface{} `json:"variables"`
 }
 
 type response struct {
-	Data   json.RawMessage `json:"data"`
-	Errors gqlerror.List   `json:"errors"`
+	Data   interface{}   `json:"data"`
+	Errors gqlerror.List `json:"errors"`
 }
 
 func (c *client) MakeRequest(ctx context.Context, query string, retval interface{}, variables map[string]interface{}) error {
@@ -104,6 +110,7 @@ func (c *client) MakeRequest(ctx context.Context, query string, retval interface
 	}
 
 	var dataAndErrors response
+	dataAndErrors.Data = retval
 	err = json.NewDecoder(resp.Body).Decode(&dataAndErrors)
 	if err != nil {
 		return err
@@ -112,6 +119,5 @@ func (c *client) MakeRequest(ctx context.Context, query string, retval interface
 	if len(dataAndErrors.Errors) > 0 {
 		return dataAndErrors.Errors
 	}
-
-	return json.Unmarshal(dataAndErrors.Data, &retval)
+	return nil
 }
