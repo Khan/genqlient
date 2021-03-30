@@ -1,4 +1,12 @@
-# genql: a truly type-safe Go GraphQL client
+<h1><pre>
+    <em>GEN</em>ERATED
+  GRAPH<em>QL</em>
++      CL<em>IENT</em>
+———————————————
+    <em>GENQLIENT</em>
+</pre>
+genqlient: a truly type-safe Go GraphQL client
+</h1>
 
 This is a proof-of-concept of using code-generation to create a truly type-safe GraphQL client in Go.  It is certainly not ready for production use!
 
