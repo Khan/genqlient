@@ -21,7 +21,7 @@ type Client interface {
 	// MakeRequest must make a request to the client's GraphQL API.
 	//
 	// ctx is the context that should be used to make this request.  If context
-	// is disabled in the genql settings, this will be set to
+	// is disabled in the genqlient settings, this will be set to
 	// context.Background().
 	//
 	// query is the literal string representing the GraphQL query, e.g.

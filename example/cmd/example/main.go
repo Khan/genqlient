@@ -1,7 +1,7 @@
 package main
 
 import (
-	example "github.com/Khan/genql/example"
+	example "github.com/Khan/genqlient/example"
 )
 
 func main() {

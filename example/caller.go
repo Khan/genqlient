@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/Khan/genql/graphql"
+	"github.com/Khan/genqlient/graphql"
 )
 
 type authedTransport struct {
@@ -61,4 +61,4 @@ func Main() {
 	fmt.Println(username, "is", userResp.User.TheirName)
 }
 
-//go:generate go run github.com/Khan/genql genql.yaml
+//go:generate go run github.com/Khan/genqlient genqlient.yaml

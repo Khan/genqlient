@@ -15,7 +15,7 @@ func TestGenerateExample(t *testing.T) {
 	}
 
 	repoRoot := filepath.Dir(filepath.Dir(thisFile))
-	configFilename := filepath.Join(repoRoot, "example/genql.yaml")
+	configFilename := filepath.Join(repoRoot, "example/genqlient.yaml")
 	config, err := ReadAndValidateConfig(configFilename)
 	if err != nil {
 		t.Fatal(err)

@@ -1,4 +1,4 @@
-module github.com/Khan/genql
+module github.com/Khan/genqlient
 
 go 1.13
 

@@ -52,7 +52,7 @@ graphqlClient := graphql.NewClient("https://example.com/graphql", http.DefaultCl
 viewerResp, _ := getViewer(context.Background(), graphqlClient)
 fmt.Println("you are", viewerResp.Viewer.MyName)
 
-//go:generate go run github.com/Khan/genql
+//go:generate go run github.com/Khan/genqlient
 ```
 
 For a complete working example, see `example/`.

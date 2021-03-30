@@ -1,6 +1,6 @@
 # Design decisions
 
-This file contains a log of miscellaneous design decisions in genql.
+This file contains a log of miscellaneous design decisions in genqlient.
 
 ## Types
 
@@ -244,7 +244,7 @@ Instead, we will likely have to do that configuration in comments, which we alre
 
 Or, we can figure out how to avoid configuration entirely.  This seems short-sighted but may be possible if we can solve for optionality another way and decide collapsing is a non-issue.
 
-**Decision:** We'll configure with comments on the field of the form `# @genql(...)`, syntax TBD but similar to a GraphQL directive.
+**Decision:** We'll configure with comments on the field of the form `# @genqlient(...)`, syntax TBD but similar to a GraphQL directive.
 
 ### Query function signatures (context/client)
 
@@ -277,6 +277,6 @@ This can all be configurable globally -- say you can decide whether to use conte
 
 ### Query extraction (for safelisting)
 
-One thing we want to be able to do is to make it clear exactly what query-document (down to comments and whitespace) we will be sending in the query for the purposes of safelisting and querying based on hash.  In the case where you have one query per file, that's easy, just use the whole file.  But you may want to share fragments between queries, in which case this is trouble: you either need a way to include fragments from another file (and a defined concatenation order), or you need to have several queries per file, and either have genql extract the right parts (in a defined/reproducible way), or have it send up the full file and the operation name to use (in which case we should still encourage you to not do that unless you're hashing, so that you aren't sending up too much data).  We could also allow configuration between the last two options (so if you don't care about hashing/safelisting you can auto-extract).
+One thing we want to be able to do is to make it clear exactly what query-document (down to comments and whitespace) we will be sending in the query for the purposes of safelisting and querying based on hash.  In the case where you have one query per file, that's easy, just use the whole file.  But you may want to share fragments between queries, in which case this is trouble: you either need a way to include fragments from another file (and a defined concatenation order), or you need to have several queries per file, and either have genqlient extract the right parts (in a defined/reproducible way), or have it send up the full file and the operation name to use (in which case we should still encourage you to not do that unless you're hashing, so that you aren't sending up too much data).  We could also allow configuration between the last two options (so if you don't care about hashing/safelisting you can auto-extract).
 
 We can decide this later once we support fragments and safelisting/hashing; it's fine if that's not available at first.

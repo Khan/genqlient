@@ -1,4 +1,4 @@
-# example of genql
+# example of genqlient
 
 ## Getting a token
 Get a token from [GitHub](https://github.com/settings/tokens/new) (no scopes needed).
@@ -13,7 +13,7 @@ you are Ben Kraft
 csilvers is Craig Silverstein
 ```
 
-## Running genql
+## Running genqlient
 
 It's already checked in to github, but to generate `generated.go`:
 ```sh

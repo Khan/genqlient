@@ -1,8 +1,8 @@
-// package main is at the root to allow "go run github.com/Khan/genql"
+// package main is at the root to allow "go run github.com/Khan/genqlient"
 package main
 
 import (
-	"github.com/Khan/genql/generate"
+	"github.com/Khan/genqlient/generate"
 )
 
 func main() {
