@@ -20,6 +20,7 @@ func QueryWithAlias(
 	var retval QueryWithAliasResponse
 	err := client.MakeRequest(
 		nil,
+		"QueryWithAlias",
 		`
 query QueryWithAlias {
 	User: user {

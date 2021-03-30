@@ -40,6 +40,7 @@ func {{.Name}}(
 	var retval {{.ResponseName}}
     err := {{if $.Config.ClientGetter}}{{$.Config.ClientGetter}}{{else}}client{{end}}.MakeRequest(
         {{if $.Config.ContextType}}ctx{{else}}nil{{end}},
+        "{{.Name}}",
         `{{.Body}}`,
         &retval,
         {{if .Args}}variables{{else}}nil{{end}},

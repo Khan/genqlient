@@ -99,6 +99,7 @@ func InterfaceNoFragmentsQuery(
 	var retval InterfaceNoFragmentsQueryResponse
 	err := client.MakeRequest(
 		nil,
+		"InterfaceNoFragmentsQuery",
 		`
 query InterfaceNoFragmentsQuery {
 	root {

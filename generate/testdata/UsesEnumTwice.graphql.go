@@ -39,6 +39,7 @@ func UsesEnumTwiceQuery(
 	var retval UsesEnumTwiceQueryResponse
 	err := client.MakeRequest(
 		nil,
+		"UsesEnumTwiceQuery",
 		`
 query UsesEnumTwiceQuery {
 	Me: user {

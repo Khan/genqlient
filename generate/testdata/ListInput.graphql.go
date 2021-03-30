@@ -25,6 +25,7 @@ func ListInputQuery(
 	var retval ListInputQueryResponse
 	err := client.MakeRequest(
 		nil,
+		"ListInputQuery",
 		`
 query ListInputQuery ($names: [String]) {
 	user(query: {names:$names}) {

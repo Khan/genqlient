@@ -25,6 +25,7 @@ func QueryWithStructs(
 	var retval QueryWithStructsResponse
 	err := client.MakeRequest(
 		nil,
+		"QueryWithStructs",
 		`
 query QueryWithStructs {
 	user {

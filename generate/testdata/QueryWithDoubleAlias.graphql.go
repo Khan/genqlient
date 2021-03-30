@@ -21,6 +21,7 @@ func QueryWithDoubleAlias(
 	var retval QueryWithDoubleAliasResponse
 	err := client.MakeRequest(
 		nil,
+		"QueryWithDoubleAlias",
 		`
 query QueryWithDoubleAlias {
 	user {

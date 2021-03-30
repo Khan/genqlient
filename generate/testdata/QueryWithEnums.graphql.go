@@ -27,6 +27,7 @@ func QueryWithEnums(
 	var retval QueryWithEnumsResponse
 	err := client.MakeRequest(
 		nil,
+		"QueryWithEnums",
 		`
 query QueryWithEnums {
 	user {

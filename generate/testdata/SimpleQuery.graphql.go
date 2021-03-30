@@ -20,6 +20,7 @@ func SimpleQuery(
 	var retval SimpleQueryResponse
 	err := client.MakeRequest(
 		nil,
+		"SimpleQuery",
 		`
 query SimpleQuery {
 	user {

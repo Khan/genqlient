@@ -40,6 +40,7 @@ type Client interface {
 	// (Errors are returned.) But again, MakeRequest may customize this.
 	MakeRequest(
 		ctx context.Context,
+		opName string,
 		query string,
 		retval interface{},
 		variables map[string]interface{},
@@ -68,10 +69,12 @@ func NewClient(endpoint string, httpClient *http.Client) Client {
 	return &client{endpoint, http.MethodPost, httpClient}
 }
 
-// TODO: set OperationName?
 type payload struct {
 	Query     string                 `json:"query"`
 	Variables map[string]interface{} `json:"variables"`
+	// OpName is only required if there are multiple queries in the document,
+	// but we set it unconditionally, because that's easier.
+	OpName string `json:"operationName"`
 }
 
 type response struct {
@@ -79,10 +82,11 @@ type response struct {
 	Errors gqlerror.List `json:"errors"`
 }
 
-func (c *client) MakeRequest(ctx context.Context, query string, retval interface{}, variables map[string]interface{}) error {
+func (c *client) MakeRequest(ctx context.Context, opName string, query string, retval interface{}, variables map[string]interface{}) error {
 	body, err := json.Marshal(payload{
 		Query:     query,
 		Variables: variables,
+		OpName:    opName,
 	})
 	if err != nil {
 		return err

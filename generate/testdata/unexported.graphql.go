@@ -40,6 +40,7 @@ func unexported(
 	var retval unexportedResponse
 	err := client.MakeRequest(
 		nil,
+		"unexported",
 		`
 query unexported ($query: UserQueryInput) {
 	user(query: $query) {

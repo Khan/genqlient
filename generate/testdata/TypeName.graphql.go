@@ -21,6 +21,7 @@ func TypeNameQuery(
 	var retval TypeNameQueryResponse
 	err := client.MakeRequest(
 		nil,
+		"TypeNameQuery",
 		`
 query TypeNameQuery {
 	user {

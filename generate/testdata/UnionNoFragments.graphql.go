@@ -77,6 +77,7 @@ func UnionNoFragmentsQuery(
 	var retval UnionNoFragmentsQueryResponse
 	err := client.MakeRequest(
 		nil,
+		"UnionNoFragmentsQuery",
 		`
 query UnionNoFragmentsQuery {
 	randomLeaf {

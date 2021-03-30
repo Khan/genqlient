@@ -25,6 +25,7 @@ func SimpleInputQuery(
 	var retval SimpleInputQueryResponse
 	err := client.MakeRequest(
 		nil,
+		"SimpleInputQuery",
 		`
 query SimpleInputQuery ($name: String!) {
 	user(query: {name:$name}) {

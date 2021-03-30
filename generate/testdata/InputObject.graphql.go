@@ -40,6 +40,7 @@ func InputObjectQuery(
 	var retval InputObjectQueryResponse
 	err := client.MakeRequest(
 		nil,
+		"InputObjectQuery",
 		`
 query InputObjectQuery ($query: UserQueryInput) {
 	user(query: $query) {

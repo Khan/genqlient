@@ -31,6 +31,7 @@ func getViewer(
 	var retval getViewerResponse
 	err := client.MakeRequest(
 		ctx,
+		"getViewer",
 		`
 query getViewer {
 	viewer {
@@ -57,6 +58,7 @@ func getUser(
 	var retval getUserResponse
 	err := client.MakeRequest(
 		ctx,
+		"getUser",
 		`
 query getUser ($Login: String!) {
 	user(login: $Login) {

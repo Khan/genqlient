@@ -23,6 +23,7 @@ func QueryWithSlices(
 	var retval QueryWithSlicesResponse
 	err := client.MakeRequest(
 		nil,
+		"QueryWithSlices",
 		`
 query QueryWithSlices {
 	user {
