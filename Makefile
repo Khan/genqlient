@@ -5,4 +5,7 @@ example:
 check:
 	go test ./...
 
+genqlient.png: genqlient.svg
+	convert -density 600 -background transparent "$<" "$@"
+
 .PHONY: example
