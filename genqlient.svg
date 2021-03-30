@@ -1,68 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="67.293556mm"
-   height="27.667257mm"
-   viewBox="0 0 67.293556 27.667257"
-   version="1.1"
    id="svg8"
-   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
-   sodipodi:docname="genqlient.svg">
+   version="1.1"
+   viewBox="0 0 67.293556 27.667257"
+   height="27.667257mm"
+   width="67.293556mm">
   <defs
      id="defs2" />
-  <sodipodi:namedview
-     id="base"
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageopacity="0.0"
-     inkscape:pageshadow="2"
-     inkscape:zoom="3.959798"
-     inkscape:cx="156.6875"
-     inkscape:cy="2.8431546"
-     inkscape:document-units="mm"
-     inkscape:current-layer="layer1"
-     showgrid="false"
-     showguides="false"
-     inkscape:guide-bbox="true"
-     inkscape:window-width="2570"
-     inkscape:window-height="2122"
-     inkscape:window-x="3840"
-     inkscape:window-y="36"
-     inkscape:window-maximized="0"
-     fit-margin-left="5"
-     fit-margin-top="5"
-     fit-margin-right="5"
-     fit-margin-bottom="5">
-    <inkscape:grid
-       type="xygrid"
-       id="grid3745"
-       originx="-47.273016"
-       originy="-206.99296" />
-    <sodipodi:guide
-       position="-45.869849,9.6289875"
-       orientation="0,1"
-       id="guide3747"
-       inkscape:locked="false" />
-    <sodipodi:guide
-       position="-43.263972,5.0185875"
-       orientation="0,1"
-       id="guide3749"
-       inkscape:locked="false" />
-    <sodipodi:guide
-       position="-41.058998,22.658378"
-       orientation="0,1"
-       id="guide3751"
-       inkscape:locked="false" />
-  </sodipodi:namedview>
   <metadata
      id="metadata5">
     <rdf:RDF>
@@ -76,79 +25,73 @@
     </rdf:RDF>
   </metadata>
   <g
-     inkscape:label="Layer 1"
-     inkscape:groupmode="layer"
-     id="layer1"
-     transform="translate(-47.273013,-62.33978)">
+     transform="translate(-47.273013,-62.33978)"
+     id="layer1">
     <flowRoot
-       xml:space="preserve"
-       id="flowRoot3713"
+       transform="matrix(0.26458333,0,0,0.26458333,-0.30103786,-0.16131146)"
        style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:40px;line-height:1.25;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
-       transform="matrix(0.26458333,0,0,0.26458333,-0.30103786,-0.16131146)"><flowRegion
-         id="flowRegion3715"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:40px;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start"><rect
-           id="rect3717"
-           width="107.14284"
-           height="58.571434"
-           x="197.14285"
+       id="flowRoot3713"
+       xml:space="preserve"><flowRegion
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:40px;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start"
+         id="flowRegion3715"><rect
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:40px;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start"
            y="246.8054"
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:40px;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start" /></flowRegion><flowPara
+           x="197.14285"
+           height="58.571434"
+           width="107.14284"
+           id="rect3717" /></flowRegion><flowPara
          id="flowPara3719">GEN</flowPara></flowRoot>    <flowRoot
-       xml:space="preserve"
-       id="flowRoot3721"
+       transform="matrix(0.26458333,0,0,0.26458333,-13.197461,-2.0849608)"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20px;line-height:1.25;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
-       transform="matrix(0.26458333,0,0,0.26458333,-13.197461,-2.0849608)"><flowRegion
-         id="flowRegion3723"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20px;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start"><rect
-           id="rect3725"
-           width="182.14287"
-           height="62.857147"
-           x="318.57144"
+       id="flowRoot3721"
+       xml:space="preserve"><flowRegion
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20px;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start"
+         id="flowRegion3723"><rect
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20px;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start"
            y="258.23398"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20px;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start" /></flowRegion><flowPara
+           x="318.57144"
+           height="62.857147"
+           width="182.14287"
+           id="rect3725" /></flowRegion><flowPara
          id="flowPara3727">ERATED</flowPara></flowRoot>    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.29166651px;line-height:1.25;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-       x="54.306408"
+       id="text3731"
        y="80.308945"
-       id="text3731"><tspan
-         sodipodi:role="line"
-         id="tspan3729"
-         x="54.306408"
-         y="80.308945"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.29166651px;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332">GRAPH</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10.58333302px;line-height:1.25;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-       x="71.24852"
-       y="80.320396"
-       id="text3735"><tspan
-         sodipodi:role="line"
-         id="tspan3733"
-         x="71.24852"
-         y="80.320396"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10.58333302px;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332">QL</tspan></text>
-    <text
-       xml:space="preserve"
+       x="54.306408"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.29166651px;line-height:1.25;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-       x="78.052078"
-       y="84.95536"
-       id="text3739"><tspan
-         sodipodi:role="line"
-         id="tspan3737"
-         x="78.052078"
-         y="84.95536"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.29166651px;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332">CL</tspan></text>
+       xml:space="preserve"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.29166651px;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332"
+         y="80.308945"
+         x="54.306408"
+         id="tspan3729">GRAPH</tspan></text>
     <text
-       xml:space="preserve"
+       id="text3735"
+       y="80.320396"
+       x="71.24852"
        style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10.58333302px;line-height:1.25;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-       x="84.477661"
+       xml:space="preserve"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10.58333302px;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332"
+         y="80.320396"
+         x="71.24852"
+         id="tspan3733">QL</tspan></text>
+    <text
+       id="text3739"
+       y="84.95536"
+       x="78.052078"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.29166651px;line-height:1.25;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       xml:space="preserve"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.29166651px;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332"
+         y="84.95536"
+         x="78.052078"
+         id="tspan3737">CL</tspan></text>
+    <text
+       id="text3743"
        y="84.932434"
-       id="text3743"><tspan
-         sodipodi:role="line"
-         id="tspan3741"
-         x="84.477661"
+       x="84.477661"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10.58333302px;line-height:1.25;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       xml:space="preserve"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10.58333302px;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332"
          y="84.932434"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10.58333302px;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332">IENT</tspan></text>
+         x="84.477661"
+         id="tspan3741">IENT</tspan></text>
   </g>
 </svg>
