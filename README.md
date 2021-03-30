@@ -92,8 +92,7 @@ Config options:
 - generate mocks?
 
 Other:
-- (*) error-checking/validation/etc. everywhere
-- (*) a name that's more clearly distinct from other libraries out there and conveys what this does
+- (+) improved validation and error checking
 - (+) more tests
 - (+) documentation
 - custom scalar types (or custom mappings for standard scalars, if you want a special ID type say)
