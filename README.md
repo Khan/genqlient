@@ -1,4 +1,4 @@
-![generated graphql client ⇒ genqlient](genqlient.svg)
+![generated graphql client ⇒ genqlient](genqlient.png)
 
 # genqlient: a truly type-safe Go GraphQL client
 
