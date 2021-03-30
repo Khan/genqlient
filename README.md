@@ -1,12 +1,6 @@
-<h1><pre>
-    <em>GEN</em>ERATED
-  GRAPH<em>QL</em>
-+      CL<em>IENT</em>
-———————————————
-    <em>GENQLIENT</em>
-</pre>
-genqlient: a truly type-safe Go GraphQL client
-</h1>
+![generated graphql client ⇒ genqlient](genqlient.svg)
+
+# genqlient: a truly type-safe Go GraphQL client
 
 This is a proof-of-concept of using code-generation to create a truly type-safe GraphQL client in Go.  It is certainly not ready for production use!
 
@@ -95,6 +89,6 @@ Other:
 - (+) improved validation and error checking
 - (+) more tests
 - (+) documentation
-- do some [even more ridiculous styling](https://github.com/sindresorhus/css-in-readme-like-wat) in the header-logo above
+- get a designer to fix my bad logo-thing
 - custom scalar types (or custom mappings for standard scalars, if you want a special ID type say)
 - allow mapping a custom type to a particular val (if you want to use a named type for some string, say)
