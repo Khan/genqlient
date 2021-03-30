@@ -95,5 +95,6 @@ Other:
 - (+) improved validation and error checking
 - (+) more tests
 - (+) documentation
+- do some [even more ridiculous styling](https://github.com/sindresorhus/css-in-readme-like-wat) in the header-logo above
 - custom scalar types (or custom mappings for standard scalars, if you want a special ID type say)
 - allow mapping a custom type to a particular val (if you want to use a named type for some string, say)
