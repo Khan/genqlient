@@ -86,6 +86,9 @@ func (g *generator) addTypeForDefinition(namePrefix, nameOverride string, typ *a
 			// prefix for the next type.
 			namePrefix = name
 		}
+		// TODO: for input and enum types, we can probably skip the prefix
+		// entirely; they don't have fields that may be used in some places but
+		// not others.
 
 	}
 
@@ -201,7 +204,6 @@ func (builder *typeBuilder) writeField(field field) error {
 		// `query q { a: f { b }, c: f { d } }` we need separate types for a
 		// and c, even though they are the same type in GraphQL, because they
 		// have different fields.
-		// TODO: if this is an input type, we should skip the prefixing!
 		builder.typeNamePrefix+upperFirst(field.Alias()), "", typ, fields)
 	if err != nil {
 		return err
