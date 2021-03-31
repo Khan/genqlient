@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 )
 
 func readConfigGenerateAndWrite(configFilename string) error {
@@ -15,6 +16,13 @@ func readConfigGenerateAndWrite(configFilename string) error {
 	code, err := Generate(config)
 	if err != nil {
 		return err
+	}
+
+	err = os.MkdirAll(filepath.Dir(config.Generated), 0o755)
+	if err != nil {
+		return fmt.Errorf(
+			"could not create parent directory for generated file %v: %v",
+			config.Generated, err)
 	}
 
 	err = ioutil.WriteFile(config.Generated, code, 0o644)

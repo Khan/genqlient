@@ -27,6 +27,7 @@ type Config struct {
 	// how to convert that to SDL).
 	Schema string `yaml:"schema"`
 	// The filename with the queries; defaults to queries.graphql
+	// TODO: allow multiple files?
 	Queries string `yaml:"queries"`
 	// The filename to which to write the generated code; defaults to
 	// generated.go
@@ -45,14 +46,20 @@ type Config struct {
 	ClientGetter string `yaml:"client_getter"`
 }
 
-func (c *Config) ValidateAndFillDefaults() error {
+func (c *Config) ValidateAndFillDefaults(configFilename string) error {
+	// Make paths relative to config dir
+	configDir := filepath.Dir(configFilename)
+	c.Schema = filepath.Join(configDir, c.Schema)
+	c.Queries = filepath.Join(configDir, c.Queries)
+	c.Generated = filepath.Join(configDir, c.Generated)
+
 	if c.Package == "" {
 		abs, err := filepath.Abs(c.Generated)
 		if err != nil {
 			return fmt.Errorf("unable to guess package-name: %v", err)
 		}
 
-		base := filepath.Base(abs)
+		base := filepath.Base(filepath.Dir(abs))
 		if !token.IsIdentifier(base) {
 			return fmt.Errorf("unable to guess package-name: %v is not a valid identifier", base)
 		}
@@ -86,16 +93,10 @@ func ReadAndValidateConfig(filename string) (*Config, error) {
 		}
 	}
 
-	err := config.ValidateAndFillDefaults()
+	err := config.ValidateAndFillDefaults(filename)
 	if err != nil {
 		return nil, fmt.Errorf("invalid config file %v: %v", filename, err)
 	}
-
-	// Make paths relative to config dir
-	basename := filepath.Dir(filename)
-	config.Schema = filepath.Join(basename, config.Schema)
-	config.Queries = filepath.Join(basename, config.Queries)
-	config.Generated = filepath.Join(basename, config.Generated)
 
 	return &config, nil
 }

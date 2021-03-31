@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/vektah/gqlparser/ast"
+	"github.com/vektah/gqlparser/v2/ast"
 )
 
 type typeBuilder struct {
@@ -120,7 +120,7 @@ type outputField struct{ field *ast.Field }
 
 func (s outputField) Alias() string {
 	// gqlparser sets Alias even if the field is not aliased, see e.g.
-	// https://github.com/vektah/gqlparser/blob/c06d8e0d135f285e37e7f1ff397f10e049733eb3/parser/query.go#L150
+	// https://github.com/vektah/gqlparser/v2/blob/c06d8e0d135f285e37e7f1ff397f10e049733eb3/parser/query.go#L150
 	return s.field.Alias
 }
 
@@ -201,6 +201,7 @@ func (builder *typeBuilder) writeField(field field) error {
 		// `query q { a: f { b }, c: f { d } }` we need separate types for a
 		// and c, even though they are the same type in GraphQL, because they
 		// have different fields.
+		// TODO: if this is an input type, we should skip the prefixing!
 		builder.typeNamePrefix+upperFirst(field.Alias()), "", typ, fields)
 	if err != nil {
 		return err

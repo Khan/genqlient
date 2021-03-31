@@ -7,8 +7,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/vektah/gqlparser/ast"
-	"github.com/vektah/gqlparser/formatter"
+	"github.com/vektah/gqlparser/v2/ast"
+	"github.com/vektah/gqlparser/v2/formatter"
 )
 
 var fileTemplate = mustTemplate("operation.go.tmpl")
@@ -152,6 +152,13 @@ func Generate(config *Config) ([]byte, error) {
 	document, err := getAndValidateQueries(config.Queries, schema)
 	if err != nil {
 		return nil, err
+	}
+
+	// TODO: we could also allow this, and generate an empty file with just the
+	// package-name, if it turns out to be more convenient that way.  (As-is,
+	// we generate a broken file, with just (unused) imports.)
+	if len(document.Operations) == 0 {
+		return nil, fmt.Errorf("no queries found in %v", config.Queries)
 	}
 
 	g := newGenerator(config, schema)
