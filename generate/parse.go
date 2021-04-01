@@ -33,8 +33,8 @@ func getSchema(filename string) (*ast.Schema, error) {
 	return schema, nil
 }
 
-func getAndValidateQueries(filenames []string, schema *ast.Schema) (*ast.QueryDocument, error) {
-	queryDoc, err := getQueries(filenames)
+func getAndValidateQueries(basedir string, filenames []string, schema *ast.Schema) (*ast.QueryDocument, error) {
+	queryDoc, err := getQueries(basedir, filenames)
 	if err != nil {
 		return nil, err
 	}
@@ -48,7 +48,7 @@ func getAndValidateQueries(filenames []string, schema *ast.Schema) (*ast.QueryDo
 	return queryDoc, nil
 }
 
-func getQueries(filenames []string) (*ast.QueryDocument, error) {
+func getQueries(basedir string, filenames []string) (*ast.QueryDocument, error) {
 	// We merge all the queries into a single query-document, since operations
 	// in one might reference fragments in another.
 	//
@@ -77,7 +77,7 @@ func getQueries(filenames []string) (*ast.QueryDocument, error) {
 
 		switch filepath.Ext(filename) {
 		case ".graphql":
-			queryDoc, err := getQueriesFromString(string(text), filename)
+			queryDoc, err := getQueriesFromString(string(text), basedir, filename)
 			if err != nil {
 				return nil, err
 			}
@@ -85,7 +85,7 @@ func getQueries(filenames []string) (*ast.QueryDocument, error) {
 			addQueryDoc(queryDoc)
 
 		case ".go":
-			queryDocs, err := getQueriesFromGo(string(text), filename)
+			queryDocs, err := getQueriesFromGo(string(text), basedir, filename)
 			if err != nil {
 				return nil, err
 			}
@@ -102,7 +102,13 @@ func getQueries(filenames []string) (*ast.QueryDocument, error) {
 	return mergedQueryDoc, nil
 }
 
-func getQueriesFromString(text string, filename string) (*ast.QueryDocument, error) {
+func getQueriesFromString(text string, basedir, filename string) (*ast.QueryDocument, error) {
+	// make path relative to the config-directory
+	relname, err := filepath.Rel(basedir, filename)
+	if err == nil {
+		filename = relname
+	}
+
 	// Cf. gqlparser.LoadQuery
 	document, graphqlError := parser.ParseQuery(
 		&ast.Source{Name: filename, Input: text})
@@ -113,7 +119,7 @@ func getQueriesFromString(text string, filename string) (*ast.QueryDocument, err
 	return document, nil
 }
 
-func getQueriesFromGo(text string, filename string) ([]*ast.QueryDocument, error) {
+func getQueriesFromGo(text string, basedir, filename string) ([]*ast.QueryDocument, error) {
 	fset := goToken.NewFileSet()
 	f, err := goParser.ParseFile(fset, filename, text, 0)
 	if err != nil {
@@ -143,7 +149,7 @@ func getQueriesFromGo(text string, filename string) ([]*ast.QueryDocument, error
 
 		fakeFilename := fset.Position(basicLit.Pos()).String()
 		var query *ast.QueryDocument
-		query, err = getQueriesFromString(value, fakeFilename)
+		query, err = getQueriesFromString(value, basedir, fakeFilename)
 		if err != nil {
 			return false
 		}

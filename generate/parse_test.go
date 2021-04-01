@@ -19,6 +19,20 @@ func sortQueries(queryDoc *ast.QueryDocument) {
 	})
 }
 
+func getTestQueries(t *testing.T, ext string) *ast.QueryDocument {
+	graphqlQueries, err := getQueries(
+		parseDataDir, []string{filepath.Join(parseDataDir, "*."+ext)})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// The different file-types may have the operations/fragments in a
+	// different order.
+	sortQueries(graphqlQueries)
+
+	return graphqlQueries
+}
+
 // TestParse tests that query-extraction from different language source files
 // produces equivalent results.  We do not test the results it produces (that's
 // covered by TestGenerate), just that they are equivalent in different
@@ -26,10 +40,7 @@ func sortQueries(queryDoc *ast.QueryDocument) {
 func TestParse(t *testing.T) {
 	extensions := []string{"go"}
 
-	graphqlQueries, err := getQueries([]string{filepath.Join(parseDataDir, "*.graphql")})
-	if err != nil {
-		t.Fatal(err)
-	}
+	graphqlQueries := getTestQueries(t, "graphql")
 
 	// check it's at least non-empty
 	if len(graphqlQueries.Operations) == 0 || len(graphqlQueries.Fragments) == 0 {
@@ -40,14 +51,7 @@ func TestParse(t *testing.T) {
 
 	for _, ext := range extensions {
 		t.Run(ext, func(t *testing.T) {
-			queries, err := getQueries([]string{filepath.Join(parseDataDir, "*."+ext)})
-			if err != nil {
-				t.Fatal(err)
-			}
-
-			// The different file-types may have the operations/fragments in a
-			// different order.
-			sortQueries(queries)
+			queries := getTestQueries(t, ext)
 
 			got, want := ast.Dump(graphqlQueries), ast.Dump(queries)
 			if got != want {

@@ -159,7 +159,7 @@ func Generate(config *Config) (map[string][]byte, error) {
 		return nil, err
 	}
 
-	document, err := getAndValidateQueries(config.Operations, schema)
+	document, err := getAndValidateQueries(config.BaseDir(), config.Operations, schema)
 	if err != nil {
 		return nil, err
 	}

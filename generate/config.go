@@ -70,16 +70,25 @@ type Config struct {
 	// getter function, global var, or a context-key-type?
 	// TODO: what if you want to return err?
 	ClientGetter string `yaml:"client_getter"`
+
+	// Set automatically to the filename of the config file itself.
+	configFilename string
+}
+
+// BaseDir returns the directory of the config-file (relative to which
+// all the other paths are resolved).
+func (c *Config) BaseDir() string {
+	return filepath.Dir(c.configFilename)
 }
 
 func (c *Config) ValidateAndFillDefaults(configFilename string) error {
+	c.configFilename = configFilename
 	// Make paths relative to config dir
-	configDir := filepath.Dir(configFilename)
-	c.Schema = filepath.Join(configDir, c.Schema)
+	c.Schema = filepath.Join(c.BaseDir(), c.Schema)
 	for i := range c.Operations {
-		c.Operations[i] = filepath.Join(configDir, c.Operations[i])
+		c.Operations[i] = filepath.Join(c.BaseDir(), c.Operations[i])
 	}
-	c.Generated = filepath.Join(configDir, c.Generated)
+	c.Generated = filepath.Join(c.BaseDir(), c.Generated)
 
 	if c.Package == "" {
 		abs, err := filepath.Abs(c.Generated)
