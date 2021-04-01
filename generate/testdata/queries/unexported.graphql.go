@@ -6,6 +6,13 @@ import (
 	"github.com/Khan/genqlient/graphql"
 )
 
+type Role string
+
+const (
+	RoleStudent Role = "STUDENT"
+	RoleTeacher Role = "TEACHER"
+)
+
 type unexportedResponse struct {
 	User unexportedUser `json:"user"`
 }
@@ -15,19 +22,12 @@ type unexportedUser struct {
 }
 
 type userQueryInput struct {
-	Email string             `json:"email"`
-	Name  string             `json:"name"`
-	Id    string             `json:"id"`
-	Role  userQueryInputRole `json:"role"`
-	Names []string           `json:"names"`
+	Email string   `json:"email"`
+	Name  string   `json:"name"`
+	Id    string   `json:"id"`
+	Role  Role     `json:"role"`
+	Names []string `json:"names"`
 }
-
-type userQueryInputRole string
-
-const (
-	userQueryInputRoleStudent userQueryInputRole = "STUDENT"
-	userQueryInputRoleTeacher userQueryInputRole = "TEACHER"
-)
 
 func unexported(
 	client graphql.Client,

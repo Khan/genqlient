@@ -6,19 +6,24 @@ import (
 	"github.com/Khan/genqlient/graphql"
 )
 
+type QueryWithEnumsOtherUser struct {
+	Roles []Role `json:"roles"`
+}
+
 type QueryWithEnumsResponse struct {
-	User QueryWithEnumsUser `json:"user"`
+	User      QueryWithEnumsUser      `json:"user"`
+	OtherUser QueryWithEnumsOtherUser `json:"otherUser"`
 }
 
 type QueryWithEnumsUser struct {
-	Roles []QueryWithEnumsUserRolesRole `json:"roles"`
+	Roles []Role `json:"roles"`
 }
 
-type QueryWithEnumsUserRolesRole string
+type Role string
 
 const (
-	QueryWithEnumsUserRolesRoleStudent QueryWithEnumsUserRolesRole = "STUDENT"
-	QueryWithEnumsUserRolesRoleTeacher QueryWithEnumsUserRolesRole = "TEACHER"
+	RoleStudent Role = "STUDENT"
+	RoleTeacher Role = "TEACHER"
 )
 
 func QueryWithEnums(
@@ -31,6 +36,9 @@ func QueryWithEnums(
 		`
 query QueryWithEnums {
 	user {
+		roles
+	}
+	otherUser: user {
 		roles
 	}
 }

@@ -6,27 +6,20 @@ import (
 	"github.com/Khan/genqlient/graphql"
 )
 
-type UsesEnumTwiceQueryMeUser struct {
-	Roles []UsesEnumTwiceQueryMeUserRolesRole `json:"roles"`
-}
-
-type UsesEnumTwiceQueryMeUserRolesRole string
+type Role string
 
 const (
-	UsesEnumTwiceQueryMeUserRolesRoleStudent UsesEnumTwiceQueryMeUserRolesRole = "STUDENT"
-	UsesEnumTwiceQueryMeUserRolesRoleTeacher UsesEnumTwiceQueryMeUserRolesRole = "TEACHER"
+	RoleStudent Role = "STUDENT"
+	RoleTeacher Role = "TEACHER"
 )
+
+type UsesEnumTwiceQueryMeUser struct {
+	Roles []Role `json:"roles"`
+}
 
 type UsesEnumTwiceQueryOtherUser struct {
-	Roles []UsesEnumTwiceQueryOtherUserRolesRole `json:"roles"`
+	Roles []Role `json:"roles"`
 }
-
-type UsesEnumTwiceQueryOtherUserRolesRole string
-
-const (
-	UsesEnumTwiceQueryOtherUserRolesRoleStudent UsesEnumTwiceQueryOtherUserRolesRole = "STUDENT"
-	UsesEnumTwiceQueryOtherUserRolesRoleTeacher UsesEnumTwiceQueryOtherUserRolesRole = "TEACHER"
-)
 
 type UsesEnumTwiceQueryResponse struct {
 	Me        UsesEnumTwiceQueryMeUser

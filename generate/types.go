@@ -67,7 +67,14 @@ func (g *generator) addTypeForDefinition(namePrefix, nameOverride string, typ *a
 		name = nameOverride
 	} else {
 		typeGoName := upperFirst(typ.Name)
-		if strings.HasSuffix(namePrefix, typeGoName) {
+		if typ.Kind == ast.Enum || typ.Kind == ast.InputObject {
+			// If we're an enum or an input-object, there is only one type we
+			// will ever possibly generate for this type, so we don't need any
+			// of the qualifiers.  This is especially helpful because the
+			// caller is very likely to need to reference these types in their
+			// code.
+			name = typeGoName
+		} else if strings.HasSuffix(namePrefix, typeGoName) {
 			// If the field and type names are the same, we can avoid the
 			// duplication.  (We include the field name in case there are
 			// multiple fields with the same type, and the type name because
@@ -100,6 +107,8 @@ func (g *generator) addTypeForDefinition(namePrefix, nameOverride string, typ *a
 	if err != nil {
 		return "", err
 	}
+	// TODO: this should also check for conflicts (except not for enums and
+	// input-objects, see above)
 	g.typeMap[name] = builder.String()
 	return name, nil
 }

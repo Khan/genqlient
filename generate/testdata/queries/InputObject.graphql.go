@@ -14,20 +14,20 @@ type InputObjectQueryUser struct {
 	Id string `json:"id"`
 }
 
-type UserQueryInput struct {
-	Email string             `json:"email"`
-	Name  string             `json:"name"`
-	Id    string             `json:"id"`
-	Role  UserQueryInputRole `json:"role"`
-	Names []string           `json:"names"`
-}
-
-type UserQueryInputRole string
+type Role string
 
 const (
-	UserQueryInputRoleStudent UserQueryInputRole = "STUDENT"
-	UserQueryInputRoleTeacher UserQueryInputRole = "TEACHER"
+	RoleStudent Role = "STUDENT"
+	RoleTeacher Role = "TEACHER"
 )
+
+type UserQueryInput struct {
+	Email string   `json:"email"`
+	Name  string   `json:"name"`
+	Id    string   `json:"id"`
+	Role  Role     `json:"role"`
+	Names []string `json:"names"`
+}
 
 func InputObjectQuery(
 	client graphql.Client,
