@@ -57,6 +57,7 @@ For each GraphQL operation (query or mutation), genqlient generates a Go functio
 - a `context.Context` (unless configured otherwise)
 - a `genqlient/graphql.Client` (you might have a global one, or init it inline)
 - arguments corresponding to the query arguments
+
 It returns a pointer to a struct representing the query-result, and an `error`.  The struct will always be initialized (never nil), even on error.  The error may be a `github.com/vektah/gqlparser/v2/gqlerror.List`, if it was a GraphQL-level error (in this case the returned struct may still contain useful data, if the API returns data even on error), or may be another error if, for example, the whole HTTP request failed (in which case the struct is unlikely to contain useful data).  If the GraphQL operation has a comment immediately above it, that comment text will be used as the GoDoc for the generated function.
 
 TODO: document generated types further, especially if they become customizable.
