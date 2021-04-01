@@ -1,0 +1,6 @@
+mutation MyMutation {
+  myField
+  myOtherField {
+    ...MyFragment
+  }
+}

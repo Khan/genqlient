@@ -27,6 +27,10 @@ type Config struct {
 	// how to convert that to SDL).
 	Schema string `yaml:"schema"`
 	// Filenames or globs with the queries; defaults to queries.graphql.
+	//
+	// These may be .graphql files, containing the queries in SDL format, or
+	// Go files, in which case any string-literal starting with (optional
+	// whitespace and) the string "# @genqlient" will be extracted as a query.
 	Queries []string `yaml:"queries"`
 	// The filename to which to write the generated code; defaults to
 	// generated.go

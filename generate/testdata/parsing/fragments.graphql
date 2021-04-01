@@ -1,0 +1,19 @@
+query MyQuery {
+  myField
+  myOtherField {
+    ...MyFragment
+  }
+}
+
+fragment MyFragment on MyType {
+  myFragmentField
+  ...NestedFragment
+}
+
+fragment UnusedFragment on MyType {
+  myFragmentField
+}
+
+fragment NestedFragment on MyType {
+  myOtherFragmentField
+}

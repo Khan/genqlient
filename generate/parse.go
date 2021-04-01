@@ -2,8 +2,14 @@ package generate
 
 import (
 	"fmt"
+	goAst "go/ast"
+	goParser "go/parser"
+	"go/token"
+	goToken "go/token"
 	"io/ioutil"
 	"path/filepath"
+	"strconv"
+	"strings"
 
 	"github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
@@ -28,44 +34,76 @@ func getSchema(filename string) (*ast.Schema, error) {
 }
 
 func getAndValidateQueries(filenames []string, schema *ast.Schema) (*ast.QueryDocument, error) {
+	queryDoc, err := getQueries(filenames)
+	if err != nil {
+		return nil, err
+	}
+
+	// Cf. gqlparser.LoadQuery
+	graphqlErrors := validator.Validate(schema, queryDoc)
+	if graphqlErrors != nil {
+		return nil, fmt.Errorf("query-spec does not match schema: %v", graphqlErrors)
+	}
+
+	return queryDoc, nil
+}
+
+func getQueries(filenames []string) (*ast.QueryDocument, error) {
 	// We merge all the queries into a single query-document, since operations
 	// in one might reference fragments in another.
 	//
 	// TODO(benkraft): It might be better to merge just within a filename, so
 	// that fragment-names don't need to be unique across files.
 	mergedQueryDoc := new(ast.QueryDocument)
+	addQueryDoc := func(queryDoc *ast.QueryDocument) {
+		mergedQueryDoc.Operations = append(mergedQueryDoc.Operations, queryDoc.Operations...)
+		mergedQueryDoc.Fragments = append(mergedQueryDoc.Fragments, queryDoc.Fragments...)
+	}
 
+	expandedFilenames := make([]string, 0, len(filenames))
 	for _, filename := range filenames {
+		matches, err := filepath.Glob(filename)
+		if err != nil {
+			return nil, fmt.Errorf("can't expand file-glob %v: %v", filename, err)
+		}
+		expandedFilenames = append(expandedFilenames, matches...)
+	}
+
+	for _, filename := range expandedFilenames {
+		text, err := ioutil.ReadFile(filename)
+		if err != nil {
+			return nil, fmt.Errorf("unreadable query-spec file %v: %v", filename, err)
+		}
+
 		switch filepath.Ext(filename) {
 		case ".graphql":
-			// Cf. gqlparser.LoadQuery
-			text, err := ioutil.ReadFile(filename)
-			if err != nil {
-				return nil, fmt.Errorf("unreadable query-spec file %v: %v", filename, err)
-			}
-
 			queryDoc, err := getQueriesFromString(string(text), filename)
 			if err != nil {
 				return nil, err
 			}
 
-			mergedQueryDoc.Operations = append(mergedQueryDoc.Operations, queryDoc.Operations...)
-			mergedQueryDoc.Fragments = append(mergedQueryDoc.Fragments, queryDoc.Fragments...)
+			addQueryDoc(queryDoc)
+
+		case ".go":
+			queryDocs, err := getQueriesFromGo(string(text), filename)
+			if err != nil {
+				return nil, err
+			}
+
+			for _, queryDoc := range queryDocs {
+				addQueryDoc(queryDoc)
+			}
 
 		default:
 			return nil, fmt.Errorf("unknown file type: %v", filename)
 		}
 	}
 
-	graphqlErrors := validator.Validate(schema, mergedQueryDoc)
-	if graphqlErrors != nil {
-		return nil, fmt.Errorf("query-spec does not match schema: %v", graphqlErrors)
-	}
-
 	return mergedQueryDoc, nil
 }
 
 func getQueriesFromString(text string, filename string) (*ast.QueryDocument, error) {
+	// Cf. gqlparser.LoadQuery
 	document, graphqlError := parser.ParseQuery(
 		&ast.Source{Name: filename, Input: text})
 	if graphqlError != nil { // ParseQuery returns type *graphql.Error, yuck
@@ -73,4 +111,46 @@ func getQueriesFromString(text string, filename string) (*ast.QueryDocument, err
 	}
 
 	return document, nil
+}
+
+func getQueriesFromGo(text string, filename string) ([]*ast.QueryDocument, error) {
+	fset := goToken.NewFileSet()
+	f, err := goParser.ParseFile(fset, filename, text, 0)
+	if err != nil {
+		return nil, fmt.Errorf("invalid Go file %v: %v", filename, err)
+	}
+
+	var retval []*ast.QueryDocument
+	goAst.Inspect(f, func(node goAst.Node) bool {
+		if err != nil {
+			return false // don't bother to recurse if something already failed
+		}
+
+		basicLit, ok := node.(*goAst.BasicLit)
+		if !ok || basicLit.Kind != token.STRING {
+			return true // recurse
+		}
+
+		var value string
+		value, err := strconv.Unquote(basicLit.Value)
+		if err != nil {
+			return false
+		}
+
+		if !strings.HasPrefix(strings.TrimSpace(value), "# @genqlient") {
+			return true
+		}
+
+		fakeFilename := fset.Position(basicLit.Pos()).String()
+		var query *ast.QueryDocument
+		query, err = getQueriesFromString(value, fakeFilename)
+		if err != nil {
+			return false
+		}
+		retval = append(retval, query)
+
+		return true
+	})
+
+	return retval, err
 }

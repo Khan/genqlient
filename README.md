@@ -51,6 +51,8 @@ fmt.Println("you are", viewerResp.Viewer.MyName)
 
 For a complete working example, see `example/`.
 
+TODO: document this a bit more, including different ways to specify queries, options once we have those, etc.
+
 ## Documentation for generated code
 
 For each GraphQL operation (query or mutation), genqlient generates a Go function with the exact same name, which accepts:
@@ -64,13 +66,11 @@ TODO: document generated types further, especially if they become customizable.
 
 ## Tests
 
-`go test ./...` tests code generation.  (This is run by GitHub Actions.)
+`go test ./...` tests code generation.  (This is run by GitHub Actions.)  Most of the tests are snapshot-based; see `generate/generate_test.go`.
 
-Most of the tests are snapshot-based; they use the schema, queries, and snapshots in `generate/testdata`.  The schema is in `schema.graphql`; the queries are in `TestName.graphql`.  The test by default asserts that the output of the generator matches the snapshot `TestName.graphql.go`.  To update the snapshots, run with `UPDATE_SNAPSHOTS=1`; it will fail the tests and print the diffs, but regenerate the snapshots.  Make sure to check that the output is sensible!
+`make example` rebuilds the example, and tests that everything wires up to a real API correctly.  This is not currently included in `go test`, since it requires a token.
 
-`make example` rebuilds the example, and tests that everything wires up to a real API correctly.
-
-TODO(benkraft): Figure out how to get GitHub Actions to run the example -- it needs a token.
+TODO(benkraft): Figure out how to get GitHub Actions a token to run the example.
 
 ## Design
 
@@ -103,3 +103,4 @@ Other:
 - get a designer to fix my bad logo-thing
 - custom scalar types (or custom mappings for standard scalars, if you want a special ID type say)
 - allow mapping a custom type to a particular val (if you want to use a named type for some string, say)
+- (optionally?) include full query in generated godoc

@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-const dataDir = "testdata"
+const dataDir = "testdata/queries"
 
 func readFile(t *testing.T, filename string, allowNotExist bool) string {
 	t.Helper()
@@ -34,6 +34,18 @@ func gofmt(src string) (string, error) {
 	return string(formatted), nil
 }
 
+// TestGenerate is a snapshot-based test of code-generation.
+//
+// This file just has the test runner; the actual data is all in
+// testdata/queries.  Specifically, the schema used for all the queries is in
+// schema.graphql; the queries themselves are in TestName.graphql.  The test
+// asserts that running genqlient on that query produces the generated code in
+// the snapshot-file TestName.graphql.go.
+//
+// To update the snapshots (if the code-generator has changed), run the test
+// with `UPDATE_SNAPSHOTS=1`; it will fail the tests and print any diffs, but
+// update the snapshots.  Make sure to check that the output is sensible; the
+// snapshots don't even get compiled!
 func TestGenerate(t *testing.T) {
 	update := (os.Getenv("UPDATE_SNAPSHOTS") == "1")
 
@@ -56,8 +68,8 @@ func TestGenerate(t *testing.T) {
 			}
 
 			goCode, err := Generate(&Config{
-				Schema:  filepath.Join("testdata", "schema.graphql"),
-				Queries: []string{filepath.Join("testdata", graphqlFilename)},
+				Schema:  filepath.Join(dataDir, "schema.graphql"),
+				Queries: []string{filepath.Join(dataDir, graphqlFilename)},
 				Package: "test",
 			})
 			if err != nil {
