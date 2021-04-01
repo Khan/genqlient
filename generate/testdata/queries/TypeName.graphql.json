@@ -1,0 +1,1 @@
+{"operations":[{"operationName":"TypeNameQuery","query":"\nquery TypeNameQuery {\n\tuser {\n\t\t__typename\n\t\tid\n\t}\n}\n"}]}

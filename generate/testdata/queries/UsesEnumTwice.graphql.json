@@ -1,0 +1,1 @@
+{"operations":[{"operationName":"UsesEnumTwiceQuery","query":"\nquery UsesEnumTwiceQuery {\n\tMe: user {\n\t\troles\n\t}\n\tOtherUser: user {\n\t\troles\n\t}\n}\n"}]}

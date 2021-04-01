@@ -21,19 +21,21 @@ func TestGenerateExample(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	code, err := Generate(config)
+	generated, err := Generate(config)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	expectedCode, err := ioutil.ReadFile(config.Generated)
-	if err != nil {
-		t.Fatal(err)
-	}
+	for filename, content := range generated {
+		expectedContent, err := ioutil.ReadFile(filename)
+		if err != nil {
+			t.Fatal(err)
+		}
 
-	if !bytes.Equal(code, expectedCode) {
-		t.Errorf(
-			"diffs to generated code:\n---actual---\n%v\n---expected---\n%v",
-			string(code), string(expectedCode))
+		if !bytes.Equal(content, expectedContent) {
+			t.Errorf(
+				"diffs to %v:\n---actual---\n%v\n---expected---\n%v",
+				filename, string(content), string(expectedContent))
+		}
 	}
 }

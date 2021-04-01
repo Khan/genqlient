@@ -71,7 +71,7 @@ func NewClient(endpoint string, httpClient *http.Client) Client {
 
 type payload struct {
 	Query     string                 `json:"query"`
-	Variables map[string]interface{} `json:"variables"`
+	Variables map[string]interface{} `json:"variables,omitempty"`
 	// OpName is only required if there are multiple queries in the document,
 	// but we set it unconditionally, because that's easier.
 	OpName string `json:"operationName"`

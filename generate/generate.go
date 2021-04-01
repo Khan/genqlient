@@ -2,6 +2,7 @@ package generate
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"go/format"
 	"sort"
@@ -26,19 +27,24 @@ type generator struct {
 	schema     *ast.Schema
 }
 
+// JSON tags in operation are for ExportOperations (see Config for details).
 type operation struct {
 	// The type of the operation (query, mutation, or subscription).
-	Type ast.Operation
+	Type ast.Operation `json:"-"`
 	// The name of the operation, from GraphQL.
-	Name string
+	Name string `json:"operationName"`
 	// The documentation for the operation, from GraphQL.
-	Doc string
+	Doc string `json:"-"`
 	// The body of the operation to send.
-	Body string
+	Body string `json:"query"`
 	// The arguments to the operation.
-	Args []argument
+	Args []argument `json:"-"`
 	// The type-name for the operation's response type.
-	ResponseName string
+	ResponseName string `json:"-"`
+}
+
+type exportedOperations struct {
+	Operations []operation `json:"operations"`
 }
 
 type argument struct {
@@ -143,7 +149,8 @@ func (g *generator) addOperation(op *ast.OperationDefinition) error {
 	return nil
 }
 
-func Generate(config *Config) ([]byte, error) {
+// Generate returns a map from absolute-path filename to generated content.
+func Generate(config *Config) (map[string][]byte, error) {
 	schema, err := getSchema(config.Schema)
 	if err != nil {
 		return nil, err
@@ -181,5 +188,17 @@ func Generate(config *Config) ([]byte, error) {
 			err, string(unformatted))
 	}
 
-	return formatted, nil
+	retval := map[string][]byte{
+		config.Generated: formatted,
+	}
+
+	if config.ExportOperations != "" {
+		retval[config.ExportOperations], err = json.Marshal(
+			exportedOperations{Operations: g.Operations})
+		if err != nil {
+			return nil, fmt.Errorf("unable to export queries: %v", err)
+		}
+	}
+
+	return retval, nil
 }

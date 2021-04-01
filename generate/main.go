@@ -13,22 +13,24 @@ func readConfigGenerateAndWrite(configFilename string) error {
 		return err
 	}
 
-	code, err := Generate(config)
+	generated, err := Generate(config)
 	if err != nil {
 		return err
 	}
 
-	err = os.MkdirAll(filepath.Dir(config.Generated), 0o755)
-	if err != nil {
-		return fmt.Errorf(
-			"could not create parent directory for generated file %v: %v",
-			config.Generated, err)
-	}
+	for filename, content := range generated {
+		err = os.MkdirAll(filepath.Dir(filename), 0o755)
+		if err != nil {
+			return fmt.Errorf(
+				"could not create parent directory for generated file %v: %v",
+				filename, err)
+		}
 
-	err = ioutil.WriteFile(config.Generated, code, 0o644)
-	if err != nil {
-		return fmt.Errorf("could not write generated file %v: %v",
-			config.Generated, err)
+		err = ioutil.WriteFile(filename, content, 0o644)
+		if err != nil {
+			return fmt.Errorf("could not write generated file %v: %v",
+				filename, err)
+		}
 	}
 	return nil
 }

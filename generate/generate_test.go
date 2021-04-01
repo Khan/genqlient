@@ -25,11 +25,11 @@ func readFile(t *testing.T, filename string, allowNotExist bool) string {
 	return string(data)
 }
 
-func gofmt(src string) (string, error) {
+func gofmt(filename, src string) (string, error) {
 	src = strings.TrimSpace(src)
 	formatted, err := format.Source([]byte(src))
 	if err != nil {
-		return src, fmt.Errorf("go parse error: %w", err)
+		return src, fmt.Errorf("go parse error in %v: %w", filename, err)
 	}
 	return string(formatted), nil
 }
@@ -60,34 +60,48 @@ func TestGenerate(t *testing.T) {
 			continue
 		}
 		goFilename := graphqlFilename + ".go"
+		queriesFilename := graphqlFilename + ".json"
 
 		t.Run(graphqlFilename, func(t *testing.T) {
-			expectedGoCode, err := gofmt(readFile(t, goFilename, update))
-			if err != nil {
-				t.Fatal(err)
-			}
-
-			goCode, err := Generate(&Config{
-				Schema:  filepath.Join(dataDir, "schema.graphql"),
-				Queries: []string{filepath.Join(dataDir, graphqlFilename)},
-				Package: "test",
+			generated, err := Generate(&Config{
+				Schema:           filepath.Join(dataDir, "schema.graphql"),
+				Queries:          []string{filepath.Join(dataDir, graphqlFilename)},
+				Package:          "test",
+				Generated:        goFilename,
+				ExportOperations: queriesFilename,
 			})
 			if err != nil {
 				t.Fatal(err)
 			}
 
-			if string(goCode) != expectedGoCode {
-				t.Errorf("got:\n%v\nwant:\n%v\n", string(goCode), expectedGoCode)
-				if update {
-					t.Log("Updating testdata dir to match")
-					err = ioutil.WriteFile(filepath.Join(dataDir, goFilename), goCode, 0o644)
+			for filename, content := range generated {
+				expectedContent := readFile(t, filename, update)
+				if strings.HasSuffix(filename, ".go") {
+					fmted, err := gofmt(filename, expectedContent)
 					if err != nil {
-						t.Errorf("Unable to update testdata dir: %v", err)
+						// Ignore gofmt errors if we are updating
+						if !update {
+							t.Fatal(err)
+						}
+					} else {
+						expectedContent = fmted
 					}
 				}
-			}
 
-			// TODO(benkraft): Also check that the code at least builds!
+				if string(content) != expectedContent {
+					t.Errorf("mismatch in %v\ngot:\n%v\nwant:\n%v\n",
+						filename, string(content), expectedContent)
+					if update {
+						t.Log("Updating testdata dir to match")
+						err = ioutil.WriteFile(filepath.Join(dataDir, filename), content, 0o644)
+						if err != nil {
+							t.Errorf("Unable to update testdata dir: %v", err)
+						}
+					}
+				}
+
+				// TODO(benkraft): Also check that the code at least builds!
+			}
 		})
 	}
 }

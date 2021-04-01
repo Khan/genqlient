@@ -1,0 +1,1 @@
+{"operations":[{"operationName":"UnionNoFragmentsQuery","query":"\nquery UnionNoFragmentsQuery {\n\trandomLeaf {\n\t\t__typename\n\t}\n}\n"}]}

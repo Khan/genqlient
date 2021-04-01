@@ -49,7 +49,7 @@ fmt.Println("you are", viewerResp.Viewer.MyName)
 //go:generate go run github.com/Khan/genqlient
 ```
 
-For a complete working example, see `example/`.
+For a complete working example, see `example/`.  For configuration options, see `go doc github.com/Khan/genqlient/generate.Config`.
 
 TODO: document this a bit more, including different ways to specify queries, options once we have those, etc.
 

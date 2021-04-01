@@ -1,0 +1,1 @@
+{"operations":[{"operationName":"QueryWithAlias","query":"\nquery QueryWithAlias {\n\tUser: user {\n\t\tID: id\n\t}\n}\n"}]}
