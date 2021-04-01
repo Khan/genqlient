@@ -12,6 +12,7 @@ Luckily, there is plenty of prior art for generating types for GraphQL schemas, 
 - Khan Academy has an in-house tool used to generate Flow types for our mobile apps (Khan folks, it's at `react-native/tools/graphql-flow` in the mobile repo)
 - In Go, [gqlgen](https://github.com/99designs/gqlgen) generates similar types for the server side of things
 - In Go, [shurcooL/graphql](https://github.com/shurcooL/graphql/) doesn't generate types, but uses types in a similar fashion
+
 But of course all of these have somewhat different concerns, so we need to make our own choices.
 
 ### Optionality and pointers
