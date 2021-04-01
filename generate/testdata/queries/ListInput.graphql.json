@@ -1,1 +1,1 @@
-{"operations":[{"operationName":"ListInputQuery","query":"\nquery ListInputQuery ($names: [String]) {\n\tuser(query: {names:$names}) {\n\t\tid\n\t}\n}\n"}]}
+{"operations":[{"operationName":"ListInputQuery","query":"\nquery ListInputQuery ($names: [String]) {\n\tuser(query: {names:$names}) {\n\t\tid\n\t}\n}\n","sourceLocation":"testdata/queries/ListInput.graphql"}]}

@@ -1,1 +1,1 @@
-{"operations":[{"operationName":"SimpleQuery","query":"\nquery SimpleQuery {\n\tuser {\n\t\tid\n\t}\n}\n"}]}
+{"operations":[{"operationName":"SimpleQuery","query":"\nquery SimpleQuery {\n\tuser {\n\t\tid\n\t}\n}\n","sourceLocation":"testdata/queries/SimpleQuery.graphql"}]}

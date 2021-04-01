@@ -65,7 +65,7 @@ func TestGenerate(t *testing.T) {
 		t.Run(graphqlFilename, func(t *testing.T) {
 			generated, err := Generate(&Config{
 				Schema:           filepath.Join(dataDir, "schema.graphql"),
-				Queries:          []string{filepath.Join(dataDir, graphqlFilename)},
+				Operations:       []string{filepath.Join(dataDir, graphqlFilename)},
 				Package:          "test",
 				Generated:        goFilename,
 				ExportOperations: queriesFilename,

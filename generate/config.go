@@ -12,7 +12,7 @@ import (
 
 var defaultConfig = &Config{
 	Schema:      "schema.graphql",
-	Queries:     []string{"queries.graphql"},
+	Operations:  []string{"genqlient.graphql"},
 	Generated:   "generated.go",
 	ContextType: "context.Context",
 }
@@ -24,12 +24,13 @@ type Config struct {
 	// how to convert that to SDL).
 	Schema string `yaml:"schema"`
 
-	// Filenames or globs with the queries; defaults to queries.graphql.
+	// Filenames or globs with the operations for which to generate code;
+	// defaults to genqlient.graphql.
 	//
 	// These may be .graphql files, containing the queries in SDL format, or
 	// Go files, in which case any string-literal starting with (optional
 	// whitespace and) the string "# @genqlient" will be extracted as a query.
-	Queries []string `yaml:"queries"`
+	Operations []string `yaml:"operations"`
 
 	// If set, a file at this path will be generated containing the exact
 	// operations that genqlient will send to the server.
@@ -41,6 +42,7 @@ type Config struct {
 	//	{"operations": [{
 	//		"operationName": "operationname",
 	//		"query": "query operationName { ... }",
+	//		"sourceLocation": "myqueriesfile.graphql",
 	//	}]}
 	// Keys may be added in the future.
 	//
@@ -74,8 +76,8 @@ func (c *Config) ValidateAndFillDefaults(configFilename string) error {
 	// Make paths relative to config dir
 	configDir := filepath.Dir(configFilename)
 	c.Schema = filepath.Join(configDir, c.Schema)
-	for i := range c.Queries {
-		c.Queries[i] = filepath.Join(configDir, c.Queries[i])
+	for i := range c.Operations {
+		c.Operations[i] = filepath.Join(configDir, c.Operations[i])
 	}
 	c.Generated = filepath.Join(configDir, c.Generated)
 
@@ -103,6 +105,15 @@ func (c *Config) ContextPackage() string {
 
 	i := strings.LastIndex(c.ContextType, ".")
 	return c.ContextType[:i]
+}
+
+func (c *Config) ContextTypeReference() string {
+	if c.ContextType == "" {
+		return ""
+	}
+
+	i := strings.LastIndex(c.ContextType, "/")
+	return c.ContextType[i+1:]
 }
 
 func ReadAndValidateConfig(filename string) (*Config, error) {

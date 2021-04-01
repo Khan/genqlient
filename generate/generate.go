@@ -41,6 +41,8 @@ type operation struct {
 	Args []argument `json:"-"`
 	// The type-name for the operation's response type.
 	ResponseName string `json:"-"`
+	// The original location of this query.
+	SourceLocation string `json:"sourceLocation"`
 }
 
 type exportedOperations struct {
@@ -96,8 +98,8 @@ func (g *generator) getDocComment(op *ast.OperationDefinition) string {
 	var commentLines []string
 	sourceLines := strings.Split(op.Position.Src.Input, "\n")
 	for i := op.Position.Line - 1; i > 0; i-- {
-		line := sourceLines[i-1]
-		if strings.HasPrefix(line, "#") {
+		line := strings.TrimSpace(sourceLines[i-1])
+		if strings.HasPrefix(line, "#") && !strings.HasPrefix(line, "# @genqlient") {
 			commentLines = append(commentLines,
 				"// "+strings.TrimSpace(strings.TrimPrefix(line, "#")))
 		} else {
@@ -141,9 +143,10 @@ func (g *generator) addOperation(op *ast.OperationDefinition) error {
 		Name: op.Name,
 		Doc:  g.getDocComment(op),
 		// The newline just makes it format a little nicer
-		Body:         "\n" + builder.String(),
-		Args:         args,
-		ResponseName: responseName,
+		Body:           "\n" + builder.String(),
+		Args:           args,
+		ResponseName:   responseName,
+		SourceLocation: op.Position.Src.Name,
 	})
 
 	return nil
@@ -156,7 +159,7 @@ func Generate(config *Config) (map[string][]byte, error) {
 		return nil, err
 	}
 
-	document, err := getAndValidateQueries(config.Queries, schema)
+	document, err := getAndValidateQueries(config.Operations, schema)
 	if err != nil {
 		return nil, err
 	}
@@ -165,7 +168,7 @@ func Generate(config *Config) (map[string][]byte, error) {
 	// package-name, if it turns out to be more convenient that way.  (As-is,
 	// we generate a broken file, with just (unused) imports.)
 	if len(document.Operations) == 0 {
-		return nil, fmt.Errorf("no queries found in %v", config.Queries)
+		return nil, fmt.Errorf("no queries found in %v", config.Operations)
 	}
 
 	g := newGenerator(config, schema)
