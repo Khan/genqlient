@@ -57,7 +57,7 @@ func TestGenerate(t *testing.T) {
 
 			goCode, err := Generate(&Config{
 				Schema:  filepath.Join("testdata", "schema.graphql"),
-				Queries: filepath.Join("testdata", graphqlFilename),
+				Queries: []string{filepath.Join("testdata", graphqlFilename)},
 				Package: "test",
 			})
 			if err != nil {

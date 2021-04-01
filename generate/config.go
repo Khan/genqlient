@@ -12,7 +12,7 @@ import (
 
 var defaultConfig = &Config{
 	Schema:      "schema.graphql",
-	Queries:     "queries.graphql",
+	Queries:     []string{"queries.graphql"},
 	Generated:   "generated.go",
 	ContextType: "context.Context",
 }
@@ -26,9 +26,8 @@ type Config struct {
 	// TODO: Allow fetching a schema via introspection (will need to figure out
 	// how to convert that to SDL).
 	Schema string `yaml:"schema"`
-	// The filename with the queries; defaults to queries.graphql
-	// TODO: allow multiple files?
-	Queries string `yaml:"queries"`
+	// Filenames or globs with the queries; defaults to queries.graphql.
+	Queries []string `yaml:"queries"`
 	// The filename to which to write the generated code; defaults to
 	// generated.go
 	Generated string `yaml:"generated"`
@@ -50,7 +49,9 @@ func (c *Config) ValidateAndFillDefaults(configFilename string) error {
 	// Make paths relative to config dir
 	configDir := filepath.Dir(configFilename)
 	c.Schema = filepath.Join(configDir, c.Schema)
-	c.Queries = filepath.Join(configDir, c.Queries)
+	for i := range c.Queries {
+		c.Queries[i] = filepath.Join(configDir, c.Queries[i])
+	}
 	c.Generated = filepath.Join(configDir, c.Generated)
 
 	if c.Package == "" {
