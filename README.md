@@ -87,9 +87,9 @@ Generated code:
 - (optional) collapsing -- should be able to have `mutation { myMutation { error { code } } }` just return `(code string, err error)`
 
 Config options:
-- (+) proper config/arguments setup (e.g. with [viper](https://github.com/spf13/viper))
+- proper config/arguments setup (e.g. with [viper](https://github.com/spf13/viper))
 - (+) improve client_getter to be more usable (and document it), or flag it out for now.
-- get schema via HTTP (perhaps even via GraphQL introspection)
+- get schema via GraphQL introspection (although honestly, it seems like SDL is becoming popular enough there may be no need)
 - send hash rather than full query
 - whether names should be exported
 - default handling for optional fields (pointers, HasFoo, etc.)
@@ -102,5 +102,5 @@ Other:
 - (+) documentation
 - get a designer to fix my bad logo-thing
 - custom scalar types (or custom mappings for standard scalars, if you want a special ID type say)
-- allow mapping a custom type to a particular val (if you want to use a named type for some string, say)
+- allow mapping a GraphQL type to a particular Go type (if you want to use a named type for some string, say)
 - (optionally?) include full query in generated godoc
