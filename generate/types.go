@@ -269,6 +269,10 @@ func (builder *typeBuilder) writeTypedef(typedef *ast.Definition, fields []field
 		return builder.maybeWriteUnmarshal(fields)
 
 	case ast.Interface, ast.Union:
+		if !allowBrokenFeatures {
+			return fmt.Errorf("not implemented: %v", typedef.Kind)
+		}
+
 		// First, write the interface type.
 		builder.WriteString("interface {\n")
 		implementsMethodName := fmt.Sprintf("implementsGraphQLInterface%v", builder.typeName)

@@ -12,6 +12,9 @@ import (
 	"github.com/vektah/gqlparser/v2/formatter"
 )
 
+// Set to true to test features that aren't yet really ready.
+var allowBrokenFeatures = false
+
 var fileTemplate = mustTemplate("operation.go.tmpl")
 
 // generator is the context for the codegen process (and ends up getting passed
@@ -166,6 +169,10 @@ func Generate(config *Config) (map[string][]byte, error) {
 	// we generate a broken file, with just (unused) imports.)
 	if len(document.Operations) == 0 {
 		return nil, fmt.Errorf("no queries found in %v", config.Operations)
+	}
+
+	if len(document.Fragments) > 0 && !allowBrokenFeatures {
+		return nil, fmt.Errorf("genqlient does not yet support fragments")
 	}
 
 	g := newGenerator(config, schema)

@@ -48,6 +48,8 @@ func gofmt(filename, src string) (string, error) {
 // snapshots don't even get compiled!
 func TestGenerate(t *testing.T) {
 	update := (os.Getenv("UPDATE_SNAPSHOTS") == "1")
+	// we can test parts of features even if they're not done yet!
+	allowBrokenFeatures = true
 
 	files, err := ioutil.ReadDir(dataDir)
 	if err != nil {
