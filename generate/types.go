@@ -14,16 +14,19 @@ type typeBuilder struct {
 	*generator
 }
 
-func (g *generator) baseTypeForOperation(operation ast.Operation) *ast.Definition {
+func (g *generator) baseTypeForOperation(operation ast.Operation) (*ast.Definition, error) {
 	switch operation {
 	case ast.Query:
-		return g.schema.Query
+		return g.schema.Query, nil
 	case ast.Mutation:
-		return g.schema.Mutation
+		return g.schema.Mutation, nil
 	case ast.Subscription:
-		return g.schema.Subscription
+		if !allowBrokenFeatures {
+			return nil, fmt.Errorf("genqlient does not yet support subscriptions")
+		}
+		return g.schema.Subscription, nil
 	default:
-		panic(fmt.Sprintf("unexpected operation: %v", operation))
+		return nil, fmt.Errorf("unexpected operation: %v", operation)
 	}
 }
 
@@ -41,8 +44,12 @@ func (g *generator) getTypeForOperation(operation *ast.OperationDefinition) (nam
 		return "", err
 	}
 
-	return g.addTypeForDefinition(
-		operation.Name, name, g.baseTypeForOperation(operation.Operation), fields)
+	baseType, err := g.baseTypeForOperation(operation.Operation)
+	if err != nil {
+		return "", err
+	}
+
+	return g.addTypeForDefinition(operation.Name, name, baseType, fields)
 }
 
 var builtinTypes = map[string]string{

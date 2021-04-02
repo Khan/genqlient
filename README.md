@@ -98,7 +98,6 @@ Config options:
 
 Other:
 - (+) improved validation and error checking
-- (+) more tests
 - (+) documentation
 - get a designer to fix my bad logo-thing
 - custom scalar types (or custom mappings for standard scalars, if you want a special ID type say)

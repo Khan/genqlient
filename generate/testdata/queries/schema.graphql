@@ -61,3 +61,7 @@ type Query {
   root: Topic!
   randomLeaf: LeafContent!
 }
+
+type Mutation {
+  createUser(name: String!, email: String): User 
+}
