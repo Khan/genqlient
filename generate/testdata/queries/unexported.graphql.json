@@ -1,1 +1,9 @@
-{"operations":[{"operationName":"unexported","query":"\nquery unexported ($query: UserQueryInput) {\n\tuser(query: $query) {\n\t\tid\n\t}\n}\n","sourceLocation":"testdata/queries/unexported.graphql"}]}
+{
+  "operations": [
+    {
+      "operationName": "unexported",
+      "query": "\nquery unexported ($query: UserQueryInput) {\n\tuser(query: $query) {\n\t\tid\n\t}\n}\n",
+      "sourceLocation": "testdata/queries/unexported.graphql"
+    }
+  ]
+}

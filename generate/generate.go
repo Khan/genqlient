@@ -113,12 +113,9 @@ func (g *generator) getDocComment(op *ast.OperationDefinition) string {
 }
 
 func (g *generator) addOperation(op *ast.OperationDefinition) error {
-	// TODO: we may have to actually get the precise query text, in case we
-	// want to be hashing it or something like that.  This is a bit tricky
-	// because gqlparser's ast doesn't provide node end-position (only
-	// token end-position).
 	var builder strings.Builder
 	f := formatter.NewFormatter(&builder)
+	// TODO: this could even get minifed.
 	f.FormatQueryDocument(&ast.QueryDocument{
 		Operations: ast.OperationList{op},
 		// TODO: handle fragments
@@ -142,7 +139,7 @@ func (g *generator) addOperation(op *ast.OperationDefinition) error {
 		Type: op.Operation,
 		Name: op.Name,
 		Doc:  g.getDocComment(op),
-		// The newline just makes it format a little nicer
+		// The newline just makes it format a little nicer.
 		Body:           "\n" + builder.String(),
 		Args:           args,
 		ResponseName:   responseName,
@@ -196,8 +193,12 @@ func Generate(config *Config) (map[string][]byte, error) {
 	}
 
 	if config.ExportOperations != "" {
-		retval[config.ExportOperations], err = json.Marshal(
-			exportedOperations{Operations: g.Operations})
+		// We use MarshalIndent so that the file is human-readable and
+		// slightly more likely to be git-mergeable (if you check it in).  In
+		// general it's never going to be used anywhere where space is an
+		// issue -- it doesn't go in your binary or anything.
+		retval[config.ExportOperations], err = json.MarshalIndent(
+			exportedOperations{Operations: g.Operations}, "", "  ")
 		if err != nil {
 			return nil, fmt.Errorf("unable to export queries: %v", err)
 		}

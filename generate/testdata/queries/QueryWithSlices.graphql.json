@@ -1,1 +1,9 @@
-{"operations":[{"operationName":"QueryWithSlices","query":"\nquery QueryWithSlices {\n\tuser {\n\t\temails\n\t\temailsOrNull\n\t\temailsWithNulls\n\t\temailsWithNullsOrNull\n\t}\n}\n","sourceLocation":"testdata/queries/QueryWithSlices.graphql"}]}
+{
+  "operations": [
+    {
+      "operationName": "QueryWithSlices",
+      "query": "\nquery QueryWithSlices {\n\tuser {\n\t\temails\n\t\temailsOrNull\n\t\temailsWithNulls\n\t\temailsWithNullsOrNull\n\t}\n}\n",
+      "sourceLocation": "testdata/queries/QueryWithSlices.graphql"
+    }
+  ]
+}

@@ -1,1 +1,9 @@
-{"operations":[{"operationName":"QueryWithStructs","query":"\nquery QueryWithStructs {\n\tuser {\n\t\tauthMethods {\n\t\t\tprovider\n\t\t\temail\n\t\t}\n\t}\n}\n","sourceLocation":"testdata/queries/QueryWithStructs.graphql"}]}
+{
+  "operations": [
+    {
+      "operationName": "QueryWithStructs",
+      "query": "\nquery QueryWithStructs {\n\tuser {\n\t\tauthMethods {\n\t\t\tprovider\n\t\t\temail\n\t\t}\n\t}\n}\n",
+      "sourceLocation": "testdata/queries/QueryWithStructs.graphql"
+    }
+  ]
+}
