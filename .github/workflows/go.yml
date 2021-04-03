@@ -27,3 +27,9 @@ jobs:
     - name: Run tests
       run: |
         go test -v ./...
+   
+    - name: Run example
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        go run ./example/cmd/example/main.go
