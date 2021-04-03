@@ -106,6 +106,8 @@ Config options:
 Other:
 - (+) improved validation and error checking
 - (+) documentation
+- (+) basic tests for graphql package
+- integration tests against common servers for graphql package
 - get a designer to fix my bad logo-thing
 - custom scalar types (or custom mappings for standard scalars, if you want a special ID type say)
 - allow mapping a GraphQL type to a particular Go type (if you want to use a named type for some string, say)
