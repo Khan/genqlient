@@ -1,9 +1,7 @@
 # example of genqlient
 
-## Getting a token
-Get a token from [GitHub](https://github.com/settings/tokens/new) (no scopes needed).
-
 ## Invoking the example 
+Create a [personal access token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) with no scopes.
 
 To run the example:
 
@@ -15,7 +13,7 @@ csilvers is Craig Silverstein
 
 ## Running genqlient
 
-It's already checked in to github, but to generate `generated.go`:
+It's already checked in to github, but to regenerate `generated.go`:
 ```sh
 go generate ./...
 ```

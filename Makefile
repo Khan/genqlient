@@ -1,6 +1,6 @@
 example:
 	go generate ./...
-	go run ./example/cmd/example/main.go csilvers
+	go run ./example/cmd/example/main.go
 
 check:
 	go test ./...

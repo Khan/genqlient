@@ -3,19 +3,25 @@ package generate
 import (
 	"bytes"
 	"io/ioutil"
+	"os"
+	"os/exec"
 	"path/filepath"
 	"runtime"
+	"strings"
 	"testing"
 )
 
-func TestGenerateExample(t *testing.T) {
+func getRepoRoot(t *testing.T) string {
 	_, thisFile, _, ok := runtime.Caller(0)
 	if !ok {
 		t.Fatal("runtime.Caller non-ok")
 	}
 
-	repoRoot := filepath.Dir(filepath.Dir(thisFile))
-	configFilename := filepath.Join(repoRoot, "example/genqlient.yaml")
+	return filepath.Dir(filepath.Dir(thisFile))
+}
+
+func TestGenerateExample(t *testing.T) {
+	configFilename := filepath.Join(getRepoRoot(t), "example/genqlient.yaml")
 	config, err := ReadAndValidateConfig(configFilename)
 	if err != nil {
 		t.Fatal(err)
@@ -37,5 +43,24 @@ func TestGenerateExample(t *testing.T) {
 				"diffs to %v:\n---actual---\n%v\n---expected---\n%v",
 				filename, string(content), string(expectedContent))
 		}
+	}
+}
+
+func TestRunExample(t *testing.T) {
+	if _, ok := os.LookupEnv("GITHUB_TOKEN"); !ok {
+		t.Skip("requires GITHUB_TOKEN to be set")
+	}
+
+	cmd := exec.Command("go", "run", "./example/cmd/example", "benjaminjkraft")
+	cmd.Dir = getRepoRoot(t)
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		t.Error(err)
+	}
+
+	got := strings.TrimSpace(string(out))
+	want := "benjaminjkraft is Ben Kraft"
+	if got != want {
+		t.Errorf("output incorrect\ngot:\n%s\nwant:\n%s", got, want)
 	}
 }

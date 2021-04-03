@@ -78,11 +78,7 @@ If you'd like to contribute to genqlient, welcome!  The library is still in a so
 
 ### Tests
 
-`go test ./...` tests code generation.  (This is run by GitHub Actions.)  Most of the tests are snapshot-based; see `generate/generate_test.go`.
-
-`make example` rebuilds the example, and tests that everything wires up to a real API correctly.  This is not currently included in `go test`, since it requires a token.
-
-TODO(benkraft): Figure out how to get GitHub Actions a token to run the example.
+`go test ./...` tests code generation.  (This is run by GitHub Actions.)  Most of the tests are snapshot-based; see `generate/generate_test.go`.  If `GITHUB_TOKEN` is available in the environment, it also checks that the example returns the expected output when run against the real API.  This is configured automatically in GitHub Actions, but you can also use a [personal access token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) with no scopes.
 
 ### Design
 

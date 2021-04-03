@@ -25,11 +25,8 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Run tests
-      run: |
-        go test -v ./...
-   
-    - name: Run example
       env:
+        # Needed for the example-test to run.
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        go run ./example/cmd/example/main.go csilvers
+        go test -v ./...
