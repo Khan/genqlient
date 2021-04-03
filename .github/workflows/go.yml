@@ -32,4 +32,4 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        go run ./example/cmd/example/main.go
+        go run ./example/cmd/example/main.go csilvers
