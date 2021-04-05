@@ -99,6 +99,7 @@ func (c *client) MakeRequest(ctx context.Context, opName string, query string, r
 	if err != nil {
 		return err
 	}
+	req.Header.Set("Content-Type", "application/json")
 
 	if ctx != nil {
 		req = req.WithContext(ctx)
