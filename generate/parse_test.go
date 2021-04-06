@@ -8,7 +8,10 @@ import (
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
-var parseDataDir = "testdata/parsing"
+var (
+	parseDataDir   = "testdata/parsing"
+	parseErrorsDir = "testdata/parsing-errors"
+)
 
 func sortQueries(queryDoc *ast.QueryDocument) {
 	sort.Slice(queryDoc.Operations, func(i, j int) bool {
@@ -57,6 +60,24 @@ func TestParse(t *testing.T) {
 			if got != want {
 				// TODO: nice diffing
 				t.Errorf("got:\n%v\nwant:\n%v\n", got, want)
+			}
+		})
+	}
+}
+
+// TestParseErrors tests that query-extraction from different language source files
+// produces appropriate errors if your query is invalid.
+func TestParseErrors(t *testing.T) {
+	extensions := []string{"graphql", "go"}
+
+	for _, ext := range extensions {
+		t.Run(ext, func(t *testing.T) {
+			g, err := getQueries(
+				parseErrorsDir,
+				[]string{filepath.Join(parseErrorsDir, "*."+ext)})
+			if err == nil {
+				t.Errorf("expected error from getQueries(*.%v)", ext)
+				t.Logf("%#v", g)
 			}
 		})
 	}

@@ -138,7 +138,7 @@ func getQueriesFromGo(text string, basedir, filename string) ([]*ast.QueryDocume
 		}
 
 		var value string
-		value, err := strconv.Unquote(basicLit.Value)
+		value, err = strconv.Unquote(basicLit.Value)
 		if err != nil {
 			return false
 		}
