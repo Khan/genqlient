@@ -2,7 +2,7 @@
 
 # genqlient: a truly type-safe Go GraphQL client
 
-This is a proof-of-concept of using code-generation to create a truly type-safe GraphQL client in Go.  It is certainly not ready for production use!
+This is a proof-of-concept of using code-generation to create a truly type-safe GraphQL client in Go.  It is certainly not ready for production use nor or contributions (see [below](#development)).
 
 ## Why another GraphQL client?
 
@@ -74,7 +74,9 @@ TODO: document generated types further, especially when they become customizable
 
 ## Development
 
-If you'd like to contribute to genqlient, welcome!  The library is still in a somewhat rough state, so please contact us (via an issue or email) before sending a PR.  We'll be ready for the rest of the world soon!
+genqlient is not yet accepting contributions.  The library is still in a very rough state, so while we intend to accept contributions in the future, we're not ready for them just yet.  Please contact us (via an issue or email) if you are interested in helping out, but please be aware the answer may be that we aren't ready for your help yet, even if such help will be greatly useful once we are!  We'll be ready for the rest of the world soon.
+
+Khan Academy is a non-profit organization with a mission to provide a free, world-class education to anyone, anywhere. If you're looking for other ways to help us, You can help us in that mission by [donating](https://khanacademy.org/donate) or looking at [career opportunities](https://khanacademy.org/careers).
 
 ### Tests
 
