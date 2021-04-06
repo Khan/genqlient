@@ -147,9 +147,9 @@ func getQueriesFromGo(text string, basedir, filename string) ([]*ast.QueryDocume
 			return true
 		}
 
-		fakeFilename := fset.Position(basicLit.Pos()).String()
+		filename := fset.Position(basicLit.Pos()).Filename
 		var query *ast.QueryDocument
-		query, err = getQueriesFromString(value, basedir, fakeFilename)
+		query, err = getQueriesFromString(value, basedir, filename)
 		if err != nil {
 			return false
 		}
