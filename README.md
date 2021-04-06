@@ -93,6 +93,10 @@ See [DESIGN.md](DESIGN.md) for documentation of major design decisions in this l
 Basic features:
 - redo support for interfaces, unions, fragments (see DESIGN)
 
+Fancy features:
+- allow `__all` to request all fields (probably a terrible idea though)
+- plugin to make `_entities` queries for apollo federation easy (basically you would just write the fragment)
+
 Generated code customization:
 - add flag(s) to make a field use a pointer (for optionality or perf; see DESIGN)
 - collapsing -- should be able to have `mutation { myMutation { error { code } } }` just return `(code string, err error)`
