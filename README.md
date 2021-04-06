@@ -90,27 +90,32 @@ See [DESIGN.md](DESIGN.md) for documentation of major design decisions in this l
 
 (+) denotes things we further need before recommending anyone else use this in prod
 
-Generated code:
-- add flag(s) to make a field use a pointer (for optionality or perf; see DESIGN)
+Basic features:
 - redo support for interfaces, unions, fragments (see DESIGN)
-- (optional) collapsing -- should be able to have `mutation { myMutation { error { code } } }` just return `(code string, err error)`
+
+Generated code customization:
+- add flag(s) to make a field use a pointer (for optionality or perf; see DESIGN)
+- collapsing -- should be able to have `mutation { myMutation { error { code } } }` just return `(code string, err error)`
+- map a GraphQL type to a particular Go type (if you want to use a named type for some string, say)
+- specify a particular name for a Go type, or for the helper function, or whatever else
+- include full query in generated godoc
 
 Config options:
 - proper config/arguments setup (e.g. with [viper](https://github.com/spf13/viper))
 - (+) improve client_getter to be more usable (and document it), or flag it out for now.
 - get schema via GraphQL introspection (although honestly, it seems like SDL is becoming popular enough there may be no need)
-- send hash rather than full query
 - whether names should be exported
-- default handling for optional fields (pointers, HasFoo, etc.)
-- response/function-name format (e.g. force exported/unexported, change "Response" suffix, change how input objects work, etc.)
+- default handling for optional fields? (maybe generate a HasFoo, you can always ignore if you don't care)
 - generate mocks?
+- custom scalar types (or custom mappings for standard scalars, if you want a special ID type say)
 
-Other:
-- (+) improved validation and error checking
-- (+) documentation
+Runtime:
 - (+) basic tests for graphql package
 - integration tests against common servers for graphql package
+- send hash rather than full query
+
+Other:
+- (+) API cleanup (check godoc)
+- (+) improved validation and error checking
+- (+) documentation
 - get a designer to fix my bad logo-thing
-- custom scalar types (or custom mappings for standard scalars, if you want a special ID type say)
-- allow mapping a GraphQL type to a particular Go type (if you want to use a named type for some string, say)
-- (optionally?) include full query in generated godoc
