@@ -116,6 +116,10 @@ func (g *generator) getDocComment(op *ast.OperationDefinition) string {
 }
 
 func (g *generator) addOperation(op *ast.OperationDefinition) error {
+	if op.Name == "" {
+		return fmt.Errorf("operations must have operation-names")
+	}
+
 	var builder strings.Builder
 	f := formatter.NewFormatter(&builder)
 	// TODO: this could even get minifed.
