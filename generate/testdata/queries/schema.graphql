@@ -1,3 +1,5 @@
+scalar DateTime
+
 enum Role {
   STUDENT
   TEACHER
@@ -60,6 +62,7 @@ type Query {
   user(query: UserQueryInput): User
   root: Topic!
   randomLeaf: LeafContent!
+  convert(dt: DateTime!, tz: String): DateTime!
 }
 
 type Mutation {

@@ -7,15 +7,15 @@ import (
 	"go/format"
 	"sort"
 	"strings"
+	"text/template"
 
 	"github.com/vektah/gqlparser/v2/ast"
 	"github.com/vektah/gqlparser/v2/formatter"
+	"golang.org/x/tools/imports"
 )
 
 // Set to true to test features that aren't yet really ready.
 var allowBrokenFeatures = false
-
-var fileTemplate = mustTemplate("operation.go.tmpl")
 
 // generator is the context for the codegen process (and ends up getting passed
 // to the template).
@@ -25,9 +25,14 @@ type generator struct {
 	// The list of operations for which to generate code.
 	Operations []operation
 	// The types needed for these operations.
-	typeMap    map[string]string
-	ImportJSON bool
-	schema     *ast.Schema
+	typeMap map[string]string
+	// Imports needed for these operations, path -> alias and alias -> true
+	imports     map[string]string
+	usedAliases map[string]bool
+	// Cache of loaded templates.
+	templateCache map[string]*template.Template
+	// Schema we are generating code against
+	schema *ast.Schema
 }
 
 // JSON tags in operation are for ExportOperations (see Config for details).
@@ -59,11 +64,29 @@ type argument struct {
 }
 
 func newGenerator(config *Config, schema *ast.Schema) *generator {
-	return &generator{
-		Config:  config,
-		typeMap: map[string]string{},
-		schema:  schema,
+	g := generator{
+		Config:        config,
+		typeMap:       map[string]string{},
+		imports:       map[string]string{},
+		usedAliases:   map[string]bool{},
+		templateCache: map[string]*template.Template{},
+		schema:        schema,
 	}
+
+	if g.Config.ClientGetter == "" {
+		_, err := g.addRef("github.com/Khan/genqlient/graphql.Client")
+		if err != nil {
+			panic(err)
+		}
+	}
+	if g.Config.ContextType != "" {
+		_, err := g.addRef(g.Config.ContextType)
+		if err != nil {
+			panic(err)
+		}
+	}
+
+	return &g
 }
 
 func (g *generator) Types() string {
@@ -163,7 +186,7 @@ func Generate(config *Config) (map[string][]byte, error) {
 		return nil, err
 	}
 
-	document, err := getAndValidateQueries(config.BaseDir(), config.Operations, schema)
+	document, err := getAndValidateQueries(config.baseDir(), config.Operations, schema)
 	if err != nil {
 		return nil, err
 	}
@@ -187,7 +210,7 @@ func Generate(config *Config) (map[string][]byte, error) {
 	}
 
 	var buf bytes.Buffer
-	err = fileTemplate.Execute(&buf, g)
+	err = g.execute("operation.go.tmpl", &buf, g)
 	if err != nil {
 		return nil, fmt.Errorf("could not render template: %v", err)
 	}
@@ -198,9 +221,14 @@ func Generate(config *Config) (map[string][]byte, error) {
 		return nil, fmt.Errorf("could not gofmt code: %v\n---unformatted code---\n%v",
 			err, string(unformatted))
 	}
+	importsed, err := imports.Process(config.Generated, formatted, nil)
+	if err != nil {
+		return nil, fmt.Errorf("could not goimports code: %v\n---unimportsed code---\n%v",
+			err, string(formatted))
+	}
 
 	retval := map[string][]byte{
-		config.Generated: formatted,
+		config.Generated: importsed,
 	}
 
 	if config.ExportOperations != "" {

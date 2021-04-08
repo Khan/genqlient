@@ -5,7 +5,6 @@ import (
 	"go/token"
 	"io/ioutil"
 	"path/filepath"
-	"strings"
 
 	"gopkg.in/yaml.v2"
 )
@@ -71,24 +70,32 @@ type Config struct {
 	// TODO: what if you want to return err?
 	ClientGetter string `yaml:"client_getter"`
 
+	// A map from GraphQL scalar type name to Go fully-qualified type name for
+	// the types to use for any custom or builtin scalars.  By default, builtin
+	// scalars are mapped to the obvious Go types (String and ID to string, Int
+	// to int, Float to float64, and Boolean to bool), but this setting will
+	// extend or override those mappings.  These types must define MarshalJSON
+	// and UnmarshalJSON methods, or otherwise be convertible to JSON.
+	Scalars map[string]string `yaml:"scalars"`
+
 	// Set automatically to the filename of the config file itself.
 	configFilename string
 }
 
-// BaseDir returns the directory of the config-file (relative to which
+// baseDir returns the directory of the config-file (relative to which
 // all the other paths are resolved).
-func (c *Config) BaseDir() string {
+func (c *Config) baseDir() string {
 	return filepath.Dir(c.configFilename)
 }
 
 func (c *Config) ValidateAndFillDefaults(configFilename string) error {
 	c.configFilename = configFilename
 	// Make paths relative to config dir
-	c.Schema = filepath.Join(c.BaseDir(), c.Schema)
+	c.Schema = filepath.Join(c.baseDir(), c.Schema)
 	for i := range c.Operations {
-		c.Operations[i] = filepath.Join(c.BaseDir(), c.Operations[i])
+		c.Operations[i] = filepath.Join(c.baseDir(), c.Operations[i])
 	}
-	c.Generated = filepath.Join(c.BaseDir(), c.Generated)
+	c.Generated = filepath.Join(c.baseDir(), c.Generated)
 
 	if c.Package == "" {
 		abs, err := filepath.Abs(c.Generated)
@@ -105,24 +112,6 @@ func (c *Config) ValidateAndFillDefaults(configFilename string) error {
 	}
 
 	return nil
-}
-
-func (c *Config) ContextPackage() string {
-	if c.ContextType == "" {
-		return ""
-	}
-
-	i := strings.LastIndex(c.ContextType, ".")
-	return c.ContextType[:i]
-}
-
-func (c *Config) ContextTypeReference() string {
-	if c.ContextType == "" {
-		return ""
-	}
-
-	i := strings.LastIndex(c.ContextType, "/")
-	return c.ContextType[i+1:]
 }
 
 func ReadAndValidateConfig(filename string) (*Config, error) {

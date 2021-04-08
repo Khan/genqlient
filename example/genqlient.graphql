@@ -1,6 +1,7 @@
 query getViewer {
   viewer {
     MyName: name
+    createdAt
   }
 }
 
@@ -8,5 +9,6 @@ query getViewer {
 query getUser($Login: String!) {
   user(login: $Login) {
     theirName: name
+    createdAt
   }
 }

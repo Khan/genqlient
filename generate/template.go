@@ -1,6 +1,8 @@
 package generate
 
 import (
+	"fmt"
+	"io"
 	"path/filepath"
 	"runtime"
 	"text/template"
@@ -13,6 +15,24 @@ var (
 	thisDir               = filepath.Dir(thisFilename)
 )
 
-func mustTemplate(relFilename string) *template.Template {
-	return template.Must(template.ParseFiles(filepath.Join(thisDir, relFilename)))
+// execute executes the given template with the funcs from this generator.
+func (g *generator) execute(tmplRelFilename string, w io.Writer, data interface{}) error {
+	tmpl := g.templateCache[tmplRelFilename]
+	if tmpl == nil {
+		absFilename := filepath.Join(thisDir, tmplRelFilename)
+		funcMap := template.FuncMap{
+			"ref": g.ref,
+		}
+		var err error
+		tmpl, err = template.New(tmplRelFilename).Funcs(funcMap).ParseFiles(absFilename)
+		if err != nil {
+			return fmt.Errorf("could not load template %v: %v", absFilename, err)
+		}
+		g.templateCache[tmplRelFilename] = tmpl
+	}
+	err := tmpl.Execute(w, data)
+	if err != nil {
+		return fmt.Errorf("could not render template: %v", err)
+	}
+	return nil
 }

@@ -4,11 +4,12 @@ package test
 
 import (
 	"github.com/Khan/genqlient/graphql"
+	"github.com/me/mypkg"
 )
 
 type SimpleMutationCreateUser struct {
-	Id   string `json:"id"`
-	Name string `json:"name"`
+	Id   mypkg.ID `json:"id"`
+	Name string   `json:"name"`
 }
 
 type SimpleMutationResponse struct {

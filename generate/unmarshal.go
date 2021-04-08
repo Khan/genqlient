@@ -1,7 +1,5 @@
 package generate
 
-var unmarshalTemplate = mustTemplate("unmarshal.go.tmpl")
-
 type templateData struct {
 	// Go type to which the method will be added
 	Type string
@@ -47,7 +45,11 @@ func (builder *typeBuilder) maybeWriteUnmarshal(fields []field) error {
 		return nil
 	}
 
-	builder.ImportJSON = true
+	_, err := builder.addRef("encoding/json.Unmarshal")
+	if err != nil {
+		return err
+	}
+
 	builder.WriteString("\n\n")
-	return unmarshalTemplate.Execute(builder, data)
+	return builder.execute("unmarshal.go.tmpl", builder, data)
 }

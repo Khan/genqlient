@@ -4,6 +4,7 @@ package example
 
 import (
 	"context"
+	"time"
 
 	"github.com/Khan/genqlient/graphql"
 )
@@ -13,7 +14,8 @@ type getUserResponse struct {
 }
 
 type getUserUser struct {
-	TheirName string `json:"theirName"`
+	TheirName string    `json:"theirName"`
+	CreatedAt time.Time `json:"createdAt"`
 }
 
 type getViewerResponse struct {
@@ -21,7 +23,8 @@ type getViewerResponse struct {
 }
 
 type getViewerViewerUser struct {
-	MyName string
+	MyName    string
+	CreatedAt time.Time `json:"createdAt"`
 }
 
 func getViewer(
@@ -36,6 +39,7 @@ func getViewer(
 query getViewer {
 	viewer {
 		MyName: name
+		createdAt
 	}
 }
 `,
@@ -63,6 +67,7 @@ func getUser(
 query getUser ($Login: String!) {
 	user(login: $Login) {
 		theirName: name
+		createdAt
 	}
 }
 `,

@@ -4,6 +4,7 @@ package test
 
 import (
 	"github.com/Khan/genqlient/graphql"
+	"github.com/me/mypkg"
 )
 
 type Role string
@@ -18,13 +19,13 @@ type unexportedResponse struct {
 }
 
 type unexportedUser struct {
-	Id string `json:"id"`
+	Id mypkg.ID `json:"id"`
 }
 
 type userQueryInput struct {
 	Email string   `json:"email"`
 	Name  string   `json:"name"`
-	Id    string   `json:"id"`
+	Id    mypkg.ID `json:"id"`
 	Role  Role     `json:"role"`
 	Names []string `json:"names"`
 }

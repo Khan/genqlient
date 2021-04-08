@@ -59,7 +59,7 @@ func TestRunExample(t *testing.T) {
 	}
 
 	got := strings.TrimSpace(string(out))
-	want := "benjaminjkraft is Ben Kraft"
+	want := "benjaminjkraft is Ben Kraft created on 2009-08-03"
 	if got != want {
 		t.Errorf("output incorrect\ngot:\n%s\nwant:\n%s", got, want)
 	}

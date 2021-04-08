@@ -4,6 +4,7 @@ package test
 
 import (
 	"github.com/Khan/genqlient/graphql"
+	"github.com/me/mypkg"
 )
 
 type TypeNameQueryResponse struct {
@@ -11,8 +12,8 @@ type TypeNameQueryResponse struct {
 }
 
 type TypeNameQueryUser struct {
-	Typename string `json:"__typename"`
-	Id       string `json:"id"`
+	Typename string   `json:"__typename"`
+	Id       mypkg.ID `json:"id"`
 }
 
 func TypeNameQuery(

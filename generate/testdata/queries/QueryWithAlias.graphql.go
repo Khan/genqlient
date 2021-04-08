@@ -4,6 +4,7 @@ package test
 
 import (
 	"github.com/Khan/genqlient/graphql"
+	"github.com/me/mypkg"
 )
 
 type QueryWithAliasResponse struct {
@@ -11,7 +12,7 @@ type QueryWithAliasResponse struct {
 }
 
 type QueryWithAliasUser struct {
-	ID string
+	ID mypkg.ID
 }
 
 func QueryWithAlias(

@@ -48,7 +48,7 @@ func Main() {
 		if err != nil {
 			return
 		}
-		fmt.Println("you are", viewerResp.Viewer.MyName)
+		fmt.Println("you are", viewerResp.Viewer.MyName, "created on", viewerResp.Viewer.CreatedAt.Format("2006-01-02"))
 
 	case 2:
 		username := os.Args[1]
@@ -56,7 +56,7 @@ func Main() {
 		if err != nil {
 			return
 		}
-		fmt.Println(username, "is", userResp.User.TheirName)
+		fmt.Println(username, "is", userResp.User.TheirName, "created on", userResp.User.CreatedAt.Format("2006-01-02"))
 
 	default:
 		err = fmt.Errorf("usage: %v [username]", os.Args[0])

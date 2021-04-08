@@ -4,6 +4,7 @@ package test
 
 import (
 	"github.com/Khan/genqlient/graphql"
+	"github.com/me/mypkg"
 )
 
 type InputObjectQueryResponse struct {
@@ -11,7 +12,7 @@ type InputObjectQueryResponse struct {
 }
 
 type InputObjectQueryUser struct {
-	Id string `json:"id"`
+	Id mypkg.ID `json:"id"`
 }
 
 type Role string
@@ -24,7 +25,7 @@ const (
 type UserQueryInput struct {
 	Email string   `json:"email"`
 	Name  string   `json:"name"`
-	Id    string   `json:"id"`
+	Id    mypkg.ID `json:"id"`
 	Role  Role     `json:"role"`
 	Names []string `json:"names"`
 }

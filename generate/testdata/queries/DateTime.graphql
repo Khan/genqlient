@@ -1,0 +1,3 @@
+query convertTimezone($dt: DateTime!, $tz: String) {
+  convert(dt: $dt, tz: $tz)
+}

@@ -71,6 +71,10 @@ func TestGenerate(t *testing.T) {
 				Package:          "test",
 				Generated:        goFilename,
 				ExportOperations: queriesFilename,
+				Scalars: map[string]string{
+					"ID":       "github.com/me/mypkg.ID",
+					"DateTime": "time.Time",
+				},
 			})
 			if err != nil {
 				t.Fatal(err)

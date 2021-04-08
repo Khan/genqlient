@@ -4,6 +4,7 @@ package test
 
 import (
 	"github.com/Khan/genqlient/graphql"
+	"github.com/me/mypkg"
 )
 
 type SimpleInputQueryResponse struct {
@@ -11,7 +12,7 @@ type SimpleInputQueryResponse struct {
 }
 
 type SimpleInputQueryUser struct {
-	Id string `json:"id"`
+	Id mypkg.ID `json:"id"`
 }
 
 func SimpleInputQuery(

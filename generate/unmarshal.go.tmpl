@@ -2,19 +2,19 @@ func (v *{{.Type}}) UnmarshalJSON(b []byte) error {
 	var firstPass struct{
 		*{{.Type}}
         {{range .Fields -}}
-		{{.GoName}} json.RawMessage `json:"{{.JSONName}}"`
+		{{.GoName}} {{ref "encoding/json.RawMessage"}} `json:"{{.JSONName}}"`
         {{end}}
 	}
 	firstPass.{{.Type}} = v
 
-	err := json.Unmarshal(b, &firstPass)
+	err := {{ref "encoding/json.Unmarshal"}}(b, &firstPass)
     if err != nil {
         return err
     }
 
     {{range .Fields -}}
 	var tn struct { TypeName string `json:"__typename"` }
-	err = json.Unmarshal(firstPass.{{.GoName}}, &tn)
+	err = {{ref "encoding/json.Unmarshal"}}(firstPass.{{.GoName}}, &tn)
     if err != nil {
         return err
     }
@@ -24,7 +24,7 @@ func (v *{{.Type}}) UnmarshalJSON(b []byte) error {
 	case "{{.GraphQLName}}":
         {{/* TODO: handle repeated fields! */}}
 		v.{{$field.GoName}} = {{.GoName}}{}
-		err = json.Unmarshal(
+		err = {{ref "encoding/json.Unmarshal"}}(
 			firstPass.{{$field.GoName}}, &v.{{$field.GoName}})
     {{end}}
     {{end}}

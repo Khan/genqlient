@@ -112,7 +112,6 @@ Config options:
 - whether names should be exported
 - default handling for optional fields? (maybe generate a HasFoo, you can always ignore if you don't care)
 - generate mocks?
-- custom scalar types (or custom mappings for standard scalars, if you want a special ID type say)
 
 Runtime:
 - (+) basic tests for graphql package

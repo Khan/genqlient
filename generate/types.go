@@ -62,8 +62,12 @@ var builtinTypes = map[string]string{
 }
 
 func (g *generator) addTypeForDefinition(namePrefix, nameOverride string, typ *ast.Definition, fields []field) (name string, err error) {
-	// If this is a builtin type, just refer to it.
-	goName, ok := builtinTypes[typ.Name]
+	// If this is a builtin type or custom scalar, just refer to it.
+	goName, ok := g.Config.Scalars[typ.Name]
+	if ok {
+		return g.addRef(goName)
+	}
+	goName, ok = builtinTypes[typ.Name]
 	if ok {
 		return goName, nil
 	}
@@ -314,8 +318,7 @@ func (builder *typeBuilder) writeTypedef(typedef *ast.Definition, fields []field
 		builder.WriteString(")\n")
 		return nil
 	case ast.Scalar:
-		// TODO(benkraft): Handle custom scalars.
-		return fmt.Errorf("not implemented: %v", typedef.Kind)
+		return fmt.Errorf("unknown scalar %v: please add it to genqlient.yaml", typedef.Name)
 	default:
 		return fmt.Errorf("unexpected kind: %v", typedef.Kind)
 	}

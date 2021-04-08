@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 
 	"github.com/Khan/genqlient/graphql"
+	"github.com/me/mypkg"
 )
 
 type InterfaceNoFragmentsQueryResponse struct {
@@ -13,7 +14,7 @@ type InterfaceNoFragmentsQueryResponse struct {
 }
 
 type InterfaceNoFragmentsQueryRootTopic struct {
-	Id       string                                              `json:"id"`
+	Id       mypkg.ID                                            `json:"id"`
 	Name     string                                              `json:"name"`
 	Children []InterfaceNoFragmentsQueryRootTopicChildrenContent `json:"-"`
 }
@@ -66,8 +67,8 @@ func (v *InterfaceNoFragmentsQueryRootTopic) UnmarshalJSON(b []byte) error {
 }
 
 type InterfaceNoFragmentsQueryRootTopicChildrenArticle struct {
-	Id   string `json:"id"`
-	Name string `json:"name"`
+	Id   mypkg.ID `json:"id"`
+	Name string   `json:"name"`
 }
 
 func (v InterfaceNoFragmentsQueryRootTopicChildrenArticle) implementsGraphQLInterfaceInterfaceNoFragmentsQueryRootTopicChildrenContent() {
@@ -78,16 +79,16 @@ type InterfaceNoFragmentsQueryRootTopicChildrenContent interface {
 }
 
 type InterfaceNoFragmentsQueryRootTopicChildrenTopic struct {
-	Id   string `json:"id"`
-	Name string `json:"name"`
+	Id   mypkg.ID `json:"id"`
+	Name string   `json:"name"`
 }
 
 func (v InterfaceNoFragmentsQueryRootTopicChildrenTopic) implementsGraphQLInterfaceInterfaceNoFragmentsQueryRootTopicChildrenContent() {
 }
 
 type InterfaceNoFragmentsQueryRootTopicChildrenVideo struct {
-	Id   string `json:"id"`
-	Name string `json:"name"`
+	Id   mypkg.ID `json:"id"`
+	Name string   `json:"name"`
 }
 
 func (v InterfaceNoFragmentsQueryRootTopicChildrenVideo) implementsGraphQLInterfaceInterfaceNoFragmentsQueryRootTopicChildrenContent() {
