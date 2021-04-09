@@ -98,6 +98,7 @@ Basic features:
 Fancy features:
 - allow `__all` to request all fields (probably a terrible idea though)
 - plugin to make `_entities` queries for apollo federation easy (basically you would just write the fragment)
+- auto-caching -- if you `@genqlient(cache: true)` we cache (you can pass a cache into the client or something)
 
 Generated code customization:
 - add flag(s) to make a field use a pointer (for optionality or perf; see DESIGN)
