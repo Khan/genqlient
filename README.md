@@ -101,7 +101,7 @@ Generated code customization:
 - add flag(s) to make a field use a pointer (for optionality or perf; see DESIGN)
 - omitempty-like thing for optional arguments
 - collapsing -- should be able to have `mutation { myMutation { error { code } } }` just return `(code string, err error)`
-- map a GraphQL type to a particular Go type (if you want to use a named type for some string, say)
+- map a field to a particular Go type (if you want to use a named type for some string, say)
 - specify a particular name for a Go type, or for the helper function, or whatever else
 - include full query in generated godoc
 

@@ -1,3 +1,5 @@
+# @genqlient
+#
 # SimpleMutation creates a user.
 #
 # It has a long doc-comment, to test that we handle that correctly.

@@ -76,6 +76,9 @@ type Config struct {
 	// to int, Float to float64, and Boolean to bool), but this setting will
 	// extend or override those mappings.  These types must define MarshalJSON
 	// and UnmarshalJSON methods, or otherwise be convertible to JSON.
+	// TODO: figure out if it makes sense to say you can use these for
+	// non-scalar types; technically it should just work, but what if you
+	// didn't request the right fields?
 	Scalars map[string]string `yaml:"scalars"`
 
 	// Set automatically to the filename of the config file itself.

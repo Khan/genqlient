@@ -120,24 +120,6 @@ func (g *generator) getArgument(opName string, arg *ast.VariableDefinition) (arg
 	}, nil
 }
 
-func (g *generator) getDocComment(op *ast.OperationDefinition) string {
-	var commentLines []string
-	sourceLines := strings.Split(op.Position.Src.Input, "\n")
-	for i := op.Position.Line - 1; i > 0; i-- {
-		line := strings.TrimSpace(sourceLines[i-1])
-		if strings.HasPrefix(line, "#") && !strings.HasPrefix(line, "# @genqlient") {
-			commentLines = append(commentLines,
-				"// "+strings.TrimSpace(strings.TrimPrefix(line, "#")))
-		} else {
-			break
-		}
-	}
-
-	reverse(commentLines)
-
-	return strings.Join(commentLines, "\n")
-}
-
 func (g *generator) addOperation(op *ast.OperationDefinition) error {
 	if op.Name == "" {
 		return fmt.Errorf("operations must have operation-names")
@@ -165,10 +147,20 @@ func (g *generator) addOperation(op *ast.OperationDefinition) error {
 		return err
 	}
 
+	commentLines, _, err := g.parsePrecedingComment(op.Position)
+	if err != nil {
+		return err
+	}
+
+	var docComment string
+	if len(commentLines) > 0 {
+		docComment = "// " + strings.ReplaceAll(commentLines, "\n", "\n// ")
+	}
+
 	g.Operations = append(g.Operations, operation{
 		Type: op.Operation,
 		Name: op.Name,
-		Doc:  g.getDocComment(op),
+		Doc:  docComment,
 		// The newline just makes it format a little nicer.
 		Body:           "\n" + builder.String(),
 		Args:           args,
