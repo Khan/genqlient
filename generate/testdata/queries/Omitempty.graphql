@@ -1,0 +1,11 @@
+# @genqlient(omitempty: true)
+query OmitEmptyQuery(
+  $query: UserQueryInput,
+  $dt: DateTime,
+  $tz: String,
+) {
+  user(query: $query) {
+    id
+  }
+  maybeConvert(dt: $dt, tz: $tz)
+}

@@ -24,9 +24,19 @@ func {{.Name}}(
     {{- if .Args -}}
     variables := map[string]interface{}{
         {{range .Args -}}
-        "{{.GraphQLName}}": {{.GoName}},
+        "{{.GraphQLName}}": {{if .Omitempty}}nil{{else}}{{.GoName}}{{end}},
         {{end}}
     }
+    {{range .Args -}}
+    {{if .Omitempty -}}
+    {{/* zero_{{.GoType}} would be a better name, but {{.GoType}} would require
+         munging since it might be, say, `time.Time`. */}}
+    var zero_{{.GoName}} {{.GoType}}
+    if {{.GoName}} != zero_{{.GoName}} {
+        variables["{{.GraphQLName}}"] = {{.GoName}}
+    }
+    {{end}}
+    {{end}}
     {{end}}
 	var retval {{.ResponseName}}
     err := {{if $.Config.ClientGetter}}{{$.Config.ClientGetter}}{{else}}client{{end}}.MakeRequest(

@@ -70,7 +70,9 @@ For each GraphQL operation (query or mutation), genqlient generates a Go functio
 
 It returns a pointer to a struct representing the query-result, and an `error`.  The struct will always be initialized (never nil), even on error.  The error may be a `github.com/vektah/gqlparser/v2/gqlerror.List`, if it was a GraphQL-level error (in this case the returned struct may still contain useful data, if the API returns data even on error), or may be another error if, for example, the whole HTTP request failed (in which case the struct is unlikely to contain useful data).  If the GraphQL operation has a comment immediately above it, that comment text will be used as the GoDoc for the generated function.
 
-TODO: document generated types further, especially when they become customizable.
+The generated code may be customized using a directive-like syntax, `# @genqlient(...)`.  For full documentation of options, see [`go doc github.com/Khan/genqlient/generate.GenqlientDirective`](https://pkg.go.dev/github.com/Khan/genqlient/generate#GenqlientDirective).
+
+TODO: consider inlining the direct stuff; and document generated types further.
 
 ## Development
 
@@ -99,7 +101,6 @@ Fancy features:
 
 Generated code customization:
 - add flag(s) to make a field use a pointer (for optionality or perf; see DESIGN)
-- omitempty-like thing for optional arguments
 - collapsing -- should be able to have `mutation { myMutation { error { code } } }` just return `(code string, err error)`
 - map a field to a particular Go type (if you want to use a named type for some string, say)
 - specify a particular name for a Go type, or for the helper function, or whatever else

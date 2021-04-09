@@ -1,0 +1,9 @@
+{
+  "operations": [
+    {
+      "operationName": "OmitEmptyQuery",
+      "query": "\nquery OmitEmptyQuery ($query: UserQueryInput, $dt: DateTime, $tz: String) {\n\tuser(query: $query) {\n\t\tid\n\t}\n\tmaybeConvert(dt: $dt, tz: $tz)\n}\n",
+      "sourceLocation": "testdata/queries/Omitempty.graphql"
+    }
+  ]
+}

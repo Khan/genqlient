@@ -61,6 +61,7 @@ type argument struct {
 	GoName      string
 	GoType      string
 	GraphQLName string
+	Omitempty   bool
 }
 
 func newGenerator(config *Config, schema *ast.Schema) *generator {
@@ -107,7 +108,21 @@ func (g *generator) Types() string {
 	return strings.Join(defs, "\n\n")
 }
 
-func (g *generator) getArgument(opName string, arg *ast.VariableDefinition) (argument, error) {
+func (g *generator) getArgument(
+	opName string,
+	arg *ast.VariableDefinition,
+	operationDirective *GenqlientDirective,
+) (argument, error) {
+	_, directive, err := g.parsePrecedingComment(arg, arg.Position)
+	if err != nil {
+		return argument{}, err
+	}
+	directive = operationDirective.merge(directive)
+	omitempty := false
+	if directive != nil {
+		omitempty = directive.Omitempty
+	}
+
 	graphQLName := arg.Variable
 	goType, err := g.getTypeForInputType(opName, arg.Type)
 	if err != nil {
@@ -117,6 +132,7 @@ func (g *generator) getArgument(opName string, arg *ast.VariableDefinition) (arg
 		GraphQLName: graphQLName,
 		GoName:      lowerFirst(graphQLName),
 		GoType:      goType,
+		Omitempty:   omitempty,
 	}, nil
 }
 
@@ -133,21 +149,21 @@ func (g *generator) addOperation(op *ast.OperationDefinition) error {
 		// TODO: handle fragments
 	})
 
+	commentLines, directive, err := g.parsePrecedingComment(op, op.Position)
+	if err != nil {
+		return err
+	}
+
 	args := make([]argument, len(op.VariableDefinitions))
 	for i, arg := range op.VariableDefinitions {
 		var err error
-		args[i], err = g.getArgument(op.Name, arg)
+		args[i], err = g.getArgument(op.Name, arg, directive)
 		if err != nil {
 			return err
 		}
 	}
 
 	responseName, err := g.getTypeForOperation(op)
-	if err != nil {
-		return err
-	}
-
-	commentLines, _, err := g.parsePrecedingComment(op.Position)
 	if err != nil {
 		return err
 	}

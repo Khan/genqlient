@@ -63,6 +63,7 @@ type Query {
   root: Topic!
   randomLeaf: LeafContent!
   convert(dt: DateTime!, tz: String): DateTime!
+  maybeConvert(dt: DateTime, tz: String): DateTime
 }
 
 type Mutation {
