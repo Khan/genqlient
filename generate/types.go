@@ -30,7 +30,7 @@ func (g *generator) baseTypeForOperation(operation ast.Operation) (*ast.Definiti
 	}
 }
 
-func (g *generator) getTypeForOperation(operation *ast.OperationDefinition) (name string, err error) {
+func (g *generator) getTypeForOperation(operation *ast.OperationDefinition, queryOptions *GenqlientDirective) (name string, err error) {
 	// TODO: configure ResponseName format
 	name = operation.Name + "Response"
 
@@ -39,7 +39,7 @@ func (g *generator) getTypeForOperation(operation *ast.OperationDefinition) (nam
 		return "", fmt.Errorf("%s defined twice:\n%s", name, def)
 	}
 
-	fields, err := selections(operation.SelectionSet)
+	fields, err := selections(g, operation.SelectionSet, queryOptions)
 	if err != nil {
 		return "", err
 	}
@@ -49,7 +49,7 @@ func (g *generator) getTypeForOperation(operation *ast.OperationDefinition) (nam
 		return "", err
 	}
 
-	return g.addTypeForDefinition(operation.Name, name, baseType, fields)
+	return g.addTypeForDefinition(operation.Name, name, baseType, fields, queryOptions)
 }
 
 var builtinTypes = map[string]string{
@@ -61,7 +61,7 @@ var builtinTypes = map[string]string{
 	"ID":      "string",
 }
 
-func (g *generator) addTypeForDefinition(namePrefix, nameOverride string, typ *ast.Definition, fields []field) (name string, err error) {
+func (g *generator) addTypeForDefinition(namePrefix, nameOverride string, typ *ast.Definition, fields []field, options *GenqlientDirective) (name string, err error) {
 	// If this is a builtin type or custom scalar, just refer to it.
 	goName, ok := g.Config.Scalars[typ.Name]
 	if ok {
@@ -114,7 +114,7 @@ func (g *generator) addTypeForDefinition(namePrefix, nameOverride string, typ *a
 	// name.
 	builder := &typeBuilder{typeName: name, typeNamePrefix: namePrefix, generator: g}
 	fmt.Fprintf(builder, "type %s ", name)
-	err = builder.writeTypedef(typ, fields)
+	err = builder.writeTypedef(typ, fields, options)
 	if err != nil {
 		return "", err
 	}
@@ -124,27 +124,49 @@ func (g *generator) addTypeForDefinition(namePrefix, nameOverride string, typ *a
 	return name, nil
 }
 
-func (g *generator) getTypeForInputType(opName string, typ *ast.Type) (string, error) {
+func (g *generator) getTypeForInputType(opName string, typ *ast.Type, options, queryOptions *GenqlientDirective) (string, error) {
 	// Sort of a hack: case the input type name to match the op-name.
 	name := matchFirst(typ.Name(), opName)
 	// TODO: we have to pass name 4 times, yuck
 	builder := &typeBuilder{typeName: name, typeNamePrefix: name, generator: g}
-	err := builder.writeType(name, name, typ, selectionsForType(g, typ))
+	// TODO: passing options is actually kinda wrong, because it means we could
+	// break the "there is only Go type for each input type" rule.  In practice
+	// it's probably rare that you use the same input type twice in a query and
+	// want different settings, though, and it just means we choose one or the
+	// other set of options.
+	// TODO: it's also awkward because you have no way to pass an option for an
+	// individual input-type field.
+	// TODO: should we use pointers by default for input-types if they're
+	// structs?
+	err := builder.writeType(name, name, typ, selectionsForType(g, typ, queryOptions), options)
 	return builder.String(), err
 }
 
 type field interface {
 	Alias() string
+	Options() (*GenqlientDirective, error)
 	Type() *ast.Type
 	SubFields() ([]field, error)
 }
 
-type outputField struct{ field *ast.Field }
+type outputField struct {
+	*generator
+	queryOptions *GenqlientDirective
+	field        *ast.Field
+}
 
 func (s outputField) Alias() string {
 	// gqlparser sets Alias even if the field is not aliased, see e.g.
 	// https://github.com/vektah/gqlparser/v2/blob/c06d8e0d135f285e37e7f1ff397f10e049733eb3/parser/query.go#L150
 	return s.field.Alias
+}
+
+func (s outputField) Options() (*GenqlientDirective, error) {
+	_, directive, err := s.generator.parsePrecedingComment(s.field, s.field.Position)
+	if err != nil {
+		return nil, err
+	}
+	return s.queryOptions.merge(directive), nil
 }
 
 func (s outputField) Type() *ast.Type {
@@ -155,15 +177,15 @@ func (s outputField) Type() *ast.Type {
 }
 
 func (s outputField) SubFields() ([]field, error) {
-	return selections(s.field.SelectionSet)
+	return selections(s.generator, s.field.SelectionSet, s.queryOptions)
 }
 
-func selections(selectionSet ast.SelectionSet) ([]field, error) {
+func selections(g *generator, selectionSet ast.SelectionSet, options *GenqlientDirective) ([]field, error) {
 	retval := make([]field, len(selectionSet))
 	for i, selection := range selectionSet {
 		switch selection := selection.(type) {
 		case *ast.Field:
-			retval[i] = outputField{selection}
+			retval[i] = outputField{g, options, selection}
 		case *ast.FragmentSpread, *ast.InlineFragment:
 			return nil, fmt.Errorf("not implemented: %T", selection)
 		default:
@@ -175,21 +197,29 @@ func selections(selectionSet ast.SelectionSet) ([]field, error) {
 
 type inputField struct {
 	*generator
-	field *ast.FieldDefinition
+	field        *ast.FieldDefinition
+	queryOptions *GenqlientDirective
 }
 
-func (s inputField) Alias() string   { return s.field.Name }
+func (s inputField) Alias() string { return s.field.Name }
+func (s inputField) Options() (*GenqlientDirective, error) {
+	_, directive, err := s.generator.parsePrecedingComment(s.field, s.field.Position)
+	if err != nil {
+		return nil, err
+	}
+	return s.queryOptions.merge(directive), nil
+}
 func (s inputField) Type() *ast.Type { return s.field.Type }
 
 func (s inputField) SubFields() ([]field, error) {
-	return selectionsForType(s.generator, s.field.Type), nil
+	return selectionsForType(s.generator, s.field.Type, s.queryOptions), nil
 }
 
-func selectionsForType(g *generator, typ *ast.Type) []field {
+func selectionsForType(g *generator, typ *ast.Type, queryOptions *GenqlientDirective) []field {
 	def := g.schema.Types[typ.Name()]
 	fields := make([]field, len(def.Fields))
 	for i, field := range def.Fields {
-		fields[i] = inputField{g, field}
+		fields[i] = inputField{g, field, queryOptions}
 	}
 	return fields
 }
@@ -214,6 +244,11 @@ func (builder *typeBuilder) writeField(field field) error {
 		return err
 	}
 
+	options, err := field.Options()
+	if err != nil {
+		return err
+	}
+
 	err = builder.writeType(
 		// Note we don't deduplicate suffixes here -- if our prefix is GetUser
 		// and the field name is User, we do GetUserUser.  This is important
@@ -224,7 +259,7 @@ func (builder *typeBuilder) writeField(field field) error {
 		// `query q { a: f { b }, c: f { d } }` we need separate types for a
 		// and c, even though they are the same type in GraphQL, because they
 		// have different fields.
-		builder.typeNamePrefix+upperFirst(field.Alias()), "", typ, fields)
+		builder.typeNamePrefix+upperFirst(field.Alias()), "", typ, fields, options)
 	if err != nil {
 		return err
 	}
@@ -239,7 +274,7 @@ func (builder *typeBuilder) writeField(field field) error {
 	return nil
 }
 
-func (builder *typeBuilder) writeType(namePrefix, nameOverride string, typ *ast.Type, fields []field) error {
+func (builder *typeBuilder) writeType(namePrefix, nameOverride string, typ *ast.Type, fields []field, options *GenqlientDirective) error {
 	// gqlgen does slightly different things here, but its implementation may
 	// be useful to crib from:
 	// https://github.com/99designs/gqlgen/blob/master/plugin/modelgen/models.go#L113
@@ -248,13 +283,15 @@ func (builder *typeBuilder) writeType(namePrefix, nameOverride string, typ *ast.
 		builder.WriteString("[]")
 		typ = typ.Elem
 	}
-	// TODO: allow an option to make the Go type a pointer, if you want to do
-	// optionality that way, or perhaps others
-	// if !typ.NonNull { builder.WriteString("*") }
+	if options.GetPointer() {
+		// TODO: this does []*T, you might in principle want *[]T or
+		// *[]*T.
+		builder.WriteString("*")
+	}
 
 	def := builder.schema.Types[typ.Name()]
 	// Writes a typedef elsewhere (if not already defined)
-	name, err := builder.addTypeForDefinition(namePrefix, nameOverride, def, fields)
+	name, err := builder.addTypeForDefinition(namePrefix, nameOverride, def, fields, options)
 	if err != nil {
 		return err
 	}
@@ -263,7 +300,7 @@ func (builder *typeBuilder) writeType(namePrefix, nameOverride string, typ *ast.
 	return nil
 }
 
-func (builder *typeBuilder) writeTypedef(typedef *ast.Definition, fields []field) error {
+func (builder *typeBuilder) writeTypedef(typedef *ast.Definition, fields []field, options *GenqlientDirective) error {
 	switch typedef.Kind {
 	case ast.Object, ast.InputObject:
 		builder.WriteString("struct {\n")
@@ -295,7 +332,7 @@ func (builder *typeBuilder) writeTypedef(typedef *ast.Definition, fields []field
 		// Then, write the implementations.
 		// TODO(benkraft): Put a doc-comment somewhere with the list.
 		for _, impldef := range builder.schema.GetPossibleTypes(typedef) {
-			name, err := builder.addTypeForDefinition(builder.typeNamePrefix, "", impldef, fields)
+			name, err := builder.addTypeForDefinition(builder.typeNamePrefix, "", impldef, fields, options)
 			if err != nil {
 				return err
 			}

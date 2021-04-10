@@ -3,9 +3,12 @@ query OmitEmptyQuery(
   $query: UserQueryInput,
   $dt: DateTime,
   $tz: String,
+  # @genqlient(omitempty: false)
+  $tzNoOmitEmpty: String,
 ) {
   user(query: $query) {
     id
   }
   maybeConvert(dt: $dt, tz: $tz)
+  convert2: maybeConvert(dt: $dt, tz: $tzNoOmitEmpty)
 }

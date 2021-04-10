@@ -24,11 +24,13 @@ func {{.Name}}(
     {{- if .Args -}}
     variables := map[string]interface{}{
         {{range .Args -}}
-        "{{.GraphQLName}}": {{if .Omitempty}}nil{{else}}{{.GoName}}{{end}},
+        {{if not .Options.GetOmitempty -}}
+        "{{.GraphQLName}}": {{.GoName}},
+        {{end -}}
         {{end}}
     }
     {{range .Args -}}
-    {{if .Omitempty -}}
+    {{if .Options.GetOmitempty -}}
     {{/* zero_{{.GoType}} would be a better name, but {{.GoType}} would require
          munging since it might be, say, `time.Time`. */}}
     var zero_{{.GoName}} {{.GoType}}

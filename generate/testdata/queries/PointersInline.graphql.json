@@ -1,0 +1,9 @@
+{
+  "operations": [
+    {
+      "operationName": "PointersQuery",
+      "query": "\nquery PointersQuery ($query: UserQueryInput, $dt: DateTime, $tz: String) {\n\tuser(query: $query) {\n\t\tid\n\t\troles\n\t\tname\n\t\temails\n\t\temailsNoPtr: emails\n\t}\n\totherUser: user(query: $query) {\n\t\tid\n\t}\n\tmaybeConvert(dt: $dt, tz: $tz)\n}\n",
+      "sourceLocation": "testdata/queries/PointersInline.graphql"
+    }
+  ]
+}

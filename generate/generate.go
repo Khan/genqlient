@@ -61,7 +61,7 @@ type argument struct {
 	GoName      string
 	GoType      string
 	GraphQLName string
-	Omitempty   bool
+	Options     *GenqlientDirective
 }
 
 func newGenerator(config *Config, schema *ast.Schema) *generator {
@@ -117,14 +117,10 @@ func (g *generator) getArgument(
 	if err != nil {
 		return argument{}, err
 	}
-	directive = operationDirective.merge(directive)
-	omitempty := false
-	if directive != nil {
-		omitempty = directive.Omitempty
-	}
 
 	graphQLName := arg.Variable
-	goType, err := g.getTypeForInputType(opName, arg.Type)
+	goType, err := g.getTypeForInputType(
+		opName, arg.Type, directive, operationDirective)
 	if err != nil {
 		return argument{}, err
 	}
@@ -132,7 +128,7 @@ func (g *generator) getArgument(
 		GraphQLName: graphQLName,
 		GoName:      lowerFirst(graphQLName),
 		GoType:      goType,
-		Omitempty:   omitempty,
+		Options:     directive,
 	}, nil
 }
 
@@ -163,7 +159,7 @@ func (g *generator) addOperation(op *ast.OperationDefinition) error {
 		}
 	}
 
-	responseName, err := g.getTypeForOperation(op)
+	responseName, err := g.getTypeForOperation(op, directive)
 	if err != nil {
 		return err
 	}

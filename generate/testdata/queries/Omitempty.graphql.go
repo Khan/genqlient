@@ -12,6 +12,7 @@ import (
 type OmitEmptyQueryResponse struct {
 	User         OmitEmptyQueryUser `json:"user"`
 	MaybeConvert time.Time          `json:"maybeConvert"`
+	Convert2     time.Time          `json:"convert2"`
 }
 
 type OmitEmptyQueryUser struct {
@@ -38,26 +39,13 @@ func OmitEmptyQuery(
 	query UserQueryInput,
 	dt time.Time,
 	tz string,
+	tzNoOmitEmpty string,
 ) (*OmitEmptyQueryResponse, error) {
 	variables := map[string]interface{}{
-		"query": nil,
-		"dt":    nil,
-		"tz":    nil,
-	}
-
-	var zero_query UserQueryInput
-	if query != zero_query {
-		variables["query"] = query
-	}
-
-	var zero_dt time.Time
-	if dt != zero_dt {
-		variables["dt"] = dt
-	}
-
-	var zero_tz string
-	if tz != zero_tz {
-		variables["tz"] = tz
+		"query":         query,
+		"dt":            dt,
+		"tz":            tz,
+		"tzNoOmitEmpty": tzNoOmitEmpty,
 	}
 
 	var retval OmitEmptyQueryResponse
@@ -65,11 +53,12 @@ func OmitEmptyQuery(
 		nil,
 		"OmitEmptyQuery",
 		`
-query OmitEmptyQuery ($query: UserQueryInput, $dt: DateTime, $tz: String) {
+query OmitEmptyQuery ($query: UserQueryInput, $dt: DateTime, $tz: String, $tzNoOmitEmpty: String) {
 	user(query: $query) {
 		id
 	}
 	maybeConvert(dt: $dt, tz: $tz)
+	convert2: maybeConvert(dt: $dt, tz: $tzNoOmitEmpty)
 }
 `,
 		&retval,

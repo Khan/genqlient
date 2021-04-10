@@ -50,7 +50,31 @@ type GenqlientDirective struct {
 	// value otherwise.
 	//
 	// Only applicable to arguments of nullable types.
-	Omitempty bool
+	Omitempty *bool
+
+	// If set, this argument or field will use a pointer type in Go.  Response
+	// types always use pointers, but otherwise we typically do not.
+	//
+	// This can be useful if it's a type you'll need to pass around (and want a
+	// pointer to save copies) or if you wish to distinguish between the Go
+	// zero value and null (for nullable fields).
+	Pointer *bool
+}
+
+func (g *GenqlientDirective) GetOmitempty() bool { return g.Omitempty != nil && *g.Omitempty }
+func (g *GenqlientDirective) GetPointer() bool   { return g.Pointer != nil && *g.Pointer }
+
+func setBool(dst **bool, v *ast.Value) error {
+	ei, err := v.Value(nil) // no vars allowed
+	// TODO: here and below, put positions on these errors
+	if err != nil {
+		return fmt.Errorf("invalid boolean value %v: %w", v, err)
+	}
+	if b, ok := ei.(bool); ok {
+		*dst = &b
+		return nil
+	}
+	return fmt.Errorf("expected boolean, got non-boolean value %T(%v)", ei, ei)
 }
 
 func fromGraphQL(dir *ast.Directive) (*GenqlientDirective, error) {
@@ -61,12 +85,19 @@ func fromGraphQL(dir *ast.Directive) (*GenqlientDirective, error) {
 	}
 
 	var retval GenqlientDirective
+	var err error
 	for _, arg := range dir.Arguments {
 		switch arg.Name {
+		// TODO: reflect and struct tags?
 		case "omitempty":
-			retval.Omitempty = true
+			err = setBool(&retval.Omitempty, arg.Value)
+		case "pointer":
+			err = setBool(&retval.Pointer, arg.Value)
 		default:
 			return nil, fmt.Errorf("unknown argument %v for @genqlient", arg.Name)
+		}
+		if err != nil {
+			return nil, err
 		}
 	}
 	return &retval, nil
@@ -79,12 +110,12 @@ func (dir *GenqlientDirective) validate(node interface{}) error {
 		// whatever it is relevant to.
 		return nil
 	case *ast.VariableDefinition:
-		if dir.Omitempty && node.Type.NonNull {
+		if dir.Omitempty != nil && node.Type.NonNull {
 			return fmt.Errorf("omitempty may only be used on optional arguments")
 		}
 		return nil
 	case *ast.Field:
-		if dir.Omitempty {
+		if dir.Omitempty != nil {
 			return fmt.Errorf("omitempty is not appilcable to fields")
 		}
 		return nil
@@ -94,11 +125,13 @@ func (dir *GenqlientDirective) validate(node interface{}) error {
 }
 
 func (dir *GenqlientDirective) merge(other *GenqlientDirective) *GenqlientDirective {
-	if dir == nil {
-		return other
+	retval := *dir
+	if other.Omitempty != nil {
+		retval.Omitempty = other.Omitempty
 	}
-	var retval GenqlientDirective
-	retval.Omitempty = dir.Omitempty || other.Omitempty
+	if other.Pointer != nil {
+		retval.Pointer = other.Pointer
+	}
 	return &retval
 }
 
@@ -106,6 +139,7 @@ func (g *generator) parsePrecedingComment(
 	node interface{},
 	pos *ast.Position,
 ) (comment string, directive *GenqlientDirective, err error) {
+	directive = new(GenqlientDirective)
 	var commentLines []string
 	sourceLines := strings.Split(pos.Src.Input, "\n")
 	for i := pos.Line - 1; i > 0; i-- {

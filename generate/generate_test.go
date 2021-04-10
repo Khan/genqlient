@@ -95,8 +95,11 @@ func TestGenerate(t *testing.T) {
 				}
 
 				if string(content) != expectedContent {
-					t.Errorf("mismatch in %v\ngot:\n%v\nwant:\n%v\n",
-						filename, string(content), expectedContent)
+					t.Errorf("mismatch in %v", filename)
+					if testing.Verbose() {
+						t.Errorf("got:\n%v\nwant:\n%v\n",
+							string(content), expectedContent)
+					}
 					if update {
 						t.Log("Updating testdata dir to match")
 						err = ioutil.WriteFile(filepath.Join(dataDir, filename), content, 0o644)

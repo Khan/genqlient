@@ -1,0 +1,20 @@
+# @genqlient(pointer: true)
+query PointersQuery(
+  $query: UserQueryInput,
+  # @genqlient(pointer: false)
+  $dt: DateTime,
+  $tz: String,
+) {
+  user(query: $query) {
+    id
+    roles
+    name
+    emails
+    # @genqlient(pointer: false)
+    emailsNoPtr: emails
+  }
+  otherUser: user(query: $query) {
+    id
+  }
+  maybeConvert(dt: $dt, tz: $tz)
+}
