@@ -11,19 +11,10 @@ import (
 	"testing"
 )
 
-const dataDir = "testdata/queries"
-
-func readFile(t *testing.T, filename string, allowNotExist bool) string {
-	t.Helper()
-	data, err := ioutil.ReadFile(filepath.Join(dataDir, filename))
-	if err != nil {
-		if allowNotExist && errors.Is(err, os.ErrNotExist) {
-			return ""
-		}
-		t.Fatal(err)
-	}
-	return string(data)
-}
+const (
+	dataDir   = "testdata/queries"
+	errorsDir = "testdata/errors"
+)
 
 func gofmt(filename, src string) (string, error) {
 	src = strings.TrimSpace(src)
@@ -32,6 +23,43 @@ func gofmt(filename, src string) (string, error) {
 		return src, fmt.Errorf("go parse error in %v: %w", filename, err)
 	}
 	return string(formatted), nil
+}
+
+func checkSnapshot(t *testing.T, filename, content string) {
+	t.Helper()
+	update := (os.Getenv("UPDATE_SNAPSHOTS") == "1")
+
+	expectedBytes, err := ioutil.ReadFile(filename)
+	if err != nil && !(update && errors.Is(err, os.ErrNotExist)) {
+		t.Fatal(err)
+	}
+	expectedContent := string(expectedBytes)
+
+	if strings.HasSuffix(filename, ".go") {
+		fmted, err := gofmt(filename, expectedContent)
+		if err != nil {
+			// Ignore gofmt errors if we are updating
+			if !update {
+				t.Fatal(err)
+			}
+		} else {
+			expectedContent = fmted
+		}
+	}
+
+	if content != expectedContent {
+		t.Errorf("mismatch in %v", filename)
+		if testing.Verbose() {
+			t.Errorf("got:\n%v\nwant:\n%v\n", content, expectedContent)
+		}
+		if update {
+			t.Log("Updating testdata dir to match")
+			err = ioutil.WriteFile(filename, []byte(content), 0o644)
+			if err != nil {
+				t.Errorf("Unable to update testdata dir: %v", err)
+			}
+		}
+	}
 }
 
 // TestGenerate is a snapshot-based test of code-generation.
@@ -47,7 +75,6 @@ func gofmt(filename, src string) (string, error) {
 // update the snapshots.  Make sure to check that the output is sensible; the
 // snapshots don't even get compiled!
 func TestGenerate(t *testing.T) {
-	update := (os.Getenv("UPDATE_SNAPSHOTS") == "1")
 	// we can test parts of features even if they're not done yet!
 	allowBrokenFeatures = true
 
@@ -57,17 +84,17 @@ func TestGenerate(t *testing.T) {
 	}
 
 	for _, file := range files {
-		graphqlFilename := file.Name()
-		if graphqlFilename == "schema.graphql" || !strings.HasSuffix(graphqlFilename, ".graphql") {
+		sourceFilename := file.Name()
+		if sourceFilename == "schema.graphql" || !strings.HasSuffix(sourceFilename, ".graphql") {
 			continue
 		}
-		goFilename := graphqlFilename + ".go"
-		queriesFilename := graphqlFilename + ".json"
+		goFilename := sourceFilename + ".go"
+		queriesFilename := sourceFilename + ".json"
 
-		t.Run(graphqlFilename, func(t *testing.T) {
+		t.Run(sourceFilename, func(t *testing.T) {
 			generated, err := Generate(&Config{
 				Schema:           filepath.Join(dataDir, "schema.graphql"),
-				Operations:       []string{filepath.Join(dataDir, graphqlFilename)},
+				Operations:       []string{filepath.Join(dataDir, sourceFilename)},
 				Package:          "test",
 				Generated:        goFilename,
 				ExportOperations: queriesFilename,
@@ -82,36 +109,49 @@ func TestGenerate(t *testing.T) {
 			}
 
 			for filename, content := range generated {
-				expectedContent := readFile(t, filename, update)
-				if strings.HasSuffix(filename, ".go") {
-					fmted, err := gofmt(filename, expectedContent)
-					if err != nil {
-						// Ignore gofmt errors if we are updating
-						if !update {
-							t.Fatal(err)
-						}
-					} else {
-						expectedContent = fmted
-					}
-				}
-
-				if string(content) != expectedContent {
-					t.Errorf("mismatch in %v", filename)
-					if testing.Verbose() {
-						t.Errorf("got:\n%v\nwant:\n%v\n",
-							string(content), expectedContent)
-					}
-					if update {
-						t.Log("Updating testdata dir to match")
-						err = ioutil.WriteFile(filepath.Join(dataDir, filename), content, 0o644)
-						if err != nil {
-							t.Errorf("Unable to update testdata dir: %v", err)
-						}
-					}
-				}
-
+				checkSnapshot(t, filepath.Join(dataDir, filename), string(content))
 				// TODO(benkraft): Also check that the code at least builds!
 			}
+		})
+	}
+}
+
+func TestGenerateErrors(t *testing.T) {
+	// we can test parts of features even if they're not done yet!
+	allowBrokenFeatures = true
+
+	files, err := ioutil.ReadDir(errorsDir)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	for _, file := range files {
+		sourceFilename := file.Name()
+		if !strings.HasSuffix(sourceFilename, ".graphql") &&
+			!strings.HasSuffix(sourceFilename, ".go") ||
+			strings.HasSuffix(sourceFilename, ".schema.graphql") {
+			continue
+		}
+
+		schemaFilename := strings.TrimSuffix(sourceFilename, filepath.Ext(sourceFilename)) + ".schema.graphql"
+		errorsFilename := sourceFilename + ".error"
+
+		t.Run(sourceFilename, func(t *testing.T) {
+			_, err := Generate(&Config{
+				Schema:     filepath.Join(errorsDir, schemaFilename),
+				Operations: []string{filepath.Join(errorsDir, sourceFilename)},
+				Package:    "test",
+				Generated:  os.DevNull,
+				Scalars: map[string]string{
+					"ValidScalar":   "string",
+					"InvalidScalar": "bogus",
+				},
+			})
+			if err == nil {
+				t.Fatal("expected an error")
+			}
+
+			checkSnapshot(t, filepath.Join(errorsDir, errorsFilename), err.Error())
 		})
 	}
 }

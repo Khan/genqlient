@@ -1,0 +1,1 @@
+invalid schema file testdata/errors/InvalidSchema.schema.graphql: testdata/errors/InvalidSchema.schema.graphql:4: Expected :, found }
