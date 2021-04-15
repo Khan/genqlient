@@ -39,7 +39,12 @@ func (g *generator) ref(fullyQualifiedName string) (qualifiedName string, err er
 func (g *generator) getRef(fullyQualifiedName string, addImport bool) (qualifiedName string, err error) {
 	i := strings.LastIndex(fullyQualifiedName, ".")
 	if i == -1 {
-		if types.Universe.Lookup(fullyQualifiedName) == nil {
+		// We allow any builtin type, or interface{}.  In principle it would be
+		// fine to allow any interface or struct, but (1) they might refer to a
+		// type that needs an import, and (2) that just honestly seems
+		// confusing, why would you want it.  But the empty interface,
+		// specifically, is useful.
+		if fullyQualifiedName != "interface{}" && types.Universe.Lookup(fullyQualifiedName) == nil {
 			return "", fmt.Errorf(
 				`unknown name "%v"; expected a builtin or path/to/package.Name`, fullyQualifiedName)
 		}

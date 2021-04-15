@@ -74,6 +74,7 @@ func TestGenerate(t *testing.T) {
 				Scalars: map[string]string{
 					"ID":       "github.com/me/mypkg.ID",
 					"DateTime": "time.Time",
+					"Junk":     "interface{}",
 				},
 			})
 			if err != nil {

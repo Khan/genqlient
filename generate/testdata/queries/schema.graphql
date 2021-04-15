@@ -1,5 +1,7 @@
 scalar DateTime
 
+scalar Junk
+
 enum Role {
   STUDENT
   TEACHER
@@ -64,6 +66,7 @@ type Query {
   randomLeaf: LeafContent!
   convert(dt: DateTime!, tz: String): DateTime!
   maybeConvert(dt: DateTime, tz: String): DateTime
+  getJunk: Junk
 }
 
 type Mutation {
