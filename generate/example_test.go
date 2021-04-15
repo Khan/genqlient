@@ -39,9 +39,10 @@ func TestGenerateExample(t *testing.T) {
 		}
 
 		if !bytes.Equal(content, expectedContent) {
-			t.Errorf(
-				"diffs to %v:\n---actual---\n%v\n---expected---\n%v",
-				filename, string(content), string(expectedContent))
+			t.Errorf("mismatch in %s", filename)
+			if testing.Verbose() {
+				t.Errorf("got:\n%s\nwant:\n%s\n", content, expectedContent)
+			}
 		}
 	}
 }
@@ -61,9 +62,6 @@ func TestRunExample(t *testing.T) {
 	got := strings.TrimSpace(string(out))
 	want := "benjaminjkraft is Ben Kraft created on 2009-08-03"
 	if got != want {
-		t.Errorf("output incorrect")
-		if testing.Verbose() {
-			t.Errorf("got:\n%s\nwant:\n%s", got, want)
-		}
+		t.Errorf("output incorrect\ngot:\n%s\nwant:\n%s", got, want)
 	}
 }
