@@ -267,7 +267,7 @@ func (builder *typeBuilder) writeField(field field) error {
 	if builder.schema.Types[typ.Name()].IsAbstractType() {
 		// abstract types are handled in our UnmarshalJSON
 		builder.WriteString(" `json:\"-\"`")
-	} else if jsonName != goName {
+	} else {
 		fmt.Fprintf(builder, " `json:\"%s\"`", jsonName)
 	}
 	builder.WriteRune('\n')

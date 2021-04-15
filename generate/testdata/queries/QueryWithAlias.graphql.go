@@ -8,11 +8,11 @@ import (
 )
 
 type QueryWithAliasResponse struct {
-	User QueryWithAliasUser
+	User QueryWithAliasUser `json:"User"`
 }
 
 type QueryWithAliasUser struct {
-	ID mypkg.ID
+	ID mypkg.ID `json:"ID"`
 }
 
 func QueryWithAlias(

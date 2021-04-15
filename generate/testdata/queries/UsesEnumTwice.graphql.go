@@ -22,8 +22,8 @@ type UsesEnumTwiceQueryOtherUser struct {
 }
 
 type UsesEnumTwiceQueryResponse struct {
-	Me        UsesEnumTwiceQueryMeUser
-	OtherUser UsesEnumTwiceQueryOtherUser
+	Me        UsesEnumTwiceQueryMeUser    `json:"Me"`
+	OtherUser UsesEnumTwiceQueryOtherUser `json:"OtherUser"`
 }
 
 func UsesEnumTwiceQuery(

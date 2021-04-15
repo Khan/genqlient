@@ -12,8 +12,8 @@ type QueryWithDoubleAliasResponse struct {
 }
 
 type QueryWithDoubleAliasUser struct {
-	ID     mypkg.ID
-	AlsoID mypkg.ID
+	ID     mypkg.ID `json:"ID"`
+	AlsoID mypkg.ID `json:"AlsoID"`
 }
 
 func QueryWithDoubleAlias(

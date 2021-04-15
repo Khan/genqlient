@@ -23,7 +23,7 @@ type getViewerResponse struct {
 }
 
 type getViewerViewerUser struct {
-	MyName    string
+	MyName    string    `json:"MyName"`
 	CreatedAt time.Time `json:"createdAt"`
 }
 
