@@ -47,7 +47,10 @@ func (g *generator) getTypeForOperation(operation *ast.OperationDefinition, quer
 		return "", errorf(operation.Position, "%v", err)
 	}
 
-	return g.addTypeForDefinition(name, operation.Name, baseType, operation.Position, fields, queryOptions)
+	builder := &typeBuilder{generator: g}
+	err = builder.writeTypedef(
+		name, operation.Name, baseType, operation.Position, fields, queryOptions)
+	return name, err
 }
 
 var builtinTypes = map[string]string{
@@ -96,36 +99,6 @@ func (g *generator) typeName(prefix string, typ *ast.Definition) (name, nextPref
 
 	// Otherwise, the name will also be the prefix for the next type.
 	return name, name
-}
-
-func (g *generator) addTypeForDefinition(
-	name, namePrefix string,
-	typ *ast.Definition,
-	pos *ast.Position,
-	fields []field,
-	options *GenqlientDirective,
-) (actualName string, err error) {
-	// If this is a builtin type or custom scalar, just refer to it.
-	goName, ok := g.Config.Scalars[typ.Name]
-	if ok {
-		return g.addRef(goName)
-	}
-	goName, ok = builtinTypes[typ.Name]
-	if ok {
-		return goName, nil
-	}
-
-	// Otherwise, build the type, put that in the type-map, and return its
-	// name.
-	builder := &typeBuilder{generator: g}
-	err = builder.writeTypedef(name, namePrefix, typ, pos, fields, options)
-	if err != nil {
-		return "", err
-	}
-	// TODO: this should also check for conflicts (except not for enums and
-	// input-objects, see above)
-	g.typeMap[name] = builder.String()
-	return name, nil
 }
 
 func (g *generator) getTypeForInputType(opName string, typ *ast.Type, options, queryOptions *GenqlientDirective) (string, error) {
@@ -304,11 +277,26 @@ func (builder *typeBuilder) writeType(name, namePrefix string, typ *ast.Type, fi
 	}
 
 	def := builder.schema.Types[typ.Name()]
-	// Writes a typedef elsewhere (if not already defined)
-	name, err := builder.addTypeForDefinition(
-		name, namePrefix, def, typ.Position, fields, options)
-	if err != nil {
-		return err
+
+	// If this is a builtin type or custom scalar, just refer to it.
+	var err error
+	goName, ok := builder.Config.Scalars[def.Name]
+	if ok {
+		name, err = builder.addRef(goName)
+		if err != nil {
+			return err
+		}
+	} else {
+		goName, ok = builtinTypes[def.Name]
+		if ok {
+			name = goName
+		} else {
+			childBuilder := &typeBuilder{generator: builder.generator}
+			err = childBuilder.writeTypedef(name, namePrefix, def, typ.Position, fields, options)
+			if err != nil {
+				return err
+			}
+		}
 	}
 
 	builder.WriteString(name)
@@ -321,7 +309,17 @@ func (builder *typeBuilder) writeTypedef(
 	pos *ast.Position,
 	fields []field,
 	options *GenqlientDirective,
-) error {
+) (err error) {
+	defer func() {
+		// Whenever we're done, add the type to the type-map.
+		// TODO: there's got to be a better way than defer.
+		if err == nil {
+			// TODO: this should also check for conflicts (except not for enums
+			// and input-objects, see above)
+			builder.typeMap[typeName] = builder.String()
+		}
+	}()
+
 	fmt.Fprintf(builder, "type %s ", typeName)
 	switch typedef.Kind {
 	case ast.Object, ast.InputObject:
@@ -355,8 +353,8 @@ func (builder *typeBuilder) writeTypedef(
 		// TODO(benkraft): Put a doc-comment somewhere with the list.
 		for _, impldef := range builder.schema.GetPossibleTypes(typedef) {
 			name, namePrefix := builder.typeName(typeNamePrefix, impldef)
-			name, err := builder.addTypeForDefinition(
-				name, namePrefix, impldef, pos, fields, options)
+			implBuilder := &typeBuilder{generator: builder.generator}
+			err := implBuilder.writeTypedef(name, namePrefix, impldef, pos, fields, options)
 			if err != nil {
 				return err
 			}
