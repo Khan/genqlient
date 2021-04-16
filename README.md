@@ -109,7 +109,7 @@ Generated code customization:
 
 Config options:
 - proper config/arguments setup (e.g. with [viper](https://github.com/spf13/viper))
-- (+) improve client_getter to be more usable (and document it), or flag it out for now.
+- (+) improve client_getter to be more usable (and document it), maybe by just saying it has to be a function that takes context, or flag it out for now.
 - get schema via GraphQL introspection (although honestly, it seems like SDL is becoming popular enough there may be no need)
 - whether names should be exported
 - default handling for optional fields? (maybe generate a HasFoo, you can always ignore if you don't care)
@@ -119,6 +119,10 @@ Runtime:
 - (+) basic tests for graphql package
 - integration tests against common servers for graphql package
 - send hash rather than full query
+
+Internal:
+- set up linting beyond `go vet`
+- switch to a snapshot testing lib (cupaloy looks good) for tests
 
 Other:
 - (+) API cleanup (check godoc)
