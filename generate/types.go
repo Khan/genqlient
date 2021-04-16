@@ -8,7 +8,6 @@ import (
 )
 
 type typeBuilder struct {
-	typeName       string
 	typeNamePrefix string
 	strings.Builder
 	*generator
@@ -49,7 +48,7 @@ func (g *generator) getTypeForOperation(operation *ast.OperationDefinition, quer
 		return "", errorf(operation.Position, "%v", err)
 	}
 
-	return g.addTypeForDefinition(operation.Name, name, baseType, operation.Position, fields, queryOptions)
+	return g.addTypeForDefinition(name, operation.Name, baseType, operation.Position, fields, queryOptions)
 }
 
 var builtinTypes = map[string]string{
@@ -61,13 +60,52 @@ var builtinTypes = map[string]string{
 	"ID":      "string",
 }
 
+func (g *generator) typeName(prefix string, typ *ast.Definition) (name, nextPrefix string) {
+	typeGoName := upperFirst(typ.Name)
+	if typ.Kind == ast.Enum || typ.Kind == ast.InputObject {
+		// If we're an enum or an input-object, there is only one type we
+		// will ever possibly generate for this type, so we don't need any
+		// of the qualifiers.  This is especially helpful because the
+		// caller is very likely to need to reference these types in their
+		// code.
+		return typeGoName, typeGoName
+	}
+
+	name = prefix
+	if !strings.HasSuffix(prefix, typeGoName) {
+		// If the field and type names are the same, we can avoid the
+		// duplication.  (We include the field name in case there are
+		// multiple fields with the same type, and the type name because
+		// that's the actual name (the rest are really qualifiers); but if
+		// they are the same then including it once suffices for both
+		// purposes.)
+		// TODO: do this a bit more fuzzily; for example if you have a field
+		//  doThing: DoThingMutation
+		// or
+		//	error: MyError
+		// we should be able to be a bit smarter than
+		// DoThingDoThingMutation/ErrorMyError.
+		name += typeGoName
+	}
+
+	if typ.Kind == ast.Interface || typ.Kind == ast.Union {
+		// for interface/union types, we do not add the type name to the
+		// name prefix; we want to have QueryFieldType rather than
+		// QueryFieldInterfaceType.  So we just use the input prefix.
+		return name, prefix
+	}
+
+	// Otherwise, the name will also be the prefix for the next type.
+	return name, name
+}
+
 func (g *generator) addTypeForDefinition(
-	namePrefix, nameOverride string,
+	name, namePrefix string,
 	typ *ast.Definition,
 	pos *ast.Position,
 	fields []field,
 	options *GenqlientDirective,
-) (name string, err error) {
+) (actualName string, err error) {
 	// If this is a builtin type or custom scalar, just refer to it.
 	goName, ok := g.Config.Scalars[typ.Name]
 	if ok {
@@ -78,49 +116,10 @@ func (g *generator) addTypeForDefinition(
 		return goName, nil
 	}
 
-	if nameOverride != "" {
-		// if we have an explicit name, the passed-in prefix is what we
-		// propagate forward
-		name = nameOverride
-	} else {
-		typeGoName := upperFirst(typ.Name)
-		if typ.Kind == ast.Enum || typ.Kind == ast.InputObject {
-			// If we're an enum or an input-object, there is only one type we
-			// will ever possibly generate for this type, so we don't need any
-			// of the qualifiers.  This is especially helpful because the
-			// caller is very likely to need to reference these types in their
-			// code.
-			name = typeGoName
-		} else if strings.HasSuffix(namePrefix, typeGoName) {
-			// If the field and type names are the same, we can avoid the
-			// duplication.  (We include the field name in case there are
-			// multiple fields with the same type, and the type name because
-			// that's the actual name (the rest are really qualifiers); but if
-			// they are the same then including it once suffices for both
-			// purposes.)
-			name = namePrefix
-		} else {
-			name = namePrefix + typeGoName
-		}
-
-		if typ.Kind != ast.Interface && typ.Kind != ast.Union {
-			// for interface/union types, we do not add the type name to the
-			// name prefix; we want to have QueryFieldType rather than
-			// QueryFieldInterfaceType.  Otherwise, the name will also be the
-			// prefix for the next type.
-			namePrefix = name
-		}
-		// TODO: for input and enum types, we can probably skip the prefix
-		// entirely; they don't have fields that may be used in some places but
-		// not others.
-
-	}
-
 	// Otherwise, build the type, put that in the type-map, and return its
 	// name.
-	builder := &typeBuilder{typeName: name, typeNamePrefix: namePrefix, generator: g}
-	fmt.Fprintf(builder, "type %s ", name)
-	err = builder.writeTypedef(typ, pos, fields, options)
+	builder := &typeBuilder{typeNamePrefix: namePrefix, generator: g}
+	err = builder.writeTypedef(name, typ, pos, fields, options)
 	if err != nil {
 		return "", err
 	}
@@ -133,8 +132,8 @@ func (g *generator) addTypeForDefinition(
 func (g *generator) getTypeForInputType(opName string, typ *ast.Type, options, queryOptions *GenqlientDirective) (string, error) {
 	// Sort of a hack: case the input type name to match the op-name.
 	name := matchFirst(typ.Name(), opName)
-	// TODO: we have to pass name 4 times, yuck
-	builder := &typeBuilder{typeName: name, typeNamePrefix: name, generator: g}
+	// TODO: we have to pass name 3 times, yuck
+	builder := &typeBuilder{typeNamePrefix: name, generator: g}
 	// TODO: passing options is actually kinda wrong, because it means we could
 	// break the "there is only Go type for each input type" rule.  In practice
 	// it's probably rare that you use the same input type twice in a query and
@@ -263,17 +262,18 @@ func (builder *typeBuilder) writeField(field field) error {
 		return err
 	}
 
-	err = builder.writeType(
-		// Note we don't deduplicate suffixes here -- if our prefix is GetUser
-		// and the field name is User, we do GetUserUser.  This is important
-		// because if you have a field called user on a type called User we
-		// need `query q { user { user { id } } }` to generate two types, QUser
-		// and QUserUser.
-		// Note also this is the alias, not the field-name, because if we have
-		// `query q { a: f { b }, c: f { d } }` we need separate types for a
-		// and c, even though they are the same type in GraphQL, because they
-		// have different fields.
-		builder.typeNamePrefix+upperFirst(field.Alias()), "", typ, fields, options)
+	// Note we don't deduplicate suffixes here -- if our prefix is GetUser
+	// and the field name is User, we do GetUserUser.  This is important
+	// because if you have a field called user on a type called User we
+	// need `query q { user { user { id } } }` to generate two types, QUser
+	// and QUserUser.
+	// Note also this is the alias, not the field-name, because if we have
+	// `query q { a: f { b }, c: f { d } }` we need separate types for a
+	// and c, even though they are the same type in GraphQL, because they
+	// have different fields.
+	name, namePrefix := builder.typeName(
+		builder.typeNamePrefix+upperFirst(field.Alias()), builder.schema.Types[typ.Name()])
+	err = builder.writeType(name, namePrefix, typ, fields, options)
 	if err != nil {
 		return err
 	}
@@ -288,24 +288,25 @@ func (builder *typeBuilder) writeField(field field) error {
 	return nil
 }
 
-func (builder *typeBuilder) writeType(namePrefix, nameOverride string, typ *ast.Type, fields []field, options *GenqlientDirective) error {
+func (builder *typeBuilder) writeType(name, namePrefix string, typ *ast.Type, fields []field, options *GenqlientDirective) error {
 	// gqlgen does slightly different things here, but its implementation may
 	// be useful to crib from:
 	// https://github.com/99designs/gqlgen/blob/master/plugin/modelgen/models.go#L113
-	if typ.Elem != nil {
+	if typ.Elem != nil { // XXX: this should be for, not if
 		// Type is a list.
 		builder.WriteString("[]")
 		typ = typ.Elem
 	}
 	if options.GetPointer() {
 		// TODO: this does []*T, you might in principle want *[]T or
-		// *[]*T.
+		// *[]*T.  We could add a "sliceptr" option if it comes up.
 		builder.WriteString("*")
 	}
 
 	def := builder.schema.Types[typ.Name()]
 	// Writes a typedef elsewhere (if not already defined)
-	name, err := builder.addTypeForDefinition(namePrefix, nameOverride, def, typ.Position, fields, options)
+	name, err := builder.addTypeForDefinition(
+		name, namePrefix, def, typ.Position, fields, options)
 	if err != nil {
 		return err
 	}
@@ -315,11 +316,13 @@ func (builder *typeBuilder) writeType(namePrefix, nameOverride string, typ *ast.
 }
 
 func (builder *typeBuilder) writeTypedef(
+	typeName string,
 	typedef *ast.Definition,
 	pos *ast.Position,
 	fields []field,
 	options *GenqlientDirective,
 ) error {
+	fmt.Fprintf(builder, "type %s ", typeName)
 	switch typedef.Kind {
 	case ast.Object, ast.InputObject:
 		builder.WriteString("struct {\n")
@@ -333,7 +336,7 @@ func (builder *typeBuilder) writeTypedef(
 
 		// If any field is abstract, we need an UnmarshalJSON method to handle
 		// it.
-		return builder.maybeWriteUnmarshal(fields)
+		return builder.maybeWriteUnmarshal(typeName, fields)
 
 	case ast.Interface, ast.Union:
 		if !allowBrokenFeatures {
@@ -342,7 +345,7 @@ func (builder *typeBuilder) writeTypedef(
 
 		// First, write the interface type.
 		builder.WriteString("interface {\n")
-		implementsMethodName := fmt.Sprintf("implementsGraphQLInterface%v", builder.typeName)
+		implementsMethodName := fmt.Sprintf("implementsGraphQLInterface%v", typeName)
 		// TODO: Also write GetX() accessor methods for fields of the interface
 		builder.WriteString(implementsMethodName)
 		builder.WriteString("()\n")
@@ -351,7 +354,9 @@ func (builder *typeBuilder) writeTypedef(
 		// Then, write the implementations.
 		// TODO(benkraft): Put a doc-comment somewhere with the list.
 		for _, impldef := range builder.schema.GetPossibleTypes(typedef) {
-			name, err := builder.addTypeForDefinition(builder.typeNamePrefix, "", impldef, pos, fields, options)
+			name, namePrefix := builder.typeName(builder.typeNamePrefix, impldef)
+			name, err := builder.addTypeForDefinition(
+				name, namePrefix, impldef, pos, fields, options)
 			if err != nil {
 				return err
 			}
@@ -369,7 +374,7 @@ func (builder *typeBuilder) writeTypedef(
 		for _, val := range typedef.EnumValues {
 			fmt.Fprintf(builder, "%s %s = \"%s\"\n",
 				builder.typeNamePrefix+goConstName(val.Name),
-				builder.typeName, val.Name)
+				typeName, val.Name)
 		}
 		builder.WriteString(")\n")
 		return nil

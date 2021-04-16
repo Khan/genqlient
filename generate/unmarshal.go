@@ -19,8 +19,8 @@ type concreteType struct {
 	GoName, GraphQLName string
 }
 
-func (builder *typeBuilder) maybeWriteUnmarshal(fields []field) error {
-	data := templateData{Type: builder.typeName}
+func (builder *typeBuilder) maybeWriteUnmarshal(typeName string, fields []field) error {
+	data := templateData{Type: typeName}
 	for _, field := range fields {
 		typedef := builder.schema.Types[field.Type().Name()]
 		if typedef.IsAbstractType() {
