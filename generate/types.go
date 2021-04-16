@@ -292,14 +292,15 @@ func (builder *typeBuilder) writeType(name, namePrefix string, typ *ast.Type, fi
 	// gqlgen does slightly different things here, but its implementation may
 	// be useful to crib from:
 	// https://github.com/99designs/gqlgen/blob/master/plugin/modelgen/models.go#L113
-	if typ.Elem != nil { // XXX: this should be for, not if
+	for typ.Elem != nil {
 		// Type is a list.
 		builder.WriteString("[]")
 		typ = typ.Elem
 	}
 	if options.GetPointer() {
 		// TODO: this does []*T, you might in principle want *[]T or
-		// *[]*T.  We could add a "sliceptr" option if it comes up.
+		// *[]*T.  We could add a "sliceptr" option if it comes up (that's
+		// still not correct if you wanted *[][]*[]T, but, like, tough luck).
 		builder.WriteString("*")
 	}
 

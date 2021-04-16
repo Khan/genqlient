@@ -1,0 +1,9 @@
+{
+  "operations": [
+    {
+      "operationName": "ListOfListsOfLists",
+      "query": "\nquery ListOfListsOfLists {\n\tlistOfListsOfLists\n}\n",
+      "sourceLocation": "testdata/queries/ListOfListsOfLists.graphql"
+    }
+  ]
+}

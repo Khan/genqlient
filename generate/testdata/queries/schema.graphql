@@ -67,6 +67,7 @@ type Query {
   convert(dt: DateTime!, tz: String): DateTime!
   maybeConvert(dt: DateTime, tz: String): DateTime
   getJunk: Junk
+  listOfListsOfLists: [[[String!]!]!]!
 }
 
 type Mutation {
