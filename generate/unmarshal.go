@@ -19,7 +19,7 @@ type concreteType struct {
 	GoName, GraphQLName string
 }
 
-func (builder *typeBuilder) maybeWriteUnmarshal(typeName string, fields []field) error {
+func (builder *typeBuilder) maybeWriteUnmarshal(typeName, typeNamePrefix string, fields []field) error {
 	data := templateData{Type: typeName}
 	for _, field := range fields {
 		typedef := builder.schema.Types[field.Type().Name()]
@@ -31,7 +31,7 @@ func (builder *typeBuilder) maybeWriteUnmarshal(typeName string, fields []field)
 			for _, typedef := range builder.schema.GetPossibleTypes(typedef) {
 				// TODO: this is slightly fragile (it needs to match the
 				// similar call in writeField)
-				goName, _ := builder.typeName(builder.typeNamePrefix+fieldInfo.GoName, typedef)
+				goName, _ := builder.typeName(typeNamePrefix+fieldInfo.GoName, typedef)
 				fieldInfo.ConcreteTypes = append(fieldInfo.ConcreteTypes,
 					concreteType{
 						GoName:      goName,

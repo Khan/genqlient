@@ -8,7 +8,6 @@ import (
 )
 
 type typeBuilder struct {
-	typeNamePrefix string
 	strings.Builder
 	*generator
 }
@@ -118,8 +117,8 @@ func (g *generator) addTypeForDefinition(
 
 	// Otherwise, build the type, put that in the type-map, and return its
 	// name.
-	builder := &typeBuilder{typeNamePrefix: namePrefix, generator: g}
-	err = builder.writeTypedef(name, typ, pos, fields, options)
+	builder := &typeBuilder{generator: g}
+	err = builder.writeTypedef(name, namePrefix, typ, pos, fields, options)
 	if err != nil {
 		return "", err
 	}
@@ -133,7 +132,7 @@ func (g *generator) getTypeForInputType(opName string, typ *ast.Type, options, q
 	// Sort of a hack: case the input type name to match the op-name.
 	name := matchFirst(typ.Name(), opName)
 	// TODO: we have to pass name 3 times, yuck
-	builder := &typeBuilder{typeNamePrefix: name, generator: g}
+	builder := &typeBuilder{generator: g}
 	// TODO: passing options is actually kinda wrong, because it means we could
 	// break the "there is only Go type for each input type" rule.  In practice
 	// it's probably rare that you use the same input type twice in a query and
@@ -237,7 +236,7 @@ func selectionsForType(g *generator, typ *ast.Type, queryOptions *GenqlientDirec
 	return fields
 }
 
-func (builder *typeBuilder) writeField(field field) error {
+func (builder *typeBuilder) writeField(typeNamePrefix string, field field) error {
 	jsonName := field.Alias()
 	// We need an exportable name for JSON-marshaling.
 	goName := upperFirst(jsonName)
@@ -273,7 +272,7 @@ func (builder *typeBuilder) writeField(field field) error {
 	// field-name, because if we have `query q { a: f { b }, c: f { d } }` we
 	// need separate types for a and c, even though they are the same type in
 	// GraphQL, because they have different fields.
-	name, namePrefix := builder.typeName(builder.typeNamePrefix+goName, typedef)
+	name, namePrefix := builder.typeName(typeNamePrefix+goName, typedef)
 	err = builder.writeType(name, namePrefix, typ, fields, options)
 	if err != nil {
 		return err
@@ -317,7 +316,7 @@ func (builder *typeBuilder) writeType(name, namePrefix string, typ *ast.Type, fi
 }
 
 func (builder *typeBuilder) writeTypedef(
-	typeName string,
+	typeName, typeNamePrefix string,
 	typedef *ast.Definition,
 	pos *ast.Position,
 	fields []field,
@@ -328,7 +327,7 @@ func (builder *typeBuilder) writeTypedef(
 	case ast.Object, ast.InputObject:
 		builder.WriteString("struct {\n")
 		for _, field := range fields {
-			err := builder.writeField(field)
+			err := builder.writeField(typeNamePrefix, field)
 			if err != nil {
 				return err
 			}
@@ -337,7 +336,7 @@ func (builder *typeBuilder) writeTypedef(
 
 		// If any field is abstract, we need an UnmarshalJSON method to handle
 		// it.
-		return builder.maybeWriteUnmarshal(typeName, fields)
+		return builder.maybeWriteUnmarshal(typeName, typeNamePrefix, fields)
 
 	case ast.Interface, ast.Union:
 		if !allowBrokenFeatures {
@@ -355,7 +354,7 @@ func (builder *typeBuilder) writeTypedef(
 		// Then, write the implementations.
 		// TODO(benkraft): Put a doc-comment somewhere with the list.
 		for _, impldef := range builder.schema.GetPossibleTypes(typedef) {
-			name, namePrefix := builder.typeName(builder.typeNamePrefix, impldef)
+			name, namePrefix := builder.typeName(typeNamePrefix, impldef)
 			name, err := builder.addTypeForDefinition(
 				name, namePrefix, impldef, pos, fields, options)
 			if err != nil {
@@ -374,7 +373,7 @@ func (builder *typeBuilder) writeTypedef(
 		builder.WriteString("const (\n")
 		for _, val := range typedef.EnumValues {
 			fmt.Fprintf(builder, "%s %s = \"%s\"\n",
-				builder.typeNamePrefix+goConstName(val.Name),
+				typeNamePrefix+goConstName(val.Name),
 				typeName, val.Name)
 		}
 		builder.WriteString(")\n")
