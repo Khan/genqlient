@@ -1,5 +1,12 @@
 package generate
 
+// This file is the core of genqlient: it's what generates the types into which
+// we will unmarshal.
+//
+// TODO: this file really really needs a file-comment explaining what's going
+// on.  probably writing that will help me figure out how to make it make more
+// sense!
+
 import (
 	"fmt"
 	"strings"
@@ -104,8 +111,8 @@ func (g *generator) typeName(prefix string, typ *ast.Definition) (name, nextPref
 func (g *generator) getTypeForInputType(opName string, typ *ast.Type, options, queryOptions *GenqlientDirective) (string, error) {
 	// Sort of a hack: case the input type name to match the op-name.
 	name := matchFirst(typ.Name(), opName)
-	// TODO: we have to pass name 3 times, yuck
 	builder := &typeBuilder{generator: g}
+	// note prefix is ignored here (see generator.typeName)
 	// TODO: passing options is actually kinda wrong, because it means we could
 	// break the "there is only Go type for each input type" rule.  In practice
 	// it's probably rare that you use the same input type twice in a query and
@@ -115,7 +122,7 @@ func (g *generator) getTypeForInputType(opName string, typ *ast.Type, options, q
 	// individual input-type field.
 	// TODO: should we use pointers by default for input-types if they're
 	// structs?
-	err := builder.writeType(name, name, typ, selectionsForType(g, typ, queryOptions), options)
+	err := builder.writeType(name, "", typ, selectionsForInputType(g, typ, queryOptions), options)
 	return builder.String(), err
 }
 
@@ -197,10 +204,10 @@ func (s inputField) Type() *ast.Type    { return s.field.Type }
 func (s inputField) Pos() *ast.Position { return s.field.Position }
 
 func (s inputField) SubFields() ([]field, error) {
-	return selectionsForType(s.generator, s.field.Type, s.queryOptions), nil
+	return selectionsForInputType(s.generator, s.field.Type, s.queryOptions), nil
 }
 
-func selectionsForType(g *generator, typ *ast.Type, queryOptions *GenqlientDirective) []field {
+func selectionsForInputType(g *generator, typ *ast.Type, queryOptions *GenqlientDirective) []field {
 	def := g.schema.Types[typ.Name()]
 	fields := make([]field, len(def.Fields))
 	for i, field := range def.Fields {
@@ -276,31 +283,25 @@ func (builder *typeBuilder) writeType(name, namePrefix string, typ *ast.Type, fi
 		builder.WriteString("*")
 	}
 
-	def := builder.schema.Types[typ.Name()]
-
 	// If this is a builtin type or custom scalar, just refer to it.
-	var err error
+	def := builder.schema.Types[typ.Name()]
 	goName, ok := builder.Config.Scalars[def.Name]
 	if ok {
-		name, err = builder.addRef(goName)
-		if err != nil {
-			return err
-		}
-	} else {
-		goName, ok = builtinTypes[def.Name]
-		if ok {
-			name = goName
-		} else {
-			childBuilder := &typeBuilder{generator: builder.generator}
-			err = childBuilder.writeTypedef(name, namePrefix, def, typ.Position, fields, options)
-			if err != nil {
-				return err
-			}
-		}
+		name, err := builder.addRef(goName)
+		builder.WriteString(name)
+		return err
+	}
+	goName, ok = builtinTypes[def.Name]
+	if ok {
+		builder.WriteString(goName)
+		return nil
 	}
 
+	// Else, write the name, then generate the definition.
 	builder.WriteString(name)
-	return nil
+
+	childBuilder := &typeBuilder{generator: builder.generator}
+	return childBuilder.writeTypedef(name, namePrefix, def, typ.Position, fields, options)
 }
 
 func (builder *typeBuilder) writeTypedef(
