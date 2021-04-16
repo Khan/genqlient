@@ -1,0 +1,14 @@
+query InterfaceNesting {
+  root {
+    id
+    children {
+      id
+      parent {
+        id
+        children {
+          id
+        }
+      }
+    }
+  }
+}
