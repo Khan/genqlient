@@ -29,11 +29,12 @@ func (builder *typeBuilder) maybeWriteUnmarshal(typeName string, fields []field)
 				JSONName: field.Alias(),
 			}
 			for _, typedef := range builder.schema.GetPossibleTypes(typedef) {
+				// TODO: this is slightly fragile (it needs to match the
+				// similar call in writeField)
+				goName, _ := builder.typeName(builder.typeNamePrefix+fieldInfo.GoName, typedef)
 				fieldInfo.ConcreteTypes = append(fieldInfo.ConcreteTypes,
 					concreteType{
-						// TODO: this is quite fragile (and wrong if the
-						// field name + type name are the same)
-						GoName:      builder.typeNamePrefix + fieldInfo.GoName + upperFirst(typedef.Name),
+						GoName:      goName,
 						GraphQLName: typedef.Name,
 					})
 			}

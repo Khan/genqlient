@@ -262,29 +262,29 @@ func (builder *typeBuilder) writeField(field field) error {
 		return err
 	}
 
+	typedef := builder.schema.Types[typ.Name()]
+
 	// Note we don't deduplicate suffixes here -- if our prefix is GetUser
 	// and the field name is User, we do GetUserUser.  This is important
 	// because if you have a field called user on a type called User we
 	// need `query q { user { user { id } } }` to generate two types, QUser
 	// and QUserUser.
-	// Note also this is the alias, not the field-name, because if we have
-	// `query q { a: f { b }, c: f { d } }` we need separate types for a
-	// and c, even though they are the same type in GraphQL, because they
-	// have different fields.
-	name, namePrefix := builder.typeName(
-		builder.typeNamePrefix+upperFirst(field.Alias()), builder.schema.Types[typ.Name()])
+	// Note also this is named based on the GraphQL alias (Go name), not the
+	// field-name, because if we have `query q { a: f { b }, c: f { d } }` we
+	// need separate types for a and c, even though they are the same type in
+	// GraphQL, because they have different fields.
+	name, namePrefix := builder.typeName(builder.typeNamePrefix+goName, typedef)
 	err = builder.writeType(name, namePrefix, typ, fields, options)
 	if err != nil {
 		return err
 	}
 
-	if builder.schema.Types[typ.Name()].IsAbstractType() {
+	if typedef.IsAbstractType() {
 		// abstract types are handled in our UnmarshalJSON
-		builder.WriteString(" `json:\"-\"`")
-	} else {
-		fmt.Fprintf(builder, " `json:\"%s\"`", jsonName)
+		jsonName = "-"
 	}
-	builder.WriteRune('\n')
+
+	fmt.Fprintf(builder, " `json:\"%s\"`\n", jsonName)
 	return nil
 }
 
