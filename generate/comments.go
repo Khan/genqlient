@@ -40,6 +40,8 @@ import (
 // the directive "a" is ignored, "b" and "c" apply to all relevant nodes in the
 // query, "d" applies to arg2 and arg3, and "e" applies to field1 and field2.
 type GenqlientDirective struct {
+	pos *ast.Position
+
 	// If set, this argument will be omitted if it's equal to its Go zero
 	// value.  For example, given the following query:
 	//	# @genqlient(omitempty: true)
@@ -68,23 +70,25 @@ func setBool(dst **bool, v *ast.Value) error {
 	ei, err := v.Value(nil) // no vars allowed
 	// TODO: here and below, put positions on these errors
 	if err != nil {
-		return fmt.Errorf("invalid boolean value %v: %w", v, err)
+		return errorf(v.Position, "invalid boolean value %v: %v", v, err)
 	}
 	if b, ok := ei.(bool); ok {
 		*dst = &b
 		return nil
 	}
-	return fmt.Errorf("expected boolean, got non-boolean value %T(%v)", ei, ei)
+	return errorf(v.Position, "expected boolean, got non-boolean value %T(%v)", ei, ei)
 }
 
 func fromGraphQL(dir *ast.Directive) (*GenqlientDirective, error) {
 	if dir.Name != "genqlient" {
 		// Actually we just won't get here; we only get here if the line starts
 		// with "# @genqlient", unless there's some sort of bug.
-		return nil, fmt.Errorf("the only valid comment-directive is @genqlient, got %v", dir.Name)
+		return nil, errorf(dir.Position, "the only valid comment-directive is @genqlient, got %v", dir.Name)
 	}
 
 	var retval GenqlientDirective
+	retval.pos = dir.Position
+
 	var err error
 	for _, arg := range dir.Arguments {
 		switch arg.Name {
@@ -94,7 +98,7 @@ func fromGraphQL(dir *ast.Directive) (*GenqlientDirective, error) {
 		case "pointer":
 			err = setBool(&retval.Pointer, arg.Value)
 		default:
-			return nil, fmt.Errorf("unknown argument %v for @genqlient", arg.Name)
+			return nil, errorf(arg.Position, "unknown argument %v for @genqlient", arg.Name)
 		}
 		if err != nil {
 			return nil, err
@@ -111,16 +115,16 @@ func (dir *GenqlientDirective) validate(node interface{}) error {
 		return nil
 	case *ast.VariableDefinition:
 		if dir.Omitempty != nil && node.Type.NonNull {
-			return fmt.Errorf("omitempty may only be used on optional arguments")
+			return errorf(dir.pos, "omitempty may only be used on optional arguments")
 		}
 		return nil
 	case *ast.Field:
 		if dir.Omitempty != nil {
-			return fmt.Errorf("omitempty is not appilcable to fields")
+			return errorf(dir.pos, "omitempty is not appilcable to fields")
 		}
 		return nil
 	default:
-		return fmt.Errorf("invalid directive location: %T", node)
+		return errorf(dir.pos, "invalid directive location: %T", node)
 	}
 }
 
@@ -174,13 +178,9 @@ func (g *generator) parsePrecedingComment(
 func parseDirective(line string, pos *ast.Position) (*ast.Directive, error) {
 	// HACK: parse the "directive" by making a fake query containing it.
 	fakeQuery := fmt.Sprintf("query %v { field }", line)
-	doc, err := parser.ParseQuery(&ast.Source{
-		Name: fmt.Sprintf("@genqlient directive at %v:%v:%v",
-			pos.Src.Name, pos.Line, pos.Column),
-		Input: fakeQuery,
-	})
+	doc, err := parser.ParseQuery(&ast.Source{Input: fakeQuery})
 	if err != nil {
-		return nil, err
+		return nil, errorf(pos, "invalid genqlient directive: %v", err)
 	}
 	return doc.Operations[0].Directives[0], nil
 }

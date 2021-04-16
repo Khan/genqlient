@@ -3,7 +3,6 @@ package generate
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"go/format"
 	"sort"
 	"strings"
@@ -134,7 +133,7 @@ func (g *generator) getArgument(
 
 func (g *generator) addOperation(op *ast.OperationDefinition) error {
 	if op.Name == "" {
-		return fmt.Errorf("operations must have operation-names")
+		return errorf(op.Position, "operations must have operation-names")
 	}
 
 	var builder strings.Builder
@@ -199,11 +198,14 @@ func Generate(config *Config) (map[string][]byte, error) {
 	// package-name, if it turns out to be more convenient that way.  (As-is,
 	// we generate a broken file, with just (unused) imports.)
 	if len(document.Operations) == 0 {
-		return nil, fmt.Errorf("no queries found in %v", config.Operations)
+		// Hard to have a position when there are no operations :(
+		return nil, errorf(nil, "no queries found, looked in: %v",
+			strings.Join(config.Operations, ", "))
 	}
 
 	if len(document.Fragments) > 0 && !allowBrokenFeatures {
-		return nil, fmt.Errorf("genqlient does not yet support fragments")
+		return nil, errorf(document.Fragments[0].Position,
+			"genqlient does not yet support fragments")
 	}
 
 	g := newGenerator(config, schema)
@@ -216,18 +218,18 @@ func Generate(config *Config) (map[string][]byte, error) {
 	var buf bytes.Buffer
 	err = g.execute("operation.go.tmpl", &buf, g)
 	if err != nil {
-		return nil, fmt.Errorf("could not render template: %v", err)
+		return nil, errorf(nil, "could not render template: %v", err)
 	}
 
 	unformatted := buf.Bytes()
 	formatted, err := format.Source(unformatted)
 	if err != nil {
-		return nil, fmt.Errorf("could not gofmt code: %v\n---unformatted code---\n%v",
+		return nil, errorf(nil, "could not gofmt code: %v\n---unformatted code---\n%v",
 			err, string(unformatted))
 	}
 	importsed, err := imports.Process(config.Generated, formatted, nil)
 	if err != nil {
-		return nil, fmt.Errorf("could not goimports code: %v\n---unimportsed code---\n%v",
+		return nil, errorf(nil, "could not goimports code: %v\n---unimportsed code---\n%v",
 			err, string(formatted))
 	}
 
@@ -243,7 +245,7 @@ func Generate(config *Config) (map[string][]byte, error) {
 		retval[config.ExportOperations], err = json.MarshalIndent(
 			exportedOperations{Operations: g.Operations}, "", "  ")
 		if err != nil {
-			return nil, fmt.Errorf("unable to export queries: %v", err)
+			return nil, errorf(nil, "unable to export queries: %v", err)
 		}
 	}
 

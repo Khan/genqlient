@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 func readConfigGenerateAndWrite(configFilename string) error {
@@ -21,14 +22,14 @@ func readConfigGenerateAndWrite(configFilename string) error {
 	for filename, content := range generated {
 		err = os.MkdirAll(filepath.Dir(filename), 0o755)
 		if err != nil {
-			return fmt.Errorf(
+			return errorf(nil,
 				"could not create parent directory for generated file %v: %v",
 				filename, err)
 		}
 
 		err = ioutil.WriteFile(filename, content, 0o644)
 		if err != nil {
-			return fmt.Errorf("could not write generated file %v: %v",
+			return errorf(nil, "could not write generated file %v: %v",
 				filename, err)
 		}
 	}
@@ -50,6 +51,10 @@ func Main() {
 	case 1:
 		err = readConfigGenerateAndWrite("")
 	default:
-		err = fmt.Errorf("usage: %s [config]", os.Args[0])
+		argv0 := os.Args[0]
+		if strings.Contains(argv0, string(filepath.Separator)+"go-build") {
+			argv0 = "go run github.com/Khan/genqlient"
+		}
+		err = errorf(nil, "usage: %s [config]", argv0)
 	}
 }

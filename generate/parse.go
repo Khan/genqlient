@@ -20,13 +20,13 @@ import (
 func getSchema(filename string) (*ast.Schema, error) {
 	text, err := ioutil.ReadFile(filename)
 	if err != nil {
-		return nil, fmt.Errorf("unreadable schema file %v: %v", filename, err)
+		return nil, errorf(nil, "unreadable schema file %v: %v", filename, err)
 	}
 
 	schema, graphqlError := gqlparser.LoadSchema(
 		&ast.Source{Name: filename, Input: string(text)})
 	if graphqlError != nil {
-		return nil, fmt.Errorf("invalid schema file %v: %v",
+		return nil, errorf(nil, "invalid schema file %v: %v",
 			filename, graphqlError)
 	}
 
@@ -42,7 +42,7 @@ func getAndValidateQueries(basedir string, filenames []string, schema *ast.Schem
 	// Cf. gqlparser.LoadQuery
 	graphqlErrors := validator.Validate(schema, queryDoc)
 	if graphqlErrors != nil {
-		return nil, fmt.Errorf("query-spec does not match schema: %v", graphqlErrors)
+		return nil, errorf(nil, "query-spec does not match schema: %v", graphqlErrors)
 	}
 
 	return queryDoc, nil
@@ -64,7 +64,7 @@ func getQueries(basedir string, filenames []string) (*ast.QueryDocument, error) 
 	for _, filename := range filenames {
 		matches, err := filepath.Glob(filename)
 		if err != nil {
-			return nil, fmt.Errorf("can't expand file-glob %v: %v", filename, err)
+			return nil, errorf(nil, "can't expand file-glob %v: %v", filename, err)
 		}
 		expandedFilenames = append(expandedFilenames, matches...)
 	}
@@ -72,7 +72,7 @@ func getQueries(basedir string, filenames []string) (*ast.QueryDocument, error) 
 	for _, filename := range expandedFilenames {
 		text, err := ioutil.ReadFile(filename)
 		if err != nil {
-			return nil, fmt.Errorf("unreadable query-spec file %v: %v", filename, err)
+			return nil, errorf(nil, "unreadable query-spec file %v: %v", filename, err)
 		}
 
 		switch filepath.Ext(filename) {
@@ -95,7 +95,7 @@ func getQueries(basedir string, filenames []string) (*ast.QueryDocument, error) 
 			}
 
 		default:
-			return nil, fmt.Errorf("unknown file type: %v", filename)
+			return nil, errorf(nil, "unknown file type: %v", filename)
 		}
 	}
 
@@ -113,7 +113,7 @@ func getQueriesFromString(text string, basedir, filename string) (*ast.QueryDocu
 	document, graphqlError := parser.ParseQuery(
 		&ast.Source{Name: filename, Input: text})
 	if graphqlError != nil { // ParseQuery returns type *graphql.Error, yuck
-		return nil, fmt.Errorf("invalid query-spec file %v: %v", filename, graphqlError)
+		return nil, errorf(nil, "invalid query-spec file %v: %v", filename, graphqlError)
 	}
 
 	return document, nil
@@ -123,7 +123,7 @@ func getQueriesFromGo(text string, basedir, filename string) ([]*ast.QueryDocume
 	fset := goToken.NewFileSet()
 	f, err := goParser.ParseFile(fset, filename, text, 0)
 	if err != nil {
-		return nil, fmt.Errorf("invalid Go file %v: %v", filename, err)
+		return nil, errorf(nil, "invalid Go file %v: %v", filename, err)
 	}
 
 	var retval []*ast.QueryDocument
@@ -147,9 +147,13 @@ func getQueriesFromGo(text string, basedir, filename string) ([]*ast.QueryDocume
 			return true
 		}
 
-		filename := fset.Position(basicLit.Pos()).Filename
+		// We put the filename as <real filename>:<line>, which errors.go knows
+		// how to parse back out (since it's what gqlparser will give to us in
+		// our errors).
+		pos := fset.Position(basicLit.Pos())
+		fakeFilename := fmt.Sprintf("%v:%v", pos.Filename, pos.Line)
 		var query *ast.QueryDocument
-		query, err = getQueriesFromString(value, basedir, filename)
+		query, err = getQueriesFromString(value, basedir, fakeFilename)
 		if err != nil {
 			return false
 		}

@@ -1,7 +1,6 @@
 package generate
 
 import (
-	"fmt"
 	"go/token"
 	"io/ioutil"
 	"path/filepath"
@@ -103,12 +102,12 @@ func (c *Config) ValidateAndFillDefaults(configFilename string) error {
 	if c.Package == "" {
 		abs, err := filepath.Abs(c.Generated)
 		if err != nil {
-			return fmt.Errorf("unable to guess package-name: %v", err)
+			return errorf(nil, "unable to guess package-name: %v", err)
 		}
 
 		base := filepath.Base(filepath.Dir(abs))
 		if !token.IsIdentifier(base) {
-			return fmt.Errorf("unable to guess package-name: %v is not a valid identifier", base)
+			return errorf(nil, "unable to guess package-name: %v is not a valid identifier", base)
 		}
 
 		c.Package = base
@@ -122,18 +121,18 @@ func ReadAndValidateConfig(filename string) (*Config, error) {
 	if filename != "" {
 		text, err := ioutil.ReadFile(filename)
 		if err != nil {
-			return nil, fmt.Errorf("unreadable config file %v: %v", filename, err)
+			return nil, errorf(nil, "unreadable config file %v: %v", filename, err)
 		}
 
 		err = yaml.Unmarshal(text, &config)
 		if err != nil {
-			return nil, fmt.Errorf("invalid config file %v: %v", filename, err)
+			return nil, errorf(nil, "invalid config file %v: %v", filename, err)
 		}
 	}
 
 	err := config.ValidateAndFillDefaults(filename)
 	if err != nil {
-		return nil, fmt.Errorf("invalid config file %v: %v", filename, err)
+		return nil, errorf(nil, "invalid config file %v: %v", filename, err)
 	}
 
 	return &config, nil

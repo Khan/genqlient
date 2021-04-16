@@ -2,7 +2,6 @@ package generate
 
 import (
 	"errors"
-	"fmt"
 	"go/format"
 	"io/ioutil"
 	"os"
@@ -20,7 +19,7 @@ func gofmt(filename, src string) (string, error) {
 	src = strings.TrimSpace(src)
 	formatted, err := format.Source([]byte(src))
 	if err != nil {
-		return src, fmt.Errorf("go parse error in %v: %w", filename, err)
+		return src, errorf(nil, "go parse error in %v: %v", filename, err)
 	}
 	return string(formatted), nil
 }

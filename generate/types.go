@@ -22,11 +22,11 @@ func (g *generator) baseTypeForOperation(operation ast.Operation) (*ast.Definiti
 		return g.schema.Mutation, nil
 	case ast.Subscription:
 		if !allowBrokenFeatures {
-			return nil, fmt.Errorf("genqlient does not yet support subscriptions")
+			return nil, errorf(nil, "genqlient does not yet support subscriptions")
 		}
 		return g.schema.Subscription, nil
 	default:
-		return nil, fmt.Errorf("unexpected operation: %v", operation)
+		return nil, errorf(nil, "unexpected operation: %v", operation)
 	}
 }
 
@@ -36,7 +36,7 @@ func (g *generator) getTypeForOperation(operation *ast.OperationDefinition, quer
 
 	if def, ok := g.typeMap[name]; ok {
 		// TODO: check for and handle conflicts a better way
-		return "", fmt.Errorf("%s defined twice:\n%s", name, def)
+		return "", errorf(operation.Position, "%s defined twice:\n%s", name, def)
 	}
 
 	fields, err := selections(g, operation.SelectionSet, queryOptions)
@@ -46,10 +46,10 @@ func (g *generator) getTypeForOperation(operation *ast.OperationDefinition, quer
 
 	baseType, err := g.baseTypeForOperation(operation.Operation)
 	if err != nil {
-		return "", err
+		return "", errorf(operation.Position, "%v", err)
 	}
 
-	return g.addTypeForDefinition(operation.Name, name, baseType, fields, queryOptions)
+	return g.addTypeForDefinition(operation.Name, name, baseType, operation.Position, fields, queryOptions)
 }
 
 var builtinTypes = map[string]string{
@@ -61,7 +61,13 @@ var builtinTypes = map[string]string{
 	"ID":      "string",
 }
 
-func (g *generator) addTypeForDefinition(namePrefix, nameOverride string, typ *ast.Definition, fields []field, options *GenqlientDirective) (name string, err error) {
+func (g *generator) addTypeForDefinition(
+	namePrefix, nameOverride string,
+	typ *ast.Definition,
+	pos *ast.Position,
+	fields []field,
+	options *GenqlientDirective,
+) (name string, err error) {
 	// If this is a builtin type or custom scalar, just refer to it.
 	goName, ok := g.Config.Scalars[typ.Name]
 	if ok {
@@ -114,7 +120,7 @@ func (g *generator) addTypeForDefinition(namePrefix, nameOverride string, typ *a
 	// name.
 	builder := &typeBuilder{typeName: name, typeNamePrefix: namePrefix, generator: g}
 	fmt.Fprintf(builder, "type %s ", name)
-	err = builder.writeTypedef(typ, fields, options)
+	err = builder.writeTypedef(typ, pos, fields, options)
 	if err != nil {
 		return "", err
 	}
@@ -146,6 +152,7 @@ type field interface {
 	Alias() string
 	Options() (*GenqlientDirective, error)
 	Type() *ast.Type
+	Pos() *ast.Position
 	SubFields() ([]field, error)
 }
 
@@ -176,6 +183,10 @@ func (s outputField) Type() *ast.Type {
 	return s.field.Definition.Type
 }
 
+func (s outputField) Pos() *ast.Position {
+	return s.field.Position
+}
+
 func (s outputField) SubFields() ([]field, error) {
 	return selections(s.generator, s.field.SelectionSet, s.queryOptions)
 }
@@ -186,10 +197,12 @@ func selections(g *generator, selectionSet ast.SelectionSet, options *GenqlientD
 		switch selection := selection.(type) {
 		case *ast.Field:
 			retval[i] = outputField{g, options, selection}
-		case *ast.FragmentSpread, *ast.InlineFragment:
-			return nil, fmt.Errorf("not implemented: %T", selection)
+		case *ast.FragmentSpread:
+			return nil, errorf(selection.Position, "not implemented: %T", selection)
+		case *ast.InlineFragment:
+			return nil, errorf(selection.Position, "not implemented: %T", selection)
 		default:
-			return nil, fmt.Errorf("invalid selection type: %v", selection)
+			return nil, errorf(nil, "invalid selection type: %T", selection)
 		}
 	}
 	return retval, nil
@@ -209,7 +222,8 @@ func (s inputField) Options() (*GenqlientDirective, error) {
 	}
 	return s.queryOptions.merge(directive), nil
 }
-func (s inputField) Type() *ast.Type { return s.field.Type }
+func (s inputField) Type() *ast.Type    { return s.field.Type }
+func (s inputField) Pos() *ast.Position { return s.field.Position }
 
 func (s inputField) SubFields() ([]field, error) {
 	return selectionsForType(s.generator, s.field.Type, s.queryOptions), nil
@@ -236,7 +250,7 @@ func (builder *typeBuilder) writeField(field field) error {
 	if typ == nil {
 		// Unclear why gqlparser hasn't already rejected this,
 		// but empirically it might not.
-		return fmt.Errorf("undefined field %v", field.Alias())
+		return errorf(field.Pos(), "undefined field %v", field.Alias())
 	}
 
 	fields, err := field.SubFields()
@@ -291,7 +305,7 @@ func (builder *typeBuilder) writeType(namePrefix, nameOverride string, typ *ast.
 
 	def := builder.schema.Types[typ.Name()]
 	// Writes a typedef elsewhere (if not already defined)
-	name, err := builder.addTypeForDefinition(namePrefix, nameOverride, def, fields, options)
+	name, err := builder.addTypeForDefinition(namePrefix, nameOverride, def, typ.Position, fields, options)
 	if err != nil {
 		return err
 	}
@@ -300,7 +314,12 @@ func (builder *typeBuilder) writeType(namePrefix, nameOverride string, typ *ast.
 	return nil
 }
 
-func (builder *typeBuilder) writeTypedef(typedef *ast.Definition, fields []field, options *GenqlientDirective) error {
+func (builder *typeBuilder) writeTypedef(
+	typedef *ast.Definition,
+	pos *ast.Position,
+	fields []field,
+	options *GenqlientDirective,
+) error {
 	switch typedef.Kind {
 	case ast.Object, ast.InputObject:
 		builder.WriteString("struct {\n")
@@ -318,7 +337,7 @@ func (builder *typeBuilder) writeTypedef(typedef *ast.Definition, fields []field
 
 	case ast.Interface, ast.Union:
 		if !allowBrokenFeatures {
-			return fmt.Errorf("not implemented: %v", typedef.Kind)
+			return errorf(pos, "not implemented: %v", typedef.Kind)
 		}
 
 		// First, write the interface type.
@@ -332,7 +351,7 @@ func (builder *typeBuilder) writeTypedef(typedef *ast.Definition, fields []field
 		// Then, write the implementations.
 		// TODO(benkraft): Put a doc-comment somewhere with the list.
 		for _, impldef := range builder.schema.GetPossibleTypes(typedef) {
-			name, err := builder.addTypeForDefinition(builder.typeNamePrefix, "", impldef, fields, options)
+			name, err := builder.addTypeForDefinition(builder.typeNamePrefix, "", impldef, pos, fields, options)
 			if err != nil {
 				return err
 			}
@@ -355,8 +374,8 @@ func (builder *typeBuilder) writeTypedef(typedef *ast.Definition, fields []field
 		builder.WriteString(")\n")
 		return nil
 	case ast.Scalar:
-		return fmt.Errorf("unknown scalar %v: please add it to genqlient.yaml", typedef.Name)
+		return errorf(pos, "unknown scalar %v: please add it to genqlient.yaml", typedef.Name)
 	default:
-		return fmt.Errorf("unexpected kind: %v", typedef.Kind)
+		return errorf(pos, "unexpected kind: %v", typedef.Kind)
 	}
 }

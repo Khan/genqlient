@@ -1,7 +1,6 @@
 package generate
 
 import (
-	"fmt"
 	"go/types"
 	"strconv"
 	"strings"
@@ -45,7 +44,8 @@ func (g *generator) getRef(fullyQualifiedName string, addImport bool) (qualified
 		// confusing, why would you want it.  But the empty interface,
 		// specifically, is useful.
 		if fullyQualifiedName != "interface{}" && types.Universe.Lookup(fullyQualifiedName) == nil {
-			return "", fmt.Errorf(
+			// TODO: pass in pos here
+			return "", errorf(nil,
 				`unknown name "%v"; expected a builtin or path/to/package.Name`, fullyQualifiedName)
 		}
 		return fullyQualifiedName, nil
@@ -60,7 +60,7 @@ func (g *generator) getRef(fullyQualifiedName string, addImport bool) (qualified
 		var ok bool
 		alias, ok = g.imports[pkgPath]
 		if !ok {
-			return "", fmt.Errorf(`no alias defined for package "%v"`, pkgPath)
+			return "", errorf(nil, `no alias defined for package "%v"`, pkgPath)
 		}
 	}
 	return alias + "." + localName, nil

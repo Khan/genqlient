@@ -1,7 +1,6 @@
 package generate
 
 import (
-	"fmt"
 	"io"
 	"path/filepath"
 	"runtime"
@@ -26,13 +25,13 @@ func (g *generator) execute(tmplRelFilename string, w io.Writer, data interface{
 		var err error
 		tmpl, err = template.New(tmplRelFilename).Funcs(funcMap).ParseFiles(absFilename)
 		if err != nil {
-			return fmt.Errorf("could not load template %v: %v", absFilename, err)
+			return errorf(nil, "could not load template %v: %v", absFilename, err)
 		}
 		g.templateCache[tmplRelFilename] = tmpl
 	}
 	err := tmpl.Execute(w, data)
 	if err != nil {
-		return fmt.Errorf("could not render template: %v", err)
+		return errorf(nil, "could not render template: %v", err)
 	}
 	return nil
 }
