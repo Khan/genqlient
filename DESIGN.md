@@ -225,11 +225,11 @@ In other libraries:
 - Apollo does basically option 1, except with TypeScript/Flow's better support for sum types.
 - GraphQL Code Generator does basically option 1 (except with sum types instead of interfaces), except with unnamed types.  It definitely generates some ugly types, even with TypeScript/Flow's better support for sum types!
 - Khan's mobile autogen basically does option 1 (again with unnamed types, and sum types).
-- gqlgen doesn't have this problem; fragments and interfaces don't need special handling by user-land server code.
+- gqlgen doesn't have this problem; on the server, fragments and interfaces are handled entirely in the framework and need not even be visible in user-land.
 - shurcooL/graphql uses option 2.
-- protobuf has a similar problem, and uses basically option 1 in Go.
+- protobuf has a similar problem, and uses basically option 1 in Go (even though in other languages it uses something more like option 3).
 
-**Decision:** In general, it seems like the GraphQL Way, and perhaps also the Go Way is Option 1; I've always found the way shurcooL/graphql handles this to be a bit strange.  (It also requires a bunch of special handling for JSON decoding, although we may need that either way.)  There's some question as to whether we need to generate types or not, but we can deal with that.
+**Decision:** In general, it seems like the GraphQL Way, and perhaps also the Go Way is Option 1; I've always found the way shurcooL/graphql handles this to be a bit strange.  So I think it has to be at least the default.  In principle we could allow both though, since option 2 is legitimately convenient, especially if you want to use fragments as a code-sharing mechanism.
 
 ## Configuration and runtime
 
