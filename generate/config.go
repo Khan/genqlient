@@ -98,6 +98,7 @@ func (c *Config) ValidateAndFillDefaults(configFilename string) error {
 		c.Operations[i] = filepath.Join(c.baseDir(), c.Operations[i])
 	}
 	c.Generated = filepath.Join(c.baseDir(), c.Generated)
+	c.ExportOperations = filepath.Join(c.baseDir(), c.ExportOperations)
 
 	if c.Package == "" {
 		abs, err := filepath.Abs(c.Generated)
