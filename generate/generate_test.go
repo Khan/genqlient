@@ -98,9 +98,10 @@ func TestGenerate(t *testing.T) {
 				Generated:        goFilename,
 				ExportOperations: queriesFilename,
 				Scalars: map[string]string{
-					"ID":       "github.com/me/mypkg.ID",
-					"DateTime": "time.Time",
-					"Junk":     "interface{}",
+					"ID":          "github.com/me/mypkg.ID",
+					"DateTime":    "time.Time",
+					"Junk":        "interface{}",
+					"ComplexJunk": "[]map[string]*[]*map[string]interface{}",
 				},
 			})
 			if err != nil {

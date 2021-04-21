@@ -2,7 +2,7 @@
   "operations": [
     {
       "operationName": "EmptyInterface",
-      "query": "\nquery EmptyInterface {\n\tgetJunk\n}\n",
+      "query": "\nquery EmptyInterface {\n\tgetJunk\n\tgetComplexJunk\n}\n",
       "sourceLocation": "testdata/queries/EmptyInterface.graphql"
     }
   ]

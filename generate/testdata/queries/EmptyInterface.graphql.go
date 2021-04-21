@@ -7,7 +7,8 @@ import (
 )
 
 type EmptyInterfaceResponse struct {
-	GetJunk interface{} `json:"getJunk"`
+	GetJunk        interface{}                             `json:"getJunk"`
+	GetComplexJunk []map[string]*[]*map[string]interface{} `json:"getComplexJunk"`
 }
 
 func EmptyInterface(
@@ -20,6 +21,7 @@ func EmptyInterface(
 		`
 query EmptyInterface {
 	getJunk
+	getComplexJunk
 }
 `,
 		&retval,

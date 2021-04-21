@@ -1,1 +1,1 @@
-query EmptyInterface { getJunk }
+query EmptyInterface { getJunk getComplexJunk }
