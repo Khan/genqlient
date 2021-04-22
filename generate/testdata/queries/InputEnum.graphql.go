@@ -7,18 +7,31 @@ import (
 	"github.com/me/mypkg"
 )
 
+// InputEnumQueryResponse is returned by InputEnumQuery on success.
 type InputEnumQueryResponse struct {
+	// usersWithRole looks a user up by role.
 	UsersWithRole []InputEnumQueryUsersWithRoleUser `json:"usersWithRole"`
 }
 
+// A User is a user!
 type InputEnumQueryUsersWithRoleUser struct {
+	// id is the user's ID.
+	//
+	// It is stable, unique, and opaque, like all good IDs.
 	Id mypkg.ID `json:"id"`
 }
 
+// Role is a type a user may have.
 type Role string
 
 const (
+	// What is a student?
+	//
+	// A student is primarily a person enrolled in a school or other educational institution and who is under learning with goals of acquiring knowledge, developing professions and achieving employment at desired field. In the broader sense, a student is anyone who applies themselves to the intensive intellectual engagement with some matter necessary to master it as part of some practical affair in which such mastery is basic or decisive.
+	//
+	// (from [Wikipedia](https://en.wikipedia.org/wiki/Student))
 	RoleStudent Role = "STUDENT"
+	// Teacher is a teacher, who teaches the students.
 	RoleTeacher Role = "TEACHER"
 )
 

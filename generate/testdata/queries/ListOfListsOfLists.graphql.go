@@ -6,6 +6,7 @@ import (
 	"github.com/Khan/genqlient/graphql"
 )
 
+// ListOfListsOfListsResponse is returned by ListOfListsOfLists on success.
 type ListOfListsOfListsResponse struct {
 	ListOfListsOfLists [][][]string `json:"listOfListsOfLists"`
 }

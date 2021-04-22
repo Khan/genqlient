@@ -9,11 +9,13 @@ import (
 	"github.com/me/mypkg"
 )
 
+// InterfaceNoFragmentsQueryResponse is returned by InterfaceNoFragmentsQuery on success.
 type InterfaceNoFragmentsQueryResponse struct {
 	Root InterfaceNoFragmentsQueryRootTopic `json:"root"`
 }
 
 type InterfaceNoFragmentsQueryRootTopic struct {
+	// ID is documented in the Content interface.
 	Id       mypkg.ID                                            `json:"id"`
 	Name     string                                              `json:"name"`
 	Children []InterfaceNoFragmentsQueryRootTopicChildrenContent `json:"-"`
@@ -67,6 +69,7 @@ func (v *InterfaceNoFragmentsQueryRootTopic) UnmarshalJSON(b []byte) error {
 }
 
 type InterfaceNoFragmentsQueryRootTopicChildrenArticle struct {
+	// ID is the identifier of the content.
 	Id   mypkg.ID `json:"id"`
 	Name string   `json:"name"`
 }
@@ -74,11 +77,13 @@ type InterfaceNoFragmentsQueryRootTopicChildrenArticle struct {
 func (v InterfaceNoFragmentsQueryRootTopicChildrenArticle) implementsGraphQLInterfaceInterfaceNoFragmentsQueryRootTopicChildrenContent() {
 }
 
+// Content is implemented by various types like Article, Video, and Topic.
 type InterfaceNoFragmentsQueryRootTopicChildrenContent interface {
 	implementsGraphQLInterfaceInterfaceNoFragmentsQueryRootTopicChildrenContent()
 }
 
 type InterfaceNoFragmentsQueryRootTopicChildrenTopic struct {
+	// ID is the identifier of the content.
 	Id   mypkg.ID `json:"id"`
 	Name string   `json:"name"`
 }
@@ -87,6 +92,7 @@ func (v InterfaceNoFragmentsQueryRootTopicChildrenTopic) implementsGraphQLInterf
 }
 
 type InterfaceNoFragmentsQueryRootTopicChildrenVideo struct {
+	// ID is the identifier of the content.
 	Id   mypkg.ID `json:"id"`
 	Name string   `json:"name"`
 }

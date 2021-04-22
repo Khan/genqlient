@@ -6,6 +6,7 @@ import (
 	"github.com/Khan/genqlient/graphql"
 )
 
+// EmptyInterfaceResponse is returned by EmptyInterface on success.
 type EmptyInterfaceResponse struct {
 	GetJunk        interface{}                             `json:"getJunk"`
 	GetComplexJunk []map[string]*[]*map[string]interface{} `json:"getComplexJunk"`

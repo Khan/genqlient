@@ -7,13 +7,22 @@ import (
 	"github.com/me/mypkg"
 )
 
+// TypeNameQueryResponse is returned by TypeNameQuery on success.
 type TypeNameQueryResponse struct {
+	// user looks up a user by some stuff.
+	//
+	// See UserQueryInput for what stuff is supported.
+	// If query is null, returns the current user.
 	User TypeNameQueryUser `json:"user"`
 }
 
+// A User is a user!
 type TypeNameQueryUser struct {
-	Typename string   `json:"__typename"`
-	Id       mypkg.ID `json:"id"`
+	Typename string `json:"__typename"`
+	// id is the user's ID.
+	//
+	// It is stable, unique, and opaque, like all good IDs.
+	Id mypkg.ID `json:"id"`
 }
 
 func TypeNameQuery(

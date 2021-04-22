@@ -7,12 +7,24 @@ import (
 	"github.com/me/mypkg"
 )
 
+// QueryWithDoubleAliasResponse is returned by QueryWithDoubleAlias on success.
 type QueryWithDoubleAliasResponse struct {
+	// user looks up a user by some stuff.
+	//
+	// See UserQueryInput for what stuff is supported.
+	// If query is null, returns the current user.
 	User QueryWithDoubleAliasUser `json:"user"`
 }
 
+// A User is a user!
 type QueryWithDoubleAliasUser struct {
-	ID     mypkg.ID `json:"ID"`
+	// id is the user's ID.
+	//
+	// It is stable, unique, and opaque, like all good IDs.
+	ID mypkg.ID `json:"ID"`
+	// id is the user's ID.
+	//
+	// It is stable, unique, and opaque, like all good IDs.
 	AlsoID mypkg.ID `json:"AlsoID"`
 }
 

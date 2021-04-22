@@ -6,10 +6,16 @@ import (
 	"github.com/Khan/genqlient/graphql"
 )
 
+// QueryWithStructsResponse is returned by QueryWithStructs on success.
 type QueryWithStructsResponse struct {
+	// user looks up a user by some stuff.
+	//
+	// See UserQueryInput for what stuff is supported.
+	// If query is null, returns the current user.
 	User QueryWithStructsUser `json:"user"`
 }
 
+// A User is a user!
 type QueryWithStructsUser struct {
 	AuthMethods []QueryWithStructsUserAuthMethodsAuthMethod `json:"authMethods"`
 }

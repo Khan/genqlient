@@ -15,6 +15,7 @@ type UnionNoFragmentsQueryRandomLeafArticle struct {
 func (v UnionNoFragmentsQueryRandomLeafArticle) implementsGraphQLInterfaceUnionNoFragmentsQueryRandomLeafLeafContent() {
 }
 
+// LeafContent represents content items that can't have child-nodes.
 type UnionNoFragmentsQueryRandomLeafLeafContent interface {
 	implementsGraphQLInterfaceUnionNoFragmentsQueryRandomLeafLeafContent()
 }
@@ -26,6 +27,7 @@ type UnionNoFragmentsQueryRandomLeafVideo struct {
 func (v UnionNoFragmentsQueryRandomLeafVideo) implementsGraphQLInterfaceUnionNoFragmentsQueryRandomLeafLeafContent() {
 }
 
+// UnionNoFragmentsQueryResponse is returned by UnionNoFragmentsQuery on success.
 type UnionNoFragmentsQueryResponse struct {
 	RandomLeaf UnionNoFragmentsQueryRandomLeafLeafContent `json:"-"`
 }

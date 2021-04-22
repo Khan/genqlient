@@ -6,10 +6,16 @@ import (
 	"github.com/Khan/genqlient/graphql"
 )
 
+// QueryWithSlicesResponse is returned by QueryWithSlices on success.
 type QueryWithSlicesResponse struct {
+	// user looks up a user by some stuff.
+	//
+	// See UserQueryInput for what stuff is supported.
+	// If query is null, returns the current user.
 	User QueryWithSlicesUser `json:"user"`
 }
 
+// A User is a user!
 type QueryWithSlicesUser struct {
 	Emails                []string `json:"emails"`
 	EmailsOrNull          []string `json:"emailsOrNull"`

@@ -9,21 +9,31 @@ import (
 	"github.com/Khan/genqlient/graphql"
 )
 
+// getUserResponse is returned by getUser on success.
 type getUserResponse struct {
+	// Lookup a user by login.
 	User getUserUser `json:"user"`
 }
 
+// A user is an individual's account on GitHub that owns repositories and can make new content.
 type getUserUser struct {
-	TheirName string    `json:"theirName"`
+	// The user's public profile name.
+	TheirName string `json:"theirName"`
+	// Identifies the date and time when the object was created.
 	CreatedAt time.Time `json:"createdAt"`
 }
 
+// getViewerResponse is returned by getViewer on success.
 type getViewerResponse struct {
+	// The currently authenticated user.
 	Viewer getViewerViewerUser `json:"viewer"`
 }
 
+// A user is an individual's account on GitHub that owns repositories and can make new content.
 type getViewerViewerUser struct {
-	MyName    string    `json:"MyName"`
+	// The user's public profile name.
+	MyName string `json:"MyName"`
+	// Identifies the date and time when the object was created.
 	CreatedAt time.Time `json:"createdAt"`
 }
 

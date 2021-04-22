@@ -9,11 +9,13 @@ import (
 	"github.com/me/mypkg"
 )
 
+// InterfaceNestingResponse is returned by InterfaceNesting on success.
 type InterfaceNestingResponse struct {
 	Root InterfaceNestingRootTopic `json:"root"`
 }
 
 type InterfaceNestingRootTopic struct {
+	// ID is documented in the Content interface.
 	Id       mypkg.ID                                   `json:"id"`
 	Children []InterfaceNestingRootTopicChildrenContent `json:"-"`
 }
@@ -66,6 +68,7 @@ func (v *InterfaceNestingRootTopic) UnmarshalJSON(b []byte) error {
 }
 
 type InterfaceNestingRootTopicChildrenArticle struct {
+	// ID is the identifier of the content.
 	Id     mypkg.ID                                            `json:"id"`
 	Parent InterfaceNestingRootTopicChildrenArticleParentTopic `json:"parent"`
 }
@@ -74,6 +77,7 @@ func (v InterfaceNestingRootTopicChildrenArticle) implementsGraphQLInterfaceInte
 }
 
 type InterfaceNestingRootTopicChildrenArticleParentTopic struct {
+	// ID is documented in the Content interface.
 	Id       mypkg.ID                                                             `json:"id"`
 	Children []InterfaceNestingRootTopicChildrenArticleParentTopicChildrenContent `json:"-"`
 }
@@ -126,17 +130,20 @@ func (v *InterfaceNestingRootTopicChildrenArticleParentTopic) UnmarshalJSON(b []
 }
 
 type InterfaceNestingRootTopicChildrenArticleParentTopicChildrenArticle struct {
+	// ID is the identifier of the content.
 	Id mypkg.ID `json:"id"`
 }
 
 func (v InterfaceNestingRootTopicChildrenArticleParentTopicChildrenArticle) implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenArticleParentTopicChildrenContent() {
 }
 
+// Content is implemented by various types like Article, Video, and Topic.
 type InterfaceNestingRootTopicChildrenArticleParentTopicChildrenContent interface {
 	implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenArticleParentTopicChildrenContent()
 }
 
 type InterfaceNestingRootTopicChildrenArticleParentTopicChildrenTopic struct {
+	// ID is the identifier of the content.
 	Id mypkg.ID `json:"id"`
 }
 
@@ -144,17 +151,20 @@ func (v InterfaceNestingRootTopicChildrenArticleParentTopicChildrenTopic) implem
 }
 
 type InterfaceNestingRootTopicChildrenArticleParentTopicChildrenVideo struct {
+	// ID is the identifier of the content.
 	Id mypkg.ID `json:"id"`
 }
 
 func (v InterfaceNestingRootTopicChildrenArticleParentTopicChildrenVideo) implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenArticleParentTopicChildrenContent() {
 }
 
+// Content is implemented by various types like Article, Video, and Topic.
 type InterfaceNestingRootTopicChildrenContent interface {
 	implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenContent()
 }
 
 type InterfaceNestingRootTopicChildrenTopic struct {
+	// ID is the identifier of the content.
 	Id     mypkg.ID                                          `json:"id"`
 	Parent InterfaceNestingRootTopicChildrenTopicParentTopic `json:"parent"`
 }
@@ -163,6 +173,7 @@ func (v InterfaceNestingRootTopicChildrenTopic) implementsGraphQLInterfaceInterf
 }
 
 type InterfaceNestingRootTopicChildrenTopicParentTopic struct {
+	// ID is documented in the Content interface.
 	Id       mypkg.ID                                                           `json:"id"`
 	Children []InterfaceNestingRootTopicChildrenTopicParentTopicChildrenContent `json:"-"`
 }
@@ -215,17 +226,20 @@ func (v *InterfaceNestingRootTopicChildrenTopicParentTopic) UnmarshalJSON(b []by
 }
 
 type InterfaceNestingRootTopicChildrenTopicParentTopicChildrenArticle struct {
+	// ID is the identifier of the content.
 	Id mypkg.ID `json:"id"`
 }
 
 func (v InterfaceNestingRootTopicChildrenTopicParentTopicChildrenArticle) implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenTopicParentTopicChildrenContent() {
 }
 
+// Content is implemented by various types like Article, Video, and Topic.
 type InterfaceNestingRootTopicChildrenTopicParentTopicChildrenContent interface {
 	implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenTopicParentTopicChildrenContent()
 }
 
 type InterfaceNestingRootTopicChildrenTopicParentTopicChildrenTopic struct {
+	// ID is the identifier of the content.
 	Id mypkg.ID `json:"id"`
 }
 
@@ -233,6 +247,7 @@ func (v InterfaceNestingRootTopicChildrenTopicParentTopicChildrenTopic) implemen
 }
 
 type InterfaceNestingRootTopicChildrenTopicParentTopicChildrenVideo struct {
+	// ID is the identifier of the content.
 	Id mypkg.ID `json:"id"`
 }
 
@@ -240,6 +255,7 @@ func (v InterfaceNestingRootTopicChildrenTopicParentTopicChildrenVideo) implemen
 }
 
 type InterfaceNestingRootTopicChildrenVideo struct {
+	// ID is the identifier of the content.
 	Id     mypkg.ID                                          `json:"id"`
 	Parent InterfaceNestingRootTopicChildrenVideoParentTopic `json:"parent"`
 }
@@ -248,6 +264,7 @@ func (v InterfaceNestingRootTopicChildrenVideo) implementsGraphQLInterfaceInterf
 }
 
 type InterfaceNestingRootTopicChildrenVideoParentTopic struct {
+	// ID is documented in the Content interface.
 	Id       mypkg.ID                                                           `json:"id"`
 	Children []InterfaceNestingRootTopicChildrenVideoParentTopicChildrenContent `json:"-"`
 }
@@ -300,17 +317,20 @@ func (v *InterfaceNestingRootTopicChildrenVideoParentTopic) UnmarshalJSON(b []by
 }
 
 type InterfaceNestingRootTopicChildrenVideoParentTopicChildrenArticle struct {
+	// ID is the identifier of the content.
 	Id mypkg.ID `json:"id"`
 }
 
 func (v InterfaceNestingRootTopicChildrenVideoParentTopicChildrenArticle) implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenVideoParentTopicChildrenContent() {
 }
 
+// Content is implemented by various types like Article, Video, and Topic.
 type InterfaceNestingRootTopicChildrenVideoParentTopicChildrenContent interface {
 	implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenVideoParentTopicChildrenContent()
 }
 
 type InterfaceNestingRootTopicChildrenVideoParentTopicChildrenTopic struct {
+	// ID is the identifier of the content.
 	Id mypkg.ID `json:"id"`
 }
 
@@ -318,6 +338,7 @@ func (v InterfaceNestingRootTopicChildrenVideoParentTopicChildrenTopic) implemen
 }
 
 type InterfaceNestingRootTopicChildrenVideoParentTopicChildrenVideo struct {
+	// ID is the identifier of the content.
 	Id mypkg.ID `json:"id"`
 }
 

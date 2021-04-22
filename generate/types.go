@@ -54,9 +54,11 @@ func (g *generator) getTypeForOperation(operation *ast.OperationDefinition, quer
 		return "", errorf(operation.Position, "%v", err)
 	}
 
+	description := fmt.Sprintf("%v is returned by %v on success.", name, operation.Name)
+
 	builder := &typeBuilder{generator: g}
 	err = builder.writeTypedef(
-		name, operation.Name, baseType, operation.Position, fields, queryOptions)
+		name, operation.Name, baseType, operation.Position, fields, queryOptions, description)
 	return name, err
 }
 
@@ -129,6 +131,7 @@ func (g *generator) getTypeForInputType(opName string, typ *ast.Type, options, q
 type field interface {
 	Alias() string
 	Options() (*GenqlientDirective, error)
+	Description() string
 	Type() *ast.Type
 	Pos() *ast.Position
 	SubFields() ([]field, error)
@@ -152,6 +155,13 @@ func (s outputField) Options() (*GenqlientDirective, error) {
 		return nil, err
 	}
 	return s.queryOptions.merge(directive), nil
+}
+
+func (s outputField) Description() string {
+	if s.field.Definition == nil {
+		return ""
+	}
+	return s.field.Definition.Description
 }
 
 func (s outputField) Type() *ast.Type {
@@ -200,8 +210,9 @@ func (s inputField) Options() (*GenqlientDirective, error) {
 	}
 	return s.queryOptions.merge(directive), nil
 }
-func (s inputField) Type() *ast.Type    { return s.field.Type }
-func (s inputField) Pos() *ast.Position { return s.field.Position }
+func (s inputField) Description() string { return s.field.Description }
+func (s inputField) Type() *ast.Type     { return s.field.Type }
+func (s inputField) Pos() *ast.Position  { return s.field.Position }
 
 func (s inputField) SubFields() ([]field, error) {
 	return selectionsForInputType(s.generator, s.field.Type, s.queryOptions), nil
@@ -221,9 +232,6 @@ func (builder *typeBuilder) writeField(typeNamePrefix string, field field) error
 	// We need an exportable name for JSON-marshaling.
 	goName := upperFirst(jsonName)
 
-	builder.WriteString(goName)
-	builder.WriteRune(' ')
-
 	typ := field.Type()
 	if typ == nil {
 		// Unclear why gqlparser hasn't already rejected this,
@@ -242,6 +250,10 @@ func (builder *typeBuilder) writeField(typeNamePrefix string, field field) error
 	}
 
 	typedef := builder.schema.Types[typ.Name()]
+
+	builder.writeDescription(field.Description())
+	builder.WriteString(goName)
+	builder.WriteRune(' ')
 
 	// Note we don't deduplicate suffixes here -- if our prefix is GetUser
 	// and the field name is User, we do GetUserUser.  This is important
@@ -301,7 +313,7 @@ func (builder *typeBuilder) writeType(name, namePrefix string, typ *ast.Type, fi
 	builder.WriteString(name)
 
 	childBuilder := &typeBuilder{generator: builder.generator}
-	return childBuilder.writeTypedef(name, namePrefix, def, typ.Position, fields, options)
+	return childBuilder.writeTypedef(name, namePrefix, def, typ.Position, fields, options, "")
 }
 
 func (builder *typeBuilder) writeTypedef(
@@ -310,6 +322,7 @@ func (builder *typeBuilder) writeTypedef(
 	pos *ast.Position,
 	fields []field,
 	options *GenqlientDirective,
+	description string, // defaults to typedef.Description
 ) (err error) {
 	defer func() {
 		// Whenever we're done, add the type to the type-map.
@@ -320,6 +333,11 @@ func (builder *typeBuilder) writeTypedef(
 			builder.typeMap[typeName] = builder.String()
 		}
 	}()
+
+	if description == "" {
+		description = typedef.Description
+	}
+	builder.writeDescription(description)
 
 	fmt.Fprintf(builder, "type %s ", typeName)
 	switch typedef.Kind {
@@ -355,7 +373,7 @@ func (builder *typeBuilder) writeTypedef(
 		for _, impldef := range builder.schema.GetPossibleTypes(typedef) {
 			name, namePrefix := builder.typeName(typeNamePrefix, impldef)
 			implBuilder := &typeBuilder{generator: builder.generator}
-			err := implBuilder.writeTypedef(name, namePrefix, impldef, pos, fields, options)
+			err := implBuilder.writeTypedef(name, namePrefix, impldef, pos, fields, options, "")
 			if err != nil {
 				return err
 			}
@@ -371,6 +389,7 @@ func (builder *typeBuilder) writeTypedef(
 		builder.WriteString("string\n")
 		builder.WriteString("const (\n")
 		for _, val := range typedef.EnumValues {
+			builder.writeDescription(val.Description)
 			fmt.Fprintf(builder, "%s %s = \"%s\"\n",
 				typeName+goConstName(val.Name),
 				typeName, val.Name)
@@ -381,5 +400,13 @@ func (builder *typeBuilder) writeTypedef(
 		return errorf(pos, "unknown scalar %v: please add it to genqlient.yaml", typedef.Name)
 	default:
 		return errorf(pos, "unexpected kind: %v", typedef.Kind)
+	}
+}
+
+func (builder *typeBuilder) writeDescription(desc string) {
+	if desc != "" {
+		for _, line := range strings.Split(desc, "\n") {
+			builder.WriteString("// " + strings.TrimLeft(line, " \t") + "\n")
+		}
 	}
 }

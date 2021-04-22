@@ -1,15 +1,35 @@
+"""DateTime is a scalar.
+
+We don't really have anything useful to do with this description though.
+"""
 scalar DateTime
 scalar Junk
 scalar ComplexJunk
 
+"""Role is a type a user may have."""
 enum Role {
+  """What is a student?
+  
+  A student is primarily a person enrolled in a school or other educational institution and who is under learning with goals of acquiring knowledge, developing professions and achieving employment at desired field. In the broader sense, a student is anyone who applies themselves to the intensive intellectual engagement with some matter necessary to master it as part of some practical affair in which such mastery is basic or decisive.
+
+  (from [Wikipedia](https://en.wikipedia.org/wiki/Student))
+  """
   STUDENT
+
+  """Teacher is a teacher, who teaches the students."""
   TEACHER
 }
 
+"""UserQueryInput is the argument to Query.users.
+
+Ideally this would support anything and everything!
+Or maybe ideally it wouldn't.
+Really I'm just talking to make this documentation longer.
+"""
 input UserQueryInput {
   email: String
   name: String
+  """id looks the user up by ID.  It's a great way to look up users."""
   id: ID
   role: Role
   names: [String]
@@ -20,7 +40,11 @@ type AuthMethod {
   email: String
 }
 
+"""A User is a user!"""
 type User {
+  """id is the user's ID.
+  
+  It is stable, unique, and opaque, like all good IDs."""
   id: ID!
   roles: [Role!]
   name: String
@@ -31,15 +55,19 @@ type User {
   authMethods: [AuthMethod!]!
 }
 
+"""Content is implemented by various types like Article, Video, and Topic."""
 interface Content {
+  """ID is the identifier of the content."""
   id: ID!
   name: String!
   parent: Topic
 }
 
+"""LeafContent represents content items that can't have child-nodes."""
 union LeafContent = Article | Video
 
 type Article implements Content {
+  """ID is documented in the Content interface."""
   id: ID!
   name: String!
   parent: Topic!
@@ -47,6 +75,7 @@ type Article implements Content {
 }
 
 type Video implements Content {
+  """ID is documented in the Content interface."""
   id: ID!
   name: String!
   parent: Topic!
@@ -54,14 +83,23 @@ type Video implements Content {
 }
 
 type Topic implements Content {
+  """ID is documented in the Content interface."""
   id: ID!
   name: String!
   parent: Topic
   children: [Content!]!
 }
 
+"""Query's description is probably ignored by almost all callers."""
 type Query {
+  """user looks up a user by some stuff.
+
+  See UserQueryInput for what stuff is supported.
+  If query is null, returns the current user.
+  """
   user(query: UserQueryInput): User
+
+  """usersWithRole looks a user up by role."""
   usersWithRole(role: Role!): [User!]!
   root: Topic!
   randomLeaf: LeafContent!

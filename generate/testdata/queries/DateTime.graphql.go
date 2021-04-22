@@ -8,6 +8,7 @@ import (
 	"github.com/Khan/genqlient/graphql"
 )
 
+// convertTimezoneResponse is returned by convertTimezone on success.
 type convertTimezoneResponse struct {
 	Convert time.Time `json:"convert"`
 }

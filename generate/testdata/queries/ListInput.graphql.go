@@ -7,11 +7,20 @@ import (
 	"github.com/me/mypkg"
 )
 
+// ListInputQueryResponse is returned by ListInputQuery on success.
 type ListInputQueryResponse struct {
+	// user looks up a user by some stuff.
+	//
+	// See UserQueryInput for what stuff is supported.
+	// If query is null, returns the current user.
 	User ListInputQueryUser `json:"user"`
 }
 
+// A User is a user!
 type ListInputQueryUser struct {
+	// id is the user's ID.
+	//
+	// It is stable, unique, and opaque, like all good IDs.
 	Id mypkg.ID `json:"id"`
 }
 

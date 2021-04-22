@@ -9,26 +9,48 @@ import (
 	"github.com/me/mypkg"
 )
 
+// OmitEmptyQueryResponse is returned by OmitEmptyQuery on success.
 type OmitEmptyQueryResponse struct {
+	// user looks up a user by some stuff.
+	//
+	// See UserQueryInput for what stuff is supported.
+	// If query is null, returns the current user.
 	User         OmitEmptyQueryUser `json:"user"`
 	MaybeConvert time.Time          `json:"maybeConvert"`
 	Convert2     time.Time          `json:"convert2"`
 }
 
+// A User is a user!
 type OmitEmptyQueryUser struct {
+	// id is the user's ID.
+	//
+	// It is stable, unique, and opaque, like all good IDs.
 	Id mypkg.ID `json:"id"`
 }
 
+// Role is a type a user may have.
 type Role string
 
 const (
+	// What is a student?
+	//
+	// A student is primarily a person enrolled in a school or other educational institution and who is under learning with goals of acquiring knowledge, developing professions and achieving employment at desired field. In the broader sense, a student is anyone who applies themselves to the intensive intellectual engagement with some matter necessary to master it as part of some practical affair in which such mastery is basic or decisive.
+	//
+	// (from [Wikipedia](https://en.wikipedia.org/wiki/Student))
 	RoleStudent Role = "STUDENT"
+	// Teacher is a teacher, who teaches the students.
 	RoleTeacher Role = "TEACHER"
 )
 
+// UserQueryInput is the argument to Query.users.
+//
+// Ideally this would support anything and everything!
+// Or maybe ideally it wouldn't.
+// Really I'm just talking to make this documentation longer.
 type UserQueryInput struct {
-	Email string   `json:"email"`
-	Name  string   `json:"name"`
+	Email string `json:"email"`
+	Name  string `json:"name"`
+	// id looks the user up by ID.  It's a great way to look up users.
 	Id    mypkg.ID `json:"id"`
 	Role  Role     `json:"role"`
 	Names []string `json:"names"`

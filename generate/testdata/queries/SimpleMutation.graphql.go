@@ -7,11 +7,16 @@ import (
 	"github.com/me/mypkg"
 )
 
+// A User is a user!
 type SimpleMutationCreateUser struct {
+	// id is the user's ID.
+	//
+	// It is stable, unique, and opaque, like all good IDs.
 	Id   mypkg.ID `json:"id"`
 	Name string   `json:"name"`
 }
 
+// SimpleMutationResponse is returned by SimpleMutation on success.
 type SimpleMutationResponse struct {
 	CreateUser SimpleMutationCreateUser `json:"createUser"`
 }
