@@ -53,7 +53,8 @@ func getQueries(basedir string, filenames []string) (*ast.QueryDocument, error) 
 	// in one might reference fragments in another.
 	//
 	// TODO(benkraft): It might be better to merge just within a filename, so
-	// that fragment-names don't need to be unique across files.
+	// that fragment-names don't need to be unique across files.  (Although
+	// then we may have other problems; and query-names still need to be.)
 	mergedQueryDoc := new(ast.QueryDocument)
 	addQueryDoc := func(queryDoc *ast.QueryDocument) {
 		mergedQueryDoc.Operations = append(mergedQueryDoc.Operations, queryDoc.Operations...)

@@ -18,8 +18,6 @@ var defaultConfig = &Config{
 type Config struct {
 	// The filename with the GraphQL schema (in SDL format); defaults to
 	// schema.graphql
-	// TODO: Allow fetching a schema via introspection (will need to figure out
-	// how to convert that to SDL).
 	Schema string `yaml:"schema"`
 
 	// Filenames or globs with the operations for which to generate code;
@@ -64,9 +62,7 @@ type Config struct {
 	// (which will be named ctx).  For example, this might do
 	// ctx.Value(myKey).(*graphql.Client).  If omitted, client must be
 	// passed to each method explicitly.
-	// TODO: what if you want to do an import in this snippet, e.g. for a
-	// getter function, global var, or a context-key-type?
-	// TODO: what if you want to return err?
+	// TODO(#5): This is a bit broken, fix it.
 	ClientGetter string `yaml:"client_getter"`
 
 	// A map from GraphQL scalar type name to Go fully-qualified type name for
@@ -75,9 +71,6 @@ type Config struct {
 	// to int, Float to float64, and Boolean to bool), but this setting will
 	// extend or override those mappings.  These types must define MarshalJSON
 	// and UnmarshalJSON methods, or otherwise be convertible to JSON.
-	// TODO: figure out if it makes sense to say you can use these for
-	// non-scalar types; technically it should just work, but what if you
-	// didn't request the right fields?
 	Scalars map[string]string `yaml:"scalars"`
 
 	// Set automatically to the filename of the config file itself.

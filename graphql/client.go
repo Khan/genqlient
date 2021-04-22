@@ -13,10 +13,7 @@ import (
 // Client is the interface that the generate code calls into to actually make
 // requests.
 //
-// Unstable: This interface is likely to change before v1.0.
-//
-// TODO: figure out what we, and others, actually want to use this for, and
-// consider supporting explicit hooks for that instead.
+// Unstable: This interface is likely to change before v1.0, see #19.
 type Client interface {
 	// MakeRequest must make a request to the client's GraphQL API.
 	//

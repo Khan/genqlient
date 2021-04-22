@@ -36,7 +36,6 @@ func (g *generator) baseTypeForOperation(operation ast.Operation) (*ast.Definiti
 }
 
 func (g *generator) getTypeForOperation(operation *ast.OperationDefinition, queryOptions *GenqlientDirective) (name string, err error) {
-	// TODO: configure ResponseName format
 	name = operation.Name + "Response"
 
 	if def, ok := g.typeMap[name]; ok {
@@ -90,12 +89,6 @@ func (g *generator) typeName(prefix string, typ *ast.Definition) (name, nextPref
 		// that's the actual name (the rest are really qualifiers); but if
 		// they are the same then including it once suffices for both
 		// purposes.)
-		// TODO: do this a bit more fuzzily; for example if you have a field
-		//  doThing: DoThingMutation
-		// or
-		//	error: MyError
-		// we should be able to be a bit smarter than
-		// DoThingDoThingMutation/ErrorMyError.
 		name += typeGoName
 	}
 
@@ -115,15 +108,6 @@ func (g *generator) getTypeForInputType(opName string, typ *ast.Type, options, q
 	name := matchFirst(typ.Name(), opName)
 	builder := &typeBuilder{generator: g}
 	// note prefix is ignored here (see generator.typeName)
-	// TODO: passing options is actually kinda wrong, because it means we could
-	// break the "there is only Go type for each input type" rule.  In practice
-	// it's probably rare that you use the same input type twice in a query and
-	// want different settings, though, and it just means we choose one or the
-	// other set of options.
-	// TODO: it's also awkward because you have no way to pass an option for an
-	// individual input-type field.
-	// TODO: should we use pointers by default for input-types if they're
-	// structs?
 	err := builder.writeType(name, "", typ, selectionsForInputType(g, typ, queryOptions), options)
 	return builder.String(), err
 }
@@ -289,9 +273,7 @@ func (builder *typeBuilder) writeType(name, namePrefix string, typ *ast.Type, fi
 		typ = typ.Elem
 	}
 	if options.GetPointer() {
-		// TODO: this does []*T, you might in principle want *[]T or
-		// *[]*T.  We could add a "sliceptr" option if it comes up (that's
-		// still not correct if you wanted *[][]*[]T, but, like, tough luck).
+		// Note this does []*T or [][]*T, not e.g. *[][]T.  See #16.
 		builder.WriteString("*")
 	}
 

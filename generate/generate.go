@@ -138,7 +138,6 @@ func (g *generator) addOperation(op *ast.OperationDefinition) error {
 
 	var builder strings.Builder
 	f := formatter.NewFormatter(&builder)
-	// TODO: this could even get minifed.
 	f.FormatQueryDocument(&ast.QueryDocument{
 		Operations: ast.OperationList{op},
 		// TODO: handle fragments
