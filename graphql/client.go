@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 
 	"github.com/vektah/gqlparser/v2/gqlerror"
@@ -108,7 +109,11 @@ func (c *client) MakeRequest(ctx context.Context, opName string, query string, r
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("returned error %v: %v", resp.Status, string(body))
+		respBody, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			respBody = []byte("<unreadable>")
+		}
+		return fmt.Errorf("returned error %v: %s", resp.Status, respBody)
 	}
 
 	var dataAndErrors response
