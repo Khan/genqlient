@@ -372,7 +372,7 @@ func (builder *typeBuilder) writeTypedef(
 		builder.WriteString("const (\n")
 		for _, val := range typedef.EnumValues {
 			fmt.Fprintf(builder, "%s %s = \"%s\"\n",
-				typeNamePrefix+goConstName(val.Name),
+				typeName+goConstName(val.Name),
 				typeName, val.Name)
 		}
 		builder.WriteString(")\n")

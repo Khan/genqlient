@@ -1,0 +1,9 @@
+{
+  "operations": [
+    {
+      "operationName": "InputEnumQuery",
+      "query": "\nquery InputEnumQuery ($role: Role!) {\n\tusersWithRole(role: $role) {\n\t\tid\n\t}\n}\n",
+      "sourceLocation": "testdata/queries/InputEnum.graphql"
+    }
+  ]
+}

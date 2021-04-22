@@ -1,0 +1,5 @@
+query InputEnumQuery($role: Role!) {
+  usersWithRole(role: $role) {
+    id
+  }
+}
