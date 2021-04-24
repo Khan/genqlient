@@ -48,8 +48,8 @@ type operation struct {
 	Args []argument `json:"-"`
 	// The type-name for the operation's response type.
 	ResponseName string `json:"-"`
-	// The original location of this query.
-	SourceLocation string `json:"sourceLocation"`
+	// The original filename from which we got this query.
+	SourceFilename string `json:"sourceLocation"`
 }
 
 type exportedOperations struct {
@@ -167,6 +167,16 @@ func (g *generator) addOperation(op *ast.OperationDefinition) error {
 		docComment = "// " + strings.ReplaceAll(commentLines, "\n", "\n// ")
 	}
 
+	// If the filename is a pseudo-filename filename.go:startline, just
+	// put the filename in the export; we don't figure out the line offset
+	// anyway, and if you want to check those exports in they will change a
+	// lot if they have line numbers.
+	// TODO: refactor to use the errorPos machinery for this
+	sourceFilename := op.Position.Src.Name
+	if i := strings.LastIndex(sourceFilename, ":"); i != -1 {
+		sourceFilename = sourceFilename[:i]
+	}
+
 	g.Operations = append(g.Operations, operation{
 		Type: op.Operation,
 		Name: op.Name,
@@ -175,7 +185,7 @@ func (g *generator) addOperation(op *ast.OperationDefinition) error {
 		Body:           "\n" + builder.String(),
 		Args:           args,
 		ResponseName:   responseName,
-		SourceLocation: op.Position.Src.Name,
+		SourceFilename: op.Position.Src.Name,
 	})
 
 	return nil
