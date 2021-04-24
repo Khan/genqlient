@@ -9,6 +9,9 @@ import (
 	"github.com/me/mypkg"
 )
 
+// PointersQueryOtherUser includes the requested fields of the GraphQL type User.
+// The GraphQL type's documentation follows.
+//
 // A User is a user!
 type PointersQueryOtherUser struct {
 	// id is the user's ID.
@@ -32,6 +35,9 @@ type PointersQueryResponse struct {
 	MaybeConvert time.Time               `json:"maybeConvert"`
 }
 
+// PointersQueryUser includes the requested fields of the GraphQL type User.
+// The GraphQL type's documentation follows.
+//
 // A User is a user!
 type PointersQueryUser struct {
 	// id is the user's ID.

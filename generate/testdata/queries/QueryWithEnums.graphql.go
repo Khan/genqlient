@@ -6,6 +6,9 @@ import (
 	"github.com/Khan/genqlient/graphql"
 )
 
+// QueryWithEnumsOtherUser includes the requested fields of the GraphQL type User.
+// The GraphQL type's documentation follows.
+//
 // A User is a user!
 type QueryWithEnumsOtherUser struct {
 	Roles []Role `json:"roles"`
@@ -25,6 +28,9 @@ type QueryWithEnumsResponse struct {
 	OtherUser QueryWithEnumsOtherUser `json:"otherUser"`
 }
 
+// QueryWithEnumsUser includes the requested fields of the GraphQL type User.
+// The GraphQL type's documentation follows.
+//
 // A User is a user!
 type QueryWithEnumsUser struct {
 	Roles []Role `json:"roles"`

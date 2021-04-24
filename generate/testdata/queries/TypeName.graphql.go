@@ -16,6 +16,9 @@ type TypeNameQueryResponse struct {
 	User TypeNameQueryUser `json:"user"`
 }
 
+// TypeNameQueryUser includes the requested fields of the GraphQL type User.
+// The GraphQL type's documentation follows.
+//
 // A User is a user!
 type TypeNameQueryUser struct {
 	Typename string `json:"__typename"`

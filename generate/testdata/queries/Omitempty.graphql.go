@@ -20,6 +20,9 @@ type OmitEmptyQueryResponse struct {
 	Convert2     time.Time          `json:"convert2"`
 }
 
+// OmitEmptyQueryUser includes the requested fields of the GraphQL type User.
+// The GraphQL type's documentation follows.
+//
 // A User is a user!
 type OmitEmptyQueryUser struct {
 	// id is the user's ID.

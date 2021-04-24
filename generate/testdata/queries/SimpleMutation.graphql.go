@@ -7,6 +7,9 @@ import (
 	"github.com/me/mypkg"
 )
 
+// SimpleMutationCreateUser includes the requested fields of the GraphQL type User.
+// The GraphQL type's documentation follows.
+//
 // A User is a user!
 type SimpleMutationCreateUser struct {
 	// id is the user's ID.

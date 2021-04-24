@@ -14,6 +14,7 @@ type InterfaceNoFragmentsQueryResponse struct {
 	Root InterfaceNoFragmentsQueryRootTopic `json:"root"`
 }
 
+// InterfaceNoFragmentsQueryRootTopic includes the requested fields of the GraphQL type Topic.
 type InterfaceNoFragmentsQueryRootTopic struct {
 	// ID is documented in the Content interface.
 	Id       mypkg.ID                                            `json:"id"`
@@ -68,6 +69,7 @@ func (v *InterfaceNoFragmentsQueryRootTopic) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+// InterfaceNoFragmentsQueryRootTopicChildrenArticle includes the requested fields of the GraphQL type Article.
 type InterfaceNoFragmentsQueryRootTopicChildrenArticle struct {
 	// ID is the identifier of the content.
 	Id   mypkg.ID `json:"id"`
@@ -77,11 +79,15 @@ type InterfaceNoFragmentsQueryRootTopicChildrenArticle struct {
 func (v InterfaceNoFragmentsQueryRootTopicChildrenArticle) implementsGraphQLInterfaceInterfaceNoFragmentsQueryRootTopicChildrenContent() {
 }
 
+// InterfaceNoFragmentsQueryRootTopicChildrenContent includes the requested fields of the GraphQL type Content.
+// The GraphQL type's documentation follows.
+//
 // Content is implemented by various types like Article, Video, and Topic.
 type InterfaceNoFragmentsQueryRootTopicChildrenContent interface {
 	implementsGraphQLInterfaceInterfaceNoFragmentsQueryRootTopicChildrenContent()
 }
 
+// InterfaceNoFragmentsQueryRootTopicChildrenTopic includes the requested fields of the GraphQL type Topic.
 type InterfaceNoFragmentsQueryRootTopicChildrenTopic struct {
 	// ID is the identifier of the content.
 	Id   mypkg.ID `json:"id"`
@@ -91,6 +97,7 @@ type InterfaceNoFragmentsQueryRootTopicChildrenTopic struct {
 func (v InterfaceNoFragmentsQueryRootTopicChildrenTopic) implementsGraphQLInterfaceInterfaceNoFragmentsQueryRootTopicChildrenContent() {
 }
 
+// InterfaceNoFragmentsQueryRootTopicChildrenVideo includes the requested fields of the GraphQL type Video.
 type InterfaceNoFragmentsQueryRootTopicChildrenVideo struct {
 	// ID is the identifier of the content.
 	Id   mypkg.ID `json:"id"`

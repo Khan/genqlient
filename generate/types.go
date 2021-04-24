@@ -317,7 +317,25 @@ func (builder *typeBuilder) writeTypedef(
 	}()
 
 	if description == "" {
-		description = typedef.Description
+		switch typedef.Kind {
+		case ast.Object, ast.Interface, ast.Union:
+			// For types where we only have some fields, note that, along with
+			// the GraphQL documentation (if any).  We don't want to just use
+			// the GraphQL documentation, since it may refer to fields we
+			// haven't selected, say.
+			// TODO: When we implement interfaces and unions more completely,
+			// also mention the concrete types they might be.
+			description = fmt.Sprintf(
+				"%v includes the requested fields of the GraphQL type %v.",
+				typeName, typedef.Name)
+			if typedef.Description != "" {
+				description = fmt.Sprintf(
+					"%v\nThe GraphQL type's documentation follows.\n\n%v",
+					description, typedef.Description)
+			}
+		default:
+			description = typedef.Description
+		}
 	}
 	builder.writeDescription(description)
 

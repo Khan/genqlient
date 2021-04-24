@@ -20,11 +20,17 @@ const (
 	RoleTeacher Role = "TEACHER"
 )
 
+// UsesEnumTwiceQueryMeUser includes the requested fields of the GraphQL type User.
+// The GraphQL type's documentation follows.
+//
 // A User is a user!
 type UsesEnumTwiceQueryMeUser struct {
 	Roles []Role `json:"roles"`
 }
 
+// UsesEnumTwiceQueryOtherUser includes the requested fields of the GraphQL type User.
+// The GraphQL type's documentation follows.
+//
 // A User is a user!
 type UsesEnumTwiceQueryOtherUser struct {
 	Roles []Role `json:"roles"`

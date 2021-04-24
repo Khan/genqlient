@@ -15,6 +15,9 @@ type QueryWithSlicesResponse struct {
 	User QueryWithSlicesUser `json:"user"`
 }
 
+// QueryWithSlicesUser includes the requested fields of the GraphQL type User.
+// The GraphQL type's documentation follows.
+//
 // A User is a user!
 type QueryWithSlicesUser struct {
 	Emails                []string `json:"emails"`

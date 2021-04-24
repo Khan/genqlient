@@ -8,6 +8,7 @@ import (
 	"github.com/Khan/genqlient/graphql"
 )
 
+// UnionNoFragmentsQueryRandomLeafArticle includes the requested fields of the GraphQL type Article.
 type UnionNoFragmentsQueryRandomLeafArticle struct {
 	Typename string `json:"__typename"`
 }
@@ -15,11 +16,15 @@ type UnionNoFragmentsQueryRandomLeafArticle struct {
 func (v UnionNoFragmentsQueryRandomLeafArticle) implementsGraphQLInterfaceUnionNoFragmentsQueryRandomLeafLeafContent() {
 }
 
+// UnionNoFragmentsQueryRandomLeafLeafContent includes the requested fields of the GraphQL type LeafContent.
+// The GraphQL type's documentation follows.
+//
 // LeafContent represents content items that can't have child-nodes.
 type UnionNoFragmentsQueryRandomLeafLeafContent interface {
 	implementsGraphQLInterfaceUnionNoFragmentsQueryRandomLeafLeafContent()
 }
 
+// UnionNoFragmentsQueryRandomLeafVideo includes the requested fields of the GraphQL type Video.
 type UnionNoFragmentsQueryRandomLeafVideo struct {
 	Typename string `json:"__typename"`
 }

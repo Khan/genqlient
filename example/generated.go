@@ -15,6 +15,9 @@ type getUserResponse struct {
 	User getUserUser `json:"user"`
 }
 
+// getUserUser includes the requested fields of the GraphQL type User.
+// The GraphQL type's documentation follows.
+//
 // A user is an individual's account on GitHub that owns repositories and can make new content.
 type getUserUser struct {
 	// The user's public profile name.
@@ -29,6 +32,9 @@ type getViewerResponse struct {
 	Viewer getViewerViewerUser `json:"viewer"`
 }
 
+// getViewerViewerUser includes the requested fields of the GraphQL type User.
+// The GraphQL type's documentation follows.
+//
 // A user is an individual's account on GitHub that owns repositories and can make new content.
 type getViewerViewerUser struct {
 	// The user's public profile name.

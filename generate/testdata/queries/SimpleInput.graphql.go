@@ -16,6 +16,9 @@ type SimpleInputQueryResponse struct {
 	User SimpleInputQueryUser `json:"user"`
 }
 
+// SimpleInputQueryUser includes the requested fields of the GraphQL type User.
+// The GraphQL type's documentation follows.
+//
 // A User is a user!
 type SimpleInputQueryUser struct {
 	// id is the user's ID.

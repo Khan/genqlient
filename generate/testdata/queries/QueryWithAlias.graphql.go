@@ -16,6 +16,9 @@ type QueryWithAliasResponse struct {
 	User QueryWithAliasUser `json:"User"`
 }
 
+// QueryWithAliasUser includes the requested fields of the GraphQL type User.
+// The GraphQL type's documentation follows.
+//
 // A User is a user!
 type QueryWithAliasUser struct {
 	// id is the user's ID.

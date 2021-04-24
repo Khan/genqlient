@@ -15,11 +15,15 @@ type QueryWithStructsResponse struct {
 	User QueryWithStructsUser `json:"user"`
 }
 
+// QueryWithStructsUser includes the requested fields of the GraphQL type User.
+// The GraphQL type's documentation follows.
+//
 // A User is a user!
 type QueryWithStructsUser struct {
 	AuthMethods []QueryWithStructsUserAuthMethodsAuthMethod `json:"authMethods"`
 }
 
+// QueryWithStructsUserAuthMethodsAuthMethod includes the requested fields of the GraphQL type AuthMethod.
 type QueryWithStructsUserAuthMethodsAuthMethod struct {
 	Provider string `json:"provider"`
 	Email    string `json:"email"`
