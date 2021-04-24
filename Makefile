@@ -3,7 +3,7 @@ example:
 	go run ./example/cmd/example/main.go
 
 check:
-	go test ./...
+	go test -cover ./...
 
 genqlient.png: genqlient.svg
 	convert -density 600 -background transparent "$<" "$@"
