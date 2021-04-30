@@ -147,6 +147,12 @@ Response{A: T{B: "...", C: "...", D: "..."}}
 Response{A: U{B: "..."}}
 ```
 
+Optionally, we might define a getter-method `GetB() string` on `T` and `U`, and include it in `I`, so that if you only need `B` you don't need to type-switch.  We could also define methods `GetC() string` and `GetD() string`, and another interface
+```go
+type F interface { isF(); GetC() string; GetD() string }
+```
+so that if you want to use the same fragment `f` to share code in several places, you can do that, because all of the relevant types will implement `F`.  To do that we'll have to have the type-names for fragment fields rooted at the fragment rather than at the query, which is probably preferable anyway since they are guaranteed to be the same for all spreads of the fragment.
+
 Another natural option, which looks more like the way `shurcooL/graphql` does things, is to generate a type for each fragment, and only fill in the relevant ones:
 ```go
 type Response struct {
@@ -186,9 +192,8 @@ Pros of the first approach:
 Pros of the second approach:
 
 - the types are simpler, and allow the option of unnamed types
-- if you query an interface, but don't care about the types, just the shared fields, you don't have to worry about anything special
-- we avoid having to have a bunch of interface methods (or push a type switch onto callers)
-- if you're using fragments to share code, rather than to type switch, we can more naturally share that type
+- if you query an interface, but don't care about the types, just the shared fields, you don't even have to think about any of this stuff
+- for callers accessing shared fields (of interfaces or of fragments spread into several places) we avoid having to make them do a type switch or use getter methods
 
 Note that both approaches require that we add `__typename` to every selection set which has fragments (unless the types match exactly).  This seems fine since Apollo client also does so for all selection sets.  We also need to define `UnmarshalJSON` on every type with fragment-spreads; in the former case Go doesn't know how to unmarshal into an interface type, while in the latter the Go type structure is too different from that of the JSON.  (Note that `shurcooL/graphql` actually has its own JSON-decoder to solve this problem.)
 
@@ -229,7 +234,7 @@ In other libraries:
 - shurcooL/graphql uses option 2.
 - protobuf has a similar problem, and uses basically option 1 in Go (even though in other languages it uses something more like option 3).
 
-**Decision:** In general, it seems like the GraphQL Way, and perhaps also the Go Way is Option 1; I've always found the way shurcooL/graphql handles this to be a bit strange.  So I think it has to be at least the default.  In principle we could allow both though, since option 2 is legitimately convenient, especially if you want to use fragments as a code-sharing mechanism.
+**Decision:** In general, it seems like the GraphQL Way, and perhaps also the Go Way is Option 1; I've always found the way shurcooL/graphql handles this to be a bit strange.  So I think it has to be at least the default.  In principle we could allow both though, since option 2 is legitimately convenient for some cases, especially if you are querying shared fields of interfaces or using fragments as a code-sharing mechanism, since option 1 handles those only through getter methods.
 
 ## Configuration and runtime
 
