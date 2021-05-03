@@ -185,7 +185,7 @@ func (g *generator) addOperation(op *ast.OperationDefinition) error {
 		Body:           "\n" + builder.String(),
 		Args:           args,
 		ResponseName:   responseName,
-		SourceFilename: op.Position.Src.Name,
+		SourceFilename: sourceFilename,
 	})
 
 	return nil
