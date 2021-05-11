@@ -151,7 +151,7 @@ Optionally, we might define a getter-method `GetB() string` on `T` and `U`, and 
 ```go
 type F interface { isF(); GetC() string; GetD() string }
 ```
-so that if you want to use the same fragment `f` to share code in several places, you can do that, because all of the relevant types will implement `F`.  To do that we'll have to have the type-names for fragment fields rooted at the fragment rather than at the query, which is probably preferable anyway since they are guaranteed to be the same for all spreads of the fragment.
+so that if you want to use the same fragment `f` to share code in several places, you can do that, because all of the relevant types will implement `F`.  To do that we'll have to have the type-names for fragment fields rooted at the fragment rather than at the query, which is probably preferable anyway since they are guaranteed to be the same for all spreads of the fragment.  (Or we can just do the methods, and let you define the interface, although you still have to root the type-names for the same reason.) 
 
 Another natural option, which looks more like the way `shurcooL/graphql` does things, is to generate a type for each fragment, and only fill in the relevant ones:
 ```go
