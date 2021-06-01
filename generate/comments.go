@@ -43,7 +43,9 @@ type GenqlientDirective struct {
 	pos *ast.Position
 
 	// If set, this argument will be omitted if it's equal to its Go zero
-	// value.  For example, given the following query:
+	// value, or is an empty slice.
+	//
+	// For example, given the following query:
 	//	# @genqlient(omitempty: true)
 	//	query MyQuery(arg: String) { ... }
 	// genqlient will generate a function

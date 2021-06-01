@@ -15,9 +15,10 @@ type OmitEmptyQueryResponse struct {
 	//
 	// See UserQueryInput for what stuff is supported.
 	// If query is null, returns the current user.
-	User         OmitEmptyQueryUser `json:"user"`
-	MaybeConvert time.Time          `json:"maybeConvert"`
-	Convert2     time.Time          `json:"convert2"`
+	User         OmitEmptyQueryUser      `json:"user"`
+	Users        OmitEmptyQueryUsersUser `json:"users"`
+	MaybeConvert time.Time               `json:"maybeConvert"`
+	Convert2     time.Time               `json:"convert2"`
 }
 
 // OmitEmptyQueryUser includes the requested fields of the GraphQL type User.
@@ -25,6 +26,17 @@ type OmitEmptyQueryResponse struct {
 //
 // A User is a user!
 type OmitEmptyQueryUser struct {
+	// id is the user's ID.
+	//
+	// It is stable, unique, and opaque, like all good IDs.
+	Id mypkg.ID `json:"id"`
+}
+
+// OmitEmptyQueryUsersUser includes the requested fields of the GraphQL type User.
+// The GraphQL type's documentation follows.
+//
+// A User is a user!
+type OmitEmptyQueryUsersUser struct {
 	// id is the user's ID.
 	//
 	// It is stable, unique, and opaque, like all good IDs.
@@ -62,15 +74,32 @@ type UserQueryInput struct {
 func OmitEmptyQuery(
 	client graphql.Client,
 	query UserQueryInput,
+	queries []UserQueryInput,
 	dt time.Time,
 	tz string,
 	tzNoOmitEmpty string,
 ) (*OmitEmptyQueryResponse, error) {
 	variables := map[string]interface{}{
-		"query":         query,
-		"dt":            dt,
-		"tz":            tz,
 		"tzNoOmitEmpty": tzNoOmitEmpty,
+	}
+
+	var zero_query UserQueryInput
+	if query != zero_query {
+		variables["query"] = query
+	}
+
+	if len(queries) > 0 {
+		variables["queries"] = queries
+	}
+
+	var zero_dt time.Time
+	if dt != zero_dt {
+		variables["dt"] = dt
+	}
+
+	var zero_tz string
+	if tz != zero_tz {
+		variables["tz"] = tz
 	}
 
 	var retval OmitEmptyQueryResponse
@@ -78,8 +107,11 @@ func OmitEmptyQuery(
 		nil,
 		"OmitEmptyQuery",
 		`
-query OmitEmptyQuery ($query: UserQueryInput, $dt: DateTime, $tz: String, $tzNoOmitEmpty: String) {
+query OmitEmptyQuery ($query: UserQueryInput, $queries: [UserQueryInput], $dt: DateTime, $tz: String, $tzNoOmitEmpty: String) {
 	user(query: $query) {
+		id
+	}
+	users(query: $queries) {
 		id
 	}
 	maybeConvert(dt: $dt, tz: $tz)

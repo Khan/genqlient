@@ -60,6 +60,7 @@ type argument struct {
 	GoName      string
 	GoType      string
 	GraphQLName string
+	IsSlice     bool
 	Options     *GenqlientDirective
 }
 
@@ -127,7 +128,8 @@ func (g *generator) getArgument(
 		GraphQLName: graphQLName,
 		GoName:      lowerFirst(graphQLName),
 		GoType:      goType,
-		Options:     directive,
+		IsSlice:     arg.Type.Elem != nil,
+		Options:     operationDirective.merge(directive),
 	}, nil
 }
 

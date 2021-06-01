@@ -99,6 +99,8 @@ type Query {
   """
   user(query: UserQueryInput): User
 
+  users(query: [UserQueryInput]): User
+
   """usersWithRole looks a user up by role."""
   usersWithRole(role: Role!): [User!]!
   root: Topic!

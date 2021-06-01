@@ -31,10 +31,14 @@ func {{.Name}}(
     }
     {{range .Args -}}
     {{if .Options.GetOmitempty -}}
+    {{if .IsSlice -}}
+    if len({{.GoName}}) > 0 {
+    {{else -}}
     {{/* zero_{{.GoType}} would be a better name, but {{.GoType}} would require
          munging since it might be, say, `time.Time`. */}}
     var zero_{{.GoName}} {{.GoType}}
     if {{.GoName}} != zero_{{.GoName}} {
+    {{end -}}
         variables["{{.GraphQLName}}"] = {{.GoName}}
     }
     {{end}}
