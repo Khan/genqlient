@@ -1,8 +1,10 @@
 package generate
 
 import (
+	"fmt"
 	"io/ioutil"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -68,6 +70,41 @@ func TestGenerate(t *testing.T) {
 				})
 				// TODO(benkraft): Also check that the code at least builds!
 			}
+
+			t.Run("Build", func(t *testing.T) {
+				if testing.Short() {
+					t.Skip("skipping build due to -short")
+				} else if sourceFilename == "InterfaceNesting.graphql" ||
+					sourceFilename == "InterfaceNoFragments.graphql" ||
+					sourceFilename == "Omitempty.graphql" {
+					t.Skip("TODO: enable these once they build")
+				}
+
+				goContent := generated[goFilename]
+				// We need to put this within the current module, rather than in
+				// /tmp, so that it can access internal/testutil.
+				f, err := ioutil.TempFile("./testdata/tmp", sourceFilename+"_*.go")
+				if err != nil {
+					t.Fatal(err)
+				}
+				defer func() {
+					f.Close()
+					os.Remove(f.Name())
+				}()
+
+				_, err = f.Write(goContent)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				cmd := exec.Command("go", "build", f.Name())
+				cmd.Stdout = os.Stdout
+				cmd.Stderr = os.Stderr
+				err = cmd.Run()
+				if err != nil {
+					t.Fatal(fmt.Errorf("generated code does not compile: %w", err))
+				}
+			})
 		})
 	}
 }
