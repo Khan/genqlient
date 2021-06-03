@@ -4,7 +4,7 @@ package test
 
 import (
 	"github.com/Khan/genqlient/graphql"
-	"github.com/me/mypkg"
+	"github.com/Khan/genqlient/internal/testutil"
 )
 
 // InputEnumQueryResponse is returned by InputEnumQuery on success.
@@ -21,7 +21,7 @@ type InputEnumQueryUsersWithRoleUser struct {
 	// id is the user's ID.
 	//
 	// It is stable, unique, and opaque, like all good IDs.
-	Id mypkg.ID `json:"id"`
+	Id testutil.ID `json:"id"`
 }
 
 // Role is a type a user may have.

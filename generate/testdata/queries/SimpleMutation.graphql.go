@@ -4,7 +4,7 @@ package test
 
 import (
 	"github.com/Khan/genqlient/graphql"
-	"github.com/me/mypkg"
+	"github.com/Khan/genqlient/internal/testutil"
 )
 
 // SimpleMutationCreateUser includes the requested fields of the GraphQL type User.
@@ -15,8 +15,8 @@ type SimpleMutationCreateUser struct {
 	// id is the user's ID.
 	//
 	// It is stable, unique, and opaque, like all good IDs.
-	Id   mypkg.ID `json:"id"`
-	Name string   `json:"name"`
+	Id   testutil.ID `json:"id"`
+	Name string      `json:"name"`
 }
 
 // SimpleMutationResponse is returned by SimpleMutation on success.

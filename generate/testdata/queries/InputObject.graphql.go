@@ -4,7 +4,7 @@ package test
 
 import (
 	"github.com/Khan/genqlient/graphql"
-	"github.com/me/mypkg"
+	"github.com/Khan/genqlient/internal/testutil"
 )
 
 // InputObjectQueryResponse is returned by InputObjectQuery on success.
@@ -24,7 +24,7 @@ type InputObjectQueryUser struct {
 	// id is the user's ID.
 	//
 	// It is stable, unique, and opaque, like all good IDs.
-	Id mypkg.ID `json:"id"`
+	Id testutil.ID `json:"id"`
 }
 
 // Role is a type a user may have.
@@ -50,9 +50,9 @@ type UserQueryInput struct {
 	Email string `json:"email"`
 	Name  string `json:"name"`
 	// id looks the user up by ID.  It's a great way to look up users.
-	Id    mypkg.ID `json:"id"`
-	Role  Role     `json:"role"`
-	Names []string `json:"names"`
+	Id    testutil.ID `json:"id"`
+	Role  Role        `json:"role"`
+	Names []string    `json:"names"`
 }
 
 func InputObjectQuery(

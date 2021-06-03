@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 
 	"github.com/Khan/genqlient/graphql"
-	"github.com/me/mypkg"
+	"github.com/Khan/genqlient/internal/testutil"
 )
 
 // InterfaceNestingResponse is returned by InterfaceNesting on success.
@@ -17,7 +17,7 @@ type InterfaceNestingResponse struct {
 // InterfaceNestingRootTopic includes the requested fields of the GraphQL type Topic.
 type InterfaceNestingRootTopic struct {
 	// ID is documented in the Content interface.
-	Id       mypkg.ID                                   `json:"id"`
+	Id       testutil.ID                                `json:"id"`
 	Children []InterfaceNestingRootTopicChildrenContent `json:"-"`
 }
 
@@ -71,7 +71,7 @@ func (v *InterfaceNestingRootTopic) UnmarshalJSON(b []byte) error {
 // InterfaceNestingRootTopicChildrenArticle includes the requested fields of the GraphQL type Article.
 type InterfaceNestingRootTopicChildrenArticle struct {
 	// ID is the identifier of the content.
-	Id     mypkg.ID                                            `json:"id"`
+	Id     testutil.ID                                         `json:"id"`
 	Parent InterfaceNestingRootTopicChildrenArticleParentTopic `json:"parent"`
 }
 
@@ -81,7 +81,7 @@ func (v InterfaceNestingRootTopicChildrenArticle) implementsGraphQLInterfaceInte
 // InterfaceNestingRootTopicChildrenArticleParentTopic includes the requested fields of the GraphQL type Topic.
 type InterfaceNestingRootTopicChildrenArticleParentTopic struct {
 	// ID is documented in the Content interface.
-	Id       mypkg.ID                                                             `json:"id"`
+	Id       testutil.ID                                                          `json:"id"`
 	Children []InterfaceNestingRootTopicChildrenArticleParentTopicChildrenContent `json:"-"`
 }
 
@@ -135,7 +135,7 @@ func (v *InterfaceNestingRootTopicChildrenArticleParentTopic) UnmarshalJSON(b []
 // InterfaceNestingRootTopicChildrenArticleParentTopicChildrenArticle includes the requested fields of the GraphQL type Article.
 type InterfaceNestingRootTopicChildrenArticleParentTopicChildrenArticle struct {
 	// ID is the identifier of the content.
-	Id mypkg.ID `json:"id"`
+	Id testutil.ID `json:"id"`
 }
 
 func (v InterfaceNestingRootTopicChildrenArticleParentTopicChildrenArticle) implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenArticleParentTopicChildrenContent() {
@@ -152,7 +152,7 @@ type InterfaceNestingRootTopicChildrenArticleParentTopicChildrenContent interfac
 // InterfaceNestingRootTopicChildrenArticleParentTopicChildrenTopic includes the requested fields of the GraphQL type Topic.
 type InterfaceNestingRootTopicChildrenArticleParentTopicChildrenTopic struct {
 	// ID is the identifier of the content.
-	Id mypkg.ID `json:"id"`
+	Id testutil.ID `json:"id"`
 }
 
 func (v InterfaceNestingRootTopicChildrenArticleParentTopicChildrenTopic) implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenArticleParentTopicChildrenContent() {
@@ -161,7 +161,7 @@ func (v InterfaceNestingRootTopicChildrenArticleParentTopicChildrenTopic) implem
 // InterfaceNestingRootTopicChildrenArticleParentTopicChildrenVideo includes the requested fields of the GraphQL type Video.
 type InterfaceNestingRootTopicChildrenArticleParentTopicChildrenVideo struct {
 	// ID is the identifier of the content.
-	Id mypkg.ID `json:"id"`
+	Id testutil.ID `json:"id"`
 }
 
 func (v InterfaceNestingRootTopicChildrenArticleParentTopicChildrenVideo) implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenArticleParentTopicChildrenContent() {
@@ -178,7 +178,7 @@ type InterfaceNestingRootTopicChildrenContent interface {
 // InterfaceNestingRootTopicChildrenTopic includes the requested fields of the GraphQL type Topic.
 type InterfaceNestingRootTopicChildrenTopic struct {
 	// ID is the identifier of the content.
-	Id     mypkg.ID                                          `json:"id"`
+	Id     testutil.ID                                       `json:"id"`
 	Parent InterfaceNestingRootTopicChildrenTopicParentTopic `json:"parent"`
 }
 
@@ -188,7 +188,7 @@ func (v InterfaceNestingRootTopicChildrenTopic) implementsGraphQLInterfaceInterf
 // InterfaceNestingRootTopicChildrenTopicParentTopic includes the requested fields of the GraphQL type Topic.
 type InterfaceNestingRootTopicChildrenTopicParentTopic struct {
 	// ID is documented in the Content interface.
-	Id       mypkg.ID                                                           `json:"id"`
+	Id       testutil.ID                                                        `json:"id"`
 	Children []InterfaceNestingRootTopicChildrenTopicParentTopicChildrenContent `json:"-"`
 }
 
@@ -242,7 +242,7 @@ func (v *InterfaceNestingRootTopicChildrenTopicParentTopic) UnmarshalJSON(b []by
 // InterfaceNestingRootTopicChildrenTopicParentTopicChildrenArticle includes the requested fields of the GraphQL type Article.
 type InterfaceNestingRootTopicChildrenTopicParentTopicChildrenArticle struct {
 	// ID is the identifier of the content.
-	Id mypkg.ID `json:"id"`
+	Id testutil.ID `json:"id"`
 }
 
 func (v InterfaceNestingRootTopicChildrenTopicParentTopicChildrenArticle) implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenTopicParentTopicChildrenContent() {
@@ -259,7 +259,7 @@ type InterfaceNestingRootTopicChildrenTopicParentTopicChildrenContent interface 
 // InterfaceNestingRootTopicChildrenTopicParentTopicChildrenTopic includes the requested fields of the GraphQL type Topic.
 type InterfaceNestingRootTopicChildrenTopicParentTopicChildrenTopic struct {
 	// ID is the identifier of the content.
-	Id mypkg.ID `json:"id"`
+	Id testutil.ID `json:"id"`
 }
 
 func (v InterfaceNestingRootTopicChildrenTopicParentTopicChildrenTopic) implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenTopicParentTopicChildrenContent() {
@@ -268,7 +268,7 @@ func (v InterfaceNestingRootTopicChildrenTopicParentTopicChildrenTopic) implemen
 // InterfaceNestingRootTopicChildrenTopicParentTopicChildrenVideo includes the requested fields of the GraphQL type Video.
 type InterfaceNestingRootTopicChildrenTopicParentTopicChildrenVideo struct {
 	// ID is the identifier of the content.
-	Id mypkg.ID `json:"id"`
+	Id testutil.ID `json:"id"`
 }
 
 func (v InterfaceNestingRootTopicChildrenTopicParentTopicChildrenVideo) implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenTopicParentTopicChildrenContent() {
@@ -277,7 +277,7 @@ func (v InterfaceNestingRootTopicChildrenTopicParentTopicChildrenVideo) implemen
 // InterfaceNestingRootTopicChildrenVideo includes the requested fields of the GraphQL type Video.
 type InterfaceNestingRootTopicChildrenVideo struct {
 	// ID is the identifier of the content.
-	Id     mypkg.ID                                          `json:"id"`
+	Id     testutil.ID                                       `json:"id"`
 	Parent InterfaceNestingRootTopicChildrenVideoParentTopic `json:"parent"`
 }
 
@@ -287,7 +287,7 @@ func (v InterfaceNestingRootTopicChildrenVideo) implementsGraphQLInterfaceInterf
 // InterfaceNestingRootTopicChildrenVideoParentTopic includes the requested fields of the GraphQL type Topic.
 type InterfaceNestingRootTopicChildrenVideoParentTopic struct {
 	// ID is documented in the Content interface.
-	Id       mypkg.ID                                                           `json:"id"`
+	Id       testutil.ID                                                        `json:"id"`
 	Children []InterfaceNestingRootTopicChildrenVideoParentTopicChildrenContent `json:"-"`
 }
 
@@ -341,7 +341,7 @@ func (v *InterfaceNestingRootTopicChildrenVideoParentTopic) UnmarshalJSON(b []by
 // InterfaceNestingRootTopicChildrenVideoParentTopicChildrenArticle includes the requested fields of the GraphQL type Article.
 type InterfaceNestingRootTopicChildrenVideoParentTopicChildrenArticle struct {
 	// ID is the identifier of the content.
-	Id mypkg.ID `json:"id"`
+	Id testutil.ID `json:"id"`
 }
 
 func (v InterfaceNestingRootTopicChildrenVideoParentTopicChildrenArticle) implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenVideoParentTopicChildrenContent() {
@@ -358,7 +358,7 @@ type InterfaceNestingRootTopicChildrenVideoParentTopicChildrenContent interface 
 // InterfaceNestingRootTopicChildrenVideoParentTopicChildrenTopic includes the requested fields of the GraphQL type Topic.
 type InterfaceNestingRootTopicChildrenVideoParentTopicChildrenTopic struct {
 	// ID is the identifier of the content.
-	Id mypkg.ID `json:"id"`
+	Id testutil.ID `json:"id"`
 }
 
 func (v InterfaceNestingRootTopicChildrenVideoParentTopicChildrenTopic) implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenVideoParentTopicChildrenContent() {
@@ -367,7 +367,7 @@ func (v InterfaceNestingRootTopicChildrenVideoParentTopicChildrenTopic) implemen
 // InterfaceNestingRootTopicChildrenVideoParentTopicChildrenVideo includes the requested fields of the GraphQL type Video.
 type InterfaceNestingRootTopicChildrenVideoParentTopicChildrenVideo struct {
 	// ID is the identifier of the content.
-	Id mypkg.ID `json:"id"`
+	Id testutil.ID `json:"id"`
 }
 
 func (v InterfaceNestingRootTopicChildrenVideoParentTopicChildrenVideo) implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenVideoParentTopicChildrenContent() {

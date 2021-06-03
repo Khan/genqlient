@@ -98,7 +98,7 @@ func TestGenerate(t *testing.T) {
 				Generated:        goFilename,
 				ExportOperations: queriesFilename,
 				Scalars: map[string]string{
-					"ID":          "github.com/me/mypkg.ID",
+					"ID":          "github.com/Khan/genqlient/internal/testutil.ID",
 					"DateTime":    "time.Time",
 					"Junk":        "interface{}",
 					"ComplexJunk": "[]map[string]*[]*map[string]interface{}",

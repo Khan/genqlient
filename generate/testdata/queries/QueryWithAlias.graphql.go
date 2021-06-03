@@ -4,7 +4,7 @@ package test
 
 import (
 	"github.com/Khan/genqlient/graphql"
-	"github.com/me/mypkg"
+	"github.com/Khan/genqlient/internal/testutil"
 )
 
 // QueryWithAliasResponse is returned by QueryWithAlias on success.
@@ -24,11 +24,11 @@ type QueryWithAliasUser struct {
 	// id is the user's ID.
 	//
 	// It is stable, unique, and opaque, like all good IDs.
-	ID mypkg.ID `json:"ID"`
+	ID testutil.ID `json:"ID"`
 	// id is the user's ID.
 	//
 	// It is stable, unique, and opaque, like all good IDs.
-	OtherID mypkg.ID `json:"otherID"`
+	OtherID testutil.ID `json:"otherID"`
 }
 
 func QueryWithAlias(

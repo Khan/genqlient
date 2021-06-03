@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/Khan/genqlient/graphql"
-	"github.com/me/mypkg"
+	"github.com/Khan/genqlient/internal/testutil"
 )
 
 // PointersQueryOtherUser includes the requested fields of the GraphQL type User.
@@ -17,7 +17,7 @@ type PointersQueryOtherUser struct {
 	// id is the user's ID.
 	//
 	// It is stable, unique, and opaque, like all good IDs.
-	Id *mypkg.ID `json:"id"`
+	Id *testutil.ID `json:"id"`
 }
 
 // PointersQueryResponse is returned by PointersQuery on success.
@@ -43,11 +43,11 @@ type PointersQueryUser struct {
 	// id is the user's ID.
 	//
 	// It is stable, unique, and opaque, like all good IDs.
-	Id          *mypkg.ID `json:"id"`
-	Roles       []*Role   `json:"roles"`
-	Name        *string   `json:"name"`
-	Emails      []*string `json:"emails"`
-	EmailsNoPtr []string  `json:"emailsNoPtr"`
+	Id          *testutil.ID `json:"id"`
+	Roles       []*Role      `json:"roles"`
+	Name        *string      `json:"name"`
+	Emails      []*string    `json:"emails"`
+	EmailsNoPtr []string     `json:"emailsNoPtr"`
 }
 
 // Role is a type a user may have.
@@ -73,9 +73,9 @@ type UserQueryInput struct {
 	Email *string `json:"email"`
 	Name  *string `json:"name"`
 	// id looks the user up by ID.  It's a great way to look up users.
-	Id    *mypkg.ID `json:"id"`
-	Role  *Role     `json:"role"`
-	Names []*string `json:"names"`
+	Id    *testutil.ID `json:"id"`
+	Role  *Role        `json:"role"`
+	Names []*string    `json:"names"`
 }
 
 func PointersQuery(

@@ -4,7 +4,7 @@ package test
 
 import (
 	"github.com/Khan/genqlient/graphql"
-	"github.com/me/mypkg"
+	"github.com/Khan/genqlient/internal/testutil"
 )
 
 // TypeNameQueryResponse is returned by TypeNameQuery on success.
@@ -25,7 +25,7 @@ type TypeNameQueryUser struct {
 	// id is the user's ID.
 	//
 	// It is stable, unique, and opaque, like all good IDs.
-	Id mypkg.ID `json:"id"`
+	Id testutil.ID `json:"id"`
 }
 
 func TypeNameQuery(

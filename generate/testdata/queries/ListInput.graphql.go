@@ -4,7 +4,7 @@ package test
 
 import (
 	"github.com/Khan/genqlient/graphql"
-	"github.com/me/mypkg"
+	"github.com/Khan/genqlient/internal/testutil"
 )
 
 // ListInputQueryResponse is returned by ListInputQuery on success.
@@ -24,7 +24,7 @@ type ListInputQueryUser struct {
 	// id is the user's ID.
 	//
 	// It is stable, unique, and opaque, like all good IDs.
-	Id mypkg.ID `json:"id"`
+	Id testutil.ID `json:"id"`
 }
 
 func ListInputQuery(

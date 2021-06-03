@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 
 	"github.com/Khan/genqlient/graphql"
-	"github.com/me/mypkg"
+	"github.com/Khan/genqlient/internal/testutil"
 )
 
 // InterfaceNoFragmentsQueryResponse is returned by InterfaceNoFragmentsQuery on success.
@@ -17,7 +17,7 @@ type InterfaceNoFragmentsQueryResponse struct {
 // InterfaceNoFragmentsQueryRootTopic includes the requested fields of the GraphQL type Topic.
 type InterfaceNoFragmentsQueryRootTopic struct {
 	// ID is documented in the Content interface.
-	Id       mypkg.ID                                            `json:"id"`
+	Id       testutil.ID                                         `json:"id"`
 	Name     string                                              `json:"name"`
 	Children []InterfaceNoFragmentsQueryRootTopicChildrenContent `json:"-"`
 }
@@ -72,8 +72,8 @@ func (v *InterfaceNoFragmentsQueryRootTopic) UnmarshalJSON(b []byte) error {
 // InterfaceNoFragmentsQueryRootTopicChildrenArticle includes the requested fields of the GraphQL type Article.
 type InterfaceNoFragmentsQueryRootTopicChildrenArticle struct {
 	// ID is the identifier of the content.
-	Id   mypkg.ID `json:"id"`
-	Name string   `json:"name"`
+	Id   testutil.ID `json:"id"`
+	Name string      `json:"name"`
 }
 
 func (v InterfaceNoFragmentsQueryRootTopicChildrenArticle) implementsGraphQLInterfaceInterfaceNoFragmentsQueryRootTopicChildrenContent() {
@@ -90,8 +90,8 @@ type InterfaceNoFragmentsQueryRootTopicChildrenContent interface {
 // InterfaceNoFragmentsQueryRootTopicChildrenTopic includes the requested fields of the GraphQL type Topic.
 type InterfaceNoFragmentsQueryRootTopicChildrenTopic struct {
 	// ID is the identifier of the content.
-	Id   mypkg.ID `json:"id"`
-	Name string   `json:"name"`
+	Id   testutil.ID `json:"id"`
+	Name string      `json:"name"`
 }
 
 func (v InterfaceNoFragmentsQueryRootTopicChildrenTopic) implementsGraphQLInterfaceInterfaceNoFragmentsQueryRootTopicChildrenContent() {
@@ -100,8 +100,8 @@ func (v InterfaceNoFragmentsQueryRootTopicChildrenTopic) implementsGraphQLInterf
 // InterfaceNoFragmentsQueryRootTopicChildrenVideo includes the requested fields of the GraphQL type Video.
 type InterfaceNoFragmentsQueryRootTopicChildrenVideo struct {
 	// ID is the identifier of the content.
-	Id   mypkg.ID `json:"id"`
-	Name string   `json:"name"`
+	Id   testutil.ID `json:"id"`
+	Name string      `json:"name"`
 }
 
 func (v InterfaceNoFragmentsQueryRootTopicChildrenVideo) implementsGraphQLInterfaceInterfaceNoFragmentsQueryRootTopicChildrenContent() {
