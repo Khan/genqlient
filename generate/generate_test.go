@@ -1,65 +1,19 @@
 package generate
 
 import (
-	"errors"
-	"go/format"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
 	"testing"
+
+	"github.com/Khan/genqlient/internal/testutil"
 )
 
 const (
 	dataDir   = "testdata/queries"
 	errorsDir = "testdata/errors"
 )
-
-func gofmt(filename, src string) (string, error) {
-	src = strings.TrimSpace(src)
-	formatted, err := format.Source([]byte(src))
-	if err != nil {
-		return src, errorf(nil, "go parse error in %v: %v", filename, err)
-	}
-	return string(formatted), nil
-}
-
-func checkSnapshot(t *testing.T, filename, content string) {
-	t.Helper()
-	update := (os.Getenv("UPDATE_SNAPSHOTS") == "1")
-
-	expectedBytes, err := ioutil.ReadFile(filename)
-	if err != nil && !(update && errors.Is(err, os.ErrNotExist)) {
-		t.Fatal(err)
-	}
-	expectedContent := string(expectedBytes)
-
-	if strings.HasSuffix(filename, ".go") {
-		fmted, err := gofmt(filename, expectedContent)
-		if err != nil {
-			// Ignore gofmt errors if we are updating
-			if !update {
-				t.Fatal(err)
-			}
-		} else {
-			expectedContent = fmted
-		}
-	}
-
-	if content != expectedContent {
-		t.Errorf("mismatch in %v", filename)
-		if testing.Verbose() {
-			t.Errorf("got:\n%v\nwant:\n%v\n", content, expectedContent)
-		}
-		if update {
-			t.Log("Updating testdata dir to match")
-			err = ioutil.WriteFile(filename, []byte(content), 0o644)
-			if err != nil {
-				t.Errorf("Unable to update testdata dir: %v", err)
-			}
-		}
-	}
-}
 
 // TestGenerate is a snapshot-based test of code-generation.
 //
@@ -109,7 +63,9 @@ func TestGenerate(t *testing.T) {
 			}
 
 			for filename, content := range generated {
-				checkSnapshot(t, filepath.Join(dataDir, filename), string(content))
+				t.Run(filename, func(t *testing.T) {
+					testutil.Cupaloy.SnapshotT(t, string(content))
+				})
 				// TODO(benkraft): Also check that the code at least builds!
 			}
 		})
@@ -133,8 +89,8 @@ func TestGenerateErrors(t *testing.T) {
 			continue
 		}
 
-		schemaFilename := strings.TrimSuffix(sourceFilename, filepath.Ext(sourceFilename)) + ".schema.graphql"
-		errorsFilename := sourceFilename + ".error"
+		baseFilename := strings.TrimSuffix(sourceFilename, filepath.Ext(sourceFilename))
+		schemaFilename := baseFilename + ".schema.graphql"
 
 		t.Run(sourceFilename, func(t *testing.T) {
 			_, err := Generate(&Config{
@@ -151,7 +107,7 @@ func TestGenerateErrors(t *testing.T) {
 				t.Fatal("expected an error")
 			}
 
-			checkSnapshot(t, filepath.Join(errorsDir, errorsFilename), err.Error())
+			testutil.Cupaloy.SnapshotT(t, err.Error())
 		})
 	}
 }

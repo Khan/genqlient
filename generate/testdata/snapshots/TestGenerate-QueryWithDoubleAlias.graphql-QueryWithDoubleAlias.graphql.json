@@ -1,0 +1,9 @@
+{
+  "operations": [
+    {
+      "operationName": "QueryWithDoubleAlias",
+      "query": "\nquery QueryWithDoubleAlias {\n\tuser {\n\t\tID: id\n\t\tAlsoID: id\n\t}\n}\n",
+      "sourceLocation": "testdata/queries/QueryWithDoubleAlias.graphql"
+    }
+  ]
+}

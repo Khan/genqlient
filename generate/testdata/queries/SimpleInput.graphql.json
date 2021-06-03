@@ -1,9 +1,0 @@
-{
-  "operations": [
-    {
-      "operationName": "SimpleInputQuery",
-      "query": "\nquery SimpleInputQuery ($name: String!) {\n\tuser(query: {name:$name}) {\n\t\tid\n\t}\n}\n",
-      "sourceLocation": "testdata/queries/SimpleInput.graphql"
-    }
-  ]
-}

@@ -1,0 +1,9 @@
+{
+  "operations": [
+    {
+      "operationName": "InterfaceNoFragmentsQuery",
+      "query": "\nquery InterfaceNoFragmentsQuery {\n\troot {\n\t\tid\n\t\tname\n\t\tchildren {\n\t\t\tid\n\t\t\tname\n\t\t}\n\t}\n}\n",
+      "sourceLocation": "testdata/queries/InterfaceNoFragments.graphql"
+    }
+  ]
+}

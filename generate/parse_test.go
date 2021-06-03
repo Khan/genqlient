@@ -40,6 +40,7 @@ func getTestQueries(t *testing.T, ext string) *ast.QueryDocument {
 // produces equivalent results.  We do not test the results it produces (that's
 // covered by TestGenerate), just that they are equivalent in different
 // languages (since TestGenerate only uses .graphql as input).
+// TODO: redo this as more standard snapshot tests?
 func TestParse(t *testing.T) {
 	extensions := []string{"go"}
 

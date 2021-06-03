@@ -1,9 +1,0 @@
-{
-  "operations": [
-    {
-      "operationName": "convertTimezone",
-      "query": "\nquery convertTimezone ($dt: DateTime!, $tz: String) {\n\tconvert(dt: $dt, tz: $tz)\n}\n",
-      "sourceLocation": "testdata/queries/DateTime.graphql"
-    }
-  ]
-}
