@@ -65,8 +65,8 @@ type GenqlientDirective struct {
 	Pointer *bool
 }
 
-func (g *GenqlientDirective) GetOmitempty() bool { return g.Omitempty != nil && *g.Omitempty }
-func (g *GenqlientDirective) GetPointer() bool   { return g.Pointer != nil && *g.Pointer }
+func (dir *GenqlientDirective) GetOmitempty() bool { return dir.Omitempty != nil && *dir.Omitempty }
+func (dir *GenqlientDirective) GetPointer() bool   { return dir.Pointer != nil && *dir.Pointer }
 
 func setBool(dst **bool, v *ast.Value) error {
 	ei, err := v.Value(nil) // no vars allowed

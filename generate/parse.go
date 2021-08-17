@@ -4,7 +4,6 @@ import (
 	"fmt"
 	goAst "go/ast"
 	goParser "go/parser"
-	"go/token"
 	goToken "go/token"
 	"io/ioutil"
 	"path/filepath"
@@ -134,7 +133,7 @@ func getQueriesFromGo(text string, basedir, filename string) ([]*ast.QueryDocume
 		}
 
 		basicLit, ok := node.(*goAst.BasicLit)
-		if !ok || basicLit.Kind != token.STRING {
+		if !ok || basicLit.Kind != goToken.STRING {
 			return true // recurse
 		}
 

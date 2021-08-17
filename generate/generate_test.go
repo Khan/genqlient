@@ -68,7 +68,6 @@ func TestGenerate(t *testing.T) {
 				t.Run(filename, func(t *testing.T) {
 					testutil.Cupaloy.SnapshotT(t, string(content))
 				})
-				// TODO(benkraft): Also check that the code at least builds!
 			}
 
 			t.Run("Build", func(t *testing.T) {

@@ -46,9 +46,9 @@ type Client interface {
 }
 
 type client struct {
+	httpClient *http.Client
 	endpoint   string
 	method     string
-	httpClient *http.Client
 }
 
 // NewClient returns a Client which makes requests to the given endpoint,
@@ -64,7 +64,7 @@ func NewClient(endpoint string, httpClient *http.Client) Client {
 	if httpClient == nil {
 		httpClient = http.DefaultClient
 	}
-	return &client{endpoint, http.MethodPost, httpClient}
+	return &client{httpClient, endpoint, http.MethodPost}
 }
 
 type payload struct {
@@ -109,9 +109,10 @@ func (c *client) MakeRequest(ctx context.Context, opName string, query string, r
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		respBody, err := ioutil.ReadAll(resp.Body)
+		var respBody []byte
+		respBody, err = ioutil.ReadAll(resp.Body)
 		if err != nil {
-			respBody = []byte("<unreadable>")
+			respBody = []byte(fmt.Sprintf("<unreadable: %v>", err))
 		}
 		return fmt.Errorf("returned error %v: %s", resp.Status, respBody)
 	}

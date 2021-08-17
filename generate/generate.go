@@ -152,7 +152,6 @@ func (g *generator) addOperation(op *ast.OperationDefinition) error {
 
 	args := make([]argument, len(op.VariableDefinitions))
 	for i, arg := range op.VariableDefinitions {
-		var err error
 		args[i], err = g.getArgument(op.Name, arg, directive)
 		if err != nil {
 			return err

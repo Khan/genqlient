@@ -9,8 +9,8 @@ import (
 )
 
 func (g *generator) addImportFor(pkgPath string) (alias string) {
-	if alias, ok := g.imports[pkgPath]; ok {
-		return alias
+	if existingAlias, ok := g.imports[pkgPath]; ok {
+		return existingAlias
 	}
 
 	pkgName := pkgPath[strings.LastIndex(pkgPath, "/")+1:]

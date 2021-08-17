@@ -2,17 +2,17 @@ name: Go
 
 on:
   push:
-    branches: [ main ]
+    branches: [ "*" ]
   pull_request:
     branches: [ main ]
 
 jobs:
   build:
-    name: Build
+    name: Test
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        go: [ '1.13', '1.14', '1.15', '1.16' ]
+        go: [ '1.13', '1.14', '1.15', '1.16', '1.17' ]
 
     steps:
     - name: Set up Go
@@ -30,3 +30,16 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         go test -cover -v ./...
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Git checkout
+      uses: actions/checkout@v2
+
+    - name: Run lint
+      uses: golangci/golangci-lint-action@v2
+      with:
+        version: v1.42

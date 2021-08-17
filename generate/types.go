@@ -281,8 +281,8 @@ func (builder *typeBuilder) writeType(name, namePrefix string, typ *ast.Type, fi
 	def := builder.schema.Types[typ.Name()]
 	goName, ok := builder.Config.Scalars[def.Name]
 	if ok {
-		name, err := builder.addRef(goName)
-		builder.WriteString(name)
+		newName, err := builder.addRef(goName)
+		builder.WriteString(newName)
 		return err
 	}
 	goName, ok = builtinTypes[def.Name]
@@ -303,7 +303,7 @@ func (builder *typeBuilder) writeTypedef(
 	typedef *ast.Definition,
 	pos *ast.Position,
 	fields []field,
-	options *GenqlientDirective,
+	options *GenqlientDirective, //nolint:unparam // it is used!
 	description string, // defaults to typedef.Description
 ) (err error) {
 	defer func() {
