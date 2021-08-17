@@ -69,6 +69,7 @@ linters-settings:
       - unnamedResult
       - ifElseChain
       - sloppyReassign
+      - typeDefFirst
 
     settings: # settings passed to gocritic
       captLocal: # must be valid enabled check name
@@ -80,7 +81,7 @@ issues:
     # Test-only deps are not restricted.
     - linters:
         - depguard
-      path: _test\.go$|internal/testutil/
+      path: _test\.go$|internal/testutil/|internal/integration/
 
     - linters:
         - errcheck
