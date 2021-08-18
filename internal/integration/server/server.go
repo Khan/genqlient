@@ -15,10 +15,29 @@ var users = []*User{
 	{ID: "2", Name: "Raven", LuckyNumber: intptr(-1)},
 }
 
+var animals = []*Animal{
+	{ID: "3", Name: "Fido", Species: SpeciesDog, Owner: userByID("0")},
+	{ID: "4", Name: "Old One", Species: SpeciesCoelacanth, Owner: nil},
+}
+
 func userByID(id string) *User {
 	for _, user := range users {
 		if id == user.ID {
 			return user
+		}
+	}
+	return nil
+}
+
+func beingByID(id string) Being {
+	for _, user := range users {
+		if id == user.ID {
+			return user
+		}
+	}
+	for _, animal := range animals {
+		if id == animal.ID {
+			return animal
 		}
 	}
 	return nil
@@ -30,6 +49,10 @@ func (r *queryResolver) Me(ctx context.Context) (*User, error) {
 
 func (r *queryResolver) User(ctx context.Context, id string) (*User, error) {
 	return userByID(id), nil
+}
+
+func (r *queryResolver) Being(ctx context.Context, id string) (Being, error) {
+	return beingByID(id), nil
 }
 
 func RunServer() *httptest.Server {

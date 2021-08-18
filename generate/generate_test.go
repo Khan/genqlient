@@ -30,9 +30,6 @@ const (
 // update the snapshots.  Make sure to check that the output is sensible; the
 // snapshots don't even get compiled!
 func TestGenerate(t *testing.T) {
-	// we can test parts of features even if they're not done yet!
-	allowBrokenFeatures = true
-
 	files, err := ioutil.ReadDir(dataDir)
 	if err != nil {
 		t.Fatal(err)
@@ -59,6 +56,7 @@ func TestGenerate(t *testing.T) {
 					"Junk":        "interface{}",
 					"ComplexJunk": "[]map[string]*[]*map[string]interface{}",
 				},
+				AllowBrokenFeatures: true,
 			})
 			if err != nil {
 				t.Fatal(err)
@@ -73,9 +71,9 @@ func TestGenerate(t *testing.T) {
 			t.Run("Build", func(t *testing.T) {
 				if testing.Short() {
 					t.Skip("skipping build due to -short")
-				} else if sourceFilename == "InterfaceNesting.graphql" ||
-					sourceFilename == "InterfaceNoFragments.graphql" ||
-					sourceFilename == "Omitempty.graphql" {
+				} else if sourceFilename == "InterfaceNesting.graphql" || // #8
+					sourceFilename == "InterfaceListField.graphql" || // #8
+					sourceFilename == "Omitempty.graphql" { // #43
 					t.Skip("TODO: enable these once they build")
 				}
 
@@ -109,9 +107,6 @@ func TestGenerate(t *testing.T) {
 }
 
 func TestGenerateErrors(t *testing.T) {
-	// we can test parts of features even if they're not done yet!
-	allowBrokenFeatures = true
-
 	files, err := ioutil.ReadDir(errorsDir)
 	if err != nil {
 		t.Fatal(err)
@@ -138,6 +133,7 @@ func TestGenerateErrors(t *testing.T) {
 					"ValidScalar":   "string",
 					"InvalidScalar": "bogus",
 				},
+				AllowBrokenFeatures: true,
 			})
 			if err == nil {
 				t.Fatal("expected an error")

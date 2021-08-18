@@ -25,7 +25,7 @@ func (g *generator) baseTypeForOperation(operation ast.Operation) (*ast.Definiti
 	case ast.Mutation:
 		return g.schema.Mutation, nil
 	case ast.Subscription:
-		if !allowBrokenFeatures {
+		if !g.Config.AllowBrokenFeatures {
 			return nil, errorf(nil, "genqlient does not yet support subscriptions")
 		}
 		return g.schema.Subscription, nil
@@ -255,8 +255,21 @@ func (g *generator) convertDefinition(
 		return goType, nil
 
 	case ast.Interface, ast.Union:
-		if !allowBrokenFeatures {
+		if !g.Config.AllowBrokenFeatures {
 			return nil, errorf(pos, "not implemented: %v", def.Kind)
+		}
+
+		// We need to request __typename so we know which concrete type to use.
+		hasTypename := false
+		for _, selection := range selectionSet {
+			field, ok := selection.(*ast.Field)
+			if ok && field.Name == "__typename" {
+				hasTypename = true
+			}
+		}
+		if !hasTypename {
+			// TODO(benkraft): Instead, modify the query to add __typename.
+			return nil, errorf(pos, "union/interface type %s must request __typename", def.Name)
 		}
 
 		implementationTypes := g.schema.GetPossibleTypes(def)

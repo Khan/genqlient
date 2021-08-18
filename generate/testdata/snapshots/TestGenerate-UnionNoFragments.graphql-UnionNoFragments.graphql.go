@@ -4,6 +4,7 @@ package test
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/Khan/genqlient/graphql"
 )
@@ -21,9 +22,35 @@ type UnionNoFragmentsQueryRandomLeafLeafContent interface {
 	implementsGraphQLInterfaceUnionNoFragmentsQueryRandomLeafLeafContent()
 }
 
-func (v UnionNoFragmentsQueryRandomLeafArticle) implementsGraphQLInterfaceUnionNoFragmentsQueryRandomLeafLeafContent() {
+func (v *UnionNoFragmentsQueryRandomLeafArticle) implementsGraphQLInterfaceUnionNoFragmentsQueryRandomLeafLeafContent() {
 }
-func (v UnionNoFragmentsQueryRandomLeafVideo) implementsGraphQLInterfaceUnionNoFragmentsQueryRandomLeafLeafContent() {
+func (v *UnionNoFragmentsQueryRandomLeafVideo) implementsGraphQLInterfaceUnionNoFragmentsQueryRandomLeafLeafContent() {
+}
+
+func __unmarshalUnionNoFragmentsQueryRandomLeafLeafContent(v *UnionNoFragmentsQueryRandomLeafLeafContent, m json.RawMessage) error {
+	if string(m) == "null" {
+		return nil
+	}
+
+	var tn struct {
+		TypeName string `json:"__typename"`
+	}
+	err := json.Unmarshal(m, &tn)
+	if err != nil {
+		return err
+	}
+
+	switch tn.TypeName {
+	case "Article":
+		*v = new(UnionNoFragmentsQueryRandomLeafArticle)
+		return json.Unmarshal(m, *v)
+	case "Video":
+		*v = new(UnionNoFragmentsQueryRandomLeafVideo)
+		return json.Unmarshal(m, *v)
+	default:
+		return fmt.Errorf(
+			`Unexpected concrete type for UnionNoFragmentsQueryRandomLeafLeafContent: "%v"`, tn.TypeName)
+	}
 }
 
 // UnionNoFragmentsQueryRandomLeafVideo includes the requested fields of the GraphQL type Video.
@@ -37,39 +64,22 @@ type UnionNoFragmentsQueryResponse struct {
 }
 
 func (v *UnionNoFragmentsQueryResponse) UnmarshalJSON(b []byte) error {
+
+	type UnionNoFragmentsQueryResponseWrapper UnionNoFragmentsQueryResponse
+
 	var firstPass struct {
-		*UnionNoFragmentsQueryResponse
+		*UnionNoFragmentsQueryResponseWrapper
 		RandomLeaf json.RawMessage `json:"randomLeaf"`
 	}
-	firstPass.UnionNoFragmentsQueryResponse = v
+	firstPass.UnionNoFragmentsQueryResponseWrapper = (*UnionNoFragmentsQueryResponseWrapper)(v)
 
 	err := json.Unmarshal(b, &firstPass)
 	if err != nil {
 		return err
 	}
 
-	var tn struct {
-		TypeName string `json:"__typename"`
-	}
-	err = json.Unmarshal(firstPass.RandomLeaf, &tn)
-	if err != nil {
-		return err
-	}
-	switch tn.TypeName {
-
-	case "Article":
-
-		v.RandomLeaf = UnionNoFragmentsQueryRandomLeafArticle{}
-		err = json.Unmarshal(
-			firstPass.RandomLeaf, &v.RandomLeaf)
-
-	case "Video":
-
-		v.RandomLeaf = UnionNoFragmentsQueryRandomLeafVideo{}
-		err = json.Unmarshal(
-			firstPass.RandomLeaf, &v.RandomLeaf)
-
-	}
+	err = __unmarshalUnionNoFragmentsQueryRandomLeafLeafContent(
+		&v.RandomLeaf, firstPass.RandomLeaf)
 	if err != nil {
 		return err
 	}

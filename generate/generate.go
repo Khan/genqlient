@@ -17,9 +17,6 @@ import (
 	"golang.org/x/tools/imports"
 )
 
-// Set to true to test features that aren't yet really ready.
-var allowBrokenFeatures = false
-
 // generator is the context for the codegen process (and ends up getting passed
 // to the template).
 type generator struct {
@@ -230,7 +227,7 @@ func Generate(config *Config) (map[string][]byte, error) {
 			strings.Join(config.Operations, ", "))
 	}
 
-	if len(document.Fragments) > 0 && !allowBrokenFeatures {
+	if len(document.Fragments) > 0 && !config.AllowBrokenFeatures {
 		return nil, errorf(document.Fragments[0].Position,
 			"genqlient does not yet support fragments")
 	}

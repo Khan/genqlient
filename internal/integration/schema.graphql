@@ -1,10 +1,28 @@
 type Query {
   me: User
   user(id: ID!): User
+  being(id: ID!): Being
 }
 
-type User {
+type User implements Being {
   id: ID!
   name: String!
   luckyNumber: Int
+}
+
+type Animal implements Being {
+  id: ID!
+  name: String!
+  species: Species!
+  owner: Being
+}
+
+enum Species {
+  DOG
+  COELACANTH
+}
+
+interface Being {
+  id: ID!
+  name: String!
 }

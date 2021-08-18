@@ -1,0 +1,11 @@
+type Query {
+  i: I
+}
+
+type T implements I {
+  f: String!
+}
+
+interface I {
+  f: String!
+}

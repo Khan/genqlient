@@ -73,6 +73,13 @@ type Config struct {
 	// and UnmarshalJSON methods, or otherwise be convertible to JSON.
 	Scalars map[string]string `yaml:"scalars"`
 
+	// Set to true to use features that aren't fully ready to use.
+	//
+	// This is primarily intended for genqlient's own tests.  These features
+	// are likely BROKEN and come with NO EXPECTATION OF COMPATIBBILITY.  Use
+	// them at your own risk!
+	AllowBrokenFeatures bool `yaml:"allow_broken_features"`
+
 	// Set automatically to the filename of the config file itself.
 	configFilename string
 }

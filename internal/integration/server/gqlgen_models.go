@@ -2,8 +2,70 @@
 
 package server
 
+import (
+	"fmt"
+	"io"
+	"strconv"
+)
+
+type Being interface {
+	IsBeing()
+}
+
+type Animal struct {
+	ID      string  `json:"id"`
+	Name    string  `json:"name"`
+	Species Species `json:"species"`
+	Owner   Being   `json:"owner"`
+}
+
+func (Animal) IsBeing() {}
+
 type User struct {
 	ID          string `json:"id"`
 	Name        string `json:"name"`
 	LuckyNumber *int   `json:"luckyNumber"`
+}
+
+func (User) IsBeing() {}
+
+type Species string
+
+const (
+	SpeciesDog        Species = "DOG"
+	SpeciesCoelacanth Species = "COELACANTH"
+)
+
+var AllSpecies = []Species{
+	SpeciesDog,
+	SpeciesCoelacanth,
+}
+
+func (e Species) IsValid() bool {
+	switch e {
+	case SpeciesDog, SpeciesCoelacanth:
+		return true
+	}
+	return false
+}
+
+func (e Species) String() string {
+	return string(e)
+}
+
+func (e *Species) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = Species(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid Species", str)
+	}
+	return nil
+}
+
+func (e Species) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
 }

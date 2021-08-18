@@ -126,10 +126,44 @@ func (typ *goStructType) WriteDefinition(w io.Writer, g *generator) error {
 	}
 	fmt.Fprintf(w, "}\n")
 
-	return g.maybeWriteUnmarshal(w, typ)
+	// Now, if needed, write the unmarshaler.
+	//
+	// Specifically, in order to unmarshal interface values, we need to add an
+	// UnmarshalJSON method to each type which has an interface-typed *field*
+	// (not the interface type itself -- we can't add methods to that).
+	// But we put most of the logic in a per-interface-type helper function,
+	// written along with the interface type; the UnmarshalJSON method is just
+	// the boilerplate.
+	if len(typ.AbstractFields()) == 0 {
+		return nil
+	}
+
+	// TODO(benkraft): Avoid having to enumerate these in advance; just let the
+	// template add them directly.
+	_, err := g.addRef("encoding/json.Unmarshal")
+	if err != nil {
+		return err
+	}
+
+	return g.execute("unmarshal.go.tmpl", w, typ)
 }
 
 func (typ *goStructType) Reference() string { return typ.GoName }
+
+// AbstractFields returns all the fields which are abstract types (i.e. GraphQL
+// unions and interfaces; equivalently, types represented by interfaces in Go).
+func (typ *goStructType) AbstractFields() []*goStructField {
+	var ret []*goStructField
+	for _, field := range typ.Fields {
+		// TODO(benkraft): To handle list-of-interface fields, we should really
+		// be "unwrapping" any goSliceType/goPointerType wrappers to find the
+		// goInterfaceType.
+		if _, ok := field.GoType.(*goInterfaceType); ok {
+			ret = append(ret, field)
+		}
+	}
+	return ret
+}
 
 // goInterfaceType represents a Go interface type, used to represent a GraphQL
 // interface or union type.
@@ -154,11 +188,25 @@ func (typ *goInterfaceType) WriteDefinition(w io.Writer, g *generator) error {
 
 	// Now, write out the implementations.
 	for _, impl := range typ.Implementations {
-		fmt.Fprintf(w, "func (v %s) %s() {}\n",
+		fmt.Fprintf(w, "func (v *%s) %s() {}\n",
 			impl.Reference(), implementsMethodName)
 	}
 
-	return nil
+	// Finally, write the unmarshal-helper, which will be called by struct
+	// fields referencing this type (see goStructType.WriteDefinition).
+	//
+	// TODO(benkraft): Avoid having to enumerate these refs in advance; just
+	// let the template add them directly.
+	_, err := g.addRef("encoding/json.Unmarshal")
+	if err != nil {
+		return err
+	}
+	_, err = g.addRef("fmt.Errorf")
+	if err != nil {
+		return err
+	}
+
+	return g.execute("unmarshal_helper.go.tmpl", w, typ)
 }
 
 func (typ *goInterfaceType) Reference() string { return typ.GoName }

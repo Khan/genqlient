@@ -1,10 +1,4 @@
 query InterfaceNoFragmentsQuery {
-  root {
-    id
-    name
-    children {
-      id
-      name
-    }
-  }
+  root { id name }       # (make sure sibling fields work)
+  randomItem { __typename id name }
 }

@@ -1,0 +1,11 @@
+query InterfaceNoFragmentsQuery {
+  root {
+    id
+    name
+    children {
+      __typename
+      id
+      name
+    }
+  }
+}
