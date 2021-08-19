@@ -1,5 +1,9 @@
 package generate
 
+import "io"
+
+// TODO(benkraft): We could potentially get rid of these now, and do everything
+// directly from the types.
 type templateData struct {
 	// Go type to which the method will be added
 	Type string
@@ -19,23 +23,22 @@ type concreteType struct {
 	GoName, GraphQLName string
 }
 
-func (builder *typeBuilder) maybeWriteUnmarshal(typeName, typeNamePrefix string, fields []field) error {
-	data := templateData{Type: typeName}
-	for _, field := range fields {
-		typedef := builder.schema.Types[field.Type().Name()]
-		if typedef.IsAbstractType() {
+func (g *generator) maybeWriteUnmarshal(w io.Writer, typ *goStructType) error {
+	data := templateData{Type: typ.GoName}
+	for _, field := range typ.Fields {
+		// TODO(benkraft): To handle list-of-interface fields, we should really
+		// be "unwrapping" any goSliceType/goPointerType wrappers to find the
+		// goInterfaceType.
+		if iface, ok := field.GoType.(*goInterfaceType); ok {
 			fieldInfo := abstractField{
-				GoName:   upperFirst(field.Alias()),
-				JSONName: field.Alias(),
+				GoName:   field.GoName,
+				JSONName: field.JSONName,
 			}
-			for _, typedef := range builder.schema.GetPossibleTypes(typedef) {
-				// TODO: this is slightly fragile (it needs to match the
-				// similar call in writeField)
-				goName, _ := builder.typeName(typeNamePrefix+fieldInfo.GoName, typedef)
+			for _, impl := range iface.Implementations {
 				fieldInfo.ConcreteTypes = append(fieldInfo.ConcreteTypes,
 					concreteType{
-						GoName:      goName,
-						GraphQLName: typedef.Name,
+						GoName:      impl.GoName,
+						GraphQLName: impl.GraphQLName,
 					})
 			}
 			data.Fields = append(data.Fields, fieldInfo)
@@ -46,11 +49,10 @@ func (builder *typeBuilder) maybeWriteUnmarshal(typeName, typeNamePrefix string,
 		return nil
 	}
 
-	_, err := builder.addRef("encoding/json.Unmarshal")
+	_, err := g.addRef("encoding/json.Unmarshal")
 	if err != nil {
 		return err
 	}
 
-	builder.WriteString("\n\n")
-	return builder.execute("unmarshal.go.tmpl", builder, data)
+	return g.execute("unmarshal.go.tmpl", w, data)
 }

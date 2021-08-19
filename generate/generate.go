@@ -1,5 +1,9 @@
 package generate
 
+// This file implements the main entrypoint and framework for the genqlient
+// code-generation process.  See comments in Generate for the high-level
+// overview.
+
 import (
 	"bytes"
 	"encoding/json"
@@ -24,7 +28,7 @@ type generator struct {
 	// The list of operations for which to generate code.
 	Operations []operation
 	// The types needed for these operations.
-	typeMap map[string]string
+	typeMap map[string]goType
 	// Imports needed for these operations, path -> alias and alias -> true
 	imports     map[string]string
 	usedAliases map[string]bool
@@ -67,7 +71,7 @@ type argument struct {
 func newGenerator(config *Config, schema *ast.Schema) *generator {
 	g := generator{
 		Config:        config,
-		typeMap:       map[string]string{},
+		typeMap:       map[string]goType{},
 		imports:       map[string]string{},
 		usedAliases:   map[string]bool{},
 		templateCache: map[string]*template.Template{},
@@ -90,7 +94,7 @@ func newGenerator(config *Config, schema *ast.Schema) *generator {
 	return &g
 }
 
-func (g *generator) Types() string {
+func (g *generator) Types() (string, error) {
 	names := make([]string, 0, len(g.typeMap))
 	for name := range g.typeMap {
 		names = append(names, name)
@@ -102,10 +106,16 @@ func (g *generator) Types() string {
 	sort.Strings(names)
 
 	defs := make([]string, 0, len(g.typeMap))
+	var builder strings.Builder
 	for _, name := range names {
-		defs = append(defs, g.typeMap[name])
+		builder.Reset()
+		err := g.typeMap[name].WriteDefinition(&builder, g)
+		if err != nil {
+			return "", err
+		}
+		defs = append(defs, builder.String())
 	}
-	return strings.Join(defs, "\n\n")
+	return strings.Join(defs, "\n\n"), nil
 }
 
 func (g *generator) getArgument(
@@ -119,7 +129,7 @@ func (g *generator) getArgument(
 	}
 
 	graphQLName := arg.Variable
-	goType, err := g.getTypeForInputType(
+	goTyp, err := g.convertInputType(
 		opName, arg.Type, directive, operationDirective)
 	if err != nil {
 		return argument{}, err
@@ -127,7 +137,7 @@ func (g *generator) getArgument(
 	return argument{
 		GraphQLName: graphQLName,
 		GoName:      lowerFirst(graphQLName),
-		GoType:      goType,
+		GoType:      goTyp.Reference(),
 		IsSlice:     arg.Type.Elem != nil,
 		Options:     operationDirective.merge(directive),
 	}, nil
@@ -158,7 +168,7 @@ func (g *generator) addOperation(op *ast.OperationDefinition) error {
 		}
 	}
 
-	responseName, err := g.getTypeForOperation(op, directive)
+	responseType, err := g.convertOperation(op, directive)
 	if err != nil {
 		return err
 	}
@@ -185,7 +195,7 @@ func (g *generator) addOperation(op *ast.OperationDefinition) error {
 		// The newline just makes it format a little nicer.
 		Body:           "\n" + builder.String(),
 		Args:           args,
-		ResponseName:   responseName,
+		ResponseName:   responseType.Reference(),
 		SourceFilename: sourceFilename,
 	})
 
@@ -193,7 +203,14 @@ func (g *generator) addOperation(op *ast.OperationDefinition) error {
 }
 
 // Generate returns a map from absolute-path filename to generated content.
+//
+// This is the main entrypoint to the code-generation process for callers who
+// wish to manage the config-reading (ReadAndValidateConfig) and file-writing
+// on their own.  (Those are wired in by Main.)
 func Generate(config *Config) (map[string][]byte, error) {
+	// Step 1: Read in the schema and operations from the files defined by the
+	// config (and validate the operations against the schema).  This is all
+	// defined in parse.go.
 	schema, err := getSchema(config.Schema)
 	if err != nil {
 		return nil, err
@@ -204,9 +221,9 @@ func Generate(config *Config) (map[string][]byte, error) {
 		return nil, err
 	}
 
-	// TODO: we could also allow this, and generate an empty file with just the
-	// package-name, if it turns out to be more convenient that way.  (As-is,
-	// we generate a broken file, with just (unused) imports.)
+	// TODO(benkraft): we could also allow this, and generate an empty file
+	// with just the package-name, if it turns out to be more convenient that
+	// way.  (As-is, we generate a broken file, with just (unused) imports.)
 	if len(document.Operations) == 0 {
 		// Hard to have a position when there are no operations :(
 		return nil, errorf(nil, "no queries found, looked in: %v",
@@ -218,6 +235,9 @@ func Generate(config *Config) (map[string][]byte, error) {
 			"genqlient does not yet support fragments")
 	}
 
+	// Step 2: For each operation, convert it into data structures representing
+	// Go types (defined in types.go).  The bulk of this logic is in
+	// traverse.go.
 	g := newGenerator(config, schema)
 	for _, op := range document.Operations {
 		if err = g.addOperation(op); err != nil {
@@ -225,6 +245,9 @@ func Generate(config *Config) (map[string][]byte, error) {
 		}
 	}
 
+	// Step 3: Glue it all together!  Most of this is done inline in the
+	// template, but the call to g.Types() in the template calls out to
+	// types.go to actually generate the code for each type.
 	var buf bytes.Buffer
 	err = g.execute("operation.go.tmpl", &buf, g)
 	if err != nil {

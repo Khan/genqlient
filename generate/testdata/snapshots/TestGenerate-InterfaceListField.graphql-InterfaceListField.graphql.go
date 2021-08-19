@@ -22,6 +22,7 @@ type InterfaceNoFragmentsQueryRootTopic struct {
 
 // InterfaceNoFragmentsQueryRootTopicChildrenArticle includes the requested fields of the GraphQL type Article.
 type InterfaceNoFragmentsQueryRootTopicChildrenArticle struct {
+	Typename string `json:"__typename"`
 	// ID is the identifier of the content.
 	Id   testutil.ID `json:"id"`
 	Name string      `json:"name"`
@@ -35,15 +36,16 @@ type InterfaceNoFragmentsQueryRootTopicChildrenContent interface {
 	implementsGraphQLInterfaceInterfaceNoFragmentsQueryRootTopicChildrenContent()
 }
 
-func (v InterfaceNoFragmentsQueryRootTopicChildrenArticle) implementsGraphQLInterfaceInterfaceNoFragmentsQueryRootTopicChildrenContent() {
+func (v *InterfaceNoFragmentsQueryRootTopicChildrenArticle) implementsGraphQLInterfaceInterfaceNoFragmentsQueryRootTopicChildrenContent() {
 }
-func (v InterfaceNoFragmentsQueryRootTopicChildrenVideo) implementsGraphQLInterfaceInterfaceNoFragmentsQueryRootTopicChildrenContent() {
+func (v *InterfaceNoFragmentsQueryRootTopicChildrenVideo) implementsGraphQLInterfaceInterfaceNoFragmentsQueryRootTopicChildrenContent() {
 }
-func (v InterfaceNoFragmentsQueryRootTopicChildrenTopic) implementsGraphQLInterfaceInterfaceNoFragmentsQueryRootTopicChildrenContent() {
+func (v *InterfaceNoFragmentsQueryRootTopicChildrenTopic) implementsGraphQLInterfaceInterfaceNoFragmentsQueryRootTopicChildrenContent() {
 }
 
 // InterfaceNoFragmentsQueryRootTopicChildrenTopic includes the requested fields of the GraphQL type Topic.
 type InterfaceNoFragmentsQueryRootTopicChildrenTopic struct {
+	Typename string `json:"__typename"`
 	// ID is the identifier of the content.
 	Id   testutil.ID `json:"id"`
 	Name string      `json:"name"`
@@ -51,6 +53,7 @@ type InterfaceNoFragmentsQueryRootTopicChildrenTopic struct {
 
 // InterfaceNoFragmentsQueryRootTopicChildrenVideo includes the requested fields of the GraphQL type Video.
 type InterfaceNoFragmentsQueryRootTopicChildrenVideo struct {
+	Typename string `json:"__typename"`
 	// ID is the identifier of the content.
 	Id   testutil.ID `json:"id"`
 	Name string      `json:"name"`
@@ -69,6 +72,7 @@ query InterfaceNoFragmentsQuery {
 		id
 		name
 		children {
+			__typename
 			id
 			name
 		}

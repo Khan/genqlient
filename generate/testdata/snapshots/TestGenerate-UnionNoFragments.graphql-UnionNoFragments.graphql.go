@@ -13,9 +13,6 @@ type UnionNoFragmentsQueryRandomLeafArticle struct {
 	Typename string `json:"__typename"`
 }
 
-func (v UnionNoFragmentsQueryRandomLeafArticle) implementsGraphQLInterfaceUnionNoFragmentsQueryRandomLeafLeafContent() {
-}
-
 // UnionNoFragmentsQueryRandomLeafLeafContent includes the requested fields of the GraphQL type LeafContent.
 // The GraphQL type's documentation follows.
 //
@@ -24,12 +21,14 @@ type UnionNoFragmentsQueryRandomLeafLeafContent interface {
 	implementsGraphQLInterfaceUnionNoFragmentsQueryRandomLeafLeafContent()
 }
 
+func (v UnionNoFragmentsQueryRandomLeafArticle) implementsGraphQLInterfaceUnionNoFragmentsQueryRandomLeafLeafContent() {
+}
+func (v UnionNoFragmentsQueryRandomLeafVideo) implementsGraphQLInterfaceUnionNoFragmentsQueryRandomLeafLeafContent() {
+}
+
 // UnionNoFragmentsQueryRandomLeafVideo includes the requested fields of the GraphQL type Video.
 type UnionNoFragmentsQueryRandomLeafVideo struct {
 	Typename string `json:"__typename"`
-}
-
-func (v UnionNoFragmentsQueryRandomLeafVideo) implementsGraphQLInterfaceUnionNoFragmentsQueryRandomLeafLeafContent() {
 }
 
 // UnionNoFragmentsQueryResponse is returned by UnionNoFragmentsQuery on success.
