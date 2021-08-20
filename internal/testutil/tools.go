@@ -1,8 +1,8 @@
-// In principle this should be "+build ignore", but for some reason
-// `go mod tidy` ignores such files, so we use another build tag we never
-// intend to set.
-
+// Conventionally this sort of thing would use the "ignore" tag, but
+// `go mod tidy` ignores so-tagged files explicitly, so we use another build
+// tag we never intend to set.
 // +build tools
+//go:build tools
 
 package testutil
 
