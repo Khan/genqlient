@@ -1,5 +1,5 @@
 // Package integration contains genqlient's integration tests, which run
-// against a real server.
+// against a real server (defined in internal/integration/server/server.go).
 //
 // These are especially important for cases where we generate nontrivial logic,
 // such as JSON-unmarshaling.
