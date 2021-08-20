@@ -1,50 +1,16 @@
-package generate
+package generate_test
 
 import (
-	"bytes"
-	"io/ioutil"
 	"os"
 	"os/exec"
-	"path/filepath"
-	"runtime"
 	"strings"
 	"testing"
+
+	"github.com/Khan/genqlient/internal/integration"
 )
 
-func getRepoRoot(t *testing.T) string {
-	_, thisFile, _, ok := runtime.Caller(0)
-	if !ok {
-		t.Fatal("runtime.Caller non-ok")
-	}
-
-	return filepath.Dir(filepath.Dir(thisFile))
-}
-
 func TestGenerateExample(t *testing.T) {
-	configFilename := filepath.Join(getRepoRoot(t), "example", "genqlient.yaml")
-	config, err := ReadAndValidateConfig(configFilename)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	generated, err := Generate(config)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	for filename, content := range generated {
-		expectedContent, err := ioutil.ReadFile(filename)
-		if err != nil {
-			t.Fatal(err)
-		}
-
-		if !bytes.Equal(content, expectedContent) {
-			t.Errorf("mismatch in %s", filename)
-			if testing.Verbose() {
-				t.Errorf("got:\n%s\nwant:\n%s\n", content, expectedContent)
-			}
-		}
-	}
+	integration.RunGenerateTest(t, "example/genqlient.yaml")
 }
 
 func TestRunExample(t *testing.T) {
@@ -53,7 +19,7 @@ func TestRunExample(t *testing.T) {
 	}
 
 	cmd := exec.Command("go", "run", "./example/cmd/example", "benjaminjkraft")
-	cmd.Dir = getRepoRoot(t)
+	cmd.Dir = integration.RepoRoot(t)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		t.Error(err)

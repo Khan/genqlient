@@ -1,11 +1,11 @@
 # These are the defaults, and are just included to be explicit.
 package: example
 schema: schema.graphql
-queries:
+operations:
 - genqlient.graphql
 generated: generated.go
 
 # We map github's DateTime type to Go's time.Time (which conveniently already
-# defines MarshalJSON and UnmarshalJSAON).
+# defines MarshalJSON and UnmarshalJSON).
 scalars:
   DateTime: time.Time
