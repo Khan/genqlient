@@ -99,6 +99,36 @@ func TestInterfaceNoFragments(t *testing.T) {
 	assert.Nil(t, resp.Being)
 }
 
+func TestInterfaceListField(t *testing.T) {
+	_ = `# @genqlient
+	query queryWithInterfaceListField($ids: [ID!]!) {
+		beings(ids: $ids) { __typename id name }
+	}`
+
+	ctx := context.Background()
+	server := server.RunServer()
+	defer server.Close()
+	client := graphql.NewClient(server.URL, http.DefaultClient)
+
+	resp, err := queryWithInterfaceListField(ctx, client,
+		[]string{"1", "3", "12847394823"})
+	require.NoError(t, err)
+
+	require.Len(t, resp.Beings, 3)
+
+	user, ok := resp.Beings[0].(*queryWithInterfaceListFieldBeingsUser)
+	require.Truef(t, ok, "got %T, not User", resp.Beings[0])
+	assert.Equal(t, "1", user.Id)
+	assert.Equal(t, "Yours Truly", user.Name)
+
+	animal, ok := resp.Beings[1].(*queryWithInterfaceListFieldBeingsAnimal)
+	require.Truef(t, ok, "got %T, not Animal", resp.Beings[1])
+	assert.Equal(t, "3", animal.Id)
+	assert.Equal(t, "Fido", animal.Name)
+
+	assert.Nil(t, resp.Beings[2])
+}
+
 func TestGeneratedCode(t *testing.T) {
 	// TODO(benkraft): Check that gqlgen is up to date too.  In practice that's
 	// less likely to be a problem, since it should only change if you update

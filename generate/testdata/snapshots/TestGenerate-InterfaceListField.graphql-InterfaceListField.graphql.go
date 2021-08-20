@@ -10,43 +10,77 @@ import (
 	"github.com/Khan/genqlient/internal/testutil"
 )
 
-// InterfaceNoFragmentsQueryResponse is returned by InterfaceNoFragmentsQuery on success.
-type InterfaceNoFragmentsQueryResponse struct {
-	Root InterfaceNoFragmentsQueryRootTopic `json:"root"`
+// InterfaceListFieldResponse is returned by InterfaceListField on success.
+type InterfaceListFieldResponse struct {
+	Root        InterfaceListFieldRootTopic         `json:"root"`
+	WithPointer *InterfaceListFieldWithPointerTopic `json:"withPointer"`
 }
 
-// InterfaceNoFragmentsQueryRootTopic includes the requested fields of the GraphQL type Topic.
-type InterfaceNoFragmentsQueryRootTopic struct {
+// InterfaceListFieldRootTopic includes the requested fields of the GraphQL type Topic.
+type InterfaceListFieldRootTopic struct {
 	// ID is documented in the Content interface.
-	Id       testutil.ID                                         `json:"id"`
-	Name     string                                              `json:"name"`
-	Children []InterfaceNoFragmentsQueryRootTopicChildrenContent `json:"children"`
+	Id       testutil.ID                                  `json:"id"`
+	Name     string                                       `json:"name"`
+	Children []InterfaceListFieldRootTopicChildrenContent `json:"-"`
 }
 
-// InterfaceNoFragmentsQueryRootTopicChildrenArticle includes the requested fields of the GraphQL type Article.
-type InterfaceNoFragmentsQueryRootTopicChildrenArticle struct {
+func (v *InterfaceListFieldRootTopic) UnmarshalJSON(b []byte) error {
+
+	type InterfaceListFieldRootTopicWrapper InterfaceListFieldRootTopic
+
+	var firstPass struct {
+		*InterfaceListFieldRootTopicWrapper
+		Children []json.RawMessage `json:"children"`
+	}
+	firstPass.InterfaceListFieldRootTopicWrapper = (*InterfaceListFieldRootTopicWrapper)(v)
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	{
+		target := &v.Children
+		raw := firstPass.Children
+		*target = make(
+			[]InterfaceListFieldRootTopicChildrenContent,
+			len(raw))
+		for i, raw := range raw {
+			target := &(*target)[i]
+			err = __unmarshalInterfaceListFieldRootTopicChildrenContent(
+				target, raw)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+// InterfaceListFieldRootTopicChildrenArticle includes the requested fields of the GraphQL type Article.
+type InterfaceListFieldRootTopicChildrenArticle struct {
 	Typename string `json:"__typename"`
 	// ID is the identifier of the content.
 	Id   testutil.ID `json:"id"`
 	Name string      `json:"name"`
 }
 
-// InterfaceNoFragmentsQueryRootTopicChildrenContent includes the requested fields of the GraphQL type Content.
+// InterfaceListFieldRootTopicChildrenContent includes the requested fields of the GraphQL type Content.
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
-type InterfaceNoFragmentsQueryRootTopicChildrenContent interface {
-	implementsGraphQLInterfaceInterfaceNoFragmentsQueryRootTopicChildrenContent()
+type InterfaceListFieldRootTopicChildrenContent interface {
+	implementsGraphQLInterfaceInterfaceListFieldRootTopicChildrenContent()
 }
 
-func (v *InterfaceNoFragmentsQueryRootTopicChildrenArticle) implementsGraphQLInterfaceInterfaceNoFragmentsQueryRootTopicChildrenContent() {
+func (v *InterfaceListFieldRootTopicChildrenArticle) implementsGraphQLInterfaceInterfaceListFieldRootTopicChildrenContent() {
 }
-func (v *InterfaceNoFragmentsQueryRootTopicChildrenVideo) implementsGraphQLInterfaceInterfaceNoFragmentsQueryRootTopicChildrenContent() {
+func (v *InterfaceListFieldRootTopicChildrenVideo) implementsGraphQLInterfaceInterfaceListFieldRootTopicChildrenContent() {
 }
-func (v *InterfaceNoFragmentsQueryRootTopicChildrenTopic) implementsGraphQLInterfaceInterfaceNoFragmentsQueryRootTopicChildrenContent() {
+func (v *InterfaceListFieldRootTopicChildrenTopic) implementsGraphQLInterfaceInterfaceListFieldRootTopicChildrenContent() {
 }
 
-func __unmarshalInterfaceNoFragmentsQueryRootTopicChildrenContent(v *InterfaceNoFragmentsQueryRootTopicChildrenContent, m json.RawMessage) error {
+func __unmarshalInterfaceListFieldRootTopicChildrenContent(v *InterfaceListFieldRootTopicChildrenContent, m json.RawMessage) error {
 	if string(m) == "null" {
 		return nil
 	}
@@ -61,46 +95,164 @@ func __unmarshalInterfaceNoFragmentsQueryRootTopicChildrenContent(v *InterfaceNo
 
 	switch tn.TypeName {
 	case "Article":
-		*v = new(InterfaceNoFragmentsQueryRootTopicChildrenArticle)
+		*v = new(InterfaceListFieldRootTopicChildrenArticle)
 		return json.Unmarshal(m, *v)
 	case "Video":
-		*v = new(InterfaceNoFragmentsQueryRootTopicChildrenVideo)
+		*v = new(InterfaceListFieldRootTopicChildrenVideo)
 		return json.Unmarshal(m, *v)
 	case "Topic":
-		*v = new(InterfaceNoFragmentsQueryRootTopicChildrenTopic)
+		*v = new(InterfaceListFieldRootTopicChildrenTopic)
 		return json.Unmarshal(m, *v)
 	default:
 		return fmt.Errorf(
-			`Unexpected concrete type for InterfaceNoFragmentsQueryRootTopicChildrenContent: "%v"`, tn.TypeName)
+			`Unexpected concrete type for InterfaceListFieldRootTopicChildrenContent: "%v"`, tn.TypeName)
 	}
 }
 
-// InterfaceNoFragmentsQueryRootTopicChildrenTopic includes the requested fields of the GraphQL type Topic.
-type InterfaceNoFragmentsQueryRootTopicChildrenTopic struct {
+// InterfaceListFieldRootTopicChildrenTopic includes the requested fields of the GraphQL type Topic.
+type InterfaceListFieldRootTopicChildrenTopic struct {
 	Typename string `json:"__typename"`
 	// ID is the identifier of the content.
 	Id   testutil.ID `json:"id"`
 	Name string      `json:"name"`
 }
 
-// InterfaceNoFragmentsQueryRootTopicChildrenVideo includes the requested fields of the GraphQL type Video.
-type InterfaceNoFragmentsQueryRootTopicChildrenVideo struct {
+// InterfaceListFieldRootTopicChildrenVideo includes the requested fields of the GraphQL type Video.
+type InterfaceListFieldRootTopicChildrenVideo struct {
 	Typename string `json:"__typename"`
 	// ID is the identifier of the content.
 	Id   testutil.ID `json:"id"`
 	Name string      `json:"name"`
 }
 
-func InterfaceNoFragmentsQuery(
+// InterfaceListFieldWithPointerTopic includes the requested fields of the GraphQL type Topic.
+type InterfaceListFieldWithPointerTopic struct {
+	// ID is documented in the Content interface.
+	Id       testutil.ID                                         `json:"id"`
+	Name     string                                              `json:"name"`
+	Children []InterfaceListFieldWithPointerTopicChildrenContent `json:"-"`
+}
+
+func (v *InterfaceListFieldWithPointerTopic) UnmarshalJSON(b []byte) error {
+
+	type InterfaceListFieldWithPointerTopicWrapper InterfaceListFieldWithPointerTopic
+
+	var firstPass struct {
+		*InterfaceListFieldWithPointerTopicWrapper
+		Children []json.RawMessage `json:"children"`
+	}
+	firstPass.InterfaceListFieldWithPointerTopicWrapper = (*InterfaceListFieldWithPointerTopicWrapper)(v)
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	{
+		target := &v.Children
+		raw := firstPass.Children
+		*target = make(
+			[]InterfaceListFieldWithPointerTopicChildrenContent,
+			len(raw))
+		for i, raw := range raw {
+			target := &(*target)[i]
+			err = __unmarshalInterfaceListFieldWithPointerTopicChildrenContent(
+				target, raw)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+// InterfaceListFieldWithPointerTopicChildrenArticle includes the requested fields of the GraphQL type Article.
+type InterfaceListFieldWithPointerTopicChildrenArticle struct {
+	Typename string `json:"__typename"`
+	// ID is the identifier of the content.
+	Id   testutil.ID `json:"id"`
+	Name string      `json:"name"`
+}
+
+// InterfaceListFieldWithPointerTopicChildrenContent includes the requested fields of the GraphQL type Content.
+// The GraphQL type's documentation follows.
+//
+// Content is implemented by various types like Article, Video, and Topic.
+type InterfaceListFieldWithPointerTopicChildrenContent interface {
+	implementsGraphQLInterfaceInterfaceListFieldWithPointerTopicChildrenContent()
+}
+
+func (v *InterfaceListFieldWithPointerTopicChildrenArticle) implementsGraphQLInterfaceInterfaceListFieldWithPointerTopicChildrenContent() {
+}
+func (v *InterfaceListFieldWithPointerTopicChildrenVideo) implementsGraphQLInterfaceInterfaceListFieldWithPointerTopicChildrenContent() {
+}
+func (v *InterfaceListFieldWithPointerTopicChildrenTopic) implementsGraphQLInterfaceInterfaceListFieldWithPointerTopicChildrenContent() {
+}
+
+func __unmarshalInterfaceListFieldWithPointerTopicChildrenContent(v *InterfaceListFieldWithPointerTopicChildrenContent, m json.RawMessage) error {
+	if string(m) == "null" {
+		return nil
+	}
+
+	var tn struct {
+		TypeName string `json:"__typename"`
+	}
+	err := json.Unmarshal(m, &tn)
+	if err != nil {
+		return err
+	}
+
+	switch tn.TypeName {
+	case "Article":
+		*v = new(InterfaceListFieldWithPointerTopicChildrenArticle)
+		return json.Unmarshal(m, *v)
+	case "Video":
+		*v = new(InterfaceListFieldWithPointerTopicChildrenVideo)
+		return json.Unmarshal(m, *v)
+	case "Topic":
+		*v = new(InterfaceListFieldWithPointerTopicChildrenTopic)
+		return json.Unmarshal(m, *v)
+	default:
+		return fmt.Errorf(
+			`Unexpected concrete type for InterfaceListFieldWithPointerTopicChildrenContent: "%v"`, tn.TypeName)
+	}
+}
+
+// InterfaceListFieldWithPointerTopicChildrenTopic includes the requested fields of the GraphQL type Topic.
+type InterfaceListFieldWithPointerTopicChildrenTopic struct {
+	Typename string `json:"__typename"`
+	// ID is the identifier of the content.
+	Id   testutil.ID `json:"id"`
+	Name string      `json:"name"`
+}
+
+// InterfaceListFieldWithPointerTopicChildrenVideo includes the requested fields of the GraphQL type Video.
+type InterfaceListFieldWithPointerTopicChildrenVideo struct {
+	Typename string `json:"__typename"`
+	// ID is the identifier of the content.
+	Id   testutil.ID `json:"id"`
+	Name string      `json:"name"`
+}
+
+func InterfaceListField(
 	client graphql.Client,
-) (*InterfaceNoFragmentsQueryResponse, error) {
-	var retval InterfaceNoFragmentsQueryResponse
+) (*InterfaceListFieldResponse, error) {
+	var retval InterfaceListFieldResponse
 	err := client.MakeRequest(
 		nil,
-		"InterfaceNoFragmentsQuery",
+		"InterfaceListField",
 		`
-query InterfaceNoFragmentsQuery {
+query InterfaceListField {
 	root {
+		id
+		name
+		children {
+			__typename
+			id
+			name
+		}
+	}
+	withPointer: root {
 		id
 		name
 		children {

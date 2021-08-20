@@ -19,7 +19,40 @@ type InterfaceNestingResponse struct {
 type InterfaceNestingRootTopic struct {
 	// ID is documented in the Content interface.
 	Id       testutil.ID                                `json:"id"`
-	Children []InterfaceNestingRootTopicChildrenContent `json:"children"`
+	Children []InterfaceNestingRootTopicChildrenContent `json:"-"`
+}
+
+func (v *InterfaceNestingRootTopic) UnmarshalJSON(b []byte) error {
+
+	type InterfaceNestingRootTopicWrapper InterfaceNestingRootTopic
+
+	var firstPass struct {
+		*InterfaceNestingRootTopicWrapper
+		Children []json.RawMessage `json:"children"`
+	}
+	firstPass.InterfaceNestingRootTopicWrapper = (*InterfaceNestingRootTopicWrapper)(v)
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	{
+		target := &v.Children
+		raw := firstPass.Children
+		*target = make(
+			[]InterfaceNestingRootTopicChildrenContent,
+			len(raw))
+		for i, raw := range raw {
+			target := &(*target)[i]
+			err = __unmarshalInterfaceNestingRootTopicChildrenContent(
+				target, raw)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
 }
 
 // InterfaceNestingRootTopicChildrenArticle includes the requested fields of the GraphQL type Article.
@@ -35,7 +68,40 @@ type InterfaceNestingRootTopicChildrenArticleParentTopic struct {
 	Typename string `json:"__typename"`
 	// ID is documented in the Content interface.
 	Id       testutil.ID                                                          `json:"id"`
-	Children []InterfaceNestingRootTopicChildrenArticleParentTopicChildrenContent `json:"children"`
+	Children []InterfaceNestingRootTopicChildrenArticleParentTopicChildrenContent `json:"-"`
+}
+
+func (v *InterfaceNestingRootTopicChildrenArticleParentTopic) UnmarshalJSON(b []byte) error {
+
+	type InterfaceNestingRootTopicChildrenArticleParentTopicWrapper InterfaceNestingRootTopicChildrenArticleParentTopic
+
+	var firstPass struct {
+		*InterfaceNestingRootTopicChildrenArticleParentTopicWrapper
+		Children []json.RawMessage `json:"children"`
+	}
+	firstPass.InterfaceNestingRootTopicChildrenArticleParentTopicWrapper = (*InterfaceNestingRootTopicChildrenArticleParentTopicWrapper)(v)
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	{
+		target := &v.Children
+		raw := firstPass.Children
+		*target = make(
+			[]InterfaceNestingRootTopicChildrenArticleParentTopicChildrenContent,
+			len(raw))
+		for i, raw := range raw {
+			target := &(*target)[i]
+			err = __unmarshalInterfaceNestingRootTopicChildrenArticleParentTopicChildrenContent(
+				target, raw)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
 }
 
 // InterfaceNestingRootTopicChildrenArticleParentTopicChildrenArticle includes the requested fields of the GraphQL type Article.
@@ -160,7 +226,40 @@ type InterfaceNestingRootTopicChildrenTopicParentTopic struct {
 	Typename string `json:"__typename"`
 	// ID is documented in the Content interface.
 	Id       testutil.ID                                                        `json:"id"`
-	Children []InterfaceNestingRootTopicChildrenTopicParentTopicChildrenContent `json:"children"`
+	Children []InterfaceNestingRootTopicChildrenTopicParentTopicChildrenContent `json:"-"`
+}
+
+func (v *InterfaceNestingRootTopicChildrenTopicParentTopic) UnmarshalJSON(b []byte) error {
+
+	type InterfaceNestingRootTopicChildrenTopicParentTopicWrapper InterfaceNestingRootTopicChildrenTopicParentTopic
+
+	var firstPass struct {
+		*InterfaceNestingRootTopicChildrenTopicParentTopicWrapper
+		Children []json.RawMessage `json:"children"`
+	}
+	firstPass.InterfaceNestingRootTopicChildrenTopicParentTopicWrapper = (*InterfaceNestingRootTopicChildrenTopicParentTopicWrapper)(v)
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	{
+		target := &v.Children
+		raw := firstPass.Children
+		*target = make(
+			[]InterfaceNestingRootTopicChildrenTopicParentTopicChildrenContent,
+			len(raw))
+		for i, raw := range raw {
+			target := &(*target)[i]
+			err = __unmarshalInterfaceNestingRootTopicChildrenTopicParentTopicChildrenContent(
+				target, raw)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
 }
 
 // InterfaceNestingRootTopicChildrenTopicParentTopicChildrenArticle includes the requested fields of the GraphQL type Article.
@@ -241,7 +340,40 @@ type InterfaceNestingRootTopicChildrenVideoParentTopic struct {
 	Typename string `json:"__typename"`
 	// ID is documented in the Content interface.
 	Id       testutil.ID                                                        `json:"id"`
-	Children []InterfaceNestingRootTopicChildrenVideoParentTopicChildrenContent `json:"children"`
+	Children []InterfaceNestingRootTopicChildrenVideoParentTopicChildrenContent `json:"-"`
+}
+
+func (v *InterfaceNestingRootTopicChildrenVideoParentTopic) UnmarshalJSON(b []byte) error {
+
+	type InterfaceNestingRootTopicChildrenVideoParentTopicWrapper InterfaceNestingRootTopicChildrenVideoParentTopic
+
+	var firstPass struct {
+		*InterfaceNestingRootTopicChildrenVideoParentTopicWrapper
+		Children []json.RawMessage `json:"children"`
+	}
+	firstPass.InterfaceNestingRootTopicChildrenVideoParentTopicWrapper = (*InterfaceNestingRootTopicChildrenVideoParentTopicWrapper)(v)
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	{
+		target := &v.Children
+		raw := firstPass.Children
+		*target = make(
+			[]InterfaceNestingRootTopicChildrenVideoParentTopicChildrenContent,
+			len(raw))
+		for i, raw := range raw {
+			target := &(*target)[i]
+			err = __unmarshalInterfaceNestingRootTopicChildrenVideoParentTopicChildrenContent(
+				target, raw)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
 }
 
 // InterfaceNestingRootTopicChildrenVideoParentTopicChildrenArticle includes the requested fields of the GraphQL type Article.

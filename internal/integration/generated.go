@@ -10,6 +10,94 @@ import (
 	"github.com/Khan/genqlient/graphql"
 )
 
+// queryWithInterfaceListFieldBeingsAnimal includes the requested fields of the GraphQL type Animal.
+type queryWithInterfaceListFieldBeingsAnimal struct {
+	Typename string `json:"__typename"`
+	Id       string `json:"id"`
+	Name     string `json:"name"`
+}
+
+// queryWithInterfaceListFieldBeingsBeing includes the requested fields of the GraphQL type Being.
+type queryWithInterfaceListFieldBeingsBeing interface {
+	implementsGraphQLInterfacequeryWithInterfaceListFieldBeingsBeing()
+}
+
+func (v *queryWithInterfaceListFieldBeingsUser) implementsGraphQLInterfacequeryWithInterfaceListFieldBeingsBeing() {
+}
+func (v *queryWithInterfaceListFieldBeingsAnimal) implementsGraphQLInterfacequeryWithInterfaceListFieldBeingsBeing() {
+}
+
+func __unmarshalqueryWithInterfaceListFieldBeingsBeing(v *queryWithInterfaceListFieldBeingsBeing, m json.RawMessage) error {
+	if string(m) == "null" {
+		return nil
+	}
+
+	var tn struct {
+		TypeName string `json:"__typename"`
+	}
+	err := json.Unmarshal(m, &tn)
+	if err != nil {
+		return err
+	}
+
+	switch tn.TypeName {
+	case "User":
+		*v = new(queryWithInterfaceListFieldBeingsUser)
+		return json.Unmarshal(m, *v)
+	case "Animal":
+		*v = new(queryWithInterfaceListFieldBeingsAnimal)
+		return json.Unmarshal(m, *v)
+	default:
+		return fmt.Errorf(
+			`Unexpected concrete type for queryWithInterfaceListFieldBeingsBeing: "%v"`, tn.TypeName)
+	}
+}
+
+// queryWithInterfaceListFieldBeingsUser includes the requested fields of the GraphQL type User.
+type queryWithInterfaceListFieldBeingsUser struct {
+	Typename string `json:"__typename"`
+	Id       string `json:"id"`
+	Name     string `json:"name"`
+}
+
+// queryWithInterfaceListFieldResponse is returned by queryWithInterfaceListField on success.
+type queryWithInterfaceListFieldResponse struct {
+	Beings []queryWithInterfaceListFieldBeingsBeing `json:"-"`
+}
+
+func (v *queryWithInterfaceListFieldResponse) UnmarshalJSON(b []byte) error {
+
+	type queryWithInterfaceListFieldResponseWrapper queryWithInterfaceListFieldResponse
+
+	var firstPass struct {
+		*queryWithInterfaceListFieldResponseWrapper
+		Beings []json.RawMessage `json:"beings"`
+	}
+	firstPass.queryWithInterfaceListFieldResponseWrapper = (*queryWithInterfaceListFieldResponseWrapper)(v)
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	{
+		target := &v.Beings
+		raw := firstPass.Beings
+		*target = make(
+			[]queryWithInterfaceListFieldBeingsBeing,
+			len(raw))
+		for i, raw := range raw {
+			target := &(*target)[i]
+			err = __unmarshalqueryWithInterfaceListFieldBeingsBeing(
+				target, raw)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
 // queryWithInterfaceNoFragmentsBeing includes the requested fields of the GraphQL type Being.
 type queryWithInterfaceNoFragmentsBeing interface {
 	implementsGraphQLInterfacequeryWithInterfaceNoFragmentsBeing()
@@ -87,12 +175,15 @@ func (v *queryWithInterfaceNoFragmentsResponse) UnmarshalJSON(b []byte) error {
 		return err
 	}
 
-	err = __unmarshalqueryWithInterfaceNoFragmentsBeing(
-		&v.Being, firstPass.Being)
-	if err != nil {
-		return err
+	{
+		target := &v.Being
+		raw := firstPass.Being
+		err = __unmarshalqueryWithInterfaceNoFragmentsBeing(
+			target, raw)
+		if err != nil {
+			return err
+		}
 	}
-
 	return nil
 }
 
@@ -192,6 +283,34 @@ query queryWithInterfaceNoFragments ($id: ID!) {
 		name
 	}
 	me {
+		id
+		name
+	}
+}
+`,
+		&retval,
+		variables,
+	)
+	return &retval, err
+}
+
+func queryWithInterfaceListField(
+	ctx context.Context,
+	client graphql.Client,
+	ids []string,
+) (*queryWithInterfaceListFieldResponse, error) {
+	variables := map[string]interface{}{
+		"ids": ids,
+	}
+
+	var retval queryWithInterfaceListFieldResponse
+	err := client.MakeRequest(
+		ctx,
+		"queryWithInterfaceListField",
+		`
+query queryWithInterfaceListField ($ids: [ID!]!) {
+	beings(ids: $ids) {
+		__typename
 		id
 		name
 	}

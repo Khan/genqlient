@@ -78,12 +78,15 @@ func (v *UnionNoFragmentsQueryResponse) UnmarshalJSON(b []byte) error {
 		return err
 	}
 
-	err = __unmarshalUnionNoFragmentsQueryRandomLeafLeafContent(
-		&v.RandomLeaf, firstPass.RandomLeaf)
-	if err != nil {
-		return err
+	{
+		target := &v.RandomLeaf
+		raw := firstPass.RandomLeaf
+		err = __unmarshalUnionNoFragmentsQueryRandomLeafLeafContent(
+			target, raw)
+		if err != nil {
+			return err
+		}
 	}
-
 	return nil
 }
 

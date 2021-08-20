@@ -1,8 +1,8 @@
 {
   "operations": [
     {
-      "operationName": "InterfaceNoFragmentsQuery",
-      "query": "\nquery InterfaceNoFragmentsQuery {\n\troot {\n\t\tid\n\t\tname\n\t\tchildren {\n\t\t\t__typename\n\t\t\tid\n\t\t\tname\n\t\t}\n\t}\n}\n",
+      "operationName": "InterfaceListField",
+      "query": "\nquery InterfaceListField {\n\troot {\n\t\tid\n\t\tname\n\t\tchildren {\n\t\t\t__typename\n\t\t\tid\n\t\t\tname\n\t\t}\n\t}\n\twithPointer: root {\n\t\tid\n\t\tname\n\t\tchildren {\n\t\t\t__typename\n\t\t\tid\n\t\t\tname\n\t\t}\n\t}\n}\n",
       "sourceLocation": "testdata/queries/InterfaceListField.graphql"
     }
   ]

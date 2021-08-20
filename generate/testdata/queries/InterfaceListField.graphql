@@ -1,5 +1,15 @@
-query InterfaceNoFragmentsQuery {
+query InterfaceListField {
   root {
+    id
+    name
+    children {
+      __typename
+      id
+      name
+    }
+  }
+  # @genqlient(pointer: true)
+  withPointer: root {
     id
     name
     children {
