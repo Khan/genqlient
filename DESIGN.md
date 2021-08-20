@@ -17,9 +17,9 @@ But of course all of these have somewhat different concerns, so we need to make 
 
 ### Optionality and pointers
 
-GraphQL has optional and non-optional types: `String` may be null, but `String!` is always set.  Go does not: there's just `string`, and it always has the zero value `0`, but cannot be `null`.  Some libraries allow the use of pointers for optionality -- `*string` is optional, `string` is required -- but this perhaps [goes against the intended Go style](https://github.com/golang/go/issues/38298#issuecomment-634837296).
+GraphQL has optional and non-optional types: `String` may be null, but `String!` is always set.  Go does not: there's just `string`, and it always has the zero value `""`, but cannot be `nil`.  Some libraries allow the use of pointers for optionality -- `*string` is optional, `string` is required -- but this perhaps [goes against the intended Go style](https://github.com/golang/go/issues/38298#issuecomment-634837296).
 
-We could refuse to use pointers, which makes it hard for clients that do want to tell `0` from `null` (we could allow a configurable default); or we could allow their use on an opt-in basis (which also requires a configuration knob); or we could use them whenever a type is optional (which in many schemas is quite often); or we could use another representation of optionality, like `MyField string; HasMyField bool` (or keep the non-optional field and add a method for presence, or whatever).
+We could refuse to use pointers, which makes it hard for clients that do want to tell `""` from `nil` (we could allow a configurable default); or we could allow their use on an opt-in basis (which also requires a configuration knob); or we could use them whenever a type is optional (which in many schemas is quite often); or we could use another representation of optionality, like `MyField string; HasMyField bool` (or keep the non-optional field and add a method for presence, or whatever).
 
 This is an important problem because many GraphQL APIs, including Khan Academy's, have a lot of optional fields.  Some are in practice required, or are omitted only if you don't have permissions!  So we don't want to add too much overhead for fields just because the schema considers them optional.
 
