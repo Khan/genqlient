@@ -65,20 +65,64 @@ type InterfaceListFieldRootTopicChildrenArticle struct {
 	Name string      `json:"name"`
 }
 
-// InterfaceListFieldRootTopicChildrenContent includes the requested fields of the GraphQL type Content.
+// InterfaceListFieldRootTopicChildrenContent includes the requested fields of the GraphQL interface Content.
+//
+// InterfaceListFieldRootTopicChildrenContent is implemented by the following types:
+// InterfaceListFieldRootTopicChildrenArticle
+// InterfaceListFieldRootTopicChildrenVideo
+// InterfaceListFieldRootTopicChildrenTopic
+//
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
 type InterfaceListFieldRootTopicChildrenContent interface {
 	implementsGraphQLInterfaceInterfaceListFieldRootTopicChildrenContent()
+	// GetTypename returns the receiver's concrete GraphQL type-name (see interface doc for possible values).
+	GetTypename() string
+	// GetId returns the interface-field "id" from its implementation.
+	// The GraphQL interface field's documentation follows.
+	//
+	// ID is the identifier of the content.
+	GetId() testutil.ID
+	// GetName returns the interface-field "name" from its implementation.
+	GetName() string
 }
 
 func (v *InterfaceListFieldRootTopicChildrenArticle) implementsGraphQLInterfaceInterfaceListFieldRootTopicChildrenContent() {
 }
+
+// GetTypename is a part of, and documented with, the interface InterfaceListFieldRootTopicChildrenContent.
+func (v *InterfaceListFieldRootTopicChildrenArticle) GetTypename() string { return v.Typename }
+
+// GetId is a part of, and documented with, the interface InterfaceListFieldRootTopicChildrenContent.
+func (v *InterfaceListFieldRootTopicChildrenArticle) GetId() testutil.ID { return v.Id }
+
+// GetName is a part of, and documented with, the interface InterfaceListFieldRootTopicChildrenContent.
+func (v *InterfaceListFieldRootTopicChildrenArticle) GetName() string { return v.Name }
+
 func (v *InterfaceListFieldRootTopicChildrenVideo) implementsGraphQLInterfaceInterfaceListFieldRootTopicChildrenContent() {
 }
+
+// GetTypename is a part of, and documented with, the interface InterfaceListFieldRootTopicChildrenContent.
+func (v *InterfaceListFieldRootTopicChildrenVideo) GetTypename() string { return v.Typename }
+
+// GetId is a part of, and documented with, the interface InterfaceListFieldRootTopicChildrenContent.
+func (v *InterfaceListFieldRootTopicChildrenVideo) GetId() testutil.ID { return v.Id }
+
+// GetName is a part of, and documented with, the interface InterfaceListFieldRootTopicChildrenContent.
+func (v *InterfaceListFieldRootTopicChildrenVideo) GetName() string { return v.Name }
+
 func (v *InterfaceListFieldRootTopicChildrenTopic) implementsGraphQLInterfaceInterfaceListFieldRootTopicChildrenContent() {
 }
+
+// GetTypename is a part of, and documented with, the interface InterfaceListFieldRootTopicChildrenContent.
+func (v *InterfaceListFieldRootTopicChildrenTopic) GetTypename() string { return v.Typename }
+
+// GetId is a part of, and documented with, the interface InterfaceListFieldRootTopicChildrenContent.
+func (v *InterfaceListFieldRootTopicChildrenTopic) GetId() testutil.ID { return v.Id }
+
+// GetName is a part of, and documented with, the interface InterfaceListFieldRootTopicChildrenContent.
+func (v *InterfaceListFieldRootTopicChildrenTopic) GetName() string { return v.Name }
 
 func __unmarshalInterfaceListFieldRootTopicChildrenContent(v *InterfaceListFieldRootTopicChildrenContent, m json.RawMessage) error {
 	if string(m) == "null" {
@@ -174,20 +218,64 @@ type InterfaceListFieldWithPointerTopicChildrenArticle struct {
 	Name string      `json:"name"`
 }
 
-// InterfaceListFieldWithPointerTopicChildrenContent includes the requested fields of the GraphQL type Content.
+// InterfaceListFieldWithPointerTopicChildrenContent includes the requested fields of the GraphQL interface Content.
+//
+// InterfaceListFieldWithPointerTopicChildrenContent is implemented by the following types:
+// InterfaceListFieldWithPointerTopicChildrenArticle
+// InterfaceListFieldWithPointerTopicChildrenVideo
+// InterfaceListFieldWithPointerTopicChildrenTopic
+//
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
 type InterfaceListFieldWithPointerTopicChildrenContent interface {
 	implementsGraphQLInterfaceInterfaceListFieldWithPointerTopicChildrenContent()
+	// GetTypename returns the receiver's concrete GraphQL type-name (see interface doc for possible values).
+	GetTypename() string
+	// GetId returns the interface-field "id" from its implementation.
+	// The GraphQL interface field's documentation follows.
+	//
+	// ID is the identifier of the content.
+	GetId() testutil.ID
+	// GetName returns the interface-field "name" from its implementation.
+	GetName() string
 }
 
 func (v *InterfaceListFieldWithPointerTopicChildrenArticle) implementsGraphQLInterfaceInterfaceListFieldWithPointerTopicChildrenContent() {
 }
+
+// GetTypename is a part of, and documented with, the interface InterfaceListFieldWithPointerTopicChildrenContent.
+func (v *InterfaceListFieldWithPointerTopicChildrenArticle) GetTypename() string { return v.Typename }
+
+// GetId is a part of, and documented with, the interface InterfaceListFieldWithPointerTopicChildrenContent.
+func (v *InterfaceListFieldWithPointerTopicChildrenArticle) GetId() testutil.ID { return v.Id }
+
+// GetName is a part of, and documented with, the interface InterfaceListFieldWithPointerTopicChildrenContent.
+func (v *InterfaceListFieldWithPointerTopicChildrenArticle) GetName() string { return v.Name }
+
 func (v *InterfaceListFieldWithPointerTopicChildrenVideo) implementsGraphQLInterfaceInterfaceListFieldWithPointerTopicChildrenContent() {
 }
+
+// GetTypename is a part of, and documented with, the interface InterfaceListFieldWithPointerTopicChildrenContent.
+func (v *InterfaceListFieldWithPointerTopicChildrenVideo) GetTypename() string { return v.Typename }
+
+// GetId is a part of, and documented with, the interface InterfaceListFieldWithPointerTopicChildrenContent.
+func (v *InterfaceListFieldWithPointerTopicChildrenVideo) GetId() testutil.ID { return v.Id }
+
+// GetName is a part of, and documented with, the interface InterfaceListFieldWithPointerTopicChildrenContent.
+func (v *InterfaceListFieldWithPointerTopicChildrenVideo) GetName() string { return v.Name }
+
 func (v *InterfaceListFieldWithPointerTopicChildrenTopic) implementsGraphQLInterfaceInterfaceListFieldWithPointerTopicChildrenContent() {
 }
+
+// GetTypename is a part of, and documented with, the interface InterfaceListFieldWithPointerTopicChildrenContent.
+func (v *InterfaceListFieldWithPointerTopicChildrenTopic) GetTypename() string { return v.Typename }
+
+// GetId is a part of, and documented with, the interface InterfaceListFieldWithPointerTopicChildrenContent.
+func (v *InterfaceListFieldWithPointerTopicChildrenTopic) GetId() testutil.ID { return v.Id }
+
+// GetName is a part of, and documented with, the interface InterfaceListFieldWithPointerTopicChildrenContent.
+func (v *InterfaceListFieldWithPointerTopicChildrenTopic) GetName() string { return v.Name }
 
 func __unmarshalInterfaceListFieldWithPointerTopicChildrenContent(v *InterfaceListFieldWithPointerTopicChildrenContent, m json.RawMessage) error {
 	if string(m) == "null" {

@@ -59,128 +59,73 @@ func (v *InterfaceNestingRootTopic) UnmarshalJSON(b []byte) error {
 type InterfaceNestingRootTopicChildrenArticle struct {
 	Typename string `json:"__typename"`
 	// ID is the identifier of the content.
-	Id     testutil.ID                                         `json:"id"`
-	Parent InterfaceNestingRootTopicChildrenArticleParentTopic `json:"parent"`
+	Id     testutil.ID                                  `json:"id"`
+	Parent InterfaceNestingRootTopicChildrenParentTopic `json:"parent"`
 }
 
-// InterfaceNestingRootTopicChildrenArticleParentTopic includes the requested fields of the GraphQL type Topic.
-type InterfaceNestingRootTopicChildrenArticleParentTopic struct {
-	// ID is documented in the Content interface.
-	Id       testutil.ID                                                          `json:"id"`
-	Children []InterfaceNestingRootTopicChildrenArticleParentTopicChildrenContent `json:"-"`
-}
-
-func (v *InterfaceNestingRootTopicChildrenArticleParentTopic) UnmarshalJSON(b []byte) error {
-
-	type InterfaceNestingRootTopicChildrenArticleParentTopicWrapper InterfaceNestingRootTopicChildrenArticleParentTopic
-
-	var firstPass struct {
-		*InterfaceNestingRootTopicChildrenArticleParentTopicWrapper
-		Children []json.RawMessage `json:"children"`
-	}
-	firstPass.InterfaceNestingRootTopicChildrenArticleParentTopicWrapper = (*InterfaceNestingRootTopicChildrenArticleParentTopicWrapper)(v)
-
-	err := json.Unmarshal(b, &firstPass)
-	if err != nil {
-		return err
-	}
-
-	{
-		target := &v.Children
-		raw := firstPass.Children
-		*target = make(
-			[]InterfaceNestingRootTopicChildrenArticleParentTopicChildrenContent,
-			len(raw))
-		for i, raw := range raw {
-			target := &(*target)[i]
-			err = __unmarshalInterfaceNestingRootTopicChildrenArticleParentTopicChildrenContent(
-				target, raw)
-			if err != nil {
-				return err
-			}
-		}
-	}
-	return nil
-}
-
-// InterfaceNestingRootTopicChildrenArticleParentTopicChildrenArticle includes the requested fields of the GraphQL type Article.
-type InterfaceNestingRootTopicChildrenArticleParentTopicChildrenArticle struct {
-	Typename string `json:"__typename"`
-	// ID is the identifier of the content.
-	Id testutil.ID `json:"id"`
-}
-
-// InterfaceNestingRootTopicChildrenArticleParentTopicChildrenContent includes the requested fields of the GraphQL type Content.
-// The GraphQL type's documentation follows.
+// InterfaceNestingRootTopicChildrenContent includes the requested fields of the GraphQL interface Content.
 //
-// Content is implemented by various types like Article, Video, and Topic.
-type InterfaceNestingRootTopicChildrenArticleParentTopicChildrenContent interface {
-	implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenArticleParentTopicChildrenContent()
-}
-
-func (v *InterfaceNestingRootTopicChildrenArticleParentTopicChildrenArticle) implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenArticleParentTopicChildrenContent() {
-}
-func (v *InterfaceNestingRootTopicChildrenArticleParentTopicChildrenVideo) implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenArticleParentTopicChildrenContent() {
-}
-func (v *InterfaceNestingRootTopicChildrenArticleParentTopicChildrenTopic) implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenArticleParentTopicChildrenContent() {
-}
-
-func __unmarshalInterfaceNestingRootTopicChildrenArticleParentTopicChildrenContent(v *InterfaceNestingRootTopicChildrenArticleParentTopicChildrenContent, m json.RawMessage) error {
-	if string(m) == "null" {
-		return nil
-	}
-
-	var tn struct {
-		TypeName string `json:"__typename"`
-	}
-	err := json.Unmarshal(m, &tn)
-	if err != nil {
-		return err
-	}
-
-	switch tn.TypeName {
-	case "Article":
-		*v = new(InterfaceNestingRootTopicChildrenArticleParentTopicChildrenArticle)
-		return json.Unmarshal(m, *v)
-	case "Video":
-		*v = new(InterfaceNestingRootTopicChildrenArticleParentTopicChildrenVideo)
-		return json.Unmarshal(m, *v)
-	case "Topic":
-		*v = new(InterfaceNestingRootTopicChildrenArticleParentTopicChildrenTopic)
-		return json.Unmarshal(m, *v)
-	default:
-		return fmt.Errorf(
-			`Unexpected concrete type for InterfaceNestingRootTopicChildrenArticleParentTopicChildrenContent: "%v"`, tn.TypeName)
-	}
-}
-
-// InterfaceNestingRootTopicChildrenArticleParentTopicChildrenTopic includes the requested fields of the GraphQL type Topic.
-type InterfaceNestingRootTopicChildrenArticleParentTopicChildrenTopic struct {
-	Typename string `json:"__typename"`
-	// ID is the identifier of the content.
-	Id testutil.ID `json:"id"`
-}
-
-// InterfaceNestingRootTopicChildrenArticleParentTopicChildrenVideo includes the requested fields of the GraphQL type Video.
-type InterfaceNestingRootTopicChildrenArticleParentTopicChildrenVideo struct {
-	Typename string `json:"__typename"`
-	// ID is the identifier of the content.
-	Id testutil.ID `json:"id"`
-}
-
-// InterfaceNestingRootTopicChildrenContent includes the requested fields of the GraphQL type Content.
+// InterfaceNestingRootTopicChildrenContent is implemented by the following types:
+// InterfaceNestingRootTopicChildrenArticle
+// InterfaceNestingRootTopicChildrenVideo
+// InterfaceNestingRootTopicChildrenTopic
+//
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
 type InterfaceNestingRootTopicChildrenContent interface {
 	implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenContent()
+	// GetTypename returns the receiver's concrete GraphQL type-name (see interface doc for possible values).
+	GetTypename() string
+	// GetId returns the interface-field "id" from its implementation.
+	// The GraphQL interface field's documentation follows.
+	//
+	// ID is the identifier of the content.
+	GetId() testutil.ID
+	// GetParent returns the interface-field "parent" from its implementation.
+	GetParent() InterfaceNestingRootTopicChildrenParentTopic
 }
 
 func (v *InterfaceNestingRootTopicChildrenArticle) implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenContent() {
 }
+
+// GetTypename is a part of, and documented with, the interface InterfaceNestingRootTopicChildrenContent.
+func (v *InterfaceNestingRootTopicChildrenArticle) GetTypename() string { return v.Typename }
+
+// GetId is a part of, and documented with, the interface InterfaceNestingRootTopicChildrenContent.
+func (v *InterfaceNestingRootTopicChildrenArticle) GetId() testutil.ID { return v.Id }
+
+// GetParent is a part of, and documented with, the interface InterfaceNestingRootTopicChildrenContent.
+func (v *InterfaceNestingRootTopicChildrenArticle) GetParent() InterfaceNestingRootTopicChildrenParentTopic {
+	return v.Parent
+}
+
 func (v *InterfaceNestingRootTopicChildrenVideo) implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenContent() {
 }
+
+// GetTypename is a part of, and documented with, the interface InterfaceNestingRootTopicChildrenContent.
+func (v *InterfaceNestingRootTopicChildrenVideo) GetTypename() string { return v.Typename }
+
+// GetId is a part of, and documented with, the interface InterfaceNestingRootTopicChildrenContent.
+func (v *InterfaceNestingRootTopicChildrenVideo) GetId() testutil.ID { return v.Id }
+
+// GetParent is a part of, and documented with, the interface InterfaceNestingRootTopicChildrenContent.
+func (v *InterfaceNestingRootTopicChildrenVideo) GetParent() InterfaceNestingRootTopicChildrenParentTopic {
+	return v.Parent
+}
+
 func (v *InterfaceNestingRootTopicChildrenTopic) implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenContent() {
+}
+
+// GetTypename is a part of, and documented with, the interface InterfaceNestingRootTopicChildrenContent.
+func (v *InterfaceNestingRootTopicChildrenTopic) GetTypename() string { return v.Typename }
+
+// GetId is a part of, and documented with, the interface InterfaceNestingRootTopicChildrenContent.
+func (v *InterfaceNestingRootTopicChildrenTopic) GetId() testutil.ID { return v.Id }
+
+// GetParent is a part of, and documented with, the interface InterfaceNestingRootTopicChildrenContent.
+func (v *InterfaceNestingRootTopicChildrenTopic) GetParent() InterfaceNestingRootTopicChildrenParentTopic {
+	return v.Parent
 }
 
 func __unmarshalInterfaceNestingRootTopicChildrenContent(v *InterfaceNestingRootTopicChildrenContent, m json.RawMessage) error {
@@ -212,30 +157,22 @@ func __unmarshalInterfaceNestingRootTopicChildrenContent(v *InterfaceNestingRoot
 	}
 }
 
-// InterfaceNestingRootTopicChildrenTopic includes the requested fields of the GraphQL type Topic.
-type InterfaceNestingRootTopicChildrenTopic struct {
-	Typename string `json:"__typename"`
-	// ID is the identifier of the content.
-	Id     testutil.ID                                       `json:"id"`
-	Parent InterfaceNestingRootTopicChildrenTopicParentTopic `json:"parent"`
-}
-
-// InterfaceNestingRootTopicChildrenTopicParentTopic includes the requested fields of the GraphQL type Topic.
-type InterfaceNestingRootTopicChildrenTopicParentTopic struct {
+// InterfaceNestingRootTopicChildrenParentTopic includes the requested fields of the GraphQL type Topic.
+type InterfaceNestingRootTopicChildrenParentTopic struct {
 	// ID is documented in the Content interface.
-	Id       testutil.ID                                                        `json:"id"`
-	Children []InterfaceNestingRootTopicChildrenTopicParentTopicChildrenContent `json:"-"`
+	Id       testutil.ID                                                   `json:"id"`
+	Children []InterfaceNestingRootTopicChildrenParentTopicChildrenContent `json:"-"`
 }
 
-func (v *InterfaceNestingRootTopicChildrenTopicParentTopic) UnmarshalJSON(b []byte) error {
+func (v *InterfaceNestingRootTopicChildrenParentTopic) UnmarshalJSON(b []byte) error {
 
-	type InterfaceNestingRootTopicChildrenTopicParentTopicWrapper InterfaceNestingRootTopicChildrenTopicParentTopic
+	type InterfaceNestingRootTopicChildrenParentTopicWrapper InterfaceNestingRootTopicChildrenParentTopic
 
 	var firstPass struct {
-		*InterfaceNestingRootTopicChildrenTopicParentTopicWrapper
+		*InterfaceNestingRootTopicChildrenParentTopicWrapper
 		Children []json.RawMessage `json:"children"`
 	}
-	firstPass.InterfaceNestingRootTopicChildrenTopicParentTopicWrapper = (*InterfaceNestingRootTopicChildrenTopicParentTopicWrapper)(v)
+	firstPass.InterfaceNestingRootTopicChildrenParentTopicWrapper = (*InterfaceNestingRootTopicChildrenParentTopicWrapper)(v)
 
 	err := json.Unmarshal(b, &firstPass)
 	if err != nil {
@@ -246,11 +183,11 @@ func (v *InterfaceNestingRootTopicChildrenTopicParentTopic) UnmarshalJSON(b []by
 		target := &v.Children
 		raw := firstPass.Children
 		*target = make(
-			[]InterfaceNestingRootTopicChildrenTopicParentTopicChildrenContent,
+			[]InterfaceNestingRootTopicChildrenParentTopicChildrenContent,
 			len(raw))
 		for i, raw := range raw {
 			target := &(*target)[i]
-			err = __unmarshalInterfaceNestingRootTopicChildrenTopicParentTopicChildrenContent(
+			err = __unmarshalInterfaceNestingRootTopicChildrenParentTopicChildrenContent(
 				target, raw)
 			if err != nil {
 				return err
@@ -260,29 +197,70 @@ func (v *InterfaceNestingRootTopicChildrenTopicParentTopic) UnmarshalJSON(b []by
 	return nil
 }
 
-// InterfaceNestingRootTopicChildrenTopicParentTopicChildrenArticle includes the requested fields of the GraphQL type Article.
-type InterfaceNestingRootTopicChildrenTopicParentTopicChildrenArticle struct {
+// InterfaceNestingRootTopicChildrenParentTopicChildrenArticle includes the requested fields of the GraphQL type Article.
+type InterfaceNestingRootTopicChildrenParentTopicChildrenArticle struct {
 	Typename string `json:"__typename"`
 	// ID is the identifier of the content.
 	Id testutil.ID `json:"id"`
 }
 
-// InterfaceNestingRootTopicChildrenTopicParentTopicChildrenContent includes the requested fields of the GraphQL type Content.
+// InterfaceNestingRootTopicChildrenParentTopicChildrenContent includes the requested fields of the GraphQL interface Content.
+//
+// InterfaceNestingRootTopicChildrenParentTopicChildrenContent is implemented by the following types:
+// InterfaceNestingRootTopicChildrenParentTopicChildrenArticle
+// InterfaceNestingRootTopicChildrenParentTopicChildrenVideo
+// InterfaceNestingRootTopicChildrenParentTopicChildrenTopic
+//
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
-type InterfaceNestingRootTopicChildrenTopicParentTopicChildrenContent interface {
-	implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenTopicParentTopicChildrenContent()
+type InterfaceNestingRootTopicChildrenParentTopicChildrenContent interface {
+	implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenParentTopicChildrenContent()
+	// GetTypename returns the receiver's concrete GraphQL type-name (see interface doc for possible values).
+	GetTypename() string
+	// GetId returns the interface-field "id" from its implementation.
+	// The GraphQL interface field's documentation follows.
+	//
+	// ID is the identifier of the content.
+	GetId() testutil.ID
 }
 
-func (v *InterfaceNestingRootTopicChildrenTopicParentTopicChildrenArticle) implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenTopicParentTopicChildrenContent() {
-}
-func (v *InterfaceNestingRootTopicChildrenTopicParentTopicChildrenVideo) implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenTopicParentTopicChildrenContent() {
-}
-func (v *InterfaceNestingRootTopicChildrenTopicParentTopicChildrenTopic) implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenTopicParentTopicChildrenContent() {
+func (v *InterfaceNestingRootTopicChildrenParentTopicChildrenArticle) implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenParentTopicChildrenContent() {
 }
 
-func __unmarshalInterfaceNestingRootTopicChildrenTopicParentTopicChildrenContent(v *InterfaceNestingRootTopicChildrenTopicParentTopicChildrenContent, m json.RawMessage) error {
+// GetTypename is a part of, and documented with, the interface InterfaceNestingRootTopicChildrenParentTopicChildrenContent.
+func (v *InterfaceNestingRootTopicChildrenParentTopicChildrenArticle) GetTypename() string {
+	return v.Typename
+}
+
+// GetId is a part of, and documented with, the interface InterfaceNestingRootTopicChildrenParentTopicChildrenContent.
+func (v *InterfaceNestingRootTopicChildrenParentTopicChildrenArticle) GetId() testutil.ID {
+	return v.Id
+}
+
+func (v *InterfaceNestingRootTopicChildrenParentTopicChildrenVideo) implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenParentTopicChildrenContent() {
+}
+
+// GetTypename is a part of, and documented with, the interface InterfaceNestingRootTopicChildrenParentTopicChildrenContent.
+func (v *InterfaceNestingRootTopicChildrenParentTopicChildrenVideo) GetTypename() string {
+	return v.Typename
+}
+
+// GetId is a part of, and documented with, the interface InterfaceNestingRootTopicChildrenParentTopicChildrenContent.
+func (v *InterfaceNestingRootTopicChildrenParentTopicChildrenVideo) GetId() testutil.ID { return v.Id }
+
+func (v *InterfaceNestingRootTopicChildrenParentTopicChildrenTopic) implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenParentTopicChildrenContent() {
+}
+
+// GetTypename is a part of, and documented with, the interface InterfaceNestingRootTopicChildrenParentTopicChildrenContent.
+func (v *InterfaceNestingRootTopicChildrenParentTopicChildrenTopic) GetTypename() string {
+	return v.Typename
+}
+
+// GetId is a part of, and documented with, the interface InterfaceNestingRootTopicChildrenParentTopicChildrenContent.
+func (v *InterfaceNestingRootTopicChildrenParentTopicChildrenTopic) GetId() testutil.ID { return v.Id }
+
+func __unmarshalInterfaceNestingRootTopicChildrenParentTopicChildrenContent(v *InterfaceNestingRootTopicChildrenParentTopicChildrenContent, m json.RawMessage) error {
 	if string(m) == "null" {
 		return nil
 	}
@@ -297,145 +275,48 @@ func __unmarshalInterfaceNestingRootTopicChildrenTopicParentTopicChildrenContent
 
 	switch tn.TypeName {
 	case "Article":
-		*v = new(InterfaceNestingRootTopicChildrenTopicParentTopicChildrenArticle)
+		*v = new(InterfaceNestingRootTopicChildrenParentTopicChildrenArticle)
 		return json.Unmarshal(m, *v)
 	case "Video":
-		*v = new(InterfaceNestingRootTopicChildrenTopicParentTopicChildrenVideo)
+		*v = new(InterfaceNestingRootTopicChildrenParentTopicChildrenVideo)
 		return json.Unmarshal(m, *v)
 	case "Topic":
-		*v = new(InterfaceNestingRootTopicChildrenTopicParentTopicChildrenTopic)
+		*v = new(InterfaceNestingRootTopicChildrenParentTopicChildrenTopic)
 		return json.Unmarshal(m, *v)
 	default:
 		return fmt.Errorf(
-			`Unexpected concrete type for InterfaceNestingRootTopicChildrenTopicParentTopicChildrenContent: "%v"`, tn.TypeName)
+			`Unexpected concrete type for InterfaceNestingRootTopicChildrenParentTopicChildrenContent: "%v"`, tn.TypeName)
 	}
 }
 
-// InterfaceNestingRootTopicChildrenTopicParentTopicChildrenTopic includes the requested fields of the GraphQL type Topic.
-type InterfaceNestingRootTopicChildrenTopicParentTopicChildrenTopic struct {
+// InterfaceNestingRootTopicChildrenParentTopicChildrenTopic includes the requested fields of the GraphQL type Topic.
+type InterfaceNestingRootTopicChildrenParentTopicChildrenTopic struct {
 	Typename string `json:"__typename"`
 	// ID is the identifier of the content.
 	Id testutil.ID `json:"id"`
 }
 
-// InterfaceNestingRootTopicChildrenTopicParentTopicChildrenVideo includes the requested fields of the GraphQL type Video.
-type InterfaceNestingRootTopicChildrenTopicParentTopicChildrenVideo struct {
+// InterfaceNestingRootTopicChildrenParentTopicChildrenVideo includes the requested fields of the GraphQL type Video.
+type InterfaceNestingRootTopicChildrenParentTopicChildrenVideo struct {
 	Typename string `json:"__typename"`
 	// ID is the identifier of the content.
 	Id testutil.ID `json:"id"`
+}
+
+// InterfaceNestingRootTopicChildrenTopic includes the requested fields of the GraphQL type Topic.
+type InterfaceNestingRootTopicChildrenTopic struct {
+	Typename string `json:"__typename"`
+	// ID is the identifier of the content.
+	Id     testutil.ID                                  `json:"id"`
+	Parent InterfaceNestingRootTopicChildrenParentTopic `json:"parent"`
 }
 
 // InterfaceNestingRootTopicChildrenVideo includes the requested fields of the GraphQL type Video.
 type InterfaceNestingRootTopicChildrenVideo struct {
 	Typename string `json:"__typename"`
 	// ID is the identifier of the content.
-	Id     testutil.ID                                       `json:"id"`
-	Parent InterfaceNestingRootTopicChildrenVideoParentTopic `json:"parent"`
-}
-
-// InterfaceNestingRootTopicChildrenVideoParentTopic includes the requested fields of the GraphQL type Topic.
-type InterfaceNestingRootTopicChildrenVideoParentTopic struct {
-	// ID is documented in the Content interface.
-	Id       testutil.ID                                                        `json:"id"`
-	Children []InterfaceNestingRootTopicChildrenVideoParentTopicChildrenContent `json:"-"`
-}
-
-func (v *InterfaceNestingRootTopicChildrenVideoParentTopic) UnmarshalJSON(b []byte) error {
-
-	type InterfaceNestingRootTopicChildrenVideoParentTopicWrapper InterfaceNestingRootTopicChildrenVideoParentTopic
-
-	var firstPass struct {
-		*InterfaceNestingRootTopicChildrenVideoParentTopicWrapper
-		Children []json.RawMessage `json:"children"`
-	}
-	firstPass.InterfaceNestingRootTopicChildrenVideoParentTopicWrapper = (*InterfaceNestingRootTopicChildrenVideoParentTopicWrapper)(v)
-
-	err := json.Unmarshal(b, &firstPass)
-	if err != nil {
-		return err
-	}
-
-	{
-		target := &v.Children
-		raw := firstPass.Children
-		*target = make(
-			[]InterfaceNestingRootTopicChildrenVideoParentTopicChildrenContent,
-			len(raw))
-		for i, raw := range raw {
-			target := &(*target)[i]
-			err = __unmarshalInterfaceNestingRootTopicChildrenVideoParentTopicChildrenContent(
-				target, raw)
-			if err != nil {
-				return err
-			}
-		}
-	}
-	return nil
-}
-
-// InterfaceNestingRootTopicChildrenVideoParentTopicChildrenArticle includes the requested fields of the GraphQL type Article.
-type InterfaceNestingRootTopicChildrenVideoParentTopicChildrenArticle struct {
-	Typename string `json:"__typename"`
-	// ID is the identifier of the content.
-	Id testutil.ID `json:"id"`
-}
-
-// InterfaceNestingRootTopicChildrenVideoParentTopicChildrenContent includes the requested fields of the GraphQL type Content.
-// The GraphQL type's documentation follows.
-//
-// Content is implemented by various types like Article, Video, and Topic.
-type InterfaceNestingRootTopicChildrenVideoParentTopicChildrenContent interface {
-	implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenVideoParentTopicChildrenContent()
-}
-
-func (v *InterfaceNestingRootTopicChildrenVideoParentTopicChildrenArticle) implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenVideoParentTopicChildrenContent() {
-}
-func (v *InterfaceNestingRootTopicChildrenVideoParentTopicChildrenVideo) implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenVideoParentTopicChildrenContent() {
-}
-func (v *InterfaceNestingRootTopicChildrenVideoParentTopicChildrenTopic) implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenVideoParentTopicChildrenContent() {
-}
-
-func __unmarshalInterfaceNestingRootTopicChildrenVideoParentTopicChildrenContent(v *InterfaceNestingRootTopicChildrenVideoParentTopicChildrenContent, m json.RawMessage) error {
-	if string(m) == "null" {
-		return nil
-	}
-
-	var tn struct {
-		TypeName string `json:"__typename"`
-	}
-	err := json.Unmarshal(m, &tn)
-	if err != nil {
-		return err
-	}
-
-	switch tn.TypeName {
-	case "Article":
-		*v = new(InterfaceNestingRootTopicChildrenVideoParentTopicChildrenArticle)
-		return json.Unmarshal(m, *v)
-	case "Video":
-		*v = new(InterfaceNestingRootTopicChildrenVideoParentTopicChildrenVideo)
-		return json.Unmarshal(m, *v)
-	case "Topic":
-		*v = new(InterfaceNestingRootTopicChildrenVideoParentTopicChildrenTopic)
-		return json.Unmarshal(m, *v)
-	default:
-		return fmt.Errorf(
-			`Unexpected concrete type for InterfaceNestingRootTopicChildrenVideoParentTopicChildrenContent: "%v"`, tn.TypeName)
-	}
-}
-
-// InterfaceNestingRootTopicChildrenVideoParentTopicChildrenTopic includes the requested fields of the GraphQL type Topic.
-type InterfaceNestingRootTopicChildrenVideoParentTopicChildrenTopic struct {
-	Typename string `json:"__typename"`
-	// ID is the identifier of the content.
-	Id testutil.ID `json:"id"`
-}
-
-// InterfaceNestingRootTopicChildrenVideoParentTopicChildrenVideo includes the requested fields of the GraphQL type Video.
-type InterfaceNestingRootTopicChildrenVideoParentTopicChildrenVideo struct {
-	Typename string `json:"__typename"`
-	// ID is the identifier of the content.
-	Id testutil.ID `json:"id"`
+	Id     testutil.ID                                  `json:"id"`
+	Parent InterfaceNestingRootTopicChildrenParentTopic `json:"parent"`
 }
 
 func InterfaceNesting(

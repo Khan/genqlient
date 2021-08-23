@@ -10,19 +10,81 @@ import (
 	"github.com/Khan/genqlient/internal/testutil"
 )
 
-// InterfaceListOfListOfListsFieldListOfListsOfListsOfContent includes the requested fields of the GraphQL type Content.
+// InterfaceListOfListOfListsFieldListOfListsOfListsOfContent includes the requested fields of the GraphQL interface Content.
+//
+// InterfaceListOfListOfListsFieldListOfListsOfListsOfContent is implemented by the following types:
+// InterfaceListOfListOfListsFieldListOfListsOfListsOfContentArticle
+// InterfaceListOfListOfListsFieldListOfListsOfListsOfContentVideo
+// InterfaceListOfListOfListsFieldListOfListsOfListsOfContentTopic
+//
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
 type InterfaceListOfListOfListsFieldListOfListsOfListsOfContent interface {
 	implementsGraphQLInterfaceInterfaceListOfListOfListsFieldListOfListsOfListsOfContent()
+	// GetTypename returns the receiver's concrete GraphQL type-name (see interface doc for possible values).
+	GetTypename() string
+	// GetId returns the interface-field "id" from its implementation.
+	// The GraphQL interface field's documentation follows.
+	//
+	// ID is the identifier of the content.
+	GetId() testutil.ID
+	// GetName returns the interface-field "name" from its implementation.
+	GetName() string
 }
 
 func (v *InterfaceListOfListOfListsFieldListOfListsOfListsOfContentArticle) implementsGraphQLInterfaceInterfaceListOfListOfListsFieldListOfListsOfListsOfContent() {
 }
+
+// GetTypename is a part of, and documented with, the interface InterfaceListOfListOfListsFieldListOfListsOfListsOfContent.
+func (v *InterfaceListOfListOfListsFieldListOfListsOfListsOfContentArticle) GetTypename() string {
+	return v.Typename
+}
+
+// GetId is a part of, and documented with, the interface InterfaceListOfListOfListsFieldListOfListsOfListsOfContent.
+func (v *InterfaceListOfListOfListsFieldListOfListsOfListsOfContentArticle) GetId() testutil.ID {
+	return v.Id
+}
+
+// GetName is a part of, and documented with, the interface InterfaceListOfListOfListsFieldListOfListsOfListsOfContent.
+func (v *InterfaceListOfListOfListsFieldListOfListsOfListsOfContentArticle) GetName() string {
+	return v.Name
+}
+
 func (v *InterfaceListOfListOfListsFieldListOfListsOfListsOfContentVideo) implementsGraphQLInterfaceInterfaceListOfListOfListsFieldListOfListsOfListsOfContent() {
 }
+
+// GetTypename is a part of, and documented with, the interface InterfaceListOfListOfListsFieldListOfListsOfListsOfContent.
+func (v *InterfaceListOfListOfListsFieldListOfListsOfListsOfContentVideo) GetTypename() string {
+	return v.Typename
+}
+
+// GetId is a part of, and documented with, the interface InterfaceListOfListOfListsFieldListOfListsOfListsOfContent.
+func (v *InterfaceListOfListOfListsFieldListOfListsOfListsOfContentVideo) GetId() testutil.ID {
+	return v.Id
+}
+
+// GetName is a part of, and documented with, the interface InterfaceListOfListOfListsFieldListOfListsOfListsOfContent.
+func (v *InterfaceListOfListOfListsFieldListOfListsOfListsOfContentVideo) GetName() string {
+	return v.Name
+}
+
 func (v *InterfaceListOfListOfListsFieldListOfListsOfListsOfContentTopic) implementsGraphQLInterfaceInterfaceListOfListOfListsFieldListOfListsOfListsOfContent() {
+}
+
+// GetTypename is a part of, and documented with, the interface InterfaceListOfListOfListsFieldListOfListsOfListsOfContent.
+func (v *InterfaceListOfListOfListsFieldListOfListsOfListsOfContentTopic) GetTypename() string {
+	return v.Typename
+}
+
+// GetId is a part of, and documented with, the interface InterfaceListOfListOfListsFieldListOfListsOfListsOfContent.
+func (v *InterfaceListOfListOfListsFieldListOfListsOfListsOfContentTopic) GetId() testutil.ID {
+	return v.Id
+}
+
+// GetName is a part of, and documented with, the interface InterfaceListOfListOfListsFieldListOfListsOfListsOfContent.
+func (v *InterfaceListOfListOfListsFieldListOfListsOfListsOfContentTopic) GetName() string {
+	return v.Name
 }
 
 func __unmarshalInterfaceListOfListOfListsFieldListOfListsOfListsOfContent(v *InterfaceListOfListOfListsFieldListOfListsOfListsOfContent, m json.RawMessage) error {
@@ -166,20 +228,64 @@ type InterfaceListOfListOfListsFieldWithPointerArticle struct {
 	Name *string      `json:"name"`
 }
 
-// InterfaceListOfListOfListsFieldWithPointerContent includes the requested fields of the GraphQL type Content.
+// InterfaceListOfListOfListsFieldWithPointerContent includes the requested fields of the GraphQL interface Content.
+//
+// InterfaceListOfListOfListsFieldWithPointerContent is implemented by the following types:
+// InterfaceListOfListOfListsFieldWithPointerArticle
+// InterfaceListOfListOfListsFieldWithPointerVideo
+// InterfaceListOfListOfListsFieldWithPointerTopic
+//
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
 type InterfaceListOfListOfListsFieldWithPointerContent interface {
 	implementsGraphQLInterfaceInterfaceListOfListOfListsFieldWithPointerContent()
+	// GetTypename returns the receiver's concrete GraphQL type-name (see interface doc for possible values).
+	GetTypename() string
+	// GetId returns the interface-field "id" from its implementation.
+	// The GraphQL interface field's documentation follows.
+	//
+	// ID is the identifier of the content.
+	GetId() *testutil.ID
+	// GetName returns the interface-field "name" from its implementation.
+	GetName() *string
 }
 
 func (v *InterfaceListOfListOfListsFieldWithPointerArticle) implementsGraphQLInterfaceInterfaceListOfListOfListsFieldWithPointerContent() {
 }
+
+// GetTypename is a part of, and documented with, the interface InterfaceListOfListOfListsFieldWithPointerContent.
+func (v *InterfaceListOfListOfListsFieldWithPointerArticle) GetTypename() string { return v.Typename }
+
+// GetId is a part of, and documented with, the interface InterfaceListOfListOfListsFieldWithPointerContent.
+func (v *InterfaceListOfListOfListsFieldWithPointerArticle) GetId() *testutil.ID { return v.Id }
+
+// GetName is a part of, and documented with, the interface InterfaceListOfListOfListsFieldWithPointerContent.
+func (v *InterfaceListOfListOfListsFieldWithPointerArticle) GetName() *string { return v.Name }
+
 func (v *InterfaceListOfListOfListsFieldWithPointerVideo) implementsGraphQLInterfaceInterfaceListOfListOfListsFieldWithPointerContent() {
 }
+
+// GetTypename is a part of, and documented with, the interface InterfaceListOfListOfListsFieldWithPointerContent.
+func (v *InterfaceListOfListOfListsFieldWithPointerVideo) GetTypename() string { return v.Typename }
+
+// GetId is a part of, and documented with, the interface InterfaceListOfListOfListsFieldWithPointerContent.
+func (v *InterfaceListOfListOfListsFieldWithPointerVideo) GetId() *testutil.ID { return v.Id }
+
+// GetName is a part of, and documented with, the interface InterfaceListOfListOfListsFieldWithPointerContent.
+func (v *InterfaceListOfListOfListsFieldWithPointerVideo) GetName() *string { return v.Name }
+
 func (v *InterfaceListOfListOfListsFieldWithPointerTopic) implementsGraphQLInterfaceInterfaceListOfListOfListsFieldWithPointerContent() {
 }
+
+// GetTypename is a part of, and documented with, the interface InterfaceListOfListOfListsFieldWithPointerContent.
+func (v *InterfaceListOfListOfListsFieldWithPointerTopic) GetTypename() string { return v.Typename }
+
+// GetId is a part of, and documented with, the interface InterfaceListOfListOfListsFieldWithPointerContent.
+func (v *InterfaceListOfListOfListsFieldWithPointerTopic) GetId() *testutil.ID { return v.Id }
+
+// GetName is a part of, and documented with, the interface InterfaceListOfListOfListsFieldWithPointerContent.
+func (v *InterfaceListOfListOfListsFieldWithPointerTopic) GetName() *string { return v.Name }
 
 func __unmarshalInterfaceListOfListOfListsFieldWithPointerContent(v *InterfaceListOfListOfListsFieldWithPointerContent, m json.RawMessage) error {
 	if string(m) == "null" {

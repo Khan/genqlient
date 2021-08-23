@@ -18,20 +18,64 @@ type InterfaceNoFragmentsQueryRandomItemArticle struct {
 	Name string      `json:"name"`
 }
 
-// InterfaceNoFragmentsQueryRandomItemContent includes the requested fields of the GraphQL type Content.
+// InterfaceNoFragmentsQueryRandomItemContent includes the requested fields of the GraphQL interface Content.
+//
+// InterfaceNoFragmentsQueryRandomItemContent is implemented by the following types:
+// InterfaceNoFragmentsQueryRandomItemArticle
+// InterfaceNoFragmentsQueryRandomItemVideo
+// InterfaceNoFragmentsQueryRandomItemTopic
+//
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
 type InterfaceNoFragmentsQueryRandomItemContent interface {
 	implementsGraphQLInterfaceInterfaceNoFragmentsQueryRandomItemContent()
+	// GetTypename returns the receiver's concrete GraphQL type-name (see interface doc for possible values).
+	GetTypename() string
+	// GetId returns the interface-field "id" from its implementation.
+	// The GraphQL interface field's documentation follows.
+	//
+	// ID is the identifier of the content.
+	GetId() testutil.ID
+	// GetName returns the interface-field "name" from its implementation.
+	GetName() string
 }
 
 func (v *InterfaceNoFragmentsQueryRandomItemArticle) implementsGraphQLInterfaceInterfaceNoFragmentsQueryRandomItemContent() {
 }
+
+// GetTypename is a part of, and documented with, the interface InterfaceNoFragmentsQueryRandomItemContent.
+func (v *InterfaceNoFragmentsQueryRandomItemArticle) GetTypename() string { return v.Typename }
+
+// GetId is a part of, and documented with, the interface InterfaceNoFragmentsQueryRandomItemContent.
+func (v *InterfaceNoFragmentsQueryRandomItemArticle) GetId() testutil.ID { return v.Id }
+
+// GetName is a part of, and documented with, the interface InterfaceNoFragmentsQueryRandomItemContent.
+func (v *InterfaceNoFragmentsQueryRandomItemArticle) GetName() string { return v.Name }
+
 func (v *InterfaceNoFragmentsQueryRandomItemVideo) implementsGraphQLInterfaceInterfaceNoFragmentsQueryRandomItemContent() {
 }
+
+// GetTypename is a part of, and documented with, the interface InterfaceNoFragmentsQueryRandomItemContent.
+func (v *InterfaceNoFragmentsQueryRandomItemVideo) GetTypename() string { return v.Typename }
+
+// GetId is a part of, and documented with, the interface InterfaceNoFragmentsQueryRandomItemContent.
+func (v *InterfaceNoFragmentsQueryRandomItemVideo) GetId() testutil.ID { return v.Id }
+
+// GetName is a part of, and documented with, the interface InterfaceNoFragmentsQueryRandomItemContent.
+func (v *InterfaceNoFragmentsQueryRandomItemVideo) GetName() string { return v.Name }
+
 func (v *InterfaceNoFragmentsQueryRandomItemTopic) implementsGraphQLInterfaceInterfaceNoFragmentsQueryRandomItemContent() {
 }
+
+// GetTypename is a part of, and documented with, the interface InterfaceNoFragmentsQueryRandomItemContent.
+func (v *InterfaceNoFragmentsQueryRandomItemTopic) GetTypename() string { return v.Typename }
+
+// GetId is a part of, and documented with, the interface InterfaceNoFragmentsQueryRandomItemContent.
+func (v *InterfaceNoFragmentsQueryRandomItemTopic) GetId() testutil.ID { return v.Id }
+
+// GetName is a part of, and documented with, the interface InterfaceNoFragmentsQueryRandomItemContent.
+func (v *InterfaceNoFragmentsQueryRandomItemTopic) GetName() string { return v.Name }
 
 func __unmarshalInterfaceNoFragmentsQueryRandomItemContent(v *InterfaceNoFragmentsQueryRandomItemContent, m json.RawMessage) error {
 	if string(m) == "null" {
@@ -86,20 +130,70 @@ type InterfaceNoFragmentsQueryRandomItemWithTypeNameArticle struct {
 	Name string      `json:"name"`
 }
 
-// InterfaceNoFragmentsQueryRandomItemWithTypeNameContent includes the requested fields of the GraphQL type Content.
+// InterfaceNoFragmentsQueryRandomItemWithTypeNameContent includes the requested fields of the GraphQL interface Content.
+//
+// InterfaceNoFragmentsQueryRandomItemWithTypeNameContent is implemented by the following types:
+// InterfaceNoFragmentsQueryRandomItemWithTypeNameArticle
+// InterfaceNoFragmentsQueryRandomItemWithTypeNameVideo
+// InterfaceNoFragmentsQueryRandomItemWithTypeNameTopic
+//
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
 type InterfaceNoFragmentsQueryRandomItemWithTypeNameContent interface {
 	implementsGraphQLInterfaceInterfaceNoFragmentsQueryRandomItemWithTypeNameContent()
+	// GetTypename returns the receiver's concrete GraphQL type-name (see interface doc for possible values).
+	GetTypename() string
+	// GetId returns the interface-field "id" from its implementation.
+	// The GraphQL interface field's documentation follows.
+	//
+	// ID is the identifier of the content.
+	GetId() testutil.ID
+	// GetName returns the interface-field "name" from its implementation.
+	GetName() string
 }
 
 func (v *InterfaceNoFragmentsQueryRandomItemWithTypeNameArticle) implementsGraphQLInterfaceInterfaceNoFragmentsQueryRandomItemWithTypeNameContent() {
 }
+
+// GetTypename is a part of, and documented with, the interface InterfaceNoFragmentsQueryRandomItemWithTypeNameContent.
+func (v *InterfaceNoFragmentsQueryRandomItemWithTypeNameArticle) GetTypename() string {
+	return v.Typename
+}
+
+// GetId is a part of, and documented with, the interface InterfaceNoFragmentsQueryRandomItemWithTypeNameContent.
+func (v *InterfaceNoFragmentsQueryRandomItemWithTypeNameArticle) GetId() testutil.ID { return v.Id }
+
+// GetName is a part of, and documented with, the interface InterfaceNoFragmentsQueryRandomItemWithTypeNameContent.
+func (v *InterfaceNoFragmentsQueryRandomItemWithTypeNameArticle) GetName() string { return v.Name }
+
 func (v *InterfaceNoFragmentsQueryRandomItemWithTypeNameVideo) implementsGraphQLInterfaceInterfaceNoFragmentsQueryRandomItemWithTypeNameContent() {
 }
+
+// GetTypename is a part of, and documented with, the interface InterfaceNoFragmentsQueryRandomItemWithTypeNameContent.
+func (v *InterfaceNoFragmentsQueryRandomItemWithTypeNameVideo) GetTypename() string {
+	return v.Typename
+}
+
+// GetId is a part of, and documented with, the interface InterfaceNoFragmentsQueryRandomItemWithTypeNameContent.
+func (v *InterfaceNoFragmentsQueryRandomItemWithTypeNameVideo) GetId() testutil.ID { return v.Id }
+
+// GetName is a part of, and documented with, the interface InterfaceNoFragmentsQueryRandomItemWithTypeNameContent.
+func (v *InterfaceNoFragmentsQueryRandomItemWithTypeNameVideo) GetName() string { return v.Name }
+
 func (v *InterfaceNoFragmentsQueryRandomItemWithTypeNameTopic) implementsGraphQLInterfaceInterfaceNoFragmentsQueryRandomItemWithTypeNameContent() {
 }
+
+// GetTypename is a part of, and documented with, the interface InterfaceNoFragmentsQueryRandomItemWithTypeNameContent.
+func (v *InterfaceNoFragmentsQueryRandomItemWithTypeNameTopic) GetTypename() string {
+	return v.Typename
+}
+
+// GetId is a part of, and documented with, the interface InterfaceNoFragmentsQueryRandomItemWithTypeNameContent.
+func (v *InterfaceNoFragmentsQueryRandomItemWithTypeNameTopic) GetId() testutil.ID { return v.Id }
+
+// GetName is a part of, and documented with, the interface InterfaceNoFragmentsQueryRandomItemWithTypeNameContent.
+func (v *InterfaceNoFragmentsQueryRandomItemWithTypeNameTopic) GetName() string { return v.Name }
 
 func __unmarshalInterfaceNoFragmentsQueryRandomItemWithTypeNameContent(v *InterfaceNoFragmentsQueryRandomItemWithTypeNameContent, m json.RawMessage) error {
 	if string(m) == "null" {
@@ -217,20 +311,64 @@ type InterfaceNoFragmentsQueryWithPointerArticle struct {
 	Name *string      `json:"name"`
 }
 
-// InterfaceNoFragmentsQueryWithPointerContent includes the requested fields of the GraphQL type Content.
+// InterfaceNoFragmentsQueryWithPointerContent includes the requested fields of the GraphQL interface Content.
+//
+// InterfaceNoFragmentsQueryWithPointerContent is implemented by the following types:
+// InterfaceNoFragmentsQueryWithPointerArticle
+// InterfaceNoFragmentsQueryWithPointerVideo
+// InterfaceNoFragmentsQueryWithPointerTopic
+//
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
 type InterfaceNoFragmentsQueryWithPointerContent interface {
 	implementsGraphQLInterfaceInterfaceNoFragmentsQueryWithPointerContent()
+	// GetTypename returns the receiver's concrete GraphQL type-name (see interface doc for possible values).
+	GetTypename() string
+	// GetId returns the interface-field "id" from its implementation.
+	// The GraphQL interface field's documentation follows.
+	//
+	// ID is the identifier of the content.
+	GetId() *testutil.ID
+	// GetName returns the interface-field "name" from its implementation.
+	GetName() *string
 }
 
 func (v *InterfaceNoFragmentsQueryWithPointerArticle) implementsGraphQLInterfaceInterfaceNoFragmentsQueryWithPointerContent() {
 }
+
+// GetTypename is a part of, and documented with, the interface InterfaceNoFragmentsQueryWithPointerContent.
+func (v *InterfaceNoFragmentsQueryWithPointerArticle) GetTypename() string { return v.Typename }
+
+// GetId is a part of, and documented with, the interface InterfaceNoFragmentsQueryWithPointerContent.
+func (v *InterfaceNoFragmentsQueryWithPointerArticle) GetId() *testutil.ID { return v.Id }
+
+// GetName is a part of, and documented with, the interface InterfaceNoFragmentsQueryWithPointerContent.
+func (v *InterfaceNoFragmentsQueryWithPointerArticle) GetName() *string { return v.Name }
+
 func (v *InterfaceNoFragmentsQueryWithPointerVideo) implementsGraphQLInterfaceInterfaceNoFragmentsQueryWithPointerContent() {
 }
+
+// GetTypename is a part of, and documented with, the interface InterfaceNoFragmentsQueryWithPointerContent.
+func (v *InterfaceNoFragmentsQueryWithPointerVideo) GetTypename() string { return v.Typename }
+
+// GetId is a part of, and documented with, the interface InterfaceNoFragmentsQueryWithPointerContent.
+func (v *InterfaceNoFragmentsQueryWithPointerVideo) GetId() *testutil.ID { return v.Id }
+
+// GetName is a part of, and documented with, the interface InterfaceNoFragmentsQueryWithPointerContent.
+func (v *InterfaceNoFragmentsQueryWithPointerVideo) GetName() *string { return v.Name }
+
 func (v *InterfaceNoFragmentsQueryWithPointerTopic) implementsGraphQLInterfaceInterfaceNoFragmentsQueryWithPointerContent() {
 }
+
+// GetTypename is a part of, and documented with, the interface InterfaceNoFragmentsQueryWithPointerContent.
+func (v *InterfaceNoFragmentsQueryWithPointerTopic) GetTypename() string { return v.Typename }
+
+// GetId is a part of, and documented with, the interface InterfaceNoFragmentsQueryWithPointerContent.
+func (v *InterfaceNoFragmentsQueryWithPointerTopic) GetId() *testutil.ID { return v.Id }
+
+// GetName is a part of, and documented with, the interface InterfaceNoFragmentsQueryWithPointerContent.
+func (v *InterfaceNoFragmentsQueryWithPointerTopic) GetName() *string { return v.Name }
 
 func __unmarshalInterfaceNoFragmentsQueryWithPointerContent(v *InterfaceNoFragmentsQueryWithPointerContent, m json.RawMessage) error {
 	if string(m) == "null" {

@@ -71,8 +71,17 @@ func TestInterfaceNoFragments(t *testing.T) {
 	resp, err := queryWithInterfaceNoFragments(ctx, client, "1")
 	require.NoError(t, err)
 
+	// We should get the following response:
+	//	me: User{Id: 1, Name: "Yours Truly"},
+	//	being: User{Id: 1, Name: "Yours Truly"},
+
 	assert.Equal(t, "1", resp.Me.Id)
 	assert.Equal(t, "Yours Truly", resp.Me.Name)
+
+	// Check fields both via interface and via type-assertion:
+	assert.Equal(t, "User", resp.Being.GetTypename())
+	assert.Equal(t, "1", resp.Being.GetId())
+	assert.Equal(t, "Yours Truly", resp.Being.GetName())
 
 	user, ok := resp.Being.(*queryWithInterfaceNoFragmentsBeingUser)
 	require.Truef(t, ok, "got %T, not User", resp.Being)
@@ -82,8 +91,16 @@ func TestInterfaceNoFragments(t *testing.T) {
 	resp, err = queryWithInterfaceNoFragments(ctx, client, "3")
 	require.NoError(t, err)
 
+	// We should get the following response:
+	//	me: User{Id: 1, Name: "Yours Truly"},
+	//	being: Animal{Id: 3, Name: "Fido"},
+
 	assert.Equal(t, "1", resp.Me.Id)
 	assert.Equal(t, "Yours Truly", resp.Me.Name)
+
+	assert.Equal(t, "Animal", resp.Being.GetTypename())
+	assert.Equal(t, "3", resp.Being.GetId())
+	assert.Equal(t, "Fido", resp.Being.GetName())
 
 	animal, ok := resp.Being.(*queryWithInterfaceNoFragmentsBeingAnimal)
 	require.Truef(t, ok, "got %T, not Animal", resp.Being)
@@ -92,6 +109,10 @@ func TestInterfaceNoFragments(t *testing.T) {
 
 	resp, err = queryWithInterfaceNoFragments(ctx, client, "4757233945723")
 	require.NoError(t, err)
+
+	// We should get the following response:
+	//	me: User{Id: 1, Name: "Yours Truly"},
+	//	being: null
 
 	assert.Equal(t, "1", resp.Me.Id)
 	assert.Equal(t, "Yours Truly", resp.Me.Name)
@@ -116,10 +137,24 @@ func TestInterfaceListField(t *testing.T) {
 
 	require.Len(t, resp.Beings, 3)
 
+	// We should get the following three beings:
+	//	User{Id: 1, Name: "Yours Truly"},
+	//	Animal{Id: 3, Name: "Fido"},
+	//	null
+
+	// Check fields both via interface and via type-assertion:
+	assert.Equal(t, "User", resp.Beings[0].GetTypename())
+	assert.Equal(t, "1", resp.Beings[0].GetId())
+	assert.Equal(t, "Yours Truly", resp.Beings[0].GetName())
+
 	user, ok := resp.Beings[0].(*queryWithInterfaceListFieldBeingsUser)
 	require.Truef(t, ok, "got %T, not User", resp.Beings[0])
 	assert.Equal(t, "1", user.Id)
 	assert.Equal(t, "Yours Truly", user.Name)
+
+	assert.Equal(t, "Animal", resp.Beings[1].GetTypename())
+	assert.Equal(t, "3", resp.Beings[1].GetId())
+	assert.Equal(t, "Fido", resp.Beings[1].GetName())
 
 	animal, ok := resp.Beings[1].(*queryWithInterfaceListFieldBeingsAnimal)
 	require.Truef(t, ok, "got %T, not Animal", resp.Beings[1])

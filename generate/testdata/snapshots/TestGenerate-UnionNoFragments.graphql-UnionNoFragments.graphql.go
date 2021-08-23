@@ -14,18 +14,32 @@ type UnionNoFragmentsQueryRandomLeafArticle struct {
 	Typename string `json:"__typename"`
 }
 
-// UnionNoFragmentsQueryRandomLeafLeafContent includes the requested fields of the GraphQL type LeafContent.
+// UnionNoFragmentsQueryRandomLeafLeafContent includes the requested fields of the GraphQL interface LeafContent.
+//
+// UnionNoFragmentsQueryRandomLeafLeafContent is implemented by the following types:
+// UnionNoFragmentsQueryRandomLeafArticle
+// UnionNoFragmentsQueryRandomLeafVideo
+//
 // The GraphQL type's documentation follows.
 //
 // LeafContent represents content items that can't have child-nodes.
 type UnionNoFragmentsQueryRandomLeafLeafContent interface {
 	implementsGraphQLInterfaceUnionNoFragmentsQueryRandomLeafLeafContent()
+	// GetTypename returns the receiver's concrete GraphQL type-name (see interface doc for possible values).
+	GetTypename() string
 }
 
 func (v *UnionNoFragmentsQueryRandomLeafArticle) implementsGraphQLInterfaceUnionNoFragmentsQueryRandomLeafLeafContent() {
 }
+
+// GetTypename is a part of, and documented with, the interface UnionNoFragmentsQueryRandomLeafLeafContent.
+func (v *UnionNoFragmentsQueryRandomLeafArticle) GetTypename() string { return v.Typename }
+
 func (v *UnionNoFragmentsQueryRandomLeafVideo) implementsGraphQLInterfaceUnionNoFragmentsQueryRandomLeafLeafContent() {
 }
+
+// GetTypename is a part of, and documented with, the interface UnionNoFragmentsQueryRandomLeafLeafContent.
+func (v *UnionNoFragmentsQueryRandomLeafVideo) GetTypename() string { return v.Typename }
 
 func __unmarshalUnionNoFragmentsQueryRandomLeafLeafContent(v *UnionNoFragmentsQueryRandomLeafLeafContent, m json.RawMessage) error {
 	if string(m) == "null" {

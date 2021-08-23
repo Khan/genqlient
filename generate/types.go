@@ -114,7 +114,8 @@ type goStructType struct {
 type goStructField struct {
 	GoName      string
 	GoType      goType
-	JSONName    string
+	JSONName    string // i.e. the field's alias in this query
+	GraphQLName string // i.e. the field's name in its type-def
 	Description string
 }
 
@@ -126,7 +127,20 @@ func isAbstract(typ goType) bool {
 func (typ *goStructType) WriteDefinition(w io.Writer, g *generator) error {
 	description := typ.Description
 	if typ.Incomplete {
-		description = incompleteTypeDescription(typ.GoName, typ.GraphQLName, typ.Description)
+		// For types where we only have some fields, note that, along with
+		// the GraphQL documentation (if any).  We don't want to just use
+		// the GraphQL documentation, since it may refer to fields we
+		// haven't selected, say.
+		prefix := fmt.Sprintf(
+			"%v includes the requested fields of the GraphQL type %v.",
+			typ.GoName, typ.GraphQLName)
+		if description != "" {
+			description = fmt.Sprintf(
+				"%v\nThe GraphQL type's documentation follows.\n\n%v",
+				prefix, description)
+		} else {
+			description = prefix
+		}
 	}
 	writeDescription(w, description)
 
@@ -182,28 +196,76 @@ func (typ *goStructType) AbstractFields() []*goStructField {
 // goInterfaceType represents a Go interface type, used to represent a GraphQL
 // interface or union type.
 type goInterfaceType struct {
-	GoName          string
-	Description     string
-	GraphQLName     string
+	GoName      string
+	Description string
+	GraphQLName string
+	// Fields shared by all the interface's implementations;
+	// we'll generate getter methods for each.
+	SharedFields    []*goStructField
 	Implementations []*goStructType
 }
 
 func (typ *goInterfaceType) WriteDefinition(w io.Writer, g *generator) error {
-	// TODO(benkraft): also mention the list of implementations.
-	description := incompleteTypeDescription(typ.GoName, typ.GraphQLName, typ.Description)
+	goTypeNames := make([]string, len(typ.Implementations))
+	for i, impl := range typ.Implementations {
+		goTypeNames[i] = impl.Reference()
+	}
+
+	description := fmt.Sprintf(
+		"%v includes the requested fields of the GraphQL interface %v.\n\n"+
+			"%v is implemented by the following types:\n\t%v",
+		typ.GoName, typ.GraphQLName, typ.GoName, strings.Join(goTypeNames, "\n\t"))
+	if description != "" {
+		description = fmt.Sprintf(
+			"%v\n\nThe GraphQL type's documentation follows.\n\n%v",
+			description, typ.Description)
+	}
 	writeDescription(w, description)
 
 	// Write the interface.
 	fmt.Fprintf(w, "type %s interface {\n", typ.GoName)
 	implementsMethodName := fmt.Sprintf("implementsGraphQLInterface%v", typ.GoName)
-	// TODO(benkraft): Also write GetX() accessor methods for fields of the interface
 	fmt.Fprintf(w, "\t%s()\n", implementsMethodName)
+	for _, sharedField := range typ.SharedFields {
+		methodName := "Get" + sharedField.GoName
+		description := ""
+		if sharedField.GraphQLName == "__typename" {
+			description = fmt.Sprintf(
+				"%s returns the receiver's concrete GraphQL type-name "+
+					"(see interface doc for possible values).", methodName)
+		} else {
+			description = fmt.Sprintf(
+				`%s returns the interface-field "%s" from its implementation.`,
+				methodName, sharedField.GraphQLName)
+			if sharedField.Description != "" {
+				description = fmt.Sprintf(
+					"%s\nThe GraphQL interface field's documentation follows.\n\n%s",
+					description, sharedField.Description)
+			}
+		}
+
+		writeDescription(w, description)
+		fmt.Fprintf(w, "\t%s() %s\n", methodName, sharedField.GoType.Reference())
+	}
 	fmt.Fprintf(w, "}\n")
 
 	// Now, write out the implementations.
 	for _, impl := range typ.Implementations {
 		fmt.Fprintf(w, "func (v *%s) %s() {}\n",
 			impl.Reference(), implementsMethodName)
+		for _, sharedField := range typ.SharedFields {
+			description := fmt.Sprintf(
+				"Get%s is a part of, and documented with, the interface %s.",
+				sharedField.GoName, typ.GoName)
+			writeDescription(w, description)
+			// In principle we should find the corresponding field of the
+			// implementation and use its name in `v.<name>`.  In practice,
+			// they're always the same.
+			fmt.Fprintf(w, "func (v *%s) Get%s() %s { return v.%s }\n",
+				impl.Reference(), sharedField.GoName,
+				sharedField.GoType.Reference(), sharedField.GoName)
+		}
+		fmt.Fprintf(w, "\n") // blank line between each type's implementations
 	}
 
 	// Finally, write the unmarshal-helper, which will be called by struct
@@ -245,22 +307,6 @@ func (typ *goPointerType) IsPointer() bool   { return true }
 func (typ *goEnumType) IsPointer() bool      { return false }
 func (typ *goStructType) IsPointer() bool    { return false }
 func (typ *goInterfaceType) IsPointer() bool { return false }
-
-func incompleteTypeDescription(goName, graphQLName, description string) string {
-	// For types where we only have some fields, note that, along with
-	// the GraphQL documentation (if any).  We don't want to just use
-	// the GraphQL documentation, since it may refer to fields we
-	// haven't selected, say.
-	prefix := fmt.Sprintf(
-		"%v includes the requested fields of the GraphQL type %v.",
-		goName, graphQLName)
-	if description != "" {
-		return fmt.Sprintf(
-			"%v\nThe GraphQL type's documentation follows.\n\n%v",
-			prefix, description)
-	}
-	return prefix
-}
 
 func writeDescription(w io.Writer, desc string) {
 	if desc != "" {
