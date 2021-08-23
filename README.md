@@ -2,7 +2,7 @@
 
 # genqlient: a truly type-safe Go GraphQL client
 
-This is a proof-of-concept of using code-generation to create a truly type-safe GraphQL client in Go.  It is certainly not ready for production use nor or contributions (see [below](#development)).
+This is a proof-of-concept of using code-generation to create a truly type-safe GraphQL client in Go.  It is certainly not ready for production use nor for contributions (see [below](#development)).
 
 ## Why another GraphQL client?
 
