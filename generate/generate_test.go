@@ -71,9 +71,6 @@ func TestGenerate(t *testing.T) {
 			t.Run("Build", func(t *testing.T) {
 				if testing.Short() {
 					t.Skip("skipping build due to -short")
-				} else if sourceFilename == "InterfaceNesting.graphql" {
-					t.Skip("TODO: enable after fixing " +
-						"https://github.com/Khan/genqlient/issues/8")
 				} else if sourceFilename == "Omitempty.graphql" {
 					t.Skip("TODO: enable after fixing " +
 						"https://github.com/Khan/genqlient/issues/43")
