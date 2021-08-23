@@ -120,7 +120,7 @@ func ReadAndValidateConfig(filename string) (*Config, error) {
 			return nil, errorf(nil, "unreadable config file %v: %v", filename, err)
 		}
 
-		err = yaml.Unmarshal(text, &config)
+		err = yaml.UnmarshalStrict(text, &config)
 		if err != nil {
 			return nil, errorf(nil, "invalid config file %v: %v", filename, err)
 		}
