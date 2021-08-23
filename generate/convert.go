@@ -259,19 +259,6 @@ func (g *generator) convertDefinition(
 			return nil, errorf(pos, "not implemented: %v", def.Kind)
 		}
 
-		// We need to request __typename so we know which concrete type to use.
-		hasTypename := false
-		for _, selection := range selectionSet {
-			field, ok := selection.(*ast.Field)
-			if ok && field.Name == "__typename" {
-				hasTypename = true
-			}
-		}
-		if !hasTypename {
-			// TODO(benkraft): Instead, modify the query to add __typename.
-			return nil, errorf(pos, "union/interface type %s must request __typename", def.Name)
-		}
-
 		implementationTypes := g.schema.GetPossibleTypes(def)
 		goType := &goInterfaceType{
 			GoName:          name,
@@ -283,6 +270,11 @@ func (g *generator) convertDefinition(
 
 		for i, implDef := range implementationTypes {
 			implName, implNamePrefix := g.typeName(namePrefix, implDef)
+			// TODO(benkraft): In principle we should skip generating a Go
+			// field for __typename each of these impl-defs if you didn't
+			// request it (and it was automatically added by
+			// preprocessQueryDocument).  But in practice it doesn't really
+			// hurt, and would be extra work to avoid, so we just leave it.
 			implTyp, err := g.convertDefinition(
 				implName, implNamePrefix, implDef, pos, selectionSet, queryOptions)
 			if err != nil {

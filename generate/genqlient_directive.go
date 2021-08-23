@@ -146,6 +146,10 @@ func (g *generator) parsePrecedingComment(
 	pos *ast.Position,
 ) (comment string, directive *GenqlientDirective, err error) {
 	directive = new(GenqlientDirective)
+	if pos == nil || pos.Src == nil { // node was added by genqlient itself
+		return "", directive, nil // treated as if there were no comment
+	}
+
 	var commentLines []string
 	sourceLines := strings.Split(pos.Src.Input, "\n")
 	for i := pos.Line - 1; i > 0; i-- {

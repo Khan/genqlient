@@ -1,6 +1,7 @@
 query InterfaceNoFragmentsQuery {
   root { id name }       # (make sure sibling fields work)
-  randomItem { __typename id name }
+  randomItem { id name }
+  randomItemWithTypeName: randomItem { __typename id name }
   # @genqlient(pointer: true)
-  withPointer: randomItem { __typename id name }
+  withPointer: randomItem { id name }
 }

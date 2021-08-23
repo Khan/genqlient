@@ -65,7 +65,6 @@ type InterfaceNestingRootTopicChildrenArticle struct {
 
 // InterfaceNestingRootTopicChildrenArticleParentTopic includes the requested fields of the GraphQL type Topic.
 type InterfaceNestingRootTopicChildrenArticleParentTopic struct {
-	Typename string `json:"__typename"`
 	// ID is documented in the Content interface.
 	Id       testutil.ID                                                          `json:"id"`
 	Children []InterfaceNestingRootTopicChildrenArticleParentTopicChildrenContent `json:"-"`
@@ -223,7 +222,6 @@ type InterfaceNestingRootTopicChildrenTopic struct {
 
 // InterfaceNestingRootTopicChildrenTopicParentTopic includes the requested fields of the GraphQL type Topic.
 type InterfaceNestingRootTopicChildrenTopicParentTopic struct {
-	Typename string `json:"__typename"`
 	// ID is documented in the Content interface.
 	Id       testutil.ID                                                        `json:"id"`
 	Children []InterfaceNestingRootTopicChildrenTopicParentTopicChildrenContent `json:"-"`
@@ -337,7 +335,6 @@ type InterfaceNestingRootTopicChildrenVideo struct {
 
 // InterfaceNestingRootTopicChildrenVideoParentTopic includes the requested fields of the GraphQL type Topic.
 type InterfaceNestingRootTopicChildrenVideoParentTopic struct {
-	Typename string `json:"__typename"`
 	// ID is documented in the Content interface.
 	Id       testutil.ID                                                        `json:"id"`
 	Children []InterfaceNestingRootTopicChildrenVideoParentTopicChildrenContent `json:"-"`
@@ -456,7 +453,6 @@ query InterfaceNesting {
 			__typename
 			id
 			parent {
-				__typename
 				id
 				children {
 					__typename

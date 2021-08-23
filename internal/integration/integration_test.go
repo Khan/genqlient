@@ -59,7 +59,7 @@ func TestVariables(t *testing.T) {
 func TestInterfaceNoFragments(t *testing.T) {
 	_ = `# @genqlient
 	query queryWithInterfaceNoFragments($id: ID!) {
-		being(id: $id) { __typename id name }
+		being(id: $id) { id name }
 		me { id name }
 	}`
 
@@ -102,7 +102,7 @@ func TestInterfaceNoFragments(t *testing.T) {
 func TestInterfaceListField(t *testing.T) {
 	_ = `# @genqlient
 	query queryWithInterfaceListField($ids: [ID!]!) {
-		beings(ids: $ids) { __typename id name }
+		beings(ids: $ids) { id name }
 	}`
 
 	ctx := context.Background()
