@@ -71,10 +71,13 @@ func TestGenerate(t *testing.T) {
 			t.Run("Build", func(t *testing.T) {
 				if testing.Short() {
 					t.Skip("skipping build due to -short")
-				} else if sourceFilename == "InterfaceNesting.graphql" || // #8
-					sourceFilename == "InterfaceListField.graphql" || // #8
-					sourceFilename == "Omitempty.graphql" { // #43
-					t.Skip("TODO: enable these once they build")
+				} else if sourceFilename == "InterfaceNesting.graphql" ||
+					sourceFilename == "InterfaceListField.graphql" {
+					t.Skip("TODO: enable after fixing " +
+						"https://github.com/Khan/genqlient/issues/8")
+				} else if sourceFilename == "Omitempty.graphql" {
+					t.Skip("TODO: enable after fixing " +
+						"https://github.com/Khan/genqlient/issues/43")
 				}
 
 				goContent := generated[goFilename]
