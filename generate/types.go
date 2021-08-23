@@ -2,7 +2,7 @@ package generate
 
 // This file defines the data structures from which genqlient generates types,
 // and the code to write them out as actual Go code.  The main entrypoint is
-// goType, which represents such a type, but traverse.go also constructs each
+// goType, which represents such a type, but convert.go also constructs each
 // of the implementing types, by traversing the GraphQL operation and schema.
 
 import (

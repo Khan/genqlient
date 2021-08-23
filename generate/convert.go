@@ -2,9 +2,9 @@ package generate
 
 // This file implements the core type-generation logic of genqlient, whereby we
 // traverse an operation-definition (and the schema against which it will be
-// executed), and decide what Go types to generate for that operation.  It
-// returns data structures representing the types to be generated; these are
-// defined, and converted into code, in types.go.
+// executed), and convert that into Go types.  It returns data structures
+// representing the types to be generated; these are defined, and converted
+// into code, in types.go.
 //
 // The entrypoints are convertOperation, which builds the response-type for a
 // query, and convertInputType, which builds the argument-types.
@@ -84,7 +84,6 @@ var builtinTypes = map[string]string{
 func (g *generator) typeName(prefix string, typ *ast.Definition) (name, nextPrefix string) {
 	typeGoName := upperFirst(typ.Name)
 	if typ.Kind == ast.Enum || typ.Kind == ast.InputObject {
-		// STOPSHIP: hopefully inline this
 		// If we're an enum or an input-object, there is only one type we
 		// will ever possibly generate for this type, so we don't need any
 		// of the qualifiers.  This is especially helpful because the

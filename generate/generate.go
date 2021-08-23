@@ -237,7 +237,7 @@ func Generate(config *Config) (map[string][]byte, error) {
 
 	// Step 2: For each operation, convert it into data structures representing
 	// Go types (defined in types.go).  The bulk of this logic is in
-	// traverse.go.
+	// convert.go.
 	g := newGenerator(config, schema)
 	for _, op := range document.Operations {
 		if err = g.addOperation(op); err != nil {
