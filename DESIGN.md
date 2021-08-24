@@ -110,7 +110,7 @@ We'll do something similar to Apollo's naming scheme.  Specifically:
 
 All of this may be configurable later.
 
-### How to support fragments and interfaces
+### How to represent interfaces
 
 Consider the following query (suppose that `a` returns interface type `I`, which may be implemented by either `T` or `U`):
 
@@ -147,11 +147,7 @@ Response{A: T{B: "...", C: "...", D: "..."}}
 Response{A: U{B: "..."}}
 ```
 
-Optionally, we might define a getter-method `GetB() string` on `T` and `U`, and include it in `I`, so that if you only need `B` you don't need to type-switch.  We could also define methods `GetC() string` and `GetD() string`, and another interface
-```go
-type F interface { isF(); GetC() string; GetD() string }
-```
-so that if you want to use the same fragment `f` to share code in several places, you can do that, because all of the relevant types will implement `F`.  To do that we'll have to have the type-names for fragment fields rooted at the fragment rather than at the query, which is probably preferable anyway since they are guaranteed to be the same for all spreads of the fragment.  (Or we can just do the methods, and let you define the interface, although you still have to root the type-names for the same reason.) 
+We can also define a getter-method `GetB() string` on `T` and `U`, and include it in `I`, so that if you only need `B` you don't need to type-switch.  Note that this option gives a few different ways to represent fragments specifically, discussed in the next section.
 
 Another natural option, which looks more like the way `shurcooL/graphql` does things, is to generate a type for each fragment, and only fill in the relevant ones:
 ```go
@@ -211,7 +207,7 @@ type Response struct {
 
 Apart from being semantically messy, this doesn't have a good way to handle the case where there are types with conflicting fields, e.g.
 
-```
+```graphql
 interface I {}
 type T implements I { f: Int }
 type U implements I { f: String }
@@ -235,6 +231,136 @@ In other libraries:
 - protobuf has a similar problem, and uses basically option 1 in Go (even though in other languages it uses something more like option 3).
 
 **Decision:** In general, it seems like the GraphQL Way, and perhaps also the Go Way is Option 1; I've always found the way shurcooL/graphql handles this to be a bit strange.  So I think it has to be at least the default.  In principle we could allow both though, since option 2 is legitimately convenient for some cases, especially if you are querying shared fields of interfaces or using fragments as a code-sharing mechanism, since option 1 handles those only through getter methods.
+
+### How to support fragments
+
+The previous section leaves some parts of how we'll handle fragments ambiguous.  Even within the way it lays things out, we generally have two options for how to represent a fragment.  Consider a query
+
+```graphql
+query MyQuery { a { b ...f } }
+fragment F on T { c d }
+```
+
+We'll have some struct (potentially several structs, one per implementation) representing the type of the value of `a`.  We can handle the fragment one of two ways: we can either flatten it into that type, such that the code is equivalent to writing `query Q { a { b c d } }` (except that `c` and `d` might be included for only some implementations, if `a` returns an interface), or we can represent it as a separate type `F` and embed it in the relevant structs.  (Or it could be a named field of said structs, but this seems to have little benefit, and it's nice to be able to access fields without knowing what fragment they're on.)
+
+To get more concrete, there are [four cases](https://spec.graphql.org/June2018/#sec-Fragment-spread-is-possible) depending on the types in question.  (In all cases below, the methods, and other potential implementations of the interfaces, are elided.  Note also that I'm not sure I got all the type-names right exactly as genqlient would, but they should match approximately.)
+
+**Object spread in object scope:** The simplest spread is when we have an object-typed fragment spread into an object-typed selection.  (The two object types must be the same.)  This is typically used as a code-sharing mechanism.
+
+```graphql
+type Query { a: A }
+type A { b: String, c: String, d: String }
+
+query MyQuery { a { b ...f } }
+fragment F on A { c d }
+```
+
+```go
+// flattened:
+type MyQueryA struct { B, C, D string }
+
+// embedded
+type MyQueryA struct { B string; F }
+type F struct { C, D string }
+```
+
+**Abstract spread in object scope:** We can also spread an interface-typed fragment into an object-typed selection, again as a code-sharing mechanism.  (The object must implement the interface.)
+
+```graphql
+type Query { a: A }
+type A implements I { b: String, c: String, d: String }
+interface I { c: String, d: String }
+
+query MyQuery { a { b ...f } }
+fragment F on I { c d }
+```
+
+```go
+// flattened:
+type MyQueryA struct { B, C, D string }
+
+// embedded
+type MyQueryA struct { B string; F }
+type F interface { isF(); GetC() string; GetD() string }
+type FA struct { C, D string } // implements F
+```
+
+**Object spread in abstract scope:** This is the most common spread, perhaps, where you spread an object-typed fragment into an interface-typed selection in order to request some fields defined on a particular implementation of the interface.  (Again the object must implement the interface.)
+
+```graphql
+type Query { a: I }
+type A implements I { b: String, c: String, d: String }
+interface I { b: String }
+
+query MyQuery { a { b ...f } }
+fragment F on A { c d }
+```
+
+```go
+// flattened:
+type MyQueryAI interface { isMyQueryAI(); GetB() string }
+type MyQueryAIA struct { B, C, D string } // implements MyQueryAI
+
+// embedded:
+type MyQueryAI interface { isMyQueryAI(); GetB() string }
+type MyQueryAIA struct { B string; F } // implements MyQueryAI
+type F struct { C, D string }
+```
+
+**Abstract spread in abstract scope:** This is a sort of combination of the last two, where you spread one interface's fragment into another interface, and can be used for code-sharing and/or to conditionally request fields.  (Perhaps surprisingly, this is legal any time the two interfaces share an implementation, and neither need implement the other.)
+
+```graphql
+type Query { a: I }
+type A implements I & J { b: String, c: String, d: String }
+interface I { b: String }
+interface J { c: String, d: String }
+
+query MyQuery { a { b ...f } }
+fragment F on J { c d }
+```
+
+```go
+// flattened:
+type MyQueryAI interface { isMyQueryAI(); GetB() string }
+type MyQueryAIA struct { B, C, D string } // implements MyQueryAI (and MyQueryAJ if generated)
+
+// embedded:
+type MyQueryAI interface { isMyQueryAI(); GetB() string }
+type MyQueryAIA struct { B string; F } // implements MyQueryAI
+type F interface { isF(); GetC() string; GetD() string }
+type FA struct { C, D string } // implements F
+```
+
+Note in this case a third non-approach is
+
+```go
+// does not work:
+type MyQueryAI interface { isMyQueryAI(); GetB() string }
+type MyQueryAIA struct { B string; F } // implements MyQueryAI
+type F struct { C, D string }
+```
+
+This doesn't work because the fragment F might itself embed other fragments of object type.
+
+**Inline and named fragments:** Another complication is that in each of these cases, the fragment might be inline (`... on T { ... }`) or defined (`...F` where `fragment F on T { ... }`).  The latter is useful for sharing code, whereas the former may be more preferable when we just want request fields from a particular type.  Note that inline fragments have no natural name of their own; in the embedding approach we'd need to generate one.  (This is extra awkward because there's no prohibition on having several inline fragments of the same type in the same selection, e.g. `{ ... on T { id }, ... on T { name } }`, so even adding the type-name doesn't produce a unique name.)
+
+**Pros of flattening:**
+
+- Makes for the simplest resulting types, by far; the fragment adds no further complexity to the types.
+- Especially a simplification when embedding abstract-typed fragments, since you don't have to go through an extra layer of interface when you already have a concrete type.
+- More efficient when multiple fragments spread into the same selection contain the same field: we need only store it once whereas embedding must copy it once for each fragment.  Also easier to use in the same case, since if you have both `val.FragmentOne.MyField` and `val.FragmentTwo.MyField`, you can't access either via `val.MyField`.  (Empirically in the Khan Academy codebase this appears to be quite rare.)
+- If you need to manually construct values of genqlient-generated types, flattening will be a lot easier, but I don't really recommend doing that.
+
+**Pros of embedding:**
+
+- Results in cleaner type-names, since each (named) fragment can act as its own "root" for naming purposes.  (In principle we could do this even when flattening, although it might read somewhat awkwardly.)
+- Much more usable for deduplication; if you spread the fragment in several places in your query you can write a function which accepts an `F`, and pass it any of the data.  (Again we might be able to get this benefit, awkwardly, when flattening by generating an interface corresponding to each fragment, assuming we are also rooting the type-names at the fragment.)
+- It's easier to tell what fields go where; the casework for abstract-in-abstract embeds gets somewhat complex.
+- Arguably the most philosophically faithful representation of the GraphQL types in Go.
+
+Note in principle we could apply some of those benefits 
+
+**Decision:** There are pros and cons both ways here; in general it seems embedding is the most natural where your goal is deduplication, whereas flattening is best for inline fragments; for named fragments used only once there's maybe a slight benefit to flattening but it's not a big difference either way.  If we have to go with one or the other, probably flattening is better.  But I think the best thing, unless it turns out to be too much work to implement, is probably just to flatten inline fragments and embed named ones.  (In principle we could also have a flag flatten named fragments, if we find a need.)
 
 ## Configuration and runtime
 
