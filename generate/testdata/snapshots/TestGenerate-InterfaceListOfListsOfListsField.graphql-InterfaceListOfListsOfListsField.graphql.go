@@ -145,6 +145,7 @@ func (v *InterfaceListOfListOfListsFieldResponse) UnmarshalJSON(b []byte) error 
 					len(raw))
 				for i, raw := range raw {
 					target := &(*target)[i]
+					*target = new(InterfaceListOfListOfListsFieldWithPointerContent)
 					err = __unmarshalInterfaceListOfListOfListsFieldWithPointerContent(
 						*target, raw)
 					if err != nil {

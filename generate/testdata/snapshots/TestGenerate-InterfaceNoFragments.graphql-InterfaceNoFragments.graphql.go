@@ -113,6 +113,7 @@ func (v *InterfaceNoFragmentsQueryResponse) UnmarshalJSON(b []byte) error {
 	{
 		target := &v.WithPointer
 		raw := firstPass.WithPointer
+		*target = new(InterfaceNoFragmentsQueryWithPointerContent)
 		err = __unmarshalInterfaceNoFragmentsQueryWithPointerContent(
 			*target, raw)
 		if err != nil {

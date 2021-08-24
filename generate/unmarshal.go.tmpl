@@ -33,7 +33,7 @@ func (v *{{.GoName}}) UnmarshalJSON(b []byte) error {
 
     {{/* Now, for each field, call out to the unmarshal-helper.
          This gets a little complicated because we may have a slice field.
-         So what we do is basically, for each field:
+         So what we do is basically, for each field of type `[][]...[]MyType`:
 
             target := &v.MyField      // *[][]...[]MyType
             raw := firstPass.MyField  // [][]...[]json.RawMessage
@@ -53,12 +53,12 @@ func (v *{{.GoName}}) UnmarshalJSON(b []byte) error {
 
             } // (also n times)
 
-         Note that if the field also uses a pointer ([][]...[]*MyType), we need
-         to do `*target` at the end, since the unmarshaler handles MyType, not
-         *MyType.  (But again it's still easiest to pass around
-         *[][]...[]*MyType, even though in principle [][]...[]*MyType would now
-         work.)  Of course, since MyType is an interface, I'm not sure why
-         you'd want a pointer anyway.
+         Note that if the field also uses a pointer (`[][]...[]*MyType`), we
+         now pass around `*[][]...[]*MyType`; again in principle
+         `[][]...[]*MyType` would work but require more special-casing.  Thus
+         in the innermost loop, `target` is of type `**MyType`, so we have to
+         pass `*target` to the unmarshal-helper.  Of course, since MyType is an
+         interface, I'm not sure why you'd any of that anyway.
 
          One additional trick is we wrap everything above in a block ({ ... }),
          so that the variables target and raw may take on different types for
@@ -75,6 +75,12 @@ func (v *{{.GoName}}) UnmarshalJSON(b []byte) error {
             len(raw))
         for i, raw := range raw {
             target := &(*target)[i]
+        {{end -}}
+        {{if $field.GoType.IsPointer -}}
+        {{/* In this case, the parent for loop did `make([]*MyType, ...)` and
+             we have a pointer into that list.  But we actually still need to
+             initialize the *elements* of the list. */ -}}
+        *target = new({{$field.GoType.Unwrap.Reference}})
         {{end -}}
         err = __unmarshal{{$field.GoType.Unwrap.Reference}}(
             {{if $field.GoType.IsPointer}}*{{end}}target, raw)

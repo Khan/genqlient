@@ -28,7 +28,8 @@ type goType interface {
 	Unwrap() goType
 
 	// Count the number of times Unwrap() will unwrap a slice type.  For
-	// example, given []*[]**[]MyStruct, return 3.
+	// example, given [][][]*MyStruct (or []**[][]*MyStruct, but we never
+	// currently generate that), return 3.
 	SliceDepth() int
 
 	// True if Unwrap() will unwrap a pointer at least once.
