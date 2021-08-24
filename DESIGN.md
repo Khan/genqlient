@@ -115,8 +115,8 @@ All of this may be configurable later.
 Consider the following query (suppose that `a` returns interface type `I`, which may be implemented by either `T` or `U`):
 
 ```graphql
-query { a { __typename b ...f } }
-fragment f on T { c d }
+query { a { __typename b ...F } }
+fragment F on T { c d }
 ```
 
 Depending on whether the concrete type returned from `a` is `T`, we can get one of two result structures back:
@@ -237,7 +237,7 @@ In other libraries:
 The previous section leaves some parts of how we'll handle fragments ambiguous.  Even within the way it lays things out, we generally have two options for how to represent a fragment.  Consider a query
 
 ```graphql
-query MyQuery { a { b ...f } }
+query MyQuery { a { b ...F } }
 fragment F on T { c d }
 ```
 
@@ -251,7 +251,7 @@ To get more concrete, there are [four cases](https://spec.graphql.org/June2018/#
 type Query { a: A }
 type A { b: String, c: String, d: String }
 
-query MyQuery { a { b ...f } }
+query MyQuery { a { b ...F } }
 fragment F on A { c d }
 ```
 
@@ -271,7 +271,7 @@ type Query { a: A }
 type A implements I { b: String, c: String, d: String }
 interface I { c: String, d: String }
 
-query MyQuery { a { b ...f } }
+query MyQuery { a { b ...F } }
 fragment F on I { c d }
 ```
 
@@ -290,21 +290,26 @@ type FA struct { C, D string } // implements F
 ```graphql
 type Query { a: I }
 type A implements I { b: String, c: String, d: String }
+type T implements I { b: String, u: String, v: String }
 interface I { b: String }
 
-query MyQuery { a { b ...f } }
+query MyQuery { a { b ...F ...G } }
 fragment F on A { c d }
+fragment G on A { u v }
 ```
 
 ```go
 // flattened:
 type MyQueryAI interface { isMyQueryAI(); GetB() string }
 type MyQueryAIA struct { B, C, D string } // implements MyQueryAI
+type MyQueryAIT struct { B, U, V string } // implements MyQueryAI
 
 // embedded:
 type MyQueryAI interface { isMyQueryAI(); GetB() string }
 type MyQueryAIA struct { B string; F } // implements MyQueryAI
+type MyQueryAIT struct { B string; G } // implements MyQueryAI
 type F struct { C, D string }
+type G struct { U, V string }
 ```
 
 **Abstract spread in abstract scope:** This is a sort of combination of the last two, where you spread one interface's fragment into another interface, and can be used for code-sharing and/or to conditionally request fields.  (Perhaps surprisingly, this is legal any time the two interfaces share an implementation, and neither need implement the other.)
@@ -312,10 +317,12 @@ type F struct { C, D string }
 ```graphql
 type Query { a: I }
 type A implements I & J { b: String, c: String, d: String }
+type T implements I { b: String }
+type U implements J { c: String, d: String, v: String }
 interface I { b: String }
 interface J { c: String, d: String }
 
-query MyQuery { a { b ...f } }
+query MyQuery { a { b ...F } }
 fragment F on J { c d }
 ```
 
@@ -323,12 +330,15 @@ fragment F on J { c d }
 // flattened:
 type MyQueryAI interface { isMyQueryAI(); GetB() string }
 type MyQueryAIA struct { B, C, D string } // implements MyQueryAI (and MyQueryAJ if generated)
+type MyQueryAIT struct { B }              // implements MyQueryAI
 
 // embedded:
 type MyQueryAI interface { isMyQueryAI(); GetB() string }
 type MyQueryAIA struct { B string; F } // implements MyQueryAI
+type MyQueryAIT struct { B string } // implements MyQueryAI
 type F interface { isF(); GetC() string; GetD() string }
 type FA struct { C, D string } // implements F
+type FJ struct { C, D, V string } // implements F (never used; might be omitted)
 ```
 
 Note in this case a third non-approach is
