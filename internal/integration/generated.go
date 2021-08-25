@@ -17,15 +17,48 @@ type queryWithInterfaceListFieldBeingsAnimal struct {
 	Name     string `json:"name"`
 }
 
-// queryWithInterfaceListFieldBeingsBeing includes the requested fields of the GraphQL type Being.
+// queryWithInterfaceListFieldBeingsBeing includes the requested fields of the GraphQL interface Being.
+//
+// queryWithInterfaceListFieldBeingsBeing is implemented by the following types:
+// queryWithInterfaceListFieldBeingsUser
+// queryWithInterfaceListFieldBeingsAnimal
+//
+// The GraphQL type's documentation follows.
+//
+//
 type queryWithInterfaceListFieldBeingsBeing interface {
 	implementsGraphQLInterfacequeryWithInterfaceListFieldBeingsBeing()
+	// GetTypename returns the receiver's concrete GraphQL type-name (see interface doc for possible values).
+	GetTypename() string
+	// GetId returns the interface-field "id" from its implementation.
+	GetId() string
+	// GetName returns the interface-field "name" from its implementation.
+	GetName() string
 }
 
 func (v *queryWithInterfaceListFieldBeingsUser) implementsGraphQLInterfacequeryWithInterfaceListFieldBeingsBeing() {
 }
+
+// GetTypename is a part of, and documented with, the interface queryWithInterfaceListFieldBeingsBeing.
+func (v *queryWithInterfaceListFieldBeingsUser) GetTypename() string { return v.Typename }
+
+// GetId is a part of, and documented with, the interface queryWithInterfaceListFieldBeingsBeing.
+func (v *queryWithInterfaceListFieldBeingsUser) GetId() string { return v.Id }
+
+// GetName is a part of, and documented with, the interface queryWithInterfaceListFieldBeingsBeing.
+func (v *queryWithInterfaceListFieldBeingsUser) GetName() string { return v.Name }
+
 func (v *queryWithInterfaceListFieldBeingsAnimal) implementsGraphQLInterfacequeryWithInterfaceListFieldBeingsBeing() {
 }
+
+// GetTypename is a part of, and documented with, the interface queryWithInterfaceListFieldBeingsBeing.
+func (v *queryWithInterfaceListFieldBeingsAnimal) GetTypename() string { return v.Typename }
+
+// GetId is a part of, and documented with, the interface queryWithInterfaceListFieldBeingsBeing.
+func (v *queryWithInterfaceListFieldBeingsAnimal) GetId() string { return v.Id }
+
+// GetName is a part of, and documented with, the interface queryWithInterfaceListFieldBeingsBeing.
+func (v *queryWithInterfaceListFieldBeingsAnimal) GetName() string { return v.Name }
 
 func __unmarshalqueryWithInterfaceListFieldBeingsBeing(v *queryWithInterfaceListFieldBeingsBeing, m json.RawMessage) error {
 	if string(m) == "null" {
@@ -105,15 +138,48 @@ type queryWithInterfaceListPointerFieldBeingsAnimal struct {
 	Name     string `json:"name"`
 }
 
-// queryWithInterfaceListPointerFieldBeingsBeing includes the requested fields of the GraphQL type Being.
+// queryWithInterfaceListPointerFieldBeingsBeing includes the requested fields of the GraphQL interface Being.
+//
+// queryWithInterfaceListPointerFieldBeingsBeing is implemented by the following types:
+// queryWithInterfaceListPointerFieldBeingsUser
+// queryWithInterfaceListPointerFieldBeingsAnimal
+//
+// The GraphQL type's documentation follows.
+//
+//
 type queryWithInterfaceListPointerFieldBeingsBeing interface {
 	implementsGraphQLInterfacequeryWithInterfaceListPointerFieldBeingsBeing()
+	// GetTypename returns the receiver's concrete GraphQL type-name (see interface doc for possible values).
+	GetTypename() string
+	// GetId returns the interface-field "id" from its implementation.
+	GetId() string
+	// GetName returns the interface-field "name" from its implementation.
+	GetName() string
 }
 
 func (v *queryWithInterfaceListPointerFieldBeingsUser) implementsGraphQLInterfacequeryWithInterfaceListPointerFieldBeingsBeing() {
 }
+
+// GetTypename is a part of, and documented with, the interface queryWithInterfaceListPointerFieldBeingsBeing.
+func (v *queryWithInterfaceListPointerFieldBeingsUser) GetTypename() string { return v.Typename }
+
+// GetId is a part of, and documented with, the interface queryWithInterfaceListPointerFieldBeingsBeing.
+func (v *queryWithInterfaceListPointerFieldBeingsUser) GetId() string { return v.Id }
+
+// GetName is a part of, and documented with, the interface queryWithInterfaceListPointerFieldBeingsBeing.
+func (v *queryWithInterfaceListPointerFieldBeingsUser) GetName() string { return v.Name }
+
 func (v *queryWithInterfaceListPointerFieldBeingsAnimal) implementsGraphQLInterfacequeryWithInterfaceListPointerFieldBeingsBeing() {
 }
+
+// GetTypename is a part of, and documented with, the interface queryWithInterfaceListPointerFieldBeingsBeing.
+func (v *queryWithInterfaceListPointerFieldBeingsAnimal) GetTypename() string { return v.Typename }
+
+// GetId is a part of, and documented with, the interface queryWithInterfaceListPointerFieldBeingsBeing.
+func (v *queryWithInterfaceListPointerFieldBeingsAnimal) GetId() string { return v.Id }
+
+// GetName is a part of, and documented with, the interface queryWithInterfaceListPointerFieldBeingsBeing.
+func (v *queryWithInterfaceListPointerFieldBeingsAnimal) GetName() string { return v.Name }
 
 func __unmarshalqueryWithInterfaceListPointerFieldBeingsBeing(v *queryWithInterfaceListPointerFieldBeingsBeing, m json.RawMessage) error {
 	if string(m) == "null" {
@@ -187,15 +253,48 @@ func (v *queryWithInterfaceListPointerFieldResponse) UnmarshalJSON(b []byte) err
 	return nil
 }
 
-// queryWithInterfaceNoFragmentsBeing includes the requested fields of the GraphQL type Being.
+// queryWithInterfaceNoFragmentsBeing includes the requested fields of the GraphQL interface Being.
+//
+// queryWithInterfaceNoFragmentsBeing is implemented by the following types:
+// queryWithInterfaceNoFragmentsBeingUser
+// queryWithInterfaceNoFragmentsBeingAnimal
+//
+// The GraphQL type's documentation follows.
+//
+//
 type queryWithInterfaceNoFragmentsBeing interface {
 	implementsGraphQLInterfacequeryWithInterfaceNoFragmentsBeing()
+	// GetTypename returns the receiver's concrete GraphQL type-name (see interface doc for possible values).
+	GetTypename() string
+	// GetId returns the interface-field "id" from its implementation.
+	GetId() string
+	// GetName returns the interface-field "name" from its implementation.
+	GetName() string
 }
 
 func (v *queryWithInterfaceNoFragmentsBeingUser) implementsGraphQLInterfacequeryWithInterfaceNoFragmentsBeing() {
 }
+
+// GetTypename is a part of, and documented with, the interface queryWithInterfaceNoFragmentsBeing.
+func (v *queryWithInterfaceNoFragmentsBeingUser) GetTypename() string { return v.Typename }
+
+// GetId is a part of, and documented with, the interface queryWithInterfaceNoFragmentsBeing.
+func (v *queryWithInterfaceNoFragmentsBeingUser) GetId() string { return v.Id }
+
+// GetName is a part of, and documented with, the interface queryWithInterfaceNoFragmentsBeing.
+func (v *queryWithInterfaceNoFragmentsBeingUser) GetName() string { return v.Name }
+
 func (v *queryWithInterfaceNoFragmentsBeingAnimal) implementsGraphQLInterfacequeryWithInterfaceNoFragmentsBeing() {
 }
+
+// GetTypename is a part of, and documented with, the interface queryWithInterfaceNoFragmentsBeing.
+func (v *queryWithInterfaceNoFragmentsBeingAnimal) GetTypename() string { return v.Typename }
+
+// GetId is a part of, and documented with, the interface queryWithInterfaceNoFragmentsBeing.
+func (v *queryWithInterfaceNoFragmentsBeingAnimal) GetId() string { return v.Id }
+
+// GetName is a part of, and documented with, the interface queryWithInterfaceNoFragmentsBeing.
+func (v *queryWithInterfaceNoFragmentsBeingAnimal) GetName() string { return v.Name }
 
 func __unmarshalqueryWithInterfaceNoFragmentsBeing(v *queryWithInterfaceNoFragmentsBeing, m json.RawMessage) error {
 	if string(m) == "null" {

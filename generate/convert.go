@@ -249,6 +249,7 @@ func (g *generator) convertDefinition(
 				GoName:      goName,
 				GoType:      fieldGoType,
 				JSONName:    field.Name,
+				GraphQLName: field.Name,
 				Description: field.Description,
 			}
 		}
@@ -264,19 +265,52 @@ func (g *generator) convertDefinition(
 			GoName:          name,
 			Description:     def.Description,
 			GraphQLName:     def.Name,
+			SharedFields:    make([]*goStructField, 0, len(selectionSet)),
 			Implementations: make([]*goStructType, len(implementationTypes)),
 		}
 		g.typeMap[name] = goType
 
+		// TODO(benkraft): This sorta-duplicates what we'll do in each
+		// implementation when it traverses the fields.  But they'll differ
+		// more once we support fragments; at that point we should figure out
+		// how to refactor.
+		for _, selection := range selectionSet {
+			field, ok := selection.(*ast.Field)
+			if !ok { // fragment/interface, not a shared field
+				continue
+			}
+			_, fieldDirective, err := g.parsePrecedingComment(field, field.GetPosition())
+			if err != nil {
+				return nil, err
+			}
+			fieldOptions := queryOptions.merge(fieldDirective)
+
+			goField, err := g.convertField(namePrefix, field, fieldOptions, queryOptions)
+			if err != nil {
+				return nil, err
+			}
+			goType.SharedFields = append(goType.SharedFields, goField)
+		}
+
 		for i, implDef := range implementationTypes {
-			implName, implNamePrefix := g.typeName(namePrefix, implDef)
+			// Note for shared fields we propagate forward the interface's
+			// name-prefix: that is, the implementations will have fields with
+			// types like
+			//	MyInterfaceMyFieldMyType
+			// not
+			//	MyInterfaceMyImplMyFieldMyType
+			//             ^^^^^^
+			// In particular, this means that the Go type of MyField will be
+			// the same across all the implementations; this is important so
+			// that we can write a method GetMyField() that returns it!
+			implName, _ := g.typeName(namePrefix, implDef)
 			// TODO(benkraft): In principle we should skip generating a Go
 			// field for __typename each of these impl-defs if you didn't
 			// request it (and it was automatically added by
 			// preprocessQueryDocument).  But in practice it doesn't really
 			// hurt, and would be extra work to avoid, so we just leave it.
 			implTyp, err := g.convertDefinition(
-				implName, implNamePrefix, implDef, pos, selectionSet, queryOptions)
+				implName, namePrefix, implDef, pos, selectionSet, queryOptions)
 			if err != nil {
 				return nil, err
 			}
@@ -356,6 +390,7 @@ func (g *generator) convertField(
 		GoName:      goName,
 		GoType:      fieldGoType,
 		JSONName:    field.Alias,
+		GraphQLName: field.Name,
 		Description: field.Definition.Description,
 	}, nil
 }
