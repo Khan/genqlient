@@ -1,0 +1,9 @@
+{
+  "operations": [
+    {
+      "operationName": "SimpleInlineFragment",
+      "query": "\nquery SimpleInlineFragment {\n\trandomItem {\n\t\t__typename\n\t\tid\n\t\tname\n\t\t... on Article {\n\t\t\ttext\n\t\t}\n\t\t... on Video {\n\t\t\tduration\n\t\t}\n\t}\n}\n",
+      "sourceLocation": "testdata/queries/SimpleInlineFragment.graphql"
+    }
+  ]
+}

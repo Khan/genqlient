@@ -206,6 +206,91 @@ func TestInterfaceListPointerField(t *testing.T) {
 	assert.Nil(t, *resp.Beings[2])
 }
 
+func TestFragments(t *testing.T) {
+	_ = `# @genqlient
+	query queryWithFragments($ids: [ID!]!) {
+		beings(ids: $ids) {
+			__typename id
+			... on Being { id name }
+			... on Animal {
+				id
+				hair { hasHair }
+				species
+				owner {
+					id
+					... on Being { name }
+					... on User { luckyNumber }
+				}
+			}
+			... on Lucky { luckyNumber }
+			... on User { hair { color } }
+		}
+	}`
+
+	ctx := context.Background()
+	server := server.RunServer()
+	defer server.Close()
+	client := graphql.NewClient(server.URL, http.DefaultClient)
+
+	resp, err := queryWithFragments(ctx, client, []string{"1", "3", "12847394823"})
+	require.NoError(t, err)
+
+	require.Len(t, resp.Beings, 3)
+
+	// We should get the following three beings:
+	//	User{Id: 1, Name: "Yours Truly"},
+	//	Animal{Id: 3, Name: "Fido"},
+	//	null
+
+	// Check fields both via interface and via type-assertion when possible
+	// User has, in total, the fields: __typename id name luckyNumber.
+	assert.Equal(t, "User", resp.Beings[0].GetTypename())
+	assert.Equal(t, "1", resp.Beings[0].GetId())
+	assert.Equal(t, "Yours Truly", resp.Beings[0].GetName())
+	// (hair and luckyNumber we need to cast for)
+
+	user, ok := resp.Beings[0].(*queryWithFragmentsBeingsUser)
+	require.Truef(t, ok, "got %T, not User", resp.Beings[0])
+	assert.Equal(t, "1", user.Id)
+	assert.Equal(t, "Yours Truly", user.Name)
+	// TODO(benkraft): Uncomment once we fix the interface-field type-naming
+	// bug that's causing this to get the wrong type (because we end up
+	// generating two conflicting types).
+	//	assert.Equal(t, "Black", user.Hair.Color)
+	assert.Equal(t, 17, user.LuckyNumber)
+
+	// Animal has, in total, the fields:
+	//	__typename
+	//	id
+	//	species
+	//	owner {
+	//		id
+	//		name
+	//		... on User { luckyNumber }
+	//	}
+	assert.Equal(t, "Animal", resp.Beings[1].GetTypename())
+	assert.Equal(t, "3", resp.Beings[1].GetId())
+	// (hair, species, and owner.* we have to cast for)
+
+	animal, ok := resp.Beings[1].(*queryWithFragmentsBeingsAnimal)
+	require.Truef(t, ok, "got %T, not Animal", resp.Beings[1])
+	assert.Equal(t, "3", animal.Id)
+	assert.Equal(t, SpeciesDog, animal.Species)
+	assert.True(t, animal.Hair.HasHair)
+
+	assert.Equal(t, "1", animal.Owner.GetId())
+	assert.Equal(t, "Yours Truly", animal.Owner.GetName())
+	// (luckyNumber we have to cast for, again)
+
+	owner, ok := animal.Owner.(*queryWithFragmentsBeingsOwnerUser)
+	require.Truef(t, ok, "got %T, not User", animal.Owner)
+	assert.Equal(t, "1", owner.Id)
+	assert.Equal(t, "Yours Truly", owner.Name)
+	assert.Equal(t, 17, owner.LuckyNumber)
+
+	assert.Nil(t, resp.Beings[2])
+}
+
 func TestGeneratedCode(t *testing.T) {
 	// TODO(benkraft): Check that gqlgen is up to date too.  In practice that's
 	// less likely to be a problem, since it should only change if you update

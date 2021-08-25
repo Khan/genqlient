@@ -12,22 +12,37 @@ type Being interface {
 	IsBeing()
 }
 
+type Lucky interface {
+	IsLucky()
+}
+
 type Animal struct {
-	ID      string  `json:"id"`
-	Name    string  `json:"name"`
-	Species Species `json:"species"`
-	Owner   Being   `json:"owner"`
+	ID      string      `json:"id"`
+	Name    string      `json:"name"`
+	Species Species     `json:"species"`
+	Owner   Being       `json:"owner"`
+	Hair    *BeingsHair `json:"hair"`
 }
 
 func (Animal) IsBeing() {}
+
+type BeingsHair struct {
+	HasHair bool `json:"hasHair"`
+}
+
+type Hair struct {
+	Color *string `json:"color"`
+}
 
 type User struct {
 	ID          string `json:"id"`
 	Name        string `json:"name"`
 	LuckyNumber *int   `json:"luckyNumber"`
+	Hair        *Hair  `json:"hair"`
 }
 
 func (User) IsBeing() {}
+func (User) IsLucky() {}
 
 type Species string
 

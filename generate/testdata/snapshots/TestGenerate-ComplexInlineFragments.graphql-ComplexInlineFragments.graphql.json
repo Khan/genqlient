@@ -1,0 +1,9 @@
+{
+  "operations": [
+    {
+      "operationName": "ComplexInlineFragments",
+      "query": "\nquery ComplexInlineFragments {\n\troot {\n\t\tid\n\t\t... on Topic {\n\t\t\tschoolGrade\n\t\t}\n\t\t... on Content {\n\t\t\tname\n\t\t}\n\t}\n\trandomItem {\n\t\t__typename\n\t\tid\n\t\t... on Article {\n\t\t\ttext\n\t\t}\n\t\t... on Content {\n\t\t\tname\n\t\t}\n\t\t... on HasDuration {\n\t\t\tduration\n\t\t}\n\t}\n\trepeatedStuff: randomItem {\n\t\t__typename\n\t\tid\n\t\tid\n\t\turl\n\t\totherId: id\n\t\t... on Article {\n\t\t\tname\n\t\t\ttext\n\t\t\totherName: name\n\t\t}\n\t\t... on Content {\n\t\t\tid\n\t\t\tname\n\t\t\totherName: name\n\t\t}\n\t\t... on HasDuration {\n\t\t\tduration\n\t\t}\n\t}\n\tconflictingStuff: randomItem {\n\t\t__typename\n\t\t... on Article {\n\t\t\tthumbnail {\n\t\t\t\tid\n\t\t\t\tthumbnailUrl\n\t\t\t}\n\t\t}\n\t\t... on Video {\n\t\t\tthumbnail {\n\t\t\t\tid\n\t\t\t\ttimestampSec\n\t\t\t}\n\t\t}\n\t}\n\tnestedStuff: randomItem {\n\t\t__typename\n\t\t... on Topic {\n\t\t\tchildren {\n\t\t\t\t__typename\n\t\t\t\tid\n\t\t\t\t... on Article {\n\t\t\t\t\ttext\n\t\t\t\t\tparent {\n\t\t\t\t\t\t... on Content {\n\t\t\t\t\t\t\tname\n\t\t\t\t\t\t\tparent {\n\t\t\t\t\t\t\t\t... on Topic {\n\t\t\t\t\t\t\t\t\tchildren {\n\t\t\t\t\t\t\t\t\t\t__typename\n\t\t\t\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\t\t\t\tname\n\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n}\n",
+      "sourceLocation": "testdata/queries/ComplexInlineFragments.graphql"
+    }
+  ]
+}
