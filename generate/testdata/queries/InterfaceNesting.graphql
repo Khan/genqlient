@@ -2,13 +2,10 @@ query InterfaceNesting {
   root {
     id
     children {
-      __typename
       id
       parent {
-        __typename
         id
         children {
-          __typename
           id
         }
       }

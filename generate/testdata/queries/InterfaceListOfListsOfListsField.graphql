@@ -1,5 +1,5 @@
 query InterfaceListOfListOfListsField {
-  listOfListsOfListsOfContent { __typename id name }
+  listOfListsOfListsOfContent { id name }
   # @genqlient(pointer: true)
-  withPointer: listOfListsOfListsOfContent { __typename id name }
+  withPointer: listOfListsOfListsOfContent { id name }
 }

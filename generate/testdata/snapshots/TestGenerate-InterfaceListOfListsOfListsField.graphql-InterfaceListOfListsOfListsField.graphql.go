@@ -160,7 +160,7 @@ func (v *InterfaceListOfListOfListsFieldResponse) UnmarshalJSON(b []byte) error 
 
 // InterfaceListOfListOfListsFieldWithPointerArticle includes the requested fields of the GraphQL type Article.
 type InterfaceListOfListOfListsFieldWithPointerArticle struct {
-	Typename *string `json:"__typename"`
+	Typename string `json:"__typename"`
 	// ID is the identifier of the content.
 	Id   *testutil.ID `json:"id"`
 	Name *string      `json:"name"`
@@ -212,7 +212,7 @@ func __unmarshalInterfaceListOfListOfListsFieldWithPointerContent(v *InterfaceLi
 
 // InterfaceListOfListOfListsFieldWithPointerTopic includes the requested fields of the GraphQL type Topic.
 type InterfaceListOfListOfListsFieldWithPointerTopic struct {
-	Typename *string `json:"__typename"`
+	Typename string `json:"__typename"`
 	// ID is the identifier of the content.
 	Id   *testutil.ID `json:"id"`
 	Name *string      `json:"name"`
@@ -220,7 +220,7 @@ type InterfaceListOfListOfListsFieldWithPointerTopic struct {
 
 // InterfaceListOfListOfListsFieldWithPointerVideo includes the requested fields of the GraphQL type Video.
 type InterfaceListOfListOfListsFieldWithPointerVideo struct {
-	Typename *string `json:"__typename"`
+	Typename string `json:"__typename"`
 	// ID is the identifier of the content.
 	Id   *testutil.ID `json:"id"`
 	Name *string      `json:"name"`

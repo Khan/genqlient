@@ -14,6 +14,7 @@ import (
 
 	"github.com/vektah/gqlparser/v2/ast"
 	"github.com/vektah/gqlparser/v2/formatter"
+	"github.com/vektah/gqlparser/v2/validator"
 	"golang.org/x/tools/imports"
 )
 
@@ -140,17 +141,88 @@ func (g *generator) getArgument(
 	}, nil
 }
 
+// Preprocess each query to make any changes that genqlient needs.
+//
+// At present, the only change is that we add __typename, if not already
+// requested, to each field of interface type, so we can use the right types
+// when unmarshaling.
+func (g *generator) preprocessQueryDocument(doc *ast.QueryDocument) {
+	var observers validator.Events
+	// We want to ensure that everywhere you ask for some list of fields (a
+	// selection-set) from an interface (or union) type, you ask for its
+	// __typename field.  There are four places we might find a selection-set:
+	// at the toplevel of a query, on a field, or in an inline or named
+	// fragment.  The toplevel of a query must be an object type, so we don't
+	// need to consider that.
+	// TODO(benkraft): Once we support fragments, figure out whether we need to
+	// traverse inline/named fragments here too.
+	observers.OnField(func(_ *validator.Walker, field *ast.Field) {
+		// We are interested in a field from the query like
+		//	field { subField ... }
+		// where the schema looks like
+		//	type ... {       # or interface/union
+		//		field: FieldType    # or [FieldType!]! etc.
+		//	}
+		//	interface FieldType {   # or union
+		//		subField: ...
+		//	}
+		// If FieldType is an interface/union, and none of the subFields is
+		// __typename, we want to change the query to
+		//	field { __typename subField ... }
+
+		fieldType := g.schema.Types[field.Definition.Type.Name()]
+		if fieldType.Kind != ast.Interface && fieldType.Kind != ast.Union {
+			return // a concrete type
+		}
+
+		hasTypename := false
+		for _, selection := range field.SelectionSet {
+			// Check if we already selected __typename. We ignore fragments,
+			// because we want __typename as a toplevel field.
+			subField, ok := selection.(*ast.Field)
+			if ok && subField.Name == "__typename" {
+				hasTypename = true
+			}
+		}
+		if !hasTypename {
+			// Ok, we need to add the field!
+			field.SelectionSet = append(ast.SelectionSet{
+				&ast.Field{
+					Alias: "__typename", Name: "__typename",
+					// Fake definition for the magic field __typename cribbed
+					// from gqlparser's validator/walk.go, equivalent to
+					//	__typename: String
+					// TODO(benkraft): This should in principle be
+					//	__typename: String!
+					// But genqlient doesn't care, so we just match gqlparser.
+					Definition: &ast.FieldDefinition{
+						Name: "__typename",
+						Type: ast.NamedType("String", nil /* pos */),
+					},
+					// Definition of the object that contains this field, i.e.
+					// FieldType.
+					ObjectDefinition: fieldType,
+				},
+			}, field.SelectionSet...)
+		}
+	})
+	validator.Walk(g.schema, doc, &observers)
+}
+
 func (g *generator) addOperation(op *ast.OperationDefinition) error {
 	if op.Name == "" {
 		return errorf(op.Position, "operations must have operation-names")
 	}
 
-	var builder strings.Builder
-	f := formatter.NewFormatter(&builder)
-	f.FormatQueryDocument(&ast.QueryDocument{
+	queryDoc := &ast.QueryDocument{
 		Operations: ast.OperationList{op},
 		// TODO: handle fragments
-	})
+	}
+	g.preprocessQueryDocument(queryDoc)
+
+	var builder strings.Builder
+	f := formatter.NewFormatter(&builder)
+	f.FormatQueryDocument(queryDoc)
 
 	commentLines, directive, err := g.parsePrecedingComment(op, op.Position)
 	if err != nil {
