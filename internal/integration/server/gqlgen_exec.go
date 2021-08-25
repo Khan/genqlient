@@ -6,6 +6,7 @@ import (
 	"bytes"
 	"context"
 	"errors"
+	"fmt"
 	"strconv"
 	"sync"
 
@@ -40,9 +41,17 @@ type DirectiveRoot struct {
 }
 
 type ComplexityRoot struct {
+	Animal struct {
+		ID      func(childComplexity int) int
+		Name    func(childComplexity int) int
+		Owner   func(childComplexity int) int
+		Species func(childComplexity int) int
+	}
+
 	Query struct {
-		Me   func(childComplexity int) int
-		User func(childComplexity int, id string) int
+		Being func(childComplexity int, id string) int
+		Me    func(childComplexity int) int
+		User  func(childComplexity int, id string) int
 	}
 
 	User struct {
@@ -55,6 +64,7 @@ type ComplexityRoot struct {
 type QueryResolver interface {
 	Me(ctx context.Context) (*User, error)
 	User(ctx context.Context, id string) (*User, error)
+	Being(ctx context.Context, id string) (Being, error)
 }
 
 type executableSchema struct {
@@ -71,6 +81,46 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 	ec := executionContext{nil, e}
 	_ = ec
 	switch typeName + "." + field {
+
+	case "Animal.id":
+		if e.complexity.Animal.ID == nil {
+			break
+		}
+
+		return e.complexity.Animal.ID(childComplexity), true
+
+	case "Animal.name":
+		if e.complexity.Animal.Name == nil {
+			break
+		}
+
+		return e.complexity.Animal.Name(childComplexity), true
+
+	case "Animal.owner":
+		if e.complexity.Animal.Owner == nil {
+			break
+		}
+
+		return e.complexity.Animal.Owner(childComplexity), true
+
+	case "Animal.species":
+		if e.complexity.Animal.Species == nil {
+			break
+		}
+
+		return e.complexity.Animal.Species(childComplexity), true
+
+	case "Query.being":
+		if e.complexity.Query.Being == nil {
+			break
+		}
+
+		args, err := ec.field_Query_being_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Being(childComplexity, args["id"].(string)), true
 
 	case "Query.me":
 		if e.complexity.Query.Me == nil {
@@ -165,12 +215,30 @@ var sources = []*ast.Source{
 	{Name: "../schema.graphql", Input: `type Query {
   me: User
   user(id: ID!): User
+  being(id: ID!): Being
 }
 
-type User {
+type User implements Being {
   id: ID!
   name: String!
   luckyNumber: Int
+}
+
+type Animal implements Being {
+  id: ID!
+  name: String!
+  species: Species!
+  owner: Being
+}
+
+enum Species {
+  DOG
+  COELACANTH
+}
+
+interface Being {
+  id: ID!
+  name: String!
 }
 `, BuiltIn: false},
 }
@@ -192,6 +260,21 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 		}
 	}
 	args["name"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_being_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
 	return args, nil
 }
 
@@ -247,6 +330,143 @@ func (ec *executionContext) field___Type_fields_args(ctx context.Context, rawArg
 // endregion ************************** directives.gotpl **************************
 
 // region    **************************** field.gotpl *****************************
+
+func (ec *executionContext) _Animal_id(ctx context.Context, field graphql.CollectedField, obj *Animal) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Animal",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNID2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Animal_name(ctx context.Context, field graphql.CollectedField, obj *Animal) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Animal",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Name, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Animal_species(ctx context.Context, field graphql.CollectedField, obj *Animal) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Animal",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Species, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(Species)
+	fc.Result = res
+	return ec.marshalNSpecies2githubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐSpecies(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Animal_owner(ctx context.Context, field graphql.CollectedField, obj *Animal) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Animal",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Owner, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(Being)
+	fc.Result = res
+	return ec.marshalOBeing2githubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐBeing(ctx, field.Selections, res)
+}
 
 func (ec *executionContext) _Query_me(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
@@ -317,6 +537,45 @@ func (ec *executionContext) _Query_user(ctx context.Context, field graphql.Colle
 	res := resTmp.(*User)
 	fc.Result = res
 	return ec.marshalOUser2ᚖgithubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐUser(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Query_being(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Query_being_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Being(rctx, args["id"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(Being)
+	fc.Result = res
+	return ec.marshalOBeing2githubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐBeing(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query___type(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -1583,9 +1842,71 @@ func (ec *executionContext) ___Type_ofType(ctx context.Context, field graphql.Co
 
 // region    ************************** interface.gotpl ***************************
 
+func (ec *executionContext) _Being(ctx context.Context, sel ast.SelectionSet, obj Being) graphql.Marshaler {
+	switch obj := (obj).(type) {
+	case nil:
+		return graphql.Null
+	case User:
+		return ec._User(ctx, sel, &obj)
+	case *User:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._User(ctx, sel, obj)
+	case Animal:
+		return ec._Animal(ctx, sel, &obj)
+	case *Animal:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._Animal(ctx, sel, obj)
+	default:
+		panic(fmt.Errorf("unexpected type %T", obj))
+	}
+}
+
 // endregion ************************** interface.gotpl ***************************
 
 // region    **************************** object.gotpl ****************************
+
+var animalImplementors = []string{"Animal", "Being"}
+
+func (ec *executionContext) _Animal(ctx context.Context, sel ast.SelectionSet, obj *Animal) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, animalImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Animal")
+		case "id":
+			out.Values[i] = ec._Animal_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "name":
+			out.Values[i] = ec._Animal_name(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "species":
+			out.Values[i] = ec._Animal_species(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "owner":
+			out.Values[i] = ec._Animal_owner(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
 
 var queryImplementors = []string{"Query"}
 
@@ -1624,6 +1945,17 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 				res = ec._Query_user(ctx, field)
 				return res
 			})
+		case "being":
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_being(ctx, field)
+				return res
+			})
 		case "__type":
 			out.Values[i] = ec._Query___type(ctx, field)
 		case "__schema":
@@ -1639,7 +1971,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 	return out
 }
 
-var userImplementors = []string{"User"}
+var userImplementors = []string{"User", "Being"}
 
 func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj *User) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, userImplementors)
@@ -1948,6 +2280,16 @@ func (ec *executionContext) marshalNID2string(ctx context.Context, sel ast.Selec
 	return res
 }
 
+func (ec *executionContext) unmarshalNSpecies2githubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐSpecies(ctx context.Context, v interface{}) (Species, error) {
+	var res Species
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNSpecies2githubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐSpecies(ctx context.Context, sel ast.SelectionSet, v Species) graphql.Marshaler {
+	return v
+}
+
 func (ec *executionContext) unmarshalNString2string(ctx context.Context, v interface{}) (string, error) {
 	res, err := graphql.UnmarshalString(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -2190,6 +2532,13 @@ func (ec *executionContext) marshalN__TypeKind2string(ctx context.Context, sel a
 		}
 	}
 	return res
+}
+
+func (ec *executionContext) marshalOBeing2githubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐBeing(ctx context.Context, sel ast.SelectionSet, v Being) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Being(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalOBoolean2bool(ctx context.Context, v interface{}) (bool, error) {

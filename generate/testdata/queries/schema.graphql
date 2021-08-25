@@ -104,6 +104,7 @@ type Query {
   """usersWithRole looks a user up by role."""
   usersWithRole(role: Role!): [User!]!
   root: Topic!
+  randomItem: Content!
   randomLeaf: LeafContent!
   convert(dt: DateTime!, tz: String): DateTime!
   maybeConvert(dt: DateTime, tz: String): DateTime

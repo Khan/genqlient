@@ -1,0 +1,28 @@
+{{/* (the blank lines at the start are intentional, to separate
+     the helper from the function it follows) */}}
+
+func __unmarshal{{.GoName}}(v *{{.GoName}}, m {{ref "encoding/json.RawMessage"}}) error {
+    if string(m) == "null" {
+        return nil
+    }
+
+    var tn struct {
+        TypeName string `json:"__typename"`
+    }
+    err := {{ref "encoding/json.Unmarshal"}}(m, &tn)
+    if err != nil {
+        return err
+    }
+
+    switch tn.TypeName {
+    {{range .Implementations -}}
+    case "{{.GraphQLName}}":
+        {{/* TODO: handle repeated fields! */ -}}
+        *v = new({{.GoName}})
+        return {{ref "encoding/json.Unmarshal"}}(m, *v)
+    {{end -}}
+    default:
+        return {{ref "fmt.Errorf"}}(
+            `Unexpected concrete type for {{.GoName}}: "%v"`, tn.TypeName)
+    }
+}

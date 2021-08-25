@@ -1,40 +1,40 @@
 {{/* (the blank lines at the start are intentional, to separate
      UnmarshalJSON from the function it follows) */}}
 
-func (v *{{.Type}}) UnmarshalJSON(b []byte) error {
-	var firstPass struct{
-		*{{.Type}}
-        {{range .Fields -}}
-		{{.GoName}} {{ref "encoding/json.RawMessage"}} `json:"{{.JSONName}}"`
+func (v *{{.GoName}}) UnmarshalJSON(b []byte) error {
+    {{/* We want to specially handle the abstract fields (.AbstractFields),
+         but unmarshal everything else normally.  To handle abstract fields,
+         first we unmarshal them into a json.RawMessage, and then handle those
+         further, below.  For the rest, we just want to call json.Unmarshal.
+         But if we do that naively on a value of type `.Type`, it will call
+         this function again, and recurse infinitely.  So we make a wrapper
+         type -- with a different name, thus different methods, but the same
+         fields, and unmarshal into that.  For more on why this is so
+         difficult, see
+         https://github.com/benjaminjkraft/notes/blob/master/go-json-interfaces.md
+         TODO(benkraft)): Ensure `{{.Type}}Wrapper` won't collide with any
+         other type we need.  (For the most part it being locally-scoped saves
+         us; it's not clear if this can be a problem in practice.)
+    */}}
+    type {{.GoName}}Wrapper {{.GoName}}
+
+    var firstPass struct{
+        *{{.GoName}}Wrapper
+        {{range .AbstractFields -}}
+        {{.GoName}} {{ref "encoding/json.RawMessage"}} `json:"{{.JSONName}}"`
         {{end}}
-	}
-	firstPass.{{.Type}} = v
+    }
+    firstPass.{{.GoName}}Wrapper = (*{{.GoName}}Wrapper)(v)
 
-	err := {{ref "encoding/json.Unmarshal"}}(b, &firstPass)
+    err := {{ref "encoding/json.Unmarshal"}}(b, &firstPass)
     if err != nil {
         return err
     }
 
-    {{/* TODO(benkraft): split this out into a separate helper function,
-         generated for each interface type, rather than generating it inline
-         with the struct type. */}}
-    {{range .Fields -}}
-	var tn struct { TypeName string `json:"__typename"` }
-	err = {{ref "encoding/json.Unmarshal"}}(firstPass.{{.GoName}}, &tn)
-    if err != nil {
-        return err
-    }
-	switch tn.TypeName {
-    {{with $field := .}}
-    {{range $field.ConcreteTypes}}
-	case "{{.GraphQLName}}":
-        {{/* TODO: handle repeated fields! */}}
-		v.{{$field.GoName}} = {{.GoName}}{}
-		err = {{ref "encoding/json.Unmarshal"}}(
-			firstPass.{{$field.GoName}}, &v.{{$field.GoName}})
-    {{end}}
-    {{end}}
-	}
+    {{/* Now, for each field, call out to the unmarshal-helper. */}}
+    {{range .AbstractFields -}}
+    err = __unmarshal{{.GoType.Reference}}(
+        &v.{{.GoName}}, firstPass.{{.GoName}})
     if err != nil {
         return err
     }

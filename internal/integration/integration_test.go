@@ -56,6 +56,49 @@ func TestVariables(t *testing.T) {
 	assert.Zero(t, resp.User)
 }
 
+func TestInterfaceNoFragments(t *testing.T) {
+	_ = `# @genqlient
+	query queryWithInterfaceNoFragments($id: ID!) {
+		being(id: $id) { __typename id name }
+		me { id name }
+	}`
+
+	ctx := context.Background()
+	server := server.RunServer()
+	defer server.Close()
+	client := graphql.NewClient(server.URL, http.DefaultClient)
+
+	resp, err := queryWithInterfaceNoFragments(ctx, client, "1")
+	require.NoError(t, err)
+
+	assert.Equal(t, "1", resp.Me.Id)
+	assert.Equal(t, "Yours Truly", resp.Me.Name)
+
+	user, ok := resp.Being.(*queryWithInterfaceNoFragmentsBeingUser)
+	require.Truef(t, ok, "got %T, not User", resp.Being)
+	assert.Equal(t, "1", user.Id)
+	assert.Equal(t, "Yours Truly", user.Name)
+
+	resp, err = queryWithInterfaceNoFragments(ctx, client, "3")
+	require.NoError(t, err)
+
+	assert.Equal(t, "1", resp.Me.Id)
+	assert.Equal(t, "Yours Truly", resp.Me.Name)
+
+	animal, ok := resp.Being.(*queryWithInterfaceNoFragmentsBeingAnimal)
+	require.Truef(t, ok, "got %T, not Animal", resp.Being)
+	assert.Equal(t, "3", animal.Id)
+	assert.Equal(t, "Fido", animal.Name)
+
+	resp, err = queryWithInterfaceNoFragments(ctx, client, "4757233945723")
+	require.NoError(t, err)
+
+	assert.Equal(t, "1", resp.Me.Id)
+	assert.Equal(t, "Yours Truly", resp.Me.Name)
+
+	assert.Nil(t, resp.Being)
+}
+
 func TestGeneratedCode(t *testing.T) {
 	// TODO(benkraft): Check that gqlgen is up to date too.  In practice that's
 	// less likely to be a problem, since it should only change if you update
