@@ -55,6 +55,14 @@ func (r *queryResolver) Being(ctx context.Context, id string) (Being, error) {
 	return beingByID(id), nil
 }
 
+func (r *queryResolver) Beings(ctx context.Context, ids []string) ([]Being, error) {
+	ret := make([]Being, len(ids))
+	for i, id := range ids {
+		ret[i] = beingByID(id)
+	}
+	return ret, nil
+}
+
 func RunServer() *httptest.Server {
 	gqlgenServer := handler.New(NewExecutableSchema(Config{Resolvers: &resolver{}}))
 	gqlgenServer.AddTransport(transport.POST{})

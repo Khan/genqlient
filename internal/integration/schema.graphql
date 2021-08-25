@@ -2,6 +2,7 @@ type Query {
   me: User
   user(id: ID!): User
   being(id: ID!): Being
+  beings(ids: [ID!]!): [Being]!
 }
 
 type User implements Being {

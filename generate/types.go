@@ -22,6 +22,18 @@ type goType interface {
 	// Reference returns the Go name of this type, e.g. []*MyStruct, and may be
 	// used to refer to it in Go code.
 	Reference() string
+
+	// Remove slice/pointer wrappers, and return the underlying (named (or
+	// builtin)) type.  For example, given []*MyStruct, return MyStruct.
+	Unwrap() goType
+
+	// Count the number of times Unwrap() will unwrap a slice type.  For
+	// example, given [][][]*MyStruct (or []**[][]*MyStruct, but we never
+	// currently generate that), return 3.
+	SliceDepth() int
+
+	// True if Unwrap() will unwrap a pointer at least once.
+	IsPointer() bool
 }
 
 var (
@@ -106,6 +118,11 @@ type goStructField struct {
 	Description string
 }
 
+func isAbstract(typ goType) bool {
+	_, ok := typ.Unwrap().(*goInterfaceType)
+	return ok
+}
+
 func (typ *goStructType) WriteDefinition(w io.Writer, g *generator) error {
 	description := typ.Description
 	if typ.Incomplete {
@@ -117,7 +134,7 @@ func (typ *goStructType) WriteDefinition(w io.Writer, g *generator) error {
 	for _, field := range typ.Fields {
 		writeDescription(w, field.Description)
 		jsonName := field.JSONName
-		if _, ok := field.GoType.(*goInterfaceType); ok {
+		if isAbstract(field.GoType) {
 			// abstract types are handled in our UnmarshalJSON
 			jsonName = "-"
 		}
@@ -155,10 +172,7 @@ func (typ *goStructType) Reference() string { return typ.GoName }
 func (typ *goStructType) AbstractFields() []*goStructField {
 	var ret []*goStructField
 	for _, field := range typ.Fields {
-		// TODO(benkraft): To handle list-of-interface fields, we should really
-		// be "unwrapping" any goSliceType/goPointerType wrappers to find the
-		// goInterfaceType.
-		if _, ok := field.GoType.(*goInterfaceType); ok {
+		if isAbstract(field.GoType) {
 			ret = append(ret, field)
 		}
 	}
@@ -210,6 +224,27 @@ func (typ *goInterfaceType) WriteDefinition(w io.Writer, g *generator) error {
 }
 
 func (typ *goInterfaceType) Reference() string { return typ.GoName }
+
+func (typ *goOpaqueType) Unwrap() goType    { return typ }
+func (typ *goSliceType) Unwrap() goType     { return typ.Elem.Unwrap() }
+func (typ *goPointerType) Unwrap() goType   { return typ.Elem.Unwrap() }
+func (typ *goEnumType) Unwrap() goType      { return typ }
+func (typ *goStructType) Unwrap() goType    { return typ }
+func (typ *goInterfaceType) Unwrap() goType { return typ }
+
+func (typ *goOpaqueType) SliceDepth() int    { return 0 }
+func (typ *goSliceType) SliceDepth() int     { return typ.Elem.SliceDepth() + 1 }
+func (typ *goPointerType) SliceDepth() int   { return 0 }
+func (typ *goEnumType) SliceDepth() int      { return 0 }
+func (typ *goStructType) SliceDepth() int    { return 0 }
+func (typ *goInterfaceType) SliceDepth() int { return 0 }
+
+func (typ *goOpaqueType) IsPointer() bool    { return false }
+func (typ *goSliceType) IsPointer() bool     { return typ.Elem.IsPointer() }
+func (typ *goPointerType) IsPointer() bool   { return true }
+func (typ *goEnumType) IsPointer() bool      { return false }
+func (typ *goStructType) IsPointer() bool    { return false }
+func (typ *goInterfaceType) IsPointer() bool { return false }
 
 func incompleteTypeDescription(goName, graphQLName, description string) string {
 	// For types where we only have some fields, note that, along with

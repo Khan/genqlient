@@ -2,7 +2,7 @@
   "operations": [
     {
       "operationName": "InterfaceNoFragmentsQuery",
-      "query": "\nquery InterfaceNoFragmentsQuery {\n\troot {\n\t\tid\n\t\tname\n\t}\n\trandomItem {\n\t\t__typename\n\t\tid\n\t\tname\n\t}\n}\n",
+      "query": "\nquery InterfaceNoFragmentsQuery {\n\troot {\n\t\tid\n\t\tname\n\t}\n\trandomItem {\n\t\t__typename\n\t\tid\n\t\tname\n\t}\n\twithPointer: randomItem {\n\t\t__typename\n\t\tid\n\t\tname\n\t}\n}\n",
       "sourceLocation": "testdata/queries/InterfaceNoFragments.graphql"
     }
   ]

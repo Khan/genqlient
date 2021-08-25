@@ -111,6 +111,7 @@ type Query {
   getJunk: Junk
   getComplexJunk: ComplexJunk
   listOfListsOfLists: [[[String!]!]!]!
+  listOfListsOfListsOfContent: [[[Content!]!]!]!
 }
 
 type Mutation {

@@ -21,7 +21,7 @@ func (v *{{.GoName}}) UnmarshalJSON(b []byte) error {
     var firstPass struct{
         *{{.GoName}}Wrapper
         {{range .AbstractFields -}}
-        {{.GoName}} {{ref "encoding/json.RawMessage"}} `json:"{{.JSONName}}"`
+        {{.GoName}} {{repeat .GoType.SliceDepth "[]"}}{{ref "encoding/json.RawMessage"}} `json:"{{.JSONName}}"`
         {{end}}
     }
     firstPass.{{.GoName}}Wrapper = (*{{.GoName}}Wrapper)(v)
@@ -31,13 +31,67 @@ func (v *{{.GoName}}) UnmarshalJSON(b []byte) error {
         return err
     }
 
-    {{/* Now, for each field, call out to the unmarshal-helper. */}}
-    {{range .AbstractFields -}}
-    err = __unmarshal{{.GoType.Reference}}(
-        &v.{{.GoName}}, firstPass.{{.GoName}})
-    if err != nil {
-        return err
+    {{/* Now, for each field, call out to the unmarshal-helper.
+         This gets a little complicated because we may have a slice field.
+         So what we do is basically, for each field of type `[][]...[]MyType`:
+
+            target := &v.MyField      // *[][]...[]MyType
+            raw := firstPass.MyField  // [][]...[]json.RawMessage
+
+            // repeat the following three lines n times; each time, inside
+            // the loop we have one less layer of slice on raw and target
+            *target = make([][]...[]MyType, len(raw))
+            for i, raw := range raw {
+                // We need the &(*target)[i] because at each stage we want to
+                // keep target as a pointer.  (It only really has to be a
+                // pointer at the innermost level, but it's easiest to be
+                // consistent.)
+                target := &(*target)[i]
+            
+                // (now we have `target *MyType` and `raw json.RawMessage`)
+                __unmarshalMyType(target, raw)
+
+            } // (also n times)
+
+         Note that if the field also uses a pointer (`[][]...[]*MyType`), we
+         now pass around `*[][]...[]*MyType`; again in principle
+         `[][]...[]*MyType` would work but require more special-casing.  Thus
+         in the innermost loop, `target` is of type `**MyType`, so we have to
+         pass `*target` to the unmarshal-helper.  Of course, since MyType is an
+         interface, I'm not sure why you'd any of that anyway.
+
+         One additional trick is we wrap everything above in a block ({ ... }),
+         so that the variables target and raw may take on different types for
+         each field we are handling, which would otherwise conflict.  (We could
+         instead suffix the names, but that makes things much harder to read.)
+    */}}
+    {{range $field := .AbstractFields -}}
+    {
+        target := &v.{{$field.GoName}}
+        raw := firstPass.{{$field.GoName}}
+        {{range $i := intRange $field.GoType.SliceDepth -}}
+        *target = make(
+            {{repeat (sub $field.GoType.SliceDepth $i) "[]"}}{{if $field.GoType.IsPointer}}*{{end}}{{$field.GoType.Unwrap.Reference}},
+            len(raw))
+        for i, raw := range raw {
+            target := &(*target)[i]
+        {{end -}}
+        {{if $field.GoType.IsPointer -}}
+        {{/* In this case, the parent for loop did `make([]*MyType, ...)` and
+             we have a pointer into that list.  But we actually still need to
+             initialize the *elements* of the list. */ -}}
+        *target = new({{$field.GoType.Unwrap.Reference}})
+        {{end -}}
+        err = __unmarshal{{$field.GoType.Unwrap.Reference}}(
+            {{if $field.GoType.IsPointer}}*{{end}}target, raw)
+        if err != nil {
+            return err
+        }
+        {{range $i := intRange $field.GoType.SliceDepth -}}
+        }
+        {{end -}}
     }
-    {{end}}
+    {{end -}}
+
     return nil
 }
