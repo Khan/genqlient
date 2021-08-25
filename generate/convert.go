@@ -200,38 +200,20 @@ func (g *generator) convertDefinition(
 
 	switch def.Kind {
 	case ast.Object:
+		fields, err := g.convertSelectionSet(
+			namePrefix, selectionSet, def, queryOptions)
+		if err != nil {
+			return nil, err
+		}
+
 		goType := &goStructType{
 			GoName:      name,
 			Description: def.Description,
 			GraphQLName: def.Name,
-			Fields:      make([]*goStructField, len(selectionSet)),
+			Fields:      fields,
 			Incomplete:  true,
 		}
 		g.typeMap[name] = goType
-
-		for i, selection := range selectionSet {
-			_, selectionDirective, err := g.parsePrecedingComment(
-				selection, selection.GetPosition())
-			if err != nil {
-				return nil, err
-			}
-			selectionOptions := queryOptions.merge(selectionDirective)
-
-			switch selection := selection.(type) {
-			case *ast.Field:
-				goType.Fields[i], err = g.convertField(
-					namePrefix, selection, selectionOptions, queryOptions)
-				if err != nil {
-					return nil, err
-				}
-			case *ast.FragmentSpread:
-				return nil, errorf(selection.Position, "not implemented: %T", selection)
-			case *ast.InlineFragment:
-				return nil, errorf(selection.Position, "not implemented: %T", selection)
-			default:
-				return nil, errorf(nil, "invalid selection type: %T", selection)
-			}
-		}
 		return goType, nil
 
 	case ast.InputObject:
@@ -270,37 +252,21 @@ func (g *generator) convertDefinition(
 		return goType, nil
 
 	case ast.Interface, ast.Union:
+		sharedFields, err := g.convertSelectionSet(
+			namePrefix, selectionSet, def, queryOptions)
+		if err != nil {
+			return nil, err
+		}
+
 		implementationTypes := g.schema.GetPossibleTypes(def)
 		goType := &goInterfaceType{
 			GoName:          name,
 			Description:     def.Description,
 			GraphQLName:     def.Name,
-			SharedFields:    make([]*goStructField, 0, len(selectionSet)),
+			SharedFields:    sharedFields,
 			Implementations: make([]*goStructType, len(implementationTypes)),
 		}
 		g.typeMap[name] = goType
-
-		// TODO(benkraft): This sorta-duplicates what we'll do in each
-		// implementation when it traverses the fields.  But they'll differ
-		// more once we support fragments; at that point we should figure out
-		// how to refactor.
-		for _, selection := range selectionSet {
-			field, ok := selection.(*ast.Field)
-			if !ok { // fragment/interface, not a shared field
-				continue
-			}
-			_, fieldDirective, err := g.parsePrecedingComment(field, field.GetPosition())
-			if err != nil {
-				return nil, err
-			}
-			fieldOptions := queryOptions.merge(fieldDirective)
-
-			goField, err := g.convertField(namePrefix, field, fieldOptions, queryOptions)
-			if err != nil {
-				return nil, err
-			}
-			goType.SharedFields = append(goType.SharedFields, goField)
-		}
 
 		for i, implDef := range implementationTypes {
 			// Note for shared fields we propagate forward the interface's
@@ -357,7 +323,154 @@ func (g *generator) convertDefinition(
 	}
 }
 
-// convertField converts a single GraphQL operation-field into a GraphQL type.
+// convertSelectionSet converts a GraphQL selection-set into a list of
+// corresponding Go struct-fields (and their Go types)
+//
+// A selection-set is a list of fields within braces like `{ myField }`, as
+// appears at the toplevel of a query, in a field's sub-selections, or within
+// an inline or named fragment.
+//
+// containingTypedef is the type-def whose fields we are selecting, and may be
+// an object type or an interface type.  In the case of interfaces, we'll call
+// convertSelectionSet once for the interface, and once for each
+// implementation.
+func (g *generator) convertSelectionSet(
+	namePrefix string,
+	selectionSet ast.SelectionSet,
+	containingTypedef *ast.Definition,
+	queryOptions *GenqlientDirective,
+) ([]*goStructField, error) {
+	fields := make([]*goStructField, 0, len(selectionSet))
+	for _, selection := range selectionSet {
+		_, selectionDirective, err := g.parsePrecedingComment(
+			selection, selection.GetPosition())
+		if err != nil {
+			return nil, err
+		}
+		selectionOptions := queryOptions.merge(selectionDirective)
+
+		switch selection := selection.(type) {
+		case *ast.Field:
+			field, err := g.convertField(
+				namePrefix, selection, selectionOptions, queryOptions)
+			if err != nil {
+				return nil, err
+			}
+			fields = append(fields, field)
+		case *ast.FragmentSpread:
+			return nil, errorf(selection.Position, "not implemented: %T", selection)
+		case *ast.InlineFragment:
+			fragmentFields, err := g.convertInlineFragment(
+				namePrefix, selection, containingTypedef, queryOptions)
+			if err != nil {
+				return nil, err
+			}
+			fields = append(fields, fragmentFields...)
+		default:
+			return nil, errorf(nil, "invalid selection type: %T", selection)
+		}
+	}
+
+	// We need to deduplicate, if you asked for
+	//	{ id, id, id, ... on SubType { id } }
+	// (which, yes, is legal) we'll treat that as just { id }.
+	uniqFields := make([]*goStructField, 0, len(selectionSet))
+	fieldNames := make(map[string]bool, len(selectionSet))
+	for _, field := range fields {
+		// GraphQL (and, effectively, JSON) requires that all fields with the
+		// same alias (JSON-name) must be the same (i.e. refer to the same
+		// field), so that's how we deduplicate.
+		if fieldNames[field.JSONName] {
+			// GraphQL (and, effectively, JSON) forbids you from having two
+			// fields with the same alias (JSON-name) that refer to different
+			// GraphQL fields.  But it does allow you to have the same field
+			// with different selections (subject to some additional rules).
+			// We say: that's too complicated! and allow duplicate fields
+			// only if they're "leaf" types (enum or scalar).
+			switch field.GoType.Unwrap().(type) {
+			case *goOpaqueType, *goEnumType:
+				// Leaf field; we can just deduplicate.
+				// Note GraphQL already guarantees that the conflicting field
+				// has scalar/enum type iff this field does:
+				// https://spec.graphql.org/draft/#SameResponseShape()
+				continue
+			case *goStructType, *goInterfaceType:
+				// TODO(benkraft): Keep track of the position of each
+				// selection, so we can put this error on the right line.
+				return nil, errorf(nil,
+					"genqlient doesn't allow duplicate fields with different selections "+
+						"(see https://github.com/Khan/genqlient/issues/64); "+
+						"duplicate field: %s.%s", containingTypedef.Name, field.JSONName)
+			default:
+				return nil, errorf(nil, "unexpected field-type: %T", field.GoType.Unwrap())
+			}
+		}
+		uniqFields = append(uniqFields, field)
+		fieldNames[field.JSONName] = true
+	}
+	return uniqFields, nil
+}
+
+// fragmentMatches returns true if the given fragment is "active" when applied
+// to the given type.
+//
+// "Active" here means "the fragment's fields will be returned on all objects
+// of the given type", which is true when the given type is or implements
+// the fragment's type.  This is distinct from the rules for when a fragment
+// spread is legal, which is true when the fragment would be active for *any*
+// of the concrete types the spread-context could have (see
+// https://spec.graphql.org/draft/#sec-Fragment-Spreads or DESIGN.md).
+//
+// containingTypedef is as described in convertInlineFragment, below.
+// fragmentTypedef is the definition of the fragment's type-condition, i.e. the
+// definition of MyType in a fragment `on MyType`.
+func fragmentMatches(containingTypedef, fragmentTypedef *ast.Definition) bool {
+	if containingTypedef.Name == fragmentTypedef.Name {
+		return true
+	}
+	for _, iface := range containingTypedef.Interfaces {
+		// Note we don't need to recurse into the interfaces here, because in
+		// GraphQL types must list all the interfaces they implement, including
+		// all types those interfaces implement [1].  Actually, at present
+		// gqlparser doesn't even support interfaces implementing other
+		// interfaces, but our code would handle that too.
+		// [1] https://spec.graphql.org/draft/#sec-Interfaces.Interfaces-Implementing-Interfaces
+		if iface == fragmentTypedef.Name {
+			return true
+		}
+	}
+	return false
+}
+
+// convertInlineFragment converts a single GraphQL inline fragment
+// (`... on MyType { myField }`) into Go struct-fields.
+//
+// containingTypedef is the type-def corresponding to the type into which we
+// are spreading; it may be either an interface type (when spreading into one)
+// or an object type (when writing the implementations of such an interface, or
+// when using an inline fragment in an object type which is rare).
+//
+// In general, we treat such fragments' fields as if they were fields of the
+// parent selection-set (except of course they are only included in types the
+// fragment matches); see DESIGN.md for more.
+func (g *generator) convertInlineFragment(
+	namePrefix string,
+	fragment *ast.InlineFragment,
+	containingTypedef *ast.Definition,
+	queryOptions *GenqlientDirective,
+) ([]*goStructField, error) {
+	// You might think fragmentTypedef would be fragment.ObjectDefinition, but
+	// actually that's the type into which the fragment is spread.
+	fragmentTypedef := g.schema.Types[fragment.TypeCondition]
+	if !fragmentMatches(containingTypedef, fragmentTypedef) {
+		return nil, nil
+	}
+	return g.convertSelectionSet(namePrefix, fragment.SelectionSet,
+		containingTypedef, queryOptions)
+}
+
+// convertField converts a single GraphQL operation-field into a Go
+// struct-field (and its type).
 //
 // Note that input-type fields are handled separately (inline in
 // convertDefinition), because they come from the type-definition, not the

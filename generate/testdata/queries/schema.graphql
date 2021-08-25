@@ -65,6 +65,13 @@ type User {
   emailsWithNullsOrNull: [String]
   authMethods: [AuthMethod!]!
   pokemon: [Pokemon!]
+  greeting: Clip
+}
+
+"""An audio clip, such as of a user saying hello."""
+type Clip implements HasDuration {
+  id: ID!
+  duration: Int!
 }
 
 """Content is implemented by various types like Article, Video, and Topic."""
@@ -73,6 +80,12 @@ interface Content {
   id: ID!
   name: String!
   parent: Topic
+  url: String!
+}
+
+"""An object with a duration, like a video."""
+interface HasDuration {
+  duration: Int!
 }
 
 """LeafContent represents content items that can't have child-nodes."""
@@ -83,15 +96,29 @@ type Article implements Content {
   id: ID!
   name: String!
   parent: Topic!
+  url: String!
   text: String!
+  thumbnail: StuffThumbnail
 }
 
-type Video implements Content {
+type StuffThumbnail {  # for articles, but let's give the name-generator a hard time.
+  id: ID!
+  thumbnailUrl: String!
+}
+
+type Video implements Content & HasDuration {
   """ID is documented in the Content interface."""
   id: ID!
   name: String!
   parent: Topic!
+  url: String!
   duration: Int!
+  thumbnail: Thumbnail
+}
+
+type Thumbnail {  # for videos, but let's give the name-generator a hard time.
+  id: ID!
+  timestampSec: Int!
 }
 
 type Topic implements Content {
@@ -99,7 +126,9 @@ type Topic implements Content {
   id: ID!
   name: String!
   parent: Topic
+  url: String!
   children: [Content!]!
+  schoolGrade: String
 }
 
 """Query's description is probably ignored by almost all callers."""

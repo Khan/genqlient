@@ -1,0 +1,12 @@
+package errors
+
+const _ = `# @genqlient
+query {
+  myField {
+    subField { subSubField1 subSubField2 }
+    ... on OnePossibleConcreteType {
+      subField { subSubField3 subSubField4 }
+    }
+  }
+}
+`
