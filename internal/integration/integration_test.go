@@ -184,10 +184,19 @@ func TestInterfaceListPointerField(t *testing.T) {
 
 	require.Len(t, resp.Beings, 3)
 
+	// Check fields both via interface and via type-assertion:
+	assert.Equal(t, "User", (*resp.Beings[0]).GetTypename())
+	assert.Equal(t, "1", (*resp.Beings[0]).GetId())
+	assert.Equal(t, "Yours Truly", (*resp.Beings[0]).GetName())
+
 	user, ok := (*resp.Beings[0]).(*queryWithInterfaceListPointerFieldBeingsUser)
-	require.Truef(t, ok, "got %T, not User", resp.Beings[0])
+	require.Truef(t, ok, "got %T, not User", (*resp.Beings[0]))
 	assert.Equal(t, "1", user.Id)
 	assert.Equal(t, "Yours Truly", user.Name)
+
+	assert.Equal(t, "Animal", (*resp.Beings[1]).GetTypename())
+	assert.Equal(t, "3", (*resp.Beings[1]).GetId())
+	assert.Equal(t, "Fido", (*resp.Beings[1]).GetName())
 
 	animal, ok := (*resp.Beings[1]).(*queryWithInterfaceListPointerFieldBeingsAnimal)
 	require.Truef(t, ok, "got %T, not Animal", resp.Beings[1])
