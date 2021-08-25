@@ -1,3 +1,6 @@
+{{/* (the blank lines at the start are intentional, to separate
+     UnmarshalJSON from the function it follows) */}}
+
 func (v *{{.Type}}) UnmarshalJSON(b []byte) error {
 	var firstPass struct{
 		*{{.Type}}
@@ -12,6 +15,9 @@ func (v *{{.Type}}) UnmarshalJSON(b []byte) error {
         return err
     }
 
+    {{/* TODO(benkraft): split this out into a separate helper function,
+         generated for each interface type, rather than generating it inline
+         with the struct type. */}}
     {{range .Fields -}}
 	var tn struct { TypeName string `json:"__typename"` }
 	err = {{ref "encoding/json.Unmarshal"}}(firstPass.{{.GoName}}, &tn)
