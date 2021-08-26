@@ -256,10 +256,6 @@ func (g *generator) convertDefinition(
 		return goType, nil
 
 	case ast.Interface, ast.Union:
-		if !g.Config.AllowBrokenFeatures {
-			return nil, errorf(pos, "not implemented: %v", def.Kind)
-		}
-
 		implementationTypes := g.schema.GetPossibleTypes(def)
 		goType := &goInterfaceType{
 			GoName:          name,
