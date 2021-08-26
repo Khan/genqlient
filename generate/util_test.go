@@ -52,28 +52,6 @@ func TestUpperFirst(t *testing.T) {
 	testStringFunc(t, upperFirst, tests)
 }
 
-func TestMatchFirst(t *testing.T) {
-	tests := []struct {
-		name, in, out, match string
-	}{
-		{"Empty", "", "", ""},
-		{"LowerToUpper", "lower", "Lower", "Upper"},
-		{"UpperToUpper", "Upper", "Upper", "Upper"},
-		{"LowerToLower", "lower", "lower", "lower"},
-		{"UpperToLower", "Upper", "upper", "lower"},
-	}
-
-	for _, test := range tests {
-		test := test
-		t.Run(test.name, func(t *testing.T) {
-			got := matchFirst(test.in, test.match)
-			if got != test.out {
-				t.Errorf("got %#v want %#v", got, test.out)
-			}
-		})
-	}
-}
-
 func TestGoConstName(t *testing.T) {
 	tests := []test{
 		{"Empty", "", ""},

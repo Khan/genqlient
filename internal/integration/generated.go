@@ -19,12 +19,12 @@ const (
 
 // queryWithFragmentsBeingsAnimal includes the requested fields of the GraphQL type Animal.
 type queryWithFragmentsBeingsAnimal struct {
-	Typename string                             `json:"__typename"`
-	Id       string                             `json:"id"`
-	Name     string                             `json:"name"`
-	Hair     queryWithFragmentsBeingsHair       `json:"hair"`
-	Species  Species                            `json:"species"`
-	Owner    queryWithFragmentsBeingsOwnerBeing `json:"-"`
+	Typename string                                       `json:"__typename"`
+	Id       string                                       `json:"id"`
+	Name     string                                       `json:"name"`
+	Hair     queryWithFragmentsBeingsAnimalHairBeingsHair `json:"hair"`
+	Species  Species                                      `json:"species"`
+	Owner    queryWithFragmentsBeingsAnimalOwnerBeing     `json:"-"`
 }
 
 func (v *queryWithFragmentsBeingsAnimal) UnmarshalJSON(b []byte) error {
@@ -45,7 +45,7 @@ func (v *queryWithFragmentsBeingsAnimal) UnmarshalJSON(b []byte) error {
 	{
 		target := &v.Owner
 		raw := firstPass.Owner
-		err = __unmarshalqueryWithFragmentsBeingsOwnerBeing(
+		err = __unmarshalqueryWithFragmentsBeingsAnimalOwnerBeing(
 			target, raw)
 		if err != nil {
 			return fmt.Errorf(
@@ -53,6 +53,98 @@ func (v *queryWithFragmentsBeingsAnimal) UnmarshalJSON(b []byte) error {
 		}
 	}
 	return nil
+}
+
+// queryWithFragmentsBeingsAnimalHairBeingsHair includes the requested fields of the GraphQL type BeingsHair.
+type queryWithFragmentsBeingsAnimalHairBeingsHair struct {
+	HasHair bool `json:"hasHair"`
+}
+
+// queryWithFragmentsBeingsAnimalOwnerAnimal includes the requested fields of the GraphQL type Animal.
+type queryWithFragmentsBeingsAnimalOwnerAnimal struct {
+	Typename string `json:"__typename"`
+	Id       string `json:"id"`
+	Name     string `json:"name"`
+}
+
+// queryWithFragmentsBeingsAnimalOwnerBeing includes the requested fields of the GraphQL interface Being.
+//
+// queryWithFragmentsBeingsAnimalOwnerBeing is implemented by the following types:
+// queryWithFragmentsBeingsAnimalOwnerUser
+// queryWithFragmentsBeingsAnimalOwnerAnimal
+//
+// The GraphQL type's documentation follows.
+//
+//
+type queryWithFragmentsBeingsAnimalOwnerBeing interface {
+	implementsGraphQLInterfacequeryWithFragmentsBeingsAnimalOwnerBeing()
+	// GetTypename returns the receiver's concrete GraphQL type-name (see interface doc for possible values).
+	GetTypename() string
+	// GetId returns the interface-field "id" from its implementation.
+	GetId() string
+	// GetName returns the interface-field "name" from its implementation.
+	GetName() string
+}
+
+func (v *queryWithFragmentsBeingsAnimalOwnerUser) implementsGraphQLInterfacequeryWithFragmentsBeingsAnimalOwnerBeing() {
+}
+
+// GetTypename is a part of, and documented with, the interface queryWithFragmentsBeingsAnimalOwnerBeing.
+func (v *queryWithFragmentsBeingsAnimalOwnerUser) GetTypename() string { return v.Typename }
+
+// GetId is a part of, and documented with, the interface queryWithFragmentsBeingsAnimalOwnerBeing.
+func (v *queryWithFragmentsBeingsAnimalOwnerUser) GetId() string { return v.Id }
+
+// GetName is a part of, and documented with, the interface queryWithFragmentsBeingsAnimalOwnerBeing.
+func (v *queryWithFragmentsBeingsAnimalOwnerUser) GetName() string { return v.Name }
+
+func (v *queryWithFragmentsBeingsAnimalOwnerAnimal) implementsGraphQLInterfacequeryWithFragmentsBeingsAnimalOwnerBeing() {
+}
+
+// GetTypename is a part of, and documented with, the interface queryWithFragmentsBeingsAnimalOwnerBeing.
+func (v *queryWithFragmentsBeingsAnimalOwnerAnimal) GetTypename() string { return v.Typename }
+
+// GetId is a part of, and documented with, the interface queryWithFragmentsBeingsAnimalOwnerBeing.
+func (v *queryWithFragmentsBeingsAnimalOwnerAnimal) GetId() string { return v.Id }
+
+// GetName is a part of, and documented with, the interface queryWithFragmentsBeingsAnimalOwnerBeing.
+func (v *queryWithFragmentsBeingsAnimalOwnerAnimal) GetName() string { return v.Name }
+
+func __unmarshalqueryWithFragmentsBeingsAnimalOwnerBeing(v *queryWithFragmentsBeingsAnimalOwnerBeing, m json.RawMessage) error {
+	if string(m) == "null" {
+		return nil
+	}
+
+	var tn struct {
+		TypeName string `json:"__typename"`
+	}
+	err := json.Unmarshal(m, &tn)
+	if err != nil {
+		return err
+	}
+
+	switch tn.TypeName {
+	case "User":
+		*v = new(queryWithFragmentsBeingsAnimalOwnerUser)
+		return json.Unmarshal(m, *v)
+	case "Animal":
+		*v = new(queryWithFragmentsBeingsAnimalOwnerAnimal)
+		return json.Unmarshal(m, *v)
+	case "":
+		return fmt.Errorf(
+			"Response was missing Being.__typename")
+	default:
+		return fmt.Errorf(
+			`Unexpected concrete type for queryWithFragmentsBeingsAnimalOwnerBeing: "%v"`, tn.TypeName)
+	}
+}
+
+// queryWithFragmentsBeingsAnimalOwnerUser includes the requested fields of the GraphQL type User.
+type queryWithFragmentsBeingsAnimalOwnerUser struct {
+	Typename    string `json:"__typename"`
+	Id          string `json:"id"`
+	Name        string `json:"name"`
+	LuckyNumber int    `json:"luckyNumber"`
 }
 
 // queryWithFragmentsBeingsBeing includes the requested fields of the GraphQL interface Being.
@@ -125,105 +217,18 @@ func __unmarshalqueryWithFragmentsBeingsBeing(v *queryWithFragmentsBeingsBeing, 
 	}
 }
 
-// queryWithFragmentsBeingsHair includes the requested fields of the GraphQL type BeingsHair.
-type queryWithFragmentsBeingsHair struct {
-	HasHair bool `json:"hasHair"`
-}
-
-// queryWithFragmentsBeingsOwnerAnimal includes the requested fields of the GraphQL type Animal.
-type queryWithFragmentsBeingsOwnerAnimal struct {
-	Typename string `json:"__typename"`
-	Id       string `json:"id"`
-	Name     string `json:"name"`
-}
-
-// queryWithFragmentsBeingsOwnerBeing includes the requested fields of the GraphQL interface Being.
-//
-// queryWithFragmentsBeingsOwnerBeing is implemented by the following types:
-// queryWithFragmentsBeingsOwnerUser
-// queryWithFragmentsBeingsOwnerAnimal
-//
-// The GraphQL type's documentation follows.
-//
-//
-type queryWithFragmentsBeingsOwnerBeing interface {
-	implementsGraphQLInterfacequeryWithFragmentsBeingsOwnerBeing()
-	// GetTypename returns the receiver's concrete GraphQL type-name (see interface doc for possible values).
-	GetTypename() string
-	// GetId returns the interface-field "id" from its implementation.
-	GetId() string
-	// GetName returns the interface-field "name" from its implementation.
-	GetName() string
-}
-
-func (v *queryWithFragmentsBeingsOwnerUser) implementsGraphQLInterfacequeryWithFragmentsBeingsOwnerBeing() {
-}
-
-// GetTypename is a part of, and documented with, the interface queryWithFragmentsBeingsOwnerBeing.
-func (v *queryWithFragmentsBeingsOwnerUser) GetTypename() string { return v.Typename }
-
-// GetId is a part of, and documented with, the interface queryWithFragmentsBeingsOwnerBeing.
-func (v *queryWithFragmentsBeingsOwnerUser) GetId() string { return v.Id }
-
-// GetName is a part of, and documented with, the interface queryWithFragmentsBeingsOwnerBeing.
-func (v *queryWithFragmentsBeingsOwnerUser) GetName() string { return v.Name }
-
-func (v *queryWithFragmentsBeingsOwnerAnimal) implementsGraphQLInterfacequeryWithFragmentsBeingsOwnerBeing() {
-}
-
-// GetTypename is a part of, and documented with, the interface queryWithFragmentsBeingsOwnerBeing.
-func (v *queryWithFragmentsBeingsOwnerAnimal) GetTypename() string { return v.Typename }
-
-// GetId is a part of, and documented with, the interface queryWithFragmentsBeingsOwnerBeing.
-func (v *queryWithFragmentsBeingsOwnerAnimal) GetId() string { return v.Id }
-
-// GetName is a part of, and documented with, the interface queryWithFragmentsBeingsOwnerBeing.
-func (v *queryWithFragmentsBeingsOwnerAnimal) GetName() string { return v.Name }
-
-func __unmarshalqueryWithFragmentsBeingsOwnerBeing(v *queryWithFragmentsBeingsOwnerBeing, m json.RawMessage) error {
-	if string(m) == "null" {
-		return nil
-	}
-
-	var tn struct {
-		TypeName string `json:"__typename"`
-	}
-	err := json.Unmarshal(m, &tn)
-	if err != nil {
-		return err
-	}
-
-	switch tn.TypeName {
-	case "User":
-		*v = new(queryWithFragmentsBeingsOwnerUser)
-		return json.Unmarshal(m, *v)
-	case "Animal":
-		*v = new(queryWithFragmentsBeingsOwnerAnimal)
-		return json.Unmarshal(m, *v)
-	case "":
-		return fmt.Errorf(
-			"Response was missing Being.__typename")
-	default:
-		return fmt.Errorf(
-			`Unexpected concrete type for queryWithFragmentsBeingsOwnerBeing: "%v"`, tn.TypeName)
-	}
-}
-
-// queryWithFragmentsBeingsOwnerUser includes the requested fields of the GraphQL type User.
-type queryWithFragmentsBeingsOwnerUser struct {
-	Typename    string `json:"__typename"`
-	Id          string `json:"id"`
-	Name        string `json:"name"`
-	LuckyNumber int    `json:"luckyNumber"`
-}
-
 // queryWithFragmentsBeingsUser includes the requested fields of the GraphQL type User.
 type queryWithFragmentsBeingsUser struct {
-	Typename    string                       `json:"__typename"`
-	Id          string                       `json:"id"`
-	Name        string                       `json:"name"`
-	LuckyNumber int                          `json:"luckyNumber"`
-	Hair        queryWithFragmentsBeingsHair `json:"hair"`
+	Typename    string                           `json:"__typename"`
+	Id          string                           `json:"id"`
+	Name        string                           `json:"name"`
+	LuckyNumber int                              `json:"luckyNumber"`
+	Hair        queryWithFragmentsBeingsUserHair `json:"hair"`
+}
+
+// queryWithFragmentsBeingsUserHair includes the requested fields of the GraphQL type Hair.
+type queryWithFragmentsBeingsUserHair struct {
+	Color string `json:"color"`
 }
 
 // queryWithFragmentsResponse is returned by queryWithFragments on success.

@@ -117,7 +117,6 @@ func (g *generator) Types() (string, error) {
 }
 
 func (g *generator) getArgument(
-	opName string,
 	arg *ast.VariableDefinition,
 	operationDirective *GenqlientDirective,
 ) (argument, error) {
@@ -127,8 +126,7 @@ func (g *generator) getArgument(
 	}
 
 	graphQLName := arg.Variable
-	goTyp, err := g.convertInputType(
-		opName, arg.Type, directive, operationDirective)
+	goTyp, err := g.convertInputType(arg.Type, directive, operationDirective)
 	if err != nil {
 		return argument{}, err
 	}
@@ -231,7 +229,7 @@ func (g *generator) addOperation(op *ast.OperationDefinition) error {
 
 	args := make([]argument, len(op.VariableDefinitions))
 	for i, arg := range op.VariableDefinitions {
-		args[i], err = g.getArgument(op.Name, arg, directive)
+		args[i], err = g.getArgument(arg, directive)
 		if err != nil {
 			return err
 		}

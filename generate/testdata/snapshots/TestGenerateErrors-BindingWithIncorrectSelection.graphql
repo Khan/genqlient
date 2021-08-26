@@ -1,1 +1,1 @@
-invalid selection for type-binding GetPokemonWrongFieldsPokemon: testdata/errors/BindingWithIncorrectSelection.graphql:2: expected field 1 to be level, got species
+invalid selection for type-binding Pokemon: testdata/errors/BindingWithIncorrectSelection.graphql:2: expected field 1 to be level, got species

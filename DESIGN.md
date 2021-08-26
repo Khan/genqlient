@@ -108,6 +108,8 @@ We'll do something similar to Apollo's naming scheme.  Specifically:
 - Fragments will have some naming scheme TBD but starting at the fragment.
 - Input objects will have a name starting at the type, since they always have the same fields, and often have naming schemes like "MyFieldInput" already.
 
+See `generate/names.go` for the precise algorithm.
+
 All of this may be configurable later.
 
 ### How to represent interfaces
