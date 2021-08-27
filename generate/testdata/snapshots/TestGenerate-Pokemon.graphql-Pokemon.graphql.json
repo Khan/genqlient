@@ -1,0 +1,9 @@
+{
+  "operations": [
+    {
+      "operationName": "GetPokemonSiblings",
+      "query": "\nquery GetPokemonSiblings ($input: PokemonInput!) {\n\tuser(query: {hasPokemon:$input}) {\n\t\tid\n\t\troles\n\t\tname\n\t\tpokemon {\n\t\t\tspecies\n\t\t\tlevel\n\t\t}\n\t\tgenqlientPokemon: pokemon {\n\t\t\tspecies\n\t\t\tlevel\n\t\t}\n\t}\n}\n",
+      "sourceLocation": "testdata/queries/Pokemon.graphql"
+    }
+  ]
+}

@@ -53,7 +53,7 @@ func (g *generator) convertOperation(
 
 	goTyp, err := g.convertDefinition(
 		name, operation.Name, baseType, operation.Position,
-		operation.SelectionSet, queryOptions)
+		operation.SelectionSet, queryOptions, queryOptions)
 
 	if structType, ok := goTyp.(*goStructType); ok {
 		// Override the ordinary description; the GraphQL documentation for
@@ -140,6 +140,15 @@ func (g *generator) convertType(
 	selectionSet ast.SelectionSet,
 	options, queryOptions *GenqlientDirective,
 ) (goType, error) {
+	// We check for local bindings here, so that you can bind, say, a
+	// `[String!]` to a struct instead of a slice.  Global bindings can only
+	// bind GraphQL named types, at least for now.
+	localBinding := options.Bind
+	if localBinding != "" && localBinding != "-" {
+		goRef, err := g.addRef(localBinding)
+		return &goOpaqueType{goRef}, err
+	}
+
 	if typ.Elem != nil {
 		// Type is a list.
 		elem, err := g.convertType(
@@ -150,7 +159,7 @@ func (g *generator) convertType(
 	// If this is a builtin type or custom scalar, just refer to it.
 	def := g.schema.Types[typ.Name()]
 	goTyp, err := g.convertDefinition(
-		name, namePrefix, def, typ.Position, selectionSet, queryOptions)
+		name, namePrefix, def, typ.Position, selectionSet, options, queryOptions)
 
 	if options.GetPointer() {
 		// Whatever we get, wrap it in a pointer.  (Because of the way the
@@ -172,11 +181,15 @@ func (g *generator) convertDefinition(
 	def *ast.Definition,
 	pos *ast.Position,
 	selectionSet ast.SelectionSet,
-	queryOptions *GenqlientDirective,
+	options, queryOptions *GenqlientDirective,
 ) (goType, error) {
-	qualifiedGoName, ok := g.Config.Scalars[def.Name]
-	if ok {
-		goRef, err := g.addRef(qualifiedGoName)
+	// Check if we should use an existing type.  (This is usually true for
+	// GraphQL scalars, but we allow you to bind non-scalar types too, if you
+	// want, subject to the caveats described in Config.Bindings.)  Local
+	// bindings are checked in the caller (convertType) and never get here.
+	globalBinding, ok := g.Config.Bindings[def.Name]
+	if ok && options.Bind != "-" {
+		goRef, err := g.addRef(globalBinding.Type)
 		return &goOpaqueType{goRef}, err
 	}
 	goBuiltinName, ok := builtinTypes[def.Name]
@@ -306,7 +319,7 @@ func (g *generator) convertDefinition(
 			// preprocessQueryDocument).  But in practice it doesn't really
 			// hurt, and would be extra work to avoid, so we just leave it.
 			implTyp, err := g.convertDefinition(
-				implName, namePrefix, implDef, pos, selectionSet, queryOptions)
+				implName, namePrefix, implDef, pos, selectionSet, options, queryOptions)
 			if err != nil {
 				return nil, err
 			}
@@ -335,8 +348,9 @@ func (g *generator) convertDefinition(
 		return goType, nil
 
 	case ast.Scalar:
+		// (If you had an entry in bindings, we would have returned it above.)
 		return nil, errorf(
-			pos, "unknown scalar %v: please add it to genqlient.yaml", def.Name)
+			pos, `unknown scalar %v: please add it to "bindings" in genqlient.yaml`, def.Name)
 	default:
 		return nil, errorf(pos, "unexpected kind: %v", def.Kind)
 	}

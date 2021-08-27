@@ -65,13 +65,25 @@ type Config struct {
 	// TODO(#5): This is a bit broken, fix it.
 	ClientGetter string `yaml:"client_getter"`
 
-	// A map from GraphQL scalar type name to Go fully-qualified type name for
-	// the types to use for any custom or builtin scalars.  By default, builtin
-	// scalars are mapped to the obvious Go types (String and ID to string, Int
-	// to int, Float to float64, and Boolean to bool), but this setting will
-	// extend or override those mappings.  These types must define MarshalJSON
-	// and UnmarshalJSON methods, or otherwise be convertible to JSON.
-	Scalars map[string]string `yaml:"scalars"`
+	// A map from GraphQL type name to Go fully-qualified type name to override
+	// the Go type genqlient will use for this GraphQL type.
+	//
+	// This is primarily used for custom scalars, or to map builtin scalars to
+	// a nonstandard type.  By default, builtin scalars are mapped to the
+	// obvious Go types (String and ID to string, Int to int, Float to float64,
+	// and Boolean to bool), but this setting will extend or override those
+	// mappings.
+	//
+	// genqlient does not validate these types in any way; they must define
+	// whatever logic is needed (MarshalJSON/UnmarshalJSON or JSON tags) to
+	// convert to/from JSON.  For this reason, it's not recommended to use this
+	// setting to map object, interface, or union types, because nothing
+	// guarantees that the fields requested in the query match those present in
+	// the Go type.
+	//
+	// To get equivalent behavior in just one query, use @genqlient(bind: ...);
+	// see GenqlientDirective.Bind for more details.
+	Bindings map[string]*TypeBinding `yaml:"bindings"`
 
 	// Set to true to use features that aren't fully ready to use.
 	//
@@ -82,6 +94,13 @@ type Config struct {
 
 	// Set automatically to the filename of the config file itself.
 	configFilename string
+}
+
+// A TypeBinding represents a Go type to which genqlient will bind a particular
+// GraphQL type.  See Config.Bind, above, for more details.
+type TypeBinding struct {
+	// The fully-qualified name of the Go type to which to bind.
+	Type string `yaml:"type"`
 }
 
 // baseDir returns the directory of the config-file (relative to which
