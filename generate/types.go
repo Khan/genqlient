@@ -46,8 +46,8 @@ var (
 )
 
 type (
-	// goOpaqueType represents a user-defined or builtin type, used to
-	// represent a GraphQL scalar.
+	// goOpaqueType represents a user-defined or builtin type, often used to
+	// represent a GraphQL scalar.  (See Config.Bindings for more context.)
 	goOpaqueType struct{ GoRef string }
 	// goSliceType represents the Go type []Elem, used to represent GraphQL
 	// list types.

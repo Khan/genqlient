@@ -20,6 +20,16 @@ enum Role {
   TEACHER
 }
 
+input PokemonInput {
+  species: String!
+  level: Int!
+}
+
+type Pokemon {
+  species: String!
+  level: Int!
+}
+
 """UserQueryInput is the argument to Query.users.
 
 Ideally this would support anything and everything!
@@ -33,6 +43,7 @@ input UserQueryInput {
   id: ID
   role: Role
   names: [String]
+  hasPokemon: PokemonInput
 }
 
 type AuthMethod {
@@ -53,6 +64,7 @@ type User {
   emailsWithNulls: [String]!
   emailsWithNullsOrNull: [String]
   authMethods: [AuthMethod!]!
+  pokemon: [Pokemon!]
 }
 
 """Content is implemented by various types like Article, Video, and Topic."""

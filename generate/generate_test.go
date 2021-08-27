@@ -51,11 +51,13 @@ func TestGenerate(t *testing.T) {
 				Package:          "test",
 				Generated:        goFilename,
 				ExportOperations: queriesFilename,
-				Scalars: map[string]string{
-					"ID":          "github.com/Khan/genqlient/internal/testutil.ID",
-					"DateTime":    "time.Time",
-					"Junk":        "interface{}",
-					"ComplexJunk": "[]map[string]*[]*map[string]interface{}",
+				Bindings: map[string]*TypeBinding{
+					"ID":           {Type: "github.com/Khan/genqlient/internal/testutil.ID"},
+					"DateTime":     {Type: "time.Time"},
+					"Junk":         {Type: "interface{}"},
+					"ComplexJunk":  {Type: "[]map[string]*[]*map[string]interface{}"},
+					"Pokemon":      {Type: "github.com/Khan/genqlient/internal/testutil.Pokemon"},
+					"PokemonInput": {Type: "github.com/Khan/genqlient/internal/testutil.Pokemon"},
 				},
 				AllowBrokenFeatures: true,
 			})
@@ -138,9 +140,9 @@ func TestGenerateErrors(t *testing.T) {
 				Operations: []string{filepath.Join(errorsDir, sourceFilename)},
 				Package:    "test",
 				Generated:  os.DevNull,
-				Scalars: map[string]string{
-					"ValidScalar":   "string",
-					"InvalidScalar": "bogus",
+				Bindings: map[string]*TypeBinding{
+					"ValidScalar":   {Type: "string"},
+					"InvalidScalar": {Type: "bogus"},
 				},
 				AllowBrokenFeatures: true,
 			})

@@ -50,9 +50,10 @@ type userQueryInput struct {
 	Email string `json:"email"`
 	Name  string `json:"name"`
 	// id looks the user up by ID.  It's a great way to look up users.
-	Id    testutil.ID `json:"id"`
-	Role  Role        `json:"role"`
-	Names []string    `json:"names"`
+	Id         testutil.ID      `json:"id"`
+	Role       Role             `json:"role"`
+	Names      []string         `json:"names"`
+	HasPokemon testutil.Pokemon `json:"hasPokemon"`
 }
 
 func unexported(

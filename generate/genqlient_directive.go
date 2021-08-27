@@ -63,6 +63,27 @@ type GenqlientDirective struct {
 	// pointer to save copies) or if you wish to distinguish between the Go
 	// zero value and null (for nullable fields).
 	Pointer *bool
+
+	// If set, this argument or field will use the given Go type instead of a
+	// genqlient-generated type.
+	//
+	// The value should be the fully-qualified type name to use for the field,
+	// for example:
+	//	time.Time
+	//	map[string]interface{}
+	//	[]github.com/you/yourpkg/subpkg.MyType
+	// Note that the type is the type of the whole field, e.g. if your field in
+	// GraphQL has type `[DateTime]`, you'd do
+	//	# @genqlient(bind: "[]time.Time")
+	// (But you're not required to; if you want to map to some type DateList,
+	// you can do that, as long as its UnmarshalJSON method can accept a list
+	// of datetimes.)
+	//
+	// See Config.Bindings for more details; this is effectively to a local
+	// version of that global setting and should be used with similar care.
+	// If set to "-", overrides any such global setting and uses a
+	// genqlient-generated type.
+	Bind string
 }
 
 func (dir *GenqlientDirective) GetOmitempty() bool { return dir.Omitempty != nil && *dir.Omitempty }
@@ -70,7 +91,6 @@ func (dir *GenqlientDirective) GetPointer() bool   { return dir.Pointer != nil &
 
 func setBool(dst **bool, v *ast.Value) error {
 	ei, err := v.Value(nil) // no vars allowed
-	// TODO: here and below, put positions on these errors
 	if err != nil {
 		return errorf(v.Position, "invalid boolean value %v: %v", v, err)
 	}
@@ -79,6 +99,18 @@ func setBool(dst **bool, v *ast.Value) error {
 		return nil
 	}
 	return errorf(v.Position, "expected boolean, got non-boolean value %T(%v)", ei, ei)
+}
+
+func setString(dst *string, v *ast.Value) error {
+	ei, err := v.Value(nil) // no vars allowed
+	if err != nil {
+		return errorf(v.Position, "invalid string value %v: %v", v, err)
+	}
+	if b, ok := ei.(string); ok {
+		*dst = b
+		return nil
+	}
+	return errorf(v.Position, "expected string, got non-string value %T(%v)", ei, ei)
 }
 
 func fromGraphQL(dir *ast.Directive) (*GenqlientDirective, error) {
@@ -99,6 +131,8 @@ func fromGraphQL(dir *ast.Directive) (*GenqlientDirective, error) {
 			err = setBool(&retval.Omitempty, arg.Value)
 		case "pointer":
 			err = setBool(&retval.Pointer, arg.Value)
+		case "bind":
+			err = setString(&retval.Bind, arg.Value)
 		default:
 			return nil, errorf(arg.Position, "unknown argument %v for @genqlient", arg.Name)
 		}
@@ -112,8 +146,12 @@ func fromGraphQL(dir *ast.Directive) (*GenqlientDirective, error) {
 func (dir *GenqlientDirective) validate(node interface{}) error {
 	switch node := node.(type) {
 	case *ast.OperationDefinition:
-		// Anything is valid on the entire operation; it will just apply to
-		// whatever it is relevant to.
+		if dir.Bind != "" {
+			return errorf(dir.pos, "bind may not be applied to the entire operation")
+		}
+
+		// Anything else is valid on the entire operation; it will just apply
+		// to whatever it is relevant to.
 		return nil
 	case *ast.VariableDefinition:
 		if dir.Omitempty != nil && node.Type.NonNull {
@@ -122,7 +160,7 @@ func (dir *GenqlientDirective) validate(node interface{}) error {
 		return nil
 	case *ast.Field:
 		if dir.Omitempty != nil {
-			return errorf(dir.pos, "omitempty is not appilcable to fields")
+			return errorf(dir.pos, "omitempty is not applicable to fields")
 		}
 		return nil
 	default:
@@ -137,6 +175,9 @@ func (dir *GenqlientDirective) merge(other *GenqlientDirective) *GenqlientDirect
 	}
 	if other.Pointer != nil {
 		retval.Pointer = other.Pointer
+	}
+	if other.Bind != "" {
+		retval.Bind = other.Bind
 	}
 	return &retval
 }
