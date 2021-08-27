@@ -345,6 +345,8 @@ func (g *generator) convertSelectionSet(
 		case *ast.FragmentSpread:
 			return nil, errorf(selection.Position, "not implemented: %T", selection)
 		case *ast.InlineFragment:
+			// (Note this will return nil, nil if the fragment doesn't apply to
+			// this type.)
 			fragmentFields, err := g.convertInlineFragment(
 				namePrefix, selection, containingTypedef, queryOptions)
 			if err != nil {
@@ -433,7 +435,8 @@ func fragmentMatches(containingTypedef, fragmentTypedef *ast.Definition) bool {
 // containingTypedef is the type-def corresponding to the type into which we
 // are spreading; it may be either an interface type (when spreading into one)
 // or an object type (when writing the implementations of such an interface, or
-// when using an inline fragment in an object type which is rare).
+// when using an inline fragment in an object type which is rare).  If the
+// given fragment does not apply to that type, this function returns nil, nil.
 //
 // In general, we treat such fragments' fields as if they were fields of the
 // parent selection-set (except of course they are only included in types the
