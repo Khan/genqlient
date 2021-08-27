@@ -186,7 +186,8 @@ func (g *generator) convertDefinition(
 	// Check if we should use an existing type.  (This is usually true for
 	// GraphQL scalars, but we allow you to bind non-scalar types too, if you
 	// want, subject to the caveats described in Config.Bindings.)  Local
-	// bindings are checked in the caller (convertType) and never get here.
+	// bindings are checked in the caller (convertType) and never get here,
+	// unless the binding is "-" which means "ignore the global binding".
 	globalBinding, ok := g.Config.Bindings[def.Name]
 	if ok && options.Bind != "-" {
 		goRef, err := g.addRef(globalBinding.Type)

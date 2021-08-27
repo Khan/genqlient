@@ -67,9 +67,17 @@ type GenqlientDirective struct {
 	// If set, this argument or field will use the given Go type instead of a
 	// genqlient-generated type.
 	//
-	// The value should be the fully-qualified type name, or e.g.
-	// []path/to/my.Type if the GraphQL type is [MyType].  (This allows
-	// binding a GraphQL list type to a Go struct type, if you want.)
+	// The value should be the fully-qualified type name to use for the field,
+	// for example:
+	//	time.Time
+	//	map[string]interface{}
+	//	[]github.com/you/yourpkg/subpkg.MyType
+	// Note that the type is the type of the whole field, e.g. if your field in
+	// GraphQL has type `[DateTime]`, you'd do
+	//	# @genqlient(bind: "[]time.Time")
+	// (But you're not required to; if you want to map to some type DateList,
+	// you can do that, as long as its UnmarshalJSON method can accept a list
+	// of datetimes.)
 	//
 	// See Config.Bindings for more details; this is effectively to a local
 	// version of that global setting and should be used with similar care.

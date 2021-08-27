@@ -99,7 +99,10 @@ type Config struct {
 // A TypeBinding represents a Go type to which genqlient will bind a particular
 // GraphQL type.  See Config.Bind, above, for more details.
 type TypeBinding struct {
-	// The fully-qualified name of the Go type to which to bind.
+	// The fully-qualified name of the Go type to which to bind.  For example:
+	//	time.Time
+	//  map[string]interface{}
+	//	github.com/you/yourpkg/subpkg.MyType
 	Type string `yaml:"type"`
 }
 
