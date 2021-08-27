@@ -85,7 +85,8 @@ func (v *{{.GoName}}) UnmarshalJSON(b []byte) error {
         err = __unmarshal{{$field.GoType.Unwrap.Reference}}(
             {{if $field.GoType.IsPointer}}*{{end}}target, raw)
         if err != nil {
-            return err
+            return fmt.Errorf(
+                "Unable to unmarshal {{$.GoName}}.{{$field.GoName}}: %w", err)
         }
         {{range $i := intRange $field.GoType.SliceDepth -}}
         }

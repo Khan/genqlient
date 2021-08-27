@@ -80,6 +80,9 @@ func __unmarshalqueryWithInterfaceListFieldBeingsBeing(v *queryWithInterfaceList
 	case "Animal":
 		*v = new(queryWithInterfaceListFieldBeingsAnimal)
 		return json.Unmarshal(m, *v)
+	case "":
+		return fmt.Errorf(
+			"Response was missing Being.__typename")
 	default:
 		return fmt.Errorf(
 			`Unexpected concrete type for queryWithInterfaceListFieldBeingsBeing: "%v"`, tn.TypeName)
@@ -124,7 +127,8 @@ func (v *queryWithInterfaceListFieldResponse) UnmarshalJSON(b []byte) error {
 			err = __unmarshalqueryWithInterfaceListFieldBeingsBeing(
 				target, raw)
 			if err != nil {
-				return err
+				return fmt.Errorf(
+					"Unable to unmarshal queryWithInterfaceListFieldResponse.Beings: %w", err)
 			}
 		}
 	}
@@ -201,6 +205,9 @@ func __unmarshalqueryWithInterfaceListPointerFieldBeingsBeing(v *queryWithInterf
 	case "Animal":
 		*v = new(queryWithInterfaceListPointerFieldBeingsAnimal)
 		return json.Unmarshal(m, *v)
+	case "":
+		return fmt.Errorf(
+			"Response was missing Being.__typename")
 	default:
 		return fmt.Errorf(
 			`Unexpected concrete type for queryWithInterfaceListPointerFieldBeingsBeing: "%v"`, tn.TypeName)
@@ -246,7 +253,8 @@ func (v *queryWithInterfaceListPointerFieldResponse) UnmarshalJSON(b []byte) err
 			err = __unmarshalqueryWithInterfaceListPointerFieldBeingsBeing(
 				*target, raw)
 			if err != nil {
-				return err
+				return fmt.Errorf(
+					"Unable to unmarshal queryWithInterfaceListPointerFieldResponse.Beings: %w", err)
 			}
 		}
 	}
@@ -316,6 +324,9 @@ func __unmarshalqueryWithInterfaceNoFragmentsBeing(v *queryWithInterfaceNoFragme
 	case "Animal":
 		*v = new(queryWithInterfaceNoFragmentsBeingAnimal)
 		return json.Unmarshal(m, *v)
+	case "":
+		return fmt.Errorf(
+			"Response was missing Being.__typename")
 	default:
 		return fmt.Errorf(
 			`Unexpected concrete type for queryWithInterfaceNoFragmentsBeing: "%v"`, tn.TypeName)
@@ -369,7 +380,8 @@ func (v *queryWithInterfaceNoFragmentsResponse) UnmarshalJSON(b []byte) error {
 		err = __unmarshalqueryWithInterfaceNoFragmentsBeing(
 			target, raw)
 		if err != nil {
-			return err
+			return fmt.Errorf(
+				"Unable to unmarshal queryWithInterfaceNoFragmentsResponse.Being: %w", err)
 		}
 	}
 	return nil

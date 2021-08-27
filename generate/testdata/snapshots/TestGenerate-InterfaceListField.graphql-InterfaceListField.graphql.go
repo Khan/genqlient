@@ -50,7 +50,8 @@ func (v *InterfaceListFieldRootTopic) UnmarshalJSON(b []byte) error {
 			err = __unmarshalInterfaceListFieldRootTopicChildrenContent(
 				target, raw)
 			if err != nil {
-				return err
+				return fmt.Errorf(
+					"Unable to unmarshal InterfaceListFieldRootTopic.Children: %w", err)
 			}
 		}
 	}
@@ -147,6 +148,9 @@ func __unmarshalInterfaceListFieldRootTopicChildrenContent(v *InterfaceListField
 	case "Topic":
 		*v = new(InterfaceListFieldRootTopicChildrenTopic)
 		return json.Unmarshal(m, *v)
+	case "":
+		return fmt.Errorf(
+			"Response was missing Content.__typename")
 	default:
 		return fmt.Errorf(
 			`Unexpected concrete type for InterfaceListFieldRootTopicChildrenContent: "%v"`, tn.TypeName)
@@ -203,7 +207,8 @@ func (v *InterfaceListFieldWithPointerTopic) UnmarshalJSON(b []byte) error {
 			err = __unmarshalInterfaceListFieldWithPointerTopicChildrenContent(
 				target, raw)
 			if err != nil {
-				return err
+				return fmt.Errorf(
+					"Unable to unmarshal InterfaceListFieldWithPointerTopic.Children: %w", err)
 			}
 		}
 	}
@@ -300,6 +305,9 @@ func __unmarshalInterfaceListFieldWithPointerTopicChildrenContent(v *InterfaceLi
 	case "Topic":
 		*v = new(InterfaceListFieldWithPointerTopicChildrenTopic)
 		return json.Unmarshal(m, *v)
+	case "":
+		return fmt.Errorf(
+			"Response was missing Content.__typename")
 	default:
 		return fmt.Errorf(
 			`Unexpected concrete type for InterfaceListFieldWithPointerTopicChildrenContent: "%v"`, tn.TypeName)

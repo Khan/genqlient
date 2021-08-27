@@ -17,10 +17,15 @@ func __unmarshal{{.GoName}}(v *{{.GoName}}, m {{ref "encoding/json.RawMessage"}}
     switch tn.TypeName {
     {{range .Implementations -}}
     case "{{.GraphQLName}}":
-        {{/* TODO: handle repeated fields! */ -}}
         *v = new({{.GoName}})
         return {{ref "encoding/json.Unmarshal"}}(m, *v)
     {{end -}}
+    case "":
+        {{/* Likely if we're making a request to a mock server and the author
+             of the mock didn't know to add __typename, so give a special
+             error. */ -}}
+        return {{ref "fmt.Errorf"}}(
+            "Response was missing {{.GraphQLName}}.__typename")
     default:
         return {{ref "fmt.Errorf"}}(
             `Unexpected concrete type for {{.GoName}}: "%v"`, tn.TypeName)

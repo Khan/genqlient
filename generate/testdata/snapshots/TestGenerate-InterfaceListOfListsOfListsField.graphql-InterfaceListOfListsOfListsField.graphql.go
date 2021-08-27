@@ -110,6 +110,9 @@ func __unmarshalInterfaceListOfListOfListsFieldListOfListsOfListsOfContent(v *In
 	case "Topic":
 		*v = new(InterfaceListOfListOfListsFieldListOfListsOfListsOfContentTopic)
 		return json.Unmarshal(m, *v)
+	case "":
+		return fmt.Errorf(
+			"Response was missing Content.__typename")
 	default:
 		return fmt.Errorf(
 			`Unexpected concrete type for InterfaceListOfListOfListsFieldListOfListsOfListsOfContent: "%v"`, tn.TypeName)
@@ -183,7 +186,8 @@ func (v *InterfaceListOfListOfListsFieldResponse) UnmarshalJSON(b []byte) error 
 					err = __unmarshalInterfaceListOfListOfListsFieldListOfListsOfListsOfContent(
 						target, raw)
 					if err != nil {
-						return err
+						return fmt.Errorf(
+							"Unable to unmarshal InterfaceListOfListOfListsFieldResponse.ListOfListsOfListsOfContent: %w", err)
 					}
 				}
 			}
@@ -211,7 +215,8 @@ func (v *InterfaceListOfListOfListsFieldResponse) UnmarshalJSON(b []byte) error 
 					err = __unmarshalInterfaceListOfListOfListsFieldWithPointerContent(
 						*target, raw)
 					if err != nil {
-						return err
+						return fmt.Errorf(
+							"Unable to unmarshal InterfaceListOfListOfListsFieldResponse.WithPointer: %w", err)
 					}
 				}
 			}
@@ -310,6 +315,9 @@ func __unmarshalInterfaceListOfListOfListsFieldWithPointerContent(v *InterfaceLi
 	case "Topic":
 		*v = new(InterfaceListOfListOfListsFieldWithPointerTopic)
 		return json.Unmarshal(m, *v)
+	case "":
+		return fmt.Errorf(
+			"Response was missing Content.__typename")
 	default:
 		return fmt.Errorf(
 			`Unexpected concrete type for InterfaceListOfListOfListsFieldWithPointerContent: "%v"`, tn.TypeName)
