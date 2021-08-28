@@ -248,17 +248,6 @@ func (g *generator) convertDefinition(
 		g.typeMap[name] = goType
 
 		for i, implDef := range implementationTypes {
-			// Note for shared fields we propagate forward the interface's
-			// name-prefix: that is, the implementations will have fields with
-			// types like
-			//	MyInterfaceMyFieldMyType
-			// not
-			//	MyInterfaceMyImplMyFieldMyType
-			//             ^^^^^^
-			// In particular, this means that the Go type of MyField will be
-			// the same across all the implementations; this is important so
-			// that we can write a method GetMyField() that returns it!
-			// STOPSHIP: update all this nonsense
 			// TODO(benkraft): In principle we should skip generating a Go
 			// field for __typename each of these impl-defs if you didn't
 			// request it (and it was automatically added by

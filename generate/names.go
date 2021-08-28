@@ -27,7 +27,7 @@ package generate
 // value of consistency seems greater than the value of brevity, given the
 // types are quite verbose either way.  Note that in all cases the "MyField" is
 // the alias of the field -- the name it has in this query -- since you could
-// have `query Q { a: f { b }, c: f { d } }` and Q.A and Q.B must have
+// have `query Q { a: f { b }, c: f { d } }` and Q.A and Q.C must have
 // different types.
 //
 // One subtlety in the above description is: is the "MyType" the interface or
