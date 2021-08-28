@@ -100,6 +100,9 @@ func __unmarshalInterfaceNoFragmentsQueryRandomItemContent(v *InterfaceNoFragmen
 	case "Topic":
 		*v = new(InterfaceNoFragmentsQueryRandomItemTopic)
 		return json.Unmarshal(m, *v)
+	case "":
+		return fmt.Errorf(
+			"Response was missing Content.__typename")
 	default:
 		return fmt.Errorf(
 			`Unexpected concrete type for InterfaceNoFragmentsQueryRandomItemContent: "%v"`, tn.TypeName)
@@ -218,6 +221,9 @@ func __unmarshalInterfaceNoFragmentsQueryRandomItemWithTypeNameContent(v *Interf
 	case "Topic":
 		*v = new(InterfaceNoFragmentsQueryRandomItemWithTypeNameTopic)
 		return json.Unmarshal(m, *v)
+	case "":
+		return fmt.Errorf(
+			"Response was missing Content.__typename")
 	default:
 		return fmt.Errorf(
 			`Unexpected concrete type for InterfaceNoFragmentsQueryRandomItemWithTypeNameContent: "%v"`, tn.TypeName)
@@ -271,7 +277,8 @@ func (v *InterfaceNoFragmentsQueryResponse) UnmarshalJSON(b []byte) error {
 		err = __unmarshalInterfaceNoFragmentsQueryRandomItemContent(
 			target, raw)
 		if err != nil {
-			return err
+			return fmt.Errorf(
+				"Unable to unmarshal InterfaceNoFragmentsQueryResponse.RandomItem: %w", err)
 		}
 	}
 	{
@@ -280,7 +287,8 @@ func (v *InterfaceNoFragmentsQueryResponse) UnmarshalJSON(b []byte) error {
 		err = __unmarshalInterfaceNoFragmentsQueryRandomItemWithTypeNameContent(
 			target, raw)
 		if err != nil {
-			return err
+			return fmt.Errorf(
+				"Unable to unmarshal InterfaceNoFragmentsQueryResponse.RandomItemWithTypeName: %w", err)
 		}
 	}
 	{
@@ -290,7 +298,8 @@ func (v *InterfaceNoFragmentsQueryResponse) UnmarshalJSON(b []byte) error {
 		err = __unmarshalInterfaceNoFragmentsQueryWithPointerContent(
 			*target, raw)
 		if err != nil {
-			return err
+			return fmt.Errorf(
+				"Unable to unmarshal InterfaceNoFragmentsQueryResponse.WithPointer: %w", err)
 		}
 	}
 	return nil
@@ -393,6 +402,9 @@ func __unmarshalInterfaceNoFragmentsQueryWithPointerContent(v *InterfaceNoFragme
 	case "Topic":
 		*v = new(InterfaceNoFragmentsQueryWithPointerTopic)
 		return json.Unmarshal(m, *v)
+	case "":
+		return fmt.Errorf(
+			"Response was missing Content.__typename")
 	default:
 		return fmt.Errorf(
 			`Unexpected concrete type for InterfaceNoFragmentsQueryWithPointerContent: "%v"`, tn.TypeName)

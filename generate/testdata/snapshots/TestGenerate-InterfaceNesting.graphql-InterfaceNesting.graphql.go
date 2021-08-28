@@ -48,7 +48,8 @@ func (v *InterfaceNestingRootTopic) UnmarshalJSON(b []byte) error {
 			err = __unmarshalInterfaceNestingRootTopicChildrenContent(
 				target, raw)
 			if err != nil {
-				return err
+				return fmt.Errorf(
+					"Unable to unmarshal InterfaceNestingRootTopic.Children: %w", err)
 			}
 		}
 	}
@@ -151,6 +152,9 @@ func __unmarshalInterfaceNestingRootTopicChildrenContent(v *InterfaceNestingRoot
 	case "Topic":
 		*v = new(InterfaceNestingRootTopicChildrenTopic)
 		return json.Unmarshal(m, *v)
+	case "":
+		return fmt.Errorf(
+			"Response was missing Content.__typename")
 	default:
 		return fmt.Errorf(
 			`Unexpected concrete type for InterfaceNestingRootTopicChildrenContent: "%v"`, tn.TypeName)
@@ -190,7 +194,8 @@ func (v *InterfaceNestingRootTopicChildrenParentTopic) UnmarshalJSON(b []byte) e
 			err = __unmarshalInterfaceNestingRootTopicChildrenParentTopicChildrenContent(
 				target, raw)
 			if err != nil {
-				return err
+				return fmt.Errorf(
+					"Unable to unmarshal InterfaceNestingRootTopicChildrenParentTopic.Children: %w", err)
 			}
 		}
 	}
@@ -283,6 +288,9 @@ func __unmarshalInterfaceNestingRootTopicChildrenParentTopicChildrenContent(v *I
 	case "Topic":
 		*v = new(InterfaceNestingRootTopicChildrenParentTopicChildrenTopic)
 		return json.Unmarshal(m, *v)
+	case "":
+		return fmt.Errorf(
+			"Response was missing Content.__typename")
 	default:
 		return fmt.Errorf(
 			`Unexpected concrete type for InterfaceNestingRootTopicChildrenParentTopicChildrenContent: "%v"`, tn.TypeName)

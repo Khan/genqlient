@@ -61,6 +61,9 @@ func __unmarshalUnionNoFragmentsQueryRandomLeafLeafContent(v *UnionNoFragmentsQu
 	case "Video":
 		*v = new(UnionNoFragmentsQueryRandomLeafVideo)
 		return json.Unmarshal(m, *v)
+	case "":
+		return fmt.Errorf(
+			"Response was missing LeafContent.__typename")
 	default:
 		return fmt.Errorf(
 			`Unexpected concrete type for UnionNoFragmentsQueryRandomLeafLeafContent: "%v"`, tn.TypeName)
@@ -98,7 +101,8 @@ func (v *UnionNoFragmentsQueryResponse) UnmarshalJSON(b []byte) error {
 		err = __unmarshalUnionNoFragmentsQueryRandomLeafLeafContent(
 			target, raw)
 		if err != nil {
-			return err
+			return fmt.Errorf(
+				"Unable to unmarshal UnionNoFragmentsQueryResponse.RandomLeaf: %w", err)
 		}
 	}
 	return nil
