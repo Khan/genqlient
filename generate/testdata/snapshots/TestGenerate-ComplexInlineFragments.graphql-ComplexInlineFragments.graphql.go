@@ -73,6 +73,9 @@ func __unmarshalComplexInlineFragmentsConflictingStuffContent(v *ComplexInlineFr
 	case "Topic":
 		*v = new(ComplexInlineFragmentsConflictingStuffTopic)
 		return json.Unmarshal(m, *v)
+	case "":
+		return fmt.Errorf(
+			"Response was missing Content.__typename")
 	default:
 		return fmt.Errorf(
 			`Unexpected concrete type for ComplexInlineFragmentsConflictingStuffContent: "%v"`, tn.TypeName)
@@ -181,6 +184,9 @@ func __unmarshalComplexInlineFragmentsNestedStuffChildrenContent(v *ComplexInlin
 	case "Topic":
 		*v = new(ComplexInlineFragmentsNestedStuffChildrenTopic)
 		return json.Unmarshal(m, *v)
+	case "":
+		return fmt.Errorf(
+			"Response was missing Content.__typename")
 	default:
 		return fmt.Errorf(
 			`Unexpected concrete type for ComplexInlineFragmentsNestedStuffChildrenContent: "%v"`, tn.TypeName)
@@ -224,7 +230,8 @@ func (v *ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopic) Unmars
 			err = __unmarshalComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenContent(
 				target, raw)
 			if err != nil {
-				return err
+				return fmt.Errorf(
+					"Unable to unmarshal ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopic.Children: %w", err)
 			}
 		}
 	}
@@ -339,6 +346,9 @@ func __unmarshalComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicC
 	case "Topic":
 		*v = new(ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenTopic)
 		return json.Unmarshal(m, *v)
+	case "":
+		return fmt.Errorf(
+			"Response was missing Content.__typename")
 	default:
 		return fmt.Errorf(
 			`Unexpected concrete type for ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenContent: "%v"`, tn.TypeName)
@@ -432,6 +442,9 @@ func __unmarshalComplexInlineFragmentsNestedStuffContent(v *ComplexInlineFragmen
 	case "Topic":
 		*v = new(ComplexInlineFragmentsNestedStuffTopic)
 		return json.Unmarshal(m, *v)
+	case "":
+		return fmt.Errorf(
+			"Response was missing Content.__typename")
 	default:
 		return fmt.Errorf(
 			`Unexpected concrete type for ComplexInlineFragmentsNestedStuffContent: "%v"`, tn.TypeName)
@@ -470,7 +483,8 @@ func (v *ComplexInlineFragmentsNestedStuffTopic) UnmarshalJSON(b []byte) error {
 			err = __unmarshalComplexInlineFragmentsNestedStuffChildrenContent(
 				target, raw)
 			if err != nil {
-				return err
+				return fmt.Errorf(
+					"Unable to unmarshal ComplexInlineFragmentsNestedStuffTopic.Children: %w", err)
 			}
 		}
 	}
@@ -573,6 +587,9 @@ func __unmarshalComplexInlineFragmentsRandomItemContent(v *ComplexInlineFragment
 	case "Topic":
 		*v = new(ComplexInlineFragmentsRandomItemTopic)
 		return json.Unmarshal(m, *v)
+	case "":
+		return fmt.Errorf(
+			"Response was missing Content.__typename")
 	default:
 		return fmt.Errorf(
 			`Unexpected concrete type for ComplexInlineFragmentsRandomItemContent: "%v"`, tn.TypeName)
@@ -727,6 +744,9 @@ func __unmarshalComplexInlineFragmentsRepeatedStuffContent(v *ComplexInlineFragm
 	case "Topic":
 		*v = new(ComplexInlineFragmentsRepeatedStuffTopic)
 		return json.Unmarshal(m, *v)
+	case "":
+		return fmt.Errorf(
+			"Response was missing Content.__typename")
 	default:
 		return fmt.Errorf(
 			`Unexpected concrete type for ComplexInlineFragmentsRepeatedStuffContent: "%v"`, tn.TypeName)
@@ -791,7 +811,8 @@ func (v *ComplexInlineFragmentsResponse) UnmarshalJSON(b []byte) error {
 		err = __unmarshalComplexInlineFragmentsRandomItemContent(
 			target, raw)
 		if err != nil {
-			return err
+			return fmt.Errorf(
+				"Unable to unmarshal ComplexInlineFragmentsResponse.RandomItem: %w", err)
 		}
 	}
 	{
@@ -800,7 +821,8 @@ func (v *ComplexInlineFragmentsResponse) UnmarshalJSON(b []byte) error {
 		err = __unmarshalComplexInlineFragmentsRepeatedStuffContent(
 			target, raw)
 		if err != nil {
-			return err
+			return fmt.Errorf(
+				"Unable to unmarshal ComplexInlineFragmentsResponse.RepeatedStuff: %w", err)
 		}
 	}
 	{
@@ -809,7 +831,8 @@ func (v *ComplexInlineFragmentsResponse) UnmarshalJSON(b []byte) error {
 		err = __unmarshalComplexInlineFragmentsConflictingStuffContent(
 			target, raw)
 		if err != nil {
-			return err
+			return fmt.Errorf(
+				"Unable to unmarshal ComplexInlineFragmentsResponse.ConflictingStuff: %w", err)
 		}
 	}
 	{
@@ -818,7 +841,8 @@ func (v *ComplexInlineFragmentsResponse) UnmarshalJSON(b []byte) error {
 		err = __unmarshalComplexInlineFragmentsNestedStuffContent(
 			target, raw)
 		if err != nil {
-			return err
+			return fmt.Errorf(
+				"Unable to unmarshal ComplexInlineFragmentsResponse.NestedStuff: %w", err)
 		}
 	}
 	return nil

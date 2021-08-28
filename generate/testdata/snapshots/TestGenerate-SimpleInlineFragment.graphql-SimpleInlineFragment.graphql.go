@@ -101,6 +101,9 @@ func __unmarshalSimpleInlineFragmentRandomItemContent(v *SimpleInlineFragmentRan
 	case "Topic":
 		*v = new(SimpleInlineFragmentRandomItemTopic)
 		return json.Unmarshal(m, *v)
+	case "":
+		return fmt.Errorf(
+			"Response was missing Content.__typename")
 	default:
 		return fmt.Errorf(
 			`Unexpected concrete type for SimpleInlineFragmentRandomItemContent: "%v"`, tn.TypeName)
@@ -150,7 +153,8 @@ func (v *SimpleInlineFragmentResponse) UnmarshalJSON(b []byte) error {
 		err = __unmarshalSimpleInlineFragmentRandomItemContent(
 			target, raw)
 		if err != nil {
-			return err
+			return fmt.Errorf(
+				"Unable to unmarshal SimpleInlineFragmentResponse.RandomItem: %w", err)
 		}
 	}
 	return nil

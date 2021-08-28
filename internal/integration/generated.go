@@ -48,7 +48,8 @@ func (v *queryWithFragmentsBeingsAnimal) UnmarshalJSON(b []byte) error {
 		err = __unmarshalqueryWithFragmentsBeingsOwnerBeing(
 			target, raw)
 		if err != nil {
-			return err
+			return fmt.Errorf(
+				"Unable to unmarshal queryWithFragmentsBeingsAnimal.Owner: %w", err)
 		}
 	}
 	return nil
@@ -115,6 +116,9 @@ func __unmarshalqueryWithFragmentsBeingsBeing(v *queryWithFragmentsBeingsBeing, 
 	case "Animal":
 		*v = new(queryWithFragmentsBeingsAnimal)
 		return json.Unmarshal(m, *v)
+	case "":
+		return fmt.Errorf(
+			"Response was missing Being.__typename")
 	default:
 		return fmt.Errorf(
 			`Unexpected concrete type for queryWithFragmentsBeingsBeing: "%v"`, tn.TypeName)
@@ -196,6 +200,9 @@ func __unmarshalqueryWithFragmentsBeingsOwnerBeing(v *queryWithFragmentsBeingsOw
 	case "Animal":
 		*v = new(queryWithFragmentsBeingsOwnerAnimal)
 		return json.Unmarshal(m, *v)
+	case "":
+		return fmt.Errorf(
+			"Response was missing Being.__typename")
 	default:
 		return fmt.Errorf(
 			`Unexpected concrete type for queryWithFragmentsBeingsOwnerBeing: "%v"`, tn.TypeName)
@@ -250,7 +257,8 @@ func (v *queryWithFragmentsResponse) UnmarshalJSON(b []byte) error {
 			err = __unmarshalqueryWithFragmentsBeingsBeing(
 				target, raw)
 			if err != nil {
-				return err
+				return fmt.Errorf(
+					"Unable to unmarshal queryWithFragmentsResponse.Beings: %w", err)
 			}
 		}
 	}
