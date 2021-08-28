@@ -52,11 +52,14 @@ func TestGenerate(t *testing.T) {
 				Generated:        goFilename,
 				ExportOperations: queriesFilename,
 				Bindings: map[string]*TypeBinding{
-					"ID":           {Type: "github.com/Khan/genqlient/internal/testutil.ID"},
-					"DateTime":     {Type: "time.Time"},
-					"Junk":         {Type: "interface{}"},
-					"ComplexJunk":  {Type: "[]map[string]*[]*map[string]interface{}"},
-					"Pokemon":      {Type: "github.com/Khan/genqlient/internal/testutil.Pokemon"},
+					"ID":          {Type: "github.com/Khan/genqlient/internal/testutil.ID"},
+					"DateTime":    {Type: "time.Time"},
+					"Junk":        {Type: "interface{}"},
+					"ComplexJunk": {Type: "[]map[string]*[]*map[string]interface{}"},
+					"Pokemon": {
+						Type:              "github.com/Khan/genqlient/internal/testutil.Pokemon",
+						ExpectExactFields: "{ species level }",
+					},
 					"PokemonInput": {Type: "github.com/Khan/genqlient/internal/testutil.Pokemon"},
 				},
 				AllowBrokenFeatures: true,
@@ -117,6 +120,14 @@ func TestGenerate(t *testing.T) {
 	}
 }
 
+// TestGenerate is a snapshot-based test of error text.
+//
+// For each .go or .graphql file in testdata/errors, and corresponding
+// .schema.graphql file, it asserts that the given query returns an error, and
+// that that error's string-text matches the snapshot.  The snapshotting is
+// useful to ensure we don't accidentally make the text less readable, drop the
+// line numbers, etc.  We include both .go and .graphql tests, to make sure the
+// line numbers work in both cases.
 func TestGenerateErrors(t *testing.T) {
 	files, err := ioutil.ReadDir(errorsDir)
 	if err != nil {
@@ -143,6 +154,10 @@ func TestGenerateErrors(t *testing.T) {
 				Bindings: map[string]*TypeBinding{
 					"ValidScalar":   {Type: "string"},
 					"InvalidScalar": {Type: "bogus"},
+					"Pokemon": {
+						Type:              "github.com/Khan/genqlient/internal/testutil.Pokemon",
+						ExpectExactFields: "{ species level }",
+					},
 				},
 				AllowBrokenFeatures: true,
 			})

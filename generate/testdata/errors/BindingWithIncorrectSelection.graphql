@@ -1,0 +1,3 @@
+query GetPokemonWrongFields {
+  pokemon { species species }
+}

@@ -104,6 +104,26 @@ type TypeBinding struct {
 	//  map[string]interface{}
 	//	github.com/you/yourpkg/subpkg.MyType
 	Type string `yaml:"type"`
+	// If set, a GraphQL selection which must exactly match the fields
+	// requested whenever this type is used.  Only applies if the GraphQL type
+	// is a composite output type (object, interface, or union).
+	//
+	// This is useful if Type is a struct whose UnmarshalJSON or other methods
+	// expect that you requested certain fields.  You can specify those fields
+	// like
+	//  MyType:
+	//		type: path/to/my.GoType
+	//		expect_exact_fields: "{ id name }"
+	// and then genqlient will reject if you make a query
+	//	{ fieldOfMytype { id title } }
+	// The fields must match exactly, including the ordering: "{ name id }"
+	// will be rejected.  But the arguments and directives, if any, need not
+	// match.
+	//
+	// TODO(benkraft): Also add ExpectIncludesFields and ExpectSubsetOfFields,
+	// or something, if you want to say, for example, that you have to request
+	// certain fields but others are optional.
+	ExpectExactFields string `yaml:"expect_exact_fields"`
 }
 
 // baseDir returns the directory of the config-file (relative to which

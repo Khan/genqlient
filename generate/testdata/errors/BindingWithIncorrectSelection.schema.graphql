@@ -1,0 +1,8 @@
+type Query {
+  pokemon: Pokemon
+}
+
+type Pokemon {
+  species: String!
+  level: Int!
+}
