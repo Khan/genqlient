@@ -43,20 +43,31 @@ type DirectiveRoot struct {
 
 type ComplexityRoot struct {
 	Animal struct {
+		Hair    func(childComplexity int) int
 		ID      func(childComplexity int) int
 		Name    func(childComplexity int) int
 		Owner   func(childComplexity int) int
 		Species func(childComplexity int) int
 	}
 
+	BeingsHair struct {
+		HasHair func(childComplexity int) int
+	}
+
+	Hair struct {
+		Color func(childComplexity int) int
+	}
+
 	Query struct {
-		Being  func(childComplexity int, id string) int
-		Beings func(childComplexity int, ids []string) int
-		Me     func(childComplexity int) int
-		User   func(childComplexity int, id string) int
+		Being         func(childComplexity int, id string) int
+		Beings        func(childComplexity int, ids []string) int
+		LotteryWinner func(childComplexity int, number int) int
+		Me            func(childComplexity int) int
+		User          func(childComplexity int, id string) int
 	}
 
 	User struct {
+		Hair        func(childComplexity int) int
 		ID          func(childComplexity int) int
 		LuckyNumber func(childComplexity int) int
 		Name        func(childComplexity int) int
@@ -68,6 +79,7 @@ type QueryResolver interface {
 	User(ctx context.Context, id string) (*User, error)
 	Being(ctx context.Context, id string) (Being, error)
 	Beings(ctx context.Context, ids []string) ([]Being, error)
+	LotteryWinner(ctx context.Context, number int) (Lucky, error)
 }
 
 type executableSchema struct {
@@ -84,6 +96,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 	ec := executionContext{nil, e}
 	_ = ec
 	switch typeName + "." + field {
+
+	case "Animal.hair":
+		if e.complexity.Animal.Hair == nil {
+			break
+		}
+
+		return e.complexity.Animal.Hair(childComplexity), true
 
 	case "Animal.id":
 		if e.complexity.Animal.ID == nil {
@@ -113,6 +132,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Animal.Species(childComplexity), true
 
+	case "BeingsHair.hasHair":
+		if e.complexity.BeingsHair.HasHair == nil {
+			break
+		}
+
+		return e.complexity.BeingsHair.HasHair(childComplexity), true
+
+	case "Hair.color":
+		if e.complexity.Hair.Color == nil {
+			break
+		}
+
+		return e.complexity.Hair.Color(childComplexity), true
+
 	case "Query.being":
 		if e.complexity.Query.Being == nil {
 			break
@@ -137,6 +170,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.Beings(childComplexity, args["ids"].([]string)), true
 
+	case "Query.lotteryWinner":
+		if e.complexity.Query.LotteryWinner == nil {
+			break
+		}
+
+		args, err := ec.field_Query_lotteryWinner_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.LotteryWinner(childComplexity, args["number"].(int)), true
+
 	case "Query.me":
 		if e.complexity.Query.Me == nil {
 			break
@@ -155,6 +200,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.User(childComplexity, args["id"].(string)), true
+
+	case "User.hair":
+		if e.complexity.User.Hair == nil {
+			break
+		}
+
+		return e.complexity.User.Hair(childComplexity), true
 
 	case "User.id":
 		if e.complexity.User.ID == nil {
@@ -232,20 +284,27 @@ var sources = []*ast.Source{
   user(id: ID!): User
   being(id: ID!): Being
   beings(ids: [ID!]!): [Being]!
+  lotteryWinner(number: Int!): Lucky
 }
 
-type User implements Being {
+type User implements Being & Lucky {
   id: ID!
   name: String!
   luckyNumber: Int
+  hair: Hair
 }
+
+type Hair { color: String }   # silly name to confuse the name-generator
 
 type Animal implements Being {
   id: ID!
   name: String!
   species: Species!
   owner: Being
+  hair: BeingsHair
 }
+
+type BeingsHair { hasHair: Boolean! }   # silly name to confuse the name-generator
 
 enum Species {
   DOG
@@ -255,6 +314,10 @@ enum Species {
 interface Being {
   id: ID!
   name: String!
+}
+
+interface Lucky {
+  luckyNumber: Int
 }
 `, BuiltIn: false},
 }
@@ -306,6 +369,21 @@ func (ec *executionContext) field_Query_beings_args(ctx context.Context, rawArgs
 		}
 	}
 	args["ids"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_lotteryWinner_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 int
+	if tmp, ok := rawArgs["number"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("number"))
+		arg0, err = ec.unmarshalNInt2int(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["number"] = arg0
 	return args, nil
 }
 
@@ -499,6 +577,105 @@ func (ec *executionContext) _Animal_owner(ctx context.Context, field graphql.Col
 	return ec.marshalOBeing2githubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐBeing(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _Animal_hair(ctx context.Context, field graphql.CollectedField, obj *Animal) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Animal",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Hair, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*BeingsHair)
+	fc.Result = res
+	return ec.marshalOBeingsHair2ᚖgithubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐBeingsHair(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _BeingsHair_hasHair(ctx context.Context, field graphql.CollectedField, obj *BeingsHair) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "BeingsHair",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.HasHair, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Hair_color(ctx context.Context, field graphql.CollectedField, obj *Hair) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Hair",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Color, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _Query_me(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -649,6 +826,45 @@ func (ec *executionContext) _Query_beings(ctx context.Context, field graphql.Col
 	res := resTmp.([]Being)
 	fc.Result = res
 	return ec.marshalNBeing2ᚕgithubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐBeing(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Query_lotteryWinner(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Query_lotteryWinner_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().LotteryWinner(rctx, args["number"].(int))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(Lucky)
+	fc.Result = res
+	return ec.marshalOLucky2githubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐLucky(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query___type(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -822,6 +1038,38 @@ func (ec *executionContext) _User_luckyNumber(ctx context.Context, field graphql
 	res := resTmp.(*int)
 	fc.Result = res
 	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _User_hair(ctx context.Context, field graphql.CollectedField, obj *User) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "User",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Hair, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*Hair)
+	fc.Result = res
+	return ec.marshalOHair2ᚖgithubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐHair(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) ___Directive_name(ctx context.Context, field graphql.CollectedField, obj *introspection.Directive) (ret graphql.Marshaler) {
@@ -1938,6 +2186,22 @@ func (ec *executionContext) _Being(ctx context.Context, sel ast.SelectionSet, ob
 	}
 }
 
+func (ec *executionContext) _Lucky(ctx context.Context, sel ast.SelectionSet, obj Lucky) graphql.Marshaler {
+	switch obj := (obj).(type) {
+	case nil:
+		return graphql.Null
+	case User:
+		return ec._User(ctx, sel, &obj)
+	case *User:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._User(ctx, sel, obj)
+	default:
+		panic(fmt.Errorf("unexpected type %T", obj))
+	}
+}
+
 // endregion ************************** interface.gotpl ***************************
 
 // region    **************************** object.gotpl ****************************
@@ -1970,6 +2234,59 @@ func (ec *executionContext) _Animal(ctx context.Context, sel ast.SelectionSet, o
 			}
 		case "owner":
 			out.Values[i] = ec._Animal_owner(ctx, field, obj)
+		case "hair":
+			out.Values[i] = ec._Animal_hair(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var beingsHairImplementors = []string{"BeingsHair"}
+
+func (ec *executionContext) _BeingsHair(ctx context.Context, sel ast.SelectionSet, obj *BeingsHair) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, beingsHairImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("BeingsHair")
+		case "hasHair":
+			out.Values[i] = ec._BeingsHair_hasHair(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var hairImplementors = []string{"Hair"}
+
+func (ec *executionContext) _Hair(ctx context.Context, sel ast.SelectionSet, obj *Hair) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, hairImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Hair")
+		case "color":
+			out.Values[i] = ec._Hair_color(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -2043,6 +2360,17 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 				}
 				return res
 			})
+		case "lotteryWinner":
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_lotteryWinner(ctx, field)
+				return res
+			})
 		case "__type":
 			out.Values[i] = ec._Query___type(ctx, field)
 		case "__schema":
@@ -2058,7 +2386,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 	return out
 }
 
-var userImplementors = []string{"User", "Being"}
+var userImplementors = []string{"User", "Being", "Lucky"}
 
 func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj *User) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, userImplementors)
@@ -2081,6 +2409,8 @@ func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj
 			}
 		case "luckyNumber":
 			out.Values[i] = ec._User_luckyNumber(ctx, field, obj)
+		case "hair":
+			out.Values[i] = ec._User_hair(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -2434,6 +2764,21 @@ func (ec *executionContext) marshalNID2ᚕstringᚄ(ctx context.Context, sel ast
 	return ret
 }
 
+func (ec *executionContext) unmarshalNInt2int(ctx context.Context, v interface{}) (int, error) {
+	res, err := graphql.UnmarshalInt(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.SelectionSet, v int) graphql.Marshaler {
+	res := graphql.MarshalInt(v)
+	if res == graphql.Null {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+	}
+	return res
+}
+
 func (ec *executionContext) unmarshalNSpecies2githubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐSpecies(ctx context.Context, v interface{}) (Species, error) {
 	var res Species
 	err := res.UnmarshalGQL(v)
@@ -2695,6 +3040,13 @@ func (ec *executionContext) marshalOBeing2githubᚗcomᚋKhanᚋgenqlientᚋinte
 	return ec._Being(ctx, sel, v)
 }
 
+func (ec *executionContext) marshalOBeingsHair2ᚖgithubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐBeingsHair(ctx context.Context, sel ast.SelectionSet, v *BeingsHair) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._BeingsHair(ctx, sel, v)
+}
+
 func (ec *executionContext) unmarshalOBoolean2bool(ctx context.Context, v interface{}) (bool, error) {
 	res, err := graphql.UnmarshalBoolean(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -2719,6 +3071,13 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	return graphql.MarshalBoolean(*v)
 }
 
+func (ec *executionContext) marshalOHair2ᚖgithubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐHair(ctx context.Context, sel ast.SelectionSet, v *Hair) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Hair(ctx, sel, v)
+}
+
 func (ec *executionContext) unmarshalOInt2ᚖint(ctx context.Context, v interface{}) (*int, error) {
 	if v == nil {
 		return nil, nil
@@ -2732,6 +3091,13 @@ func (ec *executionContext) marshalOInt2ᚖint(ctx context.Context, sel ast.Sele
 		return graphql.Null
 	}
 	return graphql.MarshalInt(*v)
+}
+
+func (ec *executionContext) marshalOLucky2githubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐLucky(ctx context.Context, sel ast.SelectionSet, v Lucky) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Lucky(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalOString2string(ctx context.Context, v interface{}) (string, error) {

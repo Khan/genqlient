@@ -1,0 +1,18 @@
+type Query {
+  myField: InterfaceType
+}
+
+interface InterfaceType {
+  subField: SubFieldType
+}
+
+type OnePossibleConcreteType implements InterfaceType {
+  subField: SubFieldType
+}
+
+type SubFieldType {
+  subSubField1: String!
+  subSubField2: String!
+  subSubField3: String!
+  subSubField4: String!
+}

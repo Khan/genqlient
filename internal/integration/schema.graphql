@@ -3,20 +3,27 @@ type Query {
   user(id: ID!): User
   being(id: ID!): Being
   beings(ids: [ID!]!): [Being]!
+  lotteryWinner(number: Int!): Lucky
 }
 
-type User implements Being {
+type User implements Being & Lucky {
   id: ID!
   name: String!
   luckyNumber: Int
+  hair: Hair
 }
+
+type Hair { color: String }   # silly name to confuse the name-generator
 
 type Animal implements Being {
   id: ID!
   name: String!
   species: Species!
   owner: Being
+  hair: BeingsHair
 }
+
+type BeingsHair { hasHair: Boolean! }   # silly name to confuse the name-generator
 
 enum Species {
   DOG
@@ -26,4 +33,8 @@ enum Species {
 interface Being {
   id: ID!
   name: String!
+}
+
+interface Lucky {
+  luckyNumber: Int
 }

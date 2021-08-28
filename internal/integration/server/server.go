@@ -8,16 +8,26 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 )
 
-func intptr(v int) *int { return &v }
+func strptr(v string) *string { return &v }
+func intptr(v int) *int       { return &v }
 
 var users = []*User{
-	{ID: "1", Name: "Yours Truly", LuckyNumber: intptr(17)},
-	{ID: "2", Name: "Raven", LuckyNumber: intptr(-1)},
+	{
+		ID: "1", Name: "Yours Truly", LuckyNumber: intptr(17),
+		Hair: &Hair{Color: strptr("Black")},
+	},
+	{ID: "2", Name: "Raven", LuckyNumber: intptr(-1), Hair: nil},
 }
 
 var animals = []*Animal{
-	{ID: "3", Name: "Fido", Species: SpeciesDog, Owner: userByID("0")},
-	{ID: "4", Name: "Old One", Species: SpeciesCoelacanth, Owner: nil},
+	{
+		ID: "3", Name: "Fido", Species: SpeciesDog, Owner: userByID("1"),
+		Hair: &BeingsHair{HasHair: true},
+	},
+	{
+		ID: "4", Name: "Old One", Species: SpeciesCoelacanth, Owner: nil,
+		Hair: &BeingsHair{HasHair: false},
+	},
 }
 
 func userByID(id string) *User {
@@ -61,6 +71,15 @@ func (r *queryResolver) Beings(ctx context.Context, ids []string) ([]Being, erro
 		ret[i] = beingByID(id)
 	}
 	return ret, nil
+}
+
+func (r *queryResolver) LotteryWinner(ctx context.Context, number int) (Lucky, error) {
+	for _, user := range users {
+		if user.LuckyNumber != nil && *user.LuckyNumber == number {
+			return user, nil
+		}
+	}
+	return nil, nil
 }
 
 func RunServer() *httptest.Server {

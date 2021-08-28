@@ -1,0 +1,8 @@
+query SimpleInlineFragment {
+  randomItem {
+    id
+    name
+    ... on Article { text }
+    ... on Video { duration }
+  }
+}
