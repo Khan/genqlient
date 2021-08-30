@@ -12,8 +12,14 @@ import (
 
 // ComplexInlineFragmentsConflictingStuffArticle includes the requested fields of the GraphQL type Article.
 type ComplexInlineFragmentsConflictingStuffArticle struct {
-	Typename  string                                          `json:"__typename"`
-	Thumbnail ComplexInlineFragmentsConflictingStuffThumbnail `json:"thumbnail"`
+	Typename  string                                                               `json:"__typename"`
+	Thumbnail ComplexInlineFragmentsConflictingStuffArticleThumbnailStuffThumbnail `json:"thumbnail"`
+}
+
+// ComplexInlineFragmentsConflictingStuffArticleThumbnailStuffThumbnail includes the requested fields of the GraphQL type StuffThumbnail.
+type ComplexInlineFragmentsConflictingStuffArticleThumbnailStuffThumbnail struct {
+	Id           testutil.ID `json:"id"`
+	ThumbnailUrl string      `json:"thumbnailUrl"`
 }
 
 // ComplexInlineFragmentsConflictingStuffContent includes the requested fields of the GraphQL interface Content.
@@ -82,12 +88,6 @@ func __unmarshalComplexInlineFragmentsConflictingStuffContent(v *ComplexInlineFr
 	}
 }
 
-// ComplexInlineFragmentsConflictingStuffThumbnail includes the requested fields of the GraphQL type Thumbnail.
-type ComplexInlineFragmentsConflictingStuffThumbnail struct {
-	Id           testutil.ID `json:"id"`
-	TimestampSec int         `json:"timestampSec"`
-}
-
 // ComplexInlineFragmentsConflictingStuffTopic includes the requested fields of the GraphQL type Topic.
 type ComplexInlineFragmentsConflictingStuffTopic struct {
 	Typename string `json:"__typename"`
@@ -95,294 +95,19 @@ type ComplexInlineFragmentsConflictingStuffTopic struct {
 
 // ComplexInlineFragmentsConflictingStuffVideo includes the requested fields of the GraphQL type Video.
 type ComplexInlineFragmentsConflictingStuffVideo struct {
-	Typename  string                                          `json:"__typename"`
-	Thumbnail ComplexInlineFragmentsConflictingStuffThumbnail `json:"thumbnail"`
+	Typename  string                                               `json:"__typename"`
+	Thumbnail ComplexInlineFragmentsConflictingStuffVideoThumbnail `json:"thumbnail"`
+}
+
+// ComplexInlineFragmentsConflictingStuffVideoThumbnail includes the requested fields of the GraphQL type Thumbnail.
+type ComplexInlineFragmentsConflictingStuffVideoThumbnail struct {
+	Id           testutil.ID `json:"id"`
+	TimestampSec int         `json:"timestampSec"`
 }
 
 // ComplexInlineFragmentsNestedStuffArticle includes the requested fields of the GraphQL type Article.
 type ComplexInlineFragmentsNestedStuffArticle struct {
 	Typename string `json:"__typename"`
-}
-
-// ComplexInlineFragmentsNestedStuffChildrenArticle includes the requested fields of the GraphQL type Article.
-type ComplexInlineFragmentsNestedStuffChildrenArticle struct {
-	Typename string `json:"__typename"`
-	// ID is the identifier of the content.
-	Id     testutil.ID                                          `json:"id"`
-	Text   string                                               `json:"text"`
-	Parent ComplexInlineFragmentsNestedStuffChildrenParentTopic `json:"parent"`
-}
-
-// ComplexInlineFragmentsNestedStuffChildrenContent includes the requested fields of the GraphQL interface Content.
-//
-// ComplexInlineFragmentsNestedStuffChildrenContent is implemented by the following types:
-// ComplexInlineFragmentsNestedStuffChildrenArticle
-// ComplexInlineFragmentsNestedStuffChildrenVideo
-// ComplexInlineFragmentsNestedStuffChildrenTopic
-//
-// The GraphQL type's documentation follows.
-//
-// Content is implemented by various types like Article, Video, and Topic.
-type ComplexInlineFragmentsNestedStuffChildrenContent interface {
-	implementsGraphQLInterfaceComplexInlineFragmentsNestedStuffChildrenContent()
-	// GetTypename returns the receiver's concrete GraphQL type-name (see interface doc for possible values).
-	GetTypename() string
-	// GetId returns the interface-field "id" from its implementation.
-	// The GraphQL interface field's documentation follows.
-	//
-	// ID is the identifier of the content.
-	GetId() testutil.ID
-}
-
-func (v *ComplexInlineFragmentsNestedStuffChildrenArticle) implementsGraphQLInterfaceComplexInlineFragmentsNestedStuffChildrenContent() {
-}
-
-// GetTypename is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffChildrenContent.
-func (v *ComplexInlineFragmentsNestedStuffChildrenArticle) GetTypename() string { return v.Typename }
-
-// GetId is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffChildrenContent.
-func (v *ComplexInlineFragmentsNestedStuffChildrenArticle) GetId() testutil.ID { return v.Id }
-
-func (v *ComplexInlineFragmentsNestedStuffChildrenVideo) implementsGraphQLInterfaceComplexInlineFragmentsNestedStuffChildrenContent() {
-}
-
-// GetTypename is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffChildrenContent.
-func (v *ComplexInlineFragmentsNestedStuffChildrenVideo) GetTypename() string { return v.Typename }
-
-// GetId is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffChildrenContent.
-func (v *ComplexInlineFragmentsNestedStuffChildrenVideo) GetId() testutil.ID { return v.Id }
-
-func (v *ComplexInlineFragmentsNestedStuffChildrenTopic) implementsGraphQLInterfaceComplexInlineFragmentsNestedStuffChildrenContent() {
-}
-
-// GetTypename is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffChildrenContent.
-func (v *ComplexInlineFragmentsNestedStuffChildrenTopic) GetTypename() string { return v.Typename }
-
-// GetId is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffChildrenContent.
-func (v *ComplexInlineFragmentsNestedStuffChildrenTopic) GetId() testutil.ID { return v.Id }
-
-func __unmarshalComplexInlineFragmentsNestedStuffChildrenContent(v *ComplexInlineFragmentsNestedStuffChildrenContent, m json.RawMessage) error {
-	if string(m) == "null" {
-		return nil
-	}
-
-	var tn struct {
-		TypeName string `json:"__typename"`
-	}
-	err := json.Unmarshal(m, &tn)
-	if err != nil {
-		return err
-	}
-
-	switch tn.TypeName {
-	case "Article":
-		*v = new(ComplexInlineFragmentsNestedStuffChildrenArticle)
-		return json.Unmarshal(m, *v)
-	case "Video":
-		*v = new(ComplexInlineFragmentsNestedStuffChildrenVideo)
-		return json.Unmarshal(m, *v)
-	case "Topic":
-		*v = new(ComplexInlineFragmentsNestedStuffChildrenTopic)
-		return json.Unmarshal(m, *v)
-	case "":
-		return fmt.Errorf(
-			"Response was missing Content.__typename")
-	default:
-		return fmt.Errorf(
-			`Unexpected concrete type for ComplexInlineFragmentsNestedStuffChildrenContent: "%v"`, tn.TypeName)
-	}
-}
-
-// ComplexInlineFragmentsNestedStuffChildrenParentTopic includes the requested fields of the GraphQL type Topic.
-type ComplexInlineFragmentsNestedStuffChildrenParentTopic struct {
-	Name   string                                                          `json:"name"`
-	Parent ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopic `json:"parent"`
-}
-
-// ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopic includes the requested fields of the GraphQL type Topic.
-type ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopic struct {
-	Children []ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenContent `json:"-"`
-}
-
-func (v *ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopic) UnmarshalJSON(b []byte) error {
-
-	type ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicWrapper ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopic
-
-	var firstPass struct {
-		*ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicWrapper
-		Children []json.RawMessage `json:"children"`
-	}
-	firstPass.ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicWrapper = (*ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicWrapper)(v)
-
-	err := json.Unmarshal(b, &firstPass)
-	if err != nil {
-		return err
-	}
-
-	{
-		target := &v.Children
-		raw := firstPass.Children
-		*target = make(
-			[]ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenContent,
-			len(raw))
-		for i, raw := range raw {
-			target := &(*target)[i]
-			err = __unmarshalComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenContent(
-				target, raw)
-			if err != nil {
-				return fmt.Errorf(
-					"Unable to unmarshal ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopic.Children: %w", err)
-			}
-		}
-	}
-	return nil
-}
-
-// ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenArticle includes the requested fields of the GraphQL type Article.
-type ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenArticle struct {
-	Typename string `json:"__typename"`
-	// ID is the identifier of the content.
-	Id   testutil.ID `json:"id"`
-	Name string      `json:"name"`
-}
-
-// ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenContent includes the requested fields of the GraphQL interface Content.
-//
-// ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenContent is implemented by the following types:
-// ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenArticle
-// ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenVideo
-// ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenTopic
-//
-// The GraphQL type's documentation follows.
-//
-// Content is implemented by various types like Article, Video, and Topic.
-type ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenContent interface {
-	implementsGraphQLInterfaceComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenContent()
-	// GetTypename returns the receiver's concrete GraphQL type-name (see interface doc for possible values).
-	GetTypename() string
-	// GetId returns the interface-field "id" from its implementation.
-	// The GraphQL interface field's documentation follows.
-	//
-	// ID is the identifier of the content.
-	GetId() testutil.ID
-	// GetName returns the interface-field "name" from its implementation.
-	GetName() string
-}
-
-func (v *ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenArticle) implementsGraphQLInterfaceComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenContent() {
-}
-
-// GetTypename is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenContent.
-func (v *ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenArticle) GetTypename() string {
-	return v.Typename
-}
-
-// GetId is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenContent.
-func (v *ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenArticle) GetId() testutil.ID {
-	return v.Id
-}
-
-// GetName is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenContent.
-func (v *ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenArticle) GetName() string {
-	return v.Name
-}
-
-func (v *ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenVideo) implementsGraphQLInterfaceComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenContent() {
-}
-
-// GetTypename is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenContent.
-func (v *ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenVideo) GetTypename() string {
-	return v.Typename
-}
-
-// GetId is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenContent.
-func (v *ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenVideo) GetId() testutil.ID {
-	return v.Id
-}
-
-// GetName is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenContent.
-func (v *ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenVideo) GetName() string {
-	return v.Name
-}
-
-func (v *ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenTopic) implementsGraphQLInterfaceComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenContent() {
-}
-
-// GetTypename is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenContent.
-func (v *ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenTopic) GetTypename() string {
-	return v.Typename
-}
-
-// GetId is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenContent.
-func (v *ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenTopic) GetId() testutil.ID {
-	return v.Id
-}
-
-// GetName is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenContent.
-func (v *ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenTopic) GetName() string {
-	return v.Name
-}
-
-func __unmarshalComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenContent(v *ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenContent, m json.RawMessage) error {
-	if string(m) == "null" {
-		return nil
-	}
-
-	var tn struct {
-		TypeName string `json:"__typename"`
-	}
-	err := json.Unmarshal(m, &tn)
-	if err != nil {
-		return err
-	}
-
-	switch tn.TypeName {
-	case "Article":
-		*v = new(ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenArticle)
-		return json.Unmarshal(m, *v)
-	case "Video":
-		*v = new(ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenVideo)
-		return json.Unmarshal(m, *v)
-	case "Topic":
-		*v = new(ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenTopic)
-		return json.Unmarshal(m, *v)
-	case "":
-		return fmt.Errorf(
-			"Response was missing Content.__typename")
-	default:
-		return fmt.Errorf(
-			`Unexpected concrete type for ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenContent: "%v"`, tn.TypeName)
-	}
-}
-
-// ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenTopic includes the requested fields of the GraphQL type Topic.
-type ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenTopic struct {
-	Typename string `json:"__typename"`
-	// ID is the identifier of the content.
-	Id   testutil.ID `json:"id"`
-	Name string      `json:"name"`
-}
-
-// ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenVideo includes the requested fields of the GraphQL type Video.
-type ComplexInlineFragmentsNestedStuffChildrenParentTopicParentTopicChildrenVideo struct {
-	Typename string `json:"__typename"`
-	// ID is the identifier of the content.
-	Id   testutil.ID `json:"id"`
-	Name string      `json:"name"`
-}
-
-// ComplexInlineFragmentsNestedStuffChildrenTopic includes the requested fields of the GraphQL type Topic.
-type ComplexInlineFragmentsNestedStuffChildrenTopic struct {
-	Typename string `json:"__typename"`
-	// ID is the identifier of the content.
-	Id testutil.ID `json:"id"`
-}
-
-// ComplexInlineFragmentsNestedStuffChildrenVideo includes the requested fields of the GraphQL type Video.
-type ComplexInlineFragmentsNestedStuffChildrenVideo struct {
-	Typename string `json:"__typename"`
-	// ID is the identifier of the content.
-	Id testutil.ID `json:"id"`
 }
 
 // ComplexInlineFragmentsNestedStuffContent includes the requested fields of the GraphQL interface Content.
@@ -453,8 +178,8 @@ func __unmarshalComplexInlineFragmentsNestedStuffContent(v *ComplexInlineFragmen
 
 // ComplexInlineFragmentsNestedStuffTopic includes the requested fields of the GraphQL type Topic.
 type ComplexInlineFragmentsNestedStuffTopic struct {
-	Typename string                                             `json:"__typename"`
-	Children []ComplexInlineFragmentsNestedStuffChildrenContent `json:"-"`
+	Typename string                                                  `json:"__typename"`
+	Children []ComplexInlineFragmentsNestedStuffTopicChildrenContent `json:"-"`
 }
 
 func (v *ComplexInlineFragmentsNestedStuffTopic) UnmarshalJSON(b []byte) error {
@@ -476,11 +201,11 @@ func (v *ComplexInlineFragmentsNestedStuffTopic) UnmarshalJSON(b []byte) error {
 		target := &v.Children
 		raw := firstPass.Children
 		*target = make(
-			[]ComplexInlineFragmentsNestedStuffChildrenContent,
+			[]ComplexInlineFragmentsNestedStuffTopicChildrenContent,
 			len(raw))
 		for i, raw := range raw {
 			target := &(*target)[i]
-			err = __unmarshalComplexInlineFragmentsNestedStuffChildrenContent(
+			err = __unmarshalComplexInlineFragmentsNestedStuffTopicChildrenContent(
 				target, raw)
 			if err != nil {
 				return fmt.Errorf(
@@ -489,6 +214,289 @@ func (v *ComplexInlineFragmentsNestedStuffTopic) UnmarshalJSON(b []byte) error {
 		}
 	}
 	return nil
+}
+
+// ComplexInlineFragmentsNestedStuffTopicChildrenArticle includes the requested fields of the GraphQL type Article.
+type ComplexInlineFragmentsNestedStuffTopicChildrenArticle struct {
+	Typename string `json:"__typename"`
+	// ID is the identifier of the content.
+	Id     testutil.ID                                                      `json:"id"`
+	Text   string                                                           `json:"text"`
+	Parent ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentTopic `json:"parent"`
+}
+
+// ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopic includes the requested fields of the GraphQL type Topic.
+type ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopic struct {
+	Children []ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent `json:"-"`
+}
+
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopic) UnmarshalJSON(b []byte) error {
+
+	type ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicWrapper ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopic
+
+	var firstPass struct {
+		*ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicWrapper
+		Children []json.RawMessage `json:"children"`
+	}
+	firstPass.ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicWrapper = (*ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicWrapper)(v)
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	{
+		target := &v.Children
+		raw := firstPass.Children
+		*target = make(
+			[]ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent,
+			len(raw))
+		for i, raw := range raw {
+			target := &(*target)[i]
+			err = __unmarshalComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent(
+				target, raw)
+			if err != nil {
+				return fmt.Errorf(
+					"Unable to unmarshal ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopic.Children: %w", err)
+			}
+		}
+	}
+	return nil
+}
+
+// ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenArticle includes the requested fields of the GraphQL type Article.
+type ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenArticle struct {
+	Typename string `json:"__typename"`
+	// ID is the identifier of the content.
+	Id   testutil.ID `json:"id"`
+	Name string      `json:"name"`
+}
+
+// ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent includes the requested fields of the GraphQL interface Content.
+//
+// ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent is implemented by the following types:
+// ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenArticle
+// ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenVideo
+// ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenTopic
+//
+// The GraphQL type's documentation follows.
+//
+// Content is implemented by various types like Article, Video, and Topic.
+type ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent interface {
+	implementsGraphQLInterfaceComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent()
+	// GetTypename returns the receiver's concrete GraphQL type-name (see interface doc for possible values).
+	GetTypename() string
+	// GetId returns the interface-field "id" from its implementation.
+	// The GraphQL interface field's documentation follows.
+	//
+	// ID is the identifier of the content.
+	GetId() testutil.ID
+	// GetName returns the interface-field "name" from its implementation.
+	GetName() string
+}
+
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenArticle) implementsGraphQLInterfaceComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent() {
+}
+
+// GetTypename is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent.
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenArticle) GetTypename() string {
+	return v.Typename
+}
+
+// GetId is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent.
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenArticle) GetId() testutil.ID {
+	return v.Id
+}
+
+// GetName is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent.
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenArticle) GetName() string {
+	return v.Name
+}
+
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenVideo) implementsGraphQLInterfaceComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent() {
+}
+
+// GetTypename is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent.
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenVideo) GetTypename() string {
+	return v.Typename
+}
+
+// GetId is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent.
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenVideo) GetId() testutil.ID {
+	return v.Id
+}
+
+// GetName is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent.
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenVideo) GetName() string {
+	return v.Name
+}
+
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenTopic) implementsGraphQLInterfaceComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent() {
+}
+
+// GetTypename is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent.
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenTopic) GetTypename() string {
+	return v.Typename
+}
+
+// GetId is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent.
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenTopic) GetId() testutil.ID {
+	return v.Id
+}
+
+// GetName is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent.
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenTopic) GetName() string {
+	return v.Name
+}
+
+func __unmarshalComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent(v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent, m json.RawMessage) error {
+	if string(m) == "null" {
+		return nil
+	}
+
+	var tn struct {
+		TypeName string `json:"__typename"`
+	}
+	err := json.Unmarshal(m, &tn)
+	if err != nil {
+		return err
+	}
+
+	switch tn.TypeName {
+	case "Article":
+		*v = new(ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenArticle)
+		return json.Unmarshal(m, *v)
+	case "Video":
+		*v = new(ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenVideo)
+		return json.Unmarshal(m, *v)
+	case "Topic":
+		*v = new(ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenTopic)
+		return json.Unmarshal(m, *v)
+	case "":
+		return fmt.Errorf(
+			"Response was missing Content.__typename")
+	default:
+		return fmt.Errorf(
+			`Unexpected concrete type for ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent: "%v"`, tn.TypeName)
+	}
+}
+
+// ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenTopic includes the requested fields of the GraphQL type Topic.
+type ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenTopic struct {
+	Typename string `json:"__typename"`
+	// ID is the identifier of the content.
+	Id   testutil.ID `json:"id"`
+	Name string      `json:"name"`
+}
+
+// ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenVideo includes the requested fields of the GraphQL type Video.
+type ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenVideo struct {
+	Typename string `json:"__typename"`
+	// ID is the identifier of the content.
+	Id   testutil.ID `json:"id"`
+	Name string      `json:"name"`
+}
+
+// ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentTopic includes the requested fields of the GraphQL type Topic.
+type ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentTopic struct {
+	Name   string                                                                        `json:"name"`
+	Parent ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopic `json:"parent"`
+}
+
+// ComplexInlineFragmentsNestedStuffTopicChildrenContent includes the requested fields of the GraphQL interface Content.
+//
+// ComplexInlineFragmentsNestedStuffTopicChildrenContent is implemented by the following types:
+// ComplexInlineFragmentsNestedStuffTopicChildrenArticle
+// ComplexInlineFragmentsNestedStuffTopicChildrenVideo
+// ComplexInlineFragmentsNestedStuffTopicChildrenTopic
+//
+// The GraphQL type's documentation follows.
+//
+// Content is implemented by various types like Article, Video, and Topic.
+type ComplexInlineFragmentsNestedStuffTopicChildrenContent interface {
+	implementsGraphQLInterfaceComplexInlineFragmentsNestedStuffTopicChildrenContent()
+	// GetTypename returns the receiver's concrete GraphQL type-name (see interface doc for possible values).
+	GetTypename() string
+	// GetId returns the interface-field "id" from its implementation.
+	// The GraphQL interface field's documentation follows.
+	//
+	// ID is the identifier of the content.
+	GetId() testutil.ID
+}
+
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticle) implementsGraphQLInterfaceComplexInlineFragmentsNestedStuffTopicChildrenContent() {
+}
+
+// GetTypename is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffTopicChildrenContent.
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticle) GetTypename() string {
+	return v.Typename
+}
+
+// GetId is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffTopicChildrenContent.
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticle) GetId() testutil.ID { return v.Id }
+
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenVideo) implementsGraphQLInterfaceComplexInlineFragmentsNestedStuffTopicChildrenContent() {
+}
+
+// GetTypename is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffTopicChildrenContent.
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenVideo) GetTypename() string { return v.Typename }
+
+// GetId is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffTopicChildrenContent.
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenVideo) GetId() testutil.ID { return v.Id }
+
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenTopic) implementsGraphQLInterfaceComplexInlineFragmentsNestedStuffTopicChildrenContent() {
+}
+
+// GetTypename is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffTopicChildrenContent.
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenTopic) GetTypename() string { return v.Typename }
+
+// GetId is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffTopicChildrenContent.
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenTopic) GetId() testutil.ID { return v.Id }
+
+func __unmarshalComplexInlineFragmentsNestedStuffTopicChildrenContent(v *ComplexInlineFragmentsNestedStuffTopicChildrenContent, m json.RawMessage) error {
+	if string(m) == "null" {
+		return nil
+	}
+
+	var tn struct {
+		TypeName string `json:"__typename"`
+	}
+	err := json.Unmarshal(m, &tn)
+	if err != nil {
+		return err
+	}
+
+	switch tn.TypeName {
+	case "Article":
+		*v = new(ComplexInlineFragmentsNestedStuffTopicChildrenArticle)
+		return json.Unmarshal(m, *v)
+	case "Video":
+		*v = new(ComplexInlineFragmentsNestedStuffTopicChildrenVideo)
+		return json.Unmarshal(m, *v)
+	case "Topic":
+		*v = new(ComplexInlineFragmentsNestedStuffTopicChildrenTopic)
+		return json.Unmarshal(m, *v)
+	case "":
+		return fmt.Errorf(
+			"Response was missing Content.__typename")
+	default:
+		return fmt.Errorf(
+			`Unexpected concrete type for ComplexInlineFragmentsNestedStuffTopicChildrenContent: "%v"`, tn.TypeName)
+	}
+}
+
+// ComplexInlineFragmentsNestedStuffTopicChildrenTopic includes the requested fields of the GraphQL type Topic.
+type ComplexInlineFragmentsNestedStuffTopicChildrenTopic struct {
+	Typename string `json:"__typename"`
+	// ID is the identifier of the content.
+	Id testutil.ID `json:"id"`
+}
+
+// ComplexInlineFragmentsNestedStuffTopicChildrenVideo includes the requested fields of the GraphQL type Video.
+type ComplexInlineFragmentsNestedStuffTopicChildrenVideo struct {
+	Typename string `json:"__typename"`
+	// ID is the identifier of the content.
+	Id testutil.ID `json:"id"`
 }
 
 // ComplexInlineFragmentsNestedStuffVideo includes the requested fields of the GraphQL type Video.

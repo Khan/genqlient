@@ -21,6 +21,21 @@ const (
 	RoleTeacher Role = "TEACHER"
 )
 
+// UserQueryInput is the argument to Query.users.
+//
+// Ideally this would support anything and everything!
+// Or maybe ideally it wouldn't.
+// Really I'm just talking to make this documentation longer.
+type UserQueryInput struct {
+	Email string `json:"email"`
+	Name  string `json:"name"`
+	// id looks the user up by ID.  It's a great way to look up users.
+	Id         testutil.ID      `json:"id"`
+	Role       Role             `json:"role"`
+	Names      []string         `json:"names"`
+	HasPokemon testutil.Pokemon `json:"hasPokemon"`
+}
+
 // unexportedResponse is returned by unexported on success.
 type unexportedResponse struct {
 	// user looks up a user by some stuff.
@@ -41,24 +56,9 @@ type unexportedUser struct {
 	Id testutil.ID `json:"id"`
 }
 
-// UserQueryInput is the argument to Query.users.
-//
-// Ideally this would support anything and everything!
-// Or maybe ideally it wouldn't.
-// Really I'm just talking to make this documentation longer.
-type userQueryInput struct {
-	Email string `json:"email"`
-	Name  string `json:"name"`
-	// id looks the user up by ID.  It's a great way to look up users.
-	Id         testutil.ID      `json:"id"`
-	Role       Role             `json:"role"`
-	Names      []string         `json:"names"`
-	HasPokemon testutil.Pokemon `json:"hasPokemon"`
-}
-
 func unexported(
 	client graphql.Client,
-	query userQueryInput,
+	query UserQueryInput,
 ) (*unexportedResponse, error) {
 	variables := map[string]interface{}{
 		"query": query,

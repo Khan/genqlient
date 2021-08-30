@@ -253,10 +253,7 @@ func TestFragments(t *testing.T) {
 	require.Truef(t, ok, "got %T, not User", resp.Beings[0])
 	assert.Equal(t, "1", user.Id)
 	assert.Equal(t, "Yours Truly", user.Name)
-	// TODO(benkraft): Uncomment once we fix the interface-field type-naming
-	// bug that's causing this to get the wrong type (because we end up
-	// generating two conflicting types).
-	//	assert.Equal(t, "Black", user.Hair.Color)
+	assert.Equal(t, "Black", user.Hair.Color)
 	assert.Equal(t, 17, user.LuckyNumber)
 
 	// Animal has, in total, the fields:
@@ -282,7 +279,7 @@ func TestFragments(t *testing.T) {
 	assert.Equal(t, "Yours Truly", animal.Owner.GetName())
 	// (luckyNumber we have to cast for, again)
 
-	owner, ok := animal.Owner.(*queryWithFragmentsBeingsOwnerUser)
+	owner, ok := animal.Owner.(*queryWithFragmentsBeingsAnimalOwnerUser)
 	require.Truef(t, ok, "got %T, not User", animal.Owner)
 	assert.Equal(t, "1", owner.Id)
 	assert.Equal(t, "Yours Truly", owner.Name)

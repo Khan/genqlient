@@ -11,7 +11,6 @@ package generate
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -51,20 +50,26 @@ func (g *generator) convertOperation(
 		return nil, errorf(operation.Position, "%v", err)
 	}
 
-	goTyp, err := g.convertDefinition(
-		name, operation.Name, baseType, operation.Position,
-		operation.SelectionSet, queryOptions, queryOptions)
-
-	if structType, ok := goTyp.(*goStructType); ok {
-		// Override the ordinary description; the GraphQL documentation for
-		// Query/Mutation is unlikely to be of value.
-		// TODO(benkraft): This is a bit awkward/fragile.
-		structType.Description =
-			fmt.Sprintf("%v is returned by %v on success.", name, operation.Name)
-		structType.Incomplete = false
+	// Instead of calling out to convertType/convertDefinition, we do our own
+	// thing, because we want to do a few things differently, and because we
+	// know we have an object type, so we can include only that case.
+	fields, err := g.convertSelectionSet(
+		newPrefixList(operation.Name), operation.SelectionSet, baseType, queryOptions)
+	if err != nil {
+		return nil, err
 	}
 
-	return goTyp, err
+	goType := &goStructType{
+		GoName: name,
+		Description: fmt.Sprintf(
+			"%v is returned by %v on success.", name, operation.Name),
+		GraphQLName: baseType.Name,
+		Fields:      fields,
+		Incomplete:  false,
+	}
+	g.typeMap[name] = goType
+
+	return goType, nil
 }
 
 var builtinTypes = map[string]string{
@@ -76,58 +81,15 @@ var builtinTypes = map[string]string{
 	"ID":      "string",
 }
 
-// typeName computes the name, in Go, that we should use for the given
-// GraphQL type definition.  This is dependent on its location within the query
-// (see DESIGN.md for more on why we generate type-names this way), which is
-// determined by the prefix argument; the nextPrefix result should be passed to
-// calls to typeName on any child types.
-func (g *generator) typeName(prefix string, typ *ast.Definition) (name, nextPrefix string) {
-	typeGoName := upperFirst(typ.Name)
-	if typ.Kind == ast.Enum || typ.Kind == ast.InputObject {
-		// If we're an enum or an input-object, there is only one type we
-		// will ever possibly generate for this type, so we don't need any
-		// of the qualifiers.  This is especially helpful because the
-		// caller is very likely to need to reference these types in their
-		// code.
-		return typeGoName, typeGoName
-	}
-
-	name = prefix
-	if !strings.HasSuffix(prefix, typeGoName) {
-		// If the field and type names are the same, we can avoid the
-		// duplication.  (We include the field name in case there are
-		// multiple fields with the same type, and the type name because
-		// that's the actual name (the rest are really qualifiers); but if
-		// they are the same then including it once suffices for both
-		// purposes.)
-		name += typeGoName
-	}
-
-	if typ.Kind == ast.Interface || typ.Kind == ast.Union {
-		// for interface/union types, we do not add the type name to the
-		// name prefix; we want to have QueryFieldType rather than
-		// QueryFieldInterfaceType.  So we just use the input prefix.
-		return name, prefix
-	}
-
-	// Otherwise, the name will also be the prefix for the next type.
-	return name, name
-}
-
 // convertInputType decides the Go type we will generate corresponding to an
 // argument to a GraphQL operation.
 func (g *generator) convertInputType(
-	opName string,
 	typ *ast.Type,
 	options, queryOptions *GenqlientDirective,
 ) (goType, error) {
-	// Sort of a hack: case the input type name to match the op-name.
-	// TODO(benkraft): this is another thing that breaks the assumption that we
-	// only need one of an input type, albeit in a relatively safe way.
-	name := matchFirst(typ.Name(), opName)
 	// note prefix is ignored here (see generator.typeName), as is selectionSet
 	// (for input types we use the whole thing)).
-	return g.convertType(name, "", typ, nil, options, queryOptions)
+	return g.convertType(nil, typ, nil, options, queryOptions)
 }
 
 // convertType decides the Go type we will generate corresponding to a
@@ -135,7 +97,7 @@ func (g *generator) convertInputType(
 // field, and may be a list or a reference to a named type, with or without the
 // "non-null" annotation.
 func (g *generator) convertType(
-	name, namePrefix string,
+	namePrefix *prefixList,
 	typ *ast.Type,
 	selectionSet ast.SelectionSet,
 	options, queryOptions *GenqlientDirective,
@@ -152,14 +114,14 @@ func (g *generator) convertType(
 	if typ.Elem != nil {
 		// Type is a list.
 		elem, err := g.convertType(
-			name, namePrefix, typ.Elem, selectionSet, options, queryOptions)
+			namePrefix, typ.Elem, selectionSet, options, queryOptions)
 		return &goSliceType{elem}, err
 	}
 
 	// If this is a builtin type or custom scalar, just refer to it.
 	def := g.schema.Types[typ.Name()]
 	goTyp, err := g.convertDefinition(
-		name, namePrefix, def, typ.Position, selectionSet, options, queryOptions)
+		namePrefix, def, typ.Position, selectionSet, options, queryOptions)
 
 	if options.GetPointer() {
 		// Whatever we get, wrap it in a pointer.  (Because of the way the
@@ -177,7 +139,7 @@ func (g *generator) convertType(
 // *ast.Definition, which represents the definition of a type in the GraphQL
 // schema, which may be referenced by a field-type (see convertType).
 func (g *generator) convertDefinition(
-	name, namePrefix string,
+	namePrefix *prefixList,
 	def *ast.Definition,
 	pos *ast.Position,
 	selectionSet ast.SelectionSet,
@@ -192,7 +154,7 @@ func (g *generator) convertDefinition(
 	if ok && options.Bind != "-" {
 		if def.Kind == ast.Object || def.Kind == ast.Interface || def.Kind == ast.Union {
 			err := g.validateBindingSelection(
-				name, globalBinding, pos, selectionSet)
+				def.Name, globalBinding, pos, selectionSet)
 			if err != nil {
 				return nil, err
 			}
@@ -207,6 +169,8 @@ func (g *generator) convertDefinition(
 
 	switch def.Kind {
 	case ast.Object:
+		name := makeTypeName(namePrefix, def.Name)
+
 		fields, err := g.convertSelectionSet(
 			namePrefix, selectionSet, def, queryOptions)
 		if err != nil {
@@ -224,6 +188,12 @@ func (g *generator) convertDefinition(
 		return goType, nil
 
 	case ast.InputObject:
+		// If we're an input-object, there is only one type we will ever
+		// possibly generate for this type, so we don't need any of the
+		// qualifiers.  This is especially helpful because the caller is very
+		// likely to need to reference these types in their code.
+		name := upperFirst(def.Name)
+
 		goType := &goStructType{
 			GoName:      name,
 			Description: def.Description,
@@ -243,7 +213,7 @@ func (g *generator) convertDefinition(
 			// will be ignored?  We know field.Type is a scalar, enum, or input
 			// type.  But plumbing that is a bit tricky in practice.
 			fieldGoType, err := g.convertType(
-				field.Type.Name(), "", field.Type, nil, queryOptions, queryOptions)
+				namePrefix, field.Type, nil, queryOptions, queryOptions)
 			if err != nil {
 				return nil, err
 			}
@@ -259,6 +229,8 @@ func (g *generator) convertDefinition(
 		return goType, nil
 
 	case ast.Interface, ast.Union:
+		name := makeTypeName(namePrefix, def.Name)
+
 		sharedFields, err := g.convertSelectionSet(
 			namePrefix, selectionSet, def, queryOptions)
 		if err != nil {
@@ -276,24 +248,13 @@ func (g *generator) convertDefinition(
 		g.typeMap[name] = goType
 
 		for i, implDef := range implementationTypes {
-			// Note for shared fields we propagate forward the interface's
-			// name-prefix: that is, the implementations will have fields with
-			// types like
-			//	MyInterfaceMyFieldMyType
-			// not
-			//	MyInterfaceMyImplMyFieldMyType
-			//             ^^^^^^
-			// In particular, this means that the Go type of MyField will be
-			// the same across all the implementations; this is important so
-			// that we can write a method GetMyField() that returns it!
-			implName, _ := g.typeName(namePrefix, implDef)
 			// TODO(benkraft): In principle we should skip generating a Go
 			// field for __typename each of these impl-defs if you didn't
 			// request it (and it was automatically added by
 			// preprocessQueryDocument).  But in practice it doesn't really
 			// hurt, and would be extra work to avoid, so we just leave it.
 			implTyp, err := g.convertDefinition(
-				implName, namePrefix, implDef, pos, selectionSet, options, queryOptions)
+				namePrefix, implDef, pos, selectionSet, options, queryOptions)
 			if err != nil {
 				return nil, err
 			}
@@ -309,6 +270,10 @@ func (g *generator) convertDefinition(
 		return goType, nil
 
 	case ast.Enum:
+		// Like with InputObject, there's only one type we will ever generate
+		// for an enum.
+		name := upperFirst(def.Name)
+
 		goType := &goEnumType{
 			GoName:      name,
 			Description: def.Description,
@@ -342,7 +307,7 @@ func (g *generator) convertDefinition(
 // convertSelectionSet once for the interface, and once for each
 // implementation.
 func (g *generator) convertSelectionSet(
-	namePrefix string,
+	namePrefix *prefixList,
 	selectionSet ast.SelectionSet,
 	containingTypedef *ast.Definition,
 	queryOptions *GenqlientDirective,
@@ -464,7 +429,7 @@ func fragmentMatches(containingTypedef, fragmentTypedef *ast.Definition) bool {
 // parent selection-set (except of course they are only included in types the
 // fragment matches); see DESIGN.md for more.
 func (g *generator) convertInlineFragment(
-	namePrefix string,
+	namePrefix *prefixList,
 	fragment *ast.InlineFragment,
 	containingTypedef *ast.Definition,
 	queryOptions *GenqlientDirective,
@@ -486,7 +451,7 @@ func (g *generator) convertInlineFragment(
 // convertDefinition), because they come from the type-definition, not the
 // operation.
 func (g *generator) convertField(
-	namePrefix string,
+	namePrefix *prefixList,
 	field *ast.Field,
 	fieldOptions, queryOptions *GenqlientDirective,
 ) (*goStructField, error) {
@@ -497,24 +462,11 @@ func (g *generator) convertField(
 			field.Position, "undefined field %v", field.Alias)
 	}
 
-	// Needs to be exported for JSON-marshaling
 	goName := upperFirst(field.Alias)
+	namePrefix = nextPrefix(namePrefix, field)
 
-	typ := field.Definition.Type
-	fieldTypedef := g.schema.Types[typ.Name()]
-
-	// Note we don't deduplicate suffixes here -- if our prefix is GetUser and
-	// the field name is User, we do GetUserUser.  This is important because if
-	// you have a field called user on a type called User we need
-	// `query q { user { user { id } } }` to generate two types, QUser and
-	// QUserUser.  Note also this is named based on the GraphQL alias (Go
-	// name), not the field-name, because if we have
-	// `query q { a: f { b }, c: f { d } }` we need separate types for a and c,
-	// even though they are the same type in GraphQL, because they have
-	// different fields.
-	name, namePrefix := g.typeName(namePrefix+goName, fieldTypedef)
 	fieldGoType, err := g.convertType(
-		name, namePrefix, typ, field.SelectionSet,
+		namePrefix, field.Definition.Type, field.SelectionSet,
 		fieldOptions, queryOptions)
 	if err != nil {
 		return nil, err
