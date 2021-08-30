@@ -54,7 +54,7 @@ func (g *generator) convertOperation(
 	// thing, because we want to do a few things differently, and because we
 	// know we have an object type, so we can include only that case.
 	fields, err := g.convertSelectionSet(
-		&prefixList{last: operation.Name}, operation.SelectionSet, baseType, queryOptions)
+		newPrefixList(operation.Name), operation.SelectionSet, baseType, queryOptions)
 	if err != nil {
 		return nil, err
 	}

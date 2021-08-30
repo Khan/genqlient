@@ -65,18 +65,21 @@ package generate
 // in `query Q { user { user { id } } }` we do need both QUser and QUserUser --
 // they have different fields.
 //
-// Note that there are (at least) two potential collisions from this algorithm:
+// Note that there are a few potential collisions from this algorithm:
 // - When generating Go types for GraphQL interface types, we generate both
 //   ...MyFieldMyInterfaceType and ...MyFieldMyImplType.  If an interface's
 //   name is a suffix of its implementation's name, and both are suffixes of a
 //   field of that type, we'll shorten both, resulting in a collision.
-// - Given a query like
+// - Names of different casing (e.g. fields `myField` and `MyField`) can
+//   collide (the first is standard usage but both are legal).
+// - We don't put a special character between parts, so fields like
 //		query Q {
-//			ab { ... } # type: C
-//			a { ... }  # type: BC
+//			ab { ... }  # type: C
+//			abc { ... } # type: C
+//			a { ... }   # type: BC
 //		}
-//	 we generate QABC to represent both fields.
-// Both cases seem fairly rare in practice; eventually we'll likely allow users
+//   can collide.
+// All cases seem fairly rare in practice; eventually we'll likely allow users
 // the ability to specify their own names, which they could use to avoid this
 // (see https://github.com/Khan/genqlient/issues/12).
 // TODO(benkraft): We should probably at least try to detect it and bail.
@@ -99,19 +102,27 @@ import (
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
-// Yes, a linked list!  We could use a stack -- it would probably be marginally
+// Yes, a linked list!  Of name-prefixes in *reverse* order, i.e. from end to
+// start.
+//
+// We could use a stack -- it would probably be marginally
 // more efficient -- but then the caller would have to know more about how to
 // manage it safely.  Using a list, and treating it as immutable, makes it
 // easy.
 type prefixList struct {
-	last string // the list goes back-to-front, so this is the *last* prefix
-	rest *prefixList
+	head string // the list goes back-to-front, so this is the *last* prefix
+	tail *prefixList
+}
+
+// creates a new one-element list
+func newPrefixList(item string) *prefixList {
+	return &prefixList{head: item}
 }
 
 func joinPrefixList(prefix *prefixList) string {
 	var reversed []string
-	for ; prefix != nil; prefix = prefix.rest {
-		reversed = append(reversed, prefix.last)
+	for ; prefix != nil; prefix = prefix.tail {
+		reversed = append(reversed, prefix.head)
 	}
 	l := len(reversed)
 	for i := 0; i < l/2; i++ {
@@ -131,10 +142,10 @@ func typeNameParts(prefix *prefixList, typeName string) *prefixList {
 	typeName = upperFirst(typeName)
 	// If the prefix has just one part, that's the operation-name.  There's no
 	// need to add "Query" or "Mutation".  (Zero should never happen.)
-	if prefix == nil || prefix.rest == nil ||
+	if prefix == nil || prefix.tail == nil ||
 		// If the last prefix field ends with this type's name, omit the
 		// type-name (see the "shortened" case in the top-of-file comment).
-		strings.HasSuffix(prefix.last, typeName) {
+		strings.HasSuffix(prefix.head, typeName) {
 		return prefix
 	}
 	return &prefixList{typeName, prefix}
