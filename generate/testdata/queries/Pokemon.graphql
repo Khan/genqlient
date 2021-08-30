@@ -8,7 +8,8 @@ query GetPokemonSiblings($input: PokemonInput!) {
     roles
     name
     # this is mapped globally to internal/testutil.Pokemon:
-    pokemon { species level }
+    # note field ordering matters, but whitespace shouldn't.
+    pokemon {    species level }
     # this overrides said mapping:
     # @genqlient(bind: "-")
     genqlientPokemon: pokemon { species level }

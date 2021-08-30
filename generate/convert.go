@@ -190,6 +190,13 @@ func (g *generator) convertDefinition(
 	// unless the binding is "-" which means "ignore the global binding".
 	globalBinding, ok := g.Config.Bindings[def.Name]
 	if ok && options.Bind != "-" {
+		if def.Kind == ast.Object || def.Kind == ast.Interface || def.Kind == ast.Union {
+			err := g.validateBindingSelection(
+				name, globalBinding, pos, selectionSet)
+			if err != nil {
+				return nil, err
+			}
+		}
 		goRef, err := g.addRef(globalBinding.Type)
 		return &goOpaqueType{goRef}, err
 	}
