@@ -2,36 +2,49 @@
      UnmarshalJSON from the function it follows) */}}
 
 func (v *{{.GoName}}) UnmarshalJSON(b []byte) error {
-    {{/* We want to specially handle the abstract fields (.AbstractFields),
-         but unmarshal everything else normally.  To handle abstract fields,
+    {{/* We want to specially handle the abstract or embedded fields, but
+         unmarshal everything else normally.  To handle abstract fields,
          first we unmarshal them into a json.RawMessage, and then handle those
-         further, below.  For the rest, we just want to call json.Unmarshal.
+         further, below.  Embedded fields we just unmarshal directly into the
+         embedded value.  For the rest, we just want to call json.Unmarshal.
          But if we do that naively on a value of type `.Type`, it will call
          this function again, and recurse infinitely.  So we make a wrapper
-         type -- with a different name, thus different methods, but the same
-         fields, and unmarshal into that.  For more on why this is so
-         difficult, see
-         https://github.com/benjaminjkraft/notes/blob/master/go-json-interfaces.md
+         type which embeds both this type and NoUmnarshalJSON, which prevents
+         either's UnmarshalJSON method from being promoted.  For more on why
+         this is so difficult, see
+         https://github.com/benjaminjkraft/notes/blob/master/go-json-interfaces.md.
+         (Note there are a few different ways "hide" the method, but this one
+         seems to be the best option that works if this type has embedded types
+         with UnmarshalJSON methods.)
          TODO(benkraft)): Ensure `{{.Type}}Wrapper` won't collide with any
          other type we need.  (For the most part it being locally-scoped saves
          us; it's not clear if this can be a problem in practice.)
     */}}
-    type {{.GoName}}Wrapper {{.GoName}}
 
+    {{/* TODO(benkraft): Omit/simplify the first pass if all fields are
+         embedded/abstract. */ -}}
     var firstPass struct{
-        *{{.GoName}}Wrapper
-        {{range .AbstractFields -}}
+        *{{.GoName}}
+        {{range .Fields -}}
+        {{if .IsAbstract -}}
         {{.GoName}} {{repeat .GoType.SliceDepth "[]"}}{{ref "encoding/json.RawMessage"}} `json:"{{.JSONName}}"`
-        {{end}}
+        {{end -}}
+        {{end -}}
+        {{/* TODO(benkraft): In principle you might have a field-name that
+             conflicts with this one; avoid that. */ -}}
+        {{ref "github.com/Khan/genqlient/graphql.NoUnmarshalJSON"}}
     }
-    firstPass.{{.GoName}}Wrapper = (*{{.GoName}}Wrapper)(v)
+    firstPass.{{.GoName}} = v
 
     err := {{ref "encoding/json.Unmarshal"}}(b, &firstPass)
     if err != nil {
         return err
     }
 
-    {{/* Now, for each field, call out to the unmarshal-helper.
+    {{/* Now, handle the fields needing special handling. */}}
+    {{range $field := .Fields -}}
+    {{if $field.IsAbstract -}}
+    {{/* First, for abstract fields, call the unmarshal-helper.
          This gets a little complicated because we may have a slice field.
          So what we do is basically, for each field of type `[][]...[]MyType`:
 
@@ -65,7 +78,6 @@ func (v *{{.GoName}}) UnmarshalJSON(b []byte) error {
          each field we are handling, which would otherwise conflict.  (We could
          instead suffix the names, but that makes things much harder to read.)
     */}}
-    {{range $field := .AbstractFields -}}
     {
         target := &v.{{$field.GoName}}
         raw := firstPass.{{$field.GoName}}
@@ -92,7 +104,17 @@ func (v *{{.GoName}}) UnmarshalJSON(b []byte) error {
         }
         {{end -}}
     }
-    {{end -}}
+    {{end -}}{{/* end if .IsAbstract */}}
+    {{if $field.IsEmbedded -}}
+    {{/* Embedded fields are easier: we just unmarshal the same input into
+         them.  (They're also easier because they can't be lists, since they
+         arise from GraphQL fragment spreads.) */}}
+    err = json.Unmarshal(b, &v.{{$field.GoType.Unwrap.Reference}})
+    if err != nil {
+        return err
+    }
+    {{end}}{{/* end if .IsEmbedded */ -}}
+    {{end}}{{/* end range .Fields */ -}}
 
     return nil
 }

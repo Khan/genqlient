@@ -288,6 +288,94 @@ func TestFragments(t *testing.T) {
 	assert.Nil(t, resp.Beings[2])
 }
 
+func TestNamedFragments(t *testing.T) {
+	_ = `# @genqlient
+	fragment AnimalFields on Animal {
+		id
+		hair { hasHair }
+		owner { id ...UserFields }
+	}
+
+	fragment MoreUserFields on User {
+		id
+		hair { color }
+	}
+	
+	fragment UserFields on User {
+		id luckyNumber
+		...MoreUserFields
+	}
+
+	query queryWithNamedFragments($ids: [ID!]!) {
+		beings(ids: $ids) {
+			__typename id
+			...AnimalFields
+			...UserFields
+		}
+	}`
+
+	ctx := context.Background()
+	server := server.RunServer()
+	defer server.Close()
+	client := graphql.NewClient(server.URL, http.DefaultClient)
+
+	resp, err := queryWithNamedFragments(ctx, client, []string{"1", "3", "12847394823"})
+	require.NoError(t, err)
+
+	require.Len(t, resp.Beings, 3)
+
+	// We should get the following three beings:
+	//	User{Id: 1, Name: "Yours Truly"},
+	//	Animal{Id: 3, Name: "Fido"},
+	//	null
+
+	// Check fields both via interface and via type-assertion when possible
+	// User has, in total, the fields: __typename id luckyNumber.
+	assert.Equal(t, "User", resp.Beings[0].GetTypename())
+	assert.Equal(t, "1", resp.Beings[0].GetId())
+	// (luckyNumber, hair we need to cast for)
+
+	user, ok := resp.Beings[0].(*queryWithNamedFragmentsBeingsUser)
+	require.Truef(t, ok, "got %T, not User", resp.Beings[0])
+	assert.Equal(t, "1", user.Id)
+	assert.Equal(t, "1", user.UserFields.Id)
+	assert.Equal(t, "1", user.UserFields.MoreUserFields.Id)
+	// on UserFields, but we should be able to access directly via embedding:
+	assert.Equal(t, 17, user.LuckyNumber)
+	assert.Equal(t, "Black", user.Hair.Color)
+
+	// Animal has, in total, the fields:
+	//	__typename
+	//	id
+	//	hair { hasHair }
+	//	owner { id luckyNumber }
+	assert.Equal(t, "Animal", resp.Beings[1].GetTypename())
+	assert.Equal(t, "3", resp.Beings[1].GetId())
+	// (hair.* and owner.* we have to cast for)
+
+	animal, ok := resp.Beings[1].(*queryWithNamedFragmentsBeingsAnimal)
+	require.Truef(t, ok, "got %T, not Animal", resp.Beings[1])
+	// Check that we filled in *both* ID fields:
+	assert.Equal(t, "3", animal.Id)
+	assert.Equal(t, "3", animal.AnimalFields.Id)
+	// on AnimalFields:
+	assert.True(t, animal.Hair.HasHair)
+	assert.Equal(t, "1", animal.Owner.GetId())
+	// (luckyNumber we have to cast for, again)
+
+	owner, ok := animal.Owner.(*AnimalFieldsOwnerUser)
+	require.Truef(t, ok, "got %T, not User", animal.Owner)
+	// Check that we filled in *both* ID fields:
+	assert.Equal(t, "1", owner.Id)
+	assert.Equal(t, "1", owner.UserFields.Id)
+	assert.Equal(t, "1", owner.UserFields.MoreUserFields.Id)
+	// on UserFields:
+	assert.Equal(t, 17, owner.LuckyNumber)
+	assert.Equal(t, "Black", owner.Hair.Color)
+
+	assert.Nil(t, resp.Beings[2])
+}
+
 func TestGeneratedCode(t *testing.T) {
 	// TODO(benkraft): Check that gqlgen is up to date too.  In practice that's
 	// less likely to be a problem, since it should only change if you update

@@ -330,7 +330,12 @@ func (g *generator) convertSelectionSet(
 			}
 			fields = append(fields, field)
 		case *ast.FragmentSpread:
-			return nil, errorf(selection.Position, "not implemented: %T", selection)
+			maybeField, err := g.convertFragmentSpread(selection, containingTypedef)
+			if err != nil {
+				return nil, err
+			} else if maybeField != nil {
+				fields = append(fields, maybeField)
+			}
 		case *ast.InlineFragment:
 			// (Note this will return nil, nil if the fragment doesn't apply to
 			// this type.)
@@ -354,7 +359,9 @@ func (g *generator) convertSelectionSet(
 		// GraphQL (and, effectively, JSON) requires that all fields with the
 		// same alias (JSON-name) must be the same (i.e. refer to the same
 		// field), so that's how we deduplicate.
-		if fieldNames[field.JSONName] {
+		// It's fine to have duplicate embeds (i.e. via named fragments), even
+		// ones with complicated overlaps, since they are separate types to us.
+		if field.JSONName != "" && fieldNames[field.JSONName] {
 			// GraphQL (and, effectively, JSON) forbids you from having two
 			// fields with the same alias (JSON-name) that refer to different
 			// GraphQL fields.  But it does allow you to have the same field
@@ -442,6 +449,73 @@ func (g *generator) convertInlineFragment(
 	}
 	return g.convertSelectionSet(namePrefix, fragment.SelectionSet,
 		containingTypedef, queryOptions)
+}
+
+// convertFragmentSpread converts a single GraphQL fragment-spread
+// (`...MyFragment`) into a Go struct-field.  It assumes that
+// convertNamedFragment has already been called on the fragment-definition.  If
+// the fragment does not apply to this type, returns nil.
+//
+// containingTypedef is as described in convertInlineFragment, above.
+func (g *generator) convertFragmentSpread(
+	fragmentSpread *ast.FragmentSpread,
+	containingTypedef *ast.Definition,
+) (*goStructField, error) {
+	if !fragmentMatches(containingTypedef, fragmentSpread.Definition.Definition) {
+		return nil, nil
+	}
+
+	typ, ok := g.typeMap[fragmentSpread.Name]
+	if !ok {
+		// If we haven't yet, convert the fragment itself.  Note that fragments
+		// aren't allowed to have cycles, so this won't recurse forever.
+		var err error
+		typ, err = g.convertNamedFragment(fragmentSpread.Definition)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return &goStructField{GoName: "" /* i.e. embedded */, GoType: typ}, nil
+}
+
+// convertNamedFragment converts a single GraphQL named fragment-definition
+// (`fragment MyFragment on MyType { ... }`) into a Go struct.
+func (g *generator) convertNamedFragment(fragment *ast.FragmentDefinition) (goType, error) {
+	typ := g.schema.Types[fragment.TypeCondition]
+	if !g.Config.AllowBrokenFeatures &&
+		(typ.Kind == ast.Interface || typ.Kind == ast.Union) {
+		return nil, errorf(fragment.Position, "not implemented: abstract-typed fragments")
+	}
+
+	description, directive, err := g.parsePrecedingComment(fragment, fragment.Position)
+	if err != nil {
+		return nil, err
+	}
+
+	// If the user included a comment, use that.  Else make up something
+	// generic; there's not much to say though.
+	if description == "" {
+		description = fmt.Sprintf(
+			"%v includes the GraphQL fields of %v requested by the fragment %v.",
+			fragment.Name, fragment.TypeCondition, fragment.Name)
+	}
+
+	fields, err := g.convertSelectionSet(
+		newPrefixList(fragment.Name), fragment.SelectionSet, typ, directive)
+	if err != nil {
+		return nil, err
+	}
+
+	goType := &goStructType{
+		GoName:      fragment.Name,
+		Description: description,
+		GraphQLName: fragment.TypeCondition,
+		Fields:      fields,
+		Incomplete:  false,
+	}
+	g.typeMap[fragment.Name] = goType
+	return goType, nil
 }
 
 // convertField converts a single GraphQL operation-field into a Go

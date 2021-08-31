@@ -153,6 +153,15 @@ func (dir *GenqlientDirective) validate(node interface{}) error {
 		// Anything else is valid on the entire operation; it will just apply
 		// to whatever it is relevant to.
 		return nil
+	case *ast.FragmentDefinition:
+		if dir.Bind != "" {
+			// TODO(benkraft): Implement this if people find it useful.
+			return errorf(dir.pos, "bind is not implemented for named fragments")
+		}
+
+		// Like operations, anything else will just apply to the entire
+		// fragment.
+		return nil
 	case *ast.VariableDefinition:
 		if dir.Omitempty != nil && node.Type.NonNull {
 			return errorf(dir.pos, "omitempty may only be used on optional arguments")
@@ -164,7 +173,7 @@ func (dir *GenqlientDirective) validate(node interface{}) error {
 		}
 		return nil
 	default:
-		return errorf(dir.pos, "invalid directive location: %T", node)
+		return errorf(dir.pos, "invalid @genqlient directive location: %T", node)
 	}
 }
 

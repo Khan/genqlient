@@ -82,13 +82,12 @@ type UnionNoFragmentsQueryResponse struct {
 
 func (v *UnionNoFragmentsQueryResponse) UnmarshalJSON(b []byte) error {
 
-	type UnionNoFragmentsQueryResponseWrapper UnionNoFragmentsQueryResponse
-
 	var firstPass struct {
-		*UnionNoFragmentsQueryResponseWrapper
+		*UnionNoFragmentsQueryResponse
 		RandomLeaf json.RawMessage `json:"randomLeaf"`
+		graphql.NoUnmarshalJSON
 	}
-	firstPass.UnionNoFragmentsQueryResponseWrapper = (*UnionNoFragmentsQueryResponseWrapper)(v)
+	firstPass.UnionNoFragmentsQueryResponse = v
 
 	err := json.Unmarshal(b, &firstPass)
 	if err != nil {
@@ -105,6 +104,7 @@ func (v *UnionNoFragmentsQueryResponse) UnmarshalJSON(b []byte) error {
 				"Unable to unmarshal UnionNoFragmentsQueryResponse.RandomLeaf: %w", err)
 		}
 	}
+
 	return nil
 }
 

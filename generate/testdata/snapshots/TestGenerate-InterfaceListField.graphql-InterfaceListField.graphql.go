@@ -26,13 +26,12 @@ type InterfaceListFieldRootTopic struct {
 
 func (v *InterfaceListFieldRootTopic) UnmarshalJSON(b []byte) error {
 
-	type InterfaceListFieldRootTopicWrapper InterfaceListFieldRootTopic
-
 	var firstPass struct {
-		*InterfaceListFieldRootTopicWrapper
+		*InterfaceListFieldRootTopic
 		Children []json.RawMessage `json:"children"`
+		graphql.NoUnmarshalJSON
 	}
-	firstPass.InterfaceListFieldRootTopicWrapper = (*InterfaceListFieldRootTopicWrapper)(v)
+	firstPass.InterfaceListFieldRootTopic = v
 
 	err := json.Unmarshal(b, &firstPass)
 	if err != nil {
@@ -55,6 +54,7 @@ func (v *InterfaceListFieldRootTopic) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
+
 	return nil
 }
 
@@ -183,13 +183,12 @@ type InterfaceListFieldWithPointerTopic struct {
 
 func (v *InterfaceListFieldWithPointerTopic) UnmarshalJSON(b []byte) error {
 
-	type InterfaceListFieldWithPointerTopicWrapper InterfaceListFieldWithPointerTopic
-
 	var firstPass struct {
-		*InterfaceListFieldWithPointerTopicWrapper
+		*InterfaceListFieldWithPointerTopic
 		Children []json.RawMessage `json:"children"`
+		graphql.NoUnmarshalJSON
 	}
-	firstPass.InterfaceListFieldWithPointerTopicWrapper = (*InterfaceListFieldWithPointerTopicWrapper)(v)
+	firstPass.InterfaceListFieldWithPointerTopic = v
 
 	err := json.Unmarshal(b, &firstPass)
 	if err != nil {
@@ -212,6 +211,7 @@ func (v *InterfaceListFieldWithPointerTopic) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
+
 	return nil
 }
 
