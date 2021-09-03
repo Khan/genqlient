@@ -2,17 +2,8 @@ package generate
 
 import (
 	"io"
-	"path/filepath"
-	"runtime"
 	"strings"
 	"text/template"
-)
-
-var (
-	// TODO(benkraft): Embed templates into the binary, see
-	// https://github.com/Khan/genqlient/issues/9.
-	_, thisFilename, _, _ = runtime.Caller(0)
-	thisDir               = filepath.Dir(thisFilename)
 )
 
 func repeat(n int, s string) string {
@@ -37,17 +28,17 @@ func sub(x, y int) int { return x - y }
 func (g *generator) render(tmplRelFilename string, w io.Writer, data interface{}) error {
 	tmpl := g.templateCache[tmplRelFilename]
 	if tmpl == nil {
-		absFilename := filepath.Join(thisDir, tmplRelFilename)
 		funcMap := template.FuncMap{
 			"ref":      g.ref,
 			"repeat":   repeat,
 			"intRange": intRange,
 			"sub":      sub,
 		}
+		tmpl = template.New(tmplRelFilename).Funcs(funcMap)
 		var err error
-		tmpl, err = template.New(tmplRelFilename).Funcs(funcMap).ParseFiles(absFilename)
+		tmpl, err = loadTemplate(tmpl, tmplRelFilename)
 		if err != nil {
-			return errorf(nil, "could not load template %v: %v", absFilename, err)
+			return err
 		}
 		g.templateCache[tmplRelFilename] = tmpl
 	}
