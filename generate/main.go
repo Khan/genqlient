@@ -49,7 +49,7 @@ func Main() {
 	case 2:
 		err = readConfigGenerateAndWrite(os.Args[1])
 	case 1:
-		err = readConfigGenerateAndWrite("")
+		err = readConfigGenerateAndWrite("genqlient.yaml")
 	default:
 		argv0 := os.Args[0]
 		if strings.Contains(argv0, string(filepath.Separator)+"go-build") {
