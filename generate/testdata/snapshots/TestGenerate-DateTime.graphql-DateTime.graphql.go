@@ -23,8 +23,10 @@ func convertTimezone(
 		"tz": tz,
 	}
 
+	var err error
+
 	var retval convertTimezoneResponse
-	err := client.MakeRequest(
+	err = client.MakeRequest(
 		nil,
 		"convertTimezone",
 		`

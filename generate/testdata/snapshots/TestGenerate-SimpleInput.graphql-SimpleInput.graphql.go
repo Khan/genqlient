@@ -35,8 +35,10 @@ func SimpleInputQuery(
 		"name": name,
 	}
 
+	var err error
+
 	var retval SimpleInputQueryResponse
-	err := client.MakeRequest(
+	err = client.MakeRequest(
 		nil,
 		"SimpleInputQuery",
 		`

@@ -64,8 +64,10 @@ func InputObjectQuery(
 		"query": query,
 	}
 
+	var err error
+
 	var retval InputObjectQueryResponse
-	err := client.MakeRequest(
+	err = client.MakeRequest(
 		nil,
 		"InputObjectQuery",
 		`

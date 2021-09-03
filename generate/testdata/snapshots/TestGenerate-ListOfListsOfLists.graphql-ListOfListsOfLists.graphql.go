@@ -14,8 +14,10 @@ type ListOfListsOfListsResponse struct {
 func ListOfListsOfLists(
 	client graphql.Client,
 ) (*ListOfListsOfListsResponse, error) {
+	var err error
+
 	var retval ListOfListsOfListsResponse
-	err := client.MakeRequest(
+	err = client.MakeRequest(
 		nil,
 		"ListOfListsOfLists",
 		`

@@ -29,8 +29,10 @@ type QueryWithSlicesUser struct {
 func QueryWithSlices(
 	client graphql.Client,
 ) (*QueryWithSlicesResponse, error) {
+	var err error
+
 	var retval QueryWithSlicesResponse
-	err := client.MakeRequest(
+	err = client.MakeRequest(
 		nil,
 		"QueryWithSlices",
 		`

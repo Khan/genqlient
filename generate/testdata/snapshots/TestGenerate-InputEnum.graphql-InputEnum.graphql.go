@@ -46,8 +46,10 @@ func InputEnumQuery(
 		"role": role,
 	}
 
+	var err error
+
 	var retval InputEnumQueryResponse
-	err := client.MakeRequest(
+	err = client.MakeRequest(
 		nil,
 		"InputEnumQuery",
 		`

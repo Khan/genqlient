@@ -47,8 +47,10 @@ func getViewer(
 	ctx context.Context,
 	client graphql.Client,
 ) (*getViewerResponse, error) {
+	var err error
+
 	var retval getViewerResponse
-	err := client.MakeRequest(
+	err = client.MakeRequest(
 		ctx,
 		"getViewer",
 		`
@@ -75,8 +77,10 @@ func getUser(
 		"Login": login,
 	}
 
+	var err error
+
 	var retval getUserResponse
-	err := client.MakeRequest(
+	err = client.MakeRequest(
 		ctx,
 		"getUser",
 		`

@@ -343,8 +343,10 @@ type InterfaceListOfListOfListsFieldWithPointerVideo struct {
 func InterfaceListOfListOfListsField(
 	client graphql.Client,
 ) (*InterfaceListOfListOfListsFieldResponse, error) {
+	var err error
+
 	var retval InterfaceListOfListOfListsFieldResponse
-	err := client.MakeRequest(
+	err = client.MakeRequest(
 		nil,
 		"InterfaceListOfListOfListsField",
 		`

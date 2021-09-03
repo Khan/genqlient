@@ -163,8 +163,10 @@ func (v *SimpleInlineFragmentResponse) UnmarshalJSON(b []byte) error {
 func SimpleInlineFragment(
 	client graphql.Client,
 ) (*SimpleInlineFragmentResponse, error) {
+	var err error
+
 	var retval SimpleInlineFragmentResponse
-	err := client.MakeRequest(
+	err = client.MakeRequest(
 		nil,
 		"SimpleInlineFragment",
 		`

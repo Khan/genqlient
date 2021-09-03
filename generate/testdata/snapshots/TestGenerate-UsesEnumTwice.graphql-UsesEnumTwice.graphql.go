@@ -53,8 +53,10 @@ type UsesEnumTwiceQueryResponse struct {
 func UsesEnumTwiceQuery(
 	client graphql.Client,
 ) (*UsesEnumTwiceQueryResponse, error) {
+	var err error
+
 	var retval UsesEnumTwiceQueryResponse
-	err := client.MakeRequest(
+	err = client.MakeRequest(
 		nil,
 		"UsesEnumTwiceQuery",
 		`

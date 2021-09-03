@@ -34,8 +34,10 @@ type QueryWithDoubleAliasUser struct {
 func QueryWithDoubleAlias(
 	client graphql.Client,
 ) (*QueryWithDoubleAliasResponse, error) {
+	var err error
+
 	var retval QueryWithDoubleAliasResponse
-	err := client.MakeRequest(
+	err = client.MakeRequest(
 		nil,
 		"QueryWithDoubleAlias",
 		`

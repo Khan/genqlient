@@ -91,8 +91,10 @@ func PointersQuery(
 		"tz":    tz,
 	}
 
+	var err error
+
 	var retval PointersQueryResponse
-	err := client.MakeRequest(
+	err = client.MakeRequest(
 		nil,
 		"PointersQuery",
 		`

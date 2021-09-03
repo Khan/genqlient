@@ -111,8 +111,10 @@ func (v *UnionNoFragmentsQueryResponse) UnmarshalJSON(b []byte) error {
 func UnionNoFragmentsQuery(
 	client graphql.Client,
 ) (*UnionNoFragmentsQueryResponse, error) {
+	var err error
+
 	var retval UnionNoFragmentsQueryResponse
-	err := client.MakeRequest(
+	err = client.MakeRequest(
 		nil,
 		"UnionNoFragmentsQuery",
 		`

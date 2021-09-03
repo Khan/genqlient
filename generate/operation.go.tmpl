@@ -43,9 +43,18 @@ func {{.Name}}(
     }
     {{end}}
     {{end}}
+    {{end -}}
+
+    var err error
+    {{if $.Config.ClientGetter -}}
+    client, err := {{ref $.Config.ClientGetter}}({{if $.Config.ContextType}}ctx{{else}}{{end}})
+    if err != nil {
+        return nil, err
+    }
     {{end}}
+
 	var retval {{.ResponseName}}
-    err := {{if $.Config.ClientGetter}}{{$.Config.ClientGetter}}{{else}}client{{end}}.MakeRequest(
+    err = client.MakeRequest(
         {{if $.Config.ContextType}}ctx{{else}}nil{{end}},
         "{{.Name}}",
         `{{.Body}}`,

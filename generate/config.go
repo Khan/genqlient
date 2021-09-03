@@ -53,16 +53,29 @@ type Config struct {
 	// Generated
 	Package string `yaml:"package"`
 
-	// Set to the fully-qualified name of a type which generated helpers should
-	// accept and use as the context.Context for HTTP requests.  Defaults to
-	// context.Context; set to the empty string to omit context entirely.
+	// Set to the fully-qualified name of a Go type which generated helpers
+	// should accept and use as the context.Context for HTTP requests.
+	//
+	// Defaults to context.Context; set to the empty string to omit context
+	// entirely (i.e. use context.Background()).  Must be a type which
+	// implements context.Context.
 	ContextType string `yaml:"context_type"`
 
-	// If set, a snippet of Go code to get a *graphql.Client from the context
-	// (which will be named ctx).  For example, this might do
-	// ctx.Value(myKey).(*graphql.Client).  If omitted, client must be
-	// passed to each method explicitly.
-	// TODO(#5): This is a bit broken, fix it.
+	// If set, a function to get a graphql.Client, perhaps from the context.
+	// By default, the client must be passed explicitly to each genqlient
+	// generated query-helper.
+	//
+	// This is useful if you have a shared client, either a global, or
+	// available from context, and don't want to pass it explicitly.  In this
+	// case the signature of the genqlient-generated helpers will omit the
+	// `graphql.Context` and they will call this function instead.
+	//
+	// Must be the fully-qualified name of a function which accepts a context
+	// (of the type configured as ContextType (above), which defaults to
+	// `context.Context`, or a function of no arguments if ContextType is set
+	// to the empty string) and returns (graphql.Client, error).  If the
+	// client-getter returns an error, the helper will return the error
+	// without making a query.
 	ClientGetter string `yaml:"client_getter"`
 
 	// A map from GraphQL type name to Go fully-qualified type name to override

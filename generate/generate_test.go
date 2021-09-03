@@ -18,6 +18,36 @@ const (
 	errorsDir = "testdata/errors"
 )
 
+// buildGoFile returns an error if the given Go code is not valid.
+//
+// namePrefix is used for the temp-file, and is just for debugging.
+func buildGoFile(namePrefix string, content []byte) error {
+	// We need to put this within the current module, rather than in
+	// /tmp, so that it can access internal/testutil.
+	f, err := ioutil.TempFile("./testdata/tmp", namePrefix+"_*.go")
+	if err != nil {
+		return err
+	}
+	defer func() {
+		f.Close()
+		os.Remove(f.Name())
+	}()
+
+	_, err = f.Write(content)
+	if err != nil {
+		return err
+	}
+
+	cmd := exec.Command("go", "build", f.Name())
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	err = cmd.Run()
+	if err != nil {
+		return fmt.Errorf("generated code does not compile: %w", err)
+	}
+	return nil
+}
+
 // TestGenerate is a snapshot-based test of code-generation.
 //
 // This file just has the test runner; the actual data is all in
@@ -91,29 +121,103 @@ func TestGenerate(t *testing.T) {
 						"https://github.com/Khan/genqlient/issues/43")
 				}
 
-				goContent := generated[goFilename]
-				// We need to put this within the current module, rather than in
-				// /tmp, so that it can access internal/testutil.
-				f, err := ioutil.TempFile("./testdata/tmp", sourceFilename+"_*.go")
+				err := buildGoFile(sourceFilename, generated[goFilename])
 				if err != nil {
-					t.Fatal(err)
+					t.Error(err)
 				}
-				defer func() {
-					f.Close()
-					os.Remove(f.Name())
-				}()
+			})
+		})
+	}
+}
 
-				_, err = f.Write(goContent)
-				if err != nil {
-					t.Fatal(err)
+// TestGenerateWithConfig tests several configuration options that affect
+// generated code but don't require particular query structures to test.
+//
+// It runs a simple query from TestGenerate with several different genqlient
+// configurations.  It uses snapshots, just like TestGenerate.
+func TestGenerateWithConfig(t *testing.T) {
+	tests := []struct {
+		name               string
+		fakeConfigFilename string
+		config             *Config // omits Schema and Operations, set below.
+	}{
+		{"DefaultConfig", "genqlient.yaml", defaultConfig},
+		{"Subpackage", "genqlient.yaml", &Config{
+			Generated:   "mypkg/myfile.go",
+			ContextType: "context.Context", // (from defaultConfig)
+		}},
+		{"SubpackageConfig", "mypkg/genqlient.yaml", &Config{
+			Generated:   "myfile.go", // (relative to genqlient.yaml)
+			ContextType: "context.Context",
+		}},
+		{"PackageName", "genqlient.yaml", &Config{
+			Generated:   "myfile.go",
+			Package:     "mypkg",
+			ContextType: "context.Context",
+		}},
+		{"ExportOperations", "genqlient.yaml", &Config{
+			Generated:        "generated.go",
+			ExportOperations: "operations.json",
+			ContextType:      "context.Context",
+		}},
+		{"CustomContext", "genqlient.yaml", &Config{
+			Generated:   "generated.go",
+			ContextType: "github.com/Khan/genqlient/internal/testutil.MyContext",
+		}},
+		{"NoContext", "genqlient.yaml", &Config{
+			Generated:   "generated.go",
+			ContextType: "",
+		}},
+		{"ClientGetter", "genqlient.yaml", &Config{
+			Generated:    "generated.go",
+			ClientGetter: "github.com/Khan/genqlient/internal/testutil.GetClientFromContext",
+			ContextType:  "context.Context",
+		}},
+		{"ClientGetterCustomContext", "genqlient.yaml", &Config{
+			Generated:    "generated.go",
+			ClientGetter: "github.com/Khan/genqlient/internal/testutil.GetClientFromMyContext",
+			ContextType:  "github.com/Khan/genqlient/internal/testutil.MyContext",
+		}},
+		{"ClientGetterNoContext", "genqlient.yaml", &Config{
+			Generated:    "generated.go",
+			ClientGetter: "github.com/Khan/genqlient/internal/testutil.GetClientFromNowhere",
+			ContextType:  "",
+		}},
+	}
+
+	sourceFilename := "SimpleQuery.graphql"
+
+	for _, test := range tests {
+		config := test.config
+		t.Run(test.name, func(t *testing.T) {
+			err := config.ValidateAndFillDefaults(
+				filepath.Join(dataDir, test.fakeConfigFilename))
+			config.Schema = filepath.Join(dataDir, "schema.graphql")
+			config.Operations = []string{filepath.Join(dataDir, sourceFilename)}
+			if err != nil {
+				t.Fatal(err)
+			}
+			generated, err := Generate(config)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			for filename, content := range generated {
+				t.Run(filename, func(t *testing.T) {
+					testutil.Cupaloy.SnapshotT(t, string(content))
+				})
+			}
+
+			t.Run("Build", func(t *testing.T) {
+				if testing.Short() {
+					t.Skip("skipping build due to -short")
 				}
 
-				cmd := exec.Command("go", "build", f.Name())
-				cmd.Stdout = os.Stdout
-				cmd.Stderr = os.Stderr
-				err = cmd.Run()
+				fmt.Println(generated)
+				err := buildGoFile(sourceFilename,
+					generated[config.Generated])
 				if err != nil {
-					t.Fatal(fmt.Errorf("generated code does not compile: %w", err))
+					t.Error(err)
 				}
 			})
 		})

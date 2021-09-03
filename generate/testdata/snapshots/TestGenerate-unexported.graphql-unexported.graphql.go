@@ -64,8 +64,10 @@ func unexported(
 		"query": query,
 	}
 
+	var err error
+
 	var retval unexportedResponse
-	err := client.MakeRequest(
+	err = client.MakeRequest(
 		nil,
 		"unexported",
 		`
