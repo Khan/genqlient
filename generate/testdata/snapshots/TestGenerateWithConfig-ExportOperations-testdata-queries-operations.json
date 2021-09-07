@@ -1,0 +1,9 @@
+{
+  "operations": [
+    {
+      "operationName": "SimpleQuery",
+      "query": "\nquery SimpleQuery {\n\tuser {\n\t\tid\n\t}\n}\n",
+      "sourceLocation": "SimpleQuery.graphql"
+    }
+  ]
+}

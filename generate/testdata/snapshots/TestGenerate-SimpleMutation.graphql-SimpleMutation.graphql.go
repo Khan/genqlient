@@ -36,8 +36,10 @@ func SimpleMutation(
 		"name": name,
 	}
 
+	var err error
+
 	var retval SimpleMutationResponse
-	err := client.MakeRequest(
+	err = client.MakeRequest(
 		nil,
 		"SimpleMutation",
 		`

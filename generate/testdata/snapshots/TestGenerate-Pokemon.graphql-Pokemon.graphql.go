@@ -45,8 +45,10 @@ func GetPokemonSiblings(
 		"input": input,
 	}
 
+	var err error
+
 	var retval GetPokemonSiblingsResponse
-	err := client.MakeRequest(
+	err = client.MakeRequest(
 		nil,
 		"GetPokemonSiblings",
 		`

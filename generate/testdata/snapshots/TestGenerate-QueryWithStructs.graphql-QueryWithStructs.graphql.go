@@ -32,8 +32,10 @@ type QueryWithStructsUserAuthMethodsAuthMethod struct {
 func QueryWithStructs(
 	client graphql.Client,
 ) (*QueryWithStructsResponse, error) {
+	var err error
+
 	var retval QueryWithStructsResponse
-	err := client.MakeRequest(
+	err = client.MakeRequest(
 		nil,
 		"QueryWithStructs",
 		`

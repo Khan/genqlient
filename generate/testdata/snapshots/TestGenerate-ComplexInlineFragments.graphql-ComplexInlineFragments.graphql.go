@@ -872,8 +872,10 @@ type ComplexInlineFragmentsRootTopic struct {
 func ComplexInlineFragments(
 	client graphql.Client,
 ) (*ComplexInlineFragmentsResponse, error) {
+	var err error
+
 	var retval ComplexInlineFragmentsResponse
-	err := client.MakeRequest(
+	err = client.MakeRequest(
 		nil,
 		"ComplexInlineFragments",
 		`

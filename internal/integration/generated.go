@@ -675,8 +675,10 @@ func simpleQuery(
 	ctx context.Context,
 	client graphql.Client,
 ) (*simpleQueryResponse, error) {
+	var err error
+
 	var retval simpleQueryResponse
-	err := client.MakeRequest(
+	err = client.MakeRequest(
 		ctx,
 		"simpleQuery",
 		`
@@ -703,8 +705,10 @@ func queryWithVariables(
 		"id": id,
 	}
 
+	var err error
+
 	var retval queryWithVariablesResponse
-	err := client.MakeRequest(
+	err = client.MakeRequest(
 		ctx,
 		"queryWithVariables",
 		`
@@ -731,8 +735,10 @@ func queryWithInterfaceNoFragments(
 		"id": id,
 	}
 
+	var err error
+
 	var retval queryWithInterfaceNoFragmentsResponse
-	err := client.MakeRequest(
+	err = client.MakeRequest(
 		ctx,
 		"queryWithInterfaceNoFragments",
 		`
@@ -763,8 +769,10 @@ func queryWithInterfaceListField(
 		"ids": ids,
 	}
 
+	var err error
+
 	var retval queryWithInterfaceListFieldResponse
-	err := client.MakeRequest(
+	err = client.MakeRequest(
 		ctx,
 		"queryWithInterfaceListField",
 		`
@@ -791,8 +799,10 @@ func queryWithInterfaceListPointerField(
 		"ids": ids,
 	}
 
+	var err error
+
 	var retval queryWithInterfaceListPointerFieldResponse
-	err := client.MakeRequest(
+	err = client.MakeRequest(
 		ctx,
 		"queryWithInterfaceListPointerField",
 		`
@@ -819,8 +829,10 @@ func queryWithFragments(
 		"ids": ids,
 	}
 
+	var err error
+
 	var retval queryWithFragmentsResponse
-	err := client.MakeRequest(
+	err = client.MakeRequest(
 		ctx,
 		"queryWithFragments",
 		`

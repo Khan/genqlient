@@ -15,8 +15,10 @@ type EmptyInterfaceResponse struct {
 func EmptyInterface(
 	client graphql.Client,
 ) (*EmptyInterfaceResponse, error) {
+	var err error
+
 	var retval EmptyInterfaceResponse
-	err := client.MakeRequest(
+	err = client.MakeRequest(
 		nil,
 		"EmptyInterface",
 		`

@@ -103,8 +103,10 @@ func OmitEmptyQuery(
 		variables["tz"] = tz
 	}
 
+	var err error
+
 	var retval OmitEmptyQueryResponse
-	err := client.MakeRequest(
+	err = client.MakeRequest(
 		nil,
 		"OmitEmptyQuery",
 		`

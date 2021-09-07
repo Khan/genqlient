@@ -53,8 +53,10 @@ const (
 func QueryWithEnums(
 	client graphql.Client,
 ) (*QueryWithEnumsResponse, error) {
+	var err error
+
 	var retval QueryWithEnumsResponse
-	err := client.MakeRequest(
+	err = client.MakeRequest(
 		nil,
 		"QueryWithEnums",
 		`

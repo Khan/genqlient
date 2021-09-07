@@ -7,6 +7,7 @@ package generate
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"go/format"
 	"sort"
 	"strings"
@@ -66,7 +67,7 @@ type argument struct {
 	Options     *GenqlientDirective
 }
 
-func newGenerator(config *Config, schema *ast.Schema) *generator {
+func newGenerator(config *Config, schema *ast.Schema) (*generator, error) {
 	g := generator{
 		Config:        config,
 		typeMap:       map[string]goType{},
@@ -76,20 +77,26 @@ func newGenerator(config *Config, schema *ast.Schema) *generator {
 		schema:        schema,
 	}
 
-	if g.Config.ClientGetter == "" {
-		_, err := g.addRef("github.com/Khan/genqlient/graphql.Client")
-		if err != nil {
-			panic(err)
-		}
+	_, err := g.addRef("github.com/Khan/genqlient/graphql.Client")
+	if err != nil {
+		return nil, err
 	}
-	if g.Config.ContextType != "" {
-		_, err := g.addRef(g.Config.ContextType)
+
+	if g.Config.ClientGetter != "" {
+		_, err := g.addRef(g.Config.ClientGetter)
 		if err != nil {
-			panic(err)
+			return nil, fmt.Errorf("invalid client_getter: %w", err)
 		}
 	}
 
-	return &g
+	if g.Config.ContextType != "" {
+		_, err := g.addRef(g.Config.ContextType)
+		if err != nil {
+			return nil, fmt.Errorf("invalid context_type: %w", err)
+		}
+	}
+
+	return &g, nil
 }
 
 func (g *generator) Types() (string, error) {
@@ -305,7 +312,11 @@ func Generate(config *Config) (map[string][]byte, error) {
 	// Step 2: For each operation, convert it into data structures representing
 	// Go types (defined in types.go).  The bulk of this logic is in
 	// convert.go.
-	g := newGenerator(config, schema)
+	g, err := newGenerator(config, schema)
+	if err != nil {
+		return nil, err
+	}
+
 	for _, op := range document.Operations {
 		if err = g.addOperation(op); err != nil {
 			return nil, err

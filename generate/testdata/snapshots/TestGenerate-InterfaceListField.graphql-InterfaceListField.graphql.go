@@ -333,8 +333,10 @@ type InterfaceListFieldWithPointerTopicChildrenVideo struct {
 func InterfaceListField(
 	client graphql.Client,
 ) (*InterfaceListFieldResponse, error) {
+	var err error
+
 	var retval InterfaceListFieldResponse
-	err := client.MakeRequest(
+	err = client.MakeRequest(
 		nil,
 		"InterfaceListField",
 		`

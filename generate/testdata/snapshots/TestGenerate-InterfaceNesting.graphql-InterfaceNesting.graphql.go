@@ -334,8 +334,10 @@ type InterfaceNestingRootTopicChildrenVideo struct {
 func InterfaceNesting(
 	client graphql.Client,
 ) (*InterfaceNestingResponse, error) {
+	var err error
+
 	var retval InterfaceNestingResponse
-	err := client.MakeRequest(
+	err = client.MakeRequest(
 		nil,
 		"InterfaceNesting",
 		`

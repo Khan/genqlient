@@ -430,8 +430,10 @@ type InterfaceNoFragmentsQueryWithPointerVideo struct {
 func InterfaceNoFragmentsQuery(
 	client graphql.Client,
 ) (*InterfaceNoFragmentsQueryResponse, error) {
+	var err error
+
 	var retval InterfaceNoFragmentsQueryResponse
-	err := client.MakeRequest(
+	err = client.MakeRequest(
 		nil,
 		"InterfaceNoFragmentsQuery",
 		`
