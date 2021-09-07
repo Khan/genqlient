@@ -213,7 +213,6 @@ func TestGenerateWithConfig(t *testing.T) {
 					t.Skip("skipping build due to -short")
 				}
 
-				fmt.Println(generated)
 				err := buildGoFile(sourceFilename,
 					generated[config.Generated])
 				if err != nil {
