@@ -54,7 +54,6 @@ func (v *InterfaceListFieldRootTopic) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-
 	return nil
 }
 
@@ -72,7 +71,6 @@ type InterfaceListFieldRootTopicChildrenArticle struct {
 // InterfaceListFieldRootTopicChildrenArticle
 // InterfaceListFieldRootTopicChildrenVideo
 // InterfaceListFieldRootTopicChildrenTopic
-//
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
@@ -211,7 +209,6 @@ func (v *InterfaceListFieldWithPointerTopic) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-
 	return nil
 }
 
@@ -229,7 +226,6 @@ type InterfaceListFieldWithPointerTopicChildrenArticle struct {
 // InterfaceListFieldWithPointerTopicChildrenArticle
 // InterfaceListFieldWithPointerTopicChildrenVideo
 // InterfaceListFieldWithPointerTopicChildrenTopic
-//
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.

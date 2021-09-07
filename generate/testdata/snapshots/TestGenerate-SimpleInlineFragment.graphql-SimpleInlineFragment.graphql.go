@@ -25,7 +25,6 @@ type SimpleInlineFragmentRandomItemArticle struct {
 // SimpleInlineFragmentRandomItemArticle
 // SimpleInlineFragmentRandomItemVideo
 // SimpleInlineFragmentRandomItemTopic
-//
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
@@ -156,7 +155,6 @@ func (v *SimpleInlineFragmentResponse) UnmarshalJSON(b []byte) error {
 				"Unable to unmarshal SimpleInlineFragmentResponse.RandomItem: %w", err)
 		}
 	}
-
 	return nil
 }
 

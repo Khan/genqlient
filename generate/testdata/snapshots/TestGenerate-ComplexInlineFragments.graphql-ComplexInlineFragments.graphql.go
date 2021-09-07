@@ -28,7 +28,6 @@ type ComplexInlineFragmentsConflictingStuffArticleThumbnailStuffThumbnail struct
 // ComplexInlineFragmentsConflictingStuffArticle
 // ComplexInlineFragmentsConflictingStuffVideo
 // ComplexInlineFragmentsConflictingStuffTopic
-//
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
@@ -116,7 +115,6 @@ type ComplexInlineFragmentsNestedStuffArticle struct {
 // ComplexInlineFragmentsNestedStuffArticle
 // ComplexInlineFragmentsNestedStuffVideo
 // ComplexInlineFragmentsNestedStuffTopic
-//
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
@@ -212,7 +210,6 @@ func (v *ComplexInlineFragmentsNestedStuffTopic) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-
 	return nil
 }
 
@@ -260,7 +257,6 @@ func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParen
 			}
 		}
 	}
-
 	return nil
 }
 
@@ -278,7 +274,6 @@ type ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTop
 // ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenArticle
 // ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenVideo
 // ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenTopic
-//
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
@@ -409,7 +404,6 @@ type ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentTopic struct {
 // ComplexInlineFragmentsNestedStuffTopicChildrenArticle
 // ComplexInlineFragmentsNestedStuffTopicChildrenVideo
 // ComplexInlineFragmentsNestedStuffTopicChildrenTopic
-//
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
@@ -519,7 +513,6 @@ type ComplexInlineFragmentsRandomItemArticle struct {
 // ComplexInlineFragmentsRandomItemArticle
 // ComplexInlineFragmentsRandomItemVideo
 // ComplexInlineFragmentsRandomItemTopic
-//
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
@@ -640,7 +633,6 @@ type ComplexInlineFragmentsRepeatedStuffArticle struct {
 // ComplexInlineFragmentsRepeatedStuffArticle
 // ComplexInlineFragmentsRepeatedStuffVideo
 // ComplexInlineFragmentsRepeatedStuffTopic
-//
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
@@ -855,7 +847,6 @@ func (v *ComplexInlineFragmentsResponse) UnmarshalJSON(b []byte) error {
 				"Unable to unmarshal ComplexInlineFragmentsResponse.NestedStuff: %w", err)
 		}
 	}
-
 	return nil
 }
 

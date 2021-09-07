@@ -24,7 +24,6 @@ type InterfaceNoFragmentsQueryRandomItemArticle struct {
 // InterfaceNoFragmentsQueryRandomItemArticle
 // InterfaceNoFragmentsQueryRandomItemVideo
 // InterfaceNoFragmentsQueryRandomItemTopic
-//
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
@@ -139,7 +138,6 @@ type InterfaceNoFragmentsQueryRandomItemWithTypeNameArticle struct {
 // InterfaceNoFragmentsQueryRandomItemWithTypeNameArticle
 // InterfaceNoFragmentsQueryRandomItemWithTypeNameVideo
 // InterfaceNoFragmentsQueryRandomItemWithTypeNameTopic
-//
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
@@ -303,7 +301,6 @@ func (v *InterfaceNoFragmentsQueryResponse) UnmarshalJSON(b []byte) error {
 				"Unable to unmarshal InterfaceNoFragmentsQueryResponse.WithPointer: %w", err)
 		}
 	}
-
 	return nil
 }
 
@@ -328,7 +325,6 @@ type InterfaceNoFragmentsQueryWithPointerArticle struct {
 // InterfaceNoFragmentsQueryWithPointerArticle
 // InterfaceNoFragmentsQueryWithPointerVideo
 // InterfaceNoFragmentsQueryWithPointerTopic
-//
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.

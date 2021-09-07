@@ -1,6 +1,6 @@
 module github.com/Khan/genqlient
 
-go 1.13
+go 1.14
 
 require (
 	github.com/99designs/gqlgen v0.13.0

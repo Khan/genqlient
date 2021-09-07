@@ -19,7 +19,6 @@ type UnionNoFragmentsQueryRandomLeafArticle struct {
 // UnionNoFragmentsQueryRandomLeafLeafContent is implemented by the following types:
 // UnionNoFragmentsQueryRandomLeafArticle
 // UnionNoFragmentsQueryRandomLeafVideo
-//
 // The GraphQL type's documentation follows.
 //
 // LeafContent represents content items that can't have child-nodes.
@@ -104,7 +103,6 @@ func (v *UnionNoFragmentsQueryResponse) UnmarshalJSON(b []byte) error {
 				"Unable to unmarshal UnionNoFragmentsQueryResponse.RandomLeaf: %w", err)
 		}
 	}
-
 	return nil
 }
 

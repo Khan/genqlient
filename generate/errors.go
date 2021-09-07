@@ -1,8 +1,11 @@
 package generate
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
+	"go/scanner"
+	"math"
 	"strconv"
 	"strings"
 
@@ -129,4 +132,50 @@ func errorf(pos *ast.Position, msg string, args ...interface{}) error {
 		pos:     errPos,
 		wrapped: wrapped,
 	}
+}
+
+// goSourceError processes the error(s) returned by go tooling (gofmt, etc.)
+// into a nice error message.
+//
+// In practice, such errors are genqlient internal errors, but it's still
+// useful to format them nicely for debugging.
+func goSourceError(
+	failedOperation string, // e.g. "gofmt", for the error message
+	source []byte,
+	err error,
+) error {
+	var errTexts []string
+	var scanErrs scanner.ErrorList
+	var scanErr *scanner.Error
+	var badLines map[int]bool
+
+	if errors.As(err, &scanErrs) {
+		errTexts = make([]string, len(scanErrs))
+		badLines = make(map[int]bool, len(scanErrs))
+		for i, scanErr := range scanErrs {
+			errTexts[i] = err.Error()
+			badLines[scanErr.Pos.Line] = true
+		}
+	} else if errors.As(err, &scanErr) {
+		errTexts = []string{scanErr.Error()}
+		badLines = map[int]bool{scanErr.Pos.Line: true}
+	} else {
+		errTexts = []string{err.Error()}
+	}
+
+	lines := bytes.SplitAfter(source, []byte("\n"))
+	lineNoWidth := int(math.Ceil(math.Log10(float64(len(lines) + 1))))
+	for i, line := range lines {
+		prefix := "  "
+		if badLines[i] {
+			prefix = "> "
+		}
+		lineNo := strconv.Itoa(i + 1)
+		padding := strings.Repeat(" ", lineNoWidth-len(lineNo))
+		lines[i] = []byte(fmt.Sprintf("%s%s%s | %s", prefix, padding, lineNo, line))
+	}
+
+	return errorf(nil,
+		"genqlient internal error: failed to %s code:\n\t%s---source code---\n%s",
+		failedOperation, strings.Join(errTexts, "\n\t"), bytes.Join(lines, nil))
 }
