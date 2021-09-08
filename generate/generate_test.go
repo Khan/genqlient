@@ -10,6 +10,7 @@ import (
 	"testing"
 
 	"github.com/Khan/genqlient/internal/testutil"
+	"gopkg.in/yaml.v2"
 )
 
 const (
@@ -80,6 +81,7 @@ func TestGenerate(t *testing.T) {
 				Package:          "test",
 				Generated:        goFilename,
 				ExportOperations: queriesFilename,
+				ContextType:      "-",
 				Bindings: map[string]*TypeBinding{
 					"ID":          {Type: "github.com/Khan/genqlient/internal/testutil.ID"},
 					"DateTime":    {Type: "time.Time"},
@@ -120,6 +122,22 @@ func TestGenerate(t *testing.T) {
 	}
 }
 
+func defaultConfig(t *testing.T) *Config {
+	// Parse the config that `genqlient --init` generates, to make sure that
+	// works.
+	var config Config
+	b, err := ioutil.ReadFile("default_genqlient.yaml")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	err = yaml.UnmarshalStrict(b, &config)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return &config
+}
+
 // TestGenerateWithConfig tests several configuration options that affect
 // generated code but don't require particular query structures to test.
 //
@@ -131,24 +149,20 @@ func TestGenerateWithConfig(t *testing.T) {
 		fakeConfigFilename string
 		config             *Config // omits Schema and Operations, set below.
 	}{
-		{"DefaultConfig", "genqlient.yaml", defaultConfig},
+		{"DefaultConfig", "genqlient.yaml", defaultConfig(t)},
 		{"Subpackage", "genqlient.yaml", &Config{
-			Generated:   "mypkg/myfile.go",
-			ContextType: "context.Context", // (from defaultConfig)
+			Generated: "mypkg/myfile.go",
 		}},
 		{"SubpackageConfig", "mypkg/genqlient.yaml", &Config{
-			Generated:   "myfile.go", // (relative to genqlient.yaml)
-			ContextType: "context.Context",
+			Generated: "myfile.go", // (relative to genqlient.yaml)
 		}},
 		{"PackageName", "genqlient.yaml", &Config{
-			Generated:   "myfile.go",
-			Package:     "mypkg",
-			ContextType: "context.Context",
+			Generated: "myfile.go",
+			Package:   "mypkg",
 		}},
 		{"ExportOperations", "genqlient.yaml", &Config{
 			Generated:        "generated.go",
 			ExportOperations: "operations.json",
-			ContextType:      "context.Context",
 		}},
 		{"CustomContext", "genqlient.yaml", &Config{
 			Generated:   "generated.go",
@@ -156,12 +170,11 @@ func TestGenerateWithConfig(t *testing.T) {
 		}},
 		{"NoContext", "genqlient.yaml", &Config{
 			Generated:   "generated.go",
-			ContextType: "",
+			ContextType: "-",
 		}},
 		{"ClientGetter", "genqlient.yaml", &Config{
 			Generated:    "generated.go",
 			ClientGetter: "github.com/Khan/genqlient/internal/testutil.GetClientFromContext",
-			ContextType:  "context.Context",
 		}},
 		{"ClientGetterCustomContext", "genqlient.yaml", &Config{
 			Generated:    "generated.go",
@@ -171,7 +184,7 @@ func TestGenerateWithConfig(t *testing.T) {
 		{"ClientGetterNoContext", "genqlient.yaml", &Config{
 			Generated:    "generated.go",
 			ClientGetter: "github.com/Khan/genqlient/internal/testutil.GetClientFromNowhere",
-			ContextType:  "",
+			ContextType:  "-",
 		}},
 	}
 
@@ -240,10 +253,11 @@ func TestGenerateErrors(t *testing.T) {
 
 		t.Run(sourceFilename, func(t *testing.T) {
 			_, err := Generate(&Config{
-				Schema:     filepath.Join(errorsDir, schemaFilename),
-				Operations: []string{filepath.Join(errorsDir, sourceFilename)},
-				Package:    "test",
-				Generated:  os.DevNull,
+				Schema:      filepath.Join(errorsDir, schemaFilename),
+				Operations:  []string{filepath.Join(errorsDir, sourceFilename)},
+				Package:     "test",
+				Generated:   os.DevNull,
+				ContextType: "context.Context",
 				Bindings: map[string]*TypeBinding{
 					"ValidScalar":   {Type: "string"},
 					"InvalidScalar": {Type: "bogus"},

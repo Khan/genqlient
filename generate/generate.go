@@ -103,7 +103,7 @@ func newGenerator(
 		}
 	}
 
-	if g.Config.ContextType != "" {
+	if g.Config.ContextType != "-" {
 		_, err := g.addRef(g.Config.ContextType)
 		if err != nil {
 			return nil, fmt.Errorf("invalid context_type: %w", err)

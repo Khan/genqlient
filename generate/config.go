@@ -51,9 +51,9 @@ type Config struct {
 	// Set to the fully-qualified name of a Go type which generated helpers
 	// should accept and use as the context.Context for HTTP requests.
 	//
-	// Defaults to context.Context; set to the empty string to omit context
-	// entirely (i.e. use context.Background()).  Must be a type which
-	// implements context.Context.
+	// Defaults to context.Context; set to "-" to omit context entirely (i.e.
+	// use context.Background()).  Must be a type which implements
+	// context.Context.
 	ContextType string `yaml:"context_type"`
 
 	// If set, a function to get a graphql.Client, perhaps from the context.
@@ -174,12 +174,12 @@ func (c *Config) ValidateAndFillDefaults(configFilename string) error {
 }
 
 func ReadAndValidateConfig(filename string) (*Config, error) {
-	var config Config
 	text, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return nil, errorf(nil, "unreadable config file %v: %v", filename, err)
 	}
 
+	var config Config
 	err = yaml.UnmarshalStrict(text, &config)
 	if err != nil {
 		return nil, errorf(nil, "invalid config file %v: %v", filename, err)
