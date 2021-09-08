@@ -15,10 +15,10 @@ type OmitEmptyQueryResponse struct {
 	//
 	// See UserQueryInput for what stuff is supported.
 	// If query is null, returns the current user.
-	User         OmitEmptyQueryUser      `json:"user"`
-	Users        OmitEmptyQueryUsersUser `json:"users"`
-	MaybeConvert time.Time               `json:"maybeConvert"`
-	Convert2     time.Time               `json:"convert2"`
+	User         OmitEmptyQueryUser        `json:"user"`
+	Users        []OmitEmptyQueryUsersUser `json:"users"`
+	MaybeConvert time.Time                 `json:"maybeConvert"`
+	Convert2     time.Time                 `json:"convert2"`
 }
 
 // OmitEmptyQueryUser includes the requested fields of the GraphQL type User.

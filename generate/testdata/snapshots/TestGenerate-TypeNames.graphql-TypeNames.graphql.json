@@ -1,0 +1,9 @@
+{
+  "operations": [
+    {
+      "operationName": "TypeNames",
+      "query": "\nquery TypeNames {\n\tuser {\n\t\tid\n\t\tname\n\t}\n\trandomItem {\n\t\t__typename\n\t\tid\n\t\tname\n\t}\n\tusers {\n\t\tid\n\t\tname\n\t}\n}\n",
+      "sourceLocation": "testdata/queries/TypeNames.graphql"
+    }
+  ]
+}

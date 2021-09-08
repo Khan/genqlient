@@ -166,3 +166,13 @@ func nextPrefix(prefix *prefixList, field *ast.Field) *prefixList {
 func makeTypeName(prefix *prefixList, typeName string) string {
 	return joinPrefixList(typeNameParts(prefix, typeName))
 }
+
+// Like makeTypeName, but append typeName unconditionally.
+//
+// This is used for when you specify a type-name for a field of interface
+// type; we use YourName for the interface, but need to do YourNameImplName for
+// the implementations.
+func makeLongTypeName(prefix *prefixList, typeName string) string {
+	typeName = upperFirst(typeName)
+	return joinPrefixList(&prefixList{typeName, prefix})
+}

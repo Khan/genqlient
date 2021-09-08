@@ -1,7 +1,8 @@
 package generate
 
-// This file is responsible for doing the validation for type-bindings, if they
-// are so configured (see TypeBinding).
+// This file contains helpers to do various bits of validation in the process
+// of converting types to Go, notably, for cases where we need to check that
+// two types match.
 
 import (
 	"fmt"
@@ -17,7 +18,7 @@ import (
 // order, and fragment-structure.  It does not recurse into named fragments, it
 // only checks that their names match.
 //
-// TODO(benkraft): Should we check arguments/directives?
+// If both selection-sets are nil/empty, they compare equal.
 func selectionsMatch(
 	pos *ast.Position,
 	expectedSelectionSet, actualSelectionSet ast.SelectionSet,

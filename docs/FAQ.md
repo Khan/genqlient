@@ -66,6 +66,18 @@ if errors.As(err, &errList) {
 }
 ```
 
+### … use custom scalars?
+
+Just tell genqlient via the `bindings` option in `genqlient.yaml`:
+
+```yaml
+bindings:
+  DateTime:
+    type: time.Time
+```
+
+Make sure the given type has whateevr logic is needed to convert to/from JSON (e.g. `MarshalJSON`/`UnmarshalJSON` or JSON tags).  See the [`genqlient.yaml` documentation](genqlient.yaml) for the full syntax.
+
 ### … require 32-bit integers?
 
 The GraphQL spec officially defines the `Int` type to be a [signed 32-bit integer](https://spec.graphql.org/draft/#sec-Int).  GraphQL clients and servers vary wildly in their enforcement of this; for example:
@@ -205,6 +217,129 @@ type GetBooksFavoriteBook struct {
 Keep in mind that if you later want to add fragments to your selection, you won't be able to use `struct` anymore; when you remove it you may need to update your code to replace `.Title` with `.GetTitle()` and so on.
 
 
+### … shared types between different parts of the query?
+
+Suppose you have a query which requests several different fields each of the same GraphQL type, e.g. `User` (or `[User]`):
+
+```graphql
+query GetMonopolyPlayers {
+  game {
+    winner { id name }
+    banker { id name }
+    spectators { id name }
+  }
+}
+```
+
+This will produce a Go type like:
+```go
+type GetMonopolyPlayersGame struct {
+  Winner     GetMonopolyPlayersGameWinnerUser
+  Banker     GetMonopolyPlayersGameBankerUser
+  Spectators []GetMonopolyPlayersGameSpectatorsUser
+}
+
+type GetMonopolyPlayersGameWinnerUser struct {
+  Id   string
+  Name string
+}
+
+// (others similarly)
+```
+
+But maybe you wanted to be able to pass all those users to a shared function (defined in your code), say `FormatUser(user ???) string`.  That's no good; you need to put three different types as the `???`.  genqlient has two ways to deal with this.
+
+One option -- the GraphQL Way, perhaps -- is to use fragments.  You'd write your query like:
+
+```graphql
+fragment MonopolyUser on User {
+  id
+  name
+}
+
+query GetMonopolyPlayers {
+  game {
+    winner { ...MonopolyUser }
+    banker { ...MonopolyUser }
+    spectators { ...MonopolyUser }
+  }
+}
+```
+
+genqlient will notice this, and generate a type corresponding to the fragment; `GetMonopolyPlayersGame` will look as before, but each of the field types will have a shared embed:
+
+```go
+type MonopolyUser struct {
+  Id   string
+  Name string
+}
+
+type GetMonopolyPlayersGameWinnerUser struct {
+  MonopolyUser
+}
+
+// (others similarly)
+```
+
+Thus you can have `FormatUser` accept a `MonopolyUser`, and pass it `game.Winner.MonopolyUser`, `game.Spectators[i].MonopolyUser`, etc.  This is convenient if you may later want to add other fields to some of the queries, because you can still do
+
+```graphql
+fragment MonopolyUser on User {
+  id
+  name
+}
+
+query GetMonopolyPlayers {
+  game {
+    winner {
+      winCount
+      ...MonopolyUser
+    }
+    banker {
+      bankerRating
+      ...MonopolyUser
+    }
+    spectators { ...MonopolyUser }
+  }
+}
+```
+
+and you can even spread the fragment into interface types.  It also avoids having to list the fields several times.
+
+Alternately, if you always want exactly the same fields, you can use the simpler but more restrictive genqlient option `typename`:
+
+```graphql
+query GetMonopolyPlayers {
+  game {
+    # @genqlient(typename: "User")
+    winner { id name }
+    # @genqlient(typename: "User")
+    banker { id name }
+    # @genqlient(typename: "User")
+    spectators { id name }
+  }
+}
+```
+
+This will tell genqlient to use the same types for each field:
+
+```go
+type GetMonopolyPlayersGame struct {
+  Winner     User
+  Banker     User
+  Spectators []User
+}
+
+type User struct {
+  Id   string
+  Name string
+}
+```
+
+In this case, genqlient will validate that each type given the name `User` has the exact same fields; see the [full documentation](genqlient_directive.graphql) for details.
+
+Note that it's also possible to use the `bindings` option (see [`genqlient.yaml` documentation](genqlient.yaml)) for a similar purpose, but this is not recommended as it typically requires more work for less gain.
+
 ### … documentation on the output types?
 
 For any GraphQL types or fields with documentation in the GraphQL schema, genqlient automatically includes that documentation in the generated code's GoDoc.  To add additional information to genqlient entrypoints, you can put comments in the GraphQL source:
@@ -257,6 +392,21 @@ If you find yourself needing to reference long generated names, you can always a
 type User = GetFamilyNamesUser
 type ChildUser = GetFamilyNamesUserChildrenUser
 ```
+
+Alternately, you can use the `typename` option: if you query
+```graphql
+query GetFamilyNames {
+  # @genqlient(typename: "User")
+  user {
+    name
+    # @genqlient(typename: "ChildUser")
+    children {
+      name
+    }
+  }
+}
+```
+genqlient will instead generate types with the given names.  (You'll need to avoid conflicts; see the [full documentation](genqlient_directive.graphql) for details.)
 
 ### … my editor/IDE plugin not know about the code genqlient just generated?
 

@@ -1,0 +1,1 @@
+testdata/errors/ConflictingTypeNames.schema.graphql:2: conflicting definition for T; this can indicate either a genqlient internal error, a conflict between user-specified type-names, or some very tricksy GraphQL field/type names: expected 2 fields, got 1

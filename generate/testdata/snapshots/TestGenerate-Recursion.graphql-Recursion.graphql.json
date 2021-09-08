@@ -1,0 +1,9 @@
+{
+  "operations": [
+    {
+      "operationName": "Recursion",
+      "query": "\nquery Recursion ($input: RecursiveInput!) {\n\trecur(input: $input) {\n\t\trec {\n\t\t\trec {\n\t\t\t\trec {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n}\n",
+      "sourceLocation": "testdata/queries/Recursion.graphql"
+    }
+  ]
+}
