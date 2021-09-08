@@ -2,18 +2,13 @@ package generate
 
 import (
 	"go/token"
+	"io"
 	"io/ioutil"
+	"os"
 	"path/filepath"
 
 	"gopkg.in/yaml.v2"
 )
-
-var defaultConfig = &Config{
-	Schema:      "schema.graphql",
-	Operations:  []string{"genqlient.graphql"},
-	Generated:   "generated.go",
-	ContextType: "context.Context",
-}
 
 type Config struct {
 	// The filename with the GraphQL schema (in SDL format); defaults to
@@ -157,6 +152,10 @@ func (c *Config) ValidateAndFillDefaults(configFilename string) error {
 		c.ExportOperations = filepath.Join(c.baseDir(), c.ExportOperations)
 	}
 
+	if c.ContextType == "" {
+		c.ContextType = "context.Context"
+	}
+
 	if c.Package == "" {
 		abs, err := filepath.Abs(c.Generated)
 		if err != nil {
@@ -175,23 +174,36 @@ func (c *Config) ValidateAndFillDefaults(configFilename string) error {
 }
 
 func ReadAndValidateConfig(filename string) (*Config, error) {
-	config := *defaultConfig
-	if filename != "" {
-		text, err := ioutil.ReadFile(filename)
-		if err != nil {
-			return nil, errorf(nil, "unreadable config file %v: %v", filename, err)
-		}
-
-		err = yaml.UnmarshalStrict(text, &config)
-		if err != nil {
-			return nil, errorf(nil, "invalid config file %v: %v", filename, err)
-		}
+	var config Config
+	text, err := ioutil.ReadFile(filename)
+	if err != nil {
+		return nil, errorf(nil, "unreadable config file %v: %v", filename, err)
 	}
 
-	err := config.ValidateAndFillDefaults(filename)
+	err = yaml.UnmarshalStrict(text, &config)
+	if err != nil {
+		return nil, errorf(nil, "invalid config file %v: %v", filename, err)
+	}
+
+	err = config.ValidateAndFillDefaults(filename)
 	if err != nil {
 		return nil, errorf(nil, "invalid config file %v: %v", filename, err)
 	}
 
 	return &config, nil
+}
+
+func initConfig(filename string) error {
+	// TODO(benkraft): Embed this config file into the binary, see
+	// https://github.com/Khan/genqlient/issues/9.
+	r, err := os.Open(filepath.Join(thisDir, "default_genqlient.yaml"))
+	if err != nil {
+		return err
+	}
+	w, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0o644)
+	if err != nil {
+		return err
+	}
+	_, err = io.Copy(w, r)
+	return err
 }

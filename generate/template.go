@@ -9,6 +9,8 @@ import (
 )
 
 var (
+	// TODO(benkraft): Embed templates into the binary, see
+	// https://github.com/Khan/genqlient/issues/9.
 	_, thisFilename, _, _ = runtime.Caller(0)
 	thisDir               = filepath.Dir(thisFilename)
 )
