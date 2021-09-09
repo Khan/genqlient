@@ -24,7 +24,6 @@ type SimpleNamedFragmentRandomItemArticle struct {
 // SimpleNamedFragmentRandomItemArticle
 // SimpleNamedFragmentRandomItemVideo
 // SimpleNamedFragmentRandomItemTopic
-//
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
@@ -139,7 +138,8 @@ func (v *SimpleNamedFragmentRandomItemVideo) UnmarshalJSON(b []byte) error {
 		return err
 	}
 
-	err = json.Unmarshal(b, &v.VideoFields)
+	err = json.Unmarshal(
+		b, &v.VideoFields)
 	if err != nil {
 		return err
 	}
@@ -156,7 +156,6 @@ type SimpleNamedFragmentRandomLeafArticle struct {
 // SimpleNamedFragmentRandomLeafLeafContent is implemented by the following types:
 // SimpleNamedFragmentRandomLeafArticle
 // SimpleNamedFragmentRandomLeafVideo
-//
 // The GraphQL type's documentation follows.
 //
 // LeafContent represents content items that can't have child-nodes.
@@ -226,7 +225,8 @@ func (v *SimpleNamedFragmentRandomLeafVideo) UnmarshalJSON(b []byte) error {
 		return err
 	}
 
-	err = json.Unmarshal(b, &v.VideoFields)
+	err = json.Unmarshal(
+		b, &v.VideoFields)
 	if err != nil {
 		return err
 	}
@@ -275,7 +275,6 @@ func (v *SimpleNamedFragmentResponse) UnmarshalJSON(b []byte) error {
 				"Unable to unmarshal SimpleNamedFragmentResponse.RandomLeaf: %w", err)
 		}
 	}
-
 	return nil
 }
 

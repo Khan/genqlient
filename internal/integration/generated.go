@@ -41,7 +41,6 @@ func (v *AnimalFields) UnmarshalJSON(b []byte) error {
 				"Unable to unmarshal AnimalFields.Owner: %w", err)
 		}
 	}
-
 	return nil
 }
 
@@ -61,10 +60,6 @@ type AnimalFieldsOwnerAnimal struct {
 // AnimalFieldsOwnerBeing is implemented by the following types:
 // AnimalFieldsOwnerUser
 // AnimalFieldsOwnerAnimal
-//
-// The GraphQL type's documentation follows.
-//
-//
 type AnimalFieldsOwnerBeing interface {
 	implementsGraphQLInterfaceAnimalFieldsOwnerBeing()
 	// GetTypename returns the receiver's concrete GraphQL type-name (see interface doc for possible values).
@@ -120,9 +115,10 @@ func __unmarshalAnimalFieldsOwnerBeing(v *AnimalFieldsOwnerBeing, m json.RawMess
 
 // AnimalFieldsOwnerUser includes the requested fields of the GraphQL type User.
 type AnimalFieldsOwnerUser struct {
-	Typename   string `json:"__typename"`
-	Id         string `json:"id"`
-	UserFields `json:"-"`
+	Typename        string `json:"__typename"`
+	Id              string `json:"id"`
+	UserFields      `json:"-"`
+	LuckyFieldsUser `json:"-"`
 }
 
 func (v *AnimalFieldsOwnerUser) UnmarshalJSON(b []byte) error {
@@ -138,7 +134,81 @@ func (v *AnimalFieldsOwnerUser) UnmarshalJSON(b []byte) error {
 		return err
 	}
 
-	err = json.Unmarshal(b, &v.UserFields)
+	err = json.Unmarshal(
+		b, &v.UserFields)
+	if err != nil {
+		return err
+	}
+	err = json.Unmarshal(
+		b, &v.LuckyFieldsUser)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// LuckyFields includes the GraphQL fields of Lucky requested by the fragment LuckyFields.
+//
+// LuckyFields is implemented by the following types:
+// LuckyFieldsUser
+type LuckyFields interface {
+	implementsGraphQLInterfaceLuckyFields()
+	// GetLuckyNumber returns the interface-field "luckyNumber" from its implementation.
+	GetLuckyNumber() int
+}
+
+func (v *LuckyFieldsUser) implementsGraphQLInterfaceLuckyFields() {}
+
+// GetLuckyNumber is a part of, and documented with, the interface LuckyFields.
+func (v *LuckyFieldsUser) GetLuckyNumber() int { return v.LuckyNumber }
+
+func __unmarshalLuckyFields(v *LuckyFields, m json.RawMessage) error {
+	if string(m) == "null" {
+		return nil
+	}
+
+	var tn struct {
+		TypeName string `json:"__typename"`
+	}
+	err := json.Unmarshal(m, &tn)
+	if err != nil {
+		return err
+	}
+
+	switch tn.TypeName {
+	case "User":
+		*v = new(LuckyFieldsUser)
+		return json.Unmarshal(m, *v)
+	case "":
+		return fmt.Errorf(
+			"Response was missing Lucky.__typename")
+	default:
+		return fmt.Errorf(
+			`Unexpected concrete type for LuckyFields: "%v"`, tn.TypeName)
+	}
+}
+
+// LuckyFields includes the GraphQL fields of User requested by the fragment LuckyFields.
+type LuckyFieldsUser struct {
+	MoreUserFields `json:"-"`
+	LuckyNumber    int `json:"luckyNumber"`
+}
+
+func (v *LuckyFieldsUser) UnmarshalJSON(b []byte) error {
+
+	var firstPass struct {
+		*LuckyFieldsUser
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.LuckyFieldsUser = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.MoreUserFields)
 	if err != nil {
 		return err
 	}
@@ -165,9 +235,9 @@ const (
 
 // UserFields includes the GraphQL fields of User requested by the fragment UserFields.
 type UserFields struct {
-	Id             string `json:"id"`
-	LuckyNumber    int    `json:"luckyNumber"`
-	MoreUserFields `json:"-"`
+	Id              string `json:"id"`
+	LuckyFieldsUser `json:"-"`
+	MoreUserFields  `json:"-"`
 }
 
 func (v *UserFields) UnmarshalJSON(b []byte) error {
@@ -183,7 +253,13 @@ func (v *UserFields) UnmarshalJSON(b []byte) error {
 		return err
 	}
 
-	err = json.Unmarshal(b, &v.MoreUserFields)
+	err = json.Unmarshal(
+		b, &v.LuckyFieldsUser)
+	if err != nil {
+		return err
+	}
+	err = json.Unmarshal(
+		b, &v.MoreUserFields)
 	if err != nil {
 		return err
 	}
@@ -224,7 +300,6 @@ func (v *queryWithFragmentsBeingsAnimal) UnmarshalJSON(b []byte) error {
 				"Unable to unmarshal queryWithFragmentsBeingsAnimal.Owner: %w", err)
 		}
 	}
-
 	return nil
 }
 
@@ -245,10 +320,6 @@ type queryWithFragmentsBeingsAnimalOwnerAnimal struct {
 // queryWithFragmentsBeingsAnimalOwnerBeing is implemented by the following types:
 // queryWithFragmentsBeingsAnimalOwnerUser
 // queryWithFragmentsBeingsAnimalOwnerAnimal
-//
-// The GraphQL type's documentation follows.
-//
-//
 type queryWithFragmentsBeingsAnimalOwnerBeing interface {
 	implementsGraphQLInterfacequeryWithFragmentsBeingsAnimalOwnerBeing()
 	// GetTypename returns the receiver's concrete GraphQL type-name (see interface doc for possible values).
@@ -325,10 +396,6 @@ type queryWithFragmentsBeingsAnimalOwnerUser struct {
 // queryWithFragmentsBeingsBeing is implemented by the following types:
 // queryWithFragmentsBeingsUser
 // queryWithFragmentsBeingsAnimal
-//
-// The GraphQL type's documentation follows.
-//
-//
 type queryWithFragmentsBeingsBeing interface {
 	implementsGraphQLInterfacequeryWithFragmentsBeingsBeing()
 	// GetTypename returns the receiver's concrete GraphQL type-name (see interface doc for possible values).
@@ -439,7 +506,6 @@ func (v *queryWithFragmentsResponse) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-
 	return nil
 }
 
@@ -455,10 +521,6 @@ type queryWithInterfaceListFieldBeingsAnimal struct {
 // queryWithInterfaceListFieldBeingsBeing is implemented by the following types:
 // queryWithInterfaceListFieldBeingsUser
 // queryWithInterfaceListFieldBeingsAnimal
-//
-// The GraphQL type's documentation follows.
-//
-//
 type queryWithInterfaceListFieldBeingsBeing interface {
 	implementsGraphQLInterfacequeryWithInterfaceListFieldBeingsBeing()
 	// GetTypename returns the receiver's concrete GraphQL type-name (see interface doc for possible values).
@@ -564,7 +626,6 @@ func (v *queryWithInterfaceListFieldResponse) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-
 	return nil
 }
 
@@ -580,10 +641,6 @@ type queryWithInterfaceListPointerFieldBeingsAnimal struct {
 // queryWithInterfaceListPointerFieldBeingsBeing is implemented by the following types:
 // queryWithInterfaceListPointerFieldBeingsUser
 // queryWithInterfaceListPointerFieldBeingsAnimal
-//
-// The GraphQL type's documentation follows.
-//
-//
 type queryWithInterfaceListPointerFieldBeingsBeing interface {
 	implementsGraphQLInterfacequeryWithInterfaceListPointerFieldBeingsBeing()
 	// GetTypename returns the receiver's concrete GraphQL type-name (see interface doc for possible values).
@@ -690,7 +747,6 @@ func (v *queryWithInterfaceListPointerFieldResponse) UnmarshalJSON(b []byte) err
 			}
 		}
 	}
-
 	return nil
 }
 
@@ -699,10 +755,6 @@ func (v *queryWithInterfaceListPointerFieldResponse) UnmarshalJSON(b []byte) err
 // queryWithInterfaceNoFragmentsBeing is implemented by the following types:
 // queryWithInterfaceNoFragmentsBeingUser
 // queryWithInterfaceNoFragmentsBeingAnimal
-//
-// The GraphQL type's documentation follows.
-//
-//
 type queryWithInterfaceNoFragmentsBeing interface {
 	implementsGraphQLInterfacequeryWithInterfaceNoFragmentsBeing()
 	// GetTypename returns the receiver's concrete GraphQL type-name (see interface doc for possible values).
@@ -816,7 +868,6 @@ func (v *queryWithInterfaceNoFragmentsResponse) UnmarshalJSON(b []byte) error {
 				"Unable to unmarshal queryWithInterfaceNoFragmentsResponse.Being: %w", err)
 		}
 	}
-
 	return nil
 }
 
@@ -840,7 +891,8 @@ func (v *queryWithNamedFragmentsBeingsAnimal) UnmarshalJSON(b []byte) error {
 		return err
 	}
 
-	err = json.Unmarshal(b, &v.AnimalFields)
+	err = json.Unmarshal(
+		b, &v.AnimalFields)
 	if err != nil {
 		return err
 	}
@@ -852,10 +904,6 @@ func (v *queryWithNamedFragmentsBeingsAnimal) UnmarshalJSON(b []byte) error {
 // queryWithNamedFragmentsBeingsBeing is implemented by the following types:
 // queryWithNamedFragmentsBeingsUser
 // queryWithNamedFragmentsBeingsAnimal
-//
-// The GraphQL type's documentation follows.
-//
-//
 type queryWithNamedFragmentsBeingsBeing interface {
 	implementsGraphQLInterfacequeryWithNamedFragmentsBeingsBeing()
 	// GetTypename returns the receiver's concrete GraphQL type-name (see interface doc for possible values).
@@ -931,7 +979,8 @@ func (v *queryWithNamedFragmentsBeingsUser) UnmarshalJSON(b []byte) error {
 		return err
 	}
 
-	err = json.Unmarshal(b, &v.UserFields)
+	err = json.Unmarshal(
+		b, &v.UserFields)
 	if err != nil {
 		return err
 	}
@@ -973,7 +1022,6 @@ func (v *queryWithNamedFragmentsResponse) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-
 	return nil
 }
 
@@ -1241,12 +1289,17 @@ fragment AnimalFields on Animal {
 		__typename
 		id
 		... UserFields
+		... LuckyFields
 	}
 }
 fragment UserFields on User {
 	id
-	luckyNumber
+	... LuckyFields
 	... MoreUserFields
+}
+fragment LuckyFields on Lucky {
+	... MoreUserFields
+	luckyNumber
 }
 fragment MoreUserFields on User {
 	id

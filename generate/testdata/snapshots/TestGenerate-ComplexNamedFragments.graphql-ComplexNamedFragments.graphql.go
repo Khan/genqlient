@@ -28,14 +28,118 @@ func (v *ComplexNamedFragmentsResponse) UnmarshalJSON(b []byte) error {
 		return err
 	}
 
-	err = json.Unmarshal(b, &v.QueryFragment)
+	err = json.Unmarshal(
+		b, &v.QueryFragment)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
+// ContentFields includes the GraphQL fields of Content requested by the fragment ContentFields.
+// The GraphQL type's documentation follows.
+//
+// Content is implemented by various types like Article, Video, and Topic.
+//
+// ContentFields is implemented by the following types:
+// ContentFieldsArticle
+// ContentFieldsVideo
+// ContentFieldsTopic
+type ContentFields interface {
+	implementsGraphQLInterfaceContentFields()
+	// GetName returns the interface-field "name" from its implementation.
+	GetName() string
+	// GetUrl returns the interface-field "url" from its implementation.
+	GetUrl() string
+}
+
+func (v *ContentFieldsArticle) implementsGraphQLInterfaceContentFields() {}
+
+// GetName is a part of, and documented with, the interface ContentFields.
+func (v *ContentFieldsArticle) GetName() string { return v.Name }
+
+// GetUrl is a part of, and documented with, the interface ContentFields.
+func (v *ContentFieldsArticle) GetUrl() string { return v.Url }
+
+func (v *ContentFieldsVideo) implementsGraphQLInterfaceContentFields() {}
+
+// GetName is a part of, and documented with, the interface ContentFields.
+func (v *ContentFieldsVideo) GetName() string { return v.Name }
+
+// GetUrl is a part of, and documented with, the interface ContentFields.
+func (v *ContentFieldsVideo) GetUrl() string { return v.Url }
+
+func (v *ContentFieldsTopic) implementsGraphQLInterfaceContentFields() {}
+
+// GetName is a part of, and documented with, the interface ContentFields.
+func (v *ContentFieldsTopic) GetName() string { return v.Name }
+
+// GetUrl is a part of, and documented with, the interface ContentFields.
+func (v *ContentFieldsTopic) GetUrl() string { return v.Url }
+
+func __unmarshalContentFields(v *ContentFields, m json.RawMessage) error {
+	if string(m) == "null" {
+		return nil
+	}
+
+	var tn struct {
+		TypeName string `json:"__typename"`
+	}
+	err := json.Unmarshal(m, &tn)
+	if err != nil {
+		return err
+	}
+
+	switch tn.TypeName {
+	case "Article":
+		*v = new(ContentFieldsArticle)
+		return json.Unmarshal(m, *v)
+	case "Video":
+		*v = new(ContentFieldsVideo)
+		return json.Unmarshal(m, *v)
+	case "Topic":
+		*v = new(ContentFieldsTopic)
+		return json.Unmarshal(m, *v)
+	case "":
+		return fmt.Errorf(
+			"Response was missing Content.__typename")
+	default:
+		return fmt.Errorf(
+			`Unexpected concrete type for ContentFields: "%v"`, tn.TypeName)
+	}
+}
+
+// ContentFields includes the GraphQL fields of Article requested by the fragment ContentFields.
+// The GraphQL type's documentation follows.
+//
+// Content is implemented by various types like Article, Video, and Topic.
+type ContentFieldsArticle struct {
+	Name string `json:"name"`
+	Url  string `json:"url"`
+}
+
+// ContentFields includes the GraphQL fields of Topic requested by the fragment ContentFields.
+// The GraphQL type's documentation follows.
+//
+// Content is implemented by various types like Article, Video, and Topic.
+type ContentFieldsTopic struct {
+	Name string `json:"name"`
+	Url  string `json:"url"`
+}
+
+// ContentFields includes the GraphQL fields of Video requested by the fragment ContentFields.
+// The GraphQL type's documentation follows.
+//
+// Content is implemented by various types like Article, Video, and Topic.
+type ContentFieldsVideo struct {
+	Name string `json:"name"`
+	Url  string `json:"url"`
+}
+
 // InnerQueryFragment includes the GraphQL fields of Query requested by the fragment InnerQueryFragment.
+// The GraphQL type's documentation follows.
+//
+// Query's description is probably ignored by almost all callers.
 type InnerQueryFragment struct {
 	RandomItem InnerQueryFragmentRandomItemContent     `json:"-"`
 	RandomLeaf InnerQueryFragmentRandomLeafLeafContent `json:"-"`
@@ -90,13 +194,34 @@ func (v *InnerQueryFragment) UnmarshalJSON(b []byte) error {
 				"Unable to unmarshal InnerQueryFragment.OtherLeaf: %w", err)
 		}
 	}
-
 	return nil
 }
 
 // InnerQueryFragmentOtherLeafArticle includes the requested fields of the GraphQL type Article.
 type InnerQueryFragmentOtherLeafArticle struct {
-	Typename string `json:"__typename"`
+	Typename             string `json:"__typename"`
+	ContentFieldsArticle `json:"-"`
+}
+
+func (v *InnerQueryFragmentOtherLeafArticle) UnmarshalJSON(b []byte) error {
+
+	var firstPass struct {
+		*InnerQueryFragmentOtherLeafArticle
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.InnerQueryFragmentOtherLeafArticle = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.ContentFieldsArticle)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // InnerQueryFragmentOtherLeafLeafContent includes the requested fields of the GraphQL interface LeafContent.
@@ -104,7 +229,6 @@ type InnerQueryFragmentOtherLeafArticle struct {
 // InnerQueryFragmentOtherLeafLeafContent is implemented by the following types:
 // InnerQueryFragmentOtherLeafArticle
 // InnerQueryFragmentOtherLeafVideo
-//
 // The GraphQL type's documentation follows.
 //
 // LeafContent represents content items that can't have child-nodes.
@@ -157,8 +281,9 @@ func __unmarshalInnerQueryFragmentOtherLeafLeafContent(v *InnerQueryFragmentOthe
 
 // InnerQueryFragmentOtherLeafVideo includes the requested fields of the GraphQL type Video.
 type InnerQueryFragmentOtherLeafVideo struct {
-	Typename        string `json:"__typename"`
-	MoreVideoFields `json:"-"`
+	Typename           string `json:"__typename"`
+	MoreVideoFields    `json:"-"`
+	ContentFieldsVideo `json:"-"`
 }
 
 func (v *InnerQueryFragmentOtherLeafVideo) UnmarshalJSON(b []byte) error {
@@ -174,7 +299,13 @@ func (v *InnerQueryFragmentOtherLeafVideo) UnmarshalJSON(b []byte) error {
 		return err
 	}
 
-	err = json.Unmarshal(b, &v.MoreVideoFields)
+	err = json.Unmarshal(
+		b, &v.MoreVideoFields)
+	if err != nil {
+		return err
+	}
+	err = json.Unmarshal(
+		b, &v.ContentFieldsVideo)
 	if err != nil {
 		return err
 	}
@@ -185,8 +316,30 @@ func (v *InnerQueryFragmentOtherLeafVideo) UnmarshalJSON(b []byte) error {
 type InnerQueryFragmentRandomItemArticle struct {
 	Typename string `json:"__typename"`
 	// ID is the identifier of the content.
-	Id   testutil.ID `json:"id"`
-	Name string      `json:"name"`
+	Id                   testutil.ID `json:"id"`
+	Name                 string      `json:"name"`
+	ContentFieldsArticle `json:"-"`
+}
+
+func (v *InnerQueryFragmentRandomItemArticle) UnmarshalJSON(b []byte) error {
+
+	var firstPass struct {
+		*InnerQueryFragmentRandomItemArticle
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.InnerQueryFragmentRandomItemArticle = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.ContentFieldsArticle)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // InnerQueryFragmentRandomItemContent includes the requested fields of the GraphQL interface Content.
@@ -195,7 +348,6 @@ type InnerQueryFragmentRandomItemArticle struct {
 // InnerQueryFragmentRandomItemArticle
 // InnerQueryFragmentRandomItemVideo
 // InnerQueryFragmentRandomItemTopic
-//
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
@@ -210,6 +362,7 @@ type InnerQueryFragmentRandomItemContent interface {
 	GetId() testutil.ID
 	// GetName returns the interface-field "name" from its implementation.
 	GetName() string
+	ContentFields
 }
 
 func (v *InnerQueryFragmentRandomItemArticle) implementsGraphQLInterfaceInnerQueryFragmentRandomItemContent() {
@@ -284,17 +437,40 @@ func __unmarshalInnerQueryFragmentRandomItemContent(v *InnerQueryFragmentRandomI
 type InnerQueryFragmentRandomItemTopic struct {
 	Typename string `json:"__typename"`
 	// ID is the identifier of the content.
-	Id   testutil.ID `json:"id"`
-	Name string      `json:"name"`
+	Id                 testutil.ID `json:"id"`
+	Name               string      `json:"name"`
+	ContentFieldsTopic `json:"-"`
+}
+
+func (v *InnerQueryFragmentRandomItemTopic) UnmarshalJSON(b []byte) error {
+
+	var firstPass struct {
+		*InnerQueryFragmentRandomItemTopic
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.InnerQueryFragmentRandomItemTopic = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.ContentFieldsTopic)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // InnerQueryFragmentRandomItemVideo includes the requested fields of the GraphQL type Video.
 type InnerQueryFragmentRandomItemVideo struct {
 	Typename string `json:"__typename"`
 	// ID is the identifier of the content.
-	Id          testutil.ID `json:"id"`
-	Name        string      `json:"name"`
-	VideoFields `json:"-"`
+	Id                 testutil.ID `json:"id"`
+	Name               string      `json:"name"`
+	VideoFields        `json:"-"`
+	ContentFieldsVideo `json:"-"`
 }
 
 func (v *InnerQueryFragmentRandomItemVideo) UnmarshalJSON(b []byte) error {
@@ -310,7 +486,13 @@ func (v *InnerQueryFragmentRandomItemVideo) UnmarshalJSON(b []byte) error {
 		return err
 	}
 
-	err = json.Unmarshal(b, &v.VideoFields)
+	err = json.Unmarshal(
+		b, &v.VideoFields)
+	if err != nil {
+		return err
+	}
+	err = json.Unmarshal(
+		b, &v.ContentFieldsVideo)
 	if err != nil {
 		return err
 	}
@@ -319,7 +501,29 @@ func (v *InnerQueryFragmentRandomItemVideo) UnmarshalJSON(b []byte) error {
 
 // InnerQueryFragmentRandomLeafArticle includes the requested fields of the GraphQL type Article.
 type InnerQueryFragmentRandomLeafArticle struct {
-	Typename string `json:"__typename"`
+	Typename             string `json:"__typename"`
+	ContentFieldsArticle `json:"-"`
+}
+
+func (v *InnerQueryFragmentRandomLeafArticle) UnmarshalJSON(b []byte) error {
+
+	var firstPass struct {
+		*InnerQueryFragmentRandomLeafArticle
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.InnerQueryFragmentRandomLeafArticle = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.ContentFieldsArticle)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // InnerQueryFragmentRandomLeafLeafContent includes the requested fields of the GraphQL interface LeafContent.
@@ -327,7 +531,6 @@ type InnerQueryFragmentRandomLeafArticle struct {
 // InnerQueryFragmentRandomLeafLeafContent is implemented by the following types:
 // InnerQueryFragmentRandomLeafArticle
 // InnerQueryFragmentRandomLeafVideo
-//
 // The GraphQL type's documentation follows.
 //
 // LeafContent represents content items that can't have child-nodes.
@@ -380,9 +583,10 @@ func __unmarshalInnerQueryFragmentRandomLeafLeafContent(v *InnerQueryFragmentRan
 
 // InnerQueryFragmentRandomLeafVideo includes the requested fields of the GraphQL type Video.
 type InnerQueryFragmentRandomLeafVideo struct {
-	Typename        string `json:"__typename"`
-	VideoFields     `json:"-"`
-	MoreVideoFields `json:"-"`
+	Typename           string `json:"__typename"`
+	VideoFields        `json:"-"`
+	MoreVideoFields    `json:"-"`
+	ContentFieldsVideo `json:"-"`
 }
 
 func (v *InnerQueryFragmentRandomLeafVideo) UnmarshalJSON(b []byte) error {
@@ -398,12 +602,18 @@ func (v *InnerQueryFragmentRandomLeafVideo) UnmarshalJSON(b []byte) error {
 		return err
 	}
 
-	err = json.Unmarshal(b, &v.VideoFields)
+	err = json.Unmarshal(
+		b, &v.VideoFields)
 	if err != nil {
 		return err
 	}
-
-	err = json.Unmarshal(b, &v.MoreVideoFields)
+	err = json.Unmarshal(
+		b, &v.MoreVideoFields)
+	if err != nil {
+		return err
+	}
+	err = json.Unmarshal(
+		b, &v.ContentFieldsVideo)
 	if err != nil {
 		return err
 	}
@@ -419,9 +629,10 @@ type MoreVideoFields struct {
 
 // MoreVideoFieldsParentTopic includes the requested fields of the GraphQL type Topic.
 type MoreVideoFieldsParentTopic struct {
-	Name     *string                                     `json:"name"`
-	Url      *string                                     `json:"url"`
-	Children []MoreVideoFieldsParentTopicChildrenContent `json:"-"`
+	Name               *string `json:"name"`
+	Url                *string `json:"url"`
+	ContentFieldsTopic `json:"-"`
+	Children           []MoreVideoFieldsParentTopicChildrenContent `json:"-"`
 }
 
 func (v *MoreVideoFieldsParentTopic) UnmarshalJSON(b []byte) error {
@@ -434,6 +645,12 @@ func (v *MoreVideoFieldsParentTopic) UnmarshalJSON(b []byte) error {
 	firstPass.MoreVideoFieldsParentTopic = v
 
 	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.ContentFieldsTopic)
 	if err != nil {
 		return err
 	}
@@ -454,7 +671,6 @@ func (v *MoreVideoFieldsParentTopic) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-
 	return nil
 }
 
@@ -469,7 +685,6 @@ type MoreVideoFieldsParentTopicChildrenArticle struct {
 // MoreVideoFieldsParentTopicChildrenArticle
 // MoreVideoFieldsParentTopicChildrenVideo
 // MoreVideoFieldsParentTopicChildrenTopic
-//
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
@@ -553,7 +768,8 @@ func (v *MoreVideoFieldsParentTopicChildrenVideo) UnmarshalJSON(b []byte) error 
 		return err
 	}
 
-	err = json.Unmarshal(b, &v.VideoFields)
+	err = json.Unmarshal(
+		b, &v.VideoFields)
 	if err != nil {
 		return err
 	}
@@ -561,6 +777,9 @@ func (v *MoreVideoFieldsParentTopicChildrenVideo) UnmarshalJSON(b []byte) error 
 }
 
 // QueryFragment includes the GraphQL fields of Query requested by the fragment QueryFragment.
+// The GraphQL type's documentation follows.
+//
+// Query's description is probably ignored by almost all callers.
 type QueryFragment struct {
 	InnerQueryFragment `json:"-"`
 }
@@ -578,7 +797,8 @@ func (v *QueryFragment) UnmarshalJSON(b []byte) error {
 		return err
 	}
 
-	err = json.Unmarshal(b, &v.InnerQueryFragment)
+	err = json.Unmarshal(
+		b, &v.InnerQueryFragment)
 	if err != nil {
 		return err
 	}
@@ -588,11 +808,33 @@ func (v *QueryFragment) UnmarshalJSON(b []byte) error {
 // VideoFields includes the GraphQL fields of Video requested by the fragment VideoFields.
 type VideoFields struct {
 	// ID is documented in the Content interface.
-	Id        testutil.ID          `json:"id"`
-	Name      string               `json:"name"`
-	Url       string               `json:"url"`
-	Duration  int                  `json:"duration"`
-	Thumbnail VideoFieldsThumbnail `json:"thumbnail"`
+	Id                 testutil.ID          `json:"id"`
+	Name               string               `json:"name"`
+	Url                string               `json:"url"`
+	Duration           int                  `json:"duration"`
+	Thumbnail          VideoFieldsThumbnail `json:"thumbnail"`
+	ContentFieldsVideo `json:"-"`
+}
+
+func (v *VideoFields) UnmarshalJSON(b []byte) error {
+
+	var firstPass struct {
+		*VideoFields
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.VideoFields = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.ContentFieldsVideo)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // VideoFieldsThumbnail includes the requested fields of the GraphQL type Thumbnail.
@@ -624,17 +866,21 @@ fragment InnerQueryFragment on Query {
 		id
 		name
 		... VideoFields
+		... ContentFields
 	}
 	randomLeaf {
 		__typename
 		... VideoFields
 		... MoreVideoFields
+		... ContentFields
 	}
 	otherLeaf: randomLeaf {
 		__typename
 		... on Video {
 			... MoreVideoFields
+			... ContentFields
 		}
+		... ContentFields
 	}
 }
 fragment VideoFields on Video {
@@ -645,12 +891,18 @@ fragment VideoFields on Video {
 	thumbnail {
 		id
 	}
+	... ContentFields
+}
+fragment ContentFields on Content {
+	name
+	url
 }
 fragment MoreVideoFields on Video {
 	id
 	parent {
 		name
 		url
+		... ContentFields
 		children {
 			__typename
 			... VideoFields

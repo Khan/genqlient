@@ -2,7 +2,7 @@
   "operations": [
     {
       "operationName": "ComplexNamedFragments",
-      "query": "\nquery ComplexNamedFragments {\n\t... on Query {\n\t\t... QueryFragment\n\t}\n}\nfragment QueryFragment on Query {\n\t... InnerQueryFragment\n}\nfragment InnerQueryFragment on Query {\n\trandomItem {\n\t\t__typename\n\t\tid\n\t\tname\n\t\t... VideoFields\n\t}\n\trandomLeaf {\n\t\t__typename\n\t\t... VideoFields\n\t\t... MoreVideoFields\n\t}\n\totherLeaf: randomLeaf {\n\t\t__typename\n\t\t... on Video {\n\t\t\t... MoreVideoFields\n\t\t}\n\t}\n}\nfragment VideoFields on Video {\n\tid\n\tname\n\turl\n\tduration\n\tthumbnail {\n\t\tid\n\t}\n}\nfragment MoreVideoFields on Video {\n\tid\n\tparent {\n\t\tname\n\t\turl\n\t\tchildren {\n\t\t\t__typename\n\t\t\t... VideoFields\n\t\t}\n\t}\n}\n",
+      "query": "\nquery ComplexNamedFragments {\n\t... on Query {\n\t\t... QueryFragment\n\t}\n}\nfragment QueryFragment on Query {\n\t... InnerQueryFragment\n}\nfragment InnerQueryFragment on Query {\n\trandomItem {\n\t\t__typename\n\t\tid\n\t\tname\n\t\t... VideoFields\n\t\t... ContentFields\n\t}\n\trandomLeaf {\n\t\t__typename\n\t\t... VideoFields\n\t\t... MoreVideoFields\n\t\t... ContentFields\n\t}\n\totherLeaf: randomLeaf {\n\t\t__typename\n\t\t... on Video {\n\t\t\t... MoreVideoFields\n\t\t\t... ContentFields\n\t\t}\n\t\t... ContentFields\n\t}\n}\nfragment VideoFields on Video {\n\tid\n\tname\n\turl\n\tduration\n\tthumbnail {\n\t\tid\n\t}\n\t... ContentFields\n}\nfragment ContentFields on Content {\n\tname\n\turl\n}\nfragment MoreVideoFields on Video {\n\tid\n\tparent {\n\t\tname\n\t\turl\n\t\t... ContentFields\n\t\tchildren {\n\t\t\t__typename\n\t\t\t... VideoFields\n\t\t}\n\t}\n}\n",
       "sourceLocation": "testdata/queries/ComplexNamedFragments.graphql"
     }
   ]

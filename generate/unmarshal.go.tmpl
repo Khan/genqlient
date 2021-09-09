@@ -26,7 +26,7 @@ func (v *{{.GoName}}) UnmarshalJSON(b []byte) error {
     var firstPass struct{
         *{{.GoName}}
         {{range .Fields -}}
-        {{if .IsAbstract -}}
+        {{if and .IsAbstract (not .IsEmbedded) -}}
         {{.GoName}} {{repeat .GoType.SliceDepth "[]"}}{{ref "encoding/json.RawMessage"}} `json:"{{.JSONName}}"`
         {{end -}}
         {{end -}}
@@ -43,7 +43,25 @@ func (v *{{.GoName}}) UnmarshalJSON(b []byte) error {
 
     {{/* Now, handle the fields needing special handling. */}}
     {{range $field := .Fields -}}
+    {{if $field.IsEmbedded -}}
+    {{/* Embedded fields are easier: we just unmarshal the same input into
+         them.  (They're also easier because they can't be lists, since they
+         arise from GraphQL fragment spreads.) */ -}}
     {{if $field.IsAbstract -}}
+    {{/* Except if they're both abstract and embedded, in which case we need to
+         call the unmarshal-helper instead.  Luckily, we don't embed
+         slice-typed fields, so we don't need the full generality we handle
+         below. */ -}}
+    err = __unmarshal{{$field.GoType.Unwrap.Reference}}(
+        b, &v.{{$field.GoType.Unwrap.Reference}})
+    {{else -}}
+    err = json.Unmarshal(
+        b, &v.{{$field.GoType.Unwrap.Reference}})
+    {{end -}}{{/* inner if .IsAbstract */ -}}
+    if err != nil {
+        return err
+    }
+    {{else if $field.IsAbstract -}}
     {{/* First, for abstract fields, call the unmarshal-helper.
          This gets a little complicated because we may have a slice field.
          So what we do is basically, for each field of type `[][]...[]MyType`:
@@ -104,16 +122,7 @@ func (v *{{.GoName}}) UnmarshalJSON(b []byte) error {
         }
         {{end -}}
     }
-    {{end -}}{{/* end if .IsAbstract */}}
-    {{if $field.IsEmbedded -}}
-    {{/* Embedded fields are easier: we just unmarshal the same input into
-         them.  (They're also easier because they can't be lists, since they
-         arise from GraphQL fragment spreads.) */}}
-    err = json.Unmarshal(b, &v.{{$field.GoType.Unwrap.Reference}})
-    if err != nil {
-        return err
-    }
-    {{end}}{{/* end if .IsEmbedded */ -}}
+    {{end -}}{{/* end if .IsEmbedded + else if .IsAbstract */ -}}
     {{end}}{{/* end range .Fields */ -}}
 
     return nil

@@ -6,7 +6,6 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"runtime"
 	"strings"
 	"testing"
 
@@ -96,15 +95,6 @@ func TestGenerate(t *testing.T) {
 			})
 			if err != nil {
 				t.Fatal(err)
-			}
-
-			if strings.HasPrefix(runtime.Version(), "go1.13") &&
-				(sourceFilename == "InterfaceNesting.graphql" ||
-					sourceFilename == "InterfaceNoFragments.graphql") {
-				// gofmt on 1.13 formats this slightly differently.
-				// TODO(benkraft): Vendor in a specific version of gofmt,
-				// to use for all Go versions.  (Maybe only for tests.)
-				t.Skip("skipping because go1.13 formats them differently")
 			}
 
 			for filename, content := range generated {

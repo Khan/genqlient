@@ -293,16 +293,22 @@ func TestNamedFragments(t *testing.T) {
 	fragment AnimalFields on Animal {
 		id
 		hair { hasHair }
-		owner { id ...UserFields }
+		owner { id ...UserFields ...LuckyFields }
 	}
 
 	fragment MoreUserFields on User {
 		id
 		hair { color }
 	}
+
+	fragment LuckyFields on Lucky {
+		...MoreUserFields
+		luckyNumber
+	}
 	
 	fragment UserFields on User {
-		id luckyNumber
+		id
+		...LuckyFields
 		...MoreUserFields
 	}
 
@@ -340,9 +346,12 @@ func TestNamedFragments(t *testing.T) {
 	assert.Equal(t, "1", user.Id)
 	assert.Equal(t, "1", user.UserFields.Id)
 	assert.Equal(t, "1", user.UserFields.MoreUserFields.Id)
+	assert.Equal(t, "1", user.UserFields.LuckyFieldsUser.MoreUserFields.Id)
 	// on UserFields, but we should be able to access directly via embedding:
 	assert.Equal(t, 17, user.LuckyNumber)
 	assert.Equal(t, "Black", user.Hair.Color)
+	assert.Equal(t, "Black", user.UserFields.MoreUserFields.Hair.Color)
+	assert.Equal(t, "Black", user.UserFields.LuckyFieldsUser.MoreUserFields.Hair.Color)
 
 	// Animal has, in total, the fields:
 	//	__typename
@@ -369,9 +378,16 @@ func TestNamedFragments(t *testing.T) {
 	assert.Equal(t, "1", owner.Id)
 	assert.Equal(t, "1", owner.UserFields.Id)
 	assert.Equal(t, "1", owner.UserFields.MoreUserFields.Id)
+	assert.Equal(t, "1", owner.UserFields.LuckyFieldsUser.MoreUserFields.Id)
 	// on UserFields:
 	assert.Equal(t, 17, owner.LuckyNumber)
-	assert.Equal(t, "Black", owner.Hair.Color)
+	assert.Equal(t, "Black", owner.UserFields.MoreUserFields.Hair.Color)
+	assert.Equal(t, "Black", owner.UserFields.LuckyFieldsUser.MoreUserFields.Hair.Color)
+
+	// Lucky-based fields we can also get by casting to the fragment-interface.
+	luckyOwner, ok := animal.Owner.(LuckyFields)
+	require.Truef(t, ok, "got %T, not Lucky", animal.Owner)
+	assert.Equal(t, 17, luckyOwner.GetLuckyNumber())
 
 	assert.Nil(t, resp.Beings[2])
 }

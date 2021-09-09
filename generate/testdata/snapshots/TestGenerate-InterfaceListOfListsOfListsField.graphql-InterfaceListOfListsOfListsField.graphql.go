@@ -16,7 +16,6 @@ import (
 // InterfaceListOfListOfListsFieldListOfListsOfListsOfContentArticle
 // InterfaceListOfListOfListsFieldListOfListsOfListsOfContentVideo
 // InterfaceListOfListOfListsFieldListOfListsOfListsOfContentTopic
-//
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
@@ -222,7 +221,6 @@ func (v *InterfaceListOfListOfListsFieldResponse) UnmarshalJSON(b []byte) error 
 			}
 		}
 	}
-
 	return nil
 }
 
@@ -240,7 +238,6 @@ type InterfaceListOfListOfListsFieldWithPointerArticle struct {
 // InterfaceListOfListOfListsFieldWithPointerArticle
 // InterfaceListOfListOfListsFieldWithPointerVideo
 // InterfaceListOfListOfListsFieldWithPointerTopic
-//
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.

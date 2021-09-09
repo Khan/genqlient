@@ -382,13 +382,11 @@ func Generate(config *Config) (map[string][]byte, error) {
 	unformatted := buf.Bytes()
 	formatted, err := format.Source(unformatted)
 	if err != nil {
-		return nil, errorf(nil, "could not gofmt code: %v\n---unformatted code---\n%v",
-			err, string(unformatted))
+		return nil, goSourceError("gofmt", unformatted, err)
 	}
 	importsed, err := imports.Process(config.Generated, formatted, nil)
 	if err != nil {
-		return nil, errorf(nil, "could not goimports code: %v\n---unimportsed code---\n%v",
-			err, string(formatted))
+		return nil, goSourceError("goimports", formatted, err)
 	}
 
 	retval := map[string][]byte{

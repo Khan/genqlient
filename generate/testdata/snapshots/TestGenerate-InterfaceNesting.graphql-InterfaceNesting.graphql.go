@@ -52,7 +52,6 @@ func (v *InterfaceNestingRootTopic) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
-
 	return nil
 }
 
@@ -70,7 +69,6 @@ type InterfaceNestingRootTopicChildrenArticle struct {
 // InterfaceNestingRootTopicChildrenArticle
 // InterfaceNestingRootTopicChildrenVideo
 // InterfaceNestingRootTopicChildrenTopic
-//
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
@@ -198,7 +196,6 @@ func (v *InterfaceNestingRootTopicChildrenContentParentTopic) UnmarshalJSON(b []
 			}
 		}
 	}
-
 	return nil
 }
 
@@ -215,7 +212,6 @@ type InterfaceNestingRootTopicChildrenContentParentTopicChildrenArticle struct {
 // InterfaceNestingRootTopicChildrenContentParentTopicChildrenArticle
 // InterfaceNestingRootTopicChildrenContentParentTopicChildrenVideo
 // InterfaceNestingRootTopicChildrenContentParentTopicChildrenTopic
-//
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.

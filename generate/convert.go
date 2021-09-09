@@ -61,11 +61,13 @@ func (g *generator) convertOperation(
 
 	goType := &goStructType{
 		GoName: name,
-		Description: fmt.Sprintf(
-			"%v is returned by %v on success.", name, operation.Name),
-		GraphQLName: baseType.Name,
-		Fields:      fields,
-		Incomplete:  false,
+		descriptionInfo: descriptionInfo{
+			CommentOverride: fmt.Sprintf(
+				"%v is returned by %v on success.", name, operation.Name),
+			GraphQLName: baseType.Name,
+			// omit the GraphQL description for baseType; it's uninteresting.
+		},
+		Fields: fields,
 	}
 	g.typeMap[name] = goType
 
@@ -167,6 +169,12 @@ func (g *generator) convertDefinition(
 		return &goOpaqueType{goBuiltinName}, nil
 	}
 
+	desc := descriptionInfo{
+		// TODO(benkraft): Copy any comment above this selection-set?
+		GraphQLDescription: def.Description,
+		GraphQLName:        def.Name,
+	}
+
 	switch def.Kind {
 	case ast.Object:
 		name := makeTypeName(namePrefix, def.Name)
@@ -178,11 +186,9 @@ func (g *generator) convertDefinition(
 		}
 
 		goType := &goStructType{
-			GoName:      name,
-			Description: def.Description,
-			GraphQLName: def.Name,
-			Fields:      fields,
-			Incomplete:  true,
+			GoName:          name,
+			Fields:          fields,
+			descriptionInfo: desc,
 		}
 		g.typeMap[name] = goType
 		return goType, nil
@@ -195,10 +201,10 @@ func (g *generator) convertDefinition(
 		name := upperFirst(def.Name)
 
 		goType := &goStructType{
-			GoName:      name,
-			Description: def.Description,
-			GraphQLName: def.Name,
-			Fields:      make([]*goStructField, len(def.Fields)),
+			GoName:          name,
+			Fields:          make([]*goStructField, len(def.Fields)),
+			descriptionInfo: desc,
+			IsInput:         true,
 		}
 		g.typeMap[name] = goType
 
@@ -240,10 +246,9 @@ func (g *generator) convertDefinition(
 		implementationTypes := g.schema.GetPossibleTypes(def)
 		goType := &goInterfaceType{
 			GoName:          name,
-			Description:     def.Description,
-			GraphQLName:     def.Name,
 			SharedFields:    sharedFields,
 			Implementations: make([]*goStructType, len(implementationTypes)),
+			descriptionInfo: desc,
 		}
 		g.typeMap[name] = goType
 
@@ -354,14 +359,31 @@ func (g *generator) convertSelectionSet(
 	//	{ id, id, id, ... on SubType { id } }
 	// (which, yes, is legal) we'll treat that as just { id }.
 	uniqFields := make([]*goStructField, 0, len(selectionSet))
+	fragmentNames := make(map[string]bool, len(selectionSet))
 	fieldNames := make(map[string]bool, len(selectionSet))
 	for _, field := range fields {
+		// If you embed a field twice via a named fragment, we keep both, even
+		// if there are complicated overlaps, since they are separate types to
+		// us.  (See also the special handling for IsEmbedded in
+		// unmarshal.go.tmpl.)
+		//
+		// But if you spread the samenamed fragment twice, e.g.
+		//	{ ...MyFragment, ... on SubType { ...MyFragment } }
+		// we'll still deduplicate that.
+		if field.JSONName == "" {
+			name := field.GoType.Reference()
+			if fragmentNames[name] {
+				continue
+			}
+			uniqFields = append(uniqFields, field)
+			fragmentNames[name] = true
+			continue
+		}
+
 		// GraphQL (and, effectively, JSON) requires that all fields with the
 		// same alias (JSON-name) must be the same (i.e. refer to the same
 		// field), so that's how we deduplicate.
-		// It's fine to have duplicate embeds (i.e. via named fragments), even
-		// ones with complicated overlaps, since they are separate types to us.
-		if field.JSONName != "" && fieldNames[field.JSONName] {
+		if fieldNames[field.JSONName] {
 			// GraphQL (and, effectively, JSON) forbids you from having two
 			// fields with the same alias (JSON-name) that refer to different
 			// GraphQL fields.  But it does allow you to have the same field
@@ -475,6 +497,27 @@ func (g *generator) convertFragmentSpread(
 		}
 	}
 
+	iface, ok := typ.(*goInterfaceType)
+	if ok && containingTypedef.Kind == ast.Object {
+		// If the containing type is concrete, and the fragment spread is
+		// abstract, refer directly to the appropriate implementation, to save
+		// the caller having to do type-assertions that will always succeed.
+		//
+		// That is, if you do
+		//	fragment F on I { ... }
+		//  query Q { a { ...F } }
+		// for the fragment we generate
+		//  type F interface { ... }
+		//  type FA struct { ... }
+		//  // (other implementations)
+		// when you spread F into a context of type A, we embed FA, not F.
+		for _, impl := range iface.Implementations {
+			if impl.GraphQLName == containingTypedef.Name {
+				typ = impl
+			}
+		}
+	}
+
 	return &goStructField{GoName: "" /* i.e. embedded */, GoType: typ}, nil
 }
 
@@ -482,23 +525,21 @@ func (g *generator) convertFragmentSpread(
 // (`fragment MyFragment on MyType { ... }`) into a Go struct.
 func (g *generator) convertNamedFragment(fragment *ast.FragmentDefinition) (goType, error) {
 	typ := g.schema.Types[fragment.TypeCondition]
-	if !g.Config.AllowBrokenFeatures &&
-		(typ.Kind == ast.Interface || typ.Kind == ast.Union) {
-		return nil, errorf(fragment.Position, "not implemented: abstract-typed fragments")
-	}
 
-	description, directive, err := g.parsePrecedingComment(fragment, fragment.Position)
+	comment, directive, err := g.parsePrecedingComment(fragment, fragment.Position)
 	if err != nil {
 		return nil, err
 	}
 
-	// If the user included a comment, use that.  Else make up something
-	// generic; there's not much to say though.
-	if description == "" {
-		description = fmt.Sprintf(
-			"%v includes the GraphQL fields of %v requested by the fragment %v.",
-			fragment.Name, fragment.TypeCondition, fragment.Name)
+	desc := descriptionInfo{
+		CommentOverride:    comment,
+		GraphQLName:        typ.Name,
+		GraphQLDescription: typ.Description,
+		FragmentName:       fragment.Name,
 	}
+
+	// The rest basically follows how we convert a definition, except that
+	// things like type-names are a bit different.
 
 	fields, err := g.convertSelectionSet(
 		newPrefixList(fragment.Name), fragment.SelectionSet, typ, directive)
@@ -506,15 +547,49 @@ func (g *generator) convertNamedFragment(fragment *ast.FragmentDefinition) (goTy
 		return nil, err
 	}
 
-	goType := &goStructType{
-		GoName:      fragment.Name,
-		Description: description,
-		GraphQLName: fragment.TypeCondition,
-		Fields:      fields,
-		Incomplete:  false,
+	switch typ.Kind {
+	case ast.Object:
+		goType := &goStructType{
+			GoName:          fragment.Name,
+			Fields:          fields,
+			descriptionInfo: desc,
+		}
+		g.typeMap[fragment.Name] = goType
+		return goType, nil
+	case ast.Interface, ast.Union:
+		implementationTypes := g.schema.GetPossibleTypes(typ)
+		goType := &goInterfaceType{
+			GoName:          fragment.Name,
+			SharedFields:    fields,
+			Implementations: make([]*goStructType, len(implementationTypes)),
+			descriptionInfo: desc,
+		}
+		g.typeMap[fragment.Name] = goType
+
+		for i, implDef := range implementationTypes {
+			implFields, err := g.convertSelectionSet(
+				newPrefixList(fragment.Name), fragment.SelectionSet, implDef, directive)
+			if err != nil {
+				return nil, err
+			}
+
+			implDesc := desc
+			implDesc.GraphQLName = implDef.Name
+
+			implTyp := &goStructType{
+				GoName:          fragment.Name + upperFirst(implDef.Name),
+				Fields:          implFields,
+				descriptionInfo: implDesc,
+			}
+			goType.Implementations[i] = implTyp
+			g.typeMap[implTyp.GoName] = implTyp
+		}
+
+		return goType, nil
+	default:
+		return nil, errorf(fragment.Position, "invalid type for fragment: %v is a %v",
+			fragment.TypeCondition, typ.Kind)
 	}
-	g.typeMap[fragment.Name] = goType
-	return goType, nil
 }
 
 // convertField converts a single GraphQL operation-field into a Go
