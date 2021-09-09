@@ -66,6 +66,24 @@ if errors.As(err, &errList) {
 }
 ```
 
+### … require 32-bit integers?
+
+The GraphQL spec officially defines the `Int` type to be a [signed 32-bit integer](https://spec.graphql.org/draft/#sec-Int).  GraphQL clients and servers vary wildly in their enforcement of this; for example:
+- [Apollo Server](https://github.com/apollographql/apollo-server/) explicitly checks that integers are at most 32 bits
+- [gqlgen](https://github.com/99designs/gqlgen) by default allows any integer that fits in `int` (i.e. 64 bits on most platforms)
+- [Apollo Client](https://github.com/apollographql/apollo-client) doesn't check (but implicitly is limited to 53 bits by JavaScript)
+- [shurcooL/graphql](https://github.com/shurcooL/graphql) requires integers be passed as a `graphql.Int`, defined to be an `int32`
+
+By default, genqlient maps GraphQL `Int`s to Go's `int`, meaning that on 64 bit systems there's no client-side restriction.  If you prefer to limit integers to `int32`, you can set a binding in your `genqlient.yaml`:
+
+```yaml
+bindings:
+  Int:
+    type: int32
+```
+
+Or, you can bind it to any other type, perhaps one with size-checked constructors; see the [`genqlient.yaml` documentation](`genqlient.yaml`) for more details.
+
 ## How do I make a query with …
 
 ### … a specific name for a field?
