@@ -10,7 +10,7 @@ check: lint
 	go test -cover ./...
 	go mod tidy
 
-genqlient.png: genqlient.svg
+docs/images/genqlient.png: docs/images/genqlient.svg
 	convert -density 600 -background transparent "$<" "$@"
 
 .PHONY: example

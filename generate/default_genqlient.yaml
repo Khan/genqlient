@@ -1,6 +1,5 @@
-# Default genqlient config, see 
-#	go doc github.com/Khan/genqlient/generate.Config
-# for more options.
+# Default genqlient config; for full documentation see:
+# https://github.com/Khan/genqlient/blob/main/docs/genqlient.yaml
 schema: schema.graphql
 operations:
 - genqlient.graphql

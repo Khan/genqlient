@@ -858,8 +858,8 @@ type ComplexInlineFragmentsRootTopic struct {
 	Name        string      `json:"name"`
 }
 
-// We test all the spread cases from DESIGN.md, see there for more context on
-// each, as well as various other nonsense.  But for abstract-in-abstract
+// We test all the spread cases from docs/DESIGN.md, see there for more context
+// on each, as well as various other nonsense.  But for abstract-in-abstract
 // spreads, we can't test cases (4b) and (4c), where I implements J or vice
 // versa, because gqlparser doesn't support interfaces that implement other
 // interfaces yet.
