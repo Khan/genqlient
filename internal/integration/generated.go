@@ -266,6 +266,17 @@ func (v *UserFields) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+// failingQueryMeUser includes the requested fields of the GraphQL type User.
+type failingQueryMeUser struct {
+	Id string `json:"id"`
+}
+
+// failingQueryResponse is returned by failingQuery on success.
+type failingQueryResponse struct {
+	Fail bool               `json:"fail"`
+	Me   failingQueryMeUser `json:"me"`
+}
+
 // queryWithFragmentsBeingsAnimal includes the requested fields of the GraphQL type Animal.
 type queryWithFragmentsBeingsAnimal struct {
 	Typename string                                       `json:"__typename"`
@@ -1065,6 +1076,30 @@ query simpleQuery {
 		id
 		name
 		luckyNumber
+	}
+}
+`,
+		&retval,
+		nil,
+	)
+	return &retval, err
+}
+
+func failingQuery(
+	ctx context.Context,
+	client graphql.Client,
+) (*failingQueryResponse, error) {
+	var err error
+
+	var retval failingQueryResponse
+	err = client.MakeRequest(
+		ctx,
+		"failingQuery",
+		`
+query failingQuery {
+	fail
+	me {
+		id
 	}
 }
 `,

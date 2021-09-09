@@ -4,6 +4,7 @@ type Query {
   being(id: ID!): Being
   beings(ids: [ID!]!): [Being]!
   lotteryWinner(number: Int!): Lucky
+  fail: Boolean
 }
 
 type User implements Being & Lucky {
