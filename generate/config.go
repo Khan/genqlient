@@ -10,6 +10,10 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+// Config represents genqlient's configuration, generally read from
+// genqlient.yaml.
+//
+// Callers must call ValidateAndFillDefaults before using the config.
 type Config struct {
 	// The filename with the GraphQL schema (in SDL format); defaults to
 	// schema.graphql
@@ -100,8 +104,9 @@ type Config struct {
 	// them at your own risk!
 	AllowBrokenFeatures bool `yaml:"allow_broken_features"`
 
-	// Set automatically to the filename of the config file itself.
-	configFilename string
+	// The directory of the config-file (relative to which all the other paths
+	// are resolved).  Set by ValidateAndFillDefaults.
+	baseDir string
 }
 
 // A TypeBinding represents a Go type to which genqlient will bind a particular
@@ -134,22 +139,21 @@ type TypeBinding struct {
 	ExpectExactFields string `yaml:"expect_exact_fields"`
 }
 
-// baseDir returns the directory of the config-file (relative to which
-// all the other paths are resolved).
-func (c *Config) baseDir() string {
-	return filepath.Dir(c.configFilename)
-}
-
-func (c *Config) ValidateAndFillDefaults(configFilename string) error {
-	c.configFilename = configFilename
+// ValidateAndFillDefaults ensures that the configuration is valid, and fills
+// in any options that were unspecified.
+//
+// The argument is the directory relative to which paths will be interpreted,
+// typically the directory of the config file.
+func (c *Config) ValidateAndFillDefaults(baseDir string) error {
+	c.baseDir = baseDir
 	// Make paths relative to config dir
-	c.Schema = filepath.Join(c.baseDir(), c.Schema)
+	c.Schema = filepath.Join(baseDir, c.Schema)
 	for i := range c.Operations {
-		c.Operations[i] = filepath.Join(c.baseDir(), c.Operations[i])
+		c.Operations[i] = filepath.Join(baseDir, c.Operations[i])
 	}
-	c.Generated = filepath.Join(c.baseDir(), c.Generated)
+	c.Generated = filepath.Join(baseDir, c.Generated)
 	if c.ExportOperations != "" {
-		c.ExportOperations = filepath.Join(c.baseDir(), c.ExportOperations)
+		c.ExportOperations = filepath.Join(baseDir, c.ExportOperations)
 	}
 
 	if c.ContextType == "" {
@@ -173,6 +177,8 @@ func (c *Config) ValidateAndFillDefaults(configFilename string) error {
 	return nil
 }
 
+// ReadAndValidateConfig reads the configuration from the given file, validates
+// it, and returns it.
 func ReadAndValidateConfig(filename string) (*Config, error) {
 	text, err := ioutil.ReadFile(filename)
 	if err != nil {
@@ -185,7 +191,7 @@ func ReadAndValidateConfig(filename string) (*Config, error) {
 		return nil, errorf(nil, "invalid config file %v: %v", filename, err)
 	}
 
-	err = config.ValidateAndFillDefaults(filename)
+	err = config.ValidateAndFillDefaults(filepath.Dir(filename))
 	if err != nil {
 		return nil, errorf(nil, "invalid config file %v: %v", filename, err)
 	}
