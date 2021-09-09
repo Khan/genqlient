@@ -134,13 +134,12 @@ type SimpleInlineFragmentResponse struct {
 
 func (v *SimpleInlineFragmentResponse) UnmarshalJSON(b []byte) error {
 
-	type SimpleInlineFragmentResponseWrapper SimpleInlineFragmentResponse
-
 	var firstPass struct {
-		*SimpleInlineFragmentResponseWrapper
+		*SimpleInlineFragmentResponse
 		RandomItem json.RawMessage `json:"randomItem"`
+		graphql.NoUnmarshalJSON
 	}
-	firstPass.SimpleInlineFragmentResponseWrapper = (*SimpleInlineFragmentResponseWrapper)(v)
+	firstPass.SimpleInlineFragmentResponse = v
 
 	err := json.Unmarshal(b, &firstPass)
 	if err != nil {
@@ -157,6 +156,7 @@ func (v *SimpleInlineFragmentResponse) UnmarshalJSON(b []byte) error {
 				"Unable to unmarshal SimpleInlineFragmentResponse.RandomItem: %w", err)
 		}
 	}
+
 	return nil
 }
 

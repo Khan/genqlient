@@ -35,6 +35,11 @@ type generator struct {
 	templateCache map[string]*template.Template
 	// Schema we are generating code against
 	schema *ast.Schema
+	// Named fragments (map by name), so we can look them up from spreads.
+	// TODO(benkraft): In theory we shouldn't need this, we can just use
+	// ast.FragmentSpread.Definition, but for some reason it doesn't seem to be
+	// set consistently, even post-validation.
+	fragments map[string]*ast.FragmentDefinition
 }
 
 // JSON tags in operation are for ExportOperations (see Config for details).
@@ -67,7 +72,11 @@ type argument struct {
 	Options     *GenqlientDirective
 }
 
-func newGenerator(config *Config, schema *ast.Schema) (*generator, error) {
+func newGenerator(
+	config *Config,
+	schema *ast.Schema,
+	fragments ast.FragmentDefinitionList,
+) (*generator, error) {
 	g := generator{
 		Config:        config,
 		typeMap:       map[string]goType{},
@@ -75,6 +84,11 @@ func newGenerator(config *Config, schema *ast.Schema) (*generator, error) {
 		usedAliases:   map[string]bool{},
 		templateCache: map[string]*template.Template{},
 		schema:        schema,
+		fragments:     make(map[string]*ast.FragmentDefinition, len(fragments)),
+	}
+
+	for _, fragment := range fragments {
+		g.fragments[fragment.Name] = fragment
 	}
 
 	_, err := g.addRef("github.com/Khan/genqlient/graphql.Client")
@@ -146,6 +160,38 @@ func (g *generator) getArgument(
 	}, nil
 }
 
+// usedFragmentNames returns the named-fragments used by (i.e. spread into)
+// this operation.
+func (g *generator) usedFragments(op *ast.OperationDefinition) ast.FragmentDefinitionList {
+	var retval, queue ast.FragmentDefinitionList
+	seen := map[string]bool{}
+
+	var observers validator.Events
+	// Fragment-spreads are easy to find; just ask for them!
+	observers.OnFragmentSpread(func(_ *validator.Walker, fragmentSpread *ast.FragmentSpread) {
+		if seen[fragmentSpread.Name] {
+			return
+		}
+		def := g.fragments[fragmentSpread.Name]
+		seen[fragmentSpread.Name] = true
+		retval = append(retval, def)
+		queue = append(queue, def)
+	})
+
+	doc := ast.QueryDocument{Operations: ast.OperationList{op}}
+	validator.Walk(g.schema, &doc, &observers)
+	// Well, easy-ish: we also have to look recursively.
+	// Note GraphQL guarantees there are no cycles among fragments:
+	// https://spec.graphql.org/draft/#sec-Fragment-spreads-must-not-form-cycles
+	for len(queue) > 0 {
+		doc = ast.QueryDocument{Fragments: ast.FragmentDefinitionList{queue[0]}}
+		validator.Walk(g.schema, &doc, &observers) // traversal is the same
+		queue = queue[1:]
+	}
+
+	return retval
+}
+
 // Preprocess each query to make any changes that genqlient needs.
 //
 // At present, the only change is that we add __typename, if not already
@@ -158,9 +204,11 @@ func (g *generator) preprocessQueryDocument(doc *ast.QueryDocument) {
 	// __typename field.  There are four places we might find a selection-set:
 	// at the toplevel of a query, on a field, or in an inline or named
 	// fragment.  The toplevel of a query must be an object type, so we don't
-	// need to consider that.
-	// TODO(benkraft): Once we support fragments, figure out whether we need to
-	// traverse inline/named fragments here too.
+	// need to consider that.  And fragments must (if used at all) be spread
+	// into some parent selection-set, so we'll add __typename there (if
+	// needed).  Note this does mean abstract-typed fragments spread into
+	// object-typed scope will *not* have access to `__typename`, but they
+	// indeed don't need it, since we do know the type in that context.
 	observers.OnField(func(_ *validator.Walker, field *ast.Field) {
 		// We are interested in a field from the query like
 		//	field { subField ... }
@@ -214,6 +262,11 @@ func (g *generator) preprocessQueryDocument(doc *ast.QueryDocument) {
 	validator.Walk(g.schema, doc, &observers)
 }
 
+// addOperation adds to g.Operations the information needed to generate a
+// genqlient entrypoint function for the given operation.  It also adds to
+// g.typeMap any types referenced by the operation, except for types belonging
+// to named fragments, which are added separately by Generate via
+// convertFragment.
 func (g *generator) addOperation(op *ast.OperationDefinition) error {
 	if op.Name == "" {
 		return errorf(op.Position, "operations must have operation-names")
@@ -221,7 +274,7 @@ func (g *generator) addOperation(op *ast.OperationDefinition) error {
 
 	queryDoc := &ast.QueryDocument{
 		Operations: ast.OperationList{op},
-		// TODO: handle fragments
+		Fragments:  g.usedFragments(op),
 	}
 	g.preprocessQueryDocument(queryDoc)
 
@@ -304,19 +357,13 @@ func Generate(config *Config) (map[string][]byte, error) {
 			strings.Join(config.Operations, ", "))
 	}
 
-	if len(document.Fragments) > 0 && !config.AllowBrokenFeatures {
-		return nil, errorf(document.Fragments[0].Position,
-			"genqlient does not yet support fragments")
-	}
-
-	// Step 2: For each operation, convert it into data structures representing
-	// Go types (defined in types.go).  The bulk of this logic is in
-	// convert.go.
-	g, err := newGenerator(config, schema)
+	// Step 2: For each operation and fragment, convert it into data structures
+	// representing Go types (defined in types.go).  The bulk of this logic is
+	// in convert.go.
+	g, err := newGenerator(config, schema, document.Fragments)
 	if err != nil {
 		return nil, err
 	}
-
 	for _, op := range document.Operations {
 		if err = g.addOperation(op); err != nil {
 			return nil, err

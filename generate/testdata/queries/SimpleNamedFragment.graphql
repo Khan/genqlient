@@ -1,0 +1,13 @@
+fragment VideoFields on Video {
+  id name url duration thumbnail { id }
+}
+
+query SimpleNamedFragment {
+  randomItem {
+    id name
+    ...VideoFields
+  }
+  randomLeaf {
+    ...VideoFields
+  }
+}

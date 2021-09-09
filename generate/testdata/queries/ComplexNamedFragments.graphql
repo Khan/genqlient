@@ -1,0 +1,39 @@
+fragment QueryFragment on Query {
+  ...InnerQueryFragment
+}
+
+fragment InnerQueryFragment on Query {
+  randomItem {
+    id name
+    ...VideoFields
+  }
+  randomLeaf {
+    ...VideoFields
+    ...MoreVideoFields
+  }
+  otherLeaf: randomLeaf {
+    ... on Video {
+      ...MoreVideoFields
+    }
+  }
+}
+
+fragment VideoFields on Video {
+  id name url duration thumbnail { id }
+}
+
+# @genqlient(pointer: true)
+fragment MoreVideoFields on Video {
+  id
+  parent {
+    name url
+    # @genqlient(pointer: false)
+    children {
+      ...VideoFields
+    }
+  }
+}
+
+query ComplexNamedFragments {
+  ... on Query { ...QueryFragment }
+}

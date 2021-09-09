@@ -119,9 +119,17 @@ type goStructField struct {
 	Description string
 }
 
-func isAbstract(typ goType) bool {
-	_, ok := typ.Unwrap().(*goInterfaceType)
+// IsAbstract returns true if this field is of abstract type (i.e. GraphQL
+// union or interface; equivalently, represented by an interface in Go).
+func (field *goStructField) IsAbstract() bool {
+	_, ok := field.GoType.Unwrap().(*goInterfaceType)
 	return ok
+}
+
+// IsEmbedded returns true if this field is embedded (a.k.a. anonymous), which
+// is in practice true if it corresponds to a named fragment spread in GraphQL.
+func (field *goStructField) IsEmbedded() bool {
+	return field.GoName == ""
 }
 
 func (typ *goStructType) WriteDefinition(w io.Writer, g *generator) error {
@@ -144,28 +152,47 @@ func (typ *goStructType) WriteDefinition(w io.Writer, g *generator) error {
 	}
 	writeDescription(w, description)
 
+	needUnmarshaler := false
 	fmt.Fprintf(w, "type %s struct {\n", typ.GoName)
 	for _, field := range typ.Fields {
 		writeDescription(w, field.Description)
 		jsonName := field.JSONName
-		if isAbstract(field.GoType) {
-			// abstract types are handled in our UnmarshalJSON
+		if field.IsAbstract() {
+			// abstract types are handled in our UnmarshalJSON (see below)
+			needUnmarshaler = true
 			jsonName = "-"
 		}
-		fmt.Fprintf(w, "\t%s %s `json:\"%s\"`\n",
-			field.GoName, field.GoType.Reference(), jsonName)
+		if field.IsEmbedded() {
+			// embedded fields also need UnmarshalJSON handling (see below)
+			needUnmarshaler = true
+			fmt.Fprintf(w, "\t%s `json:\"-\"`\n", field.GoType.Unwrap().Reference())
+		} else {
+			fmt.Fprintf(w, "\t%s %s `json:\"%s\"`\n",
+				field.GoName, field.GoType.Reference(), jsonName)
+		}
 	}
 	fmt.Fprintf(w, "}\n")
 
-	// Now, if needed, write the unmarshaler.
+	// Now, if needed, write the unmarshaler.  We need one if we have any
+	// interface-typed fields, or any embedded fields.
 	//
-	// Specifically, in order to unmarshal interface values, we need to add an
-	// UnmarshalJSON method to each type which has an interface-typed *field*
-	// (not the interface type itself -- we can't add methods to that).
-	// But we put most of the logic in a per-interface-type helper function,
-	// written along with the interface type; the UnmarshalJSON method is just
-	// the boilerplate.
-	if len(typ.AbstractFields()) == 0 {
+	// For interface-typed fields, ideally we'd write an UnmarshalJSON method
+	// on the field, but you can't add a method to an interface.  So we write a
+	// per-interface-type helper, but we have to call it (with a little
+	// boilerplate) everywhere the type is referenced.
+	//
+	// For embedded fields (from fragments), mostly the JSON library would just
+	// do what we want, but there are two problems.  First, if the embedded
+	// type has its own UnmarshalJSON, naively that would be promoted to
+	// become our UnmarshalJSON, which is no good.  But we don't want to just
+	// hide that method and inline its fields, either; we need to call its
+	// UnmarshalJSON (on the same object we unmarshal into this struct).
+	// Second, if the embedded type duplicates any fields of the embedding type
+	// -- maybe both the fragment and the selection into which it's spread
+	// select the same field, or several fragments select the same field -- the
+	// JSON library will only fill one of those (the least-nested one); we want
+	// to fill them all.
+	if !needUnmarshaler {
 		return nil
 	}
 
@@ -180,18 +207,6 @@ func (typ *goStructType) WriteDefinition(w io.Writer, g *generator) error {
 }
 
 func (typ *goStructType) Reference() string { return typ.GoName }
-
-// AbstractFields returns all the fields which are abstract types (i.e. GraphQL
-// unions and interfaces; equivalently, types represented by interfaces in Go).
-func (typ *goStructType) AbstractFields() []*goStructField {
-	var ret []*goStructField
-	for _, field := range typ.Fields {
-		if isAbstract(field.GoType) {
-			ret = append(ret, field)
-		}
-	}
-	return ret
-}
 
 // goInterfaceType represents a Go interface type, used to represent a GraphQL
 // interface or union type.

@@ -24,13 +24,12 @@ type InterfaceNestingRootTopic struct {
 
 func (v *InterfaceNestingRootTopic) UnmarshalJSON(b []byte) error {
 
-	type InterfaceNestingRootTopicWrapper InterfaceNestingRootTopic
-
 	var firstPass struct {
-		*InterfaceNestingRootTopicWrapper
+		*InterfaceNestingRootTopic
 		Children []json.RawMessage `json:"children"`
+		graphql.NoUnmarshalJSON
 	}
-	firstPass.InterfaceNestingRootTopicWrapper = (*InterfaceNestingRootTopicWrapper)(v)
+	firstPass.InterfaceNestingRootTopic = v
 
 	err := json.Unmarshal(b, &firstPass)
 	if err != nil {
@@ -53,6 +52,7 @@ func (v *InterfaceNestingRootTopic) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
+
 	return nil
 }
 
@@ -170,13 +170,12 @@ type InterfaceNestingRootTopicChildrenContentParentTopic struct {
 
 func (v *InterfaceNestingRootTopicChildrenContentParentTopic) UnmarshalJSON(b []byte) error {
 
-	type InterfaceNestingRootTopicChildrenContentParentTopicWrapper InterfaceNestingRootTopicChildrenContentParentTopic
-
 	var firstPass struct {
-		*InterfaceNestingRootTopicChildrenContentParentTopicWrapper
+		*InterfaceNestingRootTopicChildrenContentParentTopic
 		Children []json.RawMessage `json:"children"`
+		graphql.NoUnmarshalJSON
 	}
-	firstPass.InterfaceNestingRootTopicChildrenContentParentTopicWrapper = (*InterfaceNestingRootTopicChildrenContentParentTopicWrapper)(v)
+	firstPass.InterfaceNestingRootTopicChildrenContentParentTopic = v
 
 	err := json.Unmarshal(b, &firstPass)
 	if err != nil {
@@ -199,6 +198,7 @@ func (v *InterfaceNestingRootTopicChildrenContentParentTopic) UnmarshalJSON(b []
 			}
 		}
 	}
+
 	return nil
 }
 

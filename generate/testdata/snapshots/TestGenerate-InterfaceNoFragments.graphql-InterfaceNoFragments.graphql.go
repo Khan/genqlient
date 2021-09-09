@@ -256,15 +256,14 @@ type InterfaceNoFragmentsQueryResponse struct {
 
 func (v *InterfaceNoFragmentsQueryResponse) UnmarshalJSON(b []byte) error {
 
-	type InterfaceNoFragmentsQueryResponseWrapper InterfaceNoFragmentsQueryResponse
-
 	var firstPass struct {
-		*InterfaceNoFragmentsQueryResponseWrapper
+		*InterfaceNoFragmentsQueryResponse
 		RandomItem             json.RawMessage `json:"randomItem"`
 		RandomItemWithTypeName json.RawMessage `json:"randomItemWithTypeName"`
 		WithPointer            json.RawMessage `json:"withPointer"`
+		graphql.NoUnmarshalJSON
 	}
-	firstPass.InterfaceNoFragmentsQueryResponseWrapper = (*InterfaceNoFragmentsQueryResponseWrapper)(v)
+	firstPass.InterfaceNoFragmentsQueryResponse = v
 
 	err := json.Unmarshal(b, &firstPass)
 	if err != nil {
@@ -281,6 +280,7 @@ func (v *InterfaceNoFragmentsQueryResponse) UnmarshalJSON(b []byte) error {
 				"Unable to unmarshal InterfaceNoFragmentsQueryResponse.RandomItem: %w", err)
 		}
 	}
+
 	{
 		target := &v.RandomItemWithTypeName
 		raw := firstPass.RandomItemWithTypeName
@@ -291,6 +291,7 @@ func (v *InterfaceNoFragmentsQueryResponse) UnmarshalJSON(b []byte) error {
 				"Unable to unmarshal InterfaceNoFragmentsQueryResponse.RandomItemWithTypeName: %w", err)
 		}
 	}
+
 	{
 		target := &v.WithPointer
 		raw := firstPass.WithPointer
@@ -302,6 +303,7 @@ func (v *InterfaceNoFragmentsQueryResponse) UnmarshalJSON(b []byte) error {
 				"Unable to unmarshal InterfaceNoFragmentsQueryResponse.WithPointer: %w", err)
 		}
 	}
+
 	return nil
 }
 

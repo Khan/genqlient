@@ -184,13 +184,12 @@ type ComplexInlineFragmentsNestedStuffTopic struct {
 
 func (v *ComplexInlineFragmentsNestedStuffTopic) UnmarshalJSON(b []byte) error {
 
-	type ComplexInlineFragmentsNestedStuffTopicWrapper ComplexInlineFragmentsNestedStuffTopic
-
 	var firstPass struct {
-		*ComplexInlineFragmentsNestedStuffTopicWrapper
+		*ComplexInlineFragmentsNestedStuffTopic
 		Children []json.RawMessage `json:"children"`
+		graphql.NoUnmarshalJSON
 	}
-	firstPass.ComplexInlineFragmentsNestedStuffTopicWrapper = (*ComplexInlineFragmentsNestedStuffTopicWrapper)(v)
+	firstPass.ComplexInlineFragmentsNestedStuffTopic = v
 
 	err := json.Unmarshal(b, &firstPass)
 	if err != nil {
@@ -213,6 +212,7 @@ func (v *ComplexInlineFragmentsNestedStuffTopic) UnmarshalJSON(b []byte) error {
 			}
 		}
 	}
+
 	return nil
 }
 
@@ -232,13 +232,12 @@ type ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTop
 
 func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopic) UnmarshalJSON(b []byte) error {
 
-	type ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicWrapper ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopic
-
 	var firstPass struct {
-		*ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicWrapper
+		*ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopic
 		Children []json.RawMessage `json:"children"`
+		graphql.NoUnmarshalJSON
 	}
-	firstPass.ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicWrapper = (*ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicWrapper)(v)
+	firstPass.ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopic = v
 
 	err := json.Unmarshal(b, &firstPass)
 	if err != nil {
@@ -261,6 +260,7 @@ func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParen
 			}
 		}
 	}
+
 	return nil
 }
 
@@ -797,16 +797,15 @@ type ComplexInlineFragmentsResponse struct {
 
 func (v *ComplexInlineFragmentsResponse) UnmarshalJSON(b []byte) error {
 
-	type ComplexInlineFragmentsResponseWrapper ComplexInlineFragmentsResponse
-
 	var firstPass struct {
-		*ComplexInlineFragmentsResponseWrapper
+		*ComplexInlineFragmentsResponse
 		RandomItem       json.RawMessage `json:"randomItem"`
 		RepeatedStuff    json.RawMessage `json:"repeatedStuff"`
 		ConflictingStuff json.RawMessage `json:"conflictingStuff"`
 		NestedStuff      json.RawMessage `json:"nestedStuff"`
+		graphql.NoUnmarshalJSON
 	}
-	firstPass.ComplexInlineFragmentsResponseWrapper = (*ComplexInlineFragmentsResponseWrapper)(v)
+	firstPass.ComplexInlineFragmentsResponse = v
 
 	err := json.Unmarshal(b, &firstPass)
 	if err != nil {
@@ -823,6 +822,7 @@ func (v *ComplexInlineFragmentsResponse) UnmarshalJSON(b []byte) error {
 				"Unable to unmarshal ComplexInlineFragmentsResponse.RandomItem: %w", err)
 		}
 	}
+
 	{
 		target := &v.RepeatedStuff
 		raw := firstPass.RepeatedStuff
@@ -833,6 +833,7 @@ func (v *ComplexInlineFragmentsResponse) UnmarshalJSON(b []byte) error {
 				"Unable to unmarshal ComplexInlineFragmentsResponse.RepeatedStuff: %w", err)
 		}
 	}
+
 	{
 		target := &v.ConflictingStuff
 		raw := firstPass.ConflictingStuff
@@ -843,6 +844,7 @@ func (v *ComplexInlineFragmentsResponse) UnmarshalJSON(b []byte) error {
 				"Unable to unmarshal ComplexInlineFragmentsResponse.ConflictingStuff: %w", err)
 		}
 	}
+
 	{
 		target := &v.NestedStuff
 		raw := firstPass.NestedStuff
@@ -853,6 +855,7 @@ func (v *ComplexInlineFragmentsResponse) UnmarshalJSON(b []byte) error {
 				"Unable to unmarshal ComplexInlineFragmentsResponse.NestedStuff: %w", err)
 		}
 	}
+
 	return nil
 }
 

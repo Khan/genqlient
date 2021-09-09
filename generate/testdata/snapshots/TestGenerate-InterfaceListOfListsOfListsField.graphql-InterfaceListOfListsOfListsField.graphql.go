@@ -151,14 +151,13 @@ type InterfaceListOfListOfListsFieldResponse struct {
 
 func (v *InterfaceListOfListOfListsFieldResponse) UnmarshalJSON(b []byte) error {
 
-	type InterfaceListOfListOfListsFieldResponseWrapper InterfaceListOfListOfListsFieldResponse
-
 	var firstPass struct {
-		*InterfaceListOfListOfListsFieldResponseWrapper
+		*InterfaceListOfListOfListsFieldResponse
 		ListOfListsOfListsOfContent [][][]json.RawMessage `json:"listOfListsOfListsOfContent"`
 		WithPointer                 [][][]json.RawMessage `json:"withPointer"`
+		graphql.NoUnmarshalJSON
 	}
-	firstPass.InterfaceListOfListOfListsFieldResponseWrapper = (*InterfaceListOfListOfListsFieldResponseWrapper)(v)
+	firstPass.InterfaceListOfListOfListsFieldResponse = v
 
 	err := json.Unmarshal(b, &firstPass)
 	if err != nil {
@@ -193,6 +192,7 @@ func (v *InterfaceListOfListOfListsFieldResponse) UnmarshalJSON(b []byte) error 
 			}
 		}
 	}
+
 	{
 		target := &v.WithPointer
 		raw := firstPass.WithPointer
@@ -222,6 +222,7 @@ func (v *InterfaceListOfListOfListsFieldResponse) UnmarshalJSON(b []byte) error 
 			}
 		}
 	}
+
 	return nil
 }
 

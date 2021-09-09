@@ -1,0 +1,9 @@
+{
+  "operations": [
+    {
+      "operationName": "SimpleNamedFragment",
+      "query": "\nquery SimpleNamedFragment {\n\trandomItem {\n\t\t__typename\n\t\tid\n\t\tname\n\t\t... VideoFields\n\t}\n\trandomLeaf {\n\t\t__typename\n\t\t... VideoFields\n\t}\n}\nfragment VideoFields on Video {\n\tid\n\tname\n\turl\n\tduration\n\tthumbnail {\n\t\tid\n\t}\n}\n",
+      "sourceLocation": "testdata/queries/SimpleNamedFragment.graphql"
+    }
+  ]
+}
