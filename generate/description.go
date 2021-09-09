@@ -15,22 +15,22 @@ import (
 // than just a copy of the GraphQL doc.
 type descriptionInfo struct {
 	// user-specified comment for this type
-	Comment string
+	CommentOverride string
 	// name of the corresponding GraphQL type
 	GraphQLName string
 	// GraphQL description of the type .GraphQLName, if any
-	Description string
+	GraphQLDescription string
 	// name of the corresponding GraphQL fragment (on .GraphQLName), if any
 	FragmentName string
 }
 
 func maybeAddTypeDescription(info descriptionInfo, description string) string {
-	if info.Description == "" {
+	if info.GraphQLDescription == "" {
 		return description
 	}
 	return fmt.Sprintf(
 		"%v\nThe GraphQL type's documentation follows.\n\n%v",
-		description, info.Description)
+		description, info.GraphQLDescription)
 }
 
 func fragmentDescription(info descriptionInfo) string {
@@ -41,11 +41,11 @@ func fragmentDescription(info descriptionInfo) string {
 
 func structDescription(typ *goStructType) string {
 	switch {
-	case typ.Comment != "":
-		return typ.Comment
+	case typ.CommentOverride != "":
+		return typ.CommentOverride
 	case typ.IsInput:
 		// Input types have all their fields, just use the GraphQL description.
-		return typ.Description
+		return typ.GraphQLDescription
 	case typ.FragmentName != "":
 		return fragmentDescription(typ.descriptionInfo)
 	default:
@@ -69,8 +69,8 @@ func interfaceDescription(typ *goInterfaceType) string {
 		typ.GoName, strings.Join(goImplNames, "\n\t"))
 
 	switch {
-	case typ.Comment != "":
-		return typ.Comment + implementationList
+	case typ.CommentOverride != "":
+		return typ.CommentOverride + implementationList
 	case typ.FragmentName != "":
 		return fragmentDescription(typ.descriptionInfo) + implementationList
 	default:

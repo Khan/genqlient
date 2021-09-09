@@ -62,7 +62,7 @@ func (g *generator) convertOperation(
 	goType := &goStructType{
 		GoName: name,
 		descriptionInfo: descriptionInfo{
-			Comment: fmt.Sprintf(
+			CommentOverride: fmt.Sprintf(
 				"%v is returned by %v on success.", name, operation.Name),
 			GraphQLName: baseType.Name,
 			// omit the GraphQL description for baseType; it's uninteresting.
@@ -171,8 +171,8 @@ func (g *generator) convertDefinition(
 
 	desc := descriptionInfo{
 		// TODO(benkraft): Copy any comment above this selection-set?
-		Description: def.Description,
-		GraphQLName: def.Name,
+		GraphQLDescription: def.Description,
+		GraphQLName:        def.Name,
 	}
 
 	switch def.Kind {
@@ -532,10 +532,10 @@ func (g *generator) convertNamedFragment(fragment *ast.FragmentDefinition) (goTy
 	}
 
 	desc := descriptionInfo{
-		Comment:      comment,
-		GraphQLName:  typ.Name,
-		Description:  typ.Description,
-		FragmentName: fragment.Name,
+		CommentOverride:    comment,
+		GraphQLName:        typ.Name,
+		GraphQLDescription: typ.Description,
+		FragmentName:       fragment.Name,
 	}
 
 	// The rest basically follows how we convert a definition, except that
