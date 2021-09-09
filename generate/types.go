@@ -183,7 +183,7 @@ func (typ *goStructType) WriteDefinition(w io.Writer, g *generator) error {
 	//
 	// For embedded fields (from fragments), mostly the JSON library would just
 	// do what we want, but there are two problems.  First, if the embedded
-	// ype has its own UnmarshalJSON, naively that would be promoted to
+	// type has its own UnmarshalJSON, naively that would be promoted to
 	// become our UnmarshalJSON, which is no good.  But we don't want to just
 	// hide that method and inline its fields, either; we need to call its
 	// UnmarshalJSON (on the same object we unmarshal into this struct).

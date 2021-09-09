@@ -452,9 +452,8 @@ func (g *generator) convertInlineFragment(
 }
 
 // convertFragmentSpread converts a single GraphQL fragment-spread
-// (`...MyFragment`) into a Go struct-field.  It assumes that
-// convertNamedFragment has already been called on the fragment-definition.  If
-// the fragment does not apply to this type, returns nil.
+// (`...MyFragment`) into a Go struct-field.  If the fragment does not apply to
+// this type, returns nil.
 //
 // containingTypedef is as described in convertInlineFragment, above.
 func (g *generator) convertFragmentSpread(
