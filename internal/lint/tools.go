@@ -1,9 +1,3 @@
-// Conventionally this sort of thing would use the "ignore" tag, but
-// `go mod tidy` ignores so-tagged files explicitly, so we use another build
-// tag we never intend to set.
-// +build tools
-//go:build tools
-
 // Package lint exists to pin a version of golangci-lint, but to keep it out of
 // our main go.mod.  This is useful because end-users typically want to pin
 // their own version of golangci-lint (since any new lint check may fail on
