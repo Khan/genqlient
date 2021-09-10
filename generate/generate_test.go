@@ -145,43 +145,43 @@ func defaultConfig(t *testing.T) *Config {
 // configurations.  It uses snapshots, just like TestGenerate.
 func TestGenerateWithConfig(t *testing.T) {
 	tests := []struct {
-		name   string
-		config *Config // omits Schema and Operations, set below.
+		name    string
+		baseDir string  // relative to dataDir
+		config  *Config // omits Schema and Operations, set below.
 	}{
-		{"DefaultConfig", defaultConfig(t)},
-		{"Subpackage", &Config{
+		{"DefaultConfig", "", defaultConfig(t)},
+		{"Subpackage", "", &Config{
 			Generated: "mypkg/myfile.go",
 		}},
-		{"SubpackageConfig", &Config{
-			baseDir:   "mypkg",     // (relative to dataDir, see below)
+		{"SubpackageConfig", "mypkg", &Config{
 			Generated: "myfile.go", // (relative to genqlient.yaml)
 		}},
-		{"PackageName", &Config{
+		{"PackageName", "", &Config{
 			Generated: "myfile.go",
 			Package:   "mypkg",
 		}},
-		{"ExportOperations", &Config{
+		{"ExportOperations", "", &Config{
 			Generated:        "generated.go",
 			ExportOperations: "operations.json",
 		}},
-		{"CustomContext", &Config{
+		{"CustomContext", "", &Config{
 			Generated:   "generated.go",
 			ContextType: "github.com/Khan/genqlient/internal/testutil.MyContext",
 		}},
-		{"NoContext", &Config{
+		{"NoContext", "", &Config{
 			Generated:   "generated.go",
 			ContextType: "-",
 		}},
-		{"ClientGetter", &Config{
+		{"ClientGetter", "", &Config{
 			Generated:    "generated.go",
 			ClientGetter: "github.com/Khan/genqlient/internal/testutil.GetClientFromContext",
 		}},
-		{"ClientGetterCustomContext", &Config{
+		{"ClientGetterCustomContext", "", &Config{
 			Generated:    "generated.go",
 			ClientGetter: "github.com/Khan/genqlient/internal/testutil.GetClientFromMyContext",
 			ContextType:  "github.com/Khan/genqlient/internal/testutil.MyContext",
 		}},
-		{"ClientGetterNoContext", &Config{
+		{"ClientGetterNoContext", "", &Config{
 			Generated:    "generated.go",
 			ClientGetter: "github.com/Khan/genqlient/internal/testutil.GetClientFromNowhere",
 			ContextType:  "-",
@@ -192,9 +192,9 @@ func TestGenerateWithConfig(t *testing.T) {
 
 	for _, test := range tests {
 		config := test.config
+		baseDir := filepath.Join(dataDir, test.baseDir)
 		t.Run(test.name, func(t *testing.T) {
-			err := config.ValidateAndFillDefaults(
-				filepath.Join(dataDir, config.baseDir))
+			err := config.ValidateAndFillDefaults(baseDir)
 			config.Schema = filepath.Join(dataDir, "schema.graphql")
 			config.Operations = []string{filepath.Join(dataDir, sourceFilename)}
 			if err != nil {
