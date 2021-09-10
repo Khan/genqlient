@@ -145,43 +145,43 @@ func defaultConfig(t *testing.T) *Config {
 // configurations.  It uses snapshots, just like TestGenerate.
 func TestGenerateWithConfig(t *testing.T) {
 	tests := []struct {
-		name               string
-		fakeConfigFilename string
-		config             *Config // omits Schema and Operations, set below.
+		name    string
+		baseDir string  // relative to dataDir
+		config  *Config // omits Schema and Operations, set below.
 	}{
-		{"DefaultConfig", "genqlient.yaml", defaultConfig(t)},
-		{"Subpackage", "genqlient.yaml", &Config{
+		{"DefaultConfig", "", defaultConfig(t)},
+		{"Subpackage", "", &Config{
 			Generated: "mypkg/myfile.go",
 		}},
-		{"SubpackageConfig", "mypkg/genqlient.yaml", &Config{
+		{"SubpackageConfig", "mypkg", &Config{
 			Generated: "myfile.go", // (relative to genqlient.yaml)
 		}},
-		{"PackageName", "genqlient.yaml", &Config{
+		{"PackageName", "", &Config{
 			Generated: "myfile.go",
 			Package:   "mypkg",
 		}},
-		{"ExportOperations", "genqlient.yaml", &Config{
+		{"ExportOperations", "", &Config{
 			Generated:        "generated.go",
 			ExportOperations: "operations.json",
 		}},
-		{"CustomContext", "genqlient.yaml", &Config{
+		{"CustomContext", "", &Config{
 			Generated:   "generated.go",
 			ContextType: "github.com/Khan/genqlient/internal/testutil.MyContext",
 		}},
-		{"NoContext", "genqlient.yaml", &Config{
+		{"NoContext", "", &Config{
 			Generated:   "generated.go",
 			ContextType: "-",
 		}},
-		{"ClientGetter", "genqlient.yaml", &Config{
+		{"ClientGetter", "", &Config{
 			Generated:    "generated.go",
 			ClientGetter: "github.com/Khan/genqlient/internal/testutil.GetClientFromContext",
 		}},
-		{"ClientGetterCustomContext", "genqlient.yaml", &Config{
+		{"ClientGetterCustomContext", "", &Config{
 			Generated:    "generated.go",
 			ClientGetter: "github.com/Khan/genqlient/internal/testutil.GetClientFromMyContext",
 			ContextType:  "github.com/Khan/genqlient/internal/testutil.MyContext",
 		}},
-		{"ClientGetterNoContext", "genqlient.yaml", &Config{
+		{"ClientGetterNoContext", "", &Config{
 			Generated:    "generated.go",
 			ClientGetter: "github.com/Khan/genqlient/internal/testutil.GetClientFromNowhere",
 			ContextType:  "-",
@@ -192,9 +192,9 @@ func TestGenerateWithConfig(t *testing.T) {
 
 	for _, test := range tests {
 		config := test.config
+		baseDir := filepath.Join(dataDir, test.baseDir)
 		t.Run(test.name, func(t *testing.T) {
-			err := config.ValidateAndFillDefaults(
-				filepath.Join(dataDir, test.fakeConfigFilename))
+			err := config.ValidateAndFillDefaults(baseDir)
 			config.Schema = filepath.Join(dataDir, "schema.graphql")
 			config.Operations = []string{filepath.Join(dataDir, sourceFilename)}
 			if err != nil {
