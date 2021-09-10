@@ -61,6 +61,7 @@ type ComplexityRoot struct {
 	Query struct {
 		Being         func(childComplexity int, id string) int
 		Beings        func(childComplexity int, ids []string) int
+		Fail          func(childComplexity int) int
 		LotteryWinner func(childComplexity int, number int) int
 		Me            func(childComplexity int) int
 		User          func(childComplexity int, id string) int
@@ -80,6 +81,7 @@ type QueryResolver interface {
 	Being(ctx context.Context, id string) (Being, error)
 	Beings(ctx context.Context, ids []string) ([]Being, error)
 	LotteryWinner(ctx context.Context, number int) (Lucky, error)
+	Fail(ctx context.Context) (*bool, error)
 }
 
 type executableSchema struct {
@@ -169,6 +171,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.Beings(childComplexity, args["ids"].([]string)), true
+
+	case "Query.fail":
+		if e.complexity.Query.Fail == nil {
+			break
+		}
+
+		return e.complexity.Query.Fail(childComplexity), true
 
 	case "Query.lotteryWinner":
 		if e.complexity.Query.LotteryWinner == nil {
@@ -285,6 +294,7 @@ var sources = []*ast.Source{
   being(id: ID!): Being
   beings(ids: [ID!]!): [Being]!
   lotteryWinner(number: Int!): Lucky
+  fail: Boolean
 }
 
 type User implements Being & Lucky {
@@ -865,6 +875,38 @@ func (ec *executionContext) _Query_lotteryWinner(ctx context.Context, field grap
 	res := resTmp.(Lucky)
 	fc.Result = res
 	return ec.marshalOLucky2githubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐLucky(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Query_fail(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Fail(rctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*bool)
+	fc.Result = res
+	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query___type(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -2369,6 +2411,17 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_lotteryWinner(ctx, field)
+				return res
+			})
+		case "fail":
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_fail(ctx, field)
 				return res
 			})
 		case "__type":

@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"fmt"
 	"net/http/httptest"
 
 	"github.com/99designs/gqlgen/graphql/handler"
@@ -80,6 +81,11 @@ func (r *queryResolver) LotteryWinner(ctx context.Context, number int) (Lucky, e
 		}
 	}
 	return nil, nil
+}
+
+func (r *queryResolver) Fail(ctx context.Context) (*bool, error) {
+	f := true
+	return &f, fmt.Errorf("oh no")
 }
 
 func RunServer() *httptest.Server {

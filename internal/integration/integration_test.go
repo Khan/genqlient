@@ -34,6 +34,39 @@ func TestSimpleQuery(t *testing.T) {
 	assert.Equal(t, 17, resp.Me.LuckyNumber)
 }
 
+func TestServerError(t *testing.T) {
+	_ = `# @genqlient
+	query failingQuery { fail me { id } }`
+
+	ctx := context.Background()
+	server := server.RunServer()
+	defer server.Close()
+	client := graphql.NewClient(server.URL, http.DefaultClient)
+
+	resp, err := failingQuery(ctx, client)
+	// As long as we get some response back, we should still return a full
+	// response -- and indeed in this case it should even have another field
+	// (which didn't err) set.
+	assert.Error(t, err)
+	assert.NotNil(t, resp)
+	assert.Equal(t, "1", resp.Me.Id)
+}
+
+func TestNetworkError(t *testing.T) {
+	ctx := context.Background()
+	client := graphql.NewClient("https://nothing.invalid/graphql", http.DefaultClient)
+
+	resp, err := failingQuery(ctx, client)
+	// As we guarantee in the README, even on network error you always get a
+	// non-nil response; this is so you can write e.g.
+	//	resp, err := failingQuery(ctx)
+	//	return resp.Me.Id, err
+	// without a bunch of extra ceremony.
+	assert.Error(t, err)
+	assert.NotNil(t, resp)
+	assert.Equal(t, new(failingQueryResponse), resp)
+}
+
 func TestVariables(t *testing.T) {
 	_ = `# @genqlient
 	query queryWithVariables($id: ID!) { user(id: $id) { id name luckyNumber } }`
