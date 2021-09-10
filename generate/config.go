@@ -2,18 +2,13 @@ package generate
 
 import (
 	"go/token"
+	"io"
 	"io/ioutil"
+	"os"
 	"path/filepath"
 
 	"gopkg.in/yaml.v2"
 )
-
-var defaultConfig = &Config{
-	Schema:      "schema.graphql",
-	Operations:  []string{"genqlient.graphql"},
-	Generated:   "generated.go",
-	ContextType: "context.Context",
-}
 
 type Config struct {
 	// The filename with the GraphQL schema (in SDL format); defaults to
@@ -56,9 +51,9 @@ type Config struct {
 	// Set to the fully-qualified name of a Go type which generated helpers
 	// should accept and use as the context.Context for HTTP requests.
 	//
-	// Defaults to context.Context; set to the empty string to omit context
-	// entirely (i.e. use context.Background()).  Must be a type which
-	// implements context.Context.
+	// Defaults to context.Context; set to "-" to omit context entirely (i.e.
+	// use context.Background()).  Must be a type which implements
+	// context.Context.
 	ContextType string `yaml:"context_type"`
 
 	// If set, a function to get a graphql.Client, perhaps from the context.
@@ -157,6 +152,10 @@ func (c *Config) ValidateAndFillDefaults(configFilename string) error {
 		c.ExportOperations = filepath.Join(c.baseDir(), c.ExportOperations)
 	}
 
+	if c.ContextType == "" {
+		c.ContextType = "context.Context"
+	}
+
 	if c.Package == "" {
 		abs, err := filepath.Abs(c.Generated)
 		if err != nil {
@@ -175,23 +174,36 @@ func (c *Config) ValidateAndFillDefaults(configFilename string) error {
 }
 
 func ReadAndValidateConfig(filename string) (*Config, error) {
-	config := *defaultConfig
-	if filename != "" {
-		text, err := ioutil.ReadFile(filename)
-		if err != nil {
-			return nil, errorf(nil, "unreadable config file %v: %v", filename, err)
-		}
-
-		err = yaml.UnmarshalStrict(text, &config)
-		if err != nil {
-			return nil, errorf(nil, "invalid config file %v: %v", filename, err)
-		}
+	text, err := ioutil.ReadFile(filename)
+	if err != nil {
+		return nil, errorf(nil, "unreadable config file %v: %v", filename, err)
 	}
 
-	err := config.ValidateAndFillDefaults(filename)
+	var config Config
+	err = yaml.UnmarshalStrict(text, &config)
+	if err != nil {
+		return nil, errorf(nil, "invalid config file %v: %v", filename, err)
+	}
+
+	err = config.ValidateAndFillDefaults(filename)
 	if err != nil {
 		return nil, errorf(nil, "invalid config file %v: %v", filename, err)
 	}
 
 	return &config, nil
+}
+
+func initConfig(filename string) error {
+	// TODO(benkraft): Embed this config file into the binary, see
+	// https://github.com/Khan/genqlient/issues/9.
+	r, err := os.Open(filepath.Join(thisDir, "default_genqlient.yaml"))
+	if err != nil {
+		return err
+	}
+	w, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0o644)
+	if err != nil {
+		return err
+	}
+	_, err = io.Copy(w, r)
+	return err
 }

@@ -6,6 +6,8 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/alexflint/go-arg"
 )
 
 func readConfigGenerateAndWrite(configFilename string) error {
@@ -36,25 +38,32 @@ func readConfigGenerateAndWrite(configFilename string) error {
 	return nil
 }
 
+type cliArgs struct {
+	ConfigFilename string `arg:"positional" placeholder:"CONFIG" default:"genqlient.yaml" help:"path to genqlient configuration (default genqlient.yaml)"`
+	Init           bool   `arg:"--init" help:"write out and use a default config file"`
+}
+
+func (cliArgs) Description() string {
+	return strings.TrimSpace(`
+Generates GraphQL client code for a given schema and queries.
+See https://github.com/Khan/genqlient for full documentation.
+`)
+}
+
 func Main() {
-	var err error
-	defer func() {
+	exitIfError := func(err error) {
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
 		}
-	}()
-
-	switch len(os.Args) {
-	case 2:
-		err = readConfigGenerateAndWrite(os.Args[1])
-	case 1:
-		err = readConfigGenerateAndWrite("genqlient.yaml")
-	default:
-		argv0 := os.Args[0]
-		if strings.Contains(argv0, string(filepath.Separator)+"go-build") {
-			argv0 = "go run github.com/Khan/genqlient"
-		}
-		err = errorf(nil, "usage: %s [config]", argv0)
 	}
+
+	var args cliArgs
+	arg.MustParse(&args)
+	if args.Init {
+		err := initConfig(args.ConfigFilename)
+		exitIfError(err)
+	}
+	err := readConfigGenerateAndWrite(args.ConfigFilename)
+	exitIfError(err)
 }

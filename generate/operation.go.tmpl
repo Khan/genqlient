@@ -11,7 +11,7 @@ package {{.Config.Package}}
 {{range .Operations}}
 {{.Doc}}
 func {{.Name}}(
-    {{if $.Config.ContextType -}}
+    {{if ne $.Config.ContextType "-" -}}
     ctx {{ref $.Config.ContextType}},
     {{end}}
     {{- if not $.Config.ClientGetter -}}
@@ -47,7 +47,7 @@ func {{.Name}}(
 
     var err error
     {{if $.Config.ClientGetter -}}
-    client, err := {{ref $.Config.ClientGetter}}({{if $.Config.ContextType}}ctx{{else}}{{end}})
+    client, err := {{ref $.Config.ClientGetter}}({{if ne $.Config.ContextType "-"}}ctx{{else}}{{end}})
     if err != nil {
         return nil, err
     }
@@ -55,7 +55,7 @@ func {{.Name}}(
 
 	var retval {{.ResponseName}}
     err = client.MakeRequest(
-        {{if $.Config.ContextType}}ctx{{else}}nil{{end}},
+        {{if ne $.Config.ContextType "-"}}ctx{{else}}nil{{end}},
         "{{.Name}}",
         `{{.Body}}`,
         &retval,
