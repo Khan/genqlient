@@ -28,9 +28,9 @@ package: mygenerated
 # containing the exact operations that genqlient will send to the server.
 #
 # This is useful for systems which require queries to be explicitly
-# safelisted, especially for cases like queries involving fragments where
-# it may not exactly match the input queries, or for other static analysis.
-# The JSON is an object of the form
+# safelisted (e.g. [1]), especially for cases like queries involving fragments
+# where it may not exactly match the input queries, or for other static
+# analysis.  The JSON is an object of the form
 #  {"operations": [{
 #      "operationName": "operationname",
 #      "query": "query operationName { ... }",
@@ -39,6 +39,8 @@ package: mygenerated
 # Keys may be added in the future.
 #
 # By default, no such file is written.
+#
+# [1] https://www.apollographql.com/docs/studio/operation-registry/
 export_operations: operations.json
 
 # Set to the fully-qualified name of a Go type which generated helpers
