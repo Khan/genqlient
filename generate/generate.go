@@ -69,7 +69,7 @@ type argument struct {
 	GoType      string
 	GraphQLName string
 	IsSlice     bool
-	Options     *GenqlientDirective
+	Options     *genqlientDirective
 }
 
 func newGenerator(
@@ -139,7 +139,7 @@ func (g *generator) Types() (string, error) {
 
 func (g *generator) getArgument(
 	arg *ast.VariableDefinition,
-	operationDirective *GenqlientDirective,
+	operationDirective *genqlientDirective,
 ) (argument, error) {
 	_, directive, err := g.parsePrecedingComment(arg, arg.Position)
 	if err != nil {

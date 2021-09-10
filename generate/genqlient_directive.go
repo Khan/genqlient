@@ -8,86 +8,17 @@ import (
 	"github.com/vektah/gqlparser/v2/parser"
 )
 
-// GenqlientDirective represents the @genqlient quasi-directive, used to
-// configure genqlient on a query-by-query basis.
-//
-// The syntax of the directive is just like a GraphQL directive, except it goes
-// in a comment on the line immediately preceding the field.  (This is because
-// GraphQL expects directives in queries to be defined by the server, not by
-// the client, so it would reject a real @genqlient directive as nonexistent.)
-//
-// Directives may be applied to fields, arguments, or the entire query.
-// Directives on the line preceding the query apply to all relevant nodes in
-// the query; other directives apply to all nodes on the following line.  (In
-// all cases it's fine for there to be other comments in between the directive
-// and the node(s) to which it applies.)  For example, in the following query:
-//	# @genqlient(n: "a")
-//
-//	# @genqlient(n: "b")
-//	#
-//	# Comment describing the query
-//  #
-//	# @genqlient(n: "c")
-//	query MyQuery(arg1: String,
-//		# @genqlient(n: "d")
-//		arg2: String, arg3: String,
-//		arg4: String,
-//	) {
-//		# @genqlient(n: "e")
-//		field1, field2
-//		field3
-//	}
-// the directive "a" is ignored, "b" and "c" apply to all relevant nodes in the
-// query, "d" applies to arg2 and arg3, and "e" applies to field1 and field2.
-type GenqlientDirective struct {
-	pos *ast.Position
-
-	// If set, this argument will be omitted if it's equal to its Go zero
-	// value, or is an empty slice.
-	//
-	// For example, given the following query:
-	//	# @genqlient(omitempty: true)
-	//	query MyQuery(arg: String) { ... }
-	// genqlient will generate a function
-	//	MyQuery(ctx context.Context, client graphql.Client, arg string) ...
-	// which will pass {"arg": null} to GraphQL if arg is "", and the actual
-	// value otherwise.
-	//
-	// Only applicable to arguments of nullable types.
+// Represents the genqlient directive, described in detail in
+// docs/genqlient_directive.graphql.
+type genqlientDirective struct {
+	pos       *ast.Position
 	Omitempty *bool
-
-	// If set, this argument or field will use a pointer type in Go.  Response
-	// types always use pointers, but otherwise we typically do not.
-	//
-	// This can be useful if it's a type you'll need to pass around (and want a
-	// pointer to save copies) or if you wish to distinguish between the Go
-	// zero value and null (for nullable fields).
-	Pointer *bool
-
-	// If set, this argument or field will use the given Go type instead of a
-	// genqlient-generated type.
-	//
-	// The value should be the fully-qualified type name to use for the field,
-	// for example:
-	//	time.Time
-	//	map[string]interface{}
-	//	[]github.com/you/yourpkg/subpkg.MyType
-	// Note that the type is the type of the whole field, e.g. if your field in
-	// GraphQL has type `[DateTime]`, you'd do
-	//	# @genqlient(bind: "[]time.Time")
-	// (But you're not required to; if you want to map to some type DateList,
-	// you can do that, as long as its UnmarshalJSON method can accept a list
-	// of datetimes.)
-	//
-	// See Config.Bindings for more details; this is effectively to a local
-	// version of that global setting and should be used with similar care.
-	// If set to "-", overrides any such global setting and uses a
-	// genqlient-generated type.
-	Bind string
+	Pointer   *bool
+	Bind      string
 }
 
-func (dir *GenqlientDirective) GetOmitempty() bool { return dir.Omitempty != nil && *dir.Omitempty }
-func (dir *GenqlientDirective) GetPointer() bool   { return dir.Pointer != nil && *dir.Pointer }
+func (dir *genqlientDirective) GetOmitempty() bool { return dir.Omitempty != nil && *dir.Omitempty }
+func (dir *genqlientDirective) GetPointer() bool   { return dir.Pointer != nil && *dir.Pointer }
 
 func setBool(dst **bool, v *ast.Value) error {
 	ei, err := v.Value(nil) // no vars allowed
@@ -113,14 +44,14 @@ func setString(dst *string, v *ast.Value) error {
 	return errorf(v.Position, "expected string, got non-string value %T(%v)", ei, ei)
 }
 
-func fromGraphQL(dir *ast.Directive) (*GenqlientDirective, error) {
+func fromGraphQL(dir *ast.Directive) (*genqlientDirective, error) {
 	if dir.Name != "genqlient" {
 		// Actually we just won't get here; we only get here if the line starts
 		// with "# @genqlient", unless there's some sort of bug.
 		return nil, errorf(dir.Position, "the only valid comment-directive is @genqlient, got %v", dir.Name)
 	}
 
-	var retval GenqlientDirective
+	var retval genqlientDirective
 	retval.pos = dir.Position
 
 	var err error
@@ -143,7 +74,7 @@ func fromGraphQL(dir *ast.Directive) (*GenqlientDirective, error) {
 	return &retval, nil
 }
 
-func (dir *GenqlientDirective) validate(node interface{}) error {
+func (dir *genqlientDirective) validate(node interface{}) error {
 	switch node := node.(type) {
 	case *ast.OperationDefinition:
 		if dir.Bind != "" {
@@ -177,7 +108,7 @@ func (dir *GenqlientDirective) validate(node interface{}) error {
 	}
 }
 
-func (dir *GenqlientDirective) merge(other *GenqlientDirective) *GenqlientDirective {
+func (dir *genqlientDirective) merge(other *genqlientDirective) *genqlientDirective {
 	retval := *dir
 	if other.Omitempty != nil {
 		retval.Omitempty = other.Omitempty
@@ -194,8 +125,8 @@ func (dir *GenqlientDirective) merge(other *GenqlientDirective) *GenqlientDirect
 func (g *generator) parsePrecedingComment(
 	node interface{},
 	pos *ast.Position,
-) (comment string, directive *GenqlientDirective, err error) {
-	directive = new(GenqlientDirective)
+) (comment string, directive *genqlientDirective, err error) {
+	directive = new(genqlientDirective)
 	if pos == nil || pos.Src == nil { // node was added by genqlient itself
 		return "", directive, nil // treated as if there were no comment
 	}

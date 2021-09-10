@@ -37,7 +37,7 @@ func (g *generator) baseTypeForOperation(operation ast.Operation) (*ast.Definiti
 // result will be unmarshaled.
 func (g *generator) convertOperation(
 	operation *ast.OperationDefinition,
-	queryOptions *GenqlientDirective,
+	queryOptions *genqlientDirective,
 ) (goType, error) {
 	name := operation.Name + "Response"
 
@@ -87,7 +87,7 @@ var builtinTypes = map[string]string{
 // argument to a GraphQL operation.
 func (g *generator) convertInputType(
 	typ *ast.Type,
-	options, queryOptions *GenqlientDirective,
+	options, queryOptions *genqlientDirective,
 ) (goType, error) {
 	// note prefix is ignored here (see generator.typeName), as is selectionSet
 	// (for input types we use the whole thing)).
@@ -102,7 +102,7 @@ func (g *generator) convertType(
 	namePrefix *prefixList,
 	typ *ast.Type,
 	selectionSet ast.SelectionSet,
-	options, queryOptions *GenqlientDirective,
+	options, queryOptions *genqlientDirective,
 ) (goType, error) {
 	// We check for local bindings here, so that you can bind, say, a
 	// `[String!]` to a struct instead of a slice.  Global bindings can only
@@ -145,7 +145,7 @@ func (g *generator) convertDefinition(
 	def *ast.Definition,
 	pos *ast.Position,
 	selectionSet ast.SelectionSet,
-	options, queryOptions *GenqlientDirective,
+	options, queryOptions *genqlientDirective,
 ) (goType, error) {
 	// Check if we should use an existing type.  (This is usually true for
 	// GraphQL scalars, but we allow you to bind non-scalar types too, if you
@@ -315,7 +315,7 @@ func (g *generator) convertSelectionSet(
 	namePrefix *prefixList,
 	selectionSet ast.SelectionSet,
 	containingTypedef *ast.Definition,
-	queryOptions *GenqlientDirective,
+	queryOptions *genqlientDirective,
 ) ([]*goStructField, error) {
 	fields := make([]*goStructField, 0, len(selectionSet))
 	for _, selection := range selectionSet {
@@ -422,7 +422,7 @@ func (g *generator) convertSelectionSet(
 // the fragment's type.  This is distinct from the rules for when a fragment
 // spread is legal, which is true when the fragment would be active for *any*
 // of the concrete types the spread-context could have (see
-// https://spec.graphql.org/draft/#sec-Fragment-Spreads or DESIGN.md).
+// https://spec.graphql.org/draft/#sec-Fragment-Spreads or docs/DESIGN.md).
 //
 // containingTypedef is as described in convertInlineFragment, below.
 // fragmentTypedef is the definition of the fragment's type-condition, i.e. the
@@ -456,12 +456,12 @@ func fragmentMatches(containingTypedef, fragmentTypedef *ast.Definition) bool {
 //
 // In general, we treat such fragments' fields as if they were fields of the
 // parent selection-set (except of course they are only included in types the
-// fragment matches); see DESIGN.md for more.
+// fragment matches); see docs/DESIGN.md for more.
 func (g *generator) convertInlineFragment(
 	namePrefix *prefixList,
 	fragment *ast.InlineFragment,
 	containingTypedef *ast.Definition,
-	queryOptions *GenqlientDirective,
+	queryOptions *genqlientDirective,
 ) ([]*goStructField, error) {
 	// You might think fragmentTypedef would be fragment.ObjectDefinition, but
 	// actually that's the type into which the fragment is spread.
@@ -601,7 +601,7 @@ func (g *generator) convertNamedFragment(fragment *ast.FragmentDefinition) (goTy
 func (g *generator) convertField(
 	namePrefix *prefixList,
 	field *ast.Field,
-	fieldOptions, queryOptions *GenqlientDirective,
+	fieldOptions, queryOptions *genqlientDirective,
 ) (*goStructField, error) {
 	if field.Definition == nil {
 		// Unclear why gqlparser hasn't already rejected this,
