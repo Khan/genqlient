@@ -1,6 +1,6 @@
 example:
 	go generate ./...
-	go run ./example/cmd/example/main.go
+	go run ./example
 
 lint:
 	( cd internal/lint && go build -o golangci-lint github.com/golangci/golangci-lint/cmd/golangci-lint )

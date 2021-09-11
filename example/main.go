@@ -1,4 +1,4 @@
-package example
+package main
 
 import (
 	"context"
@@ -19,7 +19,7 @@ func (t *authedTransport) RoundTrip(req *http.Request) (*http.Response, error) {
 	return t.wrapped.RoundTrip(req)
 }
 
-func Main() {
+func main() {
 	var err error
 	defer func() {
 		if err != nil {
