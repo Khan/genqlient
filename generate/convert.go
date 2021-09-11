@@ -90,7 +90,7 @@ func (g *generator) convertInputType(
 	options, queryOptions *genqlientDirective,
 ) (goType, error) {
 	// note prefix is ignored here (see generator.typeName), as is selectionSet
-	// (for input types we use the whole thing)).
+	// (for input types we use the whole thing).
 	return g.convertType(nil, typ, nil, options, queryOptions)
 }
 
@@ -463,7 +463,7 @@ func (g *generator) convertInlineFragment(
 	containingTypedef *ast.Definition,
 	queryOptions *genqlientDirective,
 ) ([]*goStructField, error) {
-	// You might think fragmentTypedef would be fragment.ObjectDefinition, but
+	// You might think fragmentTypedef would be a fragment.ObjectDefinition, but
 	// actually that's the type into which the fragment is spread.
 	fragmentTypedef := g.schema.Types[fragment.TypeCondition]
 	if !fragmentMatches(containingTypedef, fragmentTypedef) {

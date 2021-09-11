@@ -223,7 +223,7 @@ func TestInterfaceListPointerField(t *testing.T) {
 	assert.Equal(t, "Yours Truly", (*resp.Beings[0]).GetName())
 
 	user, ok := (*resp.Beings[0]).(*queryWithInterfaceListPointerFieldBeingsUser)
-	require.Truef(t, ok, "got %T, not User", (*resp.Beings[0]))
+	require.Truef(t, ok, "got %T, not User", *resp.Beings[0])
 	assert.Equal(t, "1", user.Id)
 	assert.Equal(t, "Yours Truly", user.Name)
 
