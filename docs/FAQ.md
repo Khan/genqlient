@@ -91,7 +91,7 @@ Or, you can bind it to any other type, perhaps one with size-checked constructor
 genqlient supports GraphQL field-aliases, and uses them to determine the Go struct field name.  For example, if you do
 ```graphql
 query MyQuery {
-  myGreatName: myField
+  myGreatName: myString
 }
 ```
 and genqlient will generate a Go field `MyGreatName string`.  Note that the alias will always be uppercased, to ensure the field is visible to the Go JSON library.
@@ -102,11 +102,11 @@ There are two ways to handle nullable fields in genqlient.  One way is to use th
 
 ```graphql
 query MyQuery(arg: String) {
-  myField
+  myString
 }
 ```
 
-then genqlient will generate a Go field `MyField string`, and set it to the empty string if the server returns null.  This works even for structs: if an object type in GraphQL is null, genqlient will set the corresponding struct to its zero value.  It can be helpful to request `id` in such cases, since that’s a field that should always be set, or `__typename` which is guaranteed to be set, so you can use its presence to decide whether to look at the other fields.
+then genqlient will generate a Go field `MyString string`, and set it to the empty string if the server returns null.  This works even for structs: if an object type in GraphQL is null, genqlient will set the corresponding struct to its zero value.  It can be helpful to request `id` in such cases, since that’s a field that should always be set, or `__typename` which is guaranteed to be set, so you can use its presence to decide whether to look at the other fields.
 
 For input fields, you often want to tell genqlient to send null to the server if the argument is set to the zero value, similar to the JSON `omitempty` tag.  In this case, you can do:
 
@@ -115,7 +115,7 @@ query MyQuery(
   # @genqlient(omitempty: true)
   arg: String,
 ) {
-  myField
+  myString
 }
 ```
 
@@ -128,11 +128,11 @@ query MyQuery(
   arg: String,
 ) {
   # @genqlient(pointer: true)
-  myField
+  myString
 }
 ```
 
-This will generate a Go field `MyField *string`, and set it to `nil` if the server returns null (and in reverse for arguments).  Such fields can be harder to work with in Go, but allow a clear distinction between null and the Go zero value.
+This will generate a Go field `MyString *string`, and set it to `nil` if the server returns null (and in reverse for arguments).  Such fields can be harder to work with in Go, but allow a clear distinction between null and the Go zero value.  Again, you can put the directive on the first line to apply it to everything in the query, although this usually gets cumbersome.
 
 See [genqlient_directive.graphql](genqlient_directive.graphql) for complete documentation on these options.
 
@@ -154,7 +154,7 @@ query GetBooks {
 }
 ```
 
-genqlient will generate the following types:
+genqlient will generate the following types (see [below](#-genqlient-generate-such-complicated-type-names) for more on the names):
 
 ```go
 type GetBooksFavoriteBook interface {
@@ -181,6 +181,8 @@ if novel, ok := resp.Favorite.(*GetBooksFavoriteNovel); ok {
 }
 ```
 
+The interface-type's GoDoc will include a list of its implementations, for your convenience.
+
 ### … documentation on the output types?
 
 For any GraphQL types or fields with documentation in the GraphQL schema, genqlient automatically includes that documentation in the generated code's GoDoc.  To add additional information to genqlient entrypoints, you can put comments in the GraphQL source:
@@ -188,7 +190,10 @@ For any GraphQL types or fields with documentation in the GraphQL schema, genqli
 ```graphql
 # This query gets the current user.
 #
-# @genqlient(...)
+# If you also need to specify options on the query, you can put
+# the @genqlient directive after the docuentation, like this:
+#
+# @genqlient(omitempty: true)
 query GetUser { ... }
 ```
 
