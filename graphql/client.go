@@ -11,7 +11,7 @@ import (
 	"github.com/vektah/gqlparser/v2/gqlerror"
 )
 
-// Client is the interface that the generate code calls into to actually make
+// Client is the interface that the generated code calls into to actually make
 // requests.
 //
 // Unstable: This interface is likely to change before v1.0, see #19.

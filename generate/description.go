@@ -18,7 +18,7 @@ type descriptionInfo struct {
 	CommentOverride string
 	// name of the corresponding GraphQL type
 	GraphQLName string
-	// GraphQL description of the type .GraphQLName, if any
+	// GraphQL schema's description of the type .GraphQLName, if any
 	GraphQLDescription string
 	// name of the corresponding GraphQL fragment (on .GraphQLName), if any
 	FragmentName string

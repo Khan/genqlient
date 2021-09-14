@@ -245,7 +245,7 @@ func (typ *goInterfaceType) WriteDefinition(w io.Writer, g *generator) error {
 				"Get%s is a part of, and documented with, the interface %s.",
 				sharedField.GoName, typ.GoName)
 			writeDescription(w, description)
-			// In principle we should find the corresponding field of the
+			// In principle, we should find the corresponding field of the
 			// implementation and use its name in `v.<name>`.  In practice,
 			// they're always the same.
 			fmt.Fprintf(w, "func (v *%s) Get%s() %s { return v.%s }\n",

@@ -6,7 +6,7 @@ package graphql
 // NoUnmarshalJSON is intended for the use of genqlient's generated code only.
 //
 // It is used to prevent a struct type from inheriting its embed's
-// UnmarshalJSON method: given a type
+// UnmarshalJSON method, so if we construct a type:
 //	type T struct { E; NoUnmarshalJSON }
 // where E has an UnmarshalJSON method, T will not inherit it, per the Go
 // selector rules: https://golang.org/ref/spec#Selectors.

@@ -13,7 +13,7 @@ csilvers is Craig Silverstein
 
 ## Running genqlient
 
-It's already checked in to github, but to regenerate `generated.go`:
+It's already checked in to GitHub, but to regenerate `generated.go`:
 ```sh
 go generate ./...
 ```
