@@ -137,7 +137,7 @@ func joinPrefixList(prefix *prefixList) string {
 // comment), but it's used to construct both the type-names from the input and
 // the next prefix-list.
 func typeNameParts(prefix *prefixList, typeName string) *prefixList {
-	// GraphQL's types are conventionally UpperCamelCase, but it's not required;
+	// GraphQL types are conventionally UpperCamelCase, but it's not required;
 	// our names will look best if they are.
 	typeName = upperFirst(typeName)
 	// If the prefix has just one part, that's the operation-name.  There's no
