@@ -250,8 +250,9 @@ func TestGenerateErrors(t *testing.T) {
 
 		baseFilename := strings.TrimSuffix(sourceFilename, filepath.Ext(sourceFilename))
 		schemaFilename := baseFilename + ".schema.graphql"
+		testFilename := strings.ReplaceAll(sourceFilename, ".", "/")
 
-		t.Run(sourceFilename, func(t *testing.T) {
+		t.Run(testFilename, func(t *testing.T) {
 			_, err := Generate(&Config{
 				Schema:      filepath.Join(errorsDir, schemaFilename),
 				Operations:  []string{filepath.Join(errorsDir, sourceFilename)},
