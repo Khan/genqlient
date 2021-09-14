@@ -1,6 +1,6 @@
 # Design decisions
 
-This file contains a log of miscellaneous design decisions in genqlient.
+This file contains a log of miscellaneous design decisions in genqlient.  They aren't all necessarily up to date with the exact implementation details, but are preserved here as context for why genqlient does X thing Y way.
 
 ## Types
 
