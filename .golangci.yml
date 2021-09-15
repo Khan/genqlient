@@ -30,6 +30,7 @@ linters:
     - unconvert
     - unparam
     - whitespace
+    - forbidigo
 
 linters-settings:
   errcheck:
@@ -51,6 +52,12 @@ linters-settings:
       - golang.org/x/tools
       - gopkg.in/yaml.v2
       - github.com/alexflint/go-arg
+
+  forbidigo:
+    forbid:
+      - '^print(|f|ln)$'
+      - '^fmt\.Print(|f|ln)$'
+
 
   gocritic:
     # Which checks should be enabled:
@@ -82,7 +89,12 @@ issues:
     # Test-only deps are not restricted.
     - linters:
         - depguard
-      path: _test\.go$|internal/testutil/|internal/integration/
+      path: _test\.go$|^internal/testutil/|^internal/integration/
+
+    # Ok to use fmt.Print in the examples, and in the CLI entrypoint.
+    - linters:
+        - forbidigo
+      path: ^example/|^generate/main\.go$
 
     - linters:
         - errcheck
