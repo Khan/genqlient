@@ -1,0 +1,7 @@
+type Query {
+  myObject: MyObject
+}
+
+type MyObject {
+  f: String!
+}

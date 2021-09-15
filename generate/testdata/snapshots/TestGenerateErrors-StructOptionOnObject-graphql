@@ -1,0 +1,1 @@
+testdata/errors/StructOptionOnObject.graphql:3: struct is only applicable to interface-typed fields

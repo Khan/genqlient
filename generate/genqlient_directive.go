@@ -14,11 +14,13 @@ type genqlientDirective struct {
 	pos       *ast.Position
 	Omitempty *bool
 	Pointer   *bool
+	Struct    *bool
 	Bind      string
 }
 
 func (dir *genqlientDirective) GetOmitempty() bool { return dir.Omitempty != nil && *dir.Omitempty }
 func (dir *genqlientDirective) GetPointer() bool   { return dir.Pointer != nil && *dir.Pointer }
+func (dir *genqlientDirective) GetStruct() bool    { return dir.Struct != nil && *dir.Struct }
 
 func setBool(dst **bool, v *ast.Value) error {
 	ei, err := v.Value(nil) // no vars allowed
@@ -44,15 +46,15 @@ func setString(dst *string, v *ast.Value) error {
 	return errorf(v.Position, "expected string, got non-string value %T(%v)", ei, ei)
 }
 
-func fromGraphQL(dir *ast.Directive) (*genqlientDirective, error) {
+func fromGraphQL(dir *ast.Directive, pos *ast.Position) (*genqlientDirective, error) {
 	if dir.Name != "genqlient" {
 		// Actually we just won't get here; we only get here if the line starts
 		// with "# @genqlient", unless there's some sort of bug.
-		return nil, errorf(dir.Position, "the only valid comment-directive is @genqlient, got %v", dir.Name)
+		return nil, errorf(pos, "the only valid comment-directive is @genqlient, got %v", dir.Name)
 	}
 
 	var retval genqlientDirective
-	retval.pos = dir.Position
+	retval.pos = pos
 
 	var err error
 	for _, arg := range dir.Arguments {
@@ -62,10 +64,12 @@ func fromGraphQL(dir *ast.Directive) (*genqlientDirective, error) {
 			err = setBool(&retval.Omitempty, arg.Value)
 		case "pointer":
 			err = setBool(&retval.Pointer, arg.Value)
+		case "struct":
+			err = setBool(&retval.Struct, arg.Value)
 		case "bind":
 			err = setString(&retval.Bind, arg.Value)
 		default:
-			return nil, errorf(arg.Position, "unknown argument %v for @genqlient", arg.Name)
+			return nil, errorf(pos, "unknown argument %v for @genqlient", arg.Name)
 		}
 		if err != nil {
 			return nil, err
@@ -74,7 +78,7 @@ func fromGraphQL(dir *ast.Directive) (*genqlientDirective, error) {
 	return &retval, nil
 }
 
-func (dir *genqlientDirective) validate(node interface{}) error {
+func (dir *genqlientDirective) validate(node interface{}, schema *ast.Schema) error {
 	switch node := node.(type) {
 	case *ast.OperationDefinition:
 		if dir.Bind != "" {
@@ -90,6 +94,10 @@ func (dir *genqlientDirective) validate(node interface{}) error {
 			return errorf(dir.pos, "bind is not implemented for named fragments")
 		}
 
+		if dir.Struct != nil {
+			return errorf(dir.pos, "struct is only applicable to fields")
+		}
+
 		// Like operations, anything else will just apply to the entire
 		// fragment.
 		return nil
@@ -97,15 +105,56 @@ func (dir *genqlientDirective) validate(node interface{}) error {
 		if dir.Omitempty != nil && node.Type.NonNull {
 			return errorf(dir.pos, "omitempty may only be used on optional arguments")
 		}
+
+		if dir.Struct != nil {
+			return errorf(dir.pos, "struct is only applicable to fields")
+		}
+
 		return nil
 	case *ast.Field:
 		if dir.Omitempty != nil {
 			return errorf(dir.pos, "omitempty is not applicable to fields")
 		}
+
+		if dir.Struct != nil {
+			typ := schema.Types[node.Definition.Type.Name()]
+			if err := validateStructOption(typ, node.SelectionSet, dir.pos); err != nil {
+				return err
+			}
+		}
+
 		return nil
 	default:
 		return errorf(dir.pos, "invalid @genqlient directive location: %T", node)
 	}
+}
+
+func validateStructOption(
+	typ *ast.Definition,
+	selectionSet ast.SelectionSet,
+	pos *ast.Position,
+) error {
+	if typ.Kind != ast.Interface && typ.Kind != ast.Union {
+		return errorf(pos, "struct is only applicable to interface-typed fields")
+	}
+
+	// Make sure that all the requested fields apply to the interface itself
+	// (not just certain implementations).
+	for _, selection := range selectionSet {
+		switch selection.(type) {
+		case *ast.Field:
+			// fields are fine.
+		case *ast.InlineFragment, *ast.FragmentSpread:
+			// Fragments aren't allowed. In principle we could allow them under
+			// the condition that the fragment applies to the whole interface
+			// (not just one implementation; and so on recursively), and for
+			// fragment spreads additionally that the fragment has the same
+			// option applied to it, but it seems more trouble than it's worth
+			// right now.
+			return errorf(pos, "struct is not allowed for types with fragments")
+		}
+	}
+	return nil
 }
 
 func (dir *genqlientDirective) merge(other *genqlientDirective) *genqlientDirective {
@@ -115,6 +164,9 @@ func (dir *genqlientDirective) merge(other *genqlientDirective) *genqlientDirect
 	}
 	if other.Pointer != nil {
 		retval.Pointer = other.Pointer
+	}
+	if other.Struct != nil {
+		retval.Struct = other.Struct
 	}
 	if other.Bind != "" {
 		retval.Bind = other.Bind
@@ -141,11 +193,11 @@ func (g *generator) parsePrecedingComment(
 			if err != nil {
 				return "", nil, err
 			}
-			genqlientDirective, err := fromGraphQL(graphQLDirective)
+			genqlientDirective, err := fromGraphQL(graphQLDirective, pos)
 			if err != nil {
 				return "", nil, err
 			}
-			err = genqlientDirective.validate(node)
+			err = genqlientDirective.validate(node, g.schema)
 			if err != nil {
 				return "", nil, err
 			}

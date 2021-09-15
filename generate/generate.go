@@ -209,6 +209,8 @@ func (g *generator) preprocessQueryDocument(doc *ast.QueryDocument) {
 	// needed).  Note this does mean abstract-typed fragments spread into
 	// object-typed scope will *not* have access to `__typename`, but they
 	// indeed don't need it, since we do know the type in that context.
+	// TODO(benkraft): We should omit __typename if you asked for
+	// `# @genqlient(struct: true)`.
 	observers.OnField(func(_ *validator.Walker, field *ast.Field) {
 		// We are interested in a field from the query like
 		//	field { subField ... }

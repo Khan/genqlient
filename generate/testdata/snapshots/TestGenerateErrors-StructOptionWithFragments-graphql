@@ -1,0 +1,1 @@
+testdata/errors/StructOptionWithFragments.graphql:3: struct is not allowed for types with fragments

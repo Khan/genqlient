@@ -1,0 +1,9 @@
+query StructOptionOnObject {
+  # @genqlient(struct: true)
+  myInterface {
+    f
+    ... on MyObject {
+      g
+    }
+  }
+}
