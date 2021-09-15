@@ -6,7 +6,7 @@ Create a [personal access token](https://docs.github.com/en/github/authenticatin
 To run the example:
 
 ```sh
-$ GITHUB_TOKEN=<your token> go run ./cmd/example/main.go <username>
+$ GITHUB_TOKEN=<your token> go run . <username>
 you are Ben Kraft
 csilvers is Craig Silverstein
 ```

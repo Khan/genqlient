@@ -18,7 +18,7 @@ func TestRunExample(t *testing.T) {
 		t.Skip("requires GITHUB_TOKEN to be set")
 	}
 
-	cmd := exec.Command("go", "run", "./example/cmd/example", "benjaminjkraft")
+	cmd := exec.Command("go", "run", "./example", "benjaminjkraft")
 	cmd.Dir = integration.RepoRoot(t)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
