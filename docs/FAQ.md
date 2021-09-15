@@ -76,7 +76,7 @@ bindings:
     type: time.Time
 ```
 
-Make sure the given type has whateevr logic is needed to convert to/from JSON (e.g. `MarshalJSON`/`UnmarshalJSON` or JSON tags).  See the [`genqlient.yaml` documentation](genqlient.yaml) for the full syntax.
+Make sure the given type has whatever logic is needed to convert to/from JSON (e.g. `MarshalJSON`/`UnmarshalJSON` or JSON tags).  See the [`genqlient.yaml` documentation](genqlient.yaml) for the full syntax.
 
 ### … require 32-bit integers?
 

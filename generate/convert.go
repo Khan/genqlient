@@ -43,7 +43,6 @@ func (g *generator) getType(
 
 	expectedSelectionSet := typ.SelectionSet()
 	if err := selectionsMatch(pos, selectionSet, expectedSelectionSet); err != nil {
-		fmt.Println(goName, err)
 		return typ, errorf(
 			pos, "conflicting definition for %s; this can indicate either "+
 				"a genqlient internal error, a conflict between user-specified "+
