@@ -202,13 +202,6 @@ func (typ *goStructType) WriteDefinition(w io.Writer, g *generator) error {
 		return nil
 	}
 
-	// TODO(benkraft): Avoid having to enumerate these in advance; just let the
-	// template add them directly.
-	_, err := g.addRef("encoding/json.Unmarshal")
-	if err != nil {
-		return err
-	}
-
 	return g.execute("unmarshal.go.tmpl", w, typ)
 }
 
@@ -287,18 +280,6 @@ func (typ *goInterfaceType) WriteDefinition(w io.Writer, g *generator) error {
 
 	// Finally, write the unmarshal-helper, which will be called by struct
 	// fields referencing this type (see goStructType.WriteDefinition).
-	//
-	// TODO(benkraft): Avoid having to enumerate these refs in advance; just
-	// let the template add them directly.
-	_, err := g.addRef("encoding/json.Unmarshal")
-	if err != nil {
-		return err
-	}
-	_, err = g.addRef("fmt.Errorf")
-	if err != nil {
-		return err
-	}
-
 	return g.execute("unmarshal_helper.go.tmpl", w, typ)
 }
 
