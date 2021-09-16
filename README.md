@@ -1,5 +1,10 @@
 <img width="100%" alt="generated graphql client ⇒ genqlient" src="docs/images/genqlient.svg">
 
+[![Go Reference](https://pkg.go.dev/badge/github.com/Khan/genqlient.svg)](https://pkg.go.dev/github.com/Khan/genqlient)
+[![Test Status](https://github.com/Khan/genqlient/actions/workflows/go.yml/badge.svg)](https://github.com/Khan/genqlient/actions)
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](docs/CODE_OF_CONDUCT.md)
+[![GoReportcard](https://goreportcard.com/badge/github.com/Khan/genqlient?status.svg)](https://goreportcard.com/report/github.com/Khan/genqlient)
+
 # genqlient: a truly type-safe Go GraphQL client
 
 This is a proof-of-concept of using code-generation to create a truly type-safe GraphQL client in Go.  It is not yet ready for contributions (see [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md)).
