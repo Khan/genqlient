@@ -202,7 +202,7 @@ type GetBooksFavoriteBook struct {
 }
 ```
 
-Keep in mind that if you later want to add fragments to your selection, the types will change entirely.
+Keep in mind that if you later want to add fragments to your selection, you won't be able to use `struct` anymore; when you remove it you may need to update your code to replace `.Title` with `.GetTitle()` and so on.
 
 
 ### … documentation on the output types?
