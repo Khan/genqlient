@@ -31,7 +31,7 @@ package generate
 // different types.
 //
 // One subtlety in the above description is: is the "MyType" the interface or
-// the impelmentation?  When it's a suffix, the answer is both: we generate
+// the implementation?  When it's a suffix, the answer is both: we generate
 // both MyFieldMyInterface and MyFieldMyImplementation, and the latter, in Go,
 // implements the former.  (See docs/DESIGN.md for more.)  But as an infix, we
 // use the type on which the field is requested.  Concretely, the following
