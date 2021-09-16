@@ -7,8 +7,6 @@
 
 # genqlient: a truly type-safe Go GraphQL client
 
-This is a proof-of-concept of using code-generation to create a truly type-safe GraphQL client in Go.  It is not yet ready for contributions (see [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md)).
-
 ## What is genqlient?
 
 genqlient is a Go library to easily generate type-safe code to query a GraphQL API. It takes advantage of the fact that both GraphQL and Go are typed languages to ensure at compile-time that your code is making a valid GraphQL query and using the result correctly, all with a minimum of boilerplate.
@@ -25,7 +23,7 @@ You can download and run genqlient the usual way: `go run github.com/Khan/genqli
 
 ## How can I help?
 
-genqlient is not yet ready for contributions, but once it is, you'll be able to learn more in the ([Contribution Guidelines](docs/CONTRIBUTING.md)), or file an issue [on GitHub](issues).
+genqlient welcomes contributions!  Check out the ([Contribution Guidelines](docs/CONTRIBUTING.md)), or file an issue [on GitHub](issues).
 
 ## Why another GraphQL client?
 
