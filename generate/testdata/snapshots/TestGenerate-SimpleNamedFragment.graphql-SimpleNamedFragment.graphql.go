@@ -76,15 +76,15 @@ func (v *SimpleNamedFragmentRandomItemTopic) GetId() testutil.ID { return v.Id }
 // GetName is a part of, and documented with, the interface SimpleNamedFragmentRandomItemContent.
 func (v *SimpleNamedFragmentRandomItemTopic) GetName() string { return v.Name }
 
-func __unmarshalSimpleNamedFragmentRandomItemContent(v *SimpleNamedFragmentRandomItemContent, m json.RawMessage) error {
-	if string(m) == "null" {
+func __unmarshalSimpleNamedFragmentRandomItemContent(b []byte, v *SimpleNamedFragmentRandomItemContent) error {
+	if string(b) == "null" {
 		return nil
 	}
 
 	var tn struct {
 		TypeName string `json:"__typename"`
 	}
-	err := json.Unmarshal(m, &tn)
+	err := json.Unmarshal(b, &tn)
 	if err != nil {
 		return err
 	}
@@ -92,13 +92,13 @@ func __unmarshalSimpleNamedFragmentRandomItemContent(v *SimpleNamedFragmentRando
 	switch tn.TypeName {
 	case "Article":
 		*v = new(SimpleNamedFragmentRandomItemArticle)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Video":
 		*v = new(SimpleNamedFragmentRandomItemVideo)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(SimpleNamedFragmentRandomItemTopic)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
 			"Response was missing Content.__typename")
@@ -126,6 +126,10 @@ type SimpleNamedFragmentRandomItemVideo struct {
 }
 
 func (v *SimpleNamedFragmentRandomItemVideo) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
 
 	var firstPass struct {
 		*SimpleNamedFragmentRandomItemVideo
@@ -177,15 +181,15 @@ func (v *SimpleNamedFragmentRandomLeafVideo) implementsGraphQLInterfaceSimpleNam
 // GetTypename is a part of, and documented with, the interface SimpleNamedFragmentRandomLeafLeafContent.
 func (v *SimpleNamedFragmentRandomLeafVideo) GetTypename() string { return v.Typename }
 
-func __unmarshalSimpleNamedFragmentRandomLeafLeafContent(v *SimpleNamedFragmentRandomLeafLeafContent, m json.RawMessage) error {
-	if string(m) == "null" {
+func __unmarshalSimpleNamedFragmentRandomLeafLeafContent(b []byte, v *SimpleNamedFragmentRandomLeafLeafContent) error {
+	if string(b) == "null" {
 		return nil
 	}
 
 	var tn struct {
 		TypeName string `json:"__typename"`
 	}
-	err := json.Unmarshal(m, &tn)
+	err := json.Unmarshal(b, &tn)
 	if err != nil {
 		return err
 	}
@@ -193,10 +197,10 @@ func __unmarshalSimpleNamedFragmentRandomLeafLeafContent(v *SimpleNamedFragmentR
 	switch tn.TypeName {
 	case "Article":
 		*v = new(SimpleNamedFragmentRandomLeafArticle)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Video":
 		*v = new(SimpleNamedFragmentRandomLeafVideo)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
 			"Response was missing LeafContent.__typename")
@@ -213,6 +217,10 @@ type SimpleNamedFragmentRandomLeafVideo struct {
 }
 
 func (v *SimpleNamedFragmentRandomLeafVideo) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
 
 	var firstPass struct {
 		*SimpleNamedFragmentRandomLeafVideo
@@ -241,6 +249,10 @@ type SimpleNamedFragmentResponse struct {
 
 func (v *SimpleNamedFragmentResponse) UnmarshalJSON(b []byte) error {
 
+	if string(b) == "null" {
+		return nil
+	}
+
 	var firstPass struct {
 		*SimpleNamedFragmentResponse
 		RandomItem json.RawMessage `json:"randomItem"`
@@ -255,10 +267,10 @@ func (v *SimpleNamedFragmentResponse) UnmarshalJSON(b []byte) error {
 	}
 
 	{
-		target := &v.RandomItem
-		raw := firstPass.RandomItem
+		dst := &v.RandomItem
+		src := firstPass.RandomItem
 		err = __unmarshalSimpleNamedFragmentRandomItemContent(
-			target, raw)
+			src, dst)
 		if err != nil {
 			return fmt.Errorf(
 				"Unable to unmarshal SimpleNamedFragmentResponse.RandomItem: %w", err)
@@ -266,10 +278,10 @@ func (v *SimpleNamedFragmentResponse) UnmarshalJSON(b []byte) error {
 	}
 
 	{
-		target := &v.RandomLeaf
-		raw := firstPass.RandomLeaf
+		dst := &v.RandomLeaf
+		src := firstPass.RandomLeaf
 		err = __unmarshalSimpleNamedFragmentRandomLeafLeafContent(
-			target, raw)
+			src, dst)
 		if err != nil {
 			return fmt.Errorf(
 				"Unable to unmarshal SimpleNamedFragmentResponse.RandomLeaf: %w", err)

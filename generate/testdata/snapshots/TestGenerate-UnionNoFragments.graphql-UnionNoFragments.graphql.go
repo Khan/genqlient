@@ -40,15 +40,15 @@ func (v *UnionNoFragmentsQueryRandomLeafVideo) implementsGraphQLInterfaceUnionNo
 // GetTypename is a part of, and documented with, the interface UnionNoFragmentsQueryRandomLeafLeafContent.
 func (v *UnionNoFragmentsQueryRandomLeafVideo) GetTypename() string { return v.Typename }
 
-func __unmarshalUnionNoFragmentsQueryRandomLeafLeafContent(v *UnionNoFragmentsQueryRandomLeafLeafContent, m json.RawMessage) error {
-	if string(m) == "null" {
+func __unmarshalUnionNoFragmentsQueryRandomLeafLeafContent(b []byte, v *UnionNoFragmentsQueryRandomLeafLeafContent) error {
+	if string(b) == "null" {
 		return nil
 	}
 
 	var tn struct {
 		TypeName string `json:"__typename"`
 	}
-	err := json.Unmarshal(m, &tn)
+	err := json.Unmarshal(b, &tn)
 	if err != nil {
 		return err
 	}
@@ -56,10 +56,10 @@ func __unmarshalUnionNoFragmentsQueryRandomLeafLeafContent(v *UnionNoFragmentsQu
 	switch tn.TypeName {
 	case "Article":
 		*v = new(UnionNoFragmentsQueryRandomLeafArticle)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Video":
 		*v = new(UnionNoFragmentsQueryRandomLeafVideo)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
 			"Response was missing LeafContent.__typename")
@@ -81,6 +81,10 @@ type UnionNoFragmentsQueryResponse struct {
 
 func (v *UnionNoFragmentsQueryResponse) UnmarshalJSON(b []byte) error {
 
+	if string(b) == "null" {
+		return nil
+	}
+
 	var firstPass struct {
 		*UnionNoFragmentsQueryResponse
 		RandomLeaf json.RawMessage `json:"randomLeaf"`
@@ -94,10 +98,10 @@ func (v *UnionNoFragmentsQueryResponse) UnmarshalJSON(b []byte) error {
 	}
 
 	{
-		target := &v.RandomLeaf
-		raw := firstPass.RandomLeaf
+		dst := &v.RandomLeaf
+		src := firstPass.RandomLeaf
 		err = __unmarshalUnionNoFragmentsQueryRandomLeafLeafContent(
-			target, raw)
+			src, dst)
 		if err != nil {
 			return fmt.Errorf(
 				"Unable to unmarshal UnionNoFragmentsQueryResponse.RandomLeaf: %w", err)

@@ -26,6 +26,10 @@ type InterfaceListFieldRootTopic struct {
 
 func (v *InterfaceListFieldRootTopic) UnmarshalJSON(b []byte) error {
 
+	if string(b) == "null" {
+		return nil
+	}
+
 	var firstPass struct {
 		*InterfaceListFieldRootTopic
 		Children []json.RawMessage `json:"children"`
@@ -39,15 +43,15 @@ func (v *InterfaceListFieldRootTopic) UnmarshalJSON(b []byte) error {
 	}
 
 	{
-		target := &v.Children
-		raw := firstPass.Children
-		*target = make(
+		dst := &v.Children
+		src := firstPass.Children
+		*dst = make(
 			[]InterfaceListFieldRootTopicChildrenContent,
-			len(raw))
-		for i, raw := range raw {
-			target := &(*target)[i]
+			len(src))
+		for i, src := range src {
+			dst := &(*dst)[i]
 			err = __unmarshalInterfaceListFieldRootTopicChildrenContent(
-				target, raw)
+				src, dst)
 			if err != nil {
 				return fmt.Errorf(
 					"Unable to unmarshal InterfaceListFieldRootTopic.Children: %w", err)
@@ -123,15 +127,15 @@ func (v *InterfaceListFieldRootTopicChildrenTopic) GetId() testutil.ID { return 
 // GetName is a part of, and documented with, the interface InterfaceListFieldRootTopicChildrenContent.
 func (v *InterfaceListFieldRootTopicChildrenTopic) GetName() string { return v.Name }
 
-func __unmarshalInterfaceListFieldRootTopicChildrenContent(v *InterfaceListFieldRootTopicChildrenContent, m json.RawMessage) error {
-	if string(m) == "null" {
+func __unmarshalInterfaceListFieldRootTopicChildrenContent(b []byte, v *InterfaceListFieldRootTopicChildrenContent) error {
+	if string(b) == "null" {
 		return nil
 	}
 
 	var tn struct {
 		TypeName string `json:"__typename"`
 	}
-	err := json.Unmarshal(m, &tn)
+	err := json.Unmarshal(b, &tn)
 	if err != nil {
 		return err
 	}
@@ -139,13 +143,13 @@ func __unmarshalInterfaceListFieldRootTopicChildrenContent(v *InterfaceListField
 	switch tn.TypeName {
 	case "Article":
 		*v = new(InterfaceListFieldRootTopicChildrenArticle)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Video":
 		*v = new(InterfaceListFieldRootTopicChildrenVideo)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(InterfaceListFieldRootTopicChildrenTopic)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
 			"Response was missing Content.__typename")
@@ -181,6 +185,10 @@ type InterfaceListFieldWithPointerTopic struct {
 
 func (v *InterfaceListFieldWithPointerTopic) UnmarshalJSON(b []byte) error {
 
+	if string(b) == "null" {
+		return nil
+	}
+
 	var firstPass struct {
 		*InterfaceListFieldWithPointerTopic
 		Children []json.RawMessage `json:"children"`
@@ -194,15 +202,15 @@ func (v *InterfaceListFieldWithPointerTopic) UnmarshalJSON(b []byte) error {
 	}
 
 	{
-		target := &v.Children
-		raw := firstPass.Children
-		*target = make(
+		dst := &v.Children
+		src := firstPass.Children
+		*dst = make(
 			[]InterfaceListFieldWithPointerTopicChildrenContent,
-			len(raw))
-		for i, raw := range raw {
-			target := &(*target)[i]
+			len(src))
+		for i, src := range src {
+			dst := &(*dst)[i]
 			err = __unmarshalInterfaceListFieldWithPointerTopicChildrenContent(
-				target, raw)
+				src, dst)
 			if err != nil {
 				return fmt.Errorf(
 					"Unable to unmarshal InterfaceListFieldWithPointerTopic.Children: %w", err)
@@ -278,15 +286,15 @@ func (v *InterfaceListFieldWithPointerTopicChildrenTopic) GetId() testutil.ID { 
 // GetName is a part of, and documented with, the interface InterfaceListFieldWithPointerTopicChildrenContent.
 func (v *InterfaceListFieldWithPointerTopicChildrenTopic) GetName() string { return v.Name }
 
-func __unmarshalInterfaceListFieldWithPointerTopicChildrenContent(v *InterfaceListFieldWithPointerTopicChildrenContent, m json.RawMessage) error {
-	if string(m) == "null" {
+func __unmarshalInterfaceListFieldWithPointerTopicChildrenContent(b []byte, v *InterfaceListFieldWithPointerTopicChildrenContent) error {
+	if string(b) == "null" {
 		return nil
 	}
 
 	var tn struct {
 		TypeName string `json:"__typename"`
 	}
-	err := json.Unmarshal(m, &tn)
+	err := json.Unmarshal(b, &tn)
 	if err != nil {
 		return err
 	}
@@ -294,13 +302,13 @@ func __unmarshalInterfaceListFieldWithPointerTopicChildrenContent(v *InterfaceLi
 	switch tn.TypeName {
 	case "Article":
 		*v = new(InterfaceListFieldWithPointerTopicChildrenArticle)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Video":
 		*v = new(InterfaceListFieldWithPointerTopicChildrenVideo)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(InterfaceListFieldWithPointerTopicChildrenTopic)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
 			"Response was missing Content.__typename")

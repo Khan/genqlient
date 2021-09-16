@@ -2,6 +2,7 @@ package testutil
 
 import (
 	"context"
+	"time"
 
 	"github.com/Khan/genqlient/graphql"
 )
@@ -26,3 +27,20 @@ type MyContext interface {
 func GetClientFromNowhere() (graphql.Client, error)                    { return nil, nil }
 func GetClientFromContext(ctx context.Context) (graphql.Client, error) { return nil, nil }
 func GetClientFromMyContext(ctx MyContext) (graphql.Client, error)     { return nil, nil }
+
+const dateFormat = "2006-01-02"
+
+func MarshalDate(t *time.Time) ([]byte, error) {
+	return []byte(`"` + t.Format(dateFormat) + `"`), nil
+}
+
+func UnmarshalDate(b []byte, t *time.Time) error {
+	// (modified from time.Time.UnmarshalJSON)
+	if string(b) == "null" {
+		return nil
+	}
+
+	var err error
+	*t, err = time.Parse(`"`+dateFormat+`"`, string(b))
+	return err
+}

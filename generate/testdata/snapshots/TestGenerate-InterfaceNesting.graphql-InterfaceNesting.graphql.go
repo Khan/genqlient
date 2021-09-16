@@ -24,6 +24,10 @@ type InterfaceNestingRootTopic struct {
 
 func (v *InterfaceNestingRootTopic) UnmarshalJSON(b []byte) error {
 
+	if string(b) == "null" {
+		return nil
+	}
+
 	var firstPass struct {
 		*InterfaceNestingRootTopic
 		Children []json.RawMessage `json:"children"`
@@ -37,15 +41,15 @@ func (v *InterfaceNestingRootTopic) UnmarshalJSON(b []byte) error {
 	}
 
 	{
-		target := &v.Children
-		raw := firstPass.Children
-		*target = make(
+		dst := &v.Children
+		src := firstPass.Children
+		*dst = make(
 			[]InterfaceNestingRootTopicChildrenContent,
-			len(raw))
-		for i, raw := range raw {
-			target := &(*target)[i]
+			len(src))
+		for i, src := range src {
+			dst := &(*dst)[i]
 			err = __unmarshalInterfaceNestingRootTopicChildrenContent(
-				target, raw)
+				src, dst)
 			if err != nil {
 				return fmt.Errorf(
 					"Unable to unmarshal InterfaceNestingRootTopic.Children: %w", err)
@@ -127,15 +131,15 @@ func (v *InterfaceNestingRootTopicChildrenTopic) GetParent() InterfaceNestingRoo
 	return v.Parent
 }
 
-func __unmarshalInterfaceNestingRootTopicChildrenContent(v *InterfaceNestingRootTopicChildrenContent, m json.RawMessage) error {
-	if string(m) == "null" {
+func __unmarshalInterfaceNestingRootTopicChildrenContent(b []byte, v *InterfaceNestingRootTopicChildrenContent) error {
+	if string(b) == "null" {
 		return nil
 	}
 
 	var tn struct {
 		TypeName string `json:"__typename"`
 	}
-	err := json.Unmarshal(m, &tn)
+	err := json.Unmarshal(b, &tn)
 	if err != nil {
 		return err
 	}
@@ -143,13 +147,13 @@ func __unmarshalInterfaceNestingRootTopicChildrenContent(v *InterfaceNestingRoot
 	switch tn.TypeName {
 	case "Article":
 		*v = new(InterfaceNestingRootTopicChildrenArticle)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Video":
 		*v = new(InterfaceNestingRootTopicChildrenVideo)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(InterfaceNestingRootTopicChildrenTopic)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
 			"Response was missing Content.__typename")
@@ -168,6 +172,10 @@ type InterfaceNestingRootTopicChildrenContentParentTopic struct {
 
 func (v *InterfaceNestingRootTopicChildrenContentParentTopic) UnmarshalJSON(b []byte) error {
 
+	if string(b) == "null" {
+		return nil
+	}
+
 	var firstPass struct {
 		*InterfaceNestingRootTopicChildrenContentParentTopic
 		Children []json.RawMessage `json:"children"`
@@ -181,15 +189,15 @@ func (v *InterfaceNestingRootTopicChildrenContentParentTopic) UnmarshalJSON(b []
 	}
 
 	{
-		target := &v.Children
-		raw := firstPass.Children
-		*target = make(
+		dst := &v.Children
+		src := firstPass.Children
+		*dst = make(
 			[]InterfaceNestingRootTopicChildrenContentParentTopicChildrenContent,
-			len(raw))
-		for i, raw := range raw {
-			target := &(*target)[i]
+			len(src))
+		for i, src := range src {
+			dst := &(*dst)[i]
 			err = __unmarshalInterfaceNestingRootTopicChildrenContentParentTopicChildrenContent(
-				target, raw)
+				src, dst)
 			if err != nil {
 				return fmt.Errorf(
 					"Unable to unmarshal InterfaceNestingRootTopicChildrenContentParentTopic.Children: %w", err)
@@ -265,15 +273,15 @@ func (v *InterfaceNestingRootTopicChildrenContentParentTopicChildrenTopic) GetId
 	return v.Id
 }
 
-func __unmarshalInterfaceNestingRootTopicChildrenContentParentTopicChildrenContent(v *InterfaceNestingRootTopicChildrenContentParentTopicChildrenContent, m json.RawMessage) error {
-	if string(m) == "null" {
+func __unmarshalInterfaceNestingRootTopicChildrenContentParentTopicChildrenContent(b []byte, v *InterfaceNestingRootTopicChildrenContentParentTopicChildrenContent) error {
+	if string(b) == "null" {
 		return nil
 	}
 
 	var tn struct {
 		TypeName string `json:"__typename"`
 	}
-	err := json.Unmarshal(m, &tn)
+	err := json.Unmarshal(b, &tn)
 	if err != nil {
 		return err
 	}
@@ -281,13 +289,13 @@ func __unmarshalInterfaceNestingRootTopicChildrenContentParentTopicChildrenConte
 	switch tn.TypeName {
 	case "Article":
 		*v = new(InterfaceNestingRootTopicChildrenContentParentTopicChildrenArticle)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Video":
 		*v = new(InterfaceNestingRootTopicChildrenContentParentTopicChildrenVideo)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(InterfaceNestingRootTopicChildrenContentParentTopicChildrenTopic)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
 			"Response was missing Content.__typename")

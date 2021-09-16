@@ -17,6 +17,10 @@ type ComplexNamedFragmentsResponse struct {
 
 func (v *ComplexNamedFragmentsResponse) UnmarshalJSON(b []byte) error {
 
+	if string(b) == "null" {
+		return nil
+	}
+
 	var firstPass struct {
 		*ComplexNamedFragmentsResponse
 		graphql.NoUnmarshalJSON
@@ -77,15 +81,15 @@ func (v *ContentFieldsTopic) GetName() string { return v.Name }
 // GetUrl is a part of, and documented with, the interface ContentFields.
 func (v *ContentFieldsTopic) GetUrl() string { return v.Url }
 
-func __unmarshalContentFields(v *ContentFields, m json.RawMessage) error {
-	if string(m) == "null" {
+func __unmarshalContentFields(b []byte, v *ContentFields) error {
+	if string(b) == "null" {
 		return nil
 	}
 
 	var tn struct {
 		TypeName string `json:"__typename"`
 	}
-	err := json.Unmarshal(m, &tn)
+	err := json.Unmarshal(b, &tn)
 	if err != nil {
 		return err
 	}
@@ -93,13 +97,13 @@ func __unmarshalContentFields(v *ContentFields, m json.RawMessage) error {
 	switch tn.TypeName {
 	case "Article":
 		*v = new(ContentFieldsArticle)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Video":
 		*v = new(ContentFieldsVideo)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(ContentFieldsTopic)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
 			"Response was missing Content.__typename")
@@ -148,6 +152,10 @@ type InnerQueryFragment struct {
 
 func (v *InnerQueryFragment) UnmarshalJSON(b []byte) error {
 
+	if string(b) == "null" {
+		return nil
+	}
+
 	var firstPass struct {
 		*InnerQueryFragment
 		RandomItem json.RawMessage `json:"randomItem"`
@@ -163,10 +171,10 @@ func (v *InnerQueryFragment) UnmarshalJSON(b []byte) error {
 	}
 
 	{
-		target := &v.RandomItem
-		raw := firstPass.RandomItem
+		dst := &v.RandomItem
+		src := firstPass.RandomItem
 		err = __unmarshalInnerQueryFragmentRandomItemContent(
-			target, raw)
+			src, dst)
 		if err != nil {
 			return fmt.Errorf(
 				"Unable to unmarshal InnerQueryFragment.RandomItem: %w", err)
@@ -174,10 +182,10 @@ func (v *InnerQueryFragment) UnmarshalJSON(b []byte) error {
 	}
 
 	{
-		target := &v.RandomLeaf
-		raw := firstPass.RandomLeaf
+		dst := &v.RandomLeaf
+		src := firstPass.RandomLeaf
 		err = __unmarshalInnerQueryFragmentRandomLeafLeafContent(
-			target, raw)
+			src, dst)
 		if err != nil {
 			return fmt.Errorf(
 				"Unable to unmarshal InnerQueryFragment.RandomLeaf: %w", err)
@@ -185,10 +193,10 @@ func (v *InnerQueryFragment) UnmarshalJSON(b []byte) error {
 	}
 
 	{
-		target := &v.OtherLeaf
-		raw := firstPass.OtherLeaf
+		dst := &v.OtherLeaf
+		src := firstPass.OtherLeaf
 		err = __unmarshalInnerQueryFragmentOtherLeafLeafContent(
-			target, raw)
+			src, dst)
 		if err != nil {
 			return fmt.Errorf(
 				"Unable to unmarshal InnerQueryFragment.OtherLeaf: %w", err)
@@ -204,6 +212,10 @@ type InnerQueryFragmentOtherLeafArticle struct {
 }
 
 func (v *InnerQueryFragmentOtherLeafArticle) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
 
 	var firstPass struct {
 		*InnerQueryFragmentOtherLeafArticle
@@ -250,15 +262,15 @@ func (v *InnerQueryFragmentOtherLeafVideo) implementsGraphQLInterfaceInnerQueryF
 // GetTypename is a part of, and documented with, the interface InnerQueryFragmentOtherLeafLeafContent.
 func (v *InnerQueryFragmentOtherLeafVideo) GetTypename() string { return v.Typename }
 
-func __unmarshalInnerQueryFragmentOtherLeafLeafContent(v *InnerQueryFragmentOtherLeafLeafContent, m json.RawMessage) error {
-	if string(m) == "null" {
+func __unmarshalInnerQueryFragmentOtherLeafLeafContent(b []byte, v *InnerQueryFragmentOtherLeafLeafContent) error {
+	if string(b) == "null" {
 		return nil
 	}
 
 	var tn struct {
 		TypeName string `json:"__typename"`
 	}
-	err := json.Unmarshal(m, &tn)
+	err := json.Unmarshal(b, &tn)
 	if err != nil {
 		return err
 	}
@@ -266,10 +278,10 @@ func __unmarshalInnerQueryFragmentOtherLeafLeafContent(v *InnerQueryFragmentOthe
 	switch tn.TypeName {
 	case "Article":
 		*v = new(InnerQueryFragmentOtherLeafArticle)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Video":
 		*v = new(InnerQueryFragmentOtherLeafVideo)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
 			"Response was missing LeafContent.__typename")
@@ -287,6 +299,10 @@ type InnerQueryFragmentOtherLeafVideo struct {
 }
 
 func (v *InnerQueryFragmentOtherLeafVideo) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
 
 	var firstPass struct {
 		*InnerQueryFragmentOtherLeafVideo
@@ -322,6 +338,10 @@ type InnerQueryFragmentRandomItemArticle struct {
 }
 
 func (v *InnerQueryFragmentRandomItemArticle) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
 
 	var firstPass struct {
 		*InnerQueryFragmentRandomItemArticle
@@ -401,15 +421,15 @@ func (v *InnerQueryFragmentRandomItemTopic) GetId() testutil.ID { return v.Id }
 // GetName is a part of, and documented with, the interface InnerQueryFragmentRandomItemContent.
 func (v *InnerQueryFragmentRandomItemTopic) GetName() string { return v.Name }
 
-func __unmarshalInnerQueryFragmentRandomItemContent(v *InnerQueryFragmentRandomItemContent, m json.RawMessage) error {
-	if string(m) == "null" {
+func __unmarshalInnerQueryFragmentRandomItemContent(b []byte, v *InnerQueryFragmentRandomItemContent) error {
+	if string(b) == "null" {
 		return nil
 	}
 
 	var tn struct {
 		TypeName string `json:"__typename"`
 	}
-	err := json.Unmarshal(m, &tn)
+	err := json.Unmarshal(b, &tn)
 	if err != nil {
 		return err
 	}
@@ -417,13 +437,13 @@ func __unmarshalInnerQueryFragmentRandomItemContent(v *InnerQueryFragmentRandomI
 	switch tn.TypeName {
 	case "Article":
 		*v = new(InnerQueryFragmentRandomItemArticle)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Video":
 		*v = new(InnerQueryFragmentRandomItemVideo)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(InnerQueryFragmentRandomItemTopic)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
 			"Response was missing Content.__typename")
@@ -443,6 +463,10 @@ type InnerQueryFragmentRandomItemTopic struct {
 }
 
 func (v *InnerQueryFragmentRandomItemTopic) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
 
 	var firstPass struct {
 		*InnerQueryFragmentRandomItemTopic
@@ -475,6 +499,10 @@ type InnerQueryFragmentRandomItemVideo struct {
 
 func (v *InnerQueryFragmentRandomItemVideo) UnmarshalJSON(b []byte) error {
 
+	if string(b) == "null" {
+		return nil
+	}
+
 	var firstPass struct {
 		*InnerQueryFragmentRandomItemVideo
 		graphql.NoUnmarshalJSON
@@ -506,6 +534,10 @@ type InnerQueryFragmentRandomLeafArticle struct {
 }
 
 func (v *InnerQueryFragmentRandomLeafArticle) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
 
 	var firstPass struct {
 		*InnerQueryFragmentRandomLeafArticle
@@ -552,15 +584,15 @@ func (v *InnerQueryFragmentRandomLeafVideo) implementsGraphQLInterfaceInnerQuery
 // GetTypename is a part of, and documented with, the interface InnerQueryFragmentRandomLeafLeafContent.
 func (v *InnerQueryFragmentRandomLeafVideo) GetTypename() string { return v.Typename }
 
-func __unmarshalInnerQueryFragmentRandomLeafLeafContent(v *InnerQueryFragmentRandomLeafLeafContent, m json.RawMessage) error {
-	if string(m) == "null" {
+func __unmarshalInnerQueryFragmentRandomLeafLeafContent(b []byte, v *InnerQueryFragmentRandomLeafLeafContent) error {
+	if string(b) == "null" {
 		return nil
 	}
 
 	var tn struct {
 		TypeName string `json:"__typename"`
 	}
-	err := json.Unmarshal(m, &tn)
+	err := json.Unmarshal(b, &tn)
 	if err != nil {
 		return err
 	}
@@ -568,10 +600,10 @@ func __unmarshalInnerQueryFragmentRandomLeafLeafContent(v *InnerQueryFragmentRan
 	switch tn.TypeName {
 	case "Article":
 		*v = new(InnerQueryFragmentRandomLeafArticle)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Video":
 		*v = new(InnerQueryFragmentRandomLeafVideo)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
 			"Response was missing LeafContent.__typename")
@@ -590,6 +622,10 @@ type InnerQueryFragmentRandomLeafVideo struct {
 }
 
 func (v *InnerQueryFragmentRandomLeafVideo) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
 
 	var firstPass struct {
 		*InnerQueryFragmentRandomLeafVideo
@@ -637,6 +673,10 @@ type MoreVideoFieldsParentTopic struct {
 
 func (v *MoreVideoFieldsParentTopic) UnmarshalJSON(b []byte) error {
 
+	if string(b) == "null" {
+		return nil
+	}
+
 	var firstPass struct {
 		*MoreVideoFieldsParentTopic
 		Children []json.RawMessage `json:"children"`
@@ -656,15 +696,15 @@ func (v *MoreVideoFieldsParentTopic) UnmarshalJSON(b []byte) error {
 	}
 
 	{
-		target := &v.Children
-		raw := firstPass.Children
-		*target = make(
+		dst := &v.Children
+		src := firstPass.Children
+		*dst = make(
 			[]MoreVideoFieldsParentTopicChildrenContent,
-			len(raw))
-		for i, raw := range raw {
-			target := &(*target)[i]
+			len(src))
+		for i, src := range src {
+			dst := &(*dst)[i]
 			err = __unmarshalMoreVideoFieldsParentTopicChildrenContent(
-				target, raw)
+				src, dst)
 			if err != nil {
 				return fmt.Errorf(
 					"Unable to unmarshal MoreVideoFieldsParentTopic.Children: %w", err)
@@ -712,15 +752,15 @@ func (v *MoreVideoFieldsParentTopicChildrenTopic) implementsGraphQLInterfaceMore
 // GetTypename is a part of, and documented with, the interface MoreVideoFieldsParentTopicChildrenContent.
 func (v *MoreVideoFieldsParentTopicChildrenTopic) GetTypename() *string { return v.Typename }
 
-func __unmarshalMoreVideoFieldsParentTopicChildrenContent(v *MoreVideoFieldsParentTopicChildrenContent, m json.RawMessage) error {
-	if string(m) == "null" {
+func __unmarshalMoreVideoFieldsParentTopicChildrenContent(b []byte, v *MoreVideoFieldsParentTopicChildrenContent) error {
+	if string(b) == "null" {
 		return nil
 	}
 
 	var tn struct {
 		TypeName string `json:"__typename"`
 	}
-	err := json.Unmarshal(m, &tn)
+	err := json.Unmarshal(b, &tn)
 	if err != nil {
 		return err
 	}
@@ -728,13 +768,13 @@ func __unmarshalMoreVideoFieldsParentTopicChildrenContent(v *MoreVideoFieldsPare
 	switch tn.TypeName {
 	case "Article":
 		*v = new(MoreVideoFieldsParentTopicChildrenArticle)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Video":
 		*v = new(MoreVideoFieldsParentTopicChildrenVideo)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(MoreVideoFieldsParentTopicChildrenTopic)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
 			"Response was missing Content.__typename")
@@ -756,6 +796,10 @@ type MoreVideoFieldsParentTopicChildrenVideo struct {
 }
 
 func (v *MoreVideoFieldsParentTopicChildrenVideo) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
 
 	var firstPass struct {
 		*MoreVideoFieldsParentTopicChildrenVideo
@@ -785,6 +829,10 @@ type QueryFragment struct {
 }
 
 func (v *QueryFragment) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
 
 	var firstPass struct {
 		*QueryFragment
@@ -817,6 +865,10 @@ type VideoFields struct {
 }
 
 func (v *VideoFields) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
 
 	var firstPass struct {
 		*VideoFields

@@ -125,6 +125,7 @@ func (g *generator) convertOperation(
 		},
 		Fields:    fields,
 		Selection: operation.SelectionSet,
+		Generator: g,
 	}
 
 	return g.addType(goType, goType.GoName, operation.Position)
@@ -188,6 +189,7 @@ func (g *generator) convertArguments(
 			// fake name, used by addType
 			GraphQLName: name,
 		},
+		Generator: g,
 	}
 	goTypAgain, err := g.addType(goTyp, goTyp.GoName, operation.Position)
 	if err != nil {
@@ -217,7 +219,9 @@ func (g *generator) convertType(
 	localBinding := options.Bind
 	if localBinding != "" && localBinding != "-" {
 		goRef, err := g.ref(localBinding)
-		return &goOpaqueType{goRef, typ.Name()}, err
+		// TODO(benkraft): Add syntax to specify a custom (un)marshaler, if
+		// it proves useful.
+		return &goOpaqueType{GoRef: goRef, GraphQLName: typ.Name()}, err
 	}
 
 	if typ.Elem != nil {
@@ -269,11 +273,16 @@ func (g *generator) convertDefinition(
 			}
 		}
 		goRef, err := g.ref(globalBinding.Type)
-		return &goOpaqueType{goRef, def.Name}, err
+		return &goOpaqueType{
+			GoRef:       goRef,
+			GraphQLName: def.Name,
+			Marshaler:   globalBinding.Marshaler,
+			Unmarshaler: globalBinding.Unmarshaler,
+		}, err
 	}
 	goBuiltinName, ok := builtinTypes[def.Name]
 	if ok {
-		return &goOpaqueType{goBuiltinName, def.Name}, nil
+		return &goOpaqueType{GoRef: goBuiltinName, GraphQLName: def.Name}, nil
 	}
 
 	// Determine the name to use for this type.
@@ -337,6 +346,7 @@ func (g *generator) convertDefinition(
 			Fields:          fields,
 			Selection:       selectionSet,
 			descriptionInfo: desc,
+			Generator:       g,
 		}
 		return g.addType(goType, goType.GoName, pos)
 
@@ -346,6 +356,7 @@ func (g *generator) convertDefinition(
 			Fields:          make([]*goStructField, len(def.Fields)),
 			descriptionInfo: desc,
 			IsInput:         true,
+			Generator:       g,
 		}
 		// To handle recursive types, we need to add the type to the type-map
 		// *before* converting its fields.
@@ -700,6 +711,7 @@ func (g *generator) convertNamedFragment(fragment *ast.FragmentDefinition) (goTy
 			Fields:          fields,
 			Selection:       fragment.SelectionSet,
 			descriptionInfo: desc,
+			Generator:       g,
 		}
 		g.typeMap[fragment.Name] = goType
 		return goType, nil
@@ -729,6 +741,7 @@ func (g *generator) convertNamedFragment(fragment *ast.FragmentDefinition) (goTy
 				Fields:          implFields,
 				Selection:       fragment.SelectionSet,
 				descriptionInfo: implDesc,
+				Generator:       g,
 			}
 			goType.Implementations[i] = implTyp
 			g.typeMap[implTyp.GoName] = implTyp

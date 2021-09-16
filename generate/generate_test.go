@@ -83,8 +83,13 @@ func TestGenerate(t *testing.T) {
 				ExportOperations: queriesFilename,
 				ContextType:      "-",
 				Bindings: map[string]*TypeBinding{
-					"ID":          {Type: "github.com/Khan/genqlient/internal/testutil.ID"},
-					"DateTime":    {Type: "time.Time"},
+					"ID":       {Type: "github.com/Khan/genqlient/internal/testutil.ID"},
+					"DateTime": {Type: "time.Time"},
+					"Date": {
+						Type:        "time.Time",
+						Marshaler:   "github.com/Khan/genqlient/internal/testutil.MarshalDate",
+						Unmarshaler: "github.com/Khan/genqlient/internal/testutil.UnmarshalDate",
+					},
 					"Junk":        {Type: "interface{}"},
 					"ComplexJunk": {Type: "[]map[string]*[]*map[string]interface{}"},
 					"Pokemon": {

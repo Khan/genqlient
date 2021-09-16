@@ -86,15 +86,15 @@ func (v *InterfaceListOfListOfListsFieldListOfListsOfListsOfContentTopic) GetNam
 	return v.Name
 }
 
-func __unmarshalInterfaceListOfListOfListsFieldListOfListsOfListsOfContent(v *InterfaceListOfListOfListsFieldListOfListsOfListsOfContent, m json.RawMessage) error {
-	if string(m) == "null" {
+func __unmarshalInterfaceListOfListOfListsFieldListOfListsOfListsOfContent(b []byte, v *InterfaceListOfListOfListsFieldListOfListsOfListsOfContent) error {
+	if string(b) == "null" {
 		return nil
 	}
 
 	var tn struct {
 		TypeName string `json:"__typename"`
 	}
-	err := json.Unmarshal(m, &tn)
+	err := json.Unmarshal(b, &tn)
 	if err != nil {
 		return err
 	}
@@ -102,13 +102,13 @@ func __unmarshalInterfaceListOfListOfListsFieldListOfListsOfListsOfContent(v *In
 	switch tn.TypeName {
 	case "Article":
 		*v = new(InterfaceListOfListOfListsFieldListOfListsOfListsOfContentArticle)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Video":
 		*v = new(InterfaceListOfListOfListsFieldListOfListsOfListsOfContentVideo)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(InterfaceListOfListOfListsFieldListOfListsOfListsOfContentTopic)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
 			"Response was missing Content.__typename")
@@ -150,6 +150,10 @@ type InterfaceListOfListOfListsFieldResponse struct {
 
 func (v *InterfaceListOfListOfListsFieldResponse) UnmarshalJSON(b []byte) error {
 
+	if string(b) == "null" {
+		return nil
+	}
+
 	var firstPass struct {
 		*InterfaceListOfListOfListsFieldResponse
 		ListOfListsOfListsOfContent [][][]json.RawMessage `json:"listOfListsOfListsOfContent"`
@@ -164,25 +168,25 @@ func (v *InterfaceListOfListOfListsFieldResponse) UnmarshalJSON(b []byte) error 
 	}
 
 	{
-		target := &v.ListOfListsOfListsOfContent
-		raw := firstPass.ListOfListsOfListsOfContent
-		*target = make(
+		dst := &v.ListOfListsOfListsOfContent
+		src := firstPass.ListOfListsOfListsOfContent
+		*dst = make(
 			[][][]InterfaceListOfListOfListsFieldListOfListsOfListsOfContent,
-			len(raw))
-		for i, raw := range raw {
-			target := &(*target)[i]
-			*target = make(
+			len(src))
+		for i, src := range src {
+			dst := &(*dst)[i]
+			*dst = make(
 				[][]InterfaceListOfListOfListsFieldListOfListsOfListsOfContent,
-				len(raw))
-			for i, raw := range raw {
-				target := &(*target)[i]
-				*target = make(
+				len(src))
+			for i, src := range src {
+				dst := &(*dst)[i]
+				*dst = make(
 					[]InterfaceListOfListOfListsFieldListOfListsOfListsOfContent,
-					len(raw))
-				for i, raw := range raw {
-					target := &(*target)[i]
+					len(src))
+				for i, src := range src {
+					dst := &(*dst)[i]
 					err = __unmarshalInterfaceListOfListOfListsFieldListOfListsOfListsOfContent(
-						target, raw)
+						src, dst)
 					if err != nil {
 						return fmt.Errorf(
 							"Unable to unmarshal InterfaceListOfListOfListsFieldResponse.ListOfListsOfListsOfContent: %w", err)
@@ -193,26 +197,26 @@ func (v *InterfaceListOfListOfListsFieldResponse) UnmarshalJSON(b []byte) error 
 	}
 
 	{
-		target := &v.WithPointer
-		raw := firstPass.WithPointer
-		*target = make(
+		dst := &v.WithPointer
+		src := firstPass.WithPointer
+		*dst = make(
 			[][][]*InterfaceListOfListOfListsFieldWithPointerContent,
-			len(raw))
-		for i, raw := range raw {
-			target := &(*target)[i]
-			*target = make(
+			len(src))
+		for i, src := range src {
+			dst := &(*dst)[i]
+			*dst = make(
 				[][]*InterfaceListOfListOfListsFieldWithPointerContent,
-				len(raw))
-			for i, raw := range raw {
-				target := &(*target)[i]
-				*target = make(
+				len(src))
+			for i, src := range src {
+				dst := &(*dst)[i]
+				*dst = make(
 					[]*InterfaceListOfListOfListsFieldWithPointerContent,
-					len(raw))
-				for i, raw := range raw {
-					target := &(*target)[i]
-					*target = new(InterfaceListOfListOfListsFieldWithPointerContent)
+					len(src))
+				for i, src := range src {
+					dst := &(*dst)[i]
+					*dst = new(InterfaceListOfListOfListsFieldWithPointerContent)
 					err = __unmarshalInterfaceListOfListOfListsFieldWithPointerContent(
-						*target, raw)
+						src, *dst)
 					if err != nil {
 						return fmt.Errorf(
 							"Unable to unmarshal InterfaceListOfListOfListsFieldResponse.WithPointer: %w", err)
@@ -290,15 +294,15 @@ func (v *InterfaceListOfListOfListsFieldWithPointerTopic) GetId() *testutil.ID {
 // GetName is a part of, and documented with, the interface InterfaceListOfListOfListsFieldWithPointerContent.
 func (v *InterfaceListOfListOfListsFieldWithPointerTopic) GetName() *string { return v.Name }
 
-func __unmarshalInterfaceListOfListOfListsFieldWithPointerContent(v *InterfaceListOfListOfListsFieldWithPointerContent, m json.RawMessage) error {
-	if string(m) == "null" {
+func __unmarshalInterfaceListOfListOfListsFieldWithPointerContent(b []byte, v *InterfaceListOfListOfListsFieldWithPointerContent) error {
+	if string(b) == "null" {
 		return nil
 	}
 
 	var tn struct {
 		TypeName string `json:"__typename"`
 	}
-	err := json.Unmarshal(m, &tn)
+	err := json.Unmarshal(b, &tn)
 	if err != nil {
 		return err
 	}
@@ -306,13 +310,13 @@ func __unmarshalInterfaceListOfListOfListsFieldWithPointerContent(v *InterfaceLi
 	switch tn.TypeName {
 	case "Article":
 		*v = new(InterfaceListOfListOfListsFieldWithPointerArticle)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Video":
 		*v = new(InterfaceListOfListOfListsFieldWithPointerVideo)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(InterfaceListOfListOfListsFieldWithPointerTopic)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
 			"Response was missing Content.__typename")

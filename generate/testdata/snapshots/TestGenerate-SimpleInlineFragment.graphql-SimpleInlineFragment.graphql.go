@@ -77,15 +77,15 @@ func (v *SimpleInlineFragmentRandomItemTopic) GetId() testutil.ID { return v.Id 
 // GetName is a part of, and documented with, the interface SimpleInlineFragmentRandomItemContent.
 func (v *SimpleInlineFragmentRandomItemTopic) GetName() string { return v.Name }
 
-func __unmarshalSimpleInlineFragmentRandomItemContent(v *SimpleInlineFragmentRandomItemContent, m json.RawMessage) error {
-	if string(m) == "null" {
+func __unmarshalSimpleInlineFragmentRandomItemContent(b []byte, v *SimpleInlineFragmentRandomItemContent) error {
+	if string(b) == "null" {
 		return nil
 	}
 
 	var tn struct {
 		TypeName string `json:"__typename"`
 	}
-	err := json.Unmarshal(m, &tn)
+	err := json.Unmarshal(b, &tn)
 	if err != nil {
 		return err
 	}
@@ -93,13 +93,13 @@ func __unmarshalSimpleInlineFragmentRandomItemContent(v *SimpleInlineFragmentRan
 	switch tn.TypeName {
 	case "Article":
 		*v = new(SimpleInlineFragmentRandomItemArticle)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Video":
 		*v = new(SimpleInlineFragmentRandomItemVideo)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(SimpleInlineFragmentRandomItemTopic)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
 			"Response was missing Content.__typename")
@@ -133,6 +133,10 @@ type SimpleInlineFragmentResponse struct {
 
 func (v *SimpleInlineFragmentResponse) UnmarshalJSON(b []byte) error {
 
+	if string(b) == "null" {
+		return nil
+	}
+
 	var firstPass struct {
 		*SimpleInlineFragmentResponse
 		RandomItem json.RawMessage `json:"randomItem"`
@@ -146,10 +150,10 @@ func (v *SimpleInlineFragmentResponse) UnmarshalJSON(b []byte) error {
 	}
 
 	{
-		target := &v.RandomItem
-		raw := firstPass.RandomItem
+		dst := &v.RandomItem
+		src := firstPass.RandomItem
 		err = __unmarshalSimpleInlineFragmentRandomItemContent(
-			target, raw)
+			src, dst)
 		if err != nil {
 			return fmt.Errorf(
 				"Unable to unmarshal SimpleInlineFragmentResponse.RandomItem: %w", err)

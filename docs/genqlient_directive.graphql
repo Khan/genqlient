@@ -44,7 +44,8 @@ directive genqlient(
   # which will pass {"arg": null} to GraphQL if arg is "", and the actual
   # value otherwise.
   #
-  # Only applicable to arguments of nullable types.
+  # Only applicable to arguments of nullable types.  Ignored for types with
+  # custom marshalers (see their documentation in genqlient.yaml for details).
   omitempty: Boolean
 
   # If set, this argument or field will use a pointer type in Go.  Response

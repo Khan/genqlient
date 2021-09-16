@@ -1,15 +1,15 @@
 {{/* (the blank lines at the start are intentional, to separate
      the helper from the function it follows) */}}
 
-func __unmarshal{{.GoName}}(v *{{.GoName}}, m {{ref "encoding/json.RawMessage"}}) error {
-    if string(m) == "null" {
+func __unmarshal{{.GoName}}(b []byte, v *{{.GoName}}) error {
+    if string(b) == "null" {
         return nil
     }
 
     var tn struct {
         TypeName string `json:"__typename"`
     }
-    err := {{ref "encoding/json.Unmarshal"}}(m, &tn)
+    err := {{ref "encoding/json.Unmarshal"}}(b, &tn)
     if err != nil {
         return err
     }
@@ -18,7 +18,7 @@ func __unmarshal{{.GoName}}(v *{{.GoName}}, m {{ref "encoding/json.RawMessage"}}
     {{range .Implementations -}}
     case "{{.GraphQLName}}":
         *v = new({{.GoName}})
-        return {{ref "encoding/json.Unmarshal"}}(m, *v)
+        return {{ref "encoding/json.Unmarshal"}}(b, *v)
     {{end -}}
     case "":
         {{/* Likely if we're making a request to a mock server and the author

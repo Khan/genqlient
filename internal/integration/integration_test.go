@@ -9,6 +9,7 @@ import (
 	"context"
 	"net/http"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -114,6 +115,64 @@ func TestOmitempty(t *testing.T) {
 	assert.Equal(t, "1", resp.User.Id)
 	assert.Equal(t, "Yours Truly", resp.User.Name)
 	assert.Equal(t, 17, resp.User.LuckyNumber)
+}
+
+func TestCustomMarshal(t *testing.T) {
+	_ = `# @genqlient
+	query queryWithCustomMarshal($date: Date!) {
+		usersBornOn(date: $date) { id name birthdate }
+	}`
+
+	ctx := context.Background()
+	server := server.RunServer()
+	defer server.Close()
+	client := graphql.NewClient(server.URL, http.DefaultClient)
+
+	resp, err := queryWithCustomMarshal(ctx, client,
+		time.Date(2025, time.January, 1, 12, 34, 56, 789, time.UTC))
+	require.NoError(t, err)
+
+	assert.Len(t, resp.UsersBornOn, 1)
+	user := resp.UsersBornOn[0]
+	assert.Equal(t, "1", user.Id)
+	assert.Equal(t, "Yours Truly", user.Name)
+	assert.Equal(t,
+		time.Date(2025, time.January, 1, 0, 0, 0, 0, time.UTC),
+		user.Birthdate)
+
+	resp, err = queryWithCustomMarshal(ctx, client,
+		time.Date(2021, time.January, 1, 12, 34, 56, 789, time.UTC))
+	require.NoError(t, err)
+	assert.Len(t, resp.UsersBornOn, 0)
+}
+
+func TestCustomMarshalSlice(t *testing.T) {
+	_ = `# @genqlient
+	query queryWithCustomMarshalSlice($dates: [Date!]!) {
+		usersBornOnDates(dates: $dates) { id name birthdate }
+	}`
+
+	ctx := context.Background()
+	server := server.RunServer()
+	defer server.Close()
+	client := graphql.NewClient(server.URL, http.DefaultClient)
+
+	resp, err := queryWithCustomMarshalSlice(ctx, client,
+		[]time.Time{time.Date(2025, time.January, 1, 12, 34, 56, 789, time.UTC)})
+	require.NoError(t, err)
+
+	assert.Len(t, resp.UsersBornOnDates, 1)
+	user := resp.UsersBornOnDates[0]
+	assert.Equal(t, "1", user.Id)
+	assert.Equal(t, "Yours Truly", user.Name)
+	assert.Equal(t,
+		time.Date(2025, time.January, 1, 0, 0, 0, 0, time.UTC),
+		user.Birthdate)
+
+	resp, err = queryWithCustomMarshalSlice(ctx, client,
+		[]time.Time{time.Date(2021, time.January, 1, 12, 34, 56, 789, time.UTC)})
+	require.NoError(t, err)
+	assert.Len(t, resp.UsersBornOnDates, 0)
 }
 
 func TestInterfaceNoFragments(t *testing.T) {

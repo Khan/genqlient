@@ -55,15 +55,15 @@ func (v *ComplexInlineFragmentsConflictingStuffTopic) implementsGraphQLInterface
 // GetTypename is a part of, and documented with, the interface ComplexInlineFragmentsConflictingStuffContent.
 func (v *ComplexInlineFragmentsConflictingStuffTopic) GetTypename() string { return v.Typename }
 
-func __unmarshalComplexInlineFragmentsConflictingStuffContent(v *ComplexInlineFragmentsConflictingStuffContent, m json.RawMessage) error {
-	if string(m) == "null" {
+func __unmarshalComplexInlineFragmentsConflictingStuffContent(b []byte, v *ComplexInlineFragmentsConflictingStuffContent) error {
+	if string(b) == "null" {
 		return nil
 	}
 
 	var tn struct {
 		TypeName string `json:"__typename"`
 	}
-	err := json.Unmarshal(m, &tn)
+	err := json.Unmarshal(b, &tn)
 	if err != nil {
 		return err
 	}
@@ -71,13 +71,13 @@ func __unmarshalComplexInlineFragmentsConflictingStuffContent(v *ComplexInlineFr
 	switch tn.TypeName {
 	case "Article":
 		*v = new(ComplexInlineFragmentsConflictingStuffArticle)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Video":
 		*v = new(ComplexInlineFragmentsConflictingStuffVideo)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(ComplexInlineFragmentsConflictingStuffTopic)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
 			"Response was missing Content.__typename")
@@ -142,15 +142,15 @@ func (v *ComplexInlineFragmentsNestedStuffTopic) implementsGraphQLInterfaceCompl
 // GetTypename is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffContent.
 func (v *ComplexInlineFragmentsNestedStuffTopic) GetTypename() string { return v.Typename }
 
-func __unmarshalComplexInlineFragmentsNestedStuffContent(v *ComplexInlineFragmentsNestedStuffContent, m json.RawMessage) error {
-	if string(m) == "null" {
+func __unmarshalComplexInlineFragmentsNestedStuffContent(b []byte, v *ComplexInlineFragmentsNestedStuffContent) error {
+	if string(b) == "null" {
 		return nil
 	}
 
 	var tn struct {
 		TypeName string `json:"__typename"`
 	}
-	err := json.Unmarshal(m, &tn)
+	err := json.Unmarshal(b, &tn)
 	if err != nil {
 		return err
 	}
@@ -158,13 +158,13 @@ func __unmarshalComplexInlineFragmentsNestedStuffContent(v *ComplexInlineFragmen
 	switch tn.TypeName {
 	case "Article":
 		*v = new(ComplexInlineFragmentsNestedStuffArticle)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Video":
 		*v = new(ComplexInlineFragmentsNestedStuffVideo)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(ComplexInlineFragmentsNestedStuffTopic)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
 			"Response was missing Content.__typename")
@@ -182,6 +182,10 @@ type ComplexInlineFragmentsNestedStuffTopic struct {
 
 func (v *ComplexInlineFragmentsNestedStuffTopic) UnmarshalJSON(b []byte) error {
 
+	if string(b) == "null" {
+		return nil
+	}
+
 	var firstPass struct {
 		*ComplexInlineFragmentsNestedStuffTopic
 		Children []json.RawMessage `json:"children"`
@@ -195,15 +199,15 @@ func (v *ComplexInlineFragmentsNestedStuffTopic) UnmarshalJSON(b []byte) error {
 	}
 
 	{
-		target := &v.Children
-		raw := firstPass.Children
-		*target = make(
+		dst := &v.Children
+		src := firstPass.Children
+		*dst = make(
 			[]ComplexInlineFragmentsNestedStuffTopicChildrenContent,
-			len(raw))
-		for i, raw := range raw {
-			target := &(*target)[i]
+			len(src))
+		for i, src := range src {
+			dst := &(*dst)[i]
 			err = __unmarshalComplexInlineFragmentsNestedStuffTopicChildrenContent(
-				target, raw)
+				src, dst)
 			if err != nil {
 				return fmt.Errorf(
 					"Unable to unmarshal ComplexInlineFragmentsNestedStuffTopic.Children: %w", err)
@@ -229,6 +233,10 @@ type ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTop
 
 func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopic) UnmarshalJSON(b []byte) error {
 
+	if string(b) == "null" {
+		return nil
+	}
+
 	var firstPass struct {
 		*ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopic
 		Children []json.RawMessage `json:"children"`
@@ -242,15 +250,15 @@ func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParen
 	}
 
 	{
-		target := &v.Children
-		raw := firstPass.Children
-		*target = make(
+		dst := &v.Children
+		src := firstPass.Children
+		*dst = make(
 			[]ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent,
-			len(raw))
-		for i, raw := range raw {
-			target := &(*target)[i]
+			len(src))
+		for i, src := range src {
+			dst := &(*dst)[i]
 			err = __unmarshalComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent(
-				target, raw)
+				src, dst)
 			if err != nil {
 				return fmt.Errorf(
 					"Unable to unmarshal ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopic.Children: %w", err)
@@ -344,15 +352,15 @@ func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParen
 	return v.Name
 }
 
-func __unmarshalComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent(v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent, m json.RawMessage) error {
-	if string(m) == "null" {
+func __unmarshalComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent(b []byte, v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent) error {
+	if string(b) == "null" {
 		return nil
 	}
 
 	var tn struct {
 		TypeName string `json:"__typename"`
 	}
-	err := json.Unmarshal(m, &tn)
+	err := json.Unmarshal(b, &tn)
 	if err != nil {
 		return err
 	}
@@ -360,13 +368,13 @@ func __unmarshalComplexInlineFragmentsNestedStuffTopicChildrenArticleParentConte
 	switch tn.TypeName {
 	case "Article":
 		*v = new(ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenArticle)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Video":
 		*v = new(ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenVideo)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenTopic)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
 			"Response was missing Content.__typename")
@@ -447,15 +455,15 @@ func (v *ComplexInlineFragmentsNestedStuffTopicChildrenTopic) GetTypename() stri
 // GetId is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffTopicChildrenContent.
 func (v *ComplexInlineFragmentsNestedStuffTopicChildrenTopic) GetId() testutil.ID { return v.Id }
 
-func __unmarshalComplexInlineFragmentsNestedStuffTopicChildrenContent(v *ComplexInlineFragmentsNestedStuffTopicChildrenContent, m json.RawMessage) error {
-	if string(m) == "null" {
+func __unmarshalComplexInlineFragmentsNestedStuffTopicChildrenContent(b []byte, v *ComplexInlineFragmentsNestedStuffTopicChildrenContent) error {
+	if string(b) == "null" {
 		return nil
 	}
 
 	var tn struct {
 		TypeName string `json:"__typename"`
 	}
-	err := json.Unmarshal(m, &tn)
+	err := json.Unmarshal(b, &tn)
 	if err != nil {
 		return err
 	}
@@ -463,13 +471,13 @@ func __unmarshalComplexInlineFragmentsNestedStuffTopicChildrenContent(v *Complex
 	switch tn.TypeName {
 	case "Article":
 		*v = new(ComplexInlineFragmentsNestedStuffTopicChildrenArticle)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Video":
 		*v = new(ComplexInlineFragmentsNestedStuffTopicChildrenVideo)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(ComplexInlineFragmentsNestedStuffTopicChildrenTopic)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
 			"Response was missing Content.__typename")
@@ -565,15 +573,15 @@ func (v *ComplexInlineFragmentsRandomItemTopic) GetId() testutil.ID { return v.I
 // GetName is a part of, and documented with, the interface ComplexInlineFragmentsRandomItemContent.
 func (v *ComplexInlineFragmentsRandomItemTopic) GetName() string { return v.Name }
 
-func __unmarshalComplexInlineFragmentsRandomItemContent(v *ComplexInlineFragmentsRandomItemContent, m json.RawMessage) error {
-	if string(m) == "null" {
+func __unmarshalComplexInlineFragmentsRandomItemContent(b []byte, v *ComplexInlineFragmentsRandomItemContent) error {
+	if string(b) == "null" {
 		return nil
 	}
 
 	var tn struct {
 		TypeName string `json:"__typename"`
 	}
-	err := json.Unmarshal(m, &tn)
+	err := json.Unmarshal(b, &tn)
 	if err != nil {
 		return err
 	}
@@ -581,13 +589,13 @@ func __unmarshalComplexInlineFragmentsRandomItemContent(v *ComplexInlineFragment
 	switch tn.TypeName {
 	case "Article":
 		*v = new(ComplexInlineFragmentsRandomItemArticle)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Video":
 		*v = new(ComplexInlineFragmentsRandomItemVideo)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(ComplexInlineFragmentsRandomItemTopic)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
 			"Response was missing Content.__typename")
@@ -721,15 +729,15 @@ func (v *ComplexInlineFragmentsRepeatedStuffTopic) GetName() string { return v.N
 // GetOtherName is a part of, and documented with, the interface ComplexInlineFragmentsRepeatedStuffContent.
 func (v *ComplexInlineFragmentsRepeatedStuffTopic) GetOtherName() string { return v.OtherName }
 
-func __unmarshalComplexInlineFragmentsRepeatedStuffContent(v *ComplexInlineFragmentsRepeatedStuffContent, m json.RawMessage) error {
-	if string(m) == "null" {
+func __unmarshalComplexInlineFragmentsRepeatedStuffContent(b []byte, v *ComplexInlineFragmentsRepeatedStuffContent) error {
+	if string(b) == "null" {
 		return nil
 	}
 
 	var tn struct {
 		TypeName string `json:"__typename"`
 	}
-	err := json.Unmarshal(m, &tn)
+	err := json.Unmarshal(b, &tn)
 	if err != nil {
 		return err
 	}
@@ -737,13 +745,13 @@ func __unmarshalComplexInlineFragmentsRepeatedStuffContent(v *ComplexInlineFragm
 	switch tn.TypeName {
 	case "Article":
 		*v = new(ComplexInlineFragmentsRepeatedStuffArticle)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Video":
 		*v = new(ComplexInlineFragmentsRepeatedStuffVideo)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(ComplexInlineFragmentsRepeatedStuffTopic)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
 			"Response was missing Content.__typename")
@@ -789,6 +797,10 @@ type ComplexInlineFragmentsResponse struct {
 
 func (v *ComplexInlineFragmentsResponse) UnmarshalJSON(b []byte) error {
 
+	if string(b) == "null" {
+		return nil
+	}
+
 	var firstPass struct {
 		*ComplexInlineFragmentsResponse
 		RandomItem       json.RawMessage `json:"randomItem"`
@@ -805,10 +817,10 @@ func (v *ComplexInlineFragmentsResponse) UnmarshalJSON(b []byte) error {
 	}
 
 	{
-		target := &v.RandomItem
-		raw := firstPass.RandomItem
+		dst := &v.RandomItem
+		src := firstPass.RandomItem
 		err = __unmarshalComplexInlineFragmentsRandomItemContent(
-			target, raw)
+			src, dst)
 		if err != nil {
 			return fmt.Errorf(
 				"Unable to unmarshal ComplexInlineFragmentsResponse.RandomItem: %w", err)
@@ -816,10 +828,10 @@ func (v *ComplexInlineFragmentsResponse) UnmarshalJSON(b []byte) error {
 	}
 
 	{
-		target := &v.RepeatedStuff
-		raw := firstPass.RepeatedStuff
+		dst := &v.RepeatedStuff
+		src := firstPass.RepeatedStuff
 		err = __unmarshalComplexInlineFragmentsRepeatedStuffContent(
-			target, raw)
+			src, dst)
 		if err != nil {
 			return fmt.Errorf(
 				"Unable to unmarshal ComplexInlineFragmentsResponse.RepeatedStuff: %w", err)
@@ -827,10 +839,10 @@ func (v *ComplexInlineFragmentsResponse) UnmarshalJSON(b []byte) error {
 	}
 
 	{
-		target := &v.ConflictingStuff
-		raw := firstPass.ConflictingStuff
+		dst := &v.ConflictingStuff
+		src := firstPass.ConflictingStuff
 		err = __unmarshalComplexInlineFragmentsConflictingStuffContent(
-			target, raw)
+			src, dst)
 		if err != nil {
 			return fmt.Errorf(
 				"Unable to unmarshal ComplexInlineFragmentsResponse.ConflictingStuff: %w", err)
@@ -838,10 +850,10 @@ func (v *ComplexInlineFragmentsResponse) UnmarshalJSON(b []byte) error {
 	}
 
 	{
-		target := &v.NestedStuff
-		raw := firstPass.NestedStuff
+		dst := &v.NestedStuff
+		src := firstPass.NestedStuff
 		err = __unmarshalComplexInlineFragmentsNestedStuffContent(
-			target, raw)
+			src, dst)
 		if err != nil {
 			return fmt.Errorf(
 				"Unable to unmarshal ComplexInlineFragmentsResponse.NestedStuff: %w", err)

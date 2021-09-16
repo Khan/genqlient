@@ -1,0 +1,6 @@
+query CustomMarshal($date: Date!) {
+  usersBornOn(date: $date) {
+    id
+    birthdate
+  }
+}

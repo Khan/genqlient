@@ -76,15 +76,15 @@ func (v *InterfaceNoFragmentsQueryRandomItemTopic) GetId() testutil.ID { return 
 // GetName is a part of, and documented with, the interface InterfaceNoFragmentsQueryRandomItemContent.
 func (v *InterfaceNoFragmentsQueryRandomItemTopic) GetName() string { return v.Name }
 
-func __unmarshalInterfaceNoFragmentsQueryRandomItemContent(v *InterfaceNoFragmentsQueryRandomItemContent, m json.RawMessage) error {
-	if string(m) == "null" {
+func __unmarshalInterfaceNoFragmentsQueryRandomItemContent(b []byte, v *InterfaceNoFragmentsQueryRandomItemContent) error {
+	if string(b) == "null" {
 		return nil
 	}
 
 	var tn struct {
 		TypeName string `json:"__typename"`
 	}
-	err := json.Unmarshal(m, &tn)
+	err := json.Unmarshal(b, &tn)
 	if err != nil {
 		return err
 	}
@@ -92,13 +92,13 @@ func __unmarshalInterfaceNoFragmentsQueryRandomItemContent(v *InterfaceNoFragmen
 	switch tn.TypeName {
 	case "Article":
 		*v = new(InterfaceNoFragmentsQueryRandomItemArticle)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Video":
 		*v = new(InterfaceNoFragmentsQueryRandomItemVideo)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(InterfaceNoFragmentsQueryRandomItemTopic)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
 			"Response was missing Content.__typename")
@@ -196,15 +196,15 @@ func (v *InterfaceNoFragmentsQueryRandomItemWithTypeNameTopic) GetId() testutil.
 // GetName is a part of, and documented with, the interface InterfaceNoFragmentsQueryRandomItemWithTypeNameContent.
 func (v *InterfaceNoFragmentsQueryRandomItemWithTypeNameTopic) GetName() string { return v.Name }
 
-func __unmarshalInterfaceNoFragmentsQueryRandomItemWithTypeNameContent(v *InterfaceNoFragmentsQueryRandomItemWithTypeNameContent, m json.RawMessage) error {
-	if string(m) == "null" {
+func __unmarshalInterfaceNoFragmentsQueryRandomItemWithTypeNameContent(b []byte, v *InterfaceNoFragmentsQueryRandomItemWithTypeNameContent) error {
+	if string(b) == "null" {
 		return nil
 	}
 
 	var tn struct {
 		TypeName string `json:"__typename"`
 	}
-	err := json.Unmarshal(m, &tn)
+	err := json.Unmarshal(b, &tn)
 	if err != nil {
 		return err
 	}
@@ -212,13 +212,13 @@ func __unmarshalInterfaceNoFragmentsQueryRandomItemWithTypeNameContent(v *Interf
 	switch tn.TypeName {
 	case "Article":
 		*v = new(InterfaceNoFragmentsQueryRandomItemWithTypeNameArticle)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Video":
 		*v = new(InterfaceNoFragmentsQueryRandomItemWithTypeNameVideo)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(InterfaceNoFragmentsQueryRandomItemWithTypeNameTopic)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
 			"Response was missing Content.__typename")
@@ -254,6 +254,10 @@ type InterfaceNoFragmentsQueryResponse struct {
 
 func (v *InterfaceNoFragmentsQueryResponse) UnmarshalJSON(b []byte) error {
 
+	if string(b) == "null" {
+		return nil
+	}
+
 	var firstPass struct {
 		*InterfaceNoFragmentsQueryResponse
 		RandomItem             json.RawMessage `json:"randomItem"`
@@ -269,10 +273,10 @@ func (v *InterfaceNoFragmentsQueryResponse) UnmarshalJSON(b []byte) error {
 	}
 
 	{
-		target := &v.RandomItem
-		raw := firstPass.RandomItem
+		dst := &v.RandomItem
+		src := firstPass.RandomItem
 		err = __unmarshalInterfaceNoFragmentsQueryRandomItemContent(
-			target, raw)
+			src, dst)
 		if err != nil {
 			return fmt.Errorf(
 				"Unable to unmarshal InterfaceNoFragmentsQueryResponse.RandomItem: %w", err)
@@ -280,10 +284,10 @@ func (v *InterfaceNoFragmentsQueryResponse) UnmarshalJSON(b []byte) error {
 	}
 
 	{
-		target := &v.RandomItemWithTypeName
-		raw := firstPass.RandomItemWithTypeName
+		dst := &v.RandomItemWithTypeName
+		src := firstPass.RandomItemWithTypeName
 		err = __unmarshalInterfaceNoFragmentsQueryRandomItemWithTypeNameContent(
-			target, raw)
+			src, dst)
 		if err != nil {
 			return fmt.Errorf(
 				"Unable to unmarshal InterfaceNoFragmentsQueryResponse.RandomItemWithTypeName: %w", err)
@@ -291,11 +295,11 @@ func (v *InterfaceNoFragmentsQueryResponse) UnmarshalJSON(b []byte) error {
 	}
 
 	{
-		target := &v.WithPointer
-		raw := firstPass.WithPointer
-		*target = new(InterfaceNoFragmentsQueryWithPointerContent)
+		dst := &v.WithPointer
+		src := firstPass.WithPointer
+		*dst = new(InterfaceNoFragmentsQueryWithPointerContent)
 		err = __unmarshalInterfaceNoFragmentsQueryWithPointerContent(
-			*target, raw)
+			src, *dst)
 		if err != nil {
 			return fmt.Errorf(
 				"Unable to unmarshal InterfaceNoFragmentsQueryResponse.WithPointer: %w", err)
@@ -377,15 +381,15 @@ func (v *InterfaceNoFragmentsQueryWithPointerTopic) GetId() *testutil.ID { retur
 // GetName is a part of, and documented with, the interface InterfaceNoFragmentsQueryWithPointerContent.
 func (v *InterfaceNoFragmentsQueryWithPointerTopic) GetName() *string { return v.Name }
 
-func __unmarshalInterfaceNoFragmentsQueryWithPointerContent(v *InterfaceNoFragmentsQueryWithPointerContent, m json.RawMessage) error {
-	if string(m) == "null" {
+func __unmarshalInterfaceNoFragmentsQueryWithPointerContent(b []byte, v *InterfaceNoFragmentsQueryWithPointerContent) error {
+	if string(b) == "null" {
 		return nil
 	}
 
 	var tn struct {
 		TypeName string `json:"__typename"`
 	}
-	err := json.Unmarshal(m, &tn)
+	err := json.Unmarshal(b, &tn)
 	if err != nil {
 		return err
 	}
@@ -393,13 +397,13 @@ func __unmarshalInterfaceNoFragmentsQueryWithPointerContent(v *InterfaceNoFragme
 	switch tn.TypeName {
 	case "Article":
 		*v = new(InterfaceNoFragmentsQueryWithPointerArticle)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Video":
 		*v = new(InterfaceNoFragmentsQueryWithPointerVideo)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(InterfaceNoFragmentsQueryWithPointerTopic)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
 			"Response was missing Content.__typename")

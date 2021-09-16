@@ -104,6 +104,42 @@ bindings:
     # - a nonstandard way of spelling those, (interface {/* hi */},
     #   map[  string      ]T)
     type: time.Time
+    # Optionally, the fully-qualified name of the function to use when
+    # marshaling this type.
+    #
+    # This is useful when you want to bind to a standard type, but use
+    # nonstandard marshaling, for example when making requests to a server
+    # that's not compatible with Go's default time format. It is only used for
+    # types passed as arguments, i.e. input types, scalars, and enums.
+    #
+    # The function should have a signature similar to json.Marshal, i.e., it
+    # will be passed one argument which will be a pointer to a value of the
+    # given type, and must return two values: the JSON as a `[]byte`, and an
+    # error. For example, you might specify
+    #  unmarshaler: github.com/you/yourpkg.MarshalMyType
+    # and that function is defined as e.g.:
+    #  func MarshalMyType(v *MyType) ([]byte, error)
+    #
+    # Note that the `omitempty` option is ignored for types with custom
+    # marshalers; the custom marshaler can of course choose to map any value it
+    # wishes to `"null"` which in GraphQL has the same effect.
+    # 
+    # The default is to use ordinary JSON-marshaling.
+    marshaler: github.com/you/yourpkg.MarshalDateTime
+    # Optionally, the fully-qualified name of the function to use when
+    # unmarshaling this type.
+    #
+    # This is similar to marshaler, above, but for unmarshaling.  The specified
+    # function should have a signature similar to json.Unmarshal, i.e., it will
+    # be passed two arguments, a []byte of JSON to unmarshal and a pointer to a
+    # value of the given type, and must return an error.  For example, you
+    # might specify
+    #  unmarshaler: github.com/you/yourpkg.UnmarshalMyType
+    # and that function is defined as e.g.:
+    #  func UnmarshalMyType(b []byte, v *MyType) error
+    # 
+    # The default is to use ordinary JSON-unmarshaling.
+    unmarshaler: github.com/you/yourpkg.UnmarshalDateTime
 
   # To bind an object type:
   MyType:
@@ -124,3 +160,4 @@ bindings:
     # or something, if you want to say, for example, that you have to request
     # certain fields but others are optional.
     expect_exact_fields: "{ id name }"
+    # unmarshaler and marshaler are also valid here, see above for details.

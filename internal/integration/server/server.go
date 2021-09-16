@@ -15,7 +15,8 @@ func intptr(v int) *int       { return &v }
 var users = []*User{
 	{
 		ID: "1", Name: "Yours Truly", LuckyNumber: intptr(17),
-		Hair: &Hair{Color: strptr("Black")},
+		Birthdate: strptr("2025-01-01"),
+		Hair:      &Hair{Color: strptr("Black")},
 	},
 	{ID: "2", Name: "Raven", LuckyNumber: intptr(-1), Hair: nil},
 }
@@ -38,6 +39,18 @@ func userByID(id string) *User {
 		}
 	}
 	return nil
+}
+
+func usersByBirthdates(dates []string) []*User {
+	var retval []*User
+	for _, date := range dates {
+		for _, user := range users {
+			if user.Birthdate != nil && *user.Birthdate == date {
+				retval = append(retval, user)
+			}
+		}
+	}
+	return retval
 }
 
 func beingByID(id string) Being {
@@ -84,6 +97,14 @@ func (r *queryResolver) LotteryWinner(ctx context.Context, number int) (Lucky, e
 		}
 	}
 	return nil, nil
+}
+
+func (r *queryResolver) UsersBornOn(ctx context.Context, date string) ([]*User, error) {
+	return usersByBirthdates([]string{date}), nil
+}
+
+func (r *queryResolver) UsersBornOnDates(ctx context.Context, dates []string) ([]*User, error) {
+	return usersByBirthdates(dates), nil
 }
 
 func (r *queryResolver) Fail(ctx context.Context) (*bool, error) {

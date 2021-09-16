@@ -61,8 +61,9 @@ type (
 	// goOpaqueType represents a user-defined or builtin type, often used to
 	// represent a GraphQL scalar.  (See Config.Bindings for more context.)
 	goOpaqueType struct {
-		GoRef       string
-		GraphQLName string
+		GoRef                  string
+		GraphQLName            string
+		Marshaler, Unmarshaler string
 	}
 	// goSliceType represents the Go type []Elem, used to represent GraphQL
 	// list types.
@@ -132,6 +133,7 @@ type goStructType struct {
 	IsInput   bool
 	Selection ast.SelectionSet
 	descriptionInfo
+	Generator *generator // for the convenience of the template
 }
 
 type goStructField struct {
@@ -156,10 +158,74 @@ func (field *goStructField) IsEmbedded() bool {
 	return field.GoName == ""
 }
 
+// unmarshaler returns:
+// - the name of the function to use to unmarshal this field
+// - true if this is a fully-qualified name (false if it is a package-local
+//   unqualified name)
+// - true if we need to generate an unmarshaler at all, false if the default
+//   behavior will suffice
+func (field *goStructField) unmarshaler() (qualifiedName string, needsImport bool, needsUnmarshaler bool) {
+	switch typ := field.GoType.Unwrap().(type) {
+	case *goOpaqueType:
+		if typ.Unmarshaler != "" {
+			return typ.Unmarshaler, true, true
+		}
+	case *goInterfaceType:
+		return "__unmarshal" + typ.Reference(), false, true
+	}
+	return "encoding/json.Unmarshal", true, field.IsEmbedded()
+}
+
+// NeedsUnmarshaler returns true if this field needs special handling when
+// unmarshaling, e.g. if it's of interface type, embedded, or has a
+// user-specified custom unmarshaler.
+func (field *goStructField) NeedsUnmarshaler() bool {
+	_, _, ok := field.unmarshaler()
+	return ok
+}
+
+// Unmarshaler returns the Go name of the function to use to unmarshal this
+// field (which may be "json.Unmarshal" if there's not a special one).
+func (field *goStructField) Unmarshaler(g *generator) (string, error) {
+	name, needsImport, _ := field.unmarshaler()
+	if needsImport {
+		return g.ref(name)
+	}
+	return name, nil
+}
+
+// marshaler returns:
+// - the fully-qualified name of the function to use to marshal this field
+// - true if we need to generate an marshaler at all, false if the default
+//   behavior will suffice
+func (field *goStructField) marshaler() (qualifiedName string, needsMarshaler bool) {
+	// (there are no interfaces on the input side)
+	opaque, ok := field.GoType.Unwrap().(*goOpaqueType)
+	if ok && opaque.Marshaler != "" {
+		return opaque.Marshaler, true
+	}
+	return "encoding/json.Marshal", field.IsEmbedded()
+}
+
+// NeedsMarshaler returns true if this field needs special handling when
+// marshaling, e.g. if it has a user-specified custom marshaler.
+func (field *goStructField) NeedsMarshaler() bool {
+	_, ok := field.marshaler()
+	return ok
+}
+
+// Marshaler returns the Go name of the function to use to marshal this
+// field (which may be "json.Marshal" if there's not a special one).
+func (field *goStructField) Marshaler(g *generator) (string, error) {
+	name, _ := field.marshaler()
+	// Unlike unmarshaler, we never have a local name, and always need g.ref.
+	return g.ref(name)
+}
+
 func (typ *goStructType) WriteDefinition(w io.Writer, g *generator) error {
 	writeDescription(w, structDescription(typ))
 
-	needUnmarshaler := false
+	needUnmarshaler, needMarshaler := false, false
 	fmt.Fprintf(w, "type %s struct {\n", typ.GoName)
 	for _, field := range typ.Fields {
 		writeDescription(w, field.Description)
@@ -168,24 +234,24 @@ func (typ *goStructType) WriteDefinition(w io.Writer, g *generator) error {
 			jsonTag += ",omitempty"
 		}
 		jsonTag += `"`
-		if field.IsAbstract() {
-			// abstract types are handled in our UnmarshalJSON (see below)
+		if !typ.IsInput && field.NeedsUnmarshaler() {
+			// certain types are handled in our UnmarshalJSON (see below)
 			needUnmarshaler = true
 			jsonTag = `"-"`
 		}
-		if field.IsEmbedded() {
-			// embedded fields also need UnmarshalJSON handling (see below)
-			needUnmarshaler = true
-			fmt.Fprintf(w, "\t%s `json:\"-\"`\n", field.GoType.Unwrap().Reference())
-		} else {
-			fmt.Fprintf(w, "\t%s %s `json:%s`\n",
-				field.GoName, field.GoType.Reference(), jsonTag)
+		if typ.IsInput && field.NeedsMarshaler() {
+			needMarshaler = true
+			jsonTag = `"-"`
 		}
+		// Note for embedded types field.GoName is "", which produces the code
+		// we want!
+		fmt.Fprintf(w, "\t%s %s `json:%s`\n",
+			field.GoName, field.GoType.Reference(), jsonTag)
 	}
 	fmt.Fprintf(w, "}\n")
 
-	// Now, if needed, write the unmarshaler.  We need one if we have any
-	// interface-typed fields, or any embedded fields.
+	// Now, if needed, write the marshaler/unmarshaler.  We need one if we have
+	// any interface-typed fields, or any embedded fields.
 	//
 	// For interface-typed fields, ideally we'd write an UnmarshalJSON method
 	// on the field, but you can't add a method to an interface.  So we write a
@@ -204,13 +270,28 @@ func (typ *goStructType) WriteDefinition(w io.Writer, g *generator) error {
 	// JSON library will only fill one of those (the least-nested one); we want
 	// to fill them all.
 	//
+	// For fields with a custom marshaler or unmarshaler, we do basically the
+	// same thing as interface-typed fields, except the user has defined the
+	// helper.
+	//
+	// Note that in all cases we need only write an unmarshaler if this is an
+	// input type, and a marshaler if it's an output type.
+	//
 	// TODO(benkraft): If/when proposal #5901 is implemented (Go 1.18 at the
 	// earliest), we may be able to do some of this a simpler way.
-	if !needUnmarshaler {
-		return nil
+	if needUnmarshaler {
+		err := g.render("unmarshal.go.tmpl", w, typ)
+		if err != nil {
+			return err
+		}
 	}
-
-	return g.render("unmarshal.go.tmpl", w, typ)
+	if needMarshaler {
+		err := g.render("marshal.go.tmpl", w, typ)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 func (typ *goStructType) Reference() string              { return typ.GoName }
