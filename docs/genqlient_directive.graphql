@@ -54,6 +54,22 @@ directive genqlient(
   # zero value and null (for nullable fields).
   pointer: Boolean
 
+  # If set, this field will use a struct type in Go, even if it's an interface.
+  #
+  # This is useful when you have a query like
+  #  query MyQuery {
+  #    myInterface { myField }
+  #  }
+  # where you are requesting only shared fields of an interface.  By default,
+  # genqlient still generates an interface type, for consistency.  But this
+  # isn't necessary: a struct would do just fine since there are no
+  # type-specific fields.  Setting `struct: true` tells genqlient to do that.
+  #
+  # Note that this is only allowed when there are no fragments in play, such
+  # that all fields are on the interface type.  Note that if you later add a
+  # fragment, you'll have to remove this option, and the types will change.
+  struct: Boolean
+
   # If set, this argument or field will use the given Go type instead of a
   # genqlient-generated type.
   #

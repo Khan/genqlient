@@ -1,0 +1,24 @@
+fragment VideoFields on Video { duration }
+
+# @genqlient(struct: true)
+query StructOption {
+  root {
+    id
+    children {
+      id
+      parent {
+        id
+        children {
+          id
+        }
+        # (it won't apply to this)
+        interfaceChildren: children {
+          id
+          ...VideoFields
+        }
+      }
+    }
+  }
+  # (nor this)
+  user { roles }
+}

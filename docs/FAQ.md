@@ -183,6 +183,28 @@ if novel, ok := resp.Favorite.(*GetBooksFavoriteNovel); ok {
 
 The interface-type's GoDoc will include a list of its implementations, for your convenience.
 
+If you only want to request shared fields of the interface (i.e. no fragments), this may seem like a lot of ceremony.  If you prefer, you can instead add `# @genqlient(struct: true)` to the field, and genqlient will just generate a struct, like it does for GraphQL object types.  For example, given:
+
+```graphql
+query GetBooks {
+  # @genqlient(struct: true)
+  favorite {
+    title
+  }
+}
+```
+
+genqlient will generate just:
+
+```go
+type GetBooksFavoriteBook struct {
+  Title string
+}
+```
+
+Keep in mind that if you later want to add fragments to your selection, you won't be able to use `struct` anymore; when you remove it you may need to update your code to replace `.Title` with `.GetTitle()` and so on.
+
+
 ### … documentation on the output types?
 
 For any GraphQL types or fields with documentation in the GraphQL schema, genqlient automatically includes that documentation in the generated code's GoDoc.  To add additional information to genqlient entrypoints, you can put comments in the GraphQL source:

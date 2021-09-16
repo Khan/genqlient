@@ -175,7 +175,14 @@ func (g *generator) convertDefinition(
 		GraphQLName:        def.Name,
 	}
 
-	switch def.Kind {
+	// The struct option basically means "treat this as if it were an object".
+	// (It only applies if valid; this is important if you said the whole
+	// query should have `struct: true`.)
+	kind := def.Kind
+	if options.GetStruct() && validateStructOption(def, selectionSet, pos) == nil {
+		kind = ast.Object
+	}
+	switch kind {
 	case ast.Object:
 		name := makeTypeName(namePrefix, def.Name)
 
@@ -463,7 +470,7 @@ func (g *generator) convertInlineFragment(
 	containingTypedef *ast.Definition,
 	queryOptions *genqlientDirective,
 ) ([]*goStructField, error) {
-	// You might think fragmentTypedef would be a fragment.ObjectDefinition, but
+	// You might think fragmentTypedef is just fragment.ObjectDefinition, but
 	// actually that's the type into which the fragment is spread.
 	fragmentTypedef := g.schema.Types[fragment.TypeCondition]
 	if !fragmentMatches(containingTypedef, fragmentTypedef) {
