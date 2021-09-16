@@ -16,6 +16,7 @@ type genqlientDirective struct {
 	Pointer   *bool
 	Struct    *bool
 	Bind      string
+	TypeName  string
 }
 
 func (dir *genqlientDirective) GetOmitempty() bool { return dir.Omitempty != nil && *dir.Omitempty }
@@ -68,6 +69,8 @@ func fromGraphQL(dir *ast.Directive, pos *ast.Position) (*genqlientDirective, er
 			err = setBool(&retval.Struct, arg.Value)
 		case "bind":
 			err = setString(&retval.Bind, arg.Value)
+		case "typename":
+			err = setString(&retval.TypeName, arg.Value)
 		default:
 			return nil, errorf(pos, "unknown argument %v for @genqlient", arg.Name)
 		}
@@ -157,6 +160,10 @@ func validateStructOption(
 	return nil
 }
 
+// merge joins the directive applied to this node (the argument) and the one
+// applied to the entire operation (the receiver) and returns a new
+// directive-object representing the options to apply to this node (where in
+// general we take the node's option, then the operation's, then the default).
 func (dir *genqlientDirective) merge(other *genqlientDirective) *genqlientDirective {
 	retval := *dir
 	if other.Omitempty != nil {
@@ -171,6 +178,10 @@ func (dir *genqlientDirective) merge(other *genqlientDirective) *genqlientDirect
 	if other.Bind != "" {
 		retval.Bind = other.Bind
 	}
+	// For typename, the local directive always wins: when specified on the query
+	// options typename applies to the response-struct, not to all parts of the
+	// query.
+	retval.TypeName = other.TypeName
 	return &retval
 }
 

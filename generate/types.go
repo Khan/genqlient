@@ -9,6 +9,8 @@ import (
 	"fmt"
 	"io"
 	"strings"
+
+	"github.com/vektah/gqlparser/v2/ast"
 )
 
 // goType represents a type for which we'll generate code.
@@ -22,6 +24,16 @@ type goType interface {
 	// Reference returns the Go name of this type, e.g. []*MyStruct, and may be
 	// used to refer to it in Go code.
 	Reference() string
+
+	// GraphQLTypeName returns the name of the GraphQL type to which this Go type
+	// corresponds.
+	GraphQLTypeName() string
+
+	// SelectionSet returns the selection-set of the GraphQL field from which
+	// this type was generated, or nil if none is applicable (for GraphQL
+	// scalar, enum, and input types, as well as any opaque
+	// (non-genqlient-generated) type since those are validated upon creation).
+	SelectionSet() ast.SelectionSet
 
 	// Remove slice/pointer wrappers, and return the underlying (named (or
 	// builtin)) type.  For example, given []*MyStruct, return MyStruct.
@@ -48,7 +60,10 @@ var (
 type (
 	// goOpaqueType represents a user-defined or builtin type, often used to
 	// represent a GraphQL scalar.  (See Config.Bindings for more context.)
-	goOpaqueType struct{ GoRef string }
+	goOpaqueType struct {
+		GoRef       string
+		GraphQLName string
+	}
 	// goSliceType represents the Go type []Elem, used to represent GraphQL
 	// list types.
 	goSliceType struct{ Elem goType }
@@ -67,11 +82,20 @@ func (typ *goOpaqueType) Reference() string  { return typ.GoRef }
 func (typ *goSliceType) Reference() string   { return "[]" + typ.Elem.Reference() }
 func (typ *goPointerType) Reference() string { return "*" + typ.Elem.Reference() }
 
+func (typ *goOpaqueType) SelectionSet() ast.SelectionSet  { return nil }
+func (typ *goSliceType) SelectionSet() ast.SelectionSet   { return typ.Elem.SelectionSet() }
+func (typ *goPointerType) SelectionSet() ast.SelectionSet { return typ.Elem.SelectionSet() }
+
+func (typ *goOpaqueType) GraphQLTypeName() string  { return typ.GraphQLName }
+func (typ *goSliceType) GraphQLTypeName() string   { return typ.Elem.GraphQLTypeName() }
+func (typ *goPointerType) GraphQLTypeName() string { return typ.Elem.GraphQLTypeName() }
+
 // goEnumType represents a Go named-string type used to represent a GraphQL
 // enum.  In this case, we generate both the type (`type T string`) and also a
 // list of consts representing the values.
 type goEnumType struct {
 	GoName      string
+	GraphQLName string
 	Description string
 	Values      []goEnumValue
 }
@@ -96,14 +120,17 @@ func (typ *goEnumType) WriteDefinition(w io.Writer, g *generator) error {
 	return nil
 }
 
-func (typ *goEnumType) Reference() string { return typ.GoName }
+func (typ *goEnumType) Reference() string              { return typ.GoName }
+func (typ *goEnumType) SelectionSet() ast.SelectionSet { return nil }
+func (typ *goEnumType) GraphQLTypeName() string        { return typ.GraphQLName }
 
 // goStructType represents a Go struct type used to represent a GraphQL object
 // or input-object type.
 type goStructType struct {
-	GoName  string
-	Fields  []*goStructField
-	IsInput bool
+	GoName    string
+	Fields    []*goStructField
+	IsInput   bool
+	Selection ast.SelectionSet
 	descriptionInfo
 }
 
@@ -185,7 +212,9 @@ func (typ *goStructType) WriteDefinition(w io.Writer, g *generator) error {
 	return g.execute("unmarshal.go.tmpl", w, typ)
 }
 
-func (typ *goStructType) Reference() string { return typ.GoName }
+func (typ *goStructType) Reference() string              { return typ.GoName }
+func (typ *goStructType) SelectionSet() ast.SelectionSet { return typ.Selection }
+func (typ *goStructType) GraphQLTypeName() string        { return typ.GraphQLName }
 
 // goInterfaceType represents a Go interface type, used to represent a GraphQL
 // interface or union type.
@@ -195,6 +224,7 @@ type goInterfaceType struct {
 	// we'll generate getter methods for each.
 	SharedFields    []*goStructField
 	Implementations []*goStructType
+	Selection       ast.SelectionSet
 	descriptionInfo
 }
 
@@ -272,7 +302,9 @@ func (typ *goInterfaceType) WriteDefinition(w io.Writer, g *generator) error {
 	return g.execute("unmarshal_helper.go.tmpl", w, typ)
 }
 
-func (typ *goInterfaceType) Reference() string { return typ.GoName }
+func (typ *goInterfaceType) Reference() string              { return typ.GoName }
+func (typ *goInterfaceType) SelectionSet() ast.SelectionSet { return typ.Selection }
+func (typ *goInterfaceType) GraphQLTypeName() string        { return typ.GraphQLName }
 
 func (typ *goOpaqueType) Unwrap() goType    { return typ }
 func (typ *goSliceType) Unwrap() goType     { return typ.Elem.Unwrap() }

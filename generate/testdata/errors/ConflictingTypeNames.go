@@ -1,0 +1,10 @@
+package errors
+
+_ = `# @genqlient
+query ConflictingTypeNames {
+  # @genqlient(typename: "T")
+  f { g }
+  # @genqlient(typename: "T")
+  otherF: f { g h }
+}
+`

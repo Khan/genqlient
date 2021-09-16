@@ -15,6 +15,61 @@ import (
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
+// getType returns the existing type in g.typeMap with the given name, if any,
+// and an error if such type is incompatible with this one.
+//
+// This is useful as an early-out and a safety-check when generating types; if
+// the type has already been generated we can skip generating it again.  (This
+// is necessary to handle recursive input types, and an optimization in other
+// cases.)
+func (g *generator) getType(
+	goName, graphQLName string,
+	selectionSet ast.SelectionSet,
+	pos *ast.Position,
+) (goType, error) {
+	typ, ok := g.typeMap[goName]
+	if !ok {
+		return nil, nil
+	}
+
+	if typ.GraphQLTypeName() != graphQLName {
+		return typ, errorf(
+			pos, "conflicting definition for %s; this can indicate either "+
+				"a genqlient internal error, a conflict between user-specified "+
+				"type-names, or some very tricksy GraphQL field/type names: "+
+				"expected GraphQL type %s, got %s",
+			goName, typ.GraphQLTypeName(), graphQLName)
+	}
+
+	expectedSelectionSet := typ.SelectionSet()
+	if err := selectionsMatch(pos, selectionSet, expectedSelectionSet); err != nil {
+		return typ, errorf(
+			pos, "conflicting definition for %s; this can indicate either "+
+				"a genqlient internal error, a conflict between user-specified "+
+				"type-names, or some very tricksy GraphQL field/type names: %v",
+			goName, err)
+	}
+
+	return typ, nil
+}
+
+// addType inserts the type into g.typeMap, checking for conflicts.
+//
+// The conflict-checking is as described in getType.  Note we have to do it
+// here again, even if the caller has already called getType, because the
+// caller in between may have generated new types, which potentially creates
+// new conflicts.
+//
+// Returns an already-existing type if found, and otherwise the given type.
+func (g *generator) addType(typ goType, goName string, pos *ast.Position) (goType, error) {
+	otherTyp, err := g.getType(goName, typ.GraphQLTypeName(), typ.SelectionSet(), pos)
+	if otherTyp != nil || err != nil {
+		return otherTyp, err
+	}
+	g.typeMap[goName] = typ
+	return typ, nil
+}
+
 // baseTypeForOperation returns the definition of the GraphQL type to which the
 // root of the operation corresponds, e.g. the "Query" or "Mutation" type.
 func (g *generator) baseTypeForOperation(operation ast.Operation) (*ast.Definition, error) {
@@ -40,9 +95,10 @@ func (g *generator) convertOperation(
 	queryOptions *genqlientDirective,
 ) (goType, error) {
 	name := operation.Name + "Response"
-
-	if def, ok := g.typeMap[name]; ok {
-		return nil, errorf(operation.Position, "%s defined twice:\n%s", name, def)
+	namePrefix := newPrefixList(operation.Name)
+	if queryOptions.TypeName != "" {
+		name = queryOptions.TypeName
+		namePrefix = newPrefixList(queryOptions.TypeName)
 	}
 
 	baseType, err := g.baseTypeForOperation(operation.Operation)
@@ -54,7 +110,7 @@ func (g *generator) convertOperation(
 	// thing, because we want to do a few things differently, and because we
 	// know we have an object type, so we can include only that case.
 	fields, err := g.convertSelectionSet(
-		newPrefixList(operation.Name), operation.SelectionSet, baseType, queryOptions)
+		namePrefix, operation.SelectionSet, baseType, queryOptions)
 	if err != nil {
 		return nil, err
 	}
@@ -67,11 +123,11 @@ func (g *generator) convertOperation(
 			GraphQLName: baseType.Name,
 			// omit the GraphQL description for baseType; it's uninteresting.
 		},
-		Fields: fields,
+		Fields:    fields,
+		Selection: operation.SelectionSet,
 	}
-	g.typeMap[name] = goType
 
-	return goType, nil
+	return g.addType(goType, goType.GoName, operation.Position)
 }
 
 var builtinTypes = map[string]string{
@@ -110,7 +166,7 @@ func (g *generator) convertType(
 	localBinding := options.Bind
 	if localBinding != "" && localBinding != "-" {
 		goRef, err := g.addRef(localBinding)
-		return &goOpaqueType{goRef}, err
+		return &goOpaqueType{goRef, typ.Name()}, err
 	}
 
 	if typ.Elem != nil {
@@ -162,11 +218,46 @@ func (g *generator) convertDefinition(
 			}
 		}
 		goRef, err := g.addRef(globalBinding.Type)
-		return &goOpaqueType{goRef}, err
+		return &goOpaqueType{goRef, def.Name}, err
 	}
 	goBuiltinName, ok := builtinTypes[def.Name]
 	if ok {
-		return &goOpaqueType{goBuiltinName}, nil
+		return &goOpaqueType{goBuiltinName, def.Name}, nil
+	}
+
+	// Determine the name to use for this type.
+	var name string
+	if options.TypeName != "" {
+		// If the user specified a name, use it!
+		name = options.TypeName
+		if namePrefix.head == name && namePrefix.tail == nil {
+			// Special case: if this name is also the only component of the
+			// name-prefix, append the type-name anyway.  This happens when you
+			// assign a type name to an interface type, and we are generating
+			// one of its implementations.
+			name = makeLongTypeName(namePrefix, def.Name)
+		}
+		// (But the prefix is shared.)
+		namePrefix = newPrefixList(options.TypeName)
+	} else if def.Kind == ast.InputObject || def.Kind == ast.Enum {
+		// If we're an input-object or enum, there is only one type we will
+		// ever possibly generate for this type, so we don't need any of the
+		// qualifiers.  This is especially helpful because the caller is very
+		// likely to need to reference these types in their code.
+		name = upperFirst(def.Name)
+		// (namePrefix is ignored in this case.)
+	} else {
+		// Else, construct a name using the usual algorithm (see names.go).
+		name = makeTypeName(namePrefix, def.Name)
+	}
+
+	// If we already generated the type, we can skip it as long as it matches
+	// (and must fail if it doesn't).  (This can happen for input/enum types,
+	// types of fields of interfaces, when options.TypeName is set, or, of
+	// course, on invalid configuration or internal error.)
+	existing, err := g.getType(name, def.Name, selectionSet, pos)
+	if existing != nil || err != nil {
+		return existing, err
 	}
 
 	desc := descriptionInfo{
@@ -184,8 +275,6 @@ func (g *generator) convertDefinition(
 	}
 	switch kind {
 	case ast.Object:
-		name := makeTypeName(namePrefix, def.Name)
-
 		fields, err := g.convertSelectionSet(
 			namePrefix, selectionSet, def, queryOptions)
 		if err != nil {
@@ -195,25 +284,24 @@ func (g *generator) convertDefinition(
 		goType := &goStructType{
 			GoName:          name,
 			Fields:          fields,
+			Selection:       selectionSet,
 			descriptionInfo: desc,
 		}
-		g.typeMap[name] = goType
-		return goType, nil
+		return g.addType(goType, goType.GoName, pos)
 
 	case ast.InputObject:
-		// If we're an input-object, there is only one type we will ever
-		// possibly generate for this type, so we don't need any of the
-		// qualifiers.  This is especially helpful because the caller is very
-		// likely to need to reference these types in their code.
-		name := upperFirst(def.Name)
-
 		goType := &goStructType{
 			GoName:          name,
 			Fields:          make([]*goStructField, len(def.Fields)),
 			descriptionInfo: desc,
 			IsInput:         true,
 		}
-		g.typeMap[name] = goType
+		// To handle recursive types, we need to add the type to the type-map
+		// *before* converting its fields.
+		_, err := g.addType(goType, goType.GoName, pos)
+		if err != nil {
+			return nil, err
+		}
 
 		for i, field := range def.Fields {
 			goName := upperFirst(field.Name)
@@ -242,8 +330,6 @@ func (g *generator) convertDefinition(
 		return goType, nil
 
 	case ast.Interface, ast.Union:
-		name := makeTypeName(namePrefix, def.Name)
-
 		sharedFields, err := g.convertSelectionSet(
 			namePrefix, selectionSet, def, queryOptions)
 		if err != nil {
@@ -255,9 +341,9 @@ func (g *generator) convertDefinition(
 			GoName:          name,
 			SharedFields:    sharedFields,
 			Implementations: make([]*goStructType, len(implementationTypes)),
+			Selection:       selectionSet,
 			descriptionInfo: desc,
 		}
-		g.typeMap[name] = goType
 
 		for i, implDef := range implementationTypes {
 			// TODO(benkraft): In principle we should skip generating a Go
@@ -279,24 +365,19 @@ func (g *generator) convertDefinition(
 			}
 			goType.Implementations[i] = implStructTyp
 		}
-		return goType, nil
+		return g.addType(goType, goType.GoName, pos)
 
 	case ast.Enum:
-		// Like with InputObject, there's only one type we will ever generate
-		// for an enum.
-		name := upperFirst(def.Name)
-
 		goType := &goEnumType{
 			GoName:      name,
+			GraphQLName: def.Name,
 			Description: def.Description,
 			Values:      make([]goEnumValue, len(def.EnumValues)),
 		}
-		g.typeMap[name] = goType
-
 		for i, val := range def.EnumValues {
 			goType.Values[i] = goEnumValue{Name: val.Name, Description: val.Description}
 		}
-		return goType, nil
+		return g.addType(goType, goType.GoName, pos)
 
 	case ast.Scalar:
 		// (If you had an entry in bindings, we would have returned it above.)
@@ -559,6 +640,7 @@ func (g *generator) convertNamedFragment(fragment *ast.FragmentDefinition) (goTy
 		goType := &goStructType{
 			GoName:          fragment.Name,
 			Fields:          fields,
+			Selection:       fragment.SelectionSet,
 			descriptionInfo: desc,
 		}
 		g.typeMap[fragment.Name] = goType
@@ -569,6 +651,7 @@ func (g *generator) convertNamedFragment(fragment *ast.FragmentDefinition) (goTy
 			GoName:          fragment.Name,
 			SharedFields:    fields,
 			Implementations: make([]*goStructType, len(implementationTypes)),
+			Selection:       fragment.SelectionSet,
 			descriptionInfo: desc,
 		}
 		g.typeMap[fragment.Name] = goType
@@ -586,6 +669,7 @@ func (g *generator) convertNamedFragment(fragment *ast.FragmentDefinition) (goTy
 			implTyp := &goStructType{
 				GoName:          fragment.Name + upperFirst(implDef.Name),
 				Fields:          implFields,
+				Selection:       fragment.SelectionSet,
 				descriptionInfo: implDesc,
 			}
 			goType.Implementations[i] = implTyp

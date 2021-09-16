@@ -131,6 +131,15 @@ type Topic implements Content {
   schoolGrade: String
 }
 
+input RecursiveInput {
+  rec: [RecursiveInput]
+}
+
+type Recursive {
+  id: ID!
+  rec: Recursive
+}
+
 """Query's description is probably ignored by almost all callers."""
 type Query {
   """user looks up a user by some stuff.
@@ -140,7 +149,7 @@ type Query {
   """
   user(query: UserQueryInput): User
 
-  users(query: [UserQueryInput]): User
+  users(query: [UserQueryInput]): [User]
 
   """usersWithRole looks a user up by role."""
   usersWithRole(role: Role!): [User!]!
@@ -153,6 +162,7 @@ type Query {
   getComplexJunk: ComplexJunk
   listOfListsOfLists: [[[String!]!]!]!
   listOfListsOfListsOfContent: [[[Content!]!]!]!
+  recur(input: RecursiveInput!): Recursive
 }
 
 type Mutation {
