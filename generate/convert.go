@@ -163,20 +163,20 @@ func (g *generator) convertArguments(
 		goName := upperFirst(arg.Variable)
 		// note prefix is ignored here (see generator.typeName), as is
 		// selectionSet (for input types we use the whole thing).
-		goType, err := g.convertType(nil, arg.Type, nil, options, queryOptions)
+		goTyp, err := g.convertType(nil, arg.Type, nil, options, queryOptions)
 		if err != nil {
 			return nil, err
 		}
 
 		fields[i] = &goStructField{
 			GoName:      goName,
-			GoType:      goType,
+			GoType:      goTyp,
 			JSONName:    arg.Variable,
 			GraphQLName: arg.Variable,
 			Omitempty:   options.GetOmitempty(),
 		}
 	}
-	goType := &goStructType{
+	goTyp := &goStructType{
 		GoName:    name,
 		Fields:    fields,
 		Selection: nil,
@@ -186,16 +186,16 @@ func (g *generator) convertArguments(
 			GraphQLName: name,
 		},
 	}
-	goTypeAgain, err := g.addType(goType, goType.GoName, operation.Position)
+	goTypAgain, err := g.addType(goTyp, goTyp.GoName, operation.Position)
 	if err != nil {
 		return nil, err
 	}
-	goType, ok := goTypeAgain.(*goStructType)
+	goTyp, ok := goTypAgain.(*goStructType)
 	if !ok {
 		return nil, errorf(
-			operation.Position, "internal error: input type was %T", goTypeAgain)
+			operation.Position, "internal error: input type was %T", goTypAgain)
 	}
-	return goType, nil
+	return goTyp, nil
 }
 
 // convertType decides the Go type we will generate corresponding to a

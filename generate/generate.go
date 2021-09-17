@@ -72,13 +72,6 @@ type exportedOperations struct {
 	Operations []*operation `json:"operations"`
 }
 
-type argument struct {
-	GoName      string
-	GoType      goType
-	GraphQLName string
-	Options     *genqlientDirective
-}
-
 func newGenerator(
 	config *Config,
 	schema *ast.Schema,
