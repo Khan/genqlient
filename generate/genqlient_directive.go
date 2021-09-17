@@ -19,13 +19,19 @@ type genqlientDirective struct {
 	TypeName  string
 }
 
+func newGenqlientDirective(pos *ast.Position) *genqlientDirective {
+	return &genqlientDirective{
+		pos: pos,
+	}
+}
+
 func (dir *genqlientDirective) GetOmitempty() bool { return dir.Omitempty != nil && *dir.Omitempty }
 func (dir *genqlientDirective) GetPointer() bool   { return dir.Pointer != nil && *dir.Pointer }
 func (dir *genqlientDirective) GetStruct() bool    { return dir.Struct != nil && *dir.Struct }
 
-func setBool(optionName string, dst **bool, prevValue *bool, v *ast.Value, pos *ast.Position) error {
-	if prevValue != nil {
-		return errorf(pos, "conflicting directives for %v", optionName)
+func setBool(optionName string, dst **bool, v *ast.Value, pos *ast.Position) error {
+	if *dst != nil {
+		return errorf(pos, "conflicting values for %v", optionName)
 	}
 	ei, err := v.Value(nil) // no vars allowed
 	if err != nil {
@@ -38,9 +44,9 @@ func setBool(optionName string, dst **bool, prevValue *bool, v *ast.Value, pos *
 	return errorf(pos, "expected boolean, got non-boolean value %T(%v)", ei, ei)
 }
 
-func setString(optionName string, dst *string, prevValue string, v *ast.Value, pos *ast.Position) error {
-	if prevValue != "" {
-		return errorf(pos, "conflicting directives for %v", optionName)
+func setString(optionName string, dst *string, v *ast.Value, pos *ast.Position) error {
+	if *dst != "" {
+		return errorf(pos, "conflicting values for %v", optionName)
 	}
 	ei, err := v.Value(nil) // no vars allowed
 	if err != nil {
@@ -53,52 +59,44 @@ func setString(optionName string, dst *string, prevValue string, v *ast.Value, p
 	return errorf(pos, "expected string, got non-string value %T(%v)", ei, ei)
 }
 
-// fromGraphQL converts a parsed genqlient GraphQL directive into the
-// genqlientDirective struct.
+// add adds to this genqlientDirective struct the settings from then given
+// GraphQL directive.
 //
 // If there are multiple genqlient directives are applied to the same node,
 // e.g.
 //	# @genqlient(...)
 //	# @genqlient(...)
-// fromGraphQL will be called several times, with prevDirective set to the
-// result of the previous call.  In this case, conflicts between the options
-// are an error.
-func fromGraphQL(
-	dir *ast.Directive,
-	prevDirective *genqlientDirective,
-	pos *ast.Position,
-) (*genqlientDirective, error) {
-	if dir.Name != "genqlient" {
+// add will be called several times.  In this case, conflicts between the
+// options are an error.
+func (dir *genqlientDirective) add(graphQLDirective *ast.Directive, pos *ast.Position) error {
+	if graphQLDirective.Name != "genqlient" {
 		// Actually we just won't get here; we only get here if the line starts
 		// with "# @genqlient", unless there's some sort of bug.
-		return nil, errorf(pos, "the only valid comment-directive is @genqlient, got %v", dir.Name)
+		return errorf(pos, "the only valid comment-directive is @genqlient, got %v", graphQLDirective.Name)
 	}
 
-	retval := *prevDirective
-	retval.pos = pos
-
 	var err error
-	for _, arg := range dir.Arguments {
+	for _, arg := range graphQLDirective.Arguments {
 		switch arg.Name {
 		// TODO(benkraft): Use reflect and struct tags?
 		case "omitempty":
-			err = setBool("omitempty", &retval.Omitempty, prevDirective.Omitempty, arg.Value, pos)
+			err = setBool("omitempty", &dir.Omitempty, arg.Value, pos)
 		case "pointer":
-			err = setBool("pointer", &retval.Pointer, prevDirective.Pointer, arg.Value, pos)
+			err = setBool("pointer", &dir.Pointer, arg.Value, pos)
 		case "struct":
-			err = setBool("struct", &retval.Struct, prevDirective.Struct, arg.Value, pos)
+			err = setBool("struct", &dir.Struct, arg.Value, pos)
 		case "bind":
-			err = setString("bind", &retval.Bind, prevDirective.Bind, arg.Value, pos)
+			err = setString("bind", &dir.Bind, arg.Value, pos)
 		case "typename":
-			err = setString("typename", &retval.TypeName, prevDirective.TypeName, arg.Value, pos)
+			err = setString("typename", &dir.TypeName, arg.Value, pos)
 		default:
-			return nil, errorf(pos, "unknown argument %v for @genqlient", arg.Name)
+			return errorf(pos, "unknown argument %v for @genqlient", arg.Name)
 		}
 		if err != nil {
-			return nil, err
+			return err
 		}
 	}
-	return &retval, nil
+	return nil
 }
 
 func (dir *genqlientDirective) validate(node interface{}, schema *ast.Schema) error {
@@ -213,7 +211,7 @@ func (g *generator) parsePrecedingComment(
 	node interface{},
 	pos *ast.Position,
 ) (comment string, directive *genqlientDirective, err error) {
-	directive = new(genqlientDirective)
+	directive = newGenqlientDirective(pos)
 	hasDirective := false
 	if pos == nil || pos.Src == nil { // node was added by genqlient itself
 		return "", directive, nil // treated as if there were no comment
@@ -231,7 +229,7 @@ func (g *generator) parsePrecedingComment(
 			if err != nil {
 				return "", nil, err
 			}
-			directive, err = fromGraphQL(graphQLDirective, directive, pos)
+			err = directive.add(graphQLDirective, pos)
 			if err != nil {
 				return "", nil, err
 			}

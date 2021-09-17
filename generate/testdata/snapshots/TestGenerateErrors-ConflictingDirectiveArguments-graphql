@@ -1,0 +1,1 @@
+testdata/errors/ConflictingDirectiveArguments.graphql:2: conflicting values for pointer

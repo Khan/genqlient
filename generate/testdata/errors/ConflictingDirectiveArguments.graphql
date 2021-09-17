@@ -1,0 +1,2 @@
+# @genqlient(pointer: true, pointer: false)
+query ConflictingDirectiveArguments { f }

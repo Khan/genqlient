@@ -370,7 +370,7 @@ func (g *generator) convertDefinition(
 			// There are no field-specific options for inputs (yet, see #14),
 			// but we still need to merge with an empty directive to clear out
 			// any query-options that shouldn't apply here (namely "typename").
-			fieldOptions := queryOptions.merge(new(genqlientDirective))
+			fieldOptions := queryOptions.merge(newGenqlientDirective(pos))
 			// Several of the arguments don't really make sense here:
 			// (note field.Type is necessarily a scalar, input, or enum)
 			// - namePrefix is ignored for input types and enums (see
