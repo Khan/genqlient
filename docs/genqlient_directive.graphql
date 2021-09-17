@@ -30,6 +30,9 @@
 #  }
 # the directive "a" is ignored, "b" and "c" apply to all relevant nodes in the
 # query, "d" applies to arg2 and arg3, and "e" applies to field1 and field2.
+# Except as noted below, directives on nodes take precedence over ones on the
+# entire query (so "d" and "e" take precedence over "b" and "c"), and
+# multiple directives on the same node ("b" and "c") must not conflict.
 directive genqlient(
 
   # If set, this argument will be omitted if it has an empty value, defined
@@ -125,7 +128,9 @@ directive genqlient(
   # down to all child fields (which would cause conflicts).
   typename: String
 
-) on
+# Multiple genqlient directives are allowed in the same location, as long as
+# they don't have conflicting options.
+) repeatable on
   # genqlient directives can go almost anywhere, although some options are only
   # applicable in certain locations as described above.
   | QUERY

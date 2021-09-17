@@ -23,7 +23,10 @@ func (dir *genqlientDirective) GetOmitempty() bool { return dir.Omitempty != nil
 func (dir *genqlientDirective) GetPointer() bool   { return dir.Pointer != nil && *dir.Pointer }
 func (dir *genqlientDirective) GetStruct() bool    { return dir.Struct != nil && *dir.Struct }
 
-func setBool(dst **bool, v *ast.Value) error {
+func setBool(optionName string, dst **bool, prevValue *bool, v *ast.Value) error {
+	if prevValue != nil {
+		return errorf(v.Position, "conflicting directives for %v", optionName)
+	}
 	ei, err := v.Value(nil) // no vars allowed
 	if err != nil {
 		return errorf(v.Position, "invalid boolean value %v: %v", v, err)
@@ -35,7 +38,10 @@ func setBool(dst **bool, v *ast.Value) error {
 	return errorf(v.Position, "expected boolean, got non-boolean value %T(%v)", ei, ei)
 }
 
-func setString(dst *string, v *ast.Value) error {
+func setString(optionName string, dst *string, prevValue string, v *ast.Value) error {
+	if prevValue != "" {
+		return errorf(v.Position, "conflicting directives for %v", optionName)
+	}
 	ei, err := v.Value(nil) // no vars allowed
 	if err != nil {
 		return errorf(v.Position, "invalid string value %v: %v", v, err)
@@ -47,7 +53,21 @@ func setString(dst *string, v *ast.Value) error {
 	return errorf(v.Position, "expected string, got non-string value %T(%v)", ei, ei)
 }
 
-func fromGraphQL(dir *ast.Directive, pos *ast.Position) (*genqlientDirective, error) {
+// fromGraphQL converts a parsed genqlient GraphQL directive into the
+// genqlientDirective struct.
+//
+// If there are multiple genqlient directives are applied to the same node,
+// e.g.
+//	# @genqlient(...)
+//	# @genqlient(...)
+// fromGraphQL will be called several times, with prevDirective set to the
+// result of the previous call.  In this case, conflicts between the options
+// are an error.
+func fromGraphQL(
+	dir *ast.Directive,
+	prevDirective *genqlientDirective,
+	pos *ast.Position,
+) (*genqlientDirective, error) {
 	if dir.Name != "genqlient" {
 		// Actually we just won't get here; we only get here if the line starts
 		// with "# @genqlient", unless there's some sort of bug.
@@ -60,17 +80,17 @@ func fromGraphQL(dir *ast.Directive, pos *ast.Position) (*genqlientDirective, er
 	var err error
 	for _, arg := range dir.Arguments {
 		switch arg.Name {
-		// TODO: reflect and struct tags?
+		// TODO(benkraft): Use reflect and struct tags?
 		case "omitempty":
-			err = setBool(&retval.Omitempty, arg.Value)
+			err = setBool("omitempty", &retval.Omitempty, prevDirective.Omitempty, arg.Value)
 		case "pointer":
-			err = setBool(&retval.Pointer, arg.Value)
+			err = setBool("pointer", &retval.Pointer, prevDirective.Pointer, arg.Value)
 		case "struct":
-			err = setBool(&retval.Struct, arg.Value)
+			err = setBool("struct", &retval.Struct, prevDirective.Struct, arg.Value)
 		case "bind":
-			err = setString(&retval.Bind, arg.Value)
+			err = setString("bind", &retval.Bind, prevDirective.Bind, arg.Value)
 		case "typename":
-			err = setString(&retval.TypeName, arg.Value)
+			err = setString("typename", &retval.TypeName, prevDirective.TypeName, arg.Value)
 		default:
 			return nil, errorf(pos, "unknown argument %v for @genqlient", arg.Name)
 		}
@@ -185,11 +205,16 @@ func (dir *genqlientDirective) merge(other *genqlientDirective) *genqlientDirect
 	return &retval
 }
 
+// parsePrecedingComment looks at the comment right before this node, and
+// returns the genqlient directive applied to it (or an empty one if there is
+// none), the remaining human-readable comment (or "" if there is none), and an
+// error if the directive is invalid.
 func (g *generator) parsePrecedingComment(
 	node interface{},
 	pos *ast.Position,
 ) (comment string, directive *genqlientDirective, err error) {
 	directive = new(genqlientDirective)
+	hasDirective := false
 	if pos == nil || pos.Src == nil { // node was added by genqlient itself
 		return "", directive, nil // treated as if there were no comment
 	}
@@ -200,23 +225,27 @@ func (g *generator) parsePrecedingComment(
 		line := strings.TrimSpace(sourceLines[i-1])
 		trimmed := strings.TrimSpace(strings.TrimPrefix(line, "#"))
 		if strings.HasPrefix(line, "# @genqlient") {
-			graphQLDirective, err := parseDirective(trimmed, pos)
+			hasDirective = true
+			var graphQLDirective *ast.Directive
+			graphQLDirective, err = parseDirective(trimmed, pos)
 			if err != nil {
 				return "", nil, err
 			}
-			genqlientDirective, err := fromGraphQL(graphQLDirective, pos)
+			directive, err = fromGraphQL(graphQLDirective, directive, pos)
 			if err != nil {
 				return "", nil, err
 			}
-			err = genqlientDirective.validate(node, g.schema)
-			if err != nil {
-				return "", nil, err
-			}
-			directive = directive.merge(genqlientDirective)
 		} else if strings.HasPrefix(line, "#") {
 			commentLines = append(commentLines, trimmed)
 		} else {
 			break
+		}
+	}
+
+	if hasDirective { // (else directive is empty)
+		err = directive.validate(node, g.schema)
+		if err != nil {
+			return "", nil, err
 		}
 	}
 
