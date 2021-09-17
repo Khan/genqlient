@@ -74,7 +74,7 @@ func fromGraphQL(
 		return nil, errorf(pos, "the only valid comment-directive is @genqlient, got %v", dir.Name)
 	}
 
-	var retval genqlientDirective
+	retval := *prevDirective
 	retval.pos = pos
 
 	var err error

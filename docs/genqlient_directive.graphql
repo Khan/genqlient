@@ -21,18 +21,25 @@
 #  # @genqlient(n: "c")
 #  query MyQuery(arg1: String,
 #    # @genqlient(n: "d")
-#    arg2: String, arg3: String,
+#    arg2: String, arg3: MyInput,
 #    arg4: String,
 #  ) {
 #    # @genqlient(n: "e")
 #    field1, field2
-#    field3
+#    # @genqlient(n: "f")
+#    field3 {
+#      field4
+#    }
 #  }
 # the directive "a" is ignored, "b" and "c" apply to all relevant nodes in the
-# query, "d" applies to arg2 and arg3, and "e" applies to field1 and field2.
+# query, "d" applies to arg2 and arg3, "e" applies to field1 and field2, and
+# "f" applies to field3.
+#
 # Except as noted below, directives on nodes take precedence over ones on the
-# entire query (so "d" and "e" take precedence over "b" and "c"), and
-# multiple directives on the same node ("b" and "c") must not conflict.
+# entire query (so "d", "e", and "f" take precedence over "b" and "c"), and
+# multiple directives on the same node ("b" and "c") must not conflict.  Note
+# that directives on nodes do apply to their "children", so "d" does not apply
+# to the fields of MyInput, and "f" does not apply to field4.
 directive genqlient(
 
   # If set, this argument will be omitted if it has an empty value, defined
