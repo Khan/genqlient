@@ -1,0 +1,3 @@
+# @genqlient(pointer: true)
+# @genqlient(pointer: false)
+query ConflictingDirectives { f }

@@ -23,34 +23,34 @@ func (dir *genqlientDirective) GetOmitempty() bool { return dir.Omitempty != nil
 func (dir *genqlientDirective) GetPointer() bool   { return dir.Pointer != nil && *dir.Pointer }
 func (dir *genqlientDirective) GetStruct() bool    { return dir.Struct != nil && *dir.Struct }
 
-func setBool(optionName string, dst **bool, prevValue *bool, v *ast.Value) error {
+func setBool(optionName string, dst **bool, prevValue *bool, v *ast.Value, pos *ast.Position) error {
 	if prevValue != nil {
-		return errorf(v.Position, "conflicting directives for %v", optionName)
+		return errorf(pos, "conflicting directives for %v", optionName)
 	}
 	ei, err := v.Value(nil) // no vars allowed
 	if err != nil {
-		return errorf(v.Position, "invalid boolean value %v: %v", v, err)
+		return errorf(pos, "invalid boolean value %v: %v", v, err)
 	}
 	if b, ok := ei.(bool); ok {
 		*dst = &b
 		return nil
 	}
-	return errorf(v.Position, "expected boolean, got non-boolean value %T(%v)", ei, ei)
+	return errorf(pos, "expected boolean, got non-boolean value %T(%v)", ei, ei)
 }
 
-func setString(optionName string, dst *string, prevValue string, v *ast.Value) error {
+func setString(optionName string, dst *string, prevValue string, v *ast.Value, pos *ast.Position) error {
 	if prevValue != "" {
-		return errorf(v.Position, "conflicting directives for %v", optionName)
+		return errorf(pos, "conflicting directives for %v", optionName)
 	}
 	ei, err := v.Value(nil) // no vars allowed
 	if err != nil {
-		return errorf(v.Position, "invalid string value %v: %v", v, err)
+		return errorf(pos, "invalid string value %v: %v", v, err)
 	}
 	if b, ok := ei.(string); ok {
 		*dst = b
 		return nil
 	}
-	return errorf(v.Position, "expected string, got non-string value %T(%v)", ei, ei)
+	return errorf(pos, "expected string, got non-string value %T(%v)", ei, ei)
 }
 
 // fromGraphQL converts a parsed genqlient GraphQL directive into the
@@ -82,15 +82,15 @@ func fromGraphQL(
 		switch arg.Name {
 		// TODO(benkraft): Use reflect and struct tags?
 		case "omitempty":
-			err = setBool("omitempty", &retval.Omitempty, prevDirective.Omitempty, arg.Value)
+			err = setBool("omitempty", &retval.Omitempty, prevDirective.Omitempty, arg.Value, pos)
 		case "pointer":
-			err = setBool("pointer", &retval.Pointer, prevDirective.Pointer, arg.Value)
+			err = setBool("pointer", &retval.Pointer, prevDirective.Pointer, arg.Value, pos)
 		case "struct":
-			err = setBool("struct", &retval.Struct, prevDirective.Struct, arg.Value)
+			err = setBool("struct", &retval.Struct, prevDirective.Struct, arg.Value, pos)
 		case "bind":
-			err = setString("bind", &retval.Bind, prevDirective.Bind, arg.Value)
+			err = setString("bind", &retval.Bind, prevDirective.Bind, arg.Value, pos)
 		case "typename":
-			err = setString("typename", &retval.TypeName, prevDirective.TypeName, arg.Value)
+			err = setString("typename", &retval.TypeName, prevDirective.TypeName, arg.Value, pos)
 		default:
 			return nil, errorf(pos, "unknown argument %v for @genqlient", arg.Name)
 		}
