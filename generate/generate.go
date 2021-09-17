@@ -372,7 +372,7 @@ func Generate(config *Config) (map[string][]byte, error) {
 		return nil, err
 	}
 	for _, operation := range g.Operations {
-		err = g.execute("operation.go.tmpl", &bodyBuf, operation)
+		err = g.render("operation.go.tmpl", &bodyBuf, operation)
 		if err != nil {
 			return nil, err
 		}
@@ -395,7 +395,7 @@ func Generate(config *Config) (map[string][]byte, error) {
 
 	// Now really glue it all together, and format.
 	var buf bytes.Buffer
-	err = g.execute("header.go.tmpl", &buf, g)
+	err = g.render("header.go.tmpl", &buf, g)
 	if err != nil {
 		return nil, err
 	}

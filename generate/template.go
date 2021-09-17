@@ -33,8 +33,8 @@ func intRange(n int) []int {
 
 func sub(x, y int) int { return x - y }
 
-// execute executes the given template with the funcs from this generator.
-func (g *generator) execute(tmplRelFilename string, w io.Writer, data interface{}) error {
+// render executes the given template with the funcs from this generator.
+func (g *generator) render(tmplRelFilename string, w io.Writer, data interface{}) error {
 	tmpl := g.templateCache[tmplRelFilename]
 	if tmpl == nil {
 		absFilename := filepath.Join(thisDir, tmplRelFilename)

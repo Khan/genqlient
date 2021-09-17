@@ -202,7 +202,7 @@ func (typ *goStructType) WriteDefinition(w io.Writer, g *generator) error {
 		return nil
 	}
 
-	return g.execute("unmarshal.go.tmpl", w, typ)
+	return g.render("unmarshal.go.tmpl", w, typ)
 }
 
 func (typ *goStructType) Reference() string              { return typ.GoName }
@@ -280,7 +280,7 @@ func (typ *goInterfaceType) WriteDefinition(w io.Writer, g *generator) error {
 
 	// Finally, write the unmarshal-helper, which will be called by struct
 	// fields referencing this type (see goStructType.WriteDefinition).
-	return g.execute("unmarshal_helper.go.tmpl", w, typ)
+	return g.render("unmarshal_helper.go.tmpl", w, typ)
 }
 
 func (typ *goInterfaceType) Reference() string              { return typ.GoName }
