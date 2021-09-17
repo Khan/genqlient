@@ -27,7 +27,7 @@ When releasing a new version:
 
 ### New features:
 
-- The new `bindings.marshaler` and `bindings.unmarshaler` options in `genqlient.yaml` allow binding to a type without using its standard JSON serialization; see the [documentation](docs/genqlient.yaml) for details.
+- The new `bindings.marshaler` and `bindings.unmarshaler` options in `genqlient.yaml` allow binding to a type without using its standard JSON serialization; see the [documentation](genqlient.yaml) for details.
 
 ### Bug fixes:
 
