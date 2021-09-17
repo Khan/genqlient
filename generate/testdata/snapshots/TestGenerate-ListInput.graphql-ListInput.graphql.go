@@ -27,14 +27,18 @@ type ListInputQueryUser struct {
 	Id testutil.ID `json:"id"`
 }
 
+// __ListInputQueryInput is used internally by genqlient
+type __ListInputQueryInput struct {
+	Names []string `json:"names"`
+}
+
 func ListInputQuery(
 	client graphql.Client,
 	names []string,
 ) (*ListInputQueryResponse, error) {
-	variables := map[string]interface{}{
-		"names": names,
+	__input := __ListInputQueryInput{
+		Names: names,
 	}
-
 	var err error
 
 	var retval ListInputQueryResponse
@@ -49,7 +53,7 @@ query ListInputQuery ($names: [String]) {
 }
 `,
 		&retval,
-		variables,
+		&__input,
 	)
 	return &retval, err
 }

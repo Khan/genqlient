@@ -64,7 +64,7 @@ type ComplexityRoot struct {
 		Fail          func(childComplexity int) int
 		LotteryWinner func(childComplexity int, number int) int
 		Me            func(childComplexity int) int
-		User          func(childComplexity int, id string) int
+		User          func(childComplexity int, id *string) int
 	}
 
 	User struct {
@@ -77,7 +77,7 @@ type ComplexityRoot struct {
 
 type QueryResolver interface {
 	Me(ctx context.Context) (*User, error)
-	User(ctx context.Context, id string) (*User, error)
+	User(ctx context.Context, id *string) (*User, error)
 	Being(ctx context.Context, id string) (Being, error)
 	Beings(ctx context.Context, ids []string) ([]Being, error)
 	LotteryWinner(ctx context.Context, number int) (Lucky, error)
@@ -208,7 +208,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.User(childComplexity, args["id"].(string)), true
+		return e.complexity.Query.User(childComplexity, args["id"].(*string)), true
 
 	case "User.hair":
 		if e.complexity.User.Hair == nil {
@@ -290,7 +290,7 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 var sources = []*ast.Source{
 	{Name: "../schema.graphql", Input: `type Query {
   me: User
-  user(id: ID!): User
+  user(id: ID): User
   being(id: ID!): Being
   beings(ids: [ID!]!): [Being]!
   lotteryWinner(number: Int!): Lucky
@@ -400,10 +400,10 @@ func (ec *executionContext) field_Query_lotteryWinner_args(ctx context.Context, 
 func (ec *executionContext) field_Query_user_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
+	var arg0 *string
 	if tmp, ok := rawArgs["id"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		arg0, err = ec.unmarshalOID2ᚖstring(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -743,7 +743,7 @@ func (ec *executionContext) _Query_user(ctx context.Context, field graphql.Colle
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().User(rctx, args["id"].(string))
+		return ec.resolvers.Query().User(rctx, args["id"].(*string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3129,6 +3129,21 @@ func (ec *executionContext) marshalOHair2ᚖgithubᚗcomᚋKhanᚋgenqlientᚋin
 		return graphql.Null
 	}
 	return ec._Hair(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOID2ᚖstring(ctx context.Context, v interface{}) (*string, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalID(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOID2ᚖstring(ctx context.Context, sel ast.SelectionSet, v *string) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return graphql.MarshalID(*v)
 }
 
 func (ec *executionContext) unmarshalOInt2ᚖint(ctx context.Context, v interface{}) (*int, error) {

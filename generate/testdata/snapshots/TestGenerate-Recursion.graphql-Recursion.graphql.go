@@ -36,14 +36,18 @@ type RecursiveInput struct {
 	Rec []RecursiveInput `json:"rec"`
 }
 
+// __RecursionInput is used internally by genqlient
+type __RecursionInput struct {
+	Input RecursiveInput `json:"input"`
+}
+
 func Recursion(
 	client graphql.Client,
 	input RecursiveInput,
 ) (*RecursionResponse, error) {
-	variables := map[string]interface{}{
-		"input": input,
+	__input := __RecursionInput{
+		Input: input,
 	}
-
 	var err error
 
 	var retval RecursionResponse
@@ -64,7 +68,7 @@ query Recursion ($input: RecursiveInput!) {
 }
 `,
 		&retval,
-		variables,
+		&__input,
 	)
 	return &retval, err
 }

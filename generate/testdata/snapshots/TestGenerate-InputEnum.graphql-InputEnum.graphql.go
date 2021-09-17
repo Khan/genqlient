@@ -38,14 +38,18 @@ const (
 	RoleTeacher Role = "TEACHER"
 )
 
+// __InputEnumQueryInput is used internally by genqlient
+type __InputEnumQueryInput struct {
+	Role Role `json:"role"`
+}
+
 func InputEnumQuery(
 	client graphql.Client,
 	role Role,
 ) (*InputEnumQueryResponse, error) {
-	variables := map[string]interface{}{
-		"role": role,
+	__input := __InputEnumQueryInput{
+		Role: role,
 	}
-
 	var err error
 
 	var retval InputEnumQueryResponse
@@ -60,7 +64,7 @@ query InputEnumQuery ($role: Role!) {
 }
 `,
 		&retval,
-		variables,
+		&__input,
 	)
 	return &retval, err
 }

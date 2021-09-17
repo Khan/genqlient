@@ -24,6 +24,11 @@ type SimpleMutationResponse struct {
 	CreateUser SimpleMutationCreateUser `json:"createUser"`
 }
 
+// __SimpleMutationInput is used internally by genqlient
+type __SimpleMutationInput struct {
+	Name string `json:"name"`
+}
+
 // SimpleMutation creates a user.
 //
 // It has a long doc-comment, to test that we handle that correctly.
@@ -32,10 +37,9 @@ func SimpleMutation(
 	client graphql.Client,
 	name string,
 ) (*SimpleMutationResponse, error) {
-	variables := map[string]interface{}{
-		"name": name,
+	__input := __SimpleMutationInput{
+		Name: name,
 	}
-
 	var err error
 
 	var retval SimpleMutationResponse
@@ -51,7 +55,7 @@ mutation SimpleMutation ($name: String!) {
 }
 `,
 		&retval,
-		variables,
+		&__input,
 	)
 	return &retval, err
 }

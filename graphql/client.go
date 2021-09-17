@@ -24,9 +24,10 @@ type Client interface {
 	// context.Background().
 	//
 	// query is the literal string representing the GraphQL query, e.g.
-	// `query myQuery { myField }`.  variables contains the GraphQL variables
-	// to be sent along with the query, or may be nil if there are none.
-	// Typically, GraphQL APIs will accept a JSON payload of the form
+	// `query myQuery { myField }`.  variables contains a JSON-marshalable
+	// value containing the variables to be sent along with the query,
+	// or may be nil if there are none.  Typically, GraphQL APIs wills
+	// accept a JSON payload of the form
 	//	{"query": "query myQuery { ... }", "variables": {...}}`
 	// but MakeRequest may use some other transport, handle extensions, or set
 	// other parameters, if it wishes.
@@ -41,8 +42,7 @@ type Client interface {
 		ctx context.Context,
 		opName string,
 		query string,
-		retval interface{},
-		variables map[string]interface{},
+		input, retval interface{},
 	) error
 }
 
@@ -69,8 +69,8 @@ func NewClient(endpoint string, httpClient *http.Client) Client {
 }
 
 type payload struct {
-	Query     string                 `json:"query"`
-	Variables map[string]interface{} `json:"variables,omitempty"`
+	Query     string      `json:"query"`
+	Variables interface{} `json:"variables,omitempty"`
 	// OpName is only required if there are multiple queries in the document,
 	// but we set it unconditionally, because that's easier.
 	OpName string `json:"operationName"`
@@ -81,7 +81,7 @@ type response struct {
 	Errors gqlerror.List `json:"errors"`
 }
 
-func (c *client) MakeRequest(ctx context.Context, opName string, query string, retval interface{}, variables map[string]interface{}) error {
+func (c *client) MakeRequest(ctx context.Context, opName string, query string, retval interface{}, variables interface{}) error {
 	body, err := json.Marshal(payload{
 		Query:     query,
 		Variables: variables,

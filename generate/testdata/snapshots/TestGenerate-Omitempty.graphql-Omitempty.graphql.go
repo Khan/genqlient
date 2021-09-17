@@ -72,6 +72,15 @@ type UserQueryInput struct {
 	HasPokemon testutil.Pokemon `json:"hasPokemon"`
 }
 
+// __OmitEmptyQueryInput is used internally by genqlient
+type __OmitEmptyQueryInput struct {
+	Query         UserQueryInput   `json:"query,omitempty"`
+	Queries       []UserQueryInput `json:"queries,omitempty"`
+	Dt            time.Time        `json:"dt,omitempty"`
+	Tz            string           `json:"tz,omitempty"`
+	TzNoOmitEmpty string           `json:"tzNoOmitEmpty"`
+}
+
 func OmitEmptyQuery(
 	client graphql.Client,
 	query UserQueryInput,
@@ -80,29 +89,13 @@ func OmitEmptyQuery(
 	tz string,
 	tzNoOmitEmpty string,
 ) (*OmitEmptyQueryResponse, error) {
-	variables := map[string]interface{}{
-		"tzNoOmitEmpty": tzNoOmitEmpty,
+	__input := __OmitEmptyQueryInput{
+		Query:         query,
+		Queries:       queries,
+		Dt:            dt,
+		Tz:            tz,
+		TzNoOmitEmpty: tzNoOmitEmpty,
 	}
-
-	var zero_query UserQueryInput
-	if query != zero_query {
-		variables["query"] = query
-	}
-
-	if len(queries) > 0 {
-		variables["queries"] = queries
-	}
-
-	var zero_dt time.Time
-	if dt != zero_dt {
-		variables["dt"] = dt
-	}
-
-	var zero_tz string
-	if tz != zero_tz {
-		variables["tz"] = tz
-	}
-
 	var err error
 
 	var retval OmitEmptyQueryResponse
@@ -122,7 +115,7 @@ query OmitEmptyQuery ($query: UserQueryInput, $queries: [UserQueryInput], $dt: D
 }
 `,
 		&retval,
-		variables,
+		&__input,
 	)
 	return &retval, err
 }

@@ -1,6 +1,6 @@
 type Query {
   me: User
-  user(id: ID!): User
+  user(id: ID): User
   being(id: ID!): Being
   beings(ids: [ID!]!): [Being]!
   lotteryWinner(number: Int!): Lucky

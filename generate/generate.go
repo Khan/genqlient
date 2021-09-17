@@ -55,8 +55,11 @@ type operation struct {
 	Doc string `json:"-"`
 	// The body of the operation to send.
 	Body string `json:"query"`
-	// The arguments to the operation.
-	Args []argument `json:"-"`
+	// The type of the argument to the operation, which we use both internally
+	// and to construct the arguments.  We do it this way so we can use the
+	// machinery we have for handling (and, specifically, json-marshaling)
+	// types.
+	Input *goStructType `json:"-"`
 	// The type-name for the operation's response type.
 	ResponseName string `json:"-"`
 	// The original filename from which we got this query.
@@ -71,9 +74,8 @@ type exportedOperations struct {
 
 type argument struct {
 	GoName      string
-	GoType      string
+	GoType      goType
 	GraphQLName string
-	IsSlice     bool
 	Options     *genqlientDirective
 }
 
@@ -123,29 +125,6 @@ func (g *generator) WriteTypes(w io.Writer) error {
 		}
 	}
 	return nil
-}
-
-func (g *generator) getArgument(
-	arg *ast.VariableDefinition,
-	operationDirective *genqlientDirective,
-) (argument, error) {
-	_, directive, err := g.parsePrecedingComment(arg, arg.Position)
-	if err != nil {
-		return argument{}, err
-	}
-
-	graphQLName := arg.Variable
-	goTyp, err := g.convertInputType(arg.Type, directive, operationDirective)
-	if err != nil {
-		return argument{}, err
-	}
-	return argument{
-		GraphQLName: graphQLName,
-		GoName:      lowerFirst(graphQLName),
-		GoType:      goTyp.Reference(),
-		IsSlice:     arg.Type.Elem != nil,
-		Options:     operationDirective.merge(directive),
-	}, nil
 }
 
 // usedFragmentNames returns the named-fragments used by (i.e. spread into)
@@ -277,12 +256,9 @@ func (g *generator) addOperation(op *ast.OperationDefinition) error {
 		return err
 	}
 
-	args := make([]argument, len(op.VariableDefinitions))
-	for i, arg := range op.VariableDefinitions {
-		args[i], err = g.getArgument(arg, directive)
-		if err != nil {
-			return err
-		}
+	inputType, err := g.convertArguments(op, directive)
+	if err != nil {
+		return err
 	}
 
 	responseType, err := g.convertOperation(op, directive)
@@ -313,7 +289,7 @@ func (g *generator) addOperation(op *ast.OperationDefinition) error {
 		// rather than in the template so exported operations will match
 		// *exactly* what we send to the server.
 		Body:           "\n" + builder.String(),
-		Args:           args,
+		Input:          inputType,
 		ResponseName:   responseType.Reference(),
 		SourceFilename: sourceFilename,
 		Config:         g.Config, // for the convenience of the template

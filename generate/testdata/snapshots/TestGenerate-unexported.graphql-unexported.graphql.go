@@ -36,6 +36,11 @@ type UserQueryInput struct {
 	HasPokemon testutil.Pokemon `json:"hasPokemon"`
 }
 
+// __unexportedInput is used internally by genqlient
+type __unexportedInput struct {
+	Query UserQueryInput `json:"query"`
+}
+
 // unexportedResponse is returned by unexported on success.
 type unexportedResponse struct {
 	// user looks up a user by some stuff.
@@ -60,10 +65,9 @@ func unexported(
 	client graphql.Client,
 	query UserQueryInput,
 ) (*unexportedResponse, error) {
-	variables := map[string]interface{}{
-		"query": query,
+	__input := __unexportedInput{
+		Query: query,
 	}
-
 	var err error
 
 	var retval unexportedResponse
@@ -78,7 +82,7 @@ query unexported ($query: UserQueryInput) {
 }
 `,
 		&retval,
-		variables,
+		&__input,
 	)
 	return &retval, err
 }

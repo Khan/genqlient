@@ -7,7 +7,7 @@ package generate
 // into code, in types.go.
 //
 // The entrypoints are convertOperation, which builds the response-type for a
-// query, and convertInputType, which builds the argument-types.
+// query, and convertArguments, which builds the argument-types.
 
 import (
 	"fmt"
@@ -139,15 +139,63 @@ var builtinTypes = map[string]string{
 	"ID":      "string",
 }
 
-// convertInputType decides the Go type we will generate corresponding to an
-// argument to a GraphQL operation.
-func (g *generator) convertInputType(
-	typ *ast.Type,
-	options, queryOptions *genqlientDirective,
-) (goType, error) {
-	// note prefix is ignored here (see generator.typeName), as is selectionSet
-	// (for input types we use the whole thing).
-	return g.convertType(nil, typ, nil, options, queryOptions)
+// convertArguments builds the type of the GraphQL arguments to the given
+// operation.
+//
+// This type is not exposed to the user; it's just used internally in the
+// unmarshaler; and it's used as a container
+func (g *generator) convertArguments(
+	operation *ast.OperationDefinition,
+	queryOptions *genqlientDirective,
+) (*goStructType, error) {
+	if len(operation.VariableDefinitions) == 0 {
+		return nil, nil
+	}
+	name := "__" + operation.Name + "Input"
+	fields := make([]*goStructField, len(operation.VariableDefinitions))
+	for i, arg := range operation.VariableDefinitions {
+		_, directive, err := g.parsePrecedingComment(arg, arg.Position)
+		if err != nil {
+			return nil, err
+		}
+		options := queryOptions.merge(directive)
+
+		goName := upperFirst(arg.Variable)
+		// note prefix is ignored here (see generator.typeName), as is
+		// selectionSet (for input types we use the whole thing).
+		goType, err := g.convertType(nil, arg.Type, nil, options, queryOptions)
+		if err != nil {
+			return nil, err
+		}
+
+		fields[i] = &goStructField{
+			GoName:      goName,
+			GoType:      goType,
+			JSONName:    arg.Variable,
+			GraphQLName: arg.Variable,
+			Omitempty:   options.GetOmitempty(),
+		}
+	}
+	goType := &goStructType{
+		GoName:    name,
+		Fields:    fields,
+		Selection: nil,
+		descriptionInfo: descriptionInfo{
+			CommentOverride: fmt.Sprintf("%s is used internally by genqlient", name),
+			// fake name, used by addType
+			GraphQLName: name,
+		},
+	}
+	goTypeAgain, err := g.addType(goType, goType.GoName, operation.Position)
+	if err != nil {
+		return nil, err
+	}
+	goType, ok := goTypeAgain.(*goStructType)
+	if !ok {
+		return nil, errorf(
+			operation.Position, "internal error: input type was %T", goTypeAgain)
+	}
+	return goType, nil
 }
 
 // convertType decides the Go type we will generate corresponding to a
@@ -325,6 +373,8 @@ func (g *generator) convertDefinition(
 				JSONName:    field.Name,
 				GraphQLName: field.Name,
 				Description: field.Description,
+				// TODO(benkraft): set Omitempty once we have a way for the
+				// user to specify it.
 			}
 		}
 		return goType, nil

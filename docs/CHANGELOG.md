@@ -22,10 +22,13 @@ When releasing a new version:
 
 ### Breaking changes:
 
+- The [`graphql.Client`](https://pkg.go.dev/github.com/Khan/genqlient/graphql#Client) interface now accepts `variables interface{}` (containing a JSON-marshalable value) rather than `variables map[string]interface{}`.  Clients implementing the interface themselves will need to change the signature; clients who simply call `graphql.NewClient` are unaffected.
+
 ### New features:
 
 ### Bug fixes:
 
+- The `omitempty` option now works correctly for struct- and map-typed variables, which is to say it never considers them empty (matching `encoding/json`). (#43)
 - Generated type-names now abbreviate across multiple components; for example if the path to a type is `(MyOperation, Outer, Outer, Inner, OuterInner)`, it will again be called `MyOperationOuterInner`.  (This regressed in a pre-v0.1.0 refactor.) (#109)
 
 ## v0.1.0
