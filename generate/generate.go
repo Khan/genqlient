@@ -7,8 +7,8 @@ package generate
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"go/format"
+	"io"
 	"sort"
 	"strings"
 	"text/template"
@@ -25,12 +25,15 @@ type generator struct {
 	// The config for which we are generating code.
 	Config *Config
 	// The list of operations for which to generate code.
-	Operations []operation
+	Operations []*operation
 	// The types needed for these operations.
 	typeMap map[string]goType
 	// Imports needed for these operations, path -> alias and alias -> true
 	imports     map[string]string
 	usedAliases map[string]bool
+	// True if we've already written out the imports (in which case they can't
+	// be modified).
+	importsLocked bool
 	// Cache of loaded templates.
 	templateCache map[string]*template.Template
 	// Schema we are generating code against
@@ -58,10 +61,12 @@ type operation struct {
 	ResponseName string `json:"-"`
 	// The original filename from which we got this query.
 	SourceFilename string `json:"sourceLocation"`
+	// The config within which we are generating code.
+	Config *Config `json:"-"`
 }
 
 type exportedOperations struct {
-	Operations []operation `json:"operations"`
+	Operations []*operation `json:"operations"`
 }
 
 type argument struct {
@@ -76,7 +81,7 @@ func newGenerator(
 	config *Config,
 	schema *ast.Schema,
 	fragments ast.FragmentDefinitionList,
-) (*generator, error) {
+) *generator {
 	g := generator{
 		Config:        config,
 		typeMap:       map[string]goType{},
@@ -91,29 +96,10 @@ func newGenerator(
 		g.fragments[fragment.Name] = fragment
 	}
 
-	_, err := g.addRef("github.com/Khan/genqlient/graphql.Client")
-	if err != nil {
-		return nil, err
-	}
-
-	if g.Config.ClientGetter != "" {
-		_, err := g.addRef(g.Config.ClientGetter)
-		if err != nil {
-			return nil, fmt.Errorf("invalid client_getter: %w", err)
-		}
-	}
-
-	if g.Config.ContextType != "-" {
-		_, err := g.addRef(g.Config.ContextType)
-		if err != nil {
-			return nil, fmt.Errorf("invalid context_type: %w", err)
-		}
-	}
-
-	return &g, nil
+	return &g
 }
 
-func (g *generator) Types() (string, error) {
+func (g *generator) WriteTypes(w io.Writer) error {
 	names := make([]string, 0, len(g.typeMap))
 	for name := range g.typeMap {
 		names = append(names, name)
@@ -124,17 +110,19 @@ func (g *generator) Types() (string, error) {
 	// vaguely aligned to the structure of the queries.
 	sort.Strings(names)
 
-	defs := make([]string, 0, len(g.typeMap))
-	var builder strings.Builder
 	for _, name := range names {
-		builder.Reset()
-		err := g.typeMap[name].WriteDefinition(&builder, g)
+		err := g.typeMap[name].WriteDefinition(w, g)
 		if err != nil {
-			return "", err
+			return err
 		}
-		defs = append(defs, builder.String())
+		// Make sure we have blank lines between types (and between the last
+		// type and the first operation)
+		_, err = io.WriteString(w, "\n\n")
+		if err != nil {
+			return err
+		}
 	}
-	return strings.Join(defs, "\n\n"), nil
+	return nil
 }
 
 func (g *generator) getArgument(
@@ -317,15 +305,18 @@ func (g *generator) addOperation(op *ast.OperationDefinition) error {
 		sourceFilename = sourceFilename[:i]
 	}
 
-	g.Operations = append(g.Operations, operation{
+	g.Operations = append(g.Operations, &operation{
 		Type: op.Operation,
 		Name: op.Name,
 		Doc:  docComment,
-		// The newline just makes it format a little nicer.
+		// The newline just makes it format a little nicer.  We add it here
+		// rather than in the template so exported operations will match
+		// *exactly* what we send to the server.
 		Body:           "\n" + builder.String(),
 		Args:           args,
 		ResponseName:   responseType.Reference(),
 		SourceFilename: sourceFilename,
+		Config:         g.Config, // for the convenience of the template
 	})
 
 	return nil
@@ -362,24 +353,55 @@ func Generate(config *Config) (map[string][]byte, error) {
 
 	// Step 2: For each operation and fragment, convert it into data structures
 	// representing Go types (defined in types.go).  The bulk of this logic is
-	// in convert.go.
-	g, err := newGenerator(config, schema, document.Fragments)
-	if err != nil {
-		return nil, err
-	}
+	// in convert.go, and it additionally updates g.typeMap to include all the
+	// types it needs.
+	g := newGenerator(config, schema, document.Fragments)
 	for _, op := range document.Operations {
 		if err = g.addOperation(op); err != nil {
 			return nil, err
 		}
 	}
 
-	// Step 3: Glue it all together!  Most of this is done inline in the
-	// template, but the call to g.Types() in the template calls out to
-	// types.go to actually generate the code for each type.
-	var buf bytes.Buffer
-	err = g.execute("operation.go.tmpl", &buf, g)
+	// Step 3: Glue it all together!
+	//
+	// First, write the types (from g.typeMap) and operations to a temporary
+	// buffer, since they affect what imports we'll put in the header.
+	var bodyBuf bytes.Buffer
+	err = g.WriteTypes(&bodyBuf)
 	if err != nil {
-		return nil, errorf(nil, "could not render template: %v", err)
+		return nil, err
+	}
+	for _, operation := range g.Operations {
+		err = g.render("operation.go.tmpl", &bodyBuf, operation)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	// The header also needs to reference some context types, which it does
+	// after it writes the imports, so we need to preregister those imports.
+	if g.Config.ContextType != "-" {
+		_, err = g.ref("context.Context")
+		if err != nil {
+			return nil, err
+		}
+		if g.Config.ContextType != "context.Context" {
+			_, err = g.ref(g.Config.ContextType)
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
+
+	// Now really glue it all together, and format.
+	var buf bytes.Buffer
+	err = g.render("header.go.tmpl", &buf, g)
+	if err != nil {
+		return nil, err
+	}
+	_, err = io.Copy(&buf, &bodyBuf)
+	if err != nil {
+		return nil, err
 	}
 
 	unformatted := buf.Bytes()

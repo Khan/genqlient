@@ -93,6 +93,16 @@ bindings:
     #  time.Time
     #  map[string]interface{}
     #  github.com/you/yourpkg/subpkg.MyType
+    # Specifically, this can be any of the following expressions:
+    # - any named type (qualified by the full package path)
+    # - any predeclared basic type (string, int, etc.)
+    # - interface{}
+    # - for any allowed type T, *T, []T, [N]T, and map[string]T
+    # but can't be, for example:
+    # - an inline (unnamed) struct or interface type
+    # - a map whose key-type is not string
+    # - a nonstandard way of spelling those, (interface {/* hi */},
+    #   map[  string      ]T)
     type: time.Time
 
   # To bind an object type:

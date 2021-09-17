@@ -165,7 +165,7 @@ func (g *generator) convertType(
 	// bind GraphQL named types, at least for now.
 	localBinding := options.Bind
 	if localBinding != "" && localBinding != "-" {
-		goRef, err := g.addRef(localBinding)
+		goRef, err := g.ref(localBinding)
 		return &goOpaqueType{goRef, typ.Name()}, err
 	}
 
@@ -217,7 +217,7 @@ func (g *generator) convertDefinition(
 				return nil, err
 			}
 		}
-		goRef, err := g.addRef(globalBinding.Type)
+		goRef, err := g.ref(globalBinding.Type)
 		return &goOpaqueType{goRef, def.Name}, err
 	}
 	goBuiltinName, ok := builtinTypes[def.Name]
