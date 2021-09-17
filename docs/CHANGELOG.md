@@ -22,10 +22,13 @@ When releasing a new version:
 
 ### Breaking changes:
 
+- Previously, `# @genqlient` directives applied to entire operations applied inconsistently to fields of input types used by those operations.  Specifically, `pointer: true`, when applied to the operation, would affect all input-field arguments, but `omitempty: true` would not.  Now, all options apply to fields of input types; this is a behavior change in the case of `omitempty`.
+
 ### New features:
 
 - genqlient's types are now safe to JSON-marshal, which can be useful for putting them in a cache, for example.  See the [docs](FAQ.md#-let-me-json-marshal-my-response-objects) for details.
 - The new `flatten` option in the `# @genqlient` directive allows for a simpler form of type-sharing using fragment spreads.  See the [docs](FAQ.md#-shared-types-between-different-parts-of-the-query) for details.
+- The new `for` option in the `# @genqlient` directive allows applying options to a particular field anywhere it appears in the query.  This is especially useful for fields of input types, for which there is otherwise no way to specify options; see the [documentation on handling nullable fields](FAQ.md#-nullable-fields) for an example, and the [`# @genqlient` directive reference](genqlient_directive.graphql) for the full details.
 
 ### Bug fixes:
 

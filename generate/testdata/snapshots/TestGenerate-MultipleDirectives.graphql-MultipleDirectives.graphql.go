@@ -17,13 +17,13 @@ import (
 // Or maybe ideally it wouldn't.
 // Really I'm just talking to make this documentation longer.
 type MyInput struct {
-	Email *string `json:"email"`
-	Name  *string `json:"name"`
+	Email *string `json:"email,omitempty"`
+	Name  *string `json:"name,omitempty"`
 	// id looks the user up by ID.  It's a great way to look up users.
-	Id         *testutil.ID      `json:"id"`
-	Role       *Role             `json:"role"`
-	Names      []*string         `json:"names"`
-	HasPokemon *testutil.Pokemon `json:"hasPokemon"`
+	Id         *testutil.ID      `json:"id,omitempty"`
+	Role       *Role             `json:"role,omitempty"`
+	Names      []*string         `json:"names,omitempty"`
+	HasPokemon *testutil.Pokemon `json:"hasPokemon,omitempty"`
 	Birthdate  *time.Time        `json:"-"`
 }
 
@@ -163,13 +163,13 @@ const (
 // Or maybe ideally it wouldn't.
 // Really I'm just talking to make this documentation longer.
 type UserQueryInput struct {
-	Email *string `json:"email"`
-	Name  *string `json:"name"`
+	Email *string `json:"email,omitempty"`
+	Name  *string `json:"name,omitempty"`
 	// id looks the user up by ID.  It's a great way to look up users.
-	Id         *testutil.ID      `json:"id"`
-	Role       *Role             `json:"role"`
-	Names      []*string         `json:"names"`
-	HasPokemon *testutil.Pokemon `json:"hasPokemon"`
+	Id         *testutil.ID      `json:"id,omitempty"`
+	Role       *Role             `json:"role,omitempty"`
+	Names      []*string         `json:"names,omitempty"`
+	HasPokemon *testutil.Pokemon `json:"hasPokemon,omitempty"`
 	Birthdate  *time.Time        `json:"-"`
 }
 
