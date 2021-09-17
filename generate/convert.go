@@ -180,6 +180,7 @@ func (g *generator) convertArguments(
 		GoName:    name,
 		Fields:    fields,
 		Selection: nil,
+		IsInput:   true,
 		descriptionInfo: descriptionInfo{
 			CommentOverride: fmt.Sprintf("%s is used internally by genqlient", name),
 			// fake name, used by addType
