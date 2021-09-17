@@ -203,6 +203,9 @@ func (typ *goStructType) WriteDefinition(w io.Writer, g *generator) error {
 	// select the same field, or several fragments select the same field -- the
 	// JSON library will only fill one of those (the least-nested one); we want
 	// to fill them all.
+	//
+	// TODO(benkraft): If/when proposal #5901 is implemented (Go 1.18 at the
+	// earliest), we may be able to do some of this a simpler way.
 	if !needUnmarshaler {
 		return nil
 	}
