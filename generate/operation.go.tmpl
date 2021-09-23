@@ -6,32 +6,23 @@ func {{.Name}}(
     {{- if not .Config.ClientGetter -}}
     client {{ref "github.com/Khan/genqlient/graphql.Client"}},
     {{end}}
-    {{- range .Args -}}
-    {{.GoName}} {{.GoType}},
+    {{- if .Input -}}
+    {{- range .Input.Fields -}}
+    {{/* the GraphQL name here is the user-specified variable-name */ -}}
+    {{.GraphQLName}} {{.GoType.Reference}},
+    {{end -}}
     {{end -}}
 ) (*{{.ResponseName}}, error) {
-    {{- if .Args -}}
-    variables := map[string]interface{}{
-        {{range .Args -}}
-        {{if not .Options.GetOmitempty -}}
-        "{{.GraphQLName}}": {{.GoName}},
+    {{- if .Input -}}
+    {{/* We need to avoid conflicting with any of the function's argument names
+         which are derived from the GraphQL argument names; notably `input` is
+         a common one.  So we use a name that's not legal in GraphQL, namely
+         one starting with a double-underscore. */ -}}
+    __input := {{.Input.GoName}}{
+        {{range .Input.Fields -}}
+        {{.GoName}}: {{.GraphQLName}},
         {{end -}}
-        {{end}}
     }
-    {{range .Args -}}
-    {{if .Options.GetOmitempty -}}
-    {{if .IsSlice -}}
-    if len({{.GoName}}) > 0 {
-    {{else -}}
-    {{/* zero_{{.GoType}} would be a better name, but {{.GoType}} would require
-         munging since it might be, say, `time.Time`. */}}
-    var zero_{{.GoName}} {{.GoType}}
-    if {{.GoName}} != zero_{{.GoName}} {
-    {{end -}}
-        variables["{{.GraphQLName}}"] = {{.GoName}}
-    }
-    {{end}}
-    {{end}}
     {{end -}}
 
     var err error
@@ -48,7 +39,7 @@ func {{.Name}}(
         "{{.Name}}",
         `{{.Body}}`,
         &retval,
-        {{if .Args}}variables{{else}}nil{{end}},
+        {{if .Input}}&__input{{else}}nil{{end}},
     )
     return &retval, err
 }

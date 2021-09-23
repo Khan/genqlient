@@ -108,9 +108,6 @@ func TestGenerate(t *testing.T) {
 			t.Run("Build", func(t *testing.T) {
 				if testing.Short() {
 					t.Skip("skipping build due to -short")
-				} else if sourceFilename == "Omitempty.graphql" {
-					t.Skip("TODO: enable after fixing " +
-						"https://github.com/Khan/genqlient/issues/43")
 				}
 
 				err := buildGoFile(sourceFilename, generated[goFilename])

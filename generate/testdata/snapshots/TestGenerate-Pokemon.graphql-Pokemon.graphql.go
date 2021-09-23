@@ -37,14 +37,18 @@ type GetPokemonSiblingsUserGenqlientPokemon struct {
 	Level   int    `json:"level"`
 }
 
+// __GetPokemonSiblingsInput is used internally by genqlient
+type __GetPokemonSiblingsInput struct {
+	Input testutil.Pokemon `json:"input"`
+}
+
 func GetPokemonSiblings(
 	client graphql.Client,
 	input testutil.Pokemon,
 ) (*GetPokemonSiblingsResponse, error) {
-	variables := map[string]interface{}{
-		"input": input,
+	__input := __GetPokemonSiblingsInput{
+		Input: input,
 	}
-
 	var err error
 
 	var retval GetPokemonSiblingsResponse
@@ -69,7 +73,7 @@ query GetPokemonSiblings ($input: PokemonInput!) {
 }
 `,
 		&retval,
-		variables,
+		&__input,
 	)
 	return &retval, err
 }

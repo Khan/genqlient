@@ -27,14 +27,18 @@ type SimpleInputQueryUser struct {
 	Id testutil.ID `json:"id"`
 }
 
+// __SimpleInputQueryInput is used internally by genqlient
+type __SimpleInputQueryInput struct {
+	Name string `json:"name"`
+}
+
 func SimpleInputQuery(
 	client graphql.Client,
 	name string,
 ) (*SimpleInputQueryResponse, error) {
-	variables := map[string]interface{}{
-		"name": name,
+	__input := __SimpleInputQueryInput{
+		Name: name,
 	}
-
 	var err error
 
 	var retval SimpleInputQueryResponse
@@ -49,7 +53,7 @@ query SimpleInputQuery ($name: String!) {
 }
 `,
 		&retval,
-		variables,
+		&__input,
 	)
 	return &retval, err
 }

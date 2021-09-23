@@ -32,8 +32,9 @@
 # query, "d" applies to arg2 and arg3, and "e" applies to field1 and field2.
 directive genqlient(
 
-  # If set, this argument will be omitted if it's equal to its Go zero
-  # value, or is an empty slice.
+  # If set, this argument will be omitted if it has an empty value, defined
+  # (the same as in encoding/json) as false, 0, a nil pointer, a nil interface
+  # value, and any empty array, slice, map, or string.
   #
   # For example, given the following query:
   #  # @genqlient(omitempty: true)

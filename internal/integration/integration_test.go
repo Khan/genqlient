@@ -89,6 +89,33 @@ func TestVariables(t *testing.T) {
 	assert.Zero(t, resp.User)
 }
 
+func TestOmitempty(t *testing.T) {
+	_ = `# @genqlient(omitempty: true)
+	query queryWithOmitempty($id: ID) {
+		user(id: $id) { id name luckyNumber }
+	}`
+
+	ctx := context.Background()
+	server := server.RunServer()
+	defer server.Close()
+	client := graphql.NewClient(server.URL, http.DefaultClient)
+
+	resp, err := queryWithOmitempty(ctx, client, "2")
+	require.NoError(t, err)
+
+	assert.Equal(t, "2", resp.User.Id)
+	assert.Equal(t, "Raven", resp.User.Name)
+	assert.Equal(t, -1, resp.User.LuckyNumber)
+
+	// should return default user, not the user with ID ""
+	resp, err = queryWithOmitempty(ctx, client, "")
+	require.NoError(t, err)
+
+	assert.Equal(t, "1", resp.User.Id)
+	assert.Equal(t, "Yours Truly", resp.User.Name)
+	assert.Equal(t, 17, resp.User.LuckyNumber)
+}
+
 func TestInterfaceNoFragments(t *testing.T) {
 	_ = `# @genqlient
 	query queryWithInterfaceNoFragments($id: ID!) {

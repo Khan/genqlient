@@ -266,6 +266,41 @@ func (v *UserFields) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+// __queryWithFragmentsInput is used internally by genqlient
+type __queryWithFragmentsInput struct {
+	Ids []string `json:"ids"`
+}
+
+// __queryWithInterfaceListFieldInput is used internally by genqlient
+type __queryWithInterfaceListFieldInput struct {
+	Ids []string `json:"ids"`
+}
+
+// __queryWithInterfaceListPointerFieldInput is used internally by genqlient
+type __queryWithInterfaceListPointerFieldInput struct {
+	Ids []string `json:"ids"`
+}
+
+// __queryWithInterfaceNoFragmentsInput is used internally by genqlient
+type __queryWithInterfaceNoFragmentsInput struct {
+	Id string `json:"id"`
+}
+
+// __queryWithNamedFragmentsInput is used internally by genqlient
+type __queryWithNamedFragmentsInput struct {
+	Ids []string `json:"ids"`
+}
+
+// __queryWithOmitemptyInput is used internally by genqlient
+type __queryWithOmitemptyInput struct {
+	Id string `json:"id,omitempty"`
+}
+
+// __queryWithVariablesInput is used internally by genqlient
+type __queryWithVariablesInput struct {
+	Id string `json:"id"`
+}
+
 // failingQueryMeUser includes the requested fields of the GraphQL type User.
 type failingQueryMeUser struct {
 	Id string `json:"id"`
@@ -1036,6 +1071,18 @@ func (v *queryWithNamedFragmentsResponse) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+// queryWithOmitemptyResponse is returned by queryWithOmitempty on success.
+type queryWithOmitemptyResponse struct {
+	User queryWithOmitemptyUser `json:"user"`
+}
+
+// queryWithOmitemptyUser includes the requested fields of the GraphQL type User.
+type queryWithOmitemptyUser struct {
+	Id          string `json:"id"`
+	Name        string `json:"name"`
+	LuckyNumber int    `json:"luckyNumber"`
+}
+
 // queryWithVariablesResponse is returned by queryWithVariables on success.
 type queryWithVariablesResponse struct {
 	User queryWithVariablesUser `json:"user"`
@@ -1114,10 +1161,9 @@ func queryWithVariables(
 	client graphql.Client,
 	id string,
 ) (*queryWithVariablesResponse, error) {
-	variables := map[string]interface{}{
-		"id": id,
+	__input := __queryWithVariablesInput{
+		Id: id,
 	}
-
 	var err error
 
 	var retval queryWithVariablesResponse
@@ -1134,7 +1180,36 @@ query queryWithVariables ($id: ID!) {
 }
 `,
 		&retval,
-		variables,
+		&__input,
+	)
+	return &retval, err
+}
+
+func queryWithOmitempty(
+	ctx context.Context,
+	client graphql.Client,
+	id string,
+) (*queryWithOmitemptyResponse, error) {
+	__input := __queryWithOmitemptyInput{
+		Id: id,
+	}
+	var err error
+
+	var retval queryWithOmitemptyResponse
+	err = client.MakeRequest(
+		ctx,
+		"queryWithOmitempty",
+		`
+query queryWithOmitempty ($id: ID) {
+	user(id: $id) {
+		id
+		name
+		luckyNumber
+	}
+}
+`,
+		&retval,
+		&__input,
 	)
 	return &retval, err
 }
@@ -1144,10 +1219,9 @@ func queryWithInterfaceNoFragments(
 	client graphql.Client,
 	id string,
 ) (*queryWithInterfaceNoFragmentsResponse, error) {
-	variables := map[string]interface{}{
-		"id": id,
+	__input := __queryWithInterfaceNoFragmentsInput{
+		Id: id,
 	}
-
 	var err error
 
 	var retval queryWithInterfaceNoFragmentsResponse
@@ -1168,7 +1242,7 @@ query queryWithInterfaceNoFragments ($id: ID!) {
 }
 `,
 		&retval,
-		variables,
+		&__input,
 	)
 	return &retval, err
 }
@@ -1178,10 +1252,9 @@ func queryWithInterfaceListField(
 	client graphql.Client,
 	ids []string,
 ) (*queryWithInterfaceListFieldResponse, error) {
-	variables := map[string]interface{}{
-		"ids": ids,
+	__input := __queryWithInterfaceListFieldInput{
+		Ids: ids,
 	}
-
 	var err error
 
 	var retval queryWithInterfaceListFieldResponse
@@ -1198,7 +1271,7 @@ query queryWithInterfaceListField ($ids: [ID!]!) {
 }
 `,
 		&retval,
-		variables,
+		&__input,
 	)
 	return &retval, err
 }
@@ -1208,10 +1281,9 @@ func queryWithInterfaceListPointerField(
 	client graphql.Client,
 	ids []string,
 ) (*queryWithInterfaceListPointerFieldResponse, error) {
-	variables := map[string]interface{}{
-		"ids": ids,
+	__input := __queryWithInterfaceListPointerFieldInput{
+		Ids: ids,
 	}
-
 	var err error
 
 	var retval queryWithInterfaceListPointerFieldResponse
@@ -1228,7 +1300,7 @@ query queryWithInterfaceListPointerField ($ids: [ID!]!) {
 }
 `,
 		&retval,
-		variables,
+		&__input,
 	)
 	return &retval, err
 }
@@ -1238,10 +1310,9 @@ func queryWithFragments(
 	client graphql.Client,
 	ids []string,
 ) (*queryWithFragmentsResponse, error) {
-	variables := map[string]interface{}{
-		"ids": ids,
+	__input := __queryWithFragmentsInput{
+		Ids: ids,
 	}
-
 	var err error
 
 	var retval queryWithFragmentsResponse
@@ -1286,7 +1357,7 @@ query queryWithFragments ($ids: [ID!]!) {
 }
 `,
 		&retval,
-		variables,
+		&__input,
 	)
 	return &retval, err
 }
@@ -1296,10 +1367,9 @@ func queryWithNamedFragments(
 	client graphql.Client,
 	ids []string,
 ) (*queryWithNamedFragmentsResponse, error) {
-	variables := map[string]interface{}{
-		"ids": ids,
+	__input := __queryWithNamedFragmentsInput{
+		Ids: ids,
 	}
-
 	var err error
 
 	var retval queryWithNamedFragmentsResponse
@@ -1344,7 +1414,7 @@ fragment MoreUserFields on User {
 }
 `,
 		&retval,
-		variables,
+		&__input,
 	)
 	return &retval, err
 }

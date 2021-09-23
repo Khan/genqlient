@@ -79,18 +79,24 @@ type UserQueryInput struct {
 	HasPokemon testutil.Pokemon `json:"hasPokemon"`
 }
 
+// __PointersQueryInput is used internally by genqlient
+type __PointersQueryInput struct {
+	Query *UserQueryInput `json:"query"`
+	Dt    *time.Time      `json:"dt"`
+	Tz    string          `json:"tz"`
+}
+
 func PointersQuery(
 	client graphql.Client,
 	query *UserQueryInput,
 	dt *time.Time,
 	tz string,
 ) (*PointersQueryResponse, error) {
-	variables := map[string]interface{}{
-		"query": query,
-		"dt":    dt,
-		"tz":    tz,
+	__input := __PointersQueryInput{
+		Query: query,
+		Dt:    dt,
+		Tz:    tz,
 	}
-
 	var err error
 
 	var retval PointersQueryResponse
@@ -113,7 +119,7 @@ query PointersQuery ($query: UserQueryInput, $dt: DateTime, $tz: String) {
 }
 `,
 		&retval,
-		variables,
+		&__input,
 	)
 	return &retval, err
 }

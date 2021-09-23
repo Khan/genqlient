@@ -56,14 +56,18 @@ type UserQueryInput struct {
 	HasPokemon testutil.Pokemon `json:"hasPokemon"`
 }
 
+// __InputObjectQueryInput is used internally by genqlient
+type __InputObjectQueryInput struct {
+	Query UserQueryInput `json:"query"`
+}
+
 func InputObjectQuery(
 	client graphql.Client,
 	query UserQueryInput,
 ) (*InputObjectQueryResponse, error) {
-	variables := map[string]interface{}{
-		"query": query,
+	__input := __InputObjectQueryInput{
+		Query: query,
 	}
-
 	var err error
 
 	var retval InputObjectQueryResponse
@@ -78,7 +82,7 @@ query InputObjectQuery ($query: UserQueryInput) {
 }
 `,
 		&retval,
-		variables,
+		&__input,
 	)
 	return &retval, err
 }

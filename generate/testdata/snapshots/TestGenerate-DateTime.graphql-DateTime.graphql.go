@@ -8,6 +8,12 @@ import (
 	"github.com/Khan/genqlient/graphql"
 )
 
+// __convertTimezoneInput is used internally by genqlient
+type __convertTimezoneInput struct {
+	Dt time.Time `json:"dt"`
+	Tz string    `json:"tz"`
+}
+
 // convertTimezoneResponse is returned by convertTimezone on success.
 type convertTimezoneResponse struct {
 	Convert time.Time `json:"convert"`
@@ -18,11 +24,10 @@ func convertTimezone(
 	dt time.Time,
 	tz string,
 ) (*convertTimezoneResponse, error) {
-	variables := map[string]interface{}{
-		"dt": dt,
-		"tz": tz,
+	__input := __convertTimezoneInput{
+		Dt: dt,
+		Tz: tz,
 	}
-
 	var err error
 
 	var retval convertTimezoneResponse
@@ -35,7 +40,7 @@ query convertTimezone ($dt: DateTime!, $tz: String) {
 }
 `,
 		&retval,
-		variables,
+		&__input,
 	)
 	return &retval, err
 }

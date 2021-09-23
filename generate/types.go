@@ -139,6 +139,7 @@ type goStructField struct {
 	GoType      goType
 	JSONName    string // i.e. the field's alias in this query
 	GraphQLName string // i.e. the field's name in its type-def
+	Omitempty   bool   // only used on input types
 	Description string
 }
 
@@ -162,19 +163,23 @@ func (typ *goStructType) WriteDefinition(w io.Writer, g *generator) error {
 	fmt.Fprintf(w, "type %s struct {\n", typ.GoName)
 	for _, field := range typ.Fields {
 		writeDescription(w, field.Description)
-		jsonName := field.JSONName
+		jsonTag := `"` + field.JSONName
+		if field.Omitempty {
+			jsonTag += ",omitempty"
+		}
+		jsonTag += `"`
 		if field.IsAbstract() {
 			// abstract types are handled in our UnmarshalJSON (see below)
 			needUnmarshaler = true
-			jsonName = "-"
+			jsonTag = `"-"`
 		}
 		if field.IsEmbedded() {
 			// embedded fields also need UnmarshalJSON handling (see below)
 			needUnmarshaler = true
 			fmt.Fprintf(w, "\t%s `json:\"-\"`\n", field.GoType.Unwrap().Reference())
 		} else {
-			fmt.Fprintf(w, "\t%s %s `json:\"%s\"`\n",
-				field.GoName, field.GoType.Reference(), jsonName)
+			fmt.Fprintf(w, "\t%s %s `json:%s`\n",
+				field.GoName, field.GoType.Reference(), jsonTag)
 		}
 	}
 	fmt.Fprintf(w, "}\n")
@@ -198,6 +203,9 @@ func (typ *goStructType) WriteDefinition(w io.Writer, g *generator) error {
 	// select the same field, or several fragments select the same field -- the
 	// JSON library will only fill one of those (the least-nested one); we want
 	// to fill them all.
+	//
+	// TODO(benkraft): If/when proposal #5901 is implemented (Go 1.18 at the
+	// earliest), we may be able to do some of this a simpler way.
 	if !needUnmarshaler {
 		return nil
 	}

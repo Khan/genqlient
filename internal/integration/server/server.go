@@ -58,8 +58,11 @@ func (r *queryResolver) Me(ctx context.Context) (*User, error) {
 	return userByID("1"), nil
 }
 
-func (r *queryResolver) User(ctx context.Context, id string) (*User, error) {
-	return userByID(id), nil
+func (r *queryResolver) User(ctx context.Context, id *string) (*User, error) {
+	if id == nil {
+		return userByID("1"), nil
+	}
+	return userByID(*id), nil
 }
 
 func (r *queryResolver) Being(ctx context.Context, id string) (Being, error) {

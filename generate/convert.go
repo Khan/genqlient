@@ -7,7 +7,7 @@ package generate
 // into code, in types.go.
 //
 // The entrypoints are convertOperation, which builds the response-type for a
-// query, and convertInputType, which builds the argument-types.
+// query, and convertArguments, which builds the argument-types.
 
 import (
 	"fmt"
@@ -139,15 +139,66 @@ var builtinTypes = map[string]string{
 	"ID":      "string",
 }
 
-// convertInputType decides the Go type we will generate corresponding to an
-// argument to a GraphQL operation.
-func (g *generator) convertInputType(
-	typ *ast.Type,
-	options, queryOptions *genqlientDirective,
-) (goType, error) {
-	// note prefix is ignored here (see generator.typeName), as is selectionSet
-	// (for input types we use the whole thing).
-	return g.convertType(nil, typ, nil, options, queryOptions)
+// convertArguments builds the type of the GraphQL arguments to the given
+// operation.
+//
+// This type is not exposed to the user; it's just used internally in the
+// unmarshaler; and it's used as a container
+func (g *generator) convertArguments(
+	operation *ast.OperationDefinition,
+	queryOptions *genqlientDirective,
+) (*goStructType, error) {
+	if len(operation.VariableDefinitions) == 0 {
+		return nil, nil
+	}
+	name := "__" + operation.Name + "Input"
+	fields := make([]*goStructField, len(operation.VariableDefinitions))
+	for i, arg := range operation.VariableDefinitions {
+		_, directive, err := g.parsePrecedingComment(arg, arg.Position)
+		if err != nil {
+			return nil, err
+		}
+		options := queryOptions.merge(directive)
+
+		goName := upperFirst(arg.Variable)
+		// Some of the arguments don't apply here, namely the name-prefix (see
+		// names.go) and the selection-set (we use all the input type's fields,
+		// and so on recursively).  See also the `case ast.InputObject` in
+		// convertDefinition, below.
+		goTyp, err := g.convertType(nil, arg.Type, nil, options, queryOptions)
+		if err != nil {
+			return nil, err
+		}
+
+		fields[i] = &goStructField{
+			GoName:      goName,
+			GoType:      goTyp,
+			JSONName:    arg.Variable,
+			GraphQLName: arg.Variable,
+			Omitempty:   options.GetOmitempty(),
+		}
+	}
+	goTyp := &goStructType{
+		GoName:    name,
+		Fields:    fields,
+		Selection: nil,
+		IsInput:   true,
+		descriptionInfo: descriptionInfo{
+			CommentOverride: fmt.Sprintf("%s is used internally by genqlient", name),
+			// fake name, used by addType
+			GraphQLName: name,
+		},
+	}
+	goTypAgain, err := g.addType(goTyp, goTyp.GoName, operation.Position)
+	if err != nil {
+		return nil, err
+	}
+	goTyp, ok := goTypAgain.(*goStructType)
+	if !ok {
+		return nil, errorf(
+			operation.Position, "internal error: input type was %T", goTypAgain)
+	}
+	return goTyp, nil
 }
 
 // convertType decides the Go type we will generate corresponding to a
@@ -305,11 +356,16 @@ func (g *generator) convertDefinition(
 
 		for i, field := range def.Fields {
 			goName := upperFirst(field.Name)
-			// Several of the arguments don't really make sense here:
+			// Several of the arguments don't really make sense here
+			// (note field.Type is necessarily a scalar, input, or enum)
 			// - no field-specific options can apply, because this is
 			//   a field in the type, not in the query (see also #14).
-			// - namePrefix is ignored for input types; see note in
-			//   generator.typeName.
+			// - namePrefix is ignored for input types and enums (see
+			//   names.go) and for scalars (they use client-specified
+			//   names)
+			// - selectionSet is ignored for input types, because we
+			//   just use all fields of the type; and it's nonexistent
+			//   for scalars and enums, our only other possible types,
 			// TODO(benkraft): Can we refactor to avoid passing the values that
 			// will be ignored?  We know field.Type is a scalar, enum, or input
 			// type.  But plumbing that is a bit tricky in practice.
@@ -325,6 +381,8 @@ func (g *generator) convertDefinition(
 				JSONName:    field.Name,
 				GraphQLName: field.Name,
 				Description: field.Description,
+				// TODO(benkraft): set Omitempty once we have a way for the
+				// user to specify it.
 			}
 		}
 		return goType, nil

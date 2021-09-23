@@ -9,6 +9,11 @@ import (
 	"github.com/Khan/genqlient/graphql"
 )
 
+// __getUserInput is used internally by genqlient
+type __getUserInput struct {
+	Login string `json:"Login"`
+}
+
 // getUserResponse is returned by getUser on success.
 type getUserResponse struct {
 	// Lookup a user by login.
@@ -71,12 +76,11 @@ query getViewer {
 func getUser(
 	ctx context.Context,
 	client graphql.Client,
-	login string,
+	Login string,
 ) (*getUserResponse, error) {
-	variables := map[string]interface{}{
-		"Login": login,
+	__input := __getUserInput{
+		Login: Login,
 	}
-
 	var err error
 
 	var retval getUserResponse
@@ -92,7 +96,7 @@ query getUser ($Login: String!) {
 }
 `,
 		&retval,
-		variables,
+		&__input,
 	)
 	return &retval, err
 }
