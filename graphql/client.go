@@ -26,7 +26,7 @@ type Client interface {
 	// query is the literal string representing the GraphQL query, e.g.
 	// `query myQuery { myField }`.  variables contains a JSON-marshalable
 	// value containing the variables to be sent along with the query,
-	// or may be nil if there are none.  Typically, GraphQL APIs wills
+	// or may be nil if there are none.  Typically, GraphQL APIs will
 	// accept a JSON payload of the form
 	//	{"query": "query myQuery { ... }", "variables": {...}}`
 	// but MakeRequest may use some other transport, handle extensions, or set

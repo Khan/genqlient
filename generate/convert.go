@@ -161,8 +161,10 @@ func (g *generator) convertArguments(
 		options := queryOptions.merge(directive)
 
 		goName := upperFirst(arg.Variable)
-		// note prefix is ignored here (see generator.typeName), as is
-		// selectionSet (for input types we use the whole thing).
+		// Some of the arguments don't apply here, namely the name-prefix (see
+		// names.go) and the selection-set (we use all the input type's fields,
+		// and so on recursively).  See also the `case ast.InputObject` in
+		// convertDefinition, below.
 		goTyp, err := g.convertType(nil, arg.Type, nil, options, queryOptions)
 		if err != nil {
 			return nil, err
@@ -354,11 +356,16 @@ func (g *generator) convertDefinition(
 
 		for i, field := range def.Fields {
 			goName := upperFirst(field.Name)
-			// Several of the arguments don't really make sense here:
+			// Several of the arguments don't really make sense here
+			// (note field.Type is necessarily a scalar, input, or enum)
 			// - no field-specific options can apply, because this is
 			//   a field in the type, not in the query (see also #14).
-			// - namePrefix is ignored for input types; see note in
-			//   generator.typeName.
+			// - namePrefix is ignored for input types and enums (see
+			//   names.go) and for scalars (they use client-specified
+			//   names)
+			// - selectionSet is ignored for input types, because we
+			//   just use all fields of the type; and it's nonexistent
+			//   for scalars and enums, our only other possible types,
 			// TODO(benkraft): Can we refactor to avoid passing the values that
 			// will be ignored?  We know field.Type is a scalar, enum, or input
 			// type.  But plumbing that is a bit tricky in practice.

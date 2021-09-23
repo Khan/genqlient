@@ -8,13 +8,16 @@ func {{.Name}}(
     {{end}}
     {{- if .Input -}}
     {{- range .Input.Fields -}}
-    {{/* the GraphQL name is here the user-specified variable-name */ -}}
+    {{/* the GraphQL name here is the user-specified variable-name */ -}}
     {{.GraphQLName}} {{.GoType.Reference}},
     {{end -}}
     {{end -}}
 ) (*{{.ResponseName}}, error) {
     {{- if .Input -}}
-    {{/* __input is not a legal variable name in GraphQL */ -}}
+    {{/* We need to avoid conflicting with any of the function's argument names
+         which are derived from the GraphQL argument names; notably `input` is
+         a common one.  So we use a name that's not legal in GraphQL, namely
+         one starting with a double-underscore. */ -}}
     __input := {{.Input.GoName}}{
         {{range .Input.Fields -}}
         {{.GoName}}: {{.GraphQLName}},
