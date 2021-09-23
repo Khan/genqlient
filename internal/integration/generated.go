@@ -153,11 +153,16 @@ func (v *AnimalFieldsOwnerUser) UnmarshalJSON(b []byte) error {
 // LuckyFieldsUser
 type LuckyFields interface {
 	implementsGraphQLInterfaceLuckyFields()
+	// GetTypename returns the receiver's concrete GraphQL type-name (see interface doc for possible values).
+	GetTypename() string
 	// GetLuckyNumber returns the interface-field "luckyNumber" from its implementation.
 	GetLuckyNumber() int
 }
 
 func (v *LuckyFieldsUser) implementsGraphQLInterfaceLuckyFields() {}
+
+// GetTypename is a part of, and documented with, the interface LuckyFields.
+func (v *LuckyFieldsUser) GetTypename() string { return v.Typename }
 
 // GetLuckyNumber is a part of, and documented with, the interface LuckyFields.
 func (v *LuckyFieldsUser) GetLuckyNumber() int { return v.LuckyNumber }
@@ -190,6 +195,7 @@ func __unmarshalLuckyFields(v *LuckyFields, m json.RawMessage) error {
 
 // LuckyFields includes the GraphQL fields of User requested by the fragment LuckyFields.
 type LuckyFieldsUser struct {
+	Typename       string `json:"__typename"`
 	MoreUserFields `json:"-"`
 	LuckyNumber    int `json:"luckyNumber"`
 }
@@ -1403,6 +1409,7 @@ fragment UserFields on User {
 	... MoreUserFields
 }
 fragment LuckyFields on Lucky {
+	__typename
 	... MoreUserFields
 	luckyNumber
 }
