@@ -159,39 +159,13 @@ func (g *generator) usedFragments(op *ast.OperationDefinition) ast.FragmentDefin
 // when unmarshaling.
 func (g *generator) preprocessQueryDocument(doc *ast.QueryDocument) {
 	var observers validator.Events
-	// We want to ensure that everywhere you ask for some list of fields (a
-	// selection-set) from an interface (or union) type, you ask for its
-	// __typename field.  There are four places we might find a selection-set:
-	// at the toplevel of a query, on a field, or in an inline or named
-	// fragment.  The toplevel of a query must be an object type, so we don't
-	// need to consider that.  And fragments must (if used at all) be spread
-	// into some parent selection-set, so we'll add __typename there (if
-	// needed).  Note this does mean abstract-typed fragments spread into
-	// object-typed scope will *not* have access to `__typename`, but they
-	// indeed don't need it, since we do know the type in that context.
-	// TODO(benkraft): We should omit __typename if you asked for
-	// `# @genqlient(struct: true)`.
-	observers.OnField(func(_ *validator.Walker, field *ast.Field) {
-		// We are interested in a field from the query like
-		//	field { subField ... }
-		// where the schema looks like
-		//	type ... {       # or interface/union
-		//		field: FieldType    # or [FieldType!]! etc.
-		//	}
-		//	interface FieldType {   # or union
-		//		subField: ...
-		//	}
-		// If FieldType is an interface/union, and none of the subFields is
-		// __typename, we want to change the query to
-		//	field { __typename subField ... }
-
-		fieldType := g.schema.Types[field.Definition.Type.Name()]
-		if fieldType.Kind != ast.Interface && fieldType.Kind != ast.Union {
+	handleSelection := func(typ *ast.Definition, selectionSet *ast.SelectionSet) {
+		if typ.Kind != ast.Interface && typ.Kind != ast.Union {
 			return // a concrete type
 		}
 
 		hasTypename := false
-		for _, selection := range field.SelectionSet {
+		for _, selection := range *selectionSet {
 			// Check if we already selected __typename. We ignore fragments,
 			// because we want __typename as a toplevel field.
 			subField, ok := selection.(*ast.Field)
@@ -201,7 +175,7 @@ func (g *generator) preprocessQueryDocument(doc *ast.QueryDocument) {
 		}
 		if !hasTypename {
 			// Ok, we need to add the field!
-			field.SelectionSet = append(ast.SelectionSet{
+			*selectionSet = append(ast.SelectionSet{
 				&ast.Field{
 					Alias: "__typename", Name: "__typename",
 					// Fake definition for the magic field __typename cribbed
@@ -216,10 +190,53 @@ func (g *generator) preprocessQueryDocument(doc *ast.QueryDocument) {
 					},
 					// Definition of the object that contains this field, i.e.
 					// FieldType.
-					ObjectDefinition: fieldType,
+					ObjectDefinition: typ,
 				},
-			}, field.SelectionSet...)
+			}, *selectionSet...)
 		}
+	}
+
+	// We want to ensure that everywhere you ask for some list of fields (a
+	// selection-set) from an interface (or union) type, you ask for its
+	// __typename field.  There are four places we might find a selection-set:
+	// at the toplevel of a query, on a field, or in an inline or named
+	// fragment.  The toplevel of a query must be an object type, so we don't
+	// need to consider that.  We don't strictly need __typename on fragments
+	// -- they are always spread into either a concrete context, or a
+	// selection-set that has typename.  But in practice for named fragments
+	// it's convenient for various reasons (mocking, and simplifying things
+	// when we "inline" single-selection types), and it's not hard, so we do it
+	// anyway.
+	// TODO(benkraft): We could omit __typename if you asked for
+	// `# @genqlient(struct: true)`.
+	observers.OnField(func(_ *validator.Walker, field *ast.Field) {
+		// We are interested in a field from the query like
+		//	field { subField ... }
+		// where the schema looks like
+		//	type ... {       # or interface/union
+		//		field: FieldType    # or [FieldType!]! etc.
+		//	}
+		//	interface FieldType {   # or union
+		//		subField: ...
+		//	}
+		// If FieldType is an interface/union, and none of the subFields is
+		// __typename, we want to change the query to
+		//	field { __typename subField ... }
+		handleSelection(
+			g.schema.Types[field.Definition.Type.Name()],
+			&field.SelectionSet)
+	})
+	observers.OnFragment(func(_ *validator.Walker, fragment *ast.FragmentDefinition) {
+		// We are interested in a fragment like
+		//	fragment F on Type { subField ... }
+		// where the schema looks like
+		//	interface Type {   # or union
+		//		subField: ...
+		//	}
+		// If FieldType is an interface/union, and none of the subFields is
+		// __typename, we want to change the fragment to
+		//	fragment F on Type { __typename subField ... }
+		handleSelection(fragment.Definition, &fragment.SelectionSet)
 	})
 	validator.Walk(g.schema, doc, &observers)
 }

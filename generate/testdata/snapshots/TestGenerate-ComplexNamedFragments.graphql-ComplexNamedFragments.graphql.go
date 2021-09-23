@@ -47,6 +47,8 @@ func (v *ComplexNamedFragmentsResponse) UnmarshalJSON(b []byte) error {
 // ContentFieldsTopic
 type ContentFields interface {
 	implementsGraphQLInterfaceContentFields()
+	// GetTypename returns the receiver's concrete GraphQL type-name (see interface doc for possible values).
+	GetTypename() string
 	// GetName returns the interface-field "name" from its implementation.
 	GetName() string
 	// GetUrl returns the interface-field "url" from its implementation.
@@ -54,6 +56,9 @@ type ContentFields interface {
 }
 
 func (v *ContentFieldsArticle) implementsGraphQLInterfaceContentFields() {}
+
+// GetTypename is a part of, and documented with, the interface ContentFields.
+func (v *ContentFieldsArticle) GetTypename() string { return v.Typename }
 
 // GetName is a part of, and documented with, the interface ContentFields.
 func (v *ContentFieldsArticle) GetName() string { return v.Name }
@@ -63,6 +68,9 @@ func (v *ContentFieldsArticle) GetUrl() string { return v.Url }
 
 func (v *ContentFieldsVideo) implementsGraphQLInterfaceContentFields() {}
 
+// GetTypename is a part of, and documented with, the interface ContentFields.
+func (v *ContentFieldsVideo) GetTypename() string { return v.Typename }
+
 // GetName is a part of, and documented with, the interface ContentFields.
 func (v *ContentFieldsVideo) GetName() string { return v.Name }
 
@@ -70,6 +78,9 @@ func (v *ContentFieldsVideo) GetName() string { return v.Name }
 func (v *ContentFieldsVideo) GetUrl() string { return v.Url }
 
 func (v *ContentFieldsTopic) implementsGraphQLInterfaceContentFields() {}
+
+// GetTypename is a part of, and documented with, the interface ContentFields.
+func (v *ContentFieldsTopic) GetTypename() string { return v.Typename }
 
 // GetName is a part of, and documented with, the interface ContentFields.
 func (v *ContentFieldsTopic) GetName() string { return v.Name }
@@ -114,8 +125,9 @@ func __unmarshalContentFields(v *ContentFields, m json.RawMessage) error {
 //
 // Content is implemented by various types like Article, Video, and Topic.
 type ContentFieldsArticle struct {
-	Name string `json:"name"`
-	Url  string `json:"url"`
+	Typename string `json:"__typename"`
+	Name     string `json:"name"`
+	Url      string `json:"url"`
 }
 
 // ContentFields includes the GraphQL fields of Topic requested by the fragment ContentFields.
@@ -123,8 +135,9 @@ type ContentFieldsArticle struct {
 //
 // Content is implemented by various types like Article, Video, and Topic.
 type ContentFieldsTopic struct {
-	Name string `json:"name"`
-	Url  string `json:"url"`
+	Typename string `json:"__typename"`
+	Name     string `json:"name"`
+	Url      string `json:"url"`
 }
 
 // ContentFields includes the GraphQL fields of Video requested by the fragment ContentFields.
@@ -132,8 +145,9 @@ type ContentFieldsTopic struct {
 //
 // Content is implemented by various types like Article, Video, and Topic.
 type ContentFieldsVideo struct {
-	Name string `json:"name"`
-	Url  string `json:"url"`
+	Typename string `json:"__typename"`
+	Name     string `json:"name"`
+	Url      string `json:"url"`
 }
 
 // InnerQueryFragment includes the GraphQL fields of Query requested by the fragment InnerQueryFragment.
@@ -894,6 +908,7 @@ fragment VideoFields on Video {
 	... ContentFields
 }
 fragment ContentFields on Content {
+	__typename
 	name
 	url
 }

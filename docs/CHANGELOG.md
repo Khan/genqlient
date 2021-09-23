@@ -27,6 +27,8 @@ When releasing a new version:
 
 ### New features:
 
+- genqlient now adds `__typename` to fragments of interface type, in addition to fields of interface type.  This isn't necessary for any of genqlient's operation, but may be convenient to some callers.
+
 ### Bug fixes:
 
 - The `omitempty` option now works correctly for struct- and map-typed variables, matching `encoding/json`, which is to say it never omits structs, and omits empty maps. (#43)
