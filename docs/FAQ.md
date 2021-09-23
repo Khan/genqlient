@@ -260,9 +260,9 @@ type GetMonopolyPlayersGameWinnerUser struct {
 // (others similarly)
 ```
 
-But maybe you wanted to be able to pass all those users to a shared function (defined in your code), say `FormatUser(user ???) string`.  That's no good; you need to put three different types as the `???`.  genqlient has two ways to deal with this.
+But maybe you wanted to be able to pass all those users to a shared function (defined in your code), say `FormatUser(user ???) string`.  That's no good; you need to put three different types as the `???`.  genqlient has several ways to deal with this.
 
-One option -- the GraphQL Way, perhaps -- is to use fragments.  You'd write your query like:
+**Fragments:** One option -- the GraphQL Way, perhaps -- is to use fragments.  You'd write your query like:
 
 ```graphql
 fragment MonopolyUser on User {
@@ -319,7 +319,21 @@ query GetMonopolyPlayers {
 
 and you can even spread the fragment into interface types.  It also avoids having to list the fields several times.
 
-Alternately, if you always want exactly the same fields, you can use the simpler but more restrictive genqlient option `typename`:
+**Fragments, flattened:** the field `Winner`, above, has type `GetMonopolyPlayersGameWinnerUser` which just wraps `MonopolyUser`.  If we don't want to add any other fields, that's unnecessary!  Instead, we could do
+```
+query GetMonopolyPlayers {
+  game {
+    # @genqlient(flatten: true)
+    winner {
+      ...MonopolyUser
+    }
+    # (etc.)
+  }
+}
+```
+and genqlient will skip the indirection and give the field `Winner` type `MonopolyUser` directly.  This is often much more convenient if you put all the fields in the fragment, like the first query did.  See the [options documentation](genqlient_directive.graphql) for more details.
+
+**Type names:** Finally, if you always want exactly the same fields, you can use the simpler but more restrictive genqlient option `typename`:
 
 ```graphql
 query GetMonopolyPlayers {
@@ -351,7 +365,7 @@ type User struct {
 
 In this case, genqlient will validate that each type given the name `User` has the exact same fields; see the [full documentation](genqlient_directive.graphql) for details.
 
-Note that it's also possible to use the `bindings` option (see [`genqlient.yaml` documentation](genqlient.yaml)) for a similar purpose, but this is not recommended as it typically requires more work for less gain.
+**Bindings:** It's also possible to use the `bindings` option (see [`genqlient.yaml` documentation](genqlient.yaml)) for a similar purpose, but this is not recommended as it typically requires more work for less gain.
 
 ### … documentation on the output types?
 

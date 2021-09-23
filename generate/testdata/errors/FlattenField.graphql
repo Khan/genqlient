@@ -1,0 +1,6 @@
+query FlattenField {
+  # @genqlient(flatten: true)
+  t {
+    f
+  }
+}

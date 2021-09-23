@@ -1,0 +1,2 @@
+type Query { t: T }
+type T { f: String }

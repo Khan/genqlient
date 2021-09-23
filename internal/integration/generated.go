@@ -255,6 +255,177 @@ func (v *AnimalFieldsOwnerUser) __premarshalJSON() (*__premarshalAnimalFieldsOwn
 	return &retval, nil
 }
 
+// FriendsFields includes the GraphQL fields of User requested by the fragment FriendsFields.
+type FriendsFields struct {
+	Id   string `json:"id"`
+	Name string `json:"name"`
+}
+
+// InnerBeingFields includes the GraphQL fields of Being requested by the fragment InnerBeingFields.
+//
+// InnerBeingFields is implemented by the following types:
+// InnerBeingFieldsUser
+// InnerBeingFieldsAnimal
+type InnerBeingFields interface {
+	implementsGraphQLInterfaceInnerBeingFields()
+	// GetId returns the interface-field "id" from its implementation.
+	GetId() string
+	// GetName returns the interface-field "name" from its implementation.
+	GetName() string
+}
+
+func (v *InnerBeingFieldsUser) implementsGraphQLInterfaceInnerBeingFields() {}
+
+// GetId is a part of, and documented with, the interface InnerBeingFields.
+func (v *InnerBeingFieldsUser) GetId() string { return v.Id }
+
+// GetName is a part of, and documented with, the interface InnerBeingFields.
+func (v *InnerBeingFieldsUser) GetName() string { return v.Name }
+
+func (v *InnerBeingFieldsAnimal) implementsGraphQLInterfaceInnerBeingFields() {}
+
+// GetId is a part of, and documented with, the interface InnerBeingFields.
+func (v *InnerBeingFieldsAnimal) GetId() string { return v.Id }
+
+// GetName is a part of, and documented with, the interface InnerBeingFields.
+func (v *InnerBeingFieldsAnimal) GetName() string { return v.Name }
+
+func __unmarshalInnerBeingFields(b []byte, v *InnerBeingFields) error {
+	if string(b) == "null" {
+		return nil
+	}
+
+	var tn struct {
+		TypeName string `json:"__typename"`
+	}
+	err := json.Unmarshal(b, &tn)
+	if err != nil {
+		return err
+	}
+
+	switch tn.TypeName {
+	case "User":
+		*v = new(InnerBeingFieldsUser)
+		return json.Unmarshal(b, *v)
+	case "Animal":
+		*v = new(InnerBeingFieldsAnimal)
+		return json.Unmarshal(b, *v)
+	case "":
+		return fmt.Errorf(
+			"Response was missing Being.__typename")
+	default:
+		return fmt.Errorf(
+			`Unexpected concrete type for InnerBeingFields: "%v"`, tn.TypeName)
+	}
+}
+
+func __marshalInnerBeingFields(v *InnerBeingFields) ([]byte, error) {
+
+	var typename string
+	switch v := (*v).(type) {
+	case *InnerBeingFieldsUser:
+		typename = "User"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*InnerBeingFieldsUser
+		}{typename, v}
+		return json.Marshal(result)
+	case *InnerBeingFieldsAnimal:
+		typename = "Animal"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*InnerBeingFieldsAnimal
+		}{typename, v}
+		return json.Marshal(result)
+	case nil:
+		return []byte("null"), nil
+	default:
+		return nil, fmt.Errorf(
+			`Unexpected concrete type for InnerBeingFields: "%T"`, v)
+	}
+}
+
+// InnerBeingFields includes the GraphQL fields of Animal requested by the fragment InnerBeingFields.
+type InnerBeingFieldsAnimal struct {
+	Id   string `json:"id"`
+	Name string `json:"name"`
+}
+
+// InnerBeingFields includes the GraphQL fields of User requested by the fragment InnerBeingFields.
+type InnerBeingFieldsUser struct {
+	Id      string          `json:"id"`
+	Name    string          `json:"name"`
+	Friends []FriendsFields `json:"friends"`
+}
+
+// InnerLuckyFields includes the GraphQL fields of Lucky requested by the fragment InnerLuckyFields.
+//
+// InnerLuckyFields is implemented by the following types:
+// InnerLuckyFieldsUser
+type InnerLuckyFields interface {
+	implementsGraphQLInterfaceInnerLuckyFields()
+	// GetLuckyNumber returns the interface-field "luckyNumber" from its implementation.
+	GetLuckyNumber() int
+}
+
+func (v *InnerLuckyFieldsUser) implementsGraphQLInterfaceInnerLuckyFields() {}
+
+// GetLuckyNumber is a part of, and documented with, the interface InnerLuckyFields.
+func (v *InnerLuckyFieldsUser) GetLuckyNumber() int { return v.LuckyNumber }
+
+func __unmarshalInnerLuckyFields(b []byte, v *InnerLuckyFields) error {
+	if string(b) == "null" {
+		return nil
+	}
+
+	var tn struct {
+		TypeName string `json:"__typename"`
+	}
+	err := json.Unmarshal(b, &tn)
+	if err != nil {
+		return err
+	}
+
+	switch tn.TypeName {
+	case "User":
+		*v = new(InnerLuckyFieldsUser)
+		return json.Unmarshal(b, *v)
+	case "":
+		return fmt.Errorf(
+			"Response was missing Lucky.__typename")
+	default:
+		return fmt.Errorf(
+			`Unexpected concrete type for InnerLuckyFields: "%v"`, tn.TypeName)
+	}
+}
+
+func __marshalInnerLuckyFields(v *InnerLuckyFields) ([]byte, error) {
+
+	var typename string
+	switch v := (*v).(type) {
+	case *InnerLuckyFieldsUser:
+		typename = "User"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*InnerLuckyFieldsUser
+		}{typename, v}
+		return json.Marshal(result)
+	case nil:
+		return []byte("null"), nil
+	default:
+		return nil, fmt.Errorf(
+			`Unexpected concrete type for InnerLuckyFields: "%T"`, v)
+	}
+}
+
+// InnerLuckyFields includes the GraphQL fields of User requested by the fragment InnerLuckyFields.
+type InnerLuckyFieldsUser struct {
+	LuckyNumber int `json:"luckyNumber"`
+}
+
 // LuckyFields includes the GraphQL fields of Lucky requested by the fragment LuckyFields.
 //
 // LuckyFields is implemented by the following types:
@@ -385,6 +556,313 @@ type MoreUserFields struct {
 // MoreUserFieldsHair includes the requested fields of the GraphQL type Hair.
 type MoreUserFieldsHair struct {
 	Color string `json:"color"`
+}
+
+// QueryFragment includes the GraphQL fields of Query requested by the fragment QueryFragment.
+type QueryFragment struct {
+	Beings []QueryFragmentBeingsBeing `json:"-"`
+}
+
+func (v *QueryFragment) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*QueryFragment
+		Beings []json.RawMessage `json:"beings"`
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.QueryFragment = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	{
+		dst := &v.Beings
+		src := firstPass.Beings
+		*dst = make(
+			[]QueryFragmentBeingsBeing,
+			len(src))
+		for i, src := range src {
+			dst := &(*dst)[i]
+			if len(src) != 0 && string(src) != "null" {
+				err = __unmarshalQueryFragmentBeingsBeing(
+					src, dst)
+				if err != nil {
+					return fmt.Errorf(
+						"Unable to unmarshal QueryFragment.Beings: %w", err)
+				}
+			}
+		}
+	}
+	return nil
+}
+
+type __premarshalQueryFragment struct {
+	Beings []json.RawMessage `json:"beings"`
+}
+
+func (v *QueryFragment) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *QueryFragment) __premarshalJSON() (*__premarshalQueryFragment, error) {
+	var retval __premarshalQueryFragment
+
+	{
+
+		dst := &retval.Beings
+		src := v.Beings
+		*dst = make(
+			[]json.RawMessage,
+			len(src))
+		for i, src := range src {
+			dst := &(*dst)[i]
+			var err error
+			*dst, err = __marshalQueryFragmentBeingsBeing(
+				&src)
+			if err != nil {
+				return nil, fmt.Errorf(
+					"Unable to marshal QueryFragment.Beings: %w", err)
+			}
+		}
+	}
+	return &retval, nil
+}
+
+// QueryFragmentBeingsAnimal includes the requested fields of the GraphQL type Animal.
+type QueryFragmentBeingsAnimal struct {
+	Typename string           `json:"__typename"`
+	Id       string           `json:"id"`
+	Owner    InnerBeingFields `json:"-"`
+}
+
+func (v *QueryFragmentBeingsAnimal) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*QueryFragmentBeingsAnimal
+		Owner json.RawMessage `json:"owner"`
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.QueryFragmentBeingsAnimal = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	{
+		dst := &v.Owner
+		src := firstPass.Owner
+		if len(src) != 0 && string(src) != "null" {
+			err = __unmarshalInnerBeingFields(
+				src, dst)
+			if err != nil {
+				return fmt.Errorf(
+					"Unable to unmarshal QueryFragmentBeingsAnimal.Owner: %w", err)
+			}
+		}
+	}
+	return nil
+}
+
+type __premarshalQueryFragmentBeingsAnimal struct {
+	Typename string `json:"__typename"`
+
+	Id string `json:"id"`
+
+	Owner json.RawMessage `json:"owner"`
+}
+
+func (v *QueryFragmentBeingsAnimal) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *QueryFragmentBeingsAnimal) __premarshalJSON() (*__premarshalQueryFragmentBeingsAnimal, error) {
+	var retval __premarshalQueryFragmentBeingsAnimal
+
+	retval.Typename = v.Typename
+	retval.Id = v.Id
+	{
+
+		dst := &retval.Owner
+		src := v.Owner
+		var err error
+		*dst, err = __marshalInnerBeingFields(
+			&src)
+		if err != nil {
+			return nil, fmt.Errorf(
+				"Unable to marshal QueryFragmentBeingsAnimal.Owner: %w", err)
+		}
+	}
+	return &retval, nil
+}
+
+// QueryFragmentBeingsBeing includes the requested fields of the GraphQL interface Being.
+//
+// QueryFragmentBeingsBeing is implemented by the following types:
+// QueryFragmentBeingsUser
+// QueryFragmentBeingsAnimal
+type QueryFragmentBeingsBeing interface {
+	implementsGraphQLInterfaceQueryFragmentBeingsBeing()
+	// GetTypename returns the receiver's concrete GraphQL type-name (see interface doc for possible values).
+	GetTypename() string
+	// GetId returns the interface-field "id" from its implementation.
+	GetId() string
+}
+
+func (v *QueryFragmentBeingsUser) implementsGraphQLInterfaceQueryFragmentBeingsBeing() {}
+
+// GetTypename is a part of, and documented with, the interface QueryFragmentBeingsBeing.
+func (v *QueryFragmentBeingsUser) GetTypename() string { return v.Typename }
+
+// GetId is a part of, and documented with, the interface QueryFragmentBeingsBeing.
+func (v *QueryFragmentBeingsUser) GetId() string { return v.Id }
+
+func (v *QueryFragmentBeingsAnimal) implementsGraphQLInterfaceQueryFragmentBeingsBeing() {}
+
+// GetTypename is a part of, and documented with, the interface QueryFragmentBeingsBeing.
+func (v *QueryFragmentBeingsAnimal) GetTypename() string { return v.Typename }
+
+// GetId is a part of, and documented with, the interface QueryFragmentBeingsBeing.
+func (v *QueryFragmentBeingsAnimal) GetId() string { return v.Id }
+
+func __unmarshalQueryFragmentBeingsBeing(b []byte, v *QueryFragmentBeingsBeing) error {
+	if string(b) == "null" {
+		return nil
+	}
+
+	var tn struct {
+		TypeName string `json:"__typename"`
+	}
+	err := json.Unmarshal(b, &tn)
+	if err != nil {
+		return err
+	}
+
+	switch tn.TypeName {
+	case "User":
+		*v = new(QueryFragmentBeingsUser)
+		return json.Unmarshal(b, *v)
+	case "Animal":
+		*v = new(QueryFragmentBeingsAnimal)
+		return json.Unmarshal(b, *v)
+	case "":
+		return fmt.Errorf(
+			"Response was missing Being.__typename")
+	default:
+		return fmt.Errorf(
+			`Unexpected concrete type for QueryFragmentBeingsBeing: "%v"`, tn.TypeName)
+	}
+}
+
+func __marshalQueryFragmentBeingsBeing(v *QueryFragmentBeingsBeing) ([]byte, error) {
+
+	var typename string
+	switch v := (*v).(type) {
+	case *QueryFragmentBeingsUser:
+		typename = "User"
+
+		premarshaled, err := v.__premarshalJSON()
+		if err != nil {
+			return nil, err
+		}
+		result := struct {
+			TypeName string `json:"__typename"`
+			*__premarshalQueryFragmentBeingsUser
+		}{typename, premarshaled}
+		return json.Marshal(result)
+	case *QueryFragmentBeingsAnimal:
+		typename = "Animal"
+
+		premarshaled, err := v.__premarshalJSON()
+		if err != nil {
+			return nil, err
+		}
+		result := struct {
+			TypeName string `json:"__typename"`
+			*__premarshalQueryFragmentBeingsAnimal
+		}{typename, premarshaled}
+		return json.Marshal(result)
+	case nil:
+		return []byte("null"), nil
+	default:
+		return nil, fmt.Errorf(
+			`Unexpected concrete type for QueryFragmentBeingsBeing: "%T"`, v)
+	}
+}
+
+// QueryFragmentBeingsUser includes the requested fields of the GraphQL type User.
+type QueryFragmentBeingsUser struct {
+	Typename             string `json:"__typename"`
+	Id                   string `json:"id"`
+	InnerLuckyFieldsUser `json:"-"`
+}
+
+func (v *QueryFragmentBeingsUser) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*QueryFragmentBeingsUser
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.QueryFragmentBeingsUser = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.InnerLuckyFieldsUser)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+type __premarshalQueryFragmentBeingsUser struct {
+	Typename string `json:"__typename"`
+
+	Id string `json:"id"`
+
+	LuckyNumber int `json:"luckyNumber"`
+}
+
+func (v *QueryFragmentBeingsUser) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *QueryFragmentBeingsUser) __premarshalJSON() (*__premarshalQueryFragmentBeingsUser, error) {
+	var retval __premarshalQueryFragmentBeingsUser
+
+	retval.Typename = v.Typename
+	retval.Id = v.Id
+	retval.LuckyNumber = v.InnerLuckyFieldsUser.LuckyNumber
+	return &retval, nil
 }
 
 type Species string
@@ -677,6 +1155,11 @@ func (v *__queryWithCustomMarshalSliceInput) __premarshalJSON() (*__premarshal__
 		}
 	}
 	return &retval, nil
+}
+
+// __queryWithFlattenInput is used internally by genqlient
+type __queryWithFlattenInput struct {
+	Ids []string `json:"ids"`
 }
 
 // __queryWithFragmentsInput is used internally by genqlient
@@ -2671,6 +3154,69 @@ fragment MoreUserFields on User {
 	hair {
 		color
 	}
+}
+`,
+		&retval,
+		&__input,
+	)
+	return &retval, err
+}
+
+func queryWithFlatten(
+	ctx context.Context,
+	client graphql.Client,
+	ids []string,
+) (*QueryFragment, error) {
+	__input := __queryWithFlattenInput{
+		Ids: ids,
+	}
+	var err error
+
+	var retval QueryFragment
+	err = client.MakeRequest(
+		ctx,
+		"queryWithFlatten",
+		`
+query queryWithFlatten ($ids: [ID!]!) {
+	... QueryFragment
+}
+fragment QueryFragment on Query {
+	beings(ids: $ids) {
+		__typename
+		id
+		... FlattenedUserFields
+		... on Animal {
+			owner {
+				__typename
+				... BeingFields
+			}
+		}
+	}
+}
+fragment FlattenedUserFields on User {
+	... FlattenedLuckyFields
+}
+fragment BeingFields on Being {
+	... InnerBeingFields
+}
+fragment FlattenedLuckyFields on Lucky {
+	... InnerLuckyFields
+}
+fragment InnerBeingFields on Being {
+	id
+	name
+	... on User {
+		friends {
+			... FriendsFields
+		}
+	}
+}
+fragment InnerLuckyFields on Lucky {
+	luckyNumber
+}
+fragment FriendsFields on User {
+	id
+	name
 }
 `,
 		&retval,

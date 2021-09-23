@@ -554,6 +554,116 @@ func TestNamedFragments(t *testing.T) {
 	assert.Nil(t, resp.Beings[2])
 }
 
+func TestFlatten(t *testing.T) {
+	_ = `# @genqlient
+	# @genqlient(flatten: true)
+	fragment BeingFields on Being {
+		...InnerBeingFields
+	}
+
+	fragment InnerBeingFields on Being {
+		id
+		name
+		... on User {
+			# @genqlient(flatten: true)
+			friends {
+				...FriendsFields
+			}
+		}
+	}
+
+	fragment FriendsFields on User {
+		id
+		name
+	}
+
+	# @genqlient(flatten: true)
+	fragment FlattenedUserFields on User {
+		...FlattenedLuckyFields
+	}
+
+	# @genqlient(flatten: true)
+	fragment FlattenedLuckyFields on Lucky {
+		...InnerLuckyFields
+	}
+
+	fragment InnerLuckyFields on Lucky {
+		luckyNumber
+	}
+	
+	fragment QueryFragment on Query {
+		beings(ids: $ids) {
+			__typename id
+			...FlattenedUserFields
+			... on Animal {
+				# @genqlient(flatten: true)
+				owner {
+					...BeingFields
+				}
+			}
+		}
+	}
+
+	# @genqlient(flatten: true)
+	query queryWithFlatten(
+		$ids: [ID!]!,
+	) {
+		...QueryFragment
+	}`
+
+	ctx := context.Background()
+	server := server.RunServer()
+	defer server.Close()
+	client := newRoundtripClient(t, server.URL)
+
+	resp, err := queryWithFlatten(ctx, client, []string{"1", "3", "12847394823"})
+	require.NoError(t, err)
+
+	require.Len(t, resp.Beings, 3)
+
+	// We should get the following three beings:
+	//	User{Id: 1, Name: "Yours Truly"},
+	//	Animal{Id: 3, Name: "Fido"},
+	//	null
+
+	// Check fields both via interface and via type-assertion when possible
+	// User has, in total, the fields: __typename id luckyNumber.
+	assert.Equal(t, "User", resp.Beings[0].GetTypename())
+	assert.Equal(t, "1", resp.Beings[0].GetId())
+	// (luckyNumber we need to cast for)
+
+	user, ok := resp.Beings[0].(*QueryFragmentBeingsUser)
+	require.Truef(t, ok, "got %T, not User", resp.Beings[0])
+	assert.Equal(t, "1", user.Id)
+	assert.Equal(t, 17, user.InnerLuckyFieldsUser.LuckyNumber)
+
+	// Animal has, in total, the fields:
+	//	__typename
+	//	id
+	//	owner { id name ... on User { friends { id name } } }
+	assert.Equal(t, "Animal", resp.Beings[1].GetTypename())
+	assert.Equal(t, "3", resp.Beings[1].GetId())
+	// (owner.* we have to cast for)
+
+	animal, ok := resp.Beings[1].(*QueryFragmentBeingsAnimal)
+	require.Truef(t, ok, "got %T, not Animal", resp.Beings[1])
+	assert.Equal(t, "3", animal.Id)
+	// on AnimalFields:
+	assert.Equal(t, "1", animal.Owner.GetId())
+	assert.Equal(t, "Yours Truly", animal.Owner.GetName())
+	// (friends.* we have to cast for, again)
+
+	owner, ok := animal.Owner.(*InnerBeingFieldsUser)
+	require.Truef(t, ok, "got %T, not User", animal.Owner)
+	assert.Equal(t, "1", owner.Id)
+	assert.Equal(t, "Yours Truly", owner.Name)
+	assert.Len(t, owner.Friends, 1)
+	assert.Equal(t, "2", owner.Friends[0].Id)
+	assert.Equal(t, "Raven", owner.Friends[0].Name)
+
+	assert.Nil(t, resp.Beings[2])
+}
+
 func TestGeneratedCode(t *testing.T) {
 	// TODO(benkraft): Check that gqlgen is up to date too.  In practice that's
 	// less likely to be a problem, since it should only change if you update

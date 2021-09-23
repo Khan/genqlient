@@ -18,6 +18,7 @@ type User implements Being & Lucky {
   luckyNumber: Int
   hair: Hair
   birthdate: Date
+  friends: [User!]!
 }
 
 type Hair { color: String }   # silly name to confuse the name-generator

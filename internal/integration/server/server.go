@@ -21,6 +21,11 @@ var users = []*User{
 	{ID: "2", Name: "Raven", LuckyNumber: intptr(-1), Hair: nil},
 }
 
+func init() {
+	users[0].Friends = []*User{users[1]} // (obviously a lie, but)
+	users[1].Friends = users             // try to crash the system
+}
+
 var animals = []*Animal{
 	{
 		ID: "3", Name: "Fido", Species: SpeciesDog, Owner: userByID("1"),

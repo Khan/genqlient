@@ -15,6 +15,7 @@ type genqlientDirective struct {
 	Omitempty *bool
 	Pointer   *bool
 	Struct    *bool
+	Flatten   *bool
 	Bind      string
 	TypeName  string
 }
@@ -28,6 +29,7 @@ func newGenqlientDirective(pos *ast.Position) *genqlientDirective {
 func (dir *genqlientDirective) GetOmitempty() bool { return dir.Omitempty != nil && *dir.Omitempty }
 func (dir *genqlientDirective) GetPointer() bool   { return dir.Pointer != nil && *dir.Pointer }
 func (dir *genqlientDirective) GetStruct() bool    { return dir.Struct != nil && *dir.Struct }
+func (dir *genqlientDirective) GetFlatten() bool   { return dir.Flatten != nil && *dir.Flatten }
 
 func setBool(optionName string, dst **bool, v *ast.Value, pos *ast.Position) error {
 	if *dst != nil {
@@ -85,6 +87,8 @@ func (dir *genqlientDirective) add(graphQLDirective *ast.Directive, pos *ast.Pos
 			err = setBool("pointer", &dir.Pointer, arg.Value, pos)
 		case "struct":
 			err = setBool("struct", &dir.Struct, arg.Value, pos)
+		case "flatten":
+			err = setBool("flatten", &dir.Flatten, arg.Value, pos)
 		case "bind":
 			err = setString("bind", &dir.Bind, arg.Value, pos)
 		case "typename":
@@ -116,7 +120,13 @@ func (dir *genqlientDirective) validate(node interface{}, schema *ast.Schema) er
 		}
 
 		if dir.Struct != nil {
-			return errorf(dir.pos, "struct is only applicable to fields")
+			return errorf(dir.pos, "struct is only applicable to fields, not frragment-definitions")
+		}
+
+		if dir.Flatten != nil {
+			if _, err := validateFlattenOption(node.Definition, node.SelectionSet, dir.pos); err != nil {
+				return err
+			}
 		}
 
 		// Like operations, anything else will just apply to the entire
@@ -128,18 +138,28 @@ func (dir *genqlientDirective) validate(node interface{}, schema *ast.Schema) er
 		}
 
 		if dir.Struct != nil {
-			return errorf(dir.pos, "struct is only applicable to fields")
+			return errorf(dir.pos, "struct is only applicable to fields, not variable-definitions")
+		}
+
+		if dir.Flatten != nil {
+			return errorf(dir.pos, "flatten is only applicable to fields, not variable-definitions")
 		}
 
 		return nil
 	case *ast.Field:
 		if dir.Omitempty != nil {
-			return errorf(dir.pos, "omitempty is not applicable to fields")
+			return errorf(dir.pos, "omitempty is not applicable to variables, not fields")
 		}
 
+		typ := schema.Types[node.Definition.Type.Name()]
 		if dir.Struct != nil {
-			typ := schema.Types[node.Definition.Type.Name()]
 			if err := validateStructOption(typ, node.SelectionSet, dir.pos); err != nil {
+				return err
+			}
+		}
+
+		if dir.Flatten != nil {
+			if _, err := validateFlattenOption(typ, node.SelectionSet, dir.pos); err != nil {
 				return err
 			}
 		}
@@ -178,6 +198,58 @@ func validateStructOption(
 	return nil
 }
 
+func validateFlattenOption(
+	typ *ast.Definition,
+	selectionSet ast.SelectionSet,
+	pos *ast.Position,
+) (index int, err error) {
+	index = -1
+	if len(selectionSet) == 0 {
+		return -1, errorf(pos, "flatten is not allowed for leaf fields")
+	}
+
+	for i, selection := range selectionSet {
+		switch selection := selection.(type) {
+		case *ast.Field:
+			// If the field is auto-added __typename, ignore it for flattening
+			// purposes.
+			if selection.Name == "__typename" && selection.Position == nil {
+				continue
+			}
+			// Type-wise, it's no harder to implement flatten for fields, but
+			// it requires new logic in UnmarshalJSON.  We can add that if it
+			// proves useful relative to its complexity.
+			return -1, errorf(pos, "flatten is not yet supported for fields (only fragment spreads)")
+
+		case *ast.InlineFragment:
+			// Inline fragments aren't allowed. In principle there's nothing
+			// stopping us from allowing them (under the same type-match
+			// conditions as fragment spreads), but there's little value to it.
+			return -1, errorf(pos, "flatten is not allowed for selections with inline fragments")
+
+		case *ast.FragmentSpread:
+			if index != -1 {
+				return -1, errorf(pos, "flatten is not allowed for fields with multiple selections")
+			} else if !fragmentMatches(typ, selection.Definition.Definition) {
+				// We don't let you flatten
+				//  field { # type: FieldType
+				//		...Fragment # type: FragmentType
+				//	}
+				// unless FragmentType implements FieldType, because otherwise
+				// what do we do if we get back a type that doesn't implement
+				// FragmentType?
+				return -1, errorf(pos,
+					"flatten is not allowed for fields with fragment-spreads "+
+						"unless the field-type implements the fragment-type; "+
+						"field-type %s does not implement fragment-type %s",
+					typ.Name, selection.Definition.Definition.Name)
+			}
+			index = i
+		}
+	}
+	return index, nil
+}
+
 // merge joins the directive applied to this node (the argument) and the one
 // applied to the entire operation (the receiver) and returns a new
 // directive-object representing the options to apply to this node (where in
@@ -192,6 +264,9 @@ func (dir *genqlientDirective) merge(other *genqlientDirective) *genqlientDirect
 	}
 	if other.Struct != nil {
 		retval.Struct = other.Struct
+	}
+	if other.Flatten != nil {
+		retval.Flatten = other.Flatten
 	}
 	if other.Bind != "" {
 		retval.Bind = other.Bind

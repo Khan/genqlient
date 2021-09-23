@@ -1,0 +1,1 @@
+testdata/errors/FlattenField.graphql:3: flatten is not yet supported for fields (only fragment spreads)
