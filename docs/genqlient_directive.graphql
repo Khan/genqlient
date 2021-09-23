@@ -38,8 +38,8 @@
 # Except as noted below, directives on nodes take precedence over ones on the
 # entire query (so "d", "e", and "f" take precedence over "b" and "c"), and
 # multiple directives on the same node ("b" and "c") must not conflict.  Note
-# that directives on nodes do apply to their "children", so "d" does not apply
-# to the fields of MyInput, and "f" does not apply to field4.
+# that directives on nodes do *not* apply to their "children", so "d" does not
+# apply to the fields of MyInput, and "f" does not apply to field4.
 directive genqlient(
 
   # If set, this argument will be omitted if it has an empty value, defined
