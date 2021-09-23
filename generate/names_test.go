@@ -33,8 +33,8 @@ func TestTypeNames(t *testing.T) {
 		[]*ast.Field{fakeField("Query", "operationUser")},
 		"User",
 	}, {
-		// We don't shorten across multiple prefixes.
-		"OperationUserOperationUser",
+		// We do shorten across multiple prefixes.
+		"OperationUser",
 		[]*ast.Field{fakeField("Query", "user")},
 		"OperationUser",
 	}, {

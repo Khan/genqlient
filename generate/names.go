@@ -143,9 +143,9 @@ func typeNameParts(prefix *prefixList, typeName string) *prefixList {
 	// If the prefix has just one part, that's the operation-name.  There's no
 	// need to add "Query" or "Mutation".  (Zero should never happen.)
 	if prefix == nil || prefix.tail == nil ||
-		// If the last prefix field ends with this type's name, omit the
+		// If the name-so-far ends with this type's name, omit the
 		// type-name (see the "shortened" case in the top-of-file comment).
-		strings.HasSuffix(prefix.head, typeName) {
+		strings.HasSuffix(joinPrefixList(prefix), typeName) {
 		return prefix
 	}
 	return &prefixList{typeName, prefix}

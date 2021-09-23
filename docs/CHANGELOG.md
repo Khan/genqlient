@@ -26,6 +26,8 @@ When releasing a new version:
 
 ### Bug fixes:
 
+- Generated type-names now abbreviate across multiple components; for example if the path to a type is `(MyOperation, Outer, Outer, Inner, OuterInner)`, it will again be called `MyOperationOuterInner`.  (This regressed in a pre-v0.1.0 refactor.) (#109)
+
 ## v0.1.0
 
 First open-sourced version.
