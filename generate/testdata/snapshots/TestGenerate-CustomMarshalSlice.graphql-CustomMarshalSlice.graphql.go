@@ -29,7 +29,7 @@ func (v *__CustomMarshalSliceInput) MarshalJSON() ([]byte, error) {
 		*__CustomMarshalSliceInput
 		Datesss  [][][]json.RawMessage `json:"datesss"`
 		Datesssp [][][]json.RawMessage `json:"datesssp"`
-		graphql.NoUnmarshalJSON
+		graphql.NoMarshalJSON
 	}
 	fullObject.__CustomMarshalSliceInput = v
 

@@ -294,7 +294,7 @@ func (v *__queryWithCustomMarshalInput) MarshalJSON() ([]byte, error) {
 	var fullObject struct {
 		*__queryWithCustomMarshalInput
 		Date json.RawMessage `json:"date"`
-		graphql.NoUnmarshalJSON
+		graphql.NoMarshalJSON
 	}
 	fullObject.__queryWithCustomMarshalInput = v
 
@@ -324,7 +324,7 @@ func (v *__queryWithCustomMarshalSliceInput) MarshalJSON() ([]byte, error) {
 	var fullObject struct {
 		*__queryWithCustomMarshalSliceInput
 		Dates []json.RawMessage `json:"dates"`
-		graphql.NoUnmarshalJSON
+		graphql.NoMarshalJSON
 	}
 	fullObject.__queryWithCustomMarshalSliceInput = v
 

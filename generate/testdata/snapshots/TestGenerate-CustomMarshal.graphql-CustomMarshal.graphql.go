@@ -69,7 +69,7 @@ func (v *__CustomMarshalInput) MarshalJSON() ([]byte, error) {
 	var fullObject struct {
 		*__CustomMarshalInput
 		Date json.RawMessage `json:"date"`
-		graphql.NoUnmarshalJSON
+		graphql.NoMarshalJSON
 	}
 	fullObject.__CustomMarshalInput = v
 

@@ -46,7 +46,7 @@ func (v *UserQueryInput) MarshalJSON() ([]byte, error) {
 	var fullObject struct {
 		*UserQueryInput
 		Birthdate json.RawMessage `json:"birthdate"`
-		graphql.NoUnmarshalJSON
+		graphql.NoMarshalJSON
 	}
 	fullObject.UserQueryInput = v
 
