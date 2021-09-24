@@ -1,0 +1,12 @@
+# @genqlient(typename: "MyMultipleDirectivesResponse")
+# @genqlient(omitempty: true)
+# @genqlient(pointer: true)
+query MultipleDirectives(
+  # @genqlient(pointer: false)
+  # @genqlient(typename: "MyInput")
+  $query: UserQueryInput,
+  $queries: [UserQueryInput],
+) {
+  user(query: $query) { id }
+  users(query: $queries) { id }
+}

@@ -290,7 +290,7 @@ func (g *generator) convertDefinition(
 	if options.TypeName != "" {
 		// If the user specified a name, use it!
 		name = options.TypeName
-		if namePrefix.head == name && namePrefix.tail == nil {
+		if namePrefix != nil && namePrefix.head == name && namePrefix.tail == nil {
 			// Special case: if this name is also the only component of the
 			// name-prefix, append the type-name anyway.  This happens when you
 			// assign a type name to an interface type, and we are generating
@@ -367,10 +367,12 @@ func (g *generator) convertDefinition(
 
 		for i, field := range def.Fields {
 			goName := upperFirst(field.Name)
-			// Several of the arguments don't really make sense here
+			// There are no field-specific options for inputs (yet, see #14),
+			// but we still need to merge with an empty directive to clear out
+			// any query-options that shouldn't apply here (namely "typename").
+			fieldOptions := queryOptions.merge(newGenqlientDirective(pos))
+			// Several of the arguments don't really make sense here:
 			// (note field.Type is necessarily a scalar, input, or enum)
-			// - no field-specific options can apply, because this is
-			//   a field in the type, not in the query (see also #14).
 			// - namePrefix is ignored for input types and enums (see
 			//   names.go) and for scalars (they use client-specified
 			//   names)
@@ -381,7 +383,7 @@ func (g *generator) convertDefinition(
 			// will be ignored?  We know field.Type is a scalar, enum, or input
 			// type.  But plumbing that is a bit tricky in practice.
 			fieldGoType, err := g.convertType(
-				namePrefix, field.Type, nil, queryOptions, queryOptions)
+				namePrefix, field.Type, nil, fieldOptions, queryOptions)
 			if err != nil {
 				return nil, err
 			}
