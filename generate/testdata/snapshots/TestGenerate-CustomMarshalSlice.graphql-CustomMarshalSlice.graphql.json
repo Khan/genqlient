@@ -1,0 +1,9 @@
+{
+  "operations": [
+    {
+      "operationName": "CustomMarshalSlice",
+      "query": "\nquery CustomMarshalSlice ($datesss: [[[Date!]!]!]!, $datesssp: [[[Date!]!]!]!) {\n\tacceptsListOfListOfListsOfDates(datesss: $datesss)\n\twithPointer: acceptsListOfListOfListsOfDates(datesss: $datesssp)\n}\n",
+      "sourceLocation": "testdata/queries/CustomMarshalSlice.graphql"
+    }
+  ]
+}

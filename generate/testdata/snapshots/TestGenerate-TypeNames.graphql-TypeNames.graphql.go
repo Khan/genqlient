@@ -65,15 +65,15 @@ func (v *ItemTopic) GetId() testutil.ID { return v.Id }
 // GetName is a part of, and documented with, the interface Item.
 func (v *ItemTopic) GetName() string { return v.Name }
 
-func __unmarshalItem(v *Item, m json.RawMessage) error {
-	if string(m) == "null" {
+func __unmarshalItem(b []byte, v *Item) error {
+	if string(b) == "null" {
 		return nil
 	}
 
 	var tn struct {
 		TypeName string `json:"__typename"`
 	}
-	err := json.Unmarshal(m, &tn)
+	err := json.Unmarshal(b, &tn)
 	if err != nil {
 		return err
 	}
@@ -81,13 +81,13 @@ func __unmarshalItem(v *Item, m json.RawMessage) error {
 	switch tn.TypeName {
 	case "Article":
 		*v = new(ItemArticle)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Video":
 		*v = new(ItemVideo)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(ItemTopic)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
 			"Response was missing Content.__typename")
@@ -134,6 +134,10 @@ type Resp struct {
 
 func (v *Resp) UnmarshalJSON(b []byte) error {
 
+	if string(b) == "null" {
+		return nil
+	}
+
 	var firstPass struct {
 		*Resp
 		RandomItem json.RawMessage `json:"randomItem"`
@@ -147,10 +151,10 @@ func (v *Resp) UnmarshalJSON(b []byte) error {
 	}
 
 	{
-		target := &v.RandomItem
-		raw := firstPass.RandomItem
+		dst := &v.RandomItem
+		src := firstPass.RandomItem
 		err = __unmarshalItem(
-			target, raw)
+			src, dst)
 		if err != nil {
 			return fmt.Errorf(
 				"Unable to unmarshal Resp.RandomItem: %w", err)

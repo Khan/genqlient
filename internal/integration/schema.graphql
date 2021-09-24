@@ -1,9 +1,13 @@
+scalar Date
+
 type Query {
   me: User
   user(id: ID): User
   being(id: ID!): Being
   beings(ids: [ID!]!): [Being]!
   lotteryWinner(number: Int!): Lucky
+  usersBornOn(date: Date!): [User!]!
+  usersBornOnDates(dates: [Date!]!): [User!]!
   fail: Boolean
 }
 
@@ -12,6 +16,7 @@ type User implements Being & Lucky {
   name: String!
   luckyNumber: Int
   hair: Hair
+  birthdate: Date
 }
 
 type Hair { color: String }   # silly name to confuse the name-generator

@@ -2,23 +2,25 @@
      UnmarshalJSON from the function it follows) */}}
 
 func (v *{{.GoName}}) UnmarshalJSON(b []byte) error {
-    {{/* We want to specially handle the abstract or embedded fields, but
-         unmarshal everything else normally.  To handle abstract fields,
-         first we unmarshal them into a json.RawMessage, and then handle those
-         further, below.  Embedded fields we just unmarshal directly into the
-         embedded value.  For the rest, we just want to call json.Unmarshal.
-         But if we do that naively on a value of type `.Type`, it will call
-         this function again, and recurse infinitely.  So we make a wrapper
-         type which embeds both this type and NoUmnarshalJSON, which prevents
-         either's UnmarshalJSON method from being promoted.  For more on why
-         this is so difficult, see
+    {{/* Standard convention for unmarshalers is to no-op on null. */}}
+    if string(b) == "null" {
+        return nil
+    }
+
+    {{/* We want to specially handle certain fields, but unmarshal everything
+         else normally.  To handle abstract fields and fields with custom
+         unmarshalers, first we unmarshal them into a json.RawMessage, and then
+         handle those further, below.  Embedded fields don't need the
+         json.RawMessage; we just use our input again.  Either way, we first
+         want to call json.Unmarshal on the receiver (v).  But if we do that
+         naively on a value of type `.Type`, it will call this function again,
+         and recurse infinitely.  So we make a wrapper type which embeds both
+         this type and NoUmnarshalJSON, which prevents either's UnmarshalJSON
+         method from being promoted.  For more on why this is so difficult, see
          https://github.com/benjaminjkraft/notes/blob/master/go-json-interfaces.md.
          (Note there are a few different ways "hide" the method, but this one
          seems to be the best option that works if this type has embedded types
          with UnmarshalJSON methods.)
-         TODO(benkraft)): Ensure `{{.Type}}Wrapper` won't collide with any
-         other type we need.  (For the most part it being locally-scoped saves
-         us; it's not clear if this can be a problem in practice.)
     */}}
 
     {{/* TODO(benkraft): Omit/simplify the first pass if all fields are
@@ -26,7 +28,7 @@ func (v *{{.GoName}}) UnmarshalJSON(b []byte) error {
     var firstPass struct{
         *{{.GoName}}
         {{range .Fields -}}
-        {{if and .IsAbstract (not .IsEmbedded) -}}
+        {{if and .NeedsUnmarshaler (not .IsEmbedded) -}}
         {{.GoName}} {{repeat .GoType.SliceDepth "[]"}}{{ref "encoding/json.RawMessage"}} `json:"{{.JSONName}}"`
         {{end -}}
         {{end -}}
@@ -43,77 +45,71 @@ func (v *{{.GoName}}) UnmarshalJSON(b []byte) error {
 
     {{/* Now, handle the fields needing special handling. */}}
     {{range $field := .Fields -}}
+    {{if $field.NeedsUnmarshaler -}}
     {{if $field.IsEmbedded -}}
     {{/* Embedded fields are easier: we just unmarshal the same input into
          them.  (They're also easier because they can't be lists, since they
          arise from GraphQL fragment spreads.) */ -}}
-    {{if $field.IsAbstract -}}
-    {{/* Except if they're both abstract and embedded, in which case we need to
-         call the unmarshal-helper instead.  Luckily, we don't embed
-         slice-typed fields, so we don't need the full generality we handle
-         below. */ -}}
-    err = __unmarshal{{$field.GoType.Unwrap.Reference}}(
+    err = {{$field.Unmarshaler $.Generator}}(
         b, &v.{{$field.GoType.Unwrap.Reference}})
-    {{else -}}
-    err = json.Unmarshal(
-        b, &v.{{$field.GoType.Unwrap.Reference}})
-    {{end -}}{{/* inner if .IsAbstract */ -}}
     if err != nil {
         return err
     }
-    {{else if $field.IsAbstract -}}
-    {{/* First, for abstract fields, call the unmarshal-helper.
-         This gets a little complicated because we may have a slice field.
-         So what we do is basically, for each field of type `[][]...[]MyType`:
+    {{else -}}
+    {{/* For other fields (abstract or custom unmarshaler), first, call the
+         unmarshaler (our unmarshal-helper, or the user-specified one,
+         respectively).  This gets a little complicated because we may have
+         a slice field.  So what we do is basically, for each field of type
+         `[][]...[]MyType`:
 
-            target := &v.MyField      // *[][]...[]MyType
-            raw := firstPass.MyField  // [][]...[]json.RawMessage
+            dst := &v.MyField      // *[][]...[]MyType
+            src := firstPass.MyField  // [][]...[]json.RawMessage
 
             // repeat the following three lines n times; each time, inside
-            // the loop we have one less layer of slice on raw and target
-            *target = make([][]...[]MyType, len(raw))
-            for i, raw := range raw {
-                // We need the &(*target)[i] because at each stage we want to
-                // keep target as a pointer.  (It only really has to be a
+            // the loop we have one less layer of slice on src and dst
+            *dst = make([][]...[]MyType, len(src))
+            for i, src := range src {
+                // We need the &(*dst)[i] because at each stage we want to
+                // keep dst as a pointer.  (It only really has to be a
                 // pointer at the innermost level, but it's easiest to be
                 // consistent.)
-                target := &(*target)[i]
-            
-                // (now we have `target *MyType` and `raw json.RawMessage`)
-                __unmarshalMyType(target, raw)
+                dst := &(*dst)[i]
+           
+                // (now we have `dst *MyType` and `src json.RawMessage`)
+                __unmarshalMyType(dst, src)
 
             } // (also n times)
 
          Note that if the field also uses a pointer (`[][]...[]*MyType`), we
          now pass around `*[][]...[]*MyType`; again in principle
          `[][]...[]*MyType` would work but require more special-casing.  Thus
-         in the innermost loop, `target` is of type `**MyType`, so we have to
-         pass `*target` to the unmarshal-helper.  Of course, since MyType is an
+         in the innermost loop, `dst` is of type `**MyType`, so we have to
+         pass `*dst` to the unmarshaler.  Of course, since MyType is an
          interface, I'm not sure why you'd any of that anyway.
 
          One additional trick is we wrap everything above in a block ({ ... }),
-         so that the variables target and raw may take on different types for
+         so that the variables dst and src may take on different types for
          each field we are handling, which would otherwise conflict.  (We could
          instead suffix the names, but that makes things much harder to read.)
     */}}
     {
-        target := &v.{{$field.GoName}}
-        raw := firstPass.{{$field.GoName}}
+        dst := &v.{{$field.GoName}}
+        src := firstPass.{{$field.GoName}}
         {{range $i := intRange $field.GoType.SliceDepth -}}
-        *target = make(
+        *dst = make(
             {{repeat (sub $field.GoType.SliceDepth $i) "[]"}}{{if $field.GoType.IsPointer}}*{{end}}{{$field.GoType.Unwrap.Reference}},
-            len(raw))
-        for i, raw := range raw {
-            target := &(*target)[i]
+            len(src))
+        for i, src := range src {
+            dst := &(*dst)[i]
         {{end -}}
         {{if $field.GoType.IsPointer -}}
         {{/* In this case, the parent for loop did `make([]*MyType, ...)` and
              we have a pointer into that list.  But we actually still need to
              initialize the *elements* of the list. */ -}}
-        *target = new({{$field.GoType.Unwrap.Reference}})
+        *dst = new({{$field.GoType.Unwrap.Reference}})
         {{end -}}
-        err = __unmarshal{{$field.GoType.Unwrap.Reference}}(
-            {{if $field.GoType.IsPointer}}*{{end}}target, raw)
+        err = {{$field.Unmarshaler $.Generator}}(
+            src, {{if $field.GoType.IsPointer}}*{{end}}dst)
         if err != nil {
             return fmt.Errorf(
                 "Unable to unmarshal {{$.GoName}}.{{$field.GoName}}: %w", err)
@@ -122,7 +118,8 @@ func (v *{{.GoName}}) UnmarshalJSON(b []byte) error {
         }
         {{end -}}
     }
-    {{end -}}{{/* end if .IsEmbedded + else if .IsAbstract */ -}}
+    {{end -}}{{/* end if/else .IsEmbedded */ -}}
+    {{end -}}{{/* end if .NeedsUnmarshaler */ -}}
     {{end}}{{/* end range .Fields */ -}}
 
     return nil

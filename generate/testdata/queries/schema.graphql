@@ -3,6 +3,7 @@
 We don't really have anything useful to do with this description though.
 """
 scalar DateTime
+scalar Date
 scalar Junk
 scalar ComplexJunk
 
@@ -44,6 +45,7 @@ input UserQueryInput {
   role: Role
   names: [String]
   hasPokemon: PokemonInput
+  birthdate: Date
 }
 
 type AuthMethod {
@@ -66,6 +68,7 @@ type User {
   authMethods: [AuthMethod!]!
   pokemon: [Pokemon!]
   greeting: Clip
+  birthdate: Date
 }
 
 """An audio clip, such as of a user saying hello."""
@@ -153,6 +156,9 @@ type Query {
 
   """usersWithRole looks a user up by role."""
   usersWithRole(role: Role!): [User!]!
+
+  usersBornOn(date: Date!): [User!]!
+
   root: Topic!
   randomItem: Content!
   randomLeaf: LeafContent!
@@ -163,6 +169,7 @@ type Query {
   listOfListsOfLists: [[[String!]!]!]!
   listOfListsOfListsOfContent: [[[Content!]!]!]!
   recur(input: RecursiveInput!): Recursive
+  acceptsListOfListOfListsOfDates(datesss: [[[Date!]!]!]!): Boolean
 }
 
 type Mutation {

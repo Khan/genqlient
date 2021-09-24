@@ -35,10 +35,11 @@ type Hair struct {
 }
 
 type User struct {
-	ID          string `json:"id"`
-	Name        string `json:"name"`
-	LuckyNumber *int   `json:"luckyNumber"`
-	Hair        *Hair  `json:"hair"`
+	ID          string  `json:"id"`
+	Name        string  `json:"name"`
+	LuckyNumber *int    `json:"luckyNumber"`
+	Hair        *Hair   `json:"hair"`
+	Birthdate   *string `json:"birthdate"`
 }
 
 func (User) IsBeing() {}

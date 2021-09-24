@@ -62,6 +62,10 @@ type StructOptionRootTopicChildrenContentParentTopic struct {
 
 func (v *StructOptionRootTopicChildrenContentParentTopic) UnmarshalJSON(b []byte) error {
 
+	if string(b) == "null" {
+		return nil
+	}
+
 	var firstPass struct {
 		*StructOptionRootTopicChildrenContentParentTopic
 		InterfaceChildren []json.RawMessage `json:"interfaceChildren"`
@@ -75,15 +79,15 @@ func (v *StructOptionRootTopicChildrenContentParentTopic) UnmarshalJSON(b []byte
 	}
 
 	{
-		target := &v.InterfaceChildren
-		raw := firstPass.InterfaceChildren
-		*target = make(
+		dst := &v.InterfaceChildren
+		src := firstPass.InterfaceChildren
+		*dst = make(
 			[]StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenContent,
-			len(raw))
-		for i, raw := range raw {
-			target := &(*target)[i]
+			len(src))
+		for i, src := range src {
+			dst := &(*dst)[i]
 			err = __unmarshalStructOptionRootTopicChildrenContentParentTopicInterfaceChildrenContent(
-				target, raw)
+				src, dst)
 			if err != nil {
 				return fmt.Errorf(
 					"Unable to unmarshal StructOptionRootTopicChildrenContentParentTopic.InterfaceChildren: %w", err)
@@ -169,15 +173,15 @@ func (v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenTopic) 
 	return v.Id
 }
 
-func __unmarshalStructOptionRootTopicChildrenContentParentTopicInterfaceChildrenContent(v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenContent, m json.RawMessage) error {
-	if string(m) == "null" {
+func __unmarshalStructOptionRootTopicChildrenContentParentTopicInterfaceChildrenContent(b []byte, v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenContent) error {
+	if string(b) == "null" {
 		return nil
 	}
 
 	var tn struct {
 		TypeName string `json:"__typename"`
 	}
-	err := json.Unmarshal(m, &tn)
+	err := json.Unmarshal(b, &tn)
 	if err != nil {
 		return err
 	}
@@ -185,13 +189,13 @@ func __unmarshalStructOptionRootTopicChildrenContentParentTopicInterfaceChildren
 	switch tn.TypeName {
 	case "Article":
 		*v = new(StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenArticle)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Video":
 		*v = new(StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenTopic)
-		return json.Unmarshal(m, *v)
+		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
 			"Response was missing Content.__typename")
@@ -217,6 +221,10 @@ type StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo struc
 }
 
 func (v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
 
 	var firstPass struct {
 		*StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo

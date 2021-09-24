@@ -44,6 +44,8 @@ type Config struct {
 type TypeBinding struct {
 	Type              string `yaml:"type"`
 	ExpectExactFields string `yaml:"expect_exact_fields"`
+	Marshaler         string `yaml:"marshaler"`
+	Unmarshaler       string `yaml:"unmarshaler"`
 }
 
 // ValidateAndFillDefaults ensures that the configuration is valid, and fills
