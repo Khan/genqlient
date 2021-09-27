@@ -47,7 +47,7 @@ type Client interface {
 }
 
 type client struct {
-	httpClient *http.Client
+	httpClient Doer
 	endpoint   string
 	method     string
 }
@@ -61,11 +61,15 @@ type client struct {
 //
 // The typical method of adding authentication headers is to wrap the client's
 // Transport to add those headers.  See example/caller.go for an example.
-func NewClient(endpoint string, httpClient *http.Client) Client {
+func NewClient(endpoint string, httpClient Doer) Client {
 	if httpClient == nil {
 		httpClient = http.DefaultClient
 	}
 	return &client{httpClient, endpoint, http.MethodPost}
+}
+
+type Doer interface {
+	Do(*http.Request) (*http.Response, error)
 }
 
 type payload struct {
