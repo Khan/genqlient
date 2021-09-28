@@ -175,6 +175,44 @@ func TestCustomMarshalSlice(t *testing.T) {
 	assert.Len(t, resp.UsersBornOnDates, 0)
 }
 
+func TestCustomMarshalOptional(t *testing.T) {
+	_ = `# @genqlient
+	query queryWithCustomMarshalOptional(
+		# @genqlient(pointer: true)
+		$date: Date,
+		# @genqlient(pointer: true)
+		$id: ID,
+	) {
+		userSearch(birthdate: $date, id: $id) { id name birthdate }
+	}`
+
+	ctx := context.Background()
+	server := server.RunServer()
+	defer server.Close()
+	client := graphql.NewClient(server.URL, http.DefaultClient)
+
+	date := time.Date(2025, time.January, 1, 12, 34, 56, 789, time.UTC)
+	resp, err := queryWithCustomMarshalOptional(ctx, client, &date, nil)
+	require.NoError(t, err)
+
+	assert.Len(t, resp.UserSearch, 1)
+	user := resp.UserSearch[0]
+	assert.Equal(t, "1", user.Id)
+	assert.Equal(t, "Yours Truly", user.Name)
+	assert.Equal(t,
+		time.Date(2025, time.January, 1, 0, 0, 0, 0, time.UTC),
+		user.Birthdate)
+
+	id := "2"
+	resp, err = queryWithCustomMarshalOptional(ctx, client, nil, &id)
+	require.NoError(t, err)
+	assert.Len(t, resp.UserSearch, 1)
+	user = resp.UserSearch[0]
+	assert.Equal(t, "2", user.Id)
+	assert.Equal(t, "Raven", user.Name)
+	assert.Zero(t, user.Birthdate)
+}
+
 func TestInterfaceNoFragments(t *testing.T) {
 	_ = `# @genqlient
 	query queryWithInterfaceNoFragments($id: ID!) {
@@ -322,7 +360,7 @@ func TestInterfaceListPointerField(t *testing.T) {
 	assert.Equal(t, "3", animal.Id)
 	assert.Equal(t, "Fido", animal.Name)
 
-	assert.Nil(t, *resp.Beings[2])
+	assert.Nil(t, resp.Beings[2])
 }
 
 func TestFragments(t *testing.T) {

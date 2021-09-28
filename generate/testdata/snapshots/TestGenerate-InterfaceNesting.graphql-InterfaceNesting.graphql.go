@@ -48,11 +48,13 @@ func (v *InterfaceNestingRootTopic) UnmarshalJSON(b []byte) error {
 			len(src))
 		for i, src := range src {
 			dst := &(*dst)[i]
-			err = __unmarshalInterfaceNestingRootTopicChildrenContent(
-				src, dst)
-			if err != nil {
-				return fmt.Errorf(
-					"Unable to unmarshal InterfaceNestingRootTopic.Children: %w", err)
+			if len(src) != 0 && string(src) != "null" {
+				err = __unmarshalInterfaceNestingRootTopicChildrenContent(
+					src, dst)
+				if err != nil {
+					return fmt.Errorf(
+						"Unable to unmarshal InterfaceNestingRootTopic.Children: %w", err)
+				}
 			}
 		}
 	}
@@ -196,11 +198,13 @@ func (v *InterfaceNestingRootTopicChildrenContentParentTopic) UnmarshalJSON(b []
 			len(src))
 		for i, src := range src {
 			dst := &(*dst)[i]
-			err = __unmarshalInterfaceNestingRootTopicChildrenContentParentTopicChildrenContent(
-				src, dst)
-			if err != nil {
-				return fmt.Errorf(
-					"Unable to unmarshal InterfaceNestingRootTopicChildrenContentParentTopic.Children: %w", err)
+			if len(src) != 0 && string(src) != "null" {
+				err = __unmarshalInterfaceNestingRootTopicChildrenContentParentTopicChildrenContent(
+					src, dst)
+				if err != nil {
+					return fmt.Errorf(
+						"Unable to unmarshal InterfaceNestingRootTopicChildrenContentParentTopic.Children: %w", err)
+				}
 			}
 		}
 	}

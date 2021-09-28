@@ -107,6 +107,17 @@ func (r *queryResolver) UsersBornOnDates(ctx context.Context, dates []string) ([
 	return usersByBirthdates(dates), nil
 }
 
+func (r *queryResolver) UserSearch(ctx context.Context, birthdate *string, id *string) ([]*User, error) {
+	switch {
+	case birthdate == nil && id != nil:
+		return []*User{userByID(*id)}, nil
+	case birthdate != nil && id == nil:
+		return usersByBirthdates([]string{*birthdate}), nil
+	default:
+		return nil, fmt.Errorf("need exactly one of birthdate or id")
+	}
+}
+
 func (r *queryResolver) Fail(ctx context.Context) (*bool, error) {
 	f := true
 	return &f, fmt.Errorf("oh no")

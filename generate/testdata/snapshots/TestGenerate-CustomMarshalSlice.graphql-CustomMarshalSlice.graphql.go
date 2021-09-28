@@ -82,12 +82,14 @@ func (v *__CustomMarshalSliceInput) MarshalJSON() ([]byte, error) {
 					len(src))
 				for i, src := range src {
 					dst := &(*dst)[i]
-					var err error
-					*dst, err = testutil.MarshalDate(
-						src)
-					if err != nil {
-						return nil, fmt.Errorf(
-							"Unable to marshal __CustomMarshalSliceInput.Datesssp: %w", err)
+					if src != nil {
+						var err error
+						*dst, err = testutil.MarshalDate(
+							src)
+						if err != nil {
+							return nil, fmt.Errorf(
+								"Unable to marshal __CustomMarshalSliceInput.Datesssp: %w", err)
+						}
 					}
 				}
 			}

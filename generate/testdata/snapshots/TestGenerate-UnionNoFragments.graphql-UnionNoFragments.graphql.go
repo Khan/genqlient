@@ -100,11 +100,13 @@ func (v *UnionNoFragmentsQueryResponse) UnmarshalJSON(b []byte) error {
 	{
 		dst := &v.RandomLeaf
 		src := firstPass.RandomLeaf
-		err = __unmarshalUnionNoFragmentsQueryRandomLeafLeafContent(
-			src, dst)
-		if err != nil {
-			return fmt.Errorf(
-				"Unable to unmarshal UnionNoFragmentsQueryResponse.RandomLeaf: %w", err)
+		if len(src) != 0 && string(src) != "null" {
+			err = __unmarshalUnionNoFragmentsQueryRandomLeafLeafContent(
+				src, dst)
+			if err != nil {
+				return fmt.Errorf(
+					"Unable to unmarshal UnionNoFragmentsQueryResponse.RandomLeaf: %w", err)
+			}
 		}
 	}
 	return nil

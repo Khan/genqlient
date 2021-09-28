@@ -30,9 +30,15 @@ func (v *{{.GoName}}) MarshalJSON() ([]byte, error) {
         for i, src := range src {
             dst := &(*dst)[i]
         {{end -}}
+        {{/* src now has type <GoType>; dst is json.RawMessage */ -}}
+        {{if $field.GoType.IsPointer -}}
+        {{/* If you passed a pointer, and it's nil, don't call the
+             marshaler.  This matches json.Marshal's behavior. */ -}}
+        if src != nil {
+        {{end -}}
         var err error
         *dst, err = {{$field.Marshaler $.Generator}}(
-            {{/* src is a pointer to the struct-field (or field-element, etc.).
+            {{/* src is the struct-field (or field-element, etc.).
                  We want to pass a pointer to the type you specified, so if
                  there's a pointer on the field that's exactly what we want,
                  and if not we need to take the address. */ -}}
@@ -41,6 +47,9 @@ func (v *{{.GoName}}) MarshalJSON() ([]byte, error) {
             return nil, fmt.Errorf(
                 "Unable to marshal {{$.GoName}}.{{$field.GoName}}: %w", err)
         }
+        {{if $field.GoType.IsPointer -}}
+        }{{/* end if src != nil */}}
+        {{end -}}
         {{range $i := intRange $field.GoType.SliceDepth -}}
         }
         {{end -}}

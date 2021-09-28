@@ -102,17 +102,24 @@ func (v *{{.GoName}}) UnmarshalJSON(b []byte) error {
         for i, src := range src {
             dst := &(*dst)[i]
         {{end -}}
-        {{if $field.GoType.IsPointer -}}
-        {{/* In this case, the parent for loop did `make([]*MyType, ...)` and
-             we have a pointer into that list.  But we actually still need to
-             initialize the *elements* of the list. */ -}}
-        *dst = new({{$field.GoType.Unwrap.Reference}})
-        {{end -}}
-        err = {{$field.Unmarshaler $.Generator}}(
-            src, {{if $field.GoType.IsPointer}}*{{end}}dst)
-        if err != nil {
-            return fmt.Errorf(
-                "Unable to unmarshal {{$.GoName}}.{{$field.GoName}}: %w", err)
+        {{/* dst now has type *<GoType>; dst is json.RawMessage */ -}}
+        {{/* If the field is null in the input, skip calling unmarshaler.
+             (This matches json.Unmarshal.)  If the field is missing entirely
+             from the input, we will have an uninitialized json.RawMessage;
+             handle that likewise. */ -}}
+        if len(src) != 0 && string(src) != "null" {
+            {{if $field.GoType.IsPointer -}}
+            {{/* In this case, the parent for loop did `make([]*MyType, ...)`
+                 and we have a pointer into that list.  But we actually still
+                 need to initialize the *elements* of the list. */ -}}
+            *dst = new({{$field.GoType.Unwrap.Reference}})
+            {{end -}}
+            err = {{$field.Unmarshaler $.Generator}}(
+                src, {{if $field.GoType.IsPointer}}*{{end}}dst)
+            if err != nil {
+                return fmt.Errorf(
+                    "Unable to unmarshal {{$.GoName}}.{{$field.GoName}}: %w", err)
+            }
         }
         {{range $i := intRange $field.GoType.SliceDepth -}}
         }

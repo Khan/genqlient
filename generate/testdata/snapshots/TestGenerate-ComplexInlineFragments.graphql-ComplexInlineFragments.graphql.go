@@ -206,11 +206,13 @@ func (v *ComplexInlineFragmentsNestedStuffTopic) UnmarshalJSON(b []byte) error {
 			len(src))
 		for i, src := range src {
 			dst := &(*dst)[i]
-			err = __unmarshalComplexInlineFragmentsNestedStuffTopicChildrenContent(
-				src, dst)
-			if err != nil {
-				return fmt.Errorf(
-					"Unable to unmarshal ComplexInlineFragmentsNestedStuffTopic.Children: %w", err)
+			if len(src) != 0 && string(src) != "null" {
+				err = __unmarshalComplexInlineFragmentsNestedStuffTopicChildrenContent(
+					src, dst)
+				if err != nil {
+					return fmt.Errorf(
+						"Unable to unmarshal ComplexInlineFragmentsNestedStuffTopic.Children: %w", err)
+				}
 			}
 		}
 	}
@@ -257,11 +259,13 @@ func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParen
 			len(src))
 		for i, src := range src {
 			dst := &(*dst)[i]
-			err = __unmarshalComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent(
-				src, dst)
-			if err != nil {
-				return fmt.Errorf(
-					"Unable to unmarshal ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopic.Children: %w", err)
+			if len(src) != 0 && string(src) != "null" {
+				err = __unmarshalComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent(
+					src, dst)
+				if err != nil {
+					return fmt.Errorf(
+						"Unable to unmarshal ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopic.Children: %w", err)
+				}
 			}
 		}
 	}
@@ -819,44 +823,52 @@ func (v *ComplexInlineFragmentsResponse) UnmarshalJSON(b []byte) error {
 	{
 		dst := &v.RandomItem
 		src := firstPass.RandomItem
-		err = __unmarshalComplexInlineFragmentsRandomItemContent(
-			src, dst)
-		if err != nil {
-			return fmt.Errorf(
-				"Unable to unmarshal ComplexInlineFragmentsResponse.RandomItem: %w", err)
+		if len(src) != 0 && string(src) != "null" {
+			err = __unmarshalComplexInlineFragmentsRandomItemContent(
+				src, dst)
+			if err != nil {
+				return fmt.Errorf(
+					"Unable to unmarshal ComplexInlineFragmentsResponse.RandomItem: %w", err)
+			}
 		}
 	}
 
 	{
 		dst := &v.RepeatedStuff
 		src := firstPass.RepeatedStuff
-		err = __unmarshalComplexInlineFragmentsRepeatedStuffContent(
-			src, dst)
-		if err != nil {
-			return fmt.Errorf(
-				"Unable to unmarshal ComplexInlineFragmentsResponse.RepeatedStuff: %w", err)
+		if len(src) != 0 && string(src) != "null" {
+			err = __unmarshalComplexInlineFragmentsRepeatedStuffContent(
+				src, dst)
+			if err != nil {
+				return fmt.Errorf(
+					"Unable to unmarshal ComplexInlineFragmentsResponse.RepeatedStuff: %w", err)
+			}
 		}
 	}
 
 	{
 		dst := &v.ConflictingStuff
 		src := firstPass.ConflictingStuff
-		err = __unmarshalComplexInlineFragmentsConflictingStuffContent(
-			src, dst)
-		if err != nil {
-			return fmt.Errorf(
-				"Unable to unmarshal ComplexInlineFragmentsResponse.ConflictingStuff: %w", err)
+		if len(src) != 0 && string(src) != "null" {
+			err = __unmarshalComplexInlineFragmentsConflictingStuffContent(
+				src, dst)
+			if err != nil {
+				return fmt.Errorf(
+					"Unable to unmarshal ComplexInlineFragmentsResponse.ConflictingStuff: %w", err)
+			}
 		}
 	}
 
 	{
 		dst := &v.NestedStuff
 		src := firstPass.NestedStuff
-		err = __unmarshalComplexInlineFragmentsNestedStuffContent(
-			src, dst)
-		if err != nil {
-			return fmt.Errorf(
-				"Unable to unmarshal ComplexInlineFragmentsResponse.NestedStuff: %w", err)
+		if len(src) != 0 && string(src) != "null" {
+			err = __unmarshalComplexInlineFragmentsNestedStuffContent(
+				src, dst)
+			if err != nil {
+				return fmt.Errorf(
+					"Unable to unmarshal ComplexInlineFragmentsResponse.NestedStuff: %w", err)
+			}
 		}
 	}
 	return nil

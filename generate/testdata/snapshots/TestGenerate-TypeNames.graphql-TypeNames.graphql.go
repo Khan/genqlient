@@ -153,11 +153,13 @@ func (v *Resp) UnmarshalJSON(b []byte) error {
 	{
 		dst := &v.RandomItem
 		src := firstPass.RandomItem
-		err = __unmarshalItem(
-			src, dst)
-		if err != nil {
-			return fmt.Errorf(
-				"Unable to unmarshal Resp.RandomItem: %w", err)
+		if len(src) != 0 && string(src) != "null" {
+			err = __unmarshalItem(
+				src, dst)
+			if err != nil {
+				return fmt.Errorf(
+					"Unable to unmarshal Resp.RandomItem: %w", err)
+			}
 		}
 	}
 	return nil
