@@ -8,6 +8,7 @@ type Query {
   lotteryWinner(number: Int!): Lucky
   usersBornOn(date: Date!): [User!]!
   usersBornOnDates(dates: [Date!]!): [User!]!
+  userSearch(birthdate: Date, id: ID): [User]
   fail: Boolean
 }
 

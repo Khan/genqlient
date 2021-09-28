@@ -40,11 +40,13 @@ func (v *AnimalFields) UnmarshalJSON(b []byte) error {
 	{
 		dst := &v.Owner
 		src := firstPass.Owner
-		err = __unmarshalAnimalFieldsOwnerBeing(
-			src, dst)
-		if err != nil {
-			return fmt.Errorf(
-				"Unable to unmarshal AnimalFields.Owner: %w", err)
+		if len(src) != 0 && string(src) != "null" {
+			err = __unmarshalAnimalFieldsOwnerBeing(
+				src, dst)
+			if err != nil {
+				return fmt.Errorf(
+					"Unable to unmarshal AnimalFields.Owner: %w", err)
+			}
 		}
 	}
 	return nil
@@ -314,6 +316,39 @@ func (v *__queryWithCustomMarshalInput) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&fullObject)
 }
 
+// __queryWithCustomMarshalOptionalInput is used internally by genqlient
+type __queryWithCustomMarshalOptionalInput struct {
+	Date *time.Time `json:"-"`
+	Id   *string    `json:"id"`
+}
+
+func (v *__queryWithCustomMarshalOptionalInput) MarshalJSON() ([]byte, error) {
+
+	var fullObject struct {
+		*__queryWithCustomMarshalOptionalInput
+		Date json.RawMessage `json:"date"`
+		graphql.NoMarshalJSON
+	}
+	fullObject.__queryWithCustomMarshalOptionalInput = v
+
+	{
+
+		dst := &fullObject.Date
+		src := v.Date
+		if src != nil {
+			var err error
+			*dst, err = testutil.MarshalDate(
+				src)
+			if err != nil {
+				return nil, fmt.Errorf(
+					"Unable to marshal __queryWithCustomMarshalOptionalInput.Date: %w", err)
+			}
+		}
+	}
+
+	return json.Marshal(&fullObject)
+}
+
 // __queryWithCustomMarshalSliceInput is used internally by genqlient
 type __queryWithCustomMarshalSliceInput struct {
 	Dates []time.Time `json:"-"`
@@ -396,6 +431,51 @@ type failingQueryResponse struct {
 	Me   failingQueryMeUser `json:"me"`
 }
 
+// queryWithCustomMarshalOptionalResponse is returned by queryWithCustomMarshalOptional on success.
+type queryWithCustomMarshalOptionalResponse struct {
+	UserSearch []queryWithCustomMarshalOptionalUserSearchUser `json:"userSearch"`
+}
+
+// queryWithCustomMarshalOptionalUserSearchUser includes the requested fields of the GraphQL type User.
+type queryWithCustomMarshalOptionalUserSearchUser struct {
+	Id        string    `json:"id"`
+	Name      string    `json:"name"`
+	Birthdate time.Time `json:"-"`
+}
+
+func (v *queryWithCustomMarshalOptionalUserSearchUser) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*queryWithCustomMarshalOptionalUserSearchUser
+		Birthdate json.RawMessage `json:"birthdate"`
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.queryWithCustomMarshalOptionalUserSearchUser = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	{
+		dst := &v.Birthdate
+		src := firstPass.Birthdate
+		if len(src) != 0 && string(src) != "null" {
+			err = testutil.UnmarshalDate(
+				src, dst)
+			if err != nil {
+				return fmt.Errorf(
+					"Unable to unmarshal queryWithCustomMarshalOptionalUserSearchUser.Birthdate: %w", err)
+			}
+		}
+	}
+	return nil
+}
+
 // queryWithCustomMarshalResponse is returned by queryWithCustomMarshal on success.
 type queryWithCustomMarshalResponse struct {
 	UsersBornOn []queryWithCustomMarshalUsersBornOnUser `json:"usersBornOn"`
@@ -434,11 +514,13 @@ func (v *queryWithCustomMarshalSliceUsersBornOnDatesUser) UnmarshalJSON(b []byte
 	{
 		dst := &v.Birthdate
 		src := firstPass.Birthdate
-		err = testutil.UnmarshalDate(
-			src, dst)
-		if err != nil {
-			return fmt.Errorf(
-				"Unable to unmarshal queryWithCustomMarshalSliceUsersBornOnDatesUser.Birthdate: %w", err)
+		if len(src) != 0 && string(src) != "null" {
+			err = testutil.UnmarshalDate(
+				src, dst)
+			if err != nil {
+				return fmt.Errorf(
+					"Unable to unmarshal queryWithCustomMarshalSliceUsersBornOnDatesUser.Birthdate: %w", err)
+			}
 		}
 	}
 	return nil
@@ -472,11 +554,13 @@ func (v *queryWithCustomMarshalUsersBornOnUser) UnmarshalJSON(b []byte) error {
 	{
 		dst := &v.Birthdate
 		src := firstPass.Birthdate
-		err = testutil.UnmarshalDate(
-			src, dst)
-		if err != nil {
-			return fmt.Errorf(
-				"Unable to unmarshal queryWithCustomMarshalUsersBornOnUser.Birthdate: %w", err)
+		if len(src) != 0 && string(src) != "null" {
+			err = testutil.UnmarshalDate(
+				src, dst)
+			if err != nil {
+				return fmt.Errorf(
+					"Unable to unmarshal queryWithCustomMarshalUsersBornOnUser.Birthdate: %w", err)
+			}
 		}
 	}
 	return nil
@@ -513,11 +597,13 @@ func (v *queryWithFragmentsBeingsAnimal) UnmarshalJSON(b []byte) error {
 	{
 		dst := &v.Owner
 		src := firstPass.Owner
-		err = __unmarshalqueryWithFragmentsBeingsAnimalOwnerBeing(
-			src, dst)
-		if err != nil {
-			return fmt.Errorf(
-				"Unable to unmarshal queryWithFragmentsBeingsAnimal.Owner: %w", err)
+		if len(src) != 0 && string(src) != "null" {
+			err = __unmarshalqueryWithFragmentsBeingsAnimalOwnerBeing(
+				src, dst)
+			if err != nil {
+				return fmt.Errorf(
+					"Unable to unmarshal queryWithFragmentsBeingsAnimal.Owner: %w", err)
+			}
 		}
 	}
 	return nil
@@ -722,11 +808,13 @@ func (v *queryWithFragmentsResponse) UnmarshalJSON(b []byte) error {
 			len(src))
 		for i, src := range src {
 			dst := &(*dst)[i]
-			err = __unmarshalqueryWithFragmentsBeingsBeing(
-				src, dst)
-			if err != nil {
-				return fmt.Errorf(
-					"Unable to unmarshal queryWithFragmentsResponse.Beings: %w", err)
+			if len(src) != 0 && string(src) != "null" {
+				err = __unmarshalqueryWithFragmentsBeingsBeing(
+					src, dst)
+				if err != nil {
+					return fmt.Errorf(
+						"Unable to unmarshal queryWithFragmentsResponse.Beings: %w", err)
+				}
 			}
 		}
 	}
@@ -846,11 +934,13 @@ func (v *queryWithInterfaceListFieldResponse) UnmarshalJSON(b []byte) error {
 			len(src))
 		for i, src := range src {
 			dst := &(*dst)[i]
-			err = __unmarshalqueryWithInterfaceListFieldBeingsBeing(
-				src, dst)
-			if err != nil {
-				return fmt.Errorf(
-					"Unable to unmarshal queryWithInterfaceListFieldResponse.Beings: %w", err)
+			if len(src) != 0 && string(src) != "null" {
+				err = __unmarshalqueryWithInterfaceListFieldBeingsBeing(
+					src, dst)
+				if err != nil {
+					return fmt.Errorf(
+						"Unable to unmarshal queryWithInterfaceListFieldResponse.Beings: %w", err)
+				}
 			}
 		}
 	}
@@ -970,12 +1060,14 @@ func (v *queryWithInterfaceListPointerFieldResponse) UnmarshalJSON(b []byte) err
 			len(src))
 		for i, src := range src {
 			dst := &(*dst)[i]
-			*dst = new(queryWithInterfaceListPointerFieldBeingsBeing)
-			err = __unmarshalqueryWithInterfaceListPointerFieldBeingsBeing(
-				src, *dst)
-			if err != nil {
-				return fmt.Errorf(
-					"Unable to unmarshal queryWithInterfaceListPointerFieldResponse.Beings: %w", err)
+			if len(src) != 0 && string(src) != "null" {
+				*dst = new(queryWithInterfaceListPointerFieldBeingsBeing)
+				err = __unmarshalqueryWithInterfaceListPointerFieldBeingsBeing(
+					src, *dst)
+				if err != nil {
+					return fmt.Errorf(
+						"Unable to unmarshal queryWithInterfaceListPointerFieldResponse.Beings: %w", err)
+				}
 			}
 		}
 	}
@@ -1097,11 +1189,13 @@ func (v *queryWithInterfaceNoFragmentsResponse) UnmarshalJSON(b []byte) error {
 	{
 		dst := &v.Being
 		src := firstPass.Being
-		err = __unmarshalqueryWithInterfaceNoFragmentsBeing(
-			src, dst)
-		if err != nil {
-			return fmt.Errorf(
-				"Unable to unmarshal queryWithInterfaceNoFragmentsResponse.Being: %w", err)
+		if len(src) != 0 && string(src) != "null" {
+			err = __unmarshalqueryWithInterfaceNoFragmentsBeing(
+				src, dst)
+			if err != nil {
+				return fmt.Errorf(
+					"Unable to unmarshal queryWithInterfaceNoFragmentsResponse.Being: %w", err)
+			}
 		}
 	}
 	return nil
@@ -1262,11 +1356,13 @@ func (v *queryWithNamedFragmentsResponse) UnmarshalJSON(b []byte) error {
 			len(src))
 		for i, src := range src {
 			dst := &(*dst)[i]
-			err = __unmarshalqueryWithNamedFragmentsBeingsBeing(
-				src, dst)
-			if err != nil {
-				return fmt.Errorf(
-					"Unable to unmarshal queryWithNamedFragmentsResponse.Beings: %w", err)
+			if len(src) != 0 && string(src) != "null" {
+				err = __unmarshalqueryWithNamedFragmentsBeingsBeing(
+					src, dst)
+				if err != nil {
+					return fmt.Errorf(
+						"Unable to unmarshal queryWithNamedFragmentsResponse.Beings: %w", err)
+				}
 			}
 		}
 	}
@@ -1462,6 +1558,37 @@ func queryWithCustomMarshalSlice(
 		`
 query queryWithCustomMarshalSlice ($dates: [Date!]!) {
 	usersBornOnDates(dates: $dates) {
+		id
+		name
+		birthdate
+	}
+}
+`,
+		&retval,
+		&__input,
+	)
+	return &retval, err
+}
+
+func queryWithCustomMarshalOptional(
+	ctx context.Context,
+	client graphql.Client,
+	date *time.Time,
+	id *string,
+) (*queryWithCustomMarshalOptionalResponse, error) {
+	__input := __queryWithCustomMarshalOptionalInput{
+		Date: date,
+		Id:   id,
+	}
+	var err error
+
+	var retval queryWithCustomMarshalOptionalResponse
+	err = client.MakeRequest(
+		ctx,
+		"queryWithCustomMarshalOptional",
+		`
+query queryWithCustomMarshalOptional ($date: Date, $id: ID) {
+	userSearch(birthdate: $date, id: $id) {
 		id
 		name
 		birthdate

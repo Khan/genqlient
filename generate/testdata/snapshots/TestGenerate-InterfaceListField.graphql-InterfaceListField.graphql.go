@@ -50,11 +50,13 @@ func (v *InterfaceListFieldRootTopic) UnmarshalJSON(b []byte) error {
 			len(src))
 		for i, src := range src {
 			dst := &(*dst)[i]
-			err = __unmarshalInterfaceListFieldRootTopicChildrenContent(
-				src, dst)
-			if err != nil {
-				return fmt.Errorf(
-					"Unable to unmarshal InterfaceListFieldRootTopic.Children: %w", err)
+			if len(src) != 0 && string(src) != "null" {
+				err = __unmarshalInterfaceListFieldRootTopicChildrenContent(
+					src, dst)
+				if err != nil {
+					return fmt.Errorf(
+						"Unable to unmarshal InterfaceListFieldRootTopic.Children: %w", err)
+				}
 			}
 		}
 	}
@@ -209,11 +211,13 @@ func (v *InterfaceListFieldWithPointerTopic) UnmarshalJSON(b []byte) error {
 			len(src))
 		for i, src := range src {
 			dst := &(*dst)[i]
-			err = __unmarshalInterfaceListFieldWithPointerTopicChildrenContent(
-				src, dst)
-			if err != nil {
-				return fmt.Errorf(
-					"Unable to unmarshal InterfaceListFieldWithPointerTopic.Children: %w", err)
+			if len(src) != 0 && string(src) != "null" {
+				err = __unmarshalInterfaceListFieldWithPointerTopicChildrenContent(
+					src, dst)
+				if err != nil {
+					return fmt.Errorf(
+						"Unable to unmarshal InterfaceListFieldWithPointerTopic.Children: %w", err)
+				}
 			}
 		}
 	}

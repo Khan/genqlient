@@ -49,11 +49,13 @@ func (v *CustomMarshalUsersBornOnUser) UnmarshalJSON(b []byte) error {
 	{
 		dst := &v.Birthdate
 		src := firstPass.Birthdate
-		err = testutil.UnmarshalDate(
-			src, dst)
-		if err != nil {
-			return fmt.Errorf(
-				"Unable to unmarshal CustomMarshalUsersBornOnUser.Birthdate: %w", err)
+		if len(src) != 0 && string(src) != "null" {
+			err = testutil.UnmarshalDate(
+				src, dst)
+			if err != nil {
+				return fmt.Errorf(
+					"Unable to unmarshal CustomMarshalUsersBornOnUser.Birthdate: %w", err)
+			}
 		}
 	}
 	return nil

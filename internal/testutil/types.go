@@ -36,10 +36,6 @@ func MarshalDate(t *time.Time) ([]byte, error) {
 
 func UnmarshalDate(b []byte, t *time.Time) error {
 	// (modified from time.Time.UnmarshalJSON)
-	if string(b) == "null" {
-		return nil
-	}
-
 	var err error
 	*t, err = time.Parse(`"`+dateFormat+`"`, string(b))
 	return err

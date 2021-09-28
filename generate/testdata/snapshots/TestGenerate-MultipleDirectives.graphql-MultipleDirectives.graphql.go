@@ -40,12 +40,14 @@ func (v *MyInput) MarshalJSON() ([]byte, error) {
 
 		dst := &fullObject.Birthdate
 		src := v.Birthdate
-		var err error
-		*dst, err = testutil.MarshalDate(
-			src)
-		if err != nil {
-			return nil, fmt.Errorf(
-				"Unable to marshal MyInput.Birthdate: %w", err)
+		if src != nil {
+			var err error
+			*dst, err = testutil.MarshalDate(
+				src)
+			if err != nil {
+				return nil, fmt.Errorf(
+					"Unable to marshal MyInput.Birthdate: %w", err)
+			}
 		}
 	}
 
@@ -127,12 +129,14 @@ func (v *UserQueryInput) MarshalJSON() ([]byte, error) {
 
 		dst := &fullObject.Birthdate
 		src := v.Birthdate
-		var err error
-		*dst, err = testutil.MarshalDate(
-			src)
-		if err != nil {
-			return nil, fmt.Errorf(
-				"Unable to marshal UserQueryInput.Birthdate: %w", err)
+		if src != nil {
+			var err error
+			*dst, err = testutil.MarshalDate(
+				src)
+			if err != nil {
+				return nil, fmt.Errorf(
+					"Unable to marshal UserQueryInput.Birthdate: %w", err)
+			}
 		}
 	}
 

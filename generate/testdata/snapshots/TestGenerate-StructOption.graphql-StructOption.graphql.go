@@ -86,11 +86,13 @@ func (v *StructOptionRootTopicChildrenContentParentTopic) UnmarshalJSON(b []byte
 			len(src))
 		for i, src := range src {
 			dst := &(*dst)[i]
-			err = __unmarshalStructOptionRootTopicChildrenContentParentTopicInterfaceChildrenContent(
-				src, dst)
-			if err != nil {
-				return fmt.Errorf(
-					"Unable to unmarshal StructOptionRootTopicChildrenContentParentTopic.InterfaceChildren: %w", err)
+			if len(src) != 0 && string(src) != "null" {
+				err = __unmarshalStructOptionRootTopicChildrenContentParentTopicInterfaceChildrenContent(
+					src, dst)
+				if err != nil {
+					return fmt.Errorf(
+						"Unable to unmarshal StructOptionRootTopicChildrenContentParentTopic.InterfaceChildren: %w", err)
+				}
 			}
 		}
 	}

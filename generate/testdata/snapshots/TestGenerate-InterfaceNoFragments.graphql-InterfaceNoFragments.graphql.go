@@ -275,34 +275,40 @@ func (v *InterfaceNoFragmentsQueryResponse) UnmarshalJSON(b []byte) error {
 	{
 		dst := &v.RandomItem
 		src := firstPass.RandomItem
-		err = __unmarshalInterfaceNoFragmentsQueryRandomItemContent(
-			src, dst)
-		if err != nil {
-			return fmt.Errorf(
-				"Unable to unmarshal InterfaceNoFragmentsQueryResponse.RandomItem: %w", err)
+		if len(src) != 0 && string(src) != "null" {
+			err = __unmarshalInterfaceNoFragmentsQueryRandomItemContent(
+				src, dst)
+			if err != nil {
+				return fmt.Errorf(
+					"Unable to unmarshal InterfaceNoFragmentsQueryResponse.RandomItem: %w", err)
+			}
 		}
 	}
 
 	{
 		dst := &v.RandomItemWithTypeName
 		src := firstPass.RandomItemWithTypeName
-		err = __unmarshalInterfaceNoFragmentsQueryRandomItemWithTypeNameContent(
-			src, dst)
-		if err != nil {
-			return fmt.Errorf(
-				"Unable to unmarshal InterfaceNoFragmentsQueryResponse.RandomItemWithTypeName: %w", err)
+		if len(src) != 0 && string(src) != "null" {
+			err = __unmarshalInterfaceNoFragmentsQueryRandomItemWithTypeNameContent(
+				src, dst)
+			if err != nil {
+				return fmt.Errorf(
+					"Unable to unmarshal InterfaceNoFragmentsQueryResponse.RandomItemWithTypeName: %w", err)
+			}
 		}
 	}
 
 	{
 		dst := &v.WithPointer
 		src := firstPass.WithPointer
-		*dst = new(InterfaceNoFragmentsQueryWithPointerContent)
-		err = __unmarshalInterfaceNoFragmentsQueryWithPointerContent(
-			src, *dst)
-		if err != nil {
-			return fmt.Errorf(
-				"Unable to unmarshal InterfaceNoFragmentsQueryResponse.WithPointer: %w", err)
+		if len(src) != 0 && string(src) != "null" {
+			*dst = new(InterfaceNoFragmentsQueryWithPointerContent)
+			err = __unmarshalInterfaceNoFragmentsQueryWithPointerContent(
+				src, *dst)
+			if err != nil {
+				return fmt.Errorf(
+					"Unable to unmarshal InterfaceNoFragmentsQueryResponse.WithPointer: %w", err)
+			}
 		}
 	}
 	return nil

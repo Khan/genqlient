@@ -173,33 +173,39 @@ func (v *InnerQueryFragment) UnmarshalJSON(b []byte) error {
 	{
 		dst := &v.RandomItem
 		src := firstPass.RandomItem
-		err = __unmarshalInnerQueryFragmentRandomItemContent(
-			src, dst)
-		if err != nil {
-			return fmt.Errorf(
-				"Unable to unmarshal InnerQueryFragment.RandomItem: %w", err)
+		if len(src) != 0 && string(src) != "null" {
+			err = __unmarshalInnerQueryFragmentRandomItemContent(
+				src, dst)
+			if err != nil {
+				return fmt.Errorf(
+					"Unable to unmarshal InnerQueryFragment.RandomItem: %w", err)
+			}
 		}
 	}
 
 	{
 		dst := &v.RandomLeaf
 		src := firstPass.RandomLeaf
-		err = __unmarshalInnerQueryFragmentRandomLeafLeafContent(
-			src, dst)
-		if err != nil {
-			return fmt.Errorf(
-				"Unable to unmarshal InnerQueryFragment.RandomLeaf: %w", err)
+		if len(src) != 0 && string(src) != "null" {
+			err = __unmarshalInnerQueryFragmentRandomLeafLeafContent(
+				src, dst)
+			if err != nil {
+				return fmt.Errorf(
+					"Unable to unmarshal InnerQueryFragment.RandomLeaf: %w", err)
+			}
 		}
 	}
 
 	{
 		dst := &v.OtherLeaf
 		src := firstPass.OtherLeaf
-		err = __unmarshalInnerQueryFragmentOtherLeafLeafContent(
-			src, dst)
-		if err != nil {
-			return fmt.Errorf(
-				"Unable to unmarshal InnerQueryFragment.OtherLeaf: %w", err)
+		if len(src) != 0 && string(src) != "null" {
+			err = __unmarshalInnerQueryFragmentOtherLeafLeafContent(
+				src, dst)
+			if err != nil {
+				return fmt.Errorf(
+					"Unable to unmarshal InnerQueryFragment.OtherLeaf: %w", err)
+			}
 		}
 	}
 	return nil
@@ -703,11 +709,13 @@ func (v *MoreVideoFieldsParentTopic) UnmarshalJSON(b []byte) error {
 			len(src))
 		for i, src := range src {
 			dst := &(*dst)[i]
-			err = __unmarshalMoreVideoFieldsParentTopicChildrenContent(
-				src, dst)
-			if err != nil {
-				return fmt.Errorf(
-					"Unable to unmarshal MoreVideoFieldsParentTopic.Children: %w", err)
+			if len(src) != 0 && string(src) != "null" {
+				err = __unmarshalMoreVideoFieldsParentTopicChildrenContent(
+					src, dst)
+				if err != nil {
+					return fmt.Errorf(
+						"Unable to unmarshal MoreVideoFieldsParentTopic.Children: %w", err)
+				}
 			}
 		}
 	}

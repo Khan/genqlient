@@ -34,6 +34,7 @@ When releasing a new version:
 
 - The `omitempty` option now works correctly for struct- and map-typed variables, matching `encoding/json`, which is to say it never omits structs, and omits empty maps. (#43)
 - Generated type-names now abbreviate across multiple components; for example if the path to a type is `(MyOperation, Outer, Outer, Inner, OuterInner)`, it will again be called `MyOperationOuterInner`.  (This regressed in a pre-v0.1.0 refactor.) (#109)
+- Previously, interface fields with `# @genqlient(pointer: true)` would be unmarshaled to `(*MyInterface)(*<nil>)`, i.e. a pointer to the untyped-nil of the interface type.  Now they are unmarshaled as `(*MyInterface)(<nil>)`, i.e. a nil pointer of the pointer-to-interface type, as you would expect.
 
 ## v0.1.0
 
