@@ -117,8 +117,8 @@ func initConfig(filename string) error {
 	}
 	w, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0o644)
 	if err != nil {
-		return err
+		return errorf(nil, "unable to write default genqlient.yaml: %v", err)
 	}
 	_, err = io.Copy(w, r)
-	return err
+	return errorf(nil, "unable to write default genqlient.yaml: %v", err)
 }

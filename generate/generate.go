@@ -316,7 +316,8 @@ func Generate(config *Config) (map[string][]byte, error) {
 	// way.  (As-is, we generate a broken file, with just (unused) imports.)
 	if len(document.Operations) == 0 {
 		// Hard to have a position when there are no operations :(
-		return nil, errorf(nil, "no queries found, looked in: %v",
+		return nil, errorf(nil,
+			"no queries found, looked in: %v (configure this in genqlient.yaml)",
 			strings.Join(config.Operations, ", "))
 	}
 
