@@ -277,11 +277,11 @@ type selector struct {
 // Those rules don't work for us.  When unmarshaling, we want to fill in all
 // the potentially-matching fields (QT.A.Id and QT.B.Id in this case), and when
 // marshaling, we want to always marshal exactly one potentially-conflicting
-// field; we're happy to use the Go visibility rules when they apply. such field, choosing an
-// arbitrary one (in a stable manner) if needed.  For unmarshaling, our
-// QT.UnmarshalJSON ends up unmarshaling the same JSON object into QT, QT.A,
-// and QT.B, which gives us the behavior we want.  But for
-// marshaling, we need to resolve the conflicts: if we simply marshaled QT,
+// field; we're happy to use the Go visibility rules when they apply but we
+// need to always marshal one field, even if there's not a clear best choice.
+// For unmarshaling, our QT.UnmarshalJSON ends up unmarshaling the same JSON
+// object into QT, QT.A, and QT.B, which gives us the behavior we want.  But
+// for marshaling, we need to resolve the conflicts: if we simply marshaled QT,
 // QT.A, and QT.B, we'd have to do some JSON-surgery to join them, and we'd
 // probably end up with duplicate fields, which leads to unpredictable behavior
 // based on the reader.  That's no good.
