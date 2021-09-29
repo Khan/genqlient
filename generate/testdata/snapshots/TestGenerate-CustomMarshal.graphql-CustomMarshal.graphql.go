@@ -61,23 +61,97 @@ func (v *CustomMarshalUsersBornOnUser) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+type __premarshalCustomMarshalUsersBornOnUser struct {
+	Id testutil.ID `json:"id"`
+
+	Birthdate json.RawMessage `json:"birthdate"`
+}
+
+func (v *CustomMarshalUsersBornOnUser) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *CustomMarshalUsersBornOnUser) __premarshalJSON() (*__premarshalCustomMarshalUsersBornOnUser, error) {
+
+	var retval __premarshalCustomMarshalUsersBornOnUser
+
+	retval.Id = v.Id
+	{
+
+		dst := &retval.Birthdate
+		src := v.Birthdate
+		var err error
+		*dst, err = testutil.MarshalDate(
+			&src)
+		if err != nil {
+			return nil, fmt.Errorf(
+				"Unable to marshal CustomMarshalUsersBornOnUser.Birthdate: %w", err)
+		}
+	}
+	return &retval, nil
+}
+
 // __CustomMarshalInput is used internally by genqlient
 type __CustomMarshalInput struct {
 	Date time.Time `json:"-"`
 }
 
-func (v *__CustomMarshalInput) MarshalJSON() ([]byte, error) {
+func (v *__CustomMarshalInput) UnmarshalJSON(b []byte) error {
 
-	var fullObject struct {
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
 		*__CustomMarshalInput
 		Date json.RawMessage `json:"date"`
-		graphql.NoMarshalJSON
+		graphql.NoUnmarshalJSON
 	}
-	fullObject.__CustomMarshalInput = v
+	firstPass.__CustomMarshalInput = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	{
+		dst := &v.Date
+		src := firstPass.Date
+		if len(src) != 0 && string(src) != "null" {
+			err = testutil.UnmarshalDate(
+				src, dst)
+			if err != nil {
+				return fmt.Errorf(
+					"Unable to unmarshal __CustomMarshalInput.Date: %w", err)
+			}
+		}
+	}
+	return nil
+}
+
+type __premarshal__CustomMarshalInput struct {
+	Date json.RawMessage `json:"date"`
+}
+
+func (v *__CustomMarshalInput) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *__CustomMarshalInput) __premarshalJSON() (*__premarshal__CustomMarshalInput, error) {
+
+	var retval __premarshal__CustomMarshalInput
 
 	{
 
-		dst := &fullObject.Date
+		dst := &retval.Date
 		src := v.Date
 		var err error
 		*dst, err = testutil.MarshalDate(
@@ -87,8 +161,7 @@ func (v *__CustomMarshalInput) MarshalJSON() ([]byte, error) {
 				"Unable to marshal __CustomMarshalInput.Date: %w", err)
 		}
 	}
-
-	return json.Marshal(&fullObject)
+	return &retval, nil
 }
 
 func CustomMarshal(

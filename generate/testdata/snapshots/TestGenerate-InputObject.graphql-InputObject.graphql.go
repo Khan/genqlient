@@ -61,18 +61,76 @@ type UserQueryInput struct {
 	Birthdate  time.Time        `json:"-"`
 }
 
-func (v *UserQueryInput) MarshalJSON() ([]byte, error) {
+func (v *UserQueryInput) UnmarshalJSON(b []byte) error {
 
-	var fullObject struct {
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
 		*UserQueryInput
 		Birthdate json.RawMessage `json:"birthdate"`
-		graphql.NoMarshalJSON
+		graphql.NoUnmarshalJSON
 	}
-	fullObject.UserQueryInput = v
+	firstPass.UserQueryInput = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
 
 	{
+		dst := &v.Birthdate
+		src := firstPass.Birthdate
+		if len(src) != 0 && string(src) != "null" {
+			err = testutil.UnmarshalDate(
+				src, dst)
+			if err != nil {
+				return fmt.Errorf(
+					"Unable to unmarshal UserQueryInput.Birthdate: %w", err)
+			}
+		}
+	}
+	return nil
+}
 
-		dst := &fullObject.Birthdate
+type __premarshalUserQueryInput struct {
+	Email string `json:"email"`
+
+	Name string `json:"name"`
+
+	Id testutil.ID `json:"id"`
+
+	Role Role `json:"role"`
+
+	Names []string `json:"names"`
+
+	HasPokemon testutil.Pokemon `json:"hasPokemon"`
+
+	Birthdate json.RawMessage `json:"birthdate"`
+}
+
+func (v *UserQueryInput) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *UserQueryInput) __premarshalJSON() (*__premarshalUserQueryInput, error) {
+
+	var retval __premarshalUserQueryInput
+
+	retval.Email = v.Email
+	retval.Name = v.Name
+	retval.Id = v.Id
+	retval.Role = v.Role
+	retval.Names = v.Names
+	retval.HasPokemon = v.HasPokemon
+	{
+
+		dst := &retval.Birthdate
 		src := v.Birthdate
 		var err error
 		*dst, err = testutil.MarshalDate(
@@ -82,8 +140,7 @@ func (v *UserQueryInput) MarshalJSON() ([]byte, error) {
 				"Unable to marshal UserQueryInput.Birthdate: %w", err)
 		}
 	}
-
-	return json.Marshal(&fullObject)
+	return &retval, nil
 }
 
 // __InputObjectQueryInput is used internally by genqlient

@@ -31,6 +31,9 @@ func GetClientFromMyContext(ctx MyContext) (graphql.Client, error)     { return 
 const dateFormat = "2006-01-02"
 
 func MarshalDate(t *time.Time) ([]byte, error) {
+	if t == nil || t.IsZero() {
+		return []byte("null"), nil
+	}
 	return []byte(`"` + t.Format(dateFormat) + `"`), nil
 }
 

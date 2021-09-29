@@ -25,7 +25,7 @@ func TestSimpleQuery(t *testing.T) {
 	ctx := context.Background()
 	server := server.RunServer()
 	defer server.Close()
-	client := graphql.NewClient(server.URL, http.DefaultClient)
+	client := newRoundtripClient(t, server.URL)
 
 	resp, err := simpleQuery(ctx, client)
 	require.NoError(t, err)
@@ -42,7 +42,7 @@ func TestServerError(t *testing.T) {
 	ctx := context.Background()
 	server := server.RunServer()
 	defer server.Close()
-	client := graphql.NewClient(server.URL, http.DefaultClient)
+	client := newRoundtripClient(t, server.URL)
 
 	resp, err := failingQuery(ctx, client)
 	// As long as we get some response back, we should still return a full
@@ -55,7 +55,7 @@ func TestServerError(t *testing.T) {
 
 func TestNetworkError(t *testing.T) {
 	ctx := context.Background()
-	client := graphql.NewClient("https://nothing.invalid/graphql", http.DefaultClient)
+	client := newRoundtripClient(t, "https://nothing.invalid/graphql")
 
 	resp, err := failingQuery(ctx, client)
 	// As we guarantee in the README, even on network error you always get a
@@ -75,6 +75,11 @@ func TestVariables(t *testing.T) {
 	ctx := context.Background()
 	server := server.RunServer()
 	defer server.Close()
+	// This doesn't roundtrip successfully because the zero user gets marshaled
+	// as {"id": "", "name": "", ...}, not null.  There's really no way to do
+	// this right in Go (without adding `pointer: true` just for this purpose),
+	// and unmarshal(marshal(resp)) == resp should still hold, so we don't
+	// worry about it.
 	client := graphql.NewClient(server.URL, http.DefaultClient)
 
 	resp, err := queryWithVariables(ctx, client, "2")
@@ -99,7 +104,7 @@ func TestOmitempty(t *testing.T) {
 	ctx := context.Background()
 	server := server.RunServer()
 	defer server.Close()
-	client := graphql.NewClient(server.URL, http.DefaultClient)
+	client := newRoundtripClient(t, server.URL)
 
 	resp, err := queryWithOmitempty(ctx, client, "2")
 	require.NoError(t, err)
@@ -126,7 +131,7 @@ func TestCustomMarshal(t *testing.T) {
 	ctx := context.Background()
 	server := server.RunServer()
 	defer server.Close()
-	client := graphql.NewClient(server.URL, http.DefaultClient)
+	client := newRoundtripClient(t, server.URL)
 
 	resp, err := queryWithCustomMarshal(ctx, client,
 		time.Date(2025, time.January, 1, 12, 34, 56, 789, time.UTC))
@@ -155,7 +160,7 @@ func TestCustomMarshalSlice(t *testing.T) {
 	ctx := context.Background()
 	server := server.RunServer()
 	defer server.Close()
-	client := graphql.NewClient(server.URL, http.DefaultClient)
+	client := newRoundtripClient(t, server.URL)
 
 	resp, err := queryWithCustomMarshalSlice(ctx, client,
 		[]time.Time{time.Date(2025, time.January, 1, 12, 34, 56, 789, time.UTC)})
@@ -189,7 +194,7 @@ func TestCustomMarshalOptional(t *testing.T) {
 	ctx := context.Background()
 	server := server.RunServer()
 	defer server.Close()
-	client := graphql.NewClient(server.URL, http.DefaultClient)
+	client := newRoundtripClient(t, server.URL)
 
 	date := time.Date(2025, time.January, 1, 12, 34, 56, 789, time.UTC)
 	resp, err := queryWithCustomMarshalOptional(ctx, client, &date, nil)
@@ -223,7 +228,7 @@ func TestInterfaceNoFragments(t *testing.T) {
 	ctx := context.Background()
 	server := server.RunServer()
 	defer server.Close()
-	client := graphql.NewClient(server.URL, http.DefaultClient)
+	client := newRoundtripClient(t, server.URL)
 
 	resp, err := queryWithInterfaceNoFragments(ctx, client, "1")
 	require.NoError(t, err)
@@ -286,7 +291,7 @@ func TestInterfaceListField(t *testing.T) {
 	ctx := context.Background()
 	server := server.RunServer()
 	defer server.Close()
-	client := graphql.NewClient(server.URL, http.DefaultClient)
+	client := newRoundtripClient(t, server.URL)
 
 	resp, err := queryWithInterfaceListField(ctx, client,
 		[]string{"1", "3", "12847394823"})
@@ -333,7 +338,7 @@ func TestInterfaceListPointerField(t *testing.T) {
 	ctx := context.Background()
 	server := server.RunServer()
 	defer server.Close()
-	client := graphql.NewClient(server.URL, http.DefaultClient)
+	client := newRoundtripClient(t, server.URL)
 
 	resp, err := queryWithInterfaceListPointerField(ctx, client,
 		[]string{"1", "3", "12847394823"})
@@ -387,7 +392,7 @@ func TestFragments(t *testing.T) {
 	ctx := context.Background()
 	server := server.RunServer()
 	defer server.Close()
-	client := graphql.NewClient(server.URL, http.DefaultClient)
+	client := newRoundtripClient(t, server.URL)
 
 	resp, err := queryWithFragments(ctx, client, []string{"1", "3", "12847394823"})
 	require.NoError(t, err)
@@ -480,7 +485,7 @@ func TestNamedFragments(t *testing.T) {
 	ctx := context.Background()
 	server := server.RunServer()
 	defer server.Close()
-	client := graphql.NewClient(server.URL, http.DefaultClient)
+	client := newRoundtripClient(t, server.URL)
 
 	resp, err := queryWithNamedFragments(ctx, client, []string{"1", "3", "12847394823"})
 	require.NoError(t, err)

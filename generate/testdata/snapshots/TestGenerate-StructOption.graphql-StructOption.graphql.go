@@ -99,6 +99,49 @@ func (v *StructOptionRootTopicChildrenContentParentTopic) UnmarshalJSON(b []byte
 	return nil
 }
 
+type __premarshalStructOptionRootTopicChildrenContentParentTopic struct {
+	Id testutil.ID `json:"id"`
+
+	Children []StructOptionRootTopicChildrenContentParentTopicChildrenContent `json:"children"`
+
+	InterfaceChildren []json.RawMessage `json:"interfaceChildren"`
+}
+
+func (v *StructOptionRootTopicChildrenContentParentTopic) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *StructOptionRootTopicChildrenContentParentTopic) __premarshalJSON() (*__premarshalStructOptionRootTopicChildrenContentParentTopic, error) {
+
+	var retval __premarshalStructOptionRootTopicChildrenContentParentTopic
+
+	retval.Id = v.Id
+	retval.Children = v.Children
+	{
+
+		dst := &retval.InterfaceChildren
+		src := v.InterfaceChildren
+		*dst = make(
+			[]json.RawMessage,
+			len(src))
+		for i, src := range src {
+			dst := &(*dst)[i]
+			var err error
+			*dst, err = __marshalStructOptionRootTopicChildrenContentParentTopicInterfaceChildrenContent(
+				&src)
+			if err != nil {
+				return nil, fmt.Errorf(
+					"Unable to marshal StructOptionRootTopicChildrenContentParentTopic.InterfaceChildren: %w", err)
+			}
+		}
+	}
+	return &retval, nil
+}
+
 // StructOptionRootTopicChildrenContentParentTopicChildrenContent includes the requested fields of the GraphQL type Content.
 // The GraphQL type's documentation follows.
 //
@@ -207,6 +250,46 @@ func __unmarshalStructOptionRootTopicChildrenContentParentTopicInterfaceChildren
 	}
 }
 
+func __marshalStructOptionRootTopicChildrenContentParentTopicInterfaceChildrenContent(v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenContent) ([]byte, error) {
+
+	var typename string
+	switch v := (*v).(type) {
+	case *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenArticle:
+		typename = "Article"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenArticle
+		}{typename, v}
+		return json.Marshal(result)
+	case *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo:
+		typename = "Video"
+
+		premarshaled, err := v.__premarshalJSON()
+		if err != nil {
+			return nil, err
+		}
+		result := struct {
+			TypeName string `json:"__typename"`
+			*__premarshalStructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo
+		}{typename, premarshaled}
+		return json.Marshal(result)
+	case *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenTopic:
+		typename = "Topic"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenTopic
+		}{typename, v}
+		return json.Marshal(result)
+	case nil:
+		return []byte("null"), nil
+	default:
+		return nil, fmt.Errorf(
+			`Unexpected concrete type for StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenContent: "%T"`, v)
+	}
+}
+
 // StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenTopic includes the requested fields of the GraphQL type Topic.
 type StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenTopic struct {
 	Typename string `json:"__typename"`
@@ -245,6 +328,32 @@ func (v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo) 
 		return err
 	}
 	return nil
+}
+
+type __premarshalStructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo struct {
+	Typename string `json:"__typename"`
+
+	Id testutil.ID `json:"id"`
+
+	Duration int `json:"duration"`
+}
+
+func (v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo) __premarshalJSON() (*__premarshalStructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo, error) {
+
+	var retval __premarshalStructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo
+
+	retval.Typename = v.Typename
+	retval.Id = v.Id
+	retval.Duration = v.VideoFields.Duration
+	return &retval, nil
 }
 
 // StructOptionUser includes the requested fields of the GraphQL type User.

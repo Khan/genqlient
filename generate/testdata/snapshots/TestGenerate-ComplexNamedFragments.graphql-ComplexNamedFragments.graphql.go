@@ -40,6 +40,65 @@ func (v *ComplexNamedFragmentsResponse) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+type __premarshalComplexNamedFragmentsResponse struct {
+	RandomItem json.RawMessage `json:"randomItem"`
+
+	RandomLeaf json.RawMessage `json:"randomLeaf"`
+
+	OtherLeaf json.RawMessage `json:"otherLeaf"`
+}
+
+func (v *ComplexNamedFragmentsResponse) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *ComplexNamedFragmentsResponse) __premarshalJSON() (*__premarshalComplexNamedFragmentsResponse, error) {
+
+	var retval __premarshalComplexNamedFragmentsResponse
+
+	{
+
+		dst := &retval.RandomItem
+		src := v.QueryFragment.InnerQueryFragment.RandomItem
+		var err error
+		*dst, err = __marshalInnerQueryFragmentRandomItemContent(
+			&src)
+		if err != nil {
+			return nil, fmt.Errorf(
+				"Unable to marshal ComplexNamedFragmentsResponse.QueryFragment.InnerQueryFragment.RandomItem: %w", err)
+		}
+	}
+	{
+
+		dst := &retval.RandomLeaf
+		src := v.QueryFragment.InnerQueryFragment.RandomLeaf
+		var err error
+		*dst, err = __marshalInnerQueryFragmentRandomLeafLeafContent(
+			&src)
+		if err != nil {
+			return nil, fmt.Errorf(
+				"Unable to marshal ComplexNamedFragmentsResponse.QueryFragment.InnerQueryFragment.RandomLeaf: %w", err)
+		}
+	}
+	{
+
+		dst := &retval.OtherLeaf
+		src := v.QueryFragment.InnerQueryFragment.OtherLeaf
+		var err error
+		*dst, err = __marshalInnerQueryFragmentOtherLeafLeafContent(
+			&src)
+		if err != nil {
+			return nil, fmt.Errorf(
+				"Unable to marshal ComplexNamedFragmentsResponse.QueryFragment.InnerQueryFragment.OtherLeaf: %w", err)
+		}
+	}
+	return &retval, nil
+}
+
 // ContentFields includes the GraphQL fields of Content requested by the fragment ContentFields.
 // The GraphQL type's documentation follows.
 //
@@ -110,6 +169,42 @@ func __unmarshalContentFields(b []byte, v *ContentFields) error {
 	default:
 		return fmt.Errorf(
 			`Unexpected concrete type for ContentFields: "%v"`, tn.TypeName)
+	}
+}
+
+func __marshalContentFields(v *ContentFields) ([]byte, error) {
+
+	var typename string
+	switch v := (*v).(type) {
+	case *ContentFieldsArticle:
+		typename = "Article"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*ContentFieldsArticle
+		}{typename, v}
+		return json.Marshal(result)
+	case *ContentFieldsVideo:
+		typename = "Video"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*ContentFieldsVideo
+		}{typename, v}
+		return json.Marshal(result)
+	case *ContentFieldsTopic:
+		typename = "Topic"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*ContentFieldsTopic
+		}{typename, v}
+		return json.Marshal(result)
+	case nil:
+		return []byte("null"), nil
+	default:
+		return nil, fmt.Errorf(
+			`Unexpected concrete type for ContentFields: "%T"`, v)
 	}
 }
 
@@ -211,6 +306,65 @@ func (v *InnerQueryFragment) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+type __premarshalInnerQueryFragment struct {
+	RandomItem json.RawMessage `json:"randomItem"`
+
+	RandomLeaf json.RawMessage `json:"randomLeaf"`
+
+	OtherLeaf json.RawMessage `json:"otherLeaf"`
+}
+
+func (v *InnerQueryFragment) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *InnerQueryFragment) __premarshalJSON() (*__premarshalInnerQueryFragment, error) {
+
+	var retval __premarshalInnerQueryFragment
+
+	{
+
+		dst := &retval.RandomItem
+		src := v.RandomItem
+		var err error
+		*dst, err = __marshalInnerQueryFragmentRandomItemContent(
+			&src)
+		if err != nil {
+			return nil, fmt.Errorf(
+				"Unable to marshal InnerQueryFragment.RandomItem: %w", err)
+		}
+	}
+	{
+
+		dst := &retval.RandomLeaf
+		src := v.RandomLeaf
+		var err error
+		*dst, err = __marshalInnerQueryFragmentRandomLeafLeafContent(
+			&src)
+		if err != nil {
+			return nil, fmt.Errorf(
+				"Unable to marshal InnerQueryFragment.RandomLeaf: %w", err)
+		}
+	}
+	{
+
+		dst := &retval.OtherLeaf
+		src := v.OtherLeaf
+		var err error
+		*dst, err = __marshalInnerQueryFragmentOtherLeafLeafContent(
+			&src)
+		if err != nil {
+			return nil, fmt.Errorf(
+				"Unable to marshal InnerQueryFragment.OtherLeaf: %w", err)
+		}
+	}
+	return &retval, nil
+}
+
 // InnerQueryFragmentOtherLeafArticle includes the requested fields of the GraphQL type Article.
 type InnerQueryFragmentOtherLeafArticle struct {
 	Typename             string `json:"__typename"`
@@ -240,6 +394,32 @@ func (v *InnerQueryFragmentOtherLeafArticle) UnmarshalJSON(b []byte) error {
 		return err
 	}
 	return nil
+}
+
+type __premarshalInnerQueryFragmentOtherLeafArticle struct {
+	Typename string `json:"__typename"`
+
+	Name string `json:"name"`
+
+	Url string `json:"url"`
+}
+
+func (v *InnerQueryFragmentOtherLeafArticle) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *InnerQueryFragmentOtherLeafArticle) __premarshalJSON() (*__premarshalInnerQueryFragmentOtherLeafArticle, error) {
+
+	var retval __premarshalInnerQueryFragmentOtherLeafArticle
+
+	retval.Typename = v.Typename
+	retval.Name = v.ContentFieldsArticle.Name
+	retval.Url = v.ContentFieldsArticle.Url
+	return &retval, nil
 }
 
 // InnerQueryFragmentOtherLeafLeafContent includes the requested fields of the GraphQL interface LeafContent.
@@ -297,6 +477,42 @@ func __unmarshalInnerQueryFragmentOtherLeafLeafContent(b []byte, v *InnerQueryFr
 	}
 }
 
+func __marshalInnerQueryFragmentOtherLeafLeafContent(v *InnerQueryFragmentOtherLeafLeafContent) ([]byte, error) {
+
+	var typename string
+	switch v := (*v).(type) {
+	case *InnerQueryFragmentOtherLeafArticle:
+		typename = "Article"
+
+		premarshaled, err := v.__premarshalJSON()
+		if err != nil {
+			return nil, err
+		}
+		result := struct {
+			TypeName string `json:"__typename"`
+			*__premarshalInnerQueryFragmentOtherLeafArticle
+		}{typename, premarshaled}
+		return json.Marshal(result)
+	case *InnerQueryFragmentOtherLeafVideo:
+		typename = "Video"
+
+		premarshaled, err := v.__premarshalJSON()
+		if err != nil {
+			return nil, err
+		}
+		result := struct {
+			TypeName string `json:"__typename"`
+			*__premarshalInnerQueryFragmentOtherLeafVideo
+		}{typename, premarshaled}
+		return json.Marshal(result)
+	case nil:
+		return []byte("null"), nil
+	default:
+		return nil, fmt.Errorf(
+			`Unexpected concrete type for InnerQueryFragmentOtherLeafLeafContent: "%T"`, v)
+	}
+}
+
 // InnerQueryFragmentOtherLeafVideo includes the requested fields of the GraphQL type Video.
 type InnerQueryFragmentOtherLeafVideo struct {
 	Typename           string `json:"__typename"`
@@ -334,6 +550,38 @@ func (v *InnerQueryFragmentOtherLeafVideo) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+type __premarshalInnerQueryFragmentOtherLeafVideo struct {
+	Typename string `json:"__typename"`
+
+	Id *testutil.ID `json:"id"`
+
+	Parent *MoreVideoFieldsParentTopic `json:"parent"`
+
+	Name string `json:"name"`
+
+	Url string `json:"url"`
+}
+
+func (v *InnerQueryFragmentOtherLeafVideo) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *InnerQueryFragmentOtherLeafVideo) __premarshalJSON() (*__premarshalInnerQueryFragmentOtherLeafVideo, error) {
+
+	var retval __premarshalInnerQueryFragmentOtherLeafVideo
+
+	retval.Typename = v.Typename
+	retval.Id = v.MoreVideoFields.Id
+	retval.Parent = v.MoreVideoFields.Parent
+	retval.Name = v.ContentFieldsVideo.Name
+	retval.Url = v.ContentFieldsVideo.Url
+	return &retval, nil
+}
+
 // InnerQueryFragmentRandomItemArticle includes the requested fields of the GraphQL type Article.
 type InnerQueryFragmentRandomItemArticle struct {
 	Typename string `json:"__typename"`
@@ -366,6 +614,35 @@ func (v *InnerQueryFragmentRandomItemArticle) UnmarshalJSON(b []byte) error {
 		return err
 	}
 	return nil
+}
+
+type __premarshalInnerQueryFragmentRandomItemArticle struct {
+	Typename string `json:"__typename"`
+
+	Id testutil.ID `json:"id"`
+
+	Name string `json:"name"`
+
+	Url string `json:"url"`
+}
+
+func (v *InnerQueryFragmentRandomItemArticle) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *InnerQueryFragmentRandomItemArticle) __premarshalJSON() (*__premarshalInnerQueryFragmentRandomItemArticle, error) {
+
+	var retval __premarshalInnerQueryFragmentRandomItemArticle
+
+	retval.Typename = v.Typename
+	retval.Id = v.Id
+	retval.Name = v.Name
+	retval.Url = v.ContentFieldsArticle.Url
+	return &retval, nil
 }
 
 // InnerQueryFragmentRandomItemContent includes the requested fields of the GraphQL interface Content.
@@ -459,6 +736,54 @@ func __unmarshalInnerQueryFragmentRandomItemContent(b []byte, v *InnerQueryFragm
 	}
 }
 
+func __marshalInnerQueryFragmentRandomItemContent(v *InnerQueryFragmentRandomItemContent) ([]byte, error) {
+
+	var typename string
+	switch v := (*v).(type) {
+	case *InnerQueryFragmentRandomItemArticle:
+		typename = "Article"
+
+		premarshaled, err := v.__premarshalJSON()
+		if err != nil {
+			return nil, err
+		}
+		result := struct {
+			TypeName string `json:"__typename"`
+			*__premarshalInnerQueryFragmentRandomItemArticle
+		}{typename, premarshaled}
+		return json.Marshal(result)
+	case *InnerQueryFragmentRandomItemVideo:
+		typename = "Video"
+
+		premarshaled, err := v.__premarshalJSON()
+		if err != nil {
+			return nil, err
+		}
+		result := struct {
+			TypeName string `json:"__typename"`
+			*__premarshalInnerQueryFragmentRandomItemVideo
+		}{typename, premarshaled}
+		return json.Marshal(result)
+	case *InnerQueryFragmentRandomItemTopic:
+		typename = "Topic"
+
+		premarshaled, err := v.__premarshalJSON()
+		if err != nil {
+			return nil, err
+		}
+		result := struct {
+			TypeName string `json:"__typename"`
+			*__premarshalInnerQueryFragmentRandomItemTopic
+		}{typename, premarshaled}
+		return json.Marshal(result)
+	case nil:
+		return []byte("null"), nil
+	default:
+		return nil, fmt.Errorf(
+			`Unexpected concrete type for InnerQueryFragmentRandomItemContent: "%T"`, v)
+	}
+}
+
 // InnerQueryFragmentRandomItemTopic includes the requested fields of the GraphQL type Topic.
 type InnerQueryFragmentRandomItemTopic struct {
 	Typename string `json:"__typename"`
@@ -491,6 +816,35 @@ func (v *InnerQueryFragmentRandomItemTopic) UnmarshalJSON(b []byte) error {
 		return err
 	}
 	return nil
+}
+
+type __premarshalInnerQueryFragmentRandomItemTopic struct {
+	Typename string `json:"__typename"`
+
+	Id testutil.ID `json:"id"`
+
+	Name string `json:"name"`
+
+	Url string `json:"url"`
+}
+
+func (v *InnerQueryFragmentRandomItemTopic) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *InnerQueryFragmentRandomItemTopic) __premarshalJSON() (*__premarshalInnerQueryFragmentRandomItemTopic, error) {
+
+	var retval __premarshalInnerQueryFragmentRandomItemTopic
+
+	retval.Typename = v.Typename
+	retval.Id = v.Id
+	retval.Name = v.Name
+	retval.Url = v.ContentFieldsTopic.Url
+	return &retval, nil
 }
 
 // InnerQueryFragmentRandomItemVideo includes the requested fields of the GraphQL type Video.
@@ -533,6 +887,41 @@ func (v *InnerQueryFragmentRandomItemVideo) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+type __premarshalInnerQueryFragmentRandomItemVideo struct {
+	Typename string `json:"__typename"`
+
+	Id testutil.ID `json:"id"`
+
+	Name string `json:"name"`
+
+	Url string `json:"url"`
+
+	Duration int `json:"duration"`
+
+	Thumbnail VideoFieldsThumbnail `json:"thumbnail"`
+}
+
+func (v *InnerQueryFragmentRandomItemVideo) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *InnerQueryFragmentRandomItemVideo) __premarshalJSON() (*__premarshalInnerQueryFragmentRandomItemVideo, error) {
+
+	var retval __premarshalInnerQueryFragmentRandomItemVideo
+
+	retval.Typename = v.Typename
+	retval.Id = v.Id
+	retval.Name = v.Name
+	retval.Url = v.VideoFields.Url
+	retval.Duration = v.VideoFields.Duration
+	retval.Thumbnail = v.VideoFields.Thumbnail
+	return &retval, nil
+}
+
 // InnerQueryFragmentRandomLeafArticle includes the requested fields of the GraphQL type Article.
 type InnerQueryFragmentRandomLeafArticle struct {
 	Typename             string `json:"__typename"`
@@ -562,6 +951,32 @@ func (v *InnerQueryFragmentRandomLeafArticle) UnmarshalJSON(b []byte) error {
 		return err
 	}
 	return nil
+}
+
+type __premarshalInnerQueryFragmentRandomLeafArticle struct {
+	Typename string `json:"__typename"`
+
+	Name string `json:"name"`
+
+	Url string `json:"url"`
+}
+
+func (v *InnerQueryFragmentRandomLeafArticle) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *InnerQueryFragmentRandomLeafArticle) __premarshalJSON() (*__premarshalInnerQueryFragmentRandomLeafArticle, error) {
+
+	var retval __premarshalInnerQueryFragmentRandomLeafArticle
+
+	retval.Typename = v.Typename
+	retval.Name = v.ContentFieldsArticle.Name
+	retval.Url = v.ContentFieldsArticle.Url
+	return &retval, nil
 }
 
 // InnerQueryFragmentRandomLeafLeafContent includes the requested fields of the GraphQL interface LeafContent.
@@ -619,6 +1034,42 @@ func __unmarshalInnerQueryFragmentRandomLeafLeafContent(b []byte, v *InnerQueryF
 	}
 }
 
+func __marshalInnerQueryFragmentRandomLeafLeafContent(v *InnerQueryFragmentRandomLeafLeafContent) ([]byte, error) {
+
+	var typename string
+	switch v := (*v).(type) {
+	case *InnerQueryFragmentRandomLeafArticle:
+		typename = "Article"
+
+		premarshaled, err := v.__premarshalJSON()
+		if err != nil {
+			return nil, err
+		}
+		result := struct {
+			TypeName string `json:"__typename"`
+			*__premarshalInnerQueryFragmentRandomLeafArticle
+		}{typename, premarshaled}
+		return json.Marshal(result)
+	case *InnerQueryFragmentRandomLeafVideo:
+		typename = "Video"
+
+		premarshaled, err := v.__premarshalJSON()
+		if err != nil {
+			return nil, err
+		}
+		result := struct {
+			TypeName string `json:"__typename"`
+			*__premarshalInnerQueryFragmentRandomLeafVideo
+		}{typename, premarshaled}
+		return json.Marshal(result)
+	case nil:
+		return []byte("null"), nil
+	default:
+		return nil, fmt.Errorf(
+			`Unexpected concrete type for InnerQueryFragmentRandomLeafLeafContent: "%T"`, v)
+	}
+}
+
 // InnerQueryFragmentRandomLeafVideo includes the requested fields of the GraphQL type Video.
 type InnerQueryFragmentRandomLeafVideo struct {
 	Typename           string `json:"__typename"`
@@ -660,6 +1111,44 @@ func (v *InnerQueryFragmentRandomLeafVideo) UnmarshalJSON(b []byte) error {
 		return err
 	}
 	return nil
+}
+
+type __premarshalInnerQueryFragmentRandomLeafVideo struct {
+	Typename string `json:"__typename"`
+
+	Id testutil.ID `json:"id"`
+
+	Name string `json:"name"`
+
+	Url string `json:"url"`
+
+	Duration int `json:"duration"`
+
+	Thumbnail VideoFieldsThumbnail `json:"thumbnail"`
+
+	Parent *MoreVideoFieldsParentTopic `json:"parent"`
+}
+
+func (v *InnerQueryFragmentRandomLeafVideo) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *InnerQueryFragmentRandomLeafVideo) __premarshalJSON() (*__premarshalInnerQueryFragmentRandomLeafVideo, error) {
+
+	var retval __premarshalInnerQueryFragmentRandomLeafVideo
+
+	retval.Typename = v.Typename
+	retval.Id = v.VideoFields.Id
+	retval.Name = v.VideoFields.Name
+	retval.Url = v.VideoFields.Url
+	retval.Duration = v.VideoFields.Duration
+	retval.Thumbnail = v.VideoFields.Thumbnail
+	retval.Parent = v.MoreVideoFields.Parent
+	return &retval, nil
 }
 
 // MoreVideoFields includes the GraphQL fields of Video requested by the fragment MoreVideoFields.
@@ -720,6 +1209,49 @@ func (v *MoreVideoFieldsParentTopic) UnmarshalJSON(b []byte) error {
 		}
 	}
 	return nil
+}
+
+type __premarshalMoreVideoFieldsParentTopic struct {
+	Name *string `json:"name"`
+
+	Url *string `json:"url"`
+
+	Children []json.RawMessage `json:"children"`
+}
+
+func (v *MoreVideoFieldsParentTopic) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *MoreVideoFieldsParentTopic) __premarshalJSON() (*__premarshalMoreVideoFieldsParentTopic, error) {
+
+	var retval __premarshalMoreVideoFieldsParentTopic
+
+	retval.Name = v.Name
+	retval.Url = v.Url
+	{
+
+		dst := &retval.Children
+		src := v.Children
+		*dst = make(
+			[]json.RawMessage,
+			len(src))
+		for i, src := range src {
+			dst := &(*dst)[i]
+			var err error
+			*dst, err = __marshalMoreVideoFieldsParentTopicChildrenContent(
+				&src)
+			if err != nil {
+				return nil, fmt.Errorf(
+					"Unable to marshal MoreVideoFieldsParentTopic.Children: %w", err)
+			}
+		}
+	}
+	return &retval, nil
 }
 
 // MoreVideoFieldsParentTopicChildrenArticle includes the requested fields of the GraphQL type Article.
@@ -792,6 +1324,46 @@ func __unmarshalMoreVideoFieldsParentTopicChildrenContent(b []byte, v *MoreVideo
 	}
 }
 
+func __marshalMoreVideoFieldsParentTopicChildrenContent(v *MoreVideoFieldsParentTopicChildrenContent) ([]byte, error) {
+
+	var typename string
+	switch v := (*v).(type) {
+	case *MoreVideoFieldsParentTopicChildrenArticle:
+		typename = "Article"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*MoreVideoFieldsParentTopicChildrenArticle
+		}{typename, v}
+		return json.Marshal(result)
+	case *MoreVideoFieldsParentTopicChildrenVideo:
+		typename = "Video"
+
+		premarshaled, err := v.__premarshalJSON()
+		if err != nil {
+			return nil, err
+		}
+		result := struct {
+			TypeName string `json:"__typename"`
+			*__premarshalMoreVideoFieldsParentTopicChildrenVideo
+		}{typename, premarshaled}
+		return json.Marshal(result)
+	case *MoreVideoFieldsParentTopicChildrenTopic:
+		typename = "Topic"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*MoreVideoFieldsParentTopicChildrenTopic
+		}{typename, v}
+		return json.Marshal(result)
+	case nil:
+		return []byte("null"), nil
+	default:
+		return nil, fmt.Errorf(
+			`Unexpected concrete type for MoreVideoFieldsParentTopicChildrenContent: "%T"`, v)
+	}
+}
+
 // MoreVideoFieldsParentTopicChildrenTopic includes the requested fields of the GraphQL type Topic.
 type MoreVideoFieldsParentTopicChildrenTopic struct {
 	Typename *string `json:"__typename"`
@@ -828,6 +1400,41 @@ func (v *MoreVideoFieldsParentTopicChildrenVideo) UnmarshalJSON(b []byte) error 
 	return nil
 }
 
+type __premarshalMoreVideoFieldsParentTopicChildrenVideo struct {
+	Typename *string `json:"__typename"`
+
+	Id testutil.ID `json:"id"`
+
+	Name string `json:"name"`
+
+	Url string `json:"url"`
+
+	Duration int `json:"duration"`
+
+	Thumbnail VideoFieldsThumbnail `json:"thumbnail"`
+}
+
+func (v *MoreVideoFieldsParentTopicChildrenVideo) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *MoreVideoFieldsParentTopicChildrenVideo) __premarshalJSON() (*__premarshalMoreVideoFieldsParentTopicChildrenVideo, error) {
+
+	var retval __premarshalMoreVideoFieldsParentTopicChildrenVideo
+
+	retval.Typename = v.Typename
+	retval.Id = v.VideoFields.Id
+	retval.Name = v.VideoFields.Name
+	retval.Url = v.VideoFields.Url
+	retval.Duration = v.VideoFields.Duration
+	retval.Thumbnail = v.VideoFields.Thumbnail
+	return &retval, nil
+}
+
 // QueryFragment includes the GraphQL fields of Query requested by the fragment QueryFragment.
 // The GraphQL type's documentation follows.
 //
@@ -859,6 +1466,65 @@ func (v *QueryFragment) UnmarshalJSON(b []byte) error {
 		return err
 	}
 	return nil
+}
+
+type __premarshalQueryFragment struct {
+	RandomItem json.RawMessage `json:"randomItem"`
+
+	RandomLeaf json.RawMessage `json:"randomLeaf"`
+
+	OtherLeaf json.RawMessage `json:"otherLeaf"`
+}
+
+func (v *QueryFragment) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *QueryFragment) __premarshalJSON() (*__premarshalQueryFragment, error) {
+
+	var retval __premarshalQueryFragment
+
+	{
+
+		dst := &retval.RandomItem
+		src := v.InnerQueryFragment.RandomItem
+		var err error
+		*dst, err = __marshalInnerQueryFragmentRandomItemContent(
+			&src)
+		if err != nil {
+			return nil, fmt.Errorf(
+				"Unable to marshal QueryFragment.InnerQueryFragment.RandomItem: %w", err)
+		}
+	}
+	{
+
+		dst := &retval.RandomLeaf
+		src := v.InnerQueryFragment.RandomLeaf
+		var err error
+		*dst, err = __marshalInnerQueryFragmentRandomLeafLeafContent(
+			&src)
+		if err != nil {
+			return nil, fmt.Errorf(
+				"Unable to marshal QueryFragment.InnerQueryFragment.RandomLeaf: %w", err)
+		}
+	}
+	{
+
+		dst := &retval.OtherLeaf
+		src := v.InnerQueryFragment.OtherLeaf
+		var err error
+		*dst, err = __marshalInnerQueryFragmentOtherLeafLeafContent(
+			&src)
+		if err != nil {
+			return nil, fmt.Errorf(
+				"Unable to marshal QueryFragment.InnerQueryFragment.OtherLeaf: %w", err)
+		}
+	}
+	return &retval, nil
 }
 
 // VideoFields includes the GraphQL fields of Video requested by the fragment VideoFields.
@@ -895,6 +1561,38 @@ func (v *VideoFields) UnmarshalJSON(b []byte) error {
 		return err
 	}
 	return nil
+}
+
+type __premarshalVideoFields struct {
+	Id testutil.ID `json:"id"`
+
+	Name string `json:"name"`
+
+	Url string `json:"url"`
+
+	Duration int `json:"duration"`
+
+	Thumbnail VideoFieldsThumbnail `json:"thumbnail"`
+}
+
+func (v *VideoFields) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *VideoFields) __premarshalJSON() (*__premarshalVideoFields, error) {
+
+	var retval __premarshalVideoFields
+
+	retval.Id = v.Id
+	retval.Name = v.Name
+	retval.Url = v.Url
+	retval.Duration = v.Duration
+	retval.Thumbnail = v.Thumbnail
+	return &retval, nil
 }
 
 // VideoFieldsThumbnail includes the requested fields of the GraphQL type Thumbnail.

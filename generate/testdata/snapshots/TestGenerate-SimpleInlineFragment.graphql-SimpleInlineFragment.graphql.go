@@ -109,6 +109,42 @@ func __unmarshalSimpleInlineFragmentRandomItemContent(b []byte, v *SimpleInlineF
 	}
 }
 
+func __marshalSimpleInlineFragmentRandomItemContent(v *SimpleInlineFragmentRandomItemContent) ([]byte, error) {
+
+	var typename string
+	switch v := (*v).(type) {
+	case *SimpleInlineFragmentRandomItemArticle:
+		typename = "Article"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*SimpleInlineFragmentRandomItemArticle
+		}{typename, v}
+		return json.Marshal(result)
+	case *SimpleInlineFragmentRandomItemVideo:
+		typename = "Video"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*SimpleInlineFragmentRandomItemVideo
+		}{typename, v}
+		return json.Marshal(result)
+	case *SimpleInlineFragmentRandomItemTopic:
+		typename = "Topic"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*SimpleInlineFragmentRandomItemTopic
+		}{typename, v}
+		return json.Marshal(result)
+	case nil:
+		return []byte("null"), nil
+	default:
+		return nil, fmt.Errorf(
+			`Unexpected concrete type for SimpleInlineFragmentRandomItemContent: "%T"`, v)
+	}
+}
+
 // SimpleInlineFragmentRandomItemTopic includes the requested fields of the GraphQL type Topic.
 type SimpleInlineFragmentRandomItemTopic struct {
 	Typename string `json:"__typename"`
@@ -162,6 +198,37 @@ func (v *SimpleInlineFragmentResponse) UnmarshalJSON(b []byte) error {
 		}
 	}
 	return nil
+}
+
+type __premarshalSimpleInlineFragmentResponse struct {
+	RandomItem json.RawMessage `json:"randomItem"`
+}
+
+func (v *SimpleInlineFragmentResponse) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *SimpleInlineFragmentResponse) __premarshalJSON() (*__premarshalSimpleInlineFragmentResponse, error) {
+
+	var retval __premarshalSimpleInlineFragmentResponse
+
+	{
+
+		dst := &retval.RandomItem
+		src := v.RandomItem
+		var err error
+		*dst, err = __marshalSimpleInlineFragmentRandomItemContent(
+			&src)
+		if err != nil {
+			return nil, fmt.Errorf(
+				"Unable to marshal SimpleInlineFragmentResponse.RandomItem: %w", err)
+		}
+	}
+	return &retval, nil
 }
 
 func SimpleInlineFragment(

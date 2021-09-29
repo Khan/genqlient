@@ -87,6 +87,42 @@ func __unmarshalComplexInlineFragmentsConflictingStuffContent(b []byte, v *Compl
 	}
 }
 
+func __marshalComplexInlineFragmentsConflictingStuffContent(v *ComplexInlineFragmentsConflictingStuffContent) ([]byte, error) {
+
+	var typename string
+	switch v := (*v).(type) {
+	case *ComplexInlineFragmentsConflictingStuffArticle:
+		typename = "Article"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*ComplexInlineFragmentsConflictingStuffArticle
+		}{typename, v}
+		return json.Marshal(result)
+	case *ComplexInlineFragmentsConflictingStuffVideo:
+		typename = "Video"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*ComplexInlineFragmentsConflictingStuffVideo
+		}{typename, v}
+		return json.Marshal(result)
+	case *ComplexInlineFragmentsConflictingStuffTopic:
+		typename = "Topic"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*ComplexInlineFragmentsConflictingStuffTopic
+		}{typename, v}
+		return json.Marshal(result)
+	case nil:
+		return []byte("null"), nil
+	default:
+		return nil, fmt.Errorf(
+			`Unexpected concrete type for ComplexInlineFragmentsConflictingStuffContent: "%T"`, v)
+	}
+}
+
 // ComplexInlineFragmentsConflictingStuffTopic includes the requested fields of the GraphQL type Topic.
 type ComplexInlineFragmentsConflictingStuffTopic struct {
 	Typename string `json:"__typename"`
@@ -174,6 +210,46 @@ func __unmarshalComplexInlineFragmentsNestedStuffContent(b []byte, v *ComplexInl
 	}
 }
 
+func __marshalComplexInlineFragmentsNestedStuffContent(v *ComplexInlineFragmentsNestedStuffContent) ([]byte, error) {
+
+	var typename string
+	switch v := (*v).(type) {
+	case *ComplexInlineFragmentsNestedStuffArticle:
+		typename = "Article"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*ComplexInlineFragmentsNestedStuffArticle
+		}{typename, v}
+		return json.Marshal(result)
+	case *ComplexInlineFragmentsNestedStuffVideo:
+		typename = "Video"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*ComplexInlineFragmentsNestedStuffVideo
+		}{typename, v}
+		return json.Marshal(result)
+	case *ComplexInlineFragmentsNestedStuffTopic:
+		typename = "Topic"
+
+		premarshaled, err := v.__premarshalJSON()
+		if err != nil {
+			return nil, err
+		}
+		result := struct {
+			TypeName string `json:"__typename"`
+			*__premarshalComplexInlineFragmentsNestedStuffTopic
+		}{typename, premarshaled}
+		return json.Marshal(result)
+	case nil:
+		return []byte("null"), nil
+	default:
+		return nil, fmt.Errorf(
+			`Unexpected concrete type for ComplexInlineFragmentsNestedStuffContent: "%T"`, v)
+	}
+}
+
 // ComplexInlineFragmentsNestedStuffTopic includes the requested fields of the GraphQL type Topic.
 type ComplexInlineFragmentsNestedStuffTopic struct {
 	Typename string                                                  `json:"__typename"`
@@ -217,6 +293,46 @@ func (v *ComplexInlineFragmentsNestedStuffTopic) UnmarshalJSON(b []byte) error {
 		}
 	}
 	return nil
+}
+
+type __premarshalComplexInlineFragmentsNestedStuffTopic struct {
+	Typename string `json:"__typename"`
+
+	Children []json.RawMessage `json:"children"`
+}
+
+func (v *ComplexInlineFragmentsNestedStuffTopic) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *ComplexInlineFragmentsNestedStuffTopic) __premarshalJSON() (*__premarshalComplexInlineFragmentsNestedStuffTopic, error) {
+
+	var retval __premarshalComplexInlineFragmentsNestedStuffTopic
+
+	retval.Typename = v.Typename
+	{
+
+		dst := &retval.Children
+		src := v.Children
+		*dst = make(
+			[]json.RawMessage,
+			len(src))
+		for i, src := range src {
+			dst := &(*dst)[i]
+			var err error
+			*dst, err = __marshalComplexInlineFragmentsNestedStuffTopicChildrenContent(
+				&src)
+			if err != nil {
+				return nil, fmt.Errorf(
+					"Unable to marshal ComplexInlineFragmentsNestedStuffTopic.Children: %w", err)
+			}
+		}
+	}
+	return &retval, nil
 }
 
 // ComplexInlineFragmentsNestedStuffTopicChildrenArticle includes the requested fields of the GraphQL type Article.
@@ -270,6 +386,43 @@ func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParen
 		}
 	}
 	return nil
+}
+
+type __premarshalComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopic struct {
+	Children []json.RawMessage `json:"children"`
+}
+
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopic) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopic) __premarshalJSON() (*__premarshalComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopic, error) {
+
+	var retval __premarshalComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopic
+
+	{
+
+		dst := &retval.Children
+		src := v.Children
+		*dst = make(
+			[]json.RawMessage,
+			len(src))
+		for i, src := range src {
+			dst := &(*dst)[i]
+			var err error
+			*dst, err = __marshalComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent(
+				&src)
+			if err != nil {
+				return nil, fmt.Errorf(
+					"Unable to marshal ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopic.Children: %w", err)
+			}
+		}
+	}
+	return &retval, nil
 }
 
 // ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenArticle includes the requested fields of the GraphQL type Article.
@@ -388,6 +541,42 @@ func __unmarshalComplexInlineFragmentsNestedStuffTopicChildrenArticleParentConte
 	}
 }
 
+func __marshalComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent(v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent) ([]byte, error) {
+
+	var typename string
+	switch v := (*v).(type) {
+	case *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenArticle:
+		typename = "Article"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenArticle
+		}{typename, v}
+		return json.Marshal(result)
+	case *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenVideo:
+		typename = "Video"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenVideo
+		}{typename, v}
+		return json.Marshal(result)
+	case *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenTopic:
+		typename = "Topic"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenTopic
+		}{typename, v}
+		return json.Marshal(result)
+	case nil:
+		return []byte("null"), nil
+	default:
+		return nil, fmt.Errorf(
+			`Unexpected concrete type for ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent: "%T"`, v)
+	}
+}
+
 // ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenTopic includes the requested fields of the GraphQL type Topic.
 type ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenTopic struct {
 	Typename string `json:"__typename"`
@@ -488,6 +677,42 @@ func __unmarshalComplexInlineFragmentsNestedStuffTopicChildrenContent(b []byte, 
 	default:
 		return fmt.Errorf(
 			`Unexpected concrete type for ComplexInlineFragmentsNestedStuffTopicChildrenContent: "%v"`, tn.TypeName)
+	}
+}
+
+func __marshalComplexInlineFragmentsNestedStuffTopicChildrenContent(v *ComplexInlineFragmentsNestedStuffTopicChildrenContent) ([]byte, error) {
+
+	var typename string
+	switch v := (*v).(type) {
+	case *ComplexInlineFragmentsNestedStuffTopicChildrenArticle:
+		typename = "Article"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*ComplexInlineFragmentsNestedStuffTopicChildrenArticle
+		}{typename, v}
+		return json.Marshal(result)
+	case *ComplexInlineFragmentsNestedStuffTopicChildrenVideo:
+		typename = "Video"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*ComplexInlineFragmentsNestedStuffTopicChildrenVideo
+		}{typename, v}
+		return json.Marshal(result)
+	case *ComplexInlineFragmentsNestedStuffTopicChildrenTopic:
+		typename = "Topic"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*ComplexInlineFragmentsNestedStuffTopicChildrenTopic
+		}{typename, v}
+		return json.Marshal(result)
+	case nil:
+		return []byte("null"), nil
+	default:
+		return nil, fmt.Errorf(
+			`Unexpected concrete type for ComplexInlineFragmentsNestedStuffTopicChildrenContent: "%T"`, v)
 	}
 }
 
@@ -606,6 +831,42 @@ func __unmarshalComplexInlineFragmentsRandomItemContent(b []byte, v *ComplexInli
 	default:
 		return fmt.Errorf(
 			`Unexpected concrete type for ComplexInlineFragmentsRandomItemContent: "%v"`, tn.TypeName)
+	}
+}
+
+func __marshalComplexInlineFragmentsRandomItemContent(v *ComplexInlineFragmentsRandomItemContent) ([]byte, error) {
+
+	var typename string
+	switch v := (*v).(type) {
+	case *ComplexInlineFragmentsRandomItemArticle:
+		typename = "Article"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*ComplexInlineFragmentsRandomItemArticle
+		}{typename, v}
+		return json.Marshal(result)
+	case *ComplexInlineFragmentsRandomItemVideo:
+		typename = "Video"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*ComplexInlineFragmentsRandomItemVideo
+		}{typename, v}
+		return json.Marshal(result)
+	case *ComplexInlineFragmentsRandomItemTopic:
+		typename = "Topic"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*ComplexInlineFragmentsRandomItemTopic
+		}{typename, v}
+		return json.Marshal(result)
+	case nil:
+		return []byte("null"), nil
+	default:
+		return nil, fmt.Errorf(
+			`Unexpected concrete type for ComplexInlineFragmentsRandomItemContent: "%T"`, v)
 	}
 }
 
@@ -765,6 +1026,42 @@ func __unmarshalComplexInlineFragmentsRepeatedStuffContent(b []byte, v *ComplexI
 	}
 }
 
+func __marshalComplexInlineFragmentsRepeatedStuffContent(v *ComplexInlineFragmentsRepeatedStuffContent) ([]byte, error) {
+
+	var typename string
+	switch v := (*v).(type) {
+	case *ComplexInlineFragmentsRepeatedStuffArticle:
+		typename = "Article"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*ComplexInlineFragmentsRepeatedStuffArticle
+		}{typename, v}
+		return json.Marshal(result)
+	case *ComplexInlineFragmentsRepeatedStuffVideo:
+		typename = "Video"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*ComplexInlineFragmentsRepeatedStuffVideo
+		}{typename, v}
+		return json.Marshal(result)
+	case *ComplexInlineFragmentsRepeatedStuffTopic:
+		typename = "Topic"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*ComplexInlineFragmentsRepeatedStuffTopic
+		}{typename, v}
+		return json.Marshal(result)
+	case nil:
+		return []byte("null"), nil
+	default:
+		return nil, fmt.Errorf(
+			`Unexpected concrete type for ComplexInlineFragmentsRepeatedStuffContent: "%T"`, v)
+	}
+}
+
 // ComplexInlineFragmentsRepeatedStuffTopic includes the requested fields of the GraphQL type Topic.
 type ComplexInlineFragmentsRepeatedStuffTopic struct {
 	Typename string `json:"__typename"`
@@ -872,6 +1169,82 @@ func (v *ComplexInlineFragmentsResponse) UnmarshalJSON(b []byte) error {
 		}
 	}
 	return nil
+}
+
+type __premarshalComplexInlineFragmentsResponse struct {
+	Root ComplexInlineFragmentsRootTopic `json:"root"`
+
+	RandomItem json.RawMessage `json:"randomItem"`
+
+	RepeatedStuff json.RawMessage `json:"repeatedStuff"`
+
+	ConflictingStuff json.RawMessage `json:"conflictingStuff"`
+
+	NestedStuff json.RawMessage `json:"nestedStuff"`
+}
+
+func (v *ComplexInlineFragmentsResponse) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *ComplexInlineFragmentsResponse) __premarshalJSON() (*__premarshalComplexInlineFragmentsResponse, error) {
+
+	var retval __premarshalComplexInlineFragmentsResponse
+
+	retval.Root = v.Root
+	{
+
+		dst := &retval.RandomItem
+		src := v.RandomItem
+		var err error
+		*dst, err = __marshalComplexInlineFragmentsRandomItemContent(
+			&src)
+		if err != nil {
+			return nil, fmt.Errorf(
+				"Unable to marshal ComplexInlineFragmentsResponse.RandomItem: %w", err)
+		}
+	}
+	{
+
+		dst := &retval.RepeatedStuff
+		src := v.RepeatedStuff
+		var err error
+		*dst, err = __marshalComplexInlineFragmentsRepeatedStuffContent(
+			&src)
+		if err != nil {
+			return nil, fmt.Errorf(
+				"Unable to marshal ComplexInlineFragmentsResponse.RepeatedStuff: %w", err)
+		}
+	}
+	{
+
+		dst := &retval.ConflictingStuff
+		src := v.ConflictingStuff
+		var err error
+		*dst, err = __marshalComplexInlineFragmentsConflictingStuffContent(
+			&src)
+		if err != nil {
+			return nil, fmt.Errorf(
+				"Unable to marshal ComplexInlineFragmentsResponse.ConflictingStuff: %w", err)
+		}
+	}
+	{
+
+		dst := &retval.NestedStuff
+		src := v.NestedStuff
+		var err error
+		*dst, err = __marshalComplexInlineFragmentsNestedStuffContent(
+			&src)
+		if err != nil {
+			return nil, fmt.Errorf(
+				"Unable to marshal ComplexInlineFragmentsResponse.NestedStuff: %w", err)
+		}
+	}
+	return &retval, nil
 }
 
 // ComplexInlineFragmentsRootTopic includes the requested fields of the GraphQL type Topic.

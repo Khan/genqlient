@@ -52,6 +52,43 @@ func (v *AnimalFields) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+type __premarshalAnimalFields struct {
+	Id string `json:"id"`
+
+	Hair AnimalFieldsHairBeingsHair `json:"hair"`
+
+	Owner json.RawMessage `json:"owner"`
+}
+
+func (v *AnimalFields) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *AnimalFields) __premarshalJSON() (*__premarshalAnimalFields, error) {
+
+	var retval __premarshalAnimalFields
+
+	retval.Id = v.Id
+	retval.Hair = v.Hair
+	{
+
+		dst := &retval.Owner
+		src := v.Owner
+		var err error
+		*dst, err = __marshalAnimalFieldsOwnerBeing(
+			&src)
+		if err != nil {
+			return nil, fmt.Errorf(
+				"Unable to marshal AnimalFields.Owner: %w", err)
+		}
+	}
+	return &retval, nil
+}
+
 // AnimalFieldsHairBeingsHair includes the requested fields of the GraphQL type BeingsHair.
 type AnimalFieldsHairBeingsHair struct {
 	HasHair bool `json:"hasHair"`
@@ -121,6 +158,38 @@ func __unmarshalAnimalFieldsOwnerBeing(b []byte, v *AnimalFieldsOwnerBeing) erro
 	}
 }
 
+func __marshalAnimalFieldsOwnerBeing(v *AnimalFieldsOwnerBeing) ([]byte, error) {
+
+	var typename string
+	switch v := (*v).(type) {
+	case *AnimalFieldsOwnerUser:
+		typename = "User"
+
+		premarshaled, err := v.__premarshalJSON()
+		if err != nil {
+			return nil, err
+		}
+		result := struct {
+			TypeName string `json:"__typename"`
+			*__premarshalAnimalFieldsOwnerUser
+		}{typename, premarshaled}
+		return json.Marshal(result)
+	case *AnimalFieldsOwnerAnimal:
+		typename = "Animal"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*AnimalFieldsOwnerAnimal
+		}{typename, v}
+		return json.Marshal(result)
+	case nil:
+		return []byte("null"), nil
+	default:
+		return nil, fmt.Errorf(
+			`Unexpected concrete type for AnimalFieldsOwnerBeing: "%T"`, v)
+	}
+}
+
 // AnimalFieldsOwnerUser includes the requested fields of the GraphQL type User.
 type AnimalFieldsOwnerUser struct {
 	Typename        string `json:"__typename"`
@@ -157,6 +226,35 @@ func (v *AnimalFieldsOwnerUser) UnmarshalJSON(b []byte) error {
 		return err
 	}
 	return nil
+}
+
+type __premarshalAnimalFieldsOwnerUser struct {
+	Typename string `json:"__typename"`
+
+	Id string `json:"id"`
+
+	LuckyNumber int `json:"luckyNumber"`
+
+	Hair MoreUserFieldsHair `json:"hair"`
+}
+
+func (v *AnimalFieldsOwnerUser) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *AnimalFieldsOwnerUser) __premarshalJSON() (*__premarshalAnimalFieldsOwnerUser, error) {
+
+	var retval __premarshalAnimalFieldsOwnerUser
+
+	retval.Typename = v.Typename
+	retval.Id = v.Id
+	retval.LuckyNumber = v.LuckyFieldsUser.LuckyNumber
+	retval.Hair = v.UserFields.MoreUserFields.Hair
+	return &retval, nil
 }
 
 // LuckyFields includes the GraphQL fields of Lucky requested by the fragment LuckyFields.
@@ -200,6 +298,30 @@ func __unmarshalLuckyFields(b []byte, v *LuckyFields) error {
 	}
 }
 
+func __marshalLuckyFields(v *LuckyFields) ([]byte, error) {
+
+	var typename string
+	switch v := (*v).(type) {
+	case *LuckyFieldsUser:
+		typename = "User"
+
+		premarshaled, err := v.__premarshalJSON()
+		if err != nil {
+			return nil, err
+		}
+		result := struct {
+			TypeName string `json:"__typename"`
+			*__premarshalLuckyFieldsUser
+		}{typename, premarshaled}
+		return json.Marshal(result)
+	case nil:
+		return []byte("null"), nil
+	default:
+		return nil, fmt.Errorf(
+			`Unexpected concrete type for LuckyFields: "%T"`, v)
+	}
+}
+
 // LuckyFields includes the GraphQL fields of User requested by the fragment LuckyFields.
 type LuckyFieldsUser struct {
 	MoreUserFields `json:"-"`
@@ -229,6 +351,32 @@ func (v *LuckyFieldsUser) UnmarshalJSON(b []byte) error {
 		return err
 	}
 	return nil
+}
+
+type __premarshalLuckyFieldsUser struct {
+	LuckyNumber int `json:"luckyNumber"`
+
+	Id string `json:"id"`
+
+	Hair MoreUserFieldsHair `json:"hair"`
+}
+
+func (v *LuckyFieldsUser) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *LuckyFieldsUser) __premarshalJSON() (*__premarshalLuckyFieldsUser, error) {
+
+	var retval __premarshalLuckyFieldsUser
+
+	retval.LuckyNumber = v.LuckyNumber
+	retval.Id = v.MoreUserFields.Id
+	retval.Hair = v.MoreUserFields.Hair
+	return &retval, nil
 }
 
 // MoreUserFields includes the GraphQL fields of User requested by the fragment MoreUserFields.
@@ -286,23 +434,89 @@ func (v *UserFields) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+type __premarshalUserFields struct {
+	Id string `json:"id"`
+
+	LuckyNumber int `json:"luckyNumber"`
+
+	Hair MoreUserFieldsHair `json:"hair"`
+}
+
+func (v *UserFields) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *UserFields) __premarshalJSON() (*__premarshalUserFields, error) {
+
+	var retval __premarshalUserFields
+
+	retval.Id = v.Id
+	retval.LuckyNumber = v.LuckyFieldsUser.LuckyNumber
+	retval.Hair = v.MoreUserFields.Hair
+	return &retval, nil
+}
+
 // __queryWithCustomMarshalInput is used internally by genqlient
 type __queryWithCustomMarshalInput struct {
 	Date time.Time `json:"-"`
 }
 
-func (v *__queryWithCustomMarshalInput) MarshalJSON() ([]byte, error) {
+func (v *__queryWithCustomMarshalInput) UnmarshalJSON(b []byte) error {
 
-	var fullObject struct {
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
 		*__queryWithCustomMarshalInput
 		Date json.RawMessage `json:"date"`
-		graphql.NoMarshalJSON
+		graphql.NoUnmarshalJSON
 	}
-	fullObject.__queryWithCustomMarshalInput = v
+	firstPass.__queryWithCustomMarshalInput = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	{
+		dst := &v.Date
+		src := firstPass.Date
+		if len(src) != 0 && string(src) != "null" {
+			err = testutil.UnmarshalDate(
+				src, dst)
+			if err != nil {
+				return fmt.Errorf(
+					"Unable to unmarshal __queryWithCustomMarshalInput.Date: %w", err)
+			}
+		}
+	}
+	return nil
+}
+
+type __premarshal__queryWithCustomMarshalInput struct {
+	Date json.RawMessage `json:"date"`
+}
+
+func (v *__queryWithCustomMarshalInput) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *__queryWithCustomMarshalInput) __premarshalJSON() (*__premarshal__queryWithCustomMarshalInput, error) {
+
+	var retval __premarshal__queryWithCustomMarshalInput
 
 	{
 
-		dst := &fullObject.Date
+		dst := &retval.Date
 		src := v.Date
 		var err error
 		*dst, err = testutil.MarshalDate(
@@ -312,8 +526,7 @@ func (v *__queryWithCustomMarshalInput) MarshalJSON() ([]byte, error) {
 				"Unable to marshal __queryWithCustomMarshalInput.Date: %w", err)
 		}
 	}
-
-	return json.Marshal(&fullObject)
+	return &retval, nil
 }
 
 // __queryWithCustomMarshalOptionalInput is used internally by genqlient
@@ -322,18 +535,61 @@ type __queryWithCustomMarshalOptionalInput struct {
 	Id   *string    `json:"id"`
 }
 
-func (v *__queryWithCustomMarshalOptionalInput) MarshalJSON() ([]byte, error) {
+func (v *__queryWithCustomMarshalOptionalInput) UnmarshalJSON(b []byte) error {
 
-	var fullObject struct {
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
 		*__queryWithCustomMarshalOptionalInput
 		Date json.RawMessage `json:"date"`
-		graphql.NoMarshalJSON
+		graphql.NoUnmarshalJSON
 	}
-	fullObject.__queryWithCustomMarshalOptionalInput = v
+	firstPass.__queryWithCustomMarshalOptionalInput = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	{
+		dst := &v.Date
+		src := firstPass.Date
+		if len(src) != 0 && string(src) != "null" {
+			*dst = new(time.Time)
+			err = testutil.UnmarshalDate(
+				src, *dst)
+			if err != nil {
+				return fmt.Errorf(
+					"Unable to unmarshal __queryWithCustomMarshalOptionalInput.Date: %w", err)
+			}
+		}
+	}
+	return nil
+}
+
+type __premarshal__queryWithCustomMarshalOptionalInput struct {
+	Date json.RawMessage `json:"date"`
+
+	Id *string `json:"id"`
+}
+
+func (v *__queryWithCustomMarshalOptionalInput) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *__queryWithCustomMarshalOptionalInput) __premarshalJSON() (*__premarshal__queryWithCustomMarshalOptionalInput, error) {
+
+	var retval __premarshal__queryWithCustomMarshalOptionalInput
 
 	{
 
-		dst := &fullObject.Date
+		dst := &retval.Date
 		src := v.Date
 		if src != nil {
 			var err error
@@ -345,8 +601,8 @@ func (v *__queryWithCustomMarshalOptionalInput) MarshalJSON() ([]byte, error) {
 			}
 		}
 	}
-
-	return json.Marshal(&fullObject)
+	retval.Id = v.Id
+	return &retval, nil
 }
 
 // __queryWithCustomMarshalSliceInput is used internally by genqlient
@@ -354,18 +610,64 @@ type __queryWithCustomMarshalSliceInput struct {
 	Dates []time.Time `json:"-"`
 }
 
-func (v *__queryWithCustomMarshalSliceInput) MarshalJSON() ([]byte, error) {
+func (v *__queryWithCustomMarshalSliceInput) UnmarshalJSON(b []byte) error {
 
-	var fullObject struct {
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
 		*__queryWithCustomMarshalSliceInput
 		Dates []json.RawMessage `json:"dates"`
-		graphql.NoMarshalJSON
+		graphql.NoUnmarshalJSON
 	}
-	fullObject.__queryWithCustomMarshalSliceInput = v
+	firstPass.__queryWithCustomMarshalSliceInput = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	{
+		dst := &v.Dates
+		src := firstPass.Dates
+		*dst = make(
+			[]time.Time,
+			len(src))
+		for i, src := range src {
+			dst := &(*dst)[i]
+			if len(src) != 0 && string(src) != "null" {
+				err = testutil.UnmarshalDate(
+					src, dst)
+				if err != nil {
+					return fmt.Errorf(
+						"Unable to unmarshal __queryWithCustomMarshalSliceInput.Dates: %w", err)
+				}
+			}
+		}
+	}
+	return nil
+}
+
+type __premarshal__queryWithCustomMarshalSliceInput struct {
+	Dates []json.RawMessage `json:"dates"`
+}
+
+func (v *__queryWithCustomMarshalSliceInput) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *__queryWithCustomMarshalSliceInput) __premarshalJSON() (*__premarshal__queryWithCustomMarshalSliceInput, error) {
+
+	var retval __premarshal__queryWithCustomMarshalSliceInput
 
 	{
 
-		dst := &fullObject.Dates
+		dst := &retval.Dates
 		src := v.Dates
 		*dst = make(
 			[]json.RawMessage,
@@ -381,8 +683,7 @@ func (v *__queryWithCustomMarshalSliceInput) MarshalJSON() ([]byte, error) {
 			}
 		}
 	}
-
-	return json.Marshal(&fullObject)
+	return &retval, nil
 }
 
 // __queryWithFragmentsInput is used internally by genqlient
@@ -476,6 +777,43 @@ func (v *queryWithCustomMarshalOptionalUserSearchUser) UnmarshalJSON(b []byte) e
 	return nil
 }
 
+type __premarshalqueryWithCustomMarshalOptionalUserSearchUser struct {
+	Id string `json:"id"`
+
+	Name string `json:"name"`
+
+	Birthdate json.RawMessage `json:"birthdate"`
+}
+
+func (v *queryWithCustomMarshalOptionalUserSearchUser) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *queryWithCustomMarshalOptionalUserSearchUser) __premarshalJSON() (*__premarshalqueryWithCustomMarshalOptionalUserSearchUser, error) {
+
+	var retval __premarshalqueryWithCustomMarshalOptionalUserSearchUser
+
+	retval.Id = v.Id
+	retval.Name = v.Name
+	{
+
+		dst := &retval.Birthdate
+		src := v.Birthdate
+		var err error
+		*dst, err = testutil.MarshalDate(
+			&src)
+		if err != nil {
+			return nil, fmt.Errorf(
+				"Unable to marshal queryWithCustomMarshalOptionalUserSearchUser.Birthdate: %w", err)
+		}
+	}
+	return &retval, nil
+}
+
 // queryWithCustomMarshalResponse is returned by queryWithCustomMarshal on success.
 type queryWithCustomMarshalResponse struct {
 	UsersBornOn []queryWithCustomMarshalUsersBornOnUser `json:"usersBornOn"`
@@ -526,6 +864,43 @@ func (v *queryWithCustomMarshalSliceUsersBornOnDatesUser) UnmarshalJSON(b []byte
 	return nil
 }
 
+type __premarshalqueryWithCustomMarshalSliceUsersBornOnDatesUser struct {
+	Id string `json:"id"`
+
+	Name string `json:"name"`
+
+	Birthdate json.RawMessage `json:"birthdate"`
+}
+
+func (v *queryWithCustomMarshalSliceUsersBornOnDatesUser) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *queryWithCustomMarshalSliceUsersBornOnDatesUser) __premarshalJSON() (*__premarshalqueryWithCustomMarshalSliceUsersBornOnDatesUser, error) {
+
+	var retval __premarshalqueryWithCustomMarshalSliceUsersBornOnDatesUser
+
+	retval.Id = v.Id
+	retval.Name = v.Name
+	{
+
+		dst := &retval.Birthdate
+		src := v.Birthdate
+		var err error
+		*dst, err = testutil.MarshalDate(
+			&src)
+		if err != nil {
+			return nil, fmt.Errorf(
+				"Unable to marshal queryWithCustomMarshalSliceUsersBornOnDatesUser.Birthdate: %w", err)
+		}
+	}
+	return &retval, nil
+}
+
 // queryWithCustomMarshalUsersBornOnUser includes the requested fields of the GraphQL type User.
 type queryWithCustomMarshalUsersBornOnUser struct {
 	Id        string    `json:"id"`
@@ -564,6 +939,43 @@ func (v *queryWithCustomMarshalUsersBornOnUser) UnmarshalJSON(b []byte) error {
 		}
 	}
 	return nil
+}
+
+type __premarshalqueryWithCustomMarshalUsersBornOnUser struct {
+	Id string `json:"id"`
+
+	Name string `json:"name"`
+
+	Birthdate json.RawMessage `json:"birthdate"`
+}
+
+func (v *queryWithCustomMarshalUsersBornOnUser) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *queryWithCustomMarshalUsersBornOnUser) __premarshalJSON() (*__premarshalqueryWithCustomMarshalUsersBornOnUser, error) {
+
+	var retval __premarshalqueryWithCustomMarshalUsersBornOnUser
+
+	retval.Id = v.Id
+	retval.Name = v.Name
+	{
+
+		dst := &retval.Birthdate
+		src := v.Birthdate
+		var err error
+		*dst, err = testutil.MarshalDate(
+			&src)
+		if err != nil {
+			return nil, fmt.Errorf(
+				"Unable to marshal queryWithCustomMarshalUsersBornOnUser.Birthdate: %w", err)
+		}
+	}
+	return &retval, nil
 }
 
 // queryWithFragmentsBeingsAnimal includes the requested fields of the GraphQL type Animal.
@@ -607,6 +1019,52 @@ func (v *queryWithFragmentsBeingsAnimal) UnmarshalJSON(b []byte) error {
 		}
 	}
 	return nil
+}
+
+type __premarshalqueryWithFragmentsBeingsAnimal struct {
+	Typename string `json:"__typename"`
+
+	Id string `json:"id"`
+
+	Name string `json:"name"`
+
+	Hair queryWithFragmentsBeingsAnimalHairBeingsHair `json:"hair"`
+
+	Species Species `json:"species"`
+
+	Owner json.RawMessage `json:"owner"`
+}
+
+func (v *queryWithFragmentsBeingsAnimal) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *queryWithFragmentsBeingsAnimal) __premarshalJSON() (*__premarshalqueryWithFragmentsBeingsAnimal, error) {
+
+	var retval __premarshalqueryWithFragmentsBeingsAnimal
+
+	retval.Typename = v.Typename
+	retval.Id = v.Id
+	retval.Name = v.Name
+	retval.Hair = v.Hair
+	retval.Species = v.Species
+	{
+
+		dst := &retval.Owner
+		src := v.Owner
+		var err error
+		*dst, err = __marshalqueryWithFragmentsBeingsAnimalOwnerBeing(
+			&src)
+		if err != nil {
+			return nil, fmt.Errorf(
+				"Unable to marshal queryWithFragmentsBeingsAnimal.Owner: %w", err)
+		}
+	}
+	return &retval, nil
 }
 
 // queryWithFragmentsBeingsAnimalHairBeingsHair includes the requested fields of the GraphQL type BeingsHair.
@@ -689,6 +1147,34 @@ func __unmarshalqueryWithFragmentsBeingsAnimalOwnerBeing(b []byte, v *queryWithF
 	}
 }
 
+func __marshalqueryWithFragmentsBeingsAnimalOwnerBeing(v *queryWithFragmentsBeingsAnimalOwnerBeing) ([]byte, error) {
+
+	var typename string
+	switch v := (*v).(type) {
+	case *queryWithFragmentsBeingsAnimalOwnerUser:
+		typename = "User"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*queryWithFragmentsBeingsAnimalOwnerUser
+		}{typename, v}
+		return json.Marshal(result)
+	case *queryWithFragmentsBeingsAnimalOwnerAnimal:
+		typename = "Animal"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*queryWithFragmentsBeingsAnimalOwnerAnimal
+		}{typename, v}
+		return json.Marshal(result)
+	case nil:
+		return []byte("null"), nil
+	default:
+		return nil, fmt.Errorf(
+			`Unexpected concrete type for queryWithFragmentsBeingsAnimalOwnerBeing: "%T"`, v)
+	}
+}
+
 // queryWithFragmentsBeingsAnimalOwnerUser includes the requested fields of the GraphQL type User.
 type queryWithFragmentsBeingsAnimalOwnerUser struct {
 	Typename    string `json:"__typename"`
@@ -763,6 +1249,38 @@ func __unmarshalqueryWithFragmentsBeingsBeing(b []byte, v *queryWithFragmentsBei
 	}
 }
 
+func __marshalqueryWithFragmentsBeingsBeing(v *queryWithFragmentsBeingsBeing) ([]byte, error) {
+
+	var typename string
+	switch v := (*v).(type) {
+	case *queryWithFragmentsBeingsUser:
+		typename = "User"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*queryWithFragmentsBeingsUser
+		}{typename, v}
+		return json.Marshal(result)
+	case *queryWithFragmentsBeingsAnimal:
+		typename = "Animal"
+
+		premarshaled, err := v.__premarshalJSON()
+		if err != nil {
+			return nil, err
+		}
+		result := struct {
+			TypeName string `json:"__typename"`
+			*__premarshalqueryWithFragmentsBeingsAnimal
+		}{typename, premarshaled}
+		return json.Marshal(result)
+	case nil:
+		return []byte("null"), nil
+	default:
+		return nil, fmt.Errorf(
+			`Unexpected concrete type for queryWithFragmentsBeingsBeing: "%T"`, v)
+	}
+}
+
 // queryWithFragmentsBeingsUser includes the requested fields of the GraphQL type User.
 type queryWithFragmentsBeingsUser struct {
 	Typename    string                           `json:"__typename"`
@@ -819,6 +1337,43 @@ func (v *queryWithFragmentsResponse) UnmarshalJSON(b []byte) error {
 		}
 	}
 	return nil
+}
+
+type __premarshalqueryWithFragmentsResponse struct {
+	Beings []json.RawMessage `json:"beings"`
+}
+
+func (v *queryWithFragmentsResponse) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *queryWithFragmentsResponse) __premarshalJSON() (*__premarshalqueryWithFragmentsResponse, error) {
+
+	var retval __premarshalqueryWithFragmentsResponse
+
+	{
+
+		dst := &retval.Beings
+		src := v.Beings
+		*dst = make(
+			[]json.RawMessage,
+			len(src))
+		for i, src := range src {
+			dst := &(*dst)[i]
+			var err error
+			*dst, err = __marshalqueryWithFragmentsBeingsBeing(
+				&src)
+			if err != nil {
+				return nil, fmt.Errorf(
+					"Unable to marshal queryWithFragmentsResponse.Beings: %w", err)
+			}
+		}
+	}
+	return &retval, nil
 }
 
 // queryWithInterfaceListFieldBeingsAnimal includes the requested fields of the GraphQL type Animal.
@@ -896,6 +1451,34 @@ func __unmarshalqueryWithInterfaceListFieldBeingsBeing(b []byte, v *queryWithInt
 	}
 }
 
+func __marshalqueryWithInterfaceListFieldBeingsBeing(v *queryWithInterfaceListFieldBeingsBeing) ([]byte, error) {
+
+	var typename string
+	switch v := (*v).(type) {
+	case *queryWithInterfaceListFieldBeingsUser:
+		typename = "User"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*queryWithInterfaceListFieldBeingsUser
+		}{typename, v}
+		return json.Marshal(result)
+	case *queryWithInterfaceListFieldBeingsAnimal:
+		typename = "Animal"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*queryWithInterfaceListFieldBeingsAnimal
+		}{typename, v}
+		return json.Marshal(result)
+	case nil:
+		return []byte("null"), nil
+	default:
+		return nil, fmt.Errorf(
+			`Unexpected concrete type for queryWithInterfaceListFieldBeingsBeing: "%T"`, v)
+	}
+}
+
 // queryWithInterfaceListFieldBeingsUser includes the requested fields of the GraphQL type User.
 type queryWithInterfaceListFieldBeingsUser struct {
 	Typename string `json:"__typename"`
@@ -945,6 +1528,43 @@ func (v *queryWithInterfaceListFieldResponse) UnmarshalJSON(b []byte) error {
 		}
 	}
 	return nil
+}
+
+type __premarshalqueryWithInterfaceListFieldResponse struct {
+	Beings []json.RawMessage `json:"beings"`
+}
+
+func (v *queryWithInterfaceListFieldResponse) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *queryWithInterfaceListFieldResponse) __premarshalJSON() (*__premarshalqueryWithInterfaceListFieldResponse, error) {
+
+	var retval __premarshalqueryWithInterfaceListFieldResponse
+
+	{
+
+		dst := &retval.Beings
+		src := v.Beings
+		*dst = make(
+			[]json.RawMessage,
+			len(src))
+		for i, src := range src {
+			dst := &(*dst)[i]
+			var err error
+			*dst, err = __marshalqueryWithInterfaceListFieldBeingsBeing(
+				&src)
+			if err != nil {
+				return nil, fmt.Errorf(
+					"Unable to marshal queryWithInterfaceListFieldResponse.Beings: %w", err)
+			}
+		}
+	}
+	return &retval, nil
 }
 
 // queryWithInterfaceListPointerFieldBeingsAnimal includes the requested fields of the GraphQL type Animal.
@@ -1022,6 +1642,34 @@ func __unmarshalqueryWithInterfaceListPointerFieldBeingsBeing(b []byte, v *query
 	}
 }
 
+func __marshalqueryWithInterfaceListPointerFieldBeingsBeing(v *queryWithInterfaceListPointerFieldBeingsBeing) ([]byte, error) {
+
+	var typename string
+	switch v := (*v).(type) {
+	case *queryWithInterfaceListPointerFieldBeingsUser:
+		typename = "User"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*queryWithInterfaceListPointerFieldBeingsUser
+		}{typename, v}
+		return json.Marshal(result)
+	case *queryWithInterfaceListPointerFieldBeingsAnimal:
+		typename = "Animal"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*queryWithInterfaceListPointerFieldBeingsAnimal
+		}{typename, v}
+		return json.Marshal(result)
+	case nil:
+		return []byte("null"), nil
+	default:
+		return nil, fmt.Errorf(
+			`Unexpected concrete type for queryWithInterfaceListPointerFieldBeingsBeing: "%T"`, v)
+	}
+}
+
 // queryWithInterfaceListPointerFieldBeingsUser includes the requested fields of the GraphQL type User.
 type queryWithInterfaceListPointerFieldBeingsUser struct {
 	Typename string `json:"__typename"`
@@ -1072,6 +1720,45 @@ func (v *queryWithInterfaceListPointerFieldResponse) UnmarshalJSON(b []byte) err
 		}
 	}
 	return nil
+}
+
+type __premarshalqueryWithInterfaceListPointerFieldResponse struct {
+	Beings []json.RawMessage `json:"beings"`
+}
+
+func (v *queryWithInterfaceListPointerFieldResponse) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *queryWithInterfaceListPointerFieldResponse) __premarshalJSON() (*__premarshalqueryWithInterfaceListPointerFieldResponse, error) {
+
+	var retval __premarshalqueryWithInterfaceListPointerFieldResponse
+
+	{
+
+		dst := &retval.Beings
+		src := v.Beings
+		*dst = make(
+			[]json.RawMessage,
+			len(src))
+		for i, src := range src {
+			dst := &(*dst)[i]
+			if src != nil {
+				var err error
+				*dst, err = __marshalqueryWithInterfaceListPointerFieldBeingsBeing(
+					src)
+				if err != nil {
+					return nil, fmt.Errorf(
+						"Unable to marshal queryWithInterfaceListPointerFieldResponse.Beings: %w", err)
+				}
+			}
+		}
+	}
+	return &retval, nil
 }
 
 // queryWithInterfaceNoFragmentsBeing includes the requested fields of the GraphQL interface Being.
@@ -1142,6 +1829,34 @@ func __unmarshalqueryWithInterfaceNoFragmentsBeing(b []byte, v *queryWithInterfa
 	}
 }
 
+func __marshalqueryWithInterfaceNoFragmentsBeing(v *queryWithInterfaceNoFragmentsBeing) ([]byte, error) {
+
+	var typename string
+	switch v := (*v).(type) {
+	case *queryWithInterfaceNoFragmentsBeingUser:
+		typename = "User"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*queryWithInterfaceNoFragmentsBeingUser
+		}{typename, v}
+		return json.Marshal(result)
+	case *queryWithInterfaceNoFragmentsBeingAnimal:
+		typename = "Animal"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*queryWithInterfaceNoFragmentsBeingAnimal
+		}{typename, v}
+		return json.Marshal(result)
+	case nil:
+		return []byte("null"), nil
+	default:
+		return nil, fmt.Errorf(
+			`Unexpected concrete type for queryWithInterfaceNoFragmentsBeing: "%T"`, v)
+	}
+}
+
 // queryWithInterfaceNoFragmentsBeingAnimal includes the requested fields of the GraphQL type Animal.
 type queryWithInterfaceNoFragmentsBeingAnimal struct {
 	Typename string `json:"__typename"`
@@ -1201,6 +1916,40 @@ func (v *queryWithInterfaceNoFragmentsResponse) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+type __premarshalqueryWithInterfaceNoFragmentsResponse struct {
+	Being json.RawMessage `json:"being"`
+
+	Me queryWithInterfaceNoFragmentsMeUser `json:"me"`
+}
+
+func (v *queryWithInterfaceNoFragmentsResponse) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *queryWithInterfaceNoFragmentsResponse) __premarshalJSON() (*__premarshalqueryWithInterfaceNoFragmentsResponse, error) {
+
+	var retval __premarshalqueryWithInterfaceNoFragmentsResponse
+
+	{
+
+		dst := &retval.Being
+		src := v.Being
+		var err error
+		*dst, err = __marshalqueryWithInterfaceNoFragmentsBeing(
+			&src)
+		if err != nil {
+			return nil, fmt.Errorf(
+				"Unable to marshal queryWithInterfaceNoFragmentsResponse.Being: %w", err)
+		}
+	}
+	retval.Me = v.Me
+	return &retval, nil
+}
+
 // queryWithNamedFragmentsBeingsAnimal includes the requested fields of the GraphQL type Animal.
 type queryWithNamedFragmentsBeingsAnimal struct {
 	Typename     string `json:"__typename"`
@@ -1231,6 +1980,46 @@ func (v *queryWithNamedFragmentsBeingsAnimal) UnmarshalJSON(b []byte) error {
 		return err
 	}
 	return nil
+}
+
+type __premarshalqueryWithNamedFragmentsBeingsAnimal struct {
+	Typename string `json:"__typename"`
+
+	Id string `json:"id"`
+
+	Hair AnimalFieldsHairBeingsHair `json:"hair"`
+
+	Owner json.RawMessage `json:"owner"`
+}
+
+func (v *queryWithNamedFragmentsBeingsAnimal) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *queryWithNamedFragmentsBeingsAnimal) __premarshalJSON() (*__premarshalqueryWithNamedFragmentsBeingsAnimal, error) {
+
+	var retval __premarshalqueryWithNamedFragmentsBeingsAnimal
+
+	retval.Typename = v.Typename
+	retval.Id = v.Id
+	retval.Hair = v.AnimalFields.Hair
+	{
+
+		dst := &retval.Owner
+		src := v.AnimalFields.Owner
+		var err error
+		*dst, err = __marshalAnimalFieldsOwnerBeing(
+			&src)
+		if err != nil {
+			return nil, fmt.Errorf(
+				"Unable to marshal queryWithNamedFragmentsBeingsAnimal.AnimalFields.Owner: %w", err)
+		}
+	}
+	return &retval, nil
 }
 
 // queryWithNamedFragmentsBeingsBeing includes the requested fields of the GraphQL interface Being.
@@ -1293,6 +2082,42 @@ func __unmarshalqueryWithNamedFragmentsBeingsBeing(b []byte, v *queryWithNamedFr
 	}
 }
 
+func __marshalqueryWithNamedFragmentsBeingsBeing(v *queryWithNamedFragmentsBeingsBeing) ([]byte, error) {
+
+	var typename string
+	switch v := (*v).(type) {
+	case *queryWithNamedFragmentsBeingsUser:
+		typename = "User"
+
+		premarshaled, err := v.__premarshalJSON()
+		if err != nil {
+			return nil, err
+		}
+		result := struct {
+			TypeName string `json:"__typename"`
+			*__premarshalqueryWithNamedFragmentsBeingsUser
+		}{typename, premarshaled}
+		return json.Marshal(result)
+	case *queryWithNamedFragmentsBeingsAnimal:
+		typename = "Animal"
+
+		premarshaled, err := v.__premarshalJSON()
+		if err != nil {
+			return nil, err
+		}
+		result := struct {
+			TypeName string `json:"__typename"`
+			*__premarshalqueryWithNamedFragmentsBeingsAnimal
+		}{typename, premarshaled}
+		return json.Marshal(result)
+	case nil:
+		return []byte("null"), nil
+	default:
+		return nil, fmt.Errorf(
+			`Unexpected concrete type for queryWithNamedFragmentsBeingsBeing: "%T"`, v)
+	}
+}
+
 // queryWithNamedFragmentsBeingsUser includes the requested fields of the GraphQL type User.
 type queryWithNamedFragmentsBeingsUser struct {
 	Typename   string `json:"__typename"`
@@ -1323,6 +2148,35 @@ func (v *queryWithNamedFragmentsBeingsUser) UnmarshalJSON(b []byte) error {
 		return err
 	}
 	return nil
+}
+
+type __premarshalqueryWithNamedFragmentsBeingsUser struct {
+	Typename string `json:"__typename"`
+
+	Id string `json:"id"`
+
+	LuckyNumber int `json:"luckyNumber"`
+
+	Hair MoreUserFieldsHair `json:"hair"`
+}
+
+func (v *queryWithNamedFragmentsBeingsUser) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *queryWithNamedFragmentsBeingsUser) __premarshalJSON() (*__premarshalqueryWithNamedFragmentsBeingsUser, error) {
+
+	var retval __premarshalqueryWithNamedFragmentsBeingsUser
+
+	retval.Typename = v.Typename
+	retval.Id = v.Id
+	retval.LuckyNumber = v.UserFields.LuckyFieldsUser.LuckyNumber
+	retval.Hair = v.UserFields.MoreUserFields.Hair
+	return &retval, nil
 }
 
 // queryWithNamedFragmentsResponse is returned by queryWithNamedFragments on success.
@@ -1367,6 +2221,43 @@ func (v *queryWithNamedFragmentsResponse) UnmarshalJSON(b []byte) error {
 		}
 	}
 	return nil
+}
+
+type __premarshalqueryWithNamedFragmentsResponse struct {
+	Beings []json.RawMessage `json:"beings"`
+}
+
+func (v *queryWithNamedFragmentsResponse) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *queryWithNamedFragmentsResponse) __premarshalJSON() (*__premarshalqueryWithNamedFragmentsResponse, error) {
+
+	var retval __premarshalqueryWithNamedFragmentsResponse
+
+	{
+
+		dst := &retval.Beings
+		src := v.Beings
+		*dst = make(
+			[]json.RawMessage,
+			len(src))
+		for i, src := range src {
+			dst := &(*dst)[i]
+			var err error
+			*dst, err = __marshalqueryWithNamedFragmentsBeingsBeing(
+				&src)
+			if err != nil {
+				return nil, fmt.Errorf(
+					"Unable to marshal queryWithNamedFragmentsResponse.Beings: %w", err)
+			}
+		}
+	}
+	return &retval, nil
 }
 
 // queryWithOmitemptyResponse is returned by queryWithOmitempty on success.

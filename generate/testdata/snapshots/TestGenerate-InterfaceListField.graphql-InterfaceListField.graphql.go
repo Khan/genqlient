@@ -63,6 +63,49 @@ func (v *InterfaceListFieldRootTopic) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+type __premarshalInterfaceListFieldRootTopic struct {
+	Id testutil.ID `json:"id"`
+
+	Name string `json:"name"`
+
+	Children []json.RawMessage `json:"children"`
+}
+
+func (v *InterfaceListFieldRootTopic) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *InterfaceListFieldRootTopic) __premarshalJSON() (*__premarshalInterfaceListFieldRootTopic, error) {
+
+	var retval __premarshalInterfaceListFieldRootTopic
+
+	retval.Id = v.Id
+	retval.Name = v.Name
+	{
+
+		dst := &retval.Children
+		src := v.Children
+		*dst = make(
+			[]json.RawMessage,
+			len(src))
+		for i, src := range src {
+			dst := &(*dst)[i]
+			var err error
+			*dst, err = __marshalInterfaceListFieldRootTopicChildrenContent(
+				&src)
+			if err != nil {
+				return nil, fmt.Errorf(
+					"Unable to marshal InterfaceListFieldRootTopic.Children: %w", err)
+			}
+		}
+	}
+	return &retval, nil
+}
+
 // InterfaceListFieldRootTopicChildrenArticle includes the requested fields of the GraphQL type Article.
 type InterfaceListFieldRootTopicChildrenArticle struct {
 	Typename string `json:"__typename"`
@@ -161,6 +204,42 @@ func __unmarshalInterfaceListFieldRootTopicChildrenContent(b []byte, v *Interfac
 	}
 }
 
+func __marshalInterfaceListFieldRootTopicChildrenContent(v *InterfaceListFieldRootTopicChildrenContent) ([]byte, error) {
+
+	var typename string
+	switch v := (*v).(type) {
+	case *InterfaceListFieldRootTopicChildrenArticle:
+		typename = "Article"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*InterfaceListFieldRootTopicChildrenArticle
+		}{typename, v}
+		return json.Marshal(result)
+	case *InterfaceListFieldRootTopicChildrenVideo:
+		typename = "Video"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*InterfaceListFieldRootTopicChildrenVideo
+		}{typename, v}
+		return json.Marshal(result)
+	case *InterfaceListFieldRootTopicChildrenTopic:
+		typename = "Topic"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*InterfaceListFieldRootTopicChildrenTopic
+		}{typename, v}
+		return json.Marshal(result)
+	case nil:
+		return []byte("null"), nil
+	default:
+		return nil, fmt.Errorf(
+			`Unexpected concrete type for InterfaceListFieldRootTopicChildrenContent: "%T"`, v)
+	}
+}
+
 // InterfaceListFieldRootTopicChildrenTopic includes the requested fields of the GraphQL type Topic.
 type InterfaceListFieldRootTopicChildrenTopic struct {
 	Typename string `json:"__typename"`
@@ -222,6 +301,49 @@ func (v *InterfaceListFieldWithPointerTopic) UnmarshalJSON(b []byte) error {
 		}
 	}
 	return nil
+}
+
+type __premarshalInterfaceListFieldWithPointerTopic struct {
+	Id testutil.ID `json:"id"`
+
+	Name string `json:"name"`
+
+	Children []json.RawMessage `json:"children"`
+}
+
+func (v *InterfaceListFieldWithPointerTopic) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *InterfaceListFieldWithPointerTopic) __premarshalJSON() (*__premarshalInterfaceListFieldWithPointerTopic, error) {
+
+	var retval __premarshalInterfaceListFieldWithPointerTopic
+
+	retval.Id = v.Id
+	retval.Name = v.Name
+	{
+
+		dst := &retval.Children
+		src := v.Children
+		*dst = make(
+			[]json.RawMessage,
+			len(src))
+		for i, src := range src {
+			dst := &(*dst)[i]
+			var err error
+			*dst, err = __marshalInterfaceListFieldWithPointerTopicChildrenContent(
+				&src)
+			if err != nil {
+				return nil, fmt.Errorf(
+					"Unable to marshal InterfaceListFieldWithPointerTopic.Children: %w", err)
+			}
+		}
+	}
+	return &retval, nil
 }
 
 // InterfaceListFieldWithPointerTopicChildrenArticle includes the requested fields of the GraphQL type Article.
@@ -319,6 +441,42 @@ func __unmarshalInterfaceListFieldWithPointerTopicChildrenContent(b []byte, v *I
 	default:
 		return fmt.Errorf(
 			`Unexpected concrete type for InterfaceListFieldWithPointerTopicChildrenContent: "%v"`, tn.TypeName)
+	}
+}
+
+func __marshalInterfaceListFieldWithPointerTopicChildrenContent(v *InterfaceListFieldWithPointerTopicChildrenContent) ([]byte, error) {
+
+	var typename string
+	switch v := (*v).(type) {
+	case *InterfaceListFieldWithPointerTopicChildrenArticle:
+		typename = "Article"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*InterfaceListFieldWithPointerTopicChildrenArticle
+		}{typename, v}
+		return json.Marshal(result)
+	case *InterfaceListFieldWithPointerTopicChildrenVideo:
+		typename = "Video"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*InterfaceListFieldWithPointerTopicChildrenVideo
+		}{typename, v}
+		return json.Marshal(result)
+	case *InterfaceListFieldWithPointerTopicChildrenTopic:
+		typename = "Topic"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*InterfaceListFieldWithPointerTopicChildrenTopic
+		}{typename, v}
+		return json.Marshal(result)
+	case nil:
+		return []byte("null"), nil
+	default:
+		return nil, fmt.Errorf(
+			`Unexpected concrete type for InterfaceListFieldWithPointerTopicChildrenContent: "%T"`, v)
 	}
 }
 

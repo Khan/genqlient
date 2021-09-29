@@ -97,6 +97,42 @@ func __unmarshalItem(b []byte, v *Item) error {
 	}
 }
 
+func __marshalItem(v *Item) ([]byte, error) {
+
+	var typename string
+	switch v := (*v).(type) {
+	case *ItemArticle:
+		typename = "Article"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*ItemArticle
+		}{typename, v}
+		return json.Marshal(result)
+	case *ItemVideo:
+		typename = "Video"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*ItemVideo
+		}{typename, v}
+		return json.Marshal(result)
+	case *ItemTopic:
+		typename = "Topic"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*ItemTopic
+		}{typename, v}
+		return json.Marshal(result)
+	case nil:
+		return []byte("null"), nil
+	default:
+		return nil, fmt.Errorf(
+			`Unexpected concrete type for Item: "%T"`, v)
+	}
+}
+
 // ItemArticle includes the requested fields of the GraphQL type Article.
 type ItemArticle struct {
 	Typename string `json:"__typename"`
@@ -163,6 +199,43 @@ func (v *Resp) UnmarshalJSON(b []byte) error {
 		}
 	}
 	return nil
+}
+
+type __premarshalResp struct {
+	User User `json:"user"`
+
+	RandomItem json.RawMessage `json:"randomItem"`
+
+	Users []User `json:"users"`
+}
+
+func (v *Resp) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *Resp) __premarshalJSON() (*__premarshalResp, error) {
+
+	var retval __premarshalResp
+
+	retval.User = v.User
+	{
+
+		dst := &retval.RandomItem
+		src := v.RandomItem
+		var err error
+		*dst, err = __marshalItem(
+			&src)
+		if err != nil {
+			return nil, fmt.Errorf(
+				"Unable to marshal Resp.RandomItem: %w", err)
+		}
+	}
+	retval.Users = v.Users
+	return &retval, nil
 }
 
 // User includes the requested fields of the GraphQL type User.
