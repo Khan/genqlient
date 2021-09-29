@@ -24,6 +24,8 @@ When releasing a new version:
 
 ### New features:
 
+- genqlient's types are now safe to JSON-marshal, which can be useful for putting them in a cache, for example.  See the [docs](FAQ.md#-let-me-json-marshal-my-response-objects) for details.
+
 ### Bug fixes:
 
 ## v0.2.0

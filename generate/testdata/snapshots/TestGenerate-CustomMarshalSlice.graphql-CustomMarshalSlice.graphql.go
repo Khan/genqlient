@@ -23,19 +23,110 @@ type __CustomMarshalSliceInput struct {
 	Datesssp [][][]*time.Time `json:"-"`
 }
 
-func (v *__CustomMarshalSliceInput) MarshalJSON() ([]byte, error) {
+func (v *__CustomMarshalSliceInput) UnmarshalJSON(b []byte) error {
 
-	var fullObject struct {
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
 		*__CustomMarshalSliceInput
 		Datesss  [][][]json.RawMessage `json:"datesss"`
 		Datesssp [][][]json.RawMessage `json:"datesssp"`
-		graphql.NoMarshalJSON
+		graphql.NoUnmarshalJSON
 	}
-	fullObject.__CustomMarshalSliceInput = v
+	firstPass.__CustomMarshalSliceInput = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	{
+		dst := &v.Datesss
+		src := firstPass.Datesss
+		*dst = make(
+			[][][]time.Time,
+			len(src))
+		for i, src := range src {
+			dst := &(*dst)[i]
+			*dst = make(
+				[][]time.Time,
+				len(src))
+			for i, src := range src {
+				dst := &(*dst)[i]
+				*dst = make(
+					[]time.Time,
+					len(src))
+				for i, src := range src {
+					dst := &(*dst)[i]
+					if len(src) != 0 && string(src) != "null" {
+						err = testutil.UnmarshalDate(
+							src, dst)
+						if err != nil {
+							return fmt.Errorf(
+								"Unable to unmarshal __CustomMarshalSliceInput.Datesss: %w", err)
+						}
+					}
+				}
+			}
+		}
+	}
+
+	{
+		dst := &v.Datesssp
+		src := firstPass.Datesssp
+		*dst = make(
+			[][][]*time.Time,
+			len(src))
+		for i, src := range src {
+			dst := &(*dst)[i]
+			*dst = make(
+				[][]*time.Time,
+				len(src))
+			for i, src := range src {
+				dst := &(*dst)[i]
+				*dst = make(
+					[]*time.Time,
+					len(src))
+				for i, src := range src {
+					dst := &(*dst)[i]
+					if len(src) != 0 && string(src) != "null" {
+						*dst = new(time.Time)
+						err = testutil.UnmarshalDate(
+							src, *dst)
+						if err != nil {
+							return fmt.Errorf(
+								"Unable to unmarshal __CustomMarshalSliceInput.Datesssp: %w", err)
+						}
+					}
+				}
+			}
+		}
+	}
+	return nil
+}
+
+type __premarshal__CustomMarshalSliceInput struct {
+	Datesss [][][]json.RawMessage `json:"datesss"`
+
+	Datesssp [][][]json.RawMessage `json:"datesssp"`
+}
+
+func (v *__CustomMarshalSliceInput) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *__CustomMarshalSliceInput) __premarshalJSON() (*__premarshal__CustomMarshalSliceInput, error) {
+	var retval __premarshal__CustomMarshalSliceInput
 
 	{
 
-		dst := &fullObject.Datesss
+		dst := &retval.Datesss
 		src := v.Datesss
 		*dst = make(
 			[][][]json.RawMessage,
@@ -65,7 +156,7 @@ func (v *__CustomMarshalSliceInput) MarshalJSON() ([]byte, error) {
 	}
 	{
 
-		dst := &fullObject.Datesssp
+		dst := &retval.Datesssp
 		src := v.Datesssp
 		*dst = make(
 			[][][]json.RawMessage,
@@ -95,8 +186,7 @@ func (v *__CustomMarshalSliceInput) MarshalJSON() ([]byte, error) {
 			}
 		}
 	}
-
-	return json.Marshal(&fullObject)
+	return &retval, nil
 }
 
 func CustomMarshalSlice(

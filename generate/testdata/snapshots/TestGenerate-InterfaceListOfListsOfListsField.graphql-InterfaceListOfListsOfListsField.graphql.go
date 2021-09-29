@@ -118,6 +118,42 @@ func __unmarshalInterfaceListOfListOfListsFieldListOfListsOfListsOfContent(b []b
 	}
 }
 
+func __marshalInterfaceListOfListOfListsFieldListOfListsOfListsOfContent(v *InterfaceListOfListOfListsFieldListOfListsOfListsOfContent) ([]byte, error) {
+
+	var typename string
+	switch v := (*v).(type) {
+	case *InterfaceListOfListOfListsFieldListOfListsOfListsOfContentArticle:
+		typename = "Article"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*InterfaceListOfListOfListsFieldListOfListsOfListsOfContentArticle
+		}{typename, v}
+		return json.Marshal(result)
+	case *InterfaceListOfListOfListsFieldListOfListsOfListsOfContentVideo:
+		typename = "Video"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*InterfaceListOfListOfListsFieldListOfListsOfListsOfContentVideo
+		}{typename, v}
+		return json.Marshal(result)
+	case *InterfaceListOfListOfListsFieldListOfListsOfListsOfContentTopic:
+		typename = "Topic"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*InterfaceListOfListOfListsFieldListOfListsOfListsOfContentTopic
+		}{typename, v}
+		return json.Marshal(result)
+	case nil:
+		return []byte("null"), nil
+	default:
+		return nil, fmt.Errorf(
+			`Unexpected concrete type for InterfaceListOfListOfListsFieldListOfListsOfListsOfContent: "%T"`, v)
+	}
+}
+
 // InterfaceListOfListOfListsFieldListOfListsOfListsOfContentArticle includes the requested fields of the GraphQL type Article.
 type InterfaceListOfListOfListsFieldListOfListsOfListsOfContentArticle struct {
 	Typename string `json:"__typename"`
@@ -232,6 +268,88 @@ func (v *InterfaceListOfListOfListsFieldResponse) UnmarshalJSON(b []byte) error 
 	return nil
 }
 
+type __premarshalInterfaceListOfListOfListsFieldResponse struct {
+	ListOfListsOfListsOfContent [][][]json.RawMessage `json:"listOfListsOfListsOfContent"`
+
+	WithPointer [][][]json.RawMessage `json:"withPointer"`
+}
+
+func (v *InterfaceListOfListOfListsFieldResponse) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *InterfaceListOfListOfListsFieldResponse) __premarshalJSON() (*__premarshalInterfaceListOfListOfListsFieldResponse, error) {
+	var retval __premarshalInterfaceListOfListOfListsFieldResponse
+
+	{
+
+		dst := &retval.ListOfListsOfListsOfContent
+		src := v.ListOfListsOfListsOfContent
+		*dst = make(
+			[][][]json.RawMessage,
+			len(src))
+		for i, src := range src {
+			dst := &(*dst)[i]
+			*dst = make(
+				[][]json.RawMessage,
+				len(src))
+			for i, src := range src {
+				dst := &(*dst)[i]
+				*dst = make(
+					[]json.RawMessage,
+					len(src))
+				for i, src := range src {
+					dst := &(*dst)[i]
+					var err error
+					*dst, err = __marshalInterfaceListOfListOfListsFieldListOfListsOfListsOfContent(
+						&src)
+					if err != nil {
+						return nil, fmt.Errorf(
+							"Unable to marshal InterfaceListOfListOfListsFieldResponse.ListOfListsOfListsOfContent: %w", err)
+					}
+				}
+			}
+		}
+	}
+	{
+
+		dst := &retval.WithPointer
+		src := v.WithPointer
+		*dst = make(
+			[][][]json.RawMessage,
+			len(src))
+		for i, src := range src {
+			dst := &(*dst)[i]
+			*dst = make(
+				[][]json.RawMessage,
+				len(src))
+			for i, src := range src {
+				dst := &(*dst)[i]
+				*dst = make(
+					[]json.RawMessage,
+					len(src))
+				for i, src := range src {
+					dst := &(*dst)[i]
+					if src != nil {
+						var err error
+						*dst, err = __marshalInterfaceListOfListOfListsFieldWithPointerContent(
+							src)
+						if err != nil {
+							return nil, fmt.Errorf(
+								"Unable to marshal InterfaceListOfListOfListsFieldResponse.WithPointer: %w", err)
+						}
+					}
+				}
+			}
+		}
+	}
+	return &retval, nil
+}
+
 // InterfaceListOfListOfListsFieldWithPointerArticle includes the requested fields of the GraphQL type Article.
 type InterfaceListOfListOfListsFieldWithPointerArticle struct {
 	Typename string `json:"__typename"`
@@ -327,6 +445,42 @@ func __unmarshalInterfaceListOfListOfListsFieldWithPointerContent(b []byte, v *I
 	default:
 		return fmt.Errorf(
 			`Unexpected concrete type for InterfaceListOfListOfListsFieldWithPointerContent: "%v"`, tn.TypeName)
+	}
+}
+
+func __marshalInterfaceListOfListOfListsFieldWithPointerContent(v *InterfaceListOfListOfListsFieldWithPointerContent) ([]byte, error) {
+
+	var typename string
+	switch v := (*v).(type) {
+	case *InterfaceListOfListOfListsFieldWithPointerArticle:
+		typename = "Article"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*InterfaceListOfListOfListsFieldWithPointerArticle
+		}{typename, v}
+		return json.Marshal(result)
+	case *InterfaceListOfListOfListsFieldWithPointerVideo:
+		typename = "Video"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*InterfaceListOfListOfListsFieldWithPointerVideo
+		}{typename, v}
+		return json.Marshal(result)
+	case *InterfaceListOfListOfListsFieldWithPointerTopic:
+		typename = "Topic"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*InterfaceListOfListOfListsFieldWithPointerTopic
+		}{typename, v}
+		return json.Marshal(result)
+	case nil:
+		return []byte("null"), nil
+	default:
+		return nil, fmt.Errorf(
+			`Unexpected concrete type for InterfaceListOfListOfListsFieldWithPointerContent: "%T"`, v)
 	}
 }
 

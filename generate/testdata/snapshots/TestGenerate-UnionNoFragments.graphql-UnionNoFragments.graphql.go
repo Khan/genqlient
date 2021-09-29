@@ -69,6 +69,34 @@ func __unmarshalUnionNoFragmentsQueryRandomLeafLeafContent(b []byte, v *UnionNoF
 	}
 }
 
+func __marshalUnionNoFragmentsQueryRandomLeafLeafContent(v *UnionNoFragmentsQueryRandomLeafLeafContent) ([]byte, error) {
+
+	var typename string
+	switch v := (*v).(type) {
+	case *UnionNoFragmentsQueryRandomLeafArticle:
+		typename = "Article"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*UnionNoFragmentsQueryRandomLeafArticle
+		}{typename, v}
+		return json.Marshal(result)
+	case *UnionNoFragmentsQueryRandomLeafVideo:
+		typename = "Video"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*UnionNoFragmentsQueryRandomLeafVideo
+		}{typename, v}
+		return json.Marshal(result)
+	case nil:
+		return []byte("null"), nil
+	default:
+		return nil, fmt.Errorf(
+			`Unexpected concrete type for UnionNoFragmentsQueryRandomLeafLeafContent: "%T"`, v)
+	}
+}
+
 // UnionNoFragmentsQueryRandomLeafVideo includes the requested fields of the GraphQL type Video.
 type UnionNoFragmentsQueryRandomLeafVideo struct {
 	Typename string `json:"__typename"`
@@ -110,6 +138,36 @@ func (v *UnionNoFragmentsQueryResponse) UnmarshalJSON(b []byte) error {
 		}
 	}
 	return nil
+}
+
+type __premarshalUnionNoFragmentsQueryResponse struct {
+	RandomLeaf json.RawMessage `json:"randomLeaf"`
+}
+
+func (v *UnionNoFragmentsQueryResponse) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *UnionNoFragmentsQueryResponse) __premarshalJSON() (*__premarshalUnionNoFragmentsQueryResponse, error) {
+	var retval __premarshalUnionNoFragmentsQueryResponse
+
+	{
+
+		dst := &retval.RandomLeaf
+		src := v.RandomLeaf
+		var err error
+		*dst, err = __marshalUnionNoFragmentsQueryRandomLeafLeafContent(
+			&src)
+		if err != nil {
+			return nil, fmt.Errorf(
+				"Unable to marshal UnionNoFragmentsQueryResponse.RandomLeaf: %w", err)
+		}
+	}
+	return &retval, nil
 }
 
 func UnionNoFragmentsQuery(

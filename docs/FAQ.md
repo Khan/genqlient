@@ -96,6 +96,19 @@ bindings:
 
 Or, you can bind it to any other type, perhaps one with size-checked constructors; see the [`genqlient.yaml` documentation](`genqlient.yaml`) for more details.
 
+### … let me json-marshal my response objects
+
+This is supported by default!  All genqlient-generated types support both JSON-marshaling and unmarshaling, which can be useful for putting them in a cache, inspecting them by hand, using them in mocks (although this is [not recommended](#-test-my-graphql-apis)), or anything else you can do with JSON.  It's not guaranteed that marshaling a genqlient type will produce the exact GraphQL input -- we try to get as close as we can but there are some limitations around Go zero values -- but unmarshaling again should produce the value genqlient returned.  That is:
+
+```go
+resp, err := MyQuery(...)
+// not guaranteed to match what the server sent (but close):
+b, err := json.Marshal(resp)
+// guaranteed to match resp:
+var respAgain MyQueryResponse
+err := json.Unmarshal(b, &resp)
+```
+
 ## How do I make a query with …
 
 ### … a specific name for a field?

@@ -108,6 +108,42 @@ func __unmarshalInterfaceNoFragmentsQueryRandomItemContent(b []byte, v *Interfac
 	}
 }
 
+func __marshalInterfaceNoFragmentsQueryRandomItemContent(v *InterfaceNoFragmentsQueryRandomItemContent) ([]byte, error) {
+
+	var typename string
+	switch v := (*v).(type) {
+	case *InterfaceNoFragmentsQueryRandomItemArticle:
+		typename = "Article"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*InterfaceNoFragmentsQueryRandomItemArticle
+		}{typename, v}
+		return json.Marshal(result)
+	case *InterfaceNoFragmentsQueryRandomItemVideo:
+		typename = "Video"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*InterfaceNoFragmentsQueryRandomItemVideo
+		}{typename, v}
+		return json.Marshal(result)
+	case *InterfaceNoFragmentsQueryRandomItemTopic:
+		typename = "Topic"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*InterfaceNoFragmentsQueryRandomItemTopic
+		}{typename, v}
+		return json.Marshal(result)
+	case nil:
+		return []byte("null"), nil
+	default:
+		return nil, fmt.Errorf(
+			`Unexpected concrete type for InterfaceNoFragmentsQueryRandomItemContent: "%T"`, v)
+	}
+}
+
 // InterfaceNoFragmentsQueryRandomItemTopic includes the requested fields of the GraphQL type Topic.
 type InterfaceNoFragmentsQueryRandomItemTopic struct {
 	Typename string `json:"__typename"`
@@ -228,6 +264,42 @@ func __unmarshalInterfaceNoFragmentsQueryRandomItemWithTypeNameContent(b []byte,
 	}
 }
 
+func __marshalInterfaceNoFragmentsQueryRandomItemWithTypeNameContent(v *InterfaceNoFragmentsQueryRandomItemWithTypeNameContent) ([]byte, error) {
+
+	var typename string
+	switch v := (*v).(type) {
+	case *InterfaceNoFragmentsQueryRandomItemWithTypeNameArticle:
+		typename = "Article"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*InterfaceNoFragmentsQueryRandomItemWithTypeNameArticle
+		}{typename, v}
+		return json.Marshal(result)
+	case *InterfaceNoFragmentsQueryRandomItemWithTypeNameVideo:
+		typename = "Video"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*InterfaceNoFragmentsQueryRandomItemWithTypeNameVideo
+		}{typename, v}
+		return json.Marshal(result)
+	case *InterfaceNoFragmentsQueryRandomItemWithTypeNameTopic:
+		typename = "Topic"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*InterfaceNoFragmentsQueryRandomItemWithTypeNameTopic
+		}{typename, v}
+		return json.Marshal(result)
+	case nil:
+		return []byte("null"), nil
+	default:
+		return nil, fmt.Errorf(
+			`Unexpected concrete type for InterfaceNoFragmentsQueryRandomItemWithTypeNameContent: "%T"`, v)
+	}
+}
+
 // InterfaceNoFragmentsQueryRandomItemWithTypeNameTopic includes the requested fields of the GraphQL type Topic.
 type InterfaceNoFragmentsQueryRandomItemWithTypeNameTopic struct {
 	Typename string `json:"__typename"`
@@ -312,6 +384,69 @@ func (v *InterfaceNoFragmentsQueryResponse) UnmarshalJSON(b []byte) error {
 		}
 	}
 	return nil
+}
+
+type __premarshalInterfaceNoFragmentsQueryResponse struct {
+	Root InterfaceNoFragmentsQueryRootTopic `json:"root"`
+
+	RandomItem json.RawMessage `json:"randomItem"`
+
+	RandomItemWithTypeName json.RawMessage `json:"randomItemWithTypeName"`
+
+	WithPointer json.RawMessage `json:"withPointer"`
+}
+
+func (v *InterfaceNoFragmentsQueryResponse) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *InterfaceNoFragmentsQueryResponse) __premarshalJSON() (*__premarshalInterfaceNoFragmentsQueryResponse, error) {
+	var retval __premarshalInterfaceNoFragmentsQueryResponse
+
+	retval.Root = v.Root
+	{
+
+		dst := &retval.RandomItem
+		src := v.RandomItem
+		var err error
+		*dst, err = __marshalInterfaceNoFragmentsQueryRandomItemContent(
+			&src)
+		if err != nil {
+			return nil, fmt.Errorf(
+				"Unable to marshal InterfaceNoFragmentsQueryResponse.RandomItem: %w", err)
+		}
+	}
+	{
+
+		dst := &retval.RandomItemWithTypeName
+		src := v.RandomItemWithTypeName
+		var err error
+		*dst, err = __marshalInterfaceNoFragmentsQueryRandomItemWithTypeNameContent(
+			&src)
+		if err != nil {
+			return nil, fmt.Errorf(
+				"Unable to marshal InterfaceNoFragmentsQueryResponse.RandomItemWithTypeName: %w", err)
+		}
+	}
+	{
+
+		dst := &retval.WithPointer
+		src := v.WithPointer
+		if src != nil {
+			var err error
+			*dst, err = __marshalInterfaceNoFragmentsQueryWithPointerContent(
+				src)
+			if err != nil {
+				return nil, fmt.Errorf(
+					"Unable to marshal InterfaceNoFragmentsQueryResponse.WithPointer: %w", err)
+			}
+		}
+	}
+	return &retval, nil
 }
 
 // InterfaceNoFragmentsQueryRootTopic includes the requested fields of the GraphQL type Topic.
@@ -416,6 +551,42 @@ func __unmarshalInterfaceNoFragmentsQueryWithPointerContent(b []byte, v *Interfa
 	default:
 		return fmt.Errorf(
 			`Unexpected concrete type for InterfaceNoFragmentsQueryWithPointerContent: "%v"`, tn.TypeName)
+	}
+}
+
+func __marshalInterfaceNoFragmentsQueryWithPointerContent(v *InterfaceNoFragmentsQueryWithPointerContent) ([]byte, error) {
+
+	var typename string
+	switch v := (*v).(type) {
+	case *InterfaceNoFragmentsQueryWithPointerArticle:
+		typename = "Article"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*InterfaceNoFragmentsQueryWithPointerArticle
+		}{typename, v}
+		return json.Marshal(result)
+	case *InterfaceNoFragmentsQueryWithPointerVideo:
+		typename = "Video"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*InterfaceNoFragmentsQueryWithPointerVideo
+		}{typename, v}
+		return json.Marshal(result)
+	case *InterfaceNoFragmentsQueryWithPointerTopic:
+		typename = "Topic"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*InterfaceNoFragmentsQueryWithPointerTopic
+		}{typename, v}
+		return json.Marshal(result)
+	case nil:
+		return []byte("null"), nil
+	default:
+		return nil, fmt.Errorf(
+			`Unexpected concrete type for InterfaceNoFragmentsQueryWithPointerContent: "%T"`, v)
 	}
 }
 

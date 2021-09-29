@@ -108,6 +108,46 @@ func __unmarshalSimpleNamedFragmentRandomItemContent(b []byte, v *SimpleNamedFra
 	}
 }
 
+func __marshalSimpleNamedFragmentRandomItemContent(v *SimpleNamedFragmentRandomItemContent) ([]byte, error) {
+
+	var typename string
+	switch v := (*v).(type) {
+	case *SimpleNamedFragmentRandomItemArticle:
+		typename = "Article"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*SimpleNamedFragmentRandomItemArticle
+		}{typename, v}
+		return json.Marshal(result)
+	case *SimpleNamedFragmentRandomItemVideo:
+		typename = "Video"
+
+		premarshaled, err := v.__premarshalJSON()
+		if err != nil {
+			return nil, err
+		}
+		result := struct {
+			TypeName string `json:"__typename"`
+			*__premarshalSimpleNamedFragmentRandomItemVideo
+		}{typename, premarshaled}
+		return json.Marshal(result)
+	case *SimpleNamedFragmentRandomItemTopic:
+		typename = "Topic"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*SimpleNamedFragmentRandomItemTopic
+		}{typename, v}
+		return json.Marshal(result)
+	case nil:
+		return []byte("null"), nil
+	default:
+		return nil, fmt.Errorf(
+			`Unexpected concrete type for SimpleNamedFragmentRandomItemContent: "%T"`, v)
+	}
+}
+
 // SimpleNamedFragmentRandomItemTopic includes the requested fields of the GraphQL type Topic.
 type SimpleNamedFragmentRandomItemTopic struct {
 	Typename string `json:"__typename"`
@@ -148,6 +188,40 @@ func (v *SimpleNamedFragmentRandomItemVideo) UnmarshalJSON(b []byte) error {
 		return err
 	}
 	return nil
+}
+
+type __premarshalSimpleNamedFragmentRandomItemVideo struct {
+	Typename string `json:"__typename"`
+
+	Id testutil.ID `json:"id"`
+
+	Name string `json:"name"`
+
+	Url string `json:"url"`
+
+	Duration int `json:"duration"`
+
+	Thumbnail VideoFieldsThumbnail `json:"thumbnail"`
+}
+
+func (v *SimpleNamedFragmentRandomItemVideo) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *SimpleNamedFragmentRandomItemVideo) __premarshalJSON() (*__premarshalSimpleNamedFragmentRandomItemVideo, error) {
+	var retval __premarshalSimpleNamedFragmentRandomItemVideo
+
+	retval.Typename = v.Typename
+	retval.Id = v.Id
+	retval.Name = v.Name
+	retval.Url = v.VideoFields.Url
+	retval.Duration = v.VideoFields.Duration
+	retval.Thumbnail = v.VideoFields.Thumbnail
+	return &retval, nil
 }
 
 // SimpleNamedFragmentRandomLeafArticle includes the requested fields of the GraphQL type Article.
@@ -210,6 +284,38 @@ func __unmarshalSimpleNamedFragmentRandomLeafLeafContent(b []byte, v *SimpleName
 	}
 }
 
+func __marshalSimpleNamedFragmentRandomLeafLeafContent(v *SimpleNamedFragmentRandomLeafLeafContent) ([]byte, error) {
+
+	var typename string
+	switch v := (*v).(type) {
+	case *SimpleNamedFragmentRandomLeafArticle:
+		typename = "Article"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*SimpleNamedFragmentRandomLeafArticle
+		}{typename, v}
+		return json.Marshal(result)
+	case *SimpleNamedFragmentRandomLeafVideo:
+		typename = "Video"
+
+		premarshaled, err := v.__premarshalJSON()
+		if err != nil {
+			return nil, err
+		}
+		result := struct {
+			TypeName string `json:"__typename"`
+			*__premarshalSimpleNamedFragmentRandomLeafVideo
+		}{typename, premarshaled}
+		return json.Marshal(result)
+	case nil:
+		return []byte("null"), nil
+	default:
+		return nil, fmt.Errorf(
+			`Unexpected concrete type for SimpleNamedFragmentRandomLeafLeafContent: "%T"`, v)
+	}
+}
+
 // SimpleNamedFragmentRandomLeafVideo includes the requested fields of the GraphQL type Video.
 type SimpleNamedFragmentRandomLeafVideo struct {
 	Typename    string `json:"__typename"`
@@ -239,6 +345,40 @@ func (v *SimpleNamedFragmentRandomLeafVideo) UnmarshalJSON(b []byte) error {
 		return err
 	}
 	return nil
+}
+
+type __premarshalSimpleNamedFragmentRandomLeafVideo struct {
+	Typename string `json:"__typename"`
+
+	Id testutil.ID `json:"id"`
+
+	Name string `json:"name"`
+
+	Url string `json:"url"`
+
+	Duration int `json:"duration"`
+
+	Thumbnail VideoFieldsThumbnail `json:"thumbnail"`
+}
+
+func (v *SimpleNamedFragmentRandomLeafVideo) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *SimpleNamedFragmentRandomLeafVideo) __premarshalJSON() (*__premarshalSimpleNamedFragmentRandomLeafVideo, error) {
+	var retval __premarshalSimpleNamedFragmentRandomLeafVideo
+
+	retval.Typename = v.Typename
+	retval.Id = v.VideoFields.Id
+	retval.Name = v.VideoFields.Name
+	retval.Url = v.VideoFields.Url
+	retval.Duration = v.VideoFields.Duration
+	retval.Thumbnail = v.VideoFields.Thumbnail
+	return &retval, nil
 }
 
 // SimpleNamedFragmentResponse is returned by SimpleNamedFragment on success.
@@ -292,6 +432,50 @@ func (v *SimpleNamedFragmentResponse) UnmarshalJSON(b []byte) error {
 		}
 	}
 	return nil
+}
+
+type __premarshalSimpleNamedFragmentResponse struct {
+	RandomItem json.RawMessage `json:"randomItem"`
+
+	RandomLeaf json.RawMessage `json:"randomLeaf"`
+}
+
+func (v *SimpleNamedFragmentResponse) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *SimpleNamedFragmentResponse) __premarshalJSON() (*__premarshalSimpleNamedFragmentResponse, error) {
+	var retval __premarshalSimpleNamedFragmentResponse
+
+	{
+
+		dst := &retval.RandomItem
+		src := v.RandomItem
+		var err error
+		*dst, err = __marshalSimpleNamedFragmentRandomItemContent(
+			&src)
+		if err != nil {
+			return nil, fmt.Errorf(
+				"Unable to marshal SimpleNamedFragmentResponse.RandomItem: %w", err)
+		}
+	}
+	{
+
+		dst := &retval.RandomLeaf
+		src := v.RandomLeaf
+		var err error
+		*dst, err = __marshalSimpleNamedFragmentRandomLeafLeafContent(
+			&src)
+		if err != nil {
+			return nil, fmt.Errorf(
+				"Unable to marshal SimpleNamedFragmentResponse.RandomLeaf: %w", err)
+		}
+	}
+	return &retval, nil
 }
 
 // VideoFields includes the GraphQL fields of Video requested by the fragment VideoFields.

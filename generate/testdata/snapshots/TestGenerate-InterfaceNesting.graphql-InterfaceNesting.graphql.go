@@ -61,6 +61,45 @@ func (v *InterfaceNestingRootTopic) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+type __premarshalInterfaceNestingRootTopic struct {
+	Id testutil.ID `json:"id"`
+
+	Children []json.RawMessage `json:"children"`
+}
+
+func (v *InterfaceNestingRootTopic) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *InterfaceNestingRootTopic) __premarshalJSON() (*__premarshalInterfaceNestingRootTopic, error) {
+	var retval __premarshalInterfaceNestingRootTopic
+
+	retval.Id = v.Id
+	{
+
+		dst := &retval.Children
+		src := v.Children
+		*dst = make(
+			[]json.RawMessage,
+			len(src))
+		for i, src := range src {
+			dst := &(*dst)[i]
+			var err error
+			*dst, err = __marshalInterfaceNestingRootTopicChildrenContent(
+				&src)
+			if err != nil {
+				return nil, fmt.Errorf(
+					"Unable to marshal InterfaceNestingRootTopic.Children: %w", err)
+			}
+		}
+	}
+	return &retval, nil
+}
+
 // InterfaceNestingRootTopicChildrenArticle includes the requested fields of the GraphQL type Article.
 type InterfaceNestingRootTopicChildrenArticle struct {
 	Typename string `json:"__typename"`
@@ -165,6 +204,42 @@ func __unmarshalInterfaceNestingRootTopicChildrenContent(b []byte, v *InterfaceN
 	}
 }
 
+func __marshalInterfaceNestingRootTopicChildrenContent(v *InterfaceNestingRootTopicChildrenContent) ([]byte, error) {
+
+	var typename string
+	switch v := (*v).(type) {
+	case *InterfaceNestingRootTopicChildrenArticle:
+		typename = "Article"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*InterfaceNestingRootTopicChildrenArticle
+		}{typename, v}
+		return json.Marshal(result)
+	case *InterfaceNestingRootTopicChildrenVideo:
+		typename = "Video"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*InterfaceNestingRootTopicChildrenVideo
+		}{typename, v}
+		return json.Marshal(result)
+	case *InterfaceNestingRootTopicChildrenTopic:
+		typename = "Topic"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*InterfaceNestingRootTopicChildrenTopic
+		}{typename, v}
+		return json.Marshal(result)
+	case nil:
+		return []byte("null"), nil
+	default:
+		return nil, fmt.Errorf(
+			`Unexpected concrete type for InterfaceNestingRootTopicChildrenContent: "%T"`, v)
+	}
+}
+
 // InterfaceNestingRootTopicChildrenContentParentTopic includes the requested fields of the GraphQL type Topic.
 type InterfaceNestingRootTopicChildrenContentParentTopic struct {
 	// ID is documented in the Content interface.
@@ -209,6 +284,45 @@ func (v *InterfaceNestingRootTopicChildrenContentParentTopic) UnmarshalJSON(b []
 		}
 	}
 	return nil
+}
+
+type __premarshalInterfaceNestingRootTopicChildrenContentParentTopic struct {
+	Id testutil.ID `json:"id"`
+
+	Children []json.RawMessage `json:"children"`
+}
+
+func (v *InterfaceNestingRootTopicChildrenContentParentTopic) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *InterfaceNestingRootTopicChildrenContentParentTopic) __premarshalJSON() (*__premarshalInterfaceNestingRootTopicChildrenContentParentTopic, error) {
+	var retval __premarshalInterfaceNestingRootTopicChildrenContentParentTopic
+
+	retval.Id = v.Id
+	{
+
+		dst := &retval.Children
+		src := v.Children
+		*dst = make(
+			[]json.RawMessage,
+			len(src))
+		for i, src := range src {
+			dst := &(*dst)[i]
+			var err error
+			*dst, err = __marshalInterfaceNestingRootTopicChildrenContentParentTopicChildrenContent(
+				&src)
+			if err != nil {
+				return nil, fmt.Errorf(
+					"Unable to marshal InterfaceNestingRootTopicChildrenContentParentTopic.Children: %w", err)
+			}
+		}
+	}
+	return &retval, nil
 }
 
 // InterfaceNestingRootTopicChildrenContentParentTopicChildrenArticle includes the requested fields of the GraphQL type Article.
@@ -306,6 +420,42 @@ func __unmarshalInterfaceNestingRootTopicChildrenContentParentTopicChildrenConte
 	default:
 		return fmt.Errorf(
 			`Unexpected concrete type for InterfaceNestingRootTopicChildrenContentParentTopicChildrenContent: "%v"`, tn.TypeName)
+	}
+}
+
+func __marshalInterfaceNestingRootTopicChildrenContentParentTopicChildrenContent(v *InterfaceNestingRootTopicChildrenContentParentTopicChildrenContent) ([]byte, error) {
+
+	var typename string
+	switch v := (*v).(type) {
+	case *InterfaceNestingRootTopicChildrenContentParentTopicChildrenArticle:
+		typename = "Article"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*InterfaceNestingRootTopicChildrenContentParentTopicChildrenArticle
+		}{typename, v}
+		return json.Marshal(result)
+	case *InterfaceNestingRootTopicChildrenContentParentTopicChildrenVideo:
+		typename = "Video"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*InterfaceNestingRootTopicChildrenContentParentTopicChildrenVideo
+		}{typename, v}
+		return json.Marshal(result)
+	case *InterfaceNestingRootTopicChildrenContentParentTopicChildrenTopic:
+		typename = "Topic"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*InterfaceNestingRootTopicChildrenContentParentTopicChildrenTopic
+		}{typename, v}
+		return json.Marshal(result)
+	case nil:
+		return []byte("null"), nil
+	default:
+		return nil, fmt.Errorf(
+			`Unexpected concrete type for InterfaceNestingRootTopicChildrenContentParentTopicChildrenContent: "%T"`, v)
 	}
 }
 
