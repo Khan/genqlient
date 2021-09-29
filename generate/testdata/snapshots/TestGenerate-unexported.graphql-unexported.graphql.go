@@ -99,7 +99,6 @@ func (v *UserQueryInput) MarshalJSON() ([]byte, error) {
 }
 
 func (v *UserQueryInput) __premarshalJSON() (*__premarshalUserQueryInput, error) {
-
 	var retval __premarshalUserQueryInput
 
 	retval.Email = v.Email

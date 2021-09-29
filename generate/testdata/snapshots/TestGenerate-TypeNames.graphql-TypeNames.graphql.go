@@ -218,7 +218,6 @@ func (v *Resp) MarshalJSON() ([]byte, error) {
 }
 
 func (v *Resp) __premarshalJSON() (*__premarshalResp, error) {
-
 	var retval __premarshalResp
 
 	retval.User = v.User

@@ -122,7 +122,6 @@ func (v *__CustomMarshalSliceInput) MarshalJSON() ([]byte, error) {
 }
 
 func (v *__CustomMarshalSliceInput) __premarshalJSON() (*__premarshal__CustomMarshalSliceInput, error) {
-
 	var retval __premarshal__CustomMarshalSliceInput
 
 	{

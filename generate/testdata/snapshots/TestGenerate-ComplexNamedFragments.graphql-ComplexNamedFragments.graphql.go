@@ -57,7 +57,6 @@ func (v *ComplexNamedFragmentsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (v *ComplexNamedFragmentsResponse) __premarshalJSON() (*__premarshalComplexNamedFragmentsResponse, error) {
-
 	var retval __premarshalComplexNamedFragmentsResponse
 
 	{
@@ -323,7 +322,6 @@ func (v *InnerQueryFragment) MarshalJSON() ([]byte, error) {
 }
 
 func (v *InnerQueryFragment) __premarshalJSON() (*__premarshalInnerQueryFragment, error) {
-
 	var retval __premarshalInnerQueryFragment
 
 	{
@@ -413,7 +411,6 @@ func (v *InnerQueryFragmentOtherLeafArticle) MarshalJSON() ([]byte, error) {
 }
 
 func (v *InnerQueryFragmentOtherLeafArticle) __premarshalJSON() (*__premarshalInnerQueryFragmentOtherLeafArticle, error) {
-
 	var retval __premarshalInnerQueryFragmentOtherLeafArticle
 
 	retval.Typename = v.Typename
@@ -571,7 +568,6 @@ func (v *InnerQueryFragmentOtherLeafVideo) MarshalJSON() ([]byte, error) {
 }
 
 func (v *InnerQueryFragmentOtherLeafVideo) __premarshalJSON() (*__premarshalInnerQueryFragmentOtherLeafVideo, error) {
-
 	var retval __premarshalInnerQueryFragmentOtherLeafVideo
 
 	retval.Typename = v.Typename
@@ -635,7 +631,6 @@ func (v *InnerQueryFragmentRandomItemArticle) MarshalJSON() ([]byte, error) {
 }
 
 func (v *InnerQueryFragmentRandomItemArticle) __premarshalJSON() (*__premarshalInnerQueryFragmentRandomItemArticle, error) {
-
 	var retval __premarshalInnerQueryFragmentRandomItemArticle
 
 	retval.Typename = v.Typename
@@ -837,7 +832,6 @@ func (v *InnerQueryFragmentRandomItemTopic) MarshalJSON() ([]byte, error) {
 }
 
 func (v *InnerQueryFragmentRandomItemTopic) __premarshalJSON() (*__premarshalInnerQueryFragmentRandomItemTopic, error) {
-
 	var retval __premarshalInnerQueryFragmentRandomItemTopic
 
 	retval.Typename = v.Typename
@@ -910,7 +904,6 @@ func (v *InnerQueryFragmentRandomItemVideo) MarshalJSON() ([]byte, error) {
 }
 
 func (v *InnerQueryFragmentRandomItemVideo) __premarshalJSON() (*__premarshalInnerQueryFragmentRandomItemVideo, error) {
-
 	var retval __premarshalInnerQueryFragmentRandomItemVideo
 
 	retval.Typename = v.Typename
@@ -970,7 +963,6 @@ func (v *InnerQueryFragmentRandomLeafArticle) MarshalJSON() ([]byte, error) {
 }
 
 func (v *InnerQueryFragmentRandomLeafArticle) __premarshalJSON() (*__premarshalInnerQueryFragmentRandomLeafArticle, error) {
-
 	var retval __premarshalInnerQueryFragmentRandomLeafArticle
 
 	retval.Typename = v.Typename
@@ -1138,7 +1130,6 @@ func (v *InnerQueryFragmentRandomLeafVideo) MarshalJSON() ([]byte, error) {
 }
 
 func (v *InnerQueryFragmentRandomLeafVideo) __premarshalJSON() (*__premarshalInnerQueryFragmentRandomLeafVideo, error) {
-
 	var retval __premarshalInnerQueryFragmentRandomLeafVideo
 
 	retval.Typename = v.Typename
@@ -1228,7 +1219,6 @@ func (v *MoreVideoFieldsParentTopic) MarshalJSON() ([]byte, error) {
 }
 
 func (v *MoreVideoFieldsParentTopic) __premarshalJSON() (*__premarshalMoreVideoFieldsParentTopic, error) {
-
 	var retval __premarshalMoreVideoFieldsParentTopic
 
 	retval.Name = v.Name
@@ -1423,7 +1413,6 @@ func (v *MoreVideoFieldsParentTopicChildrenVideo) MarshalJSON() ([]byte, error) 
 }
 
 func (v *MoreVideoFieldsParentTopicChildrenVideo) __premarshalJSON() (*__premarshalMoreVideoFieldsParentTopicChildrenVideo, error) {
-
 	var retval __premarshalMoreVideoFieldsParentTopicChildrenVideo
 
 	retval.Typename = v.Typename
@@ -1485,7 +1474,6 @@ func (v *QueryFragment) MarshalJSON() ([]byte, error) {
 }
 
 func (v *QueryFragment) __premarshalJSON() (*__premarshalQueryFragment, error) {
-
 	var retval __premarshalQueryFragment
 
 	{
@@ -1584,7 +1572,6 @@ func (v *VideoFields) MarshalJSON() ([]byte, error) {
 }
 
 func (v *VideoFields) __premarshalJSON() (*__premarshalVideoFields, error) {
-
 	var retval __premarshalVideoFields
 
 	retval.Id = v.Id

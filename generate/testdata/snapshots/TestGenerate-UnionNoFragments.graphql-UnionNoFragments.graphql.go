@@ -153,7 +153,6 @@ func (v *UnionNoFragmentsQueryResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (v *UnionNoFragmentsQueryResponse) __premarshalJSON() (*__premarshalUnionNoFragmentsQueryResponse, error) {
-
 	var retval __premarshalUnionNoFragmentsQueryResponse
 
 	{

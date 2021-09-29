@@ -405,7 +405,6 @@ func (v *InterfaceNoFragmentsQueryResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (v *InterfaceNoFragmentsQueryResponse) __premarshalJSON() (*__premarshalInterfaceNoFragmentsQueryResponse, error) {
-
 	var retval __premarshalInterfaceNoFragmentsQueryResponse
 
 	retval.Root = v.Root

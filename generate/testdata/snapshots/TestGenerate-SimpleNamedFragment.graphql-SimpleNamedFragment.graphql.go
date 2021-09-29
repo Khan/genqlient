@@ -213,7 +213,6 @@ func (v *SimpleNamedFragmentRandomItemVideo) MarshalJSON() ([]byte, error) {
 }
 
 func (v *SimpleNamedFragmentRandomItemVideo) __premarshalJSON() (*__premarshalSimpleNamedFragmentRandomItemVideo, error) {
-
 	var retval __premarshalSimpleNamedFragmentRandomItemVideo
 
 	retval.Typename = v.Typename
@@ -371,7 +370,6 @@ func (v *SimpleNamedFragmentRandomLeafVideo) MarshalJSON() ([]byte, error) {
 }
 
 func (v *SimpleNamedFragmentRandomLeafVideo) __premarshalJSON() (*__premarshalSimpleNamedFragmentRandomLeafVideo, error) {
-
 	var retval __premarshalSimpleNamedFragmentRandomLeafVideo
 
 	retval.Typename = v.Typename
@@ -451,7 +449,6 @@ func (v *SimpleNamedFragmentResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (v *SimpleNamedFragmentResponse) __premarshalJSON() (*__premarshalSimpleNamedFragmentResponse, error) {
-
 	var retval __premarshalSimpleNamedFragmentResponse
 
 	{

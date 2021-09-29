@@ -213,7 +213,6 @@ func (v *SimpleInlineFragmentResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (v *SimpleInlineFragmentResponse) __premarshalJSON() (*__premarshalSimpleInlineFragmentResponse, error) {
-
 	var retval __premarshalSimpleInlineFragmentResponse
 
 	{

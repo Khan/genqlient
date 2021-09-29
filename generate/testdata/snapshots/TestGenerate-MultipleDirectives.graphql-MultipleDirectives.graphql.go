@@ -86,7 +86,6 @@ func (v *MyInput) MarshalJSON() ([]byte, error) {
 }
 
 func (v *MyInput) __premarshalJSON() (*__premarshalMyInput, error) {
-
 	var retval __premarshalMyInput
 
 	retval.Email = v.Email
@@ -233,7 +232,6 @@ func (v *UserQueryInput) MarshalJSON() ([]byte, error) {
 }
 
 func (v *UserQueryInput) __premarshalJSON() (*__premarshalUserQueryInput, error) {
-
 	var retval __premarshalUserQueryInput
 
 	retval.Email = v.Email

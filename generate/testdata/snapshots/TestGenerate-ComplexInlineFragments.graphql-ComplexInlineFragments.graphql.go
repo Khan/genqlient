@@ -310,7 +310,6 @@ func (v *ComplexInlineFragmentsNestedStuffTopic) MarshalJSON() ([]byte, error) {
 }
 
 func (v *ComplexInlineFragmentsNestedStuffTopic) __premarshalJSON() (*__premarshalComplexInlineFragmentsNestedStuffTopic, error) {
-
 	var retval __premarshalComplexInlineFragmentsNestedStuffTopic
 
 	retval.Typename = v.Typename
@@ -401,7 +400,6 @@ func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParen
 }
 
 func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopic) __premarshalJSON() (*__premarshalComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopic, error) {
-
 	var retval __premarshalComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopic
 
 	{
@@ -1192,7 +1190,6 @@ func (v *ComplexInlineFragmentsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (v *ComplexInlineFragmentsResponse) __premarshalJSON() (*__premarshalComplexInlineFragmentsResponse, error) {
-
 	var retval __premarshalComplexInlineFragmentsResponse
 
 	retval.Root = v.Root

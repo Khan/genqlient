@@ -80,7 +80,6 @@ func (v *InterfaceListFieldRootTopic) MarshalJSON() ([]byte, error) {
 }
 
 func (v *InterfaceListFieldRootTopic) __premarshalJSON() (*__premarshalInterfaceListFieldRootTopic, error) {
-
 	var retval __premarshalInterfaceListFieldRootTopic
 
 	retval.Id = v.Id
@@ -320,7 +319,6 @@ func (v *InterfaceListFieldWithPointerTopic) MarshalJSON() ([]byte, error) {
 }
 
 func (v *InterfaceListFieldWithPointerTopic) __premarshalJSON() (*__premarshalInterfaceListFieldWithPointerTopic, error) {
-
 	var retval __premarshalInterfaceListFieldWithPointerTopic
 
 	retval.Id = v.Id

@@ -69,7 +69,6 @@ func (v *AnimalFields) MarshalJSON() ([]byte, error) {
 }
 
 func (v *AnimalFields) __premarshalJSON() (*__premarshalAnimalFields, error) {
-
 	var retval __premarshalAnimalFields
 
 	retval.Id = v.Id
@@ -247,7 +246,6 @@ func (v *AnimalFieldsOwnerUser) MarshalJSON() ([]byte, error) {
 }
 
 func (v *AnimalFieldsOwnerUser) __premarshalJSON() (*__premarshalAnimalFieldsOwnerUser, error) {
-
 	var retval __premarshalAnimalFieldsOwnerUser
 
 	retval.Typename = v.Typename
@@ -370,7 +368,6 @@ func (v *LuckyFieldsUser) MarshalJSON() ([]byte, error) {
 }
 
 func (v *LuckyFieldsUser) __premarshalJSON() (*__premarshalLuckyFieldsUser, error) {
-
 	var retval __premarshalLuckyFieldsUser
 
 	retval.LuckyNumber = v.LuckyNumber
@@ -451,7 +448,6 @@ func (v *UserFields) MarshalJSON() ([]byte, error) {
 }
 
 func (v *UserFields) __premarshalJSON() (*__premarshalUserFields, error) {
-
 	var retval __premarshalUserFields
 
 	retval.Id = v.Id
@@ -511,7 +507,6 @@ func (v *__queryWithCustomMarshalInput) MarshalJSON() ([]byte, error) {
 }
 
 func (v *__queryWithCustomMarshalInput) __premarshalJSON() (*__premarshal__queryWithCustomMarshalInput, error) {
-
 	var retval __premarshal__queryWithCustomMarshalInput
 
 	{
@@ -584,7 +579,6 @@ func (v *__queryWithCustomMarshalOptionalInput) MarshalJSON() ([]byte, error) {
 }
 
 func (v *__queryWithCustomMarshalOptionalInput) __premarshalJSON() (*__premarshal__queryWithCustomMarshalOptionalInput, error) {
-
 	var retval __premarshal__queryWithCustomMarshalOptionalInput
 
 	{
@@ -662,7 +656,6 @@ func (v *__queryWithCustomMarshalSliceInput) MarshalJSON() ([]byte, error) {
 }
 
 func (v *__queryWithCustomMarshalSliceInput) __premarshalJSON() (*__premarshal__queryWithCustomMarshalSliceInput, error) {
-
 	var retval __premarshal__queryWithCustomMarshalSliceInput
 
 	{
@@ -794,7 +787,6 @@ func (v *queryWithCustomMarshalOptionalUserSearchUser) MarshalJSON() ([]byte, er
 }
 
 func (v *queryWithCustomMarshalOptionalUserSearchUser) __premarshalJSON() (*__premarshalqueryWithCustomMarshalOptionalUserSearchUser, error) {
-
 	var retval __premarshalqueryWithCustomMarshalOptionalUserSearchUser
 
 	retval.Id = v.Id
@@ -881,7 +873,6 @@ func (v *queryWithCustomMarshalSliceUsersBornOnDatesUser) MarshalJSON() ([]byte,
 }
 
 func (v *queryWithCustomMarshalSliceUsersBornOnDatesUser) __premarshalJSON() (*__premarshalqueryWithCustomMarshalSliceUsersBornOnDatesUser, error) {
-
 	var retval __premarshalqueryWithCustomMarshalSliceUsersBornOnDatesUser
 
 	retval.Id = v.Id
@@ -958,7 +949,6 @@ func (v *queryWithCustomMarshalUsersBornOnUser) MarshalJSON() ([]byte, error) {
 }
 
 func (v *queryWithCustomMarshalUsersBornOnUser) __premarshalJSON() (*__premarshalqueryWithCustomMarshalUsersBornOnUser, error) {
-
 	var retval __premarshalqueryWithCustomMarshalUsersBornOnUser
 
 	retval.Id = v.Id
@@ -1044,7 +1034,6 @@ func (v *queryWithFragmentsBeingsAnimal) MarshalJSON() ([]byte, error) {
 }
 
 func (v *queryWithFragmentsBeingsAnimal) __premarshalJSON() (*__premarshalqueryWithFragmentsBeingsAnimal, error) {
-
 	var retval __premarshalqueryWithFragmentsBeingsAnimal
 
 	retval.Typename = v.Typename
@@ -1352,7 +1341,6 @@ func (v *queryWithFragmentsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (v *queryWithFragmentsResponse) __premarshalJSON() (*__premarshalqueryWithFragmentsResponse, error) {
-
 	var retval __premarshalqueryWithFragmentsResponse
 
 	{
@@ -1543,7 +1531,6 @@ func (v *queryWithInterfaceListFieldResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (v *queryWithInterfaceListFieldResponse) __premarshalJSON() (*__premarshalqueryWithInterfaceListFieldResponse, error) {
-
 	var retval __premarshalqueryWithInterfaceListFieldResponse
 
 	{
@@ -1735,7 +1722,6 @@ func (v *queryWithInterfaceListPointerFieldResponse) MarshalJSON() ([]byte, erro
 }
 
 func (v *queryWithInterfaceListPointerFieldResponse) __premarshalJSON() (*__premarshalqueryWithInterfaceListPointerFieldResponse, error) {
-
 	var retval __premarshalqueryWithInterfaceListPointerFieldResponse
 
 	{
@@ -1931,7 +1917,6 @@ func (v *queryWithInterfaceNoFragmentsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (v *queryWithInterfaceNoFragmentsResponse) __premarshalJSON() (*__premarshalqueryWithInterfaceNoFragmentsResponse, error) {
-
 	var retval __premarshalqueryWithInterfaceNoFragmentsResponse
 
 	{
@@ -2001,7 +1986,6 @@ func (v *queryWithNamedFragmentsBeingsAnimal) MarshalJSON() ([]byte, error) {
 }
 
 func (v *queryWithNamedFragmentsBeingsAnimal) __premarshalJSON() (*__premarshalqueryWithNamedFragmentsBeingsAnimal, error) {
-
 	var retval __premarshalqueryWithNamedFragmentsBeingsAnimal
 
 	retval.Typename = v.Typename
@@ -2169,7 +2153,6 @@ func (v *queryWithNamedFragmentsBeingsUser) MarshalJSON() ([]byte, error) {
 }
 
 func (v *queryWithNamedFragmentsBeingsUser) __premarshalJSON() (*__premarshalqueryWithNamedFragmentsBeingsUser, error) {
-
 	var retval __premarshalqueryWithNamedFragmentsBeingsUser
 
 	retval.Typename = v.Typename
@@ -2236,7 +2219,6 @@ func (v *queryWithNamedFragmentsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (v *queryWithNamedFragmentsResponse) __premarshalJSON() (*__premarshalqueryWithNamedFragmentsResponse, error) {
-
 	var retval __premarshalqueryWithNamedFragmentsResponse
 
 	{

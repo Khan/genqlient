@@ -76,7 +76,6 @@ func (v *CustomMarshalUsersBornOnUser) MarshalJSON() ([]byte, error) {
 }
 
 func (v *CustomMarshalUsersBornOnUser) __premarshalJSON() (*__premarshalCustomMarshalUsersBornOnUser, error) {
-
 	var retval __premarshalCustomMarshalUsersBornOnUser
 
 	retval.Id = v.Id
@@ -146,7 +145,6 @@ func (v *__CustomMarshalInput) MarshalJSON() ([]byte, error) {
 }
 
 func (v *__CustomMarshalInput) __premarshalJSON() (*__premarshal__CustomMarshalInput, error) {
-
 	var retval __premarshal__CustomMarshalInput
 
 	{

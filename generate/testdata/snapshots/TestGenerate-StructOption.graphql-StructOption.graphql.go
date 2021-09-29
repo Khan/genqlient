@@ -116,7 +116,6 @@ func (v *StructOptionRootTopicChildrenContentParentTopic) MarshalJSON() ([]byte,
 }
 
 func (v *StructOptionRootTopicChildrenContentParentTopic) __premarshalJSON() (*__premarshalStructOptionRootTopicChildrenContentParentTopic, error) {
-
 	var retval __premarshalStructOptionRootTopicChildrenContentParentTopic
 
 	retval.Id = v.Id
@@ -347,7 +346,6 @@ func (v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo) 
 }
 
 func (v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo) __premarshalJSON() (*__premarshalStructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo, error) {
-
 	var retval __premarshalStructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo
 
 	retval.Typename = v.Typename

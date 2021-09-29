@@ -76,7 +76,6 @@ func (v *InterfaceNestingRootTopic) MarshalJSON() ([]byte, error) {
 }
 
 func (v *InterfaceNestingRootTopic) __premarshalJSON() (*__premarshalInterfaceNestingRootTopic, error) {
-
 	var retval __premarshalInterfaceNestingRootTopic
 
 	retval.Id = v.Id
@@ -302,7 +301,6 @@ func (v *InterfaceNestingRootTopicChildrenContentParentTopic) MarshalJSON() ([]b
 }
 
 func (v *InterfaceNestingRootTopicChildrenContentParentTopic) __premarshalJSON() (*__premarshalInterfaceNestingRootTopicChildrenContentParentTopic, error) {
-
 	var retval __premarshalInterfaceNestingRootTopicChildrenContentParentTopic
 
 	retval.Id = v.Id
