@@ -115,6 +115,15 @@ func (g *generator) convertOperation(
 		return nil, err
 	}
 
+	// It's not common to use a fragment-spread for the whole query, but you
+	// can if you want two queries to return the same type!
+	if queryOptions.GetFlatten() {
+		i, err := validateFlattenOption(baseType, operation.SelectionSet, operation.Position)
+		if err == nil {
+			return fields[i].GoType, nil
+		}
+	}
+
 	goType := &goStructType{
 		GoName: name,
 		descriptionInfo: descriptionInfo{
@@ -340,6 +349,17 @@ func (g *generator) convertDefinition(
 		if err != nil {
 			return nil, err
 		}
+		if options.GetFlatten() {
+			// As with struct, flatten only applies if valid, important if you
+			// applied it to the whole query.
+			// TODO(benkraft): This is a slightly fragile way to do this;
+			// figure out a good way to do it before/while constructing the
+			// fields, rather than after.
+			i, err := validateFlattenOption(def, selectionSet, pos)
+			if err == nil {
+				return fields[i].GoType, nil
+			}
+		}
 
 		goType := &goStructType{
 			GoName:          name,
@@ -405,6 +425,14 @@ func (g *generator) convertDefinition(
 			namePrefix, selectionSet, def, queryOptions)
 		if err != nil {
 			return nil, err
+		}
+		// Flatten can only flatten if there is only one field (plus perhaps
+		// __typename), and it's shared.
+		if options.GetFlatten() {
+			i, err := validateFlattenOption(def, selectionSet, pos)
+			if err == nil {
+				return sharedFields[i].GoType, nil
+			}
 		}
 
 		implementationTypes := g.schema.GetPossibleTypes(def)
@@ -704,6 +732,15 @@ func (g *generator) convertNamedFragment(fragment *ast.FragmentDefinition) (goTy
 		newPrefixList(fragment.Name), fragment.SelectionSet, typ, directive)
 	if err != nil {
 		return nil, err
+	}
+	if directive.GetFlatten() {
+		// Flatten on a fragment-definition is a bit weird -- it makes one
+		// fragment effectively an alias for another -- but no reason we can't
+		// allow it.
+		i, err := validateFlattenOption(typ, fragment.SelectionSet, fragment.Position)
+		if err == nil {
+			return fields[i].GoType, nil
+		}
 	}
 
 	switch typ.Kind {

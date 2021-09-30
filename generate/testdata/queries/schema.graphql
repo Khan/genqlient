@@ -131,6 +131,7 @@ type Topic implements Content {
   parent: Topic
   url: String!
   children: [Content!]!
+  videoChildren: [Video!]!
   schoolGrade: String
 }
 
@@ -162,6 +163,7 @@ type Query {
   root: Topic!
   randomItem: Content!
   randomLeaf: LeafContent!
+  randomVideo: Video!
   convert(dt: DateTime!, tz: String): DateTime!
   maybeConvert(dt: DateTime, tz: String): DateTime
   getJunk: Junk

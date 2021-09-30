@@ -1,0 +1,7 @@
+fragment F on T { f }
+query FlattenImplementation {
+  # @genqlient(flatten: true)
+  i {
+    ...F
+  }
+}

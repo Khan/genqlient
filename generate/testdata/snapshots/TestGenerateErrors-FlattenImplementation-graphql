@@ -1,0 +1,1 @@
+testdata/errors/FlattenImplementation.graphql:4: flatten is not allowed for fields with fragment-spreads unless the field-type implements the fragment-type; field-type I does not implement fragment-type T

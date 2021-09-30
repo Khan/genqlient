@@ -40,6 +40,7 @@ type User struct {
 	LuckyNumber *int    `json:"luckyNumber"`
 	Hair        *Hair   `json:"hair"`
 	Birthdate   *string `json:"birthdate"`
+	Friends     []*User `json:"friends"`
 }
 
 func (User) IsBeing() {}
