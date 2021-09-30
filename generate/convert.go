@@ -734,6 +734,9 @@ func (g *generator) convertNamedFragment(fragment *ast.FragmentDefinition) (goTy
 		return nil, err
 	}
 	if directive.GetFlatten() {
+		// Flatten on a fragment-definition is a bit weird -- it makes one
+		// fragment effectively an alias for another -- but no reason we can't
+		// allow it.
 		i, err := validateFlattenOption(typ, fragment.SelectionSet, fragment.Position)
 		if err == nil {
 			return fields[i].GoType, nil

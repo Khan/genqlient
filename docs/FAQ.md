@@ -319,7 +319,7 @@ query GetMonopolyPlayers {
 
 and you can even spread the fragment into interface types.  It also avoids having to list the fields several times.
 
-**Fragments, flattened:** the field `Winner`, above, has type `GetMonopolyPlayersGameWinnerUser` which just wraps `MonopolyUser`.  If we don't want to add any other fields, that's unnecessary!  Instead, we could do
+**Fragments, flattened:** The Go field for `winner`, in the first query above, has type `GetMonopolyPlayersGameWinnerUser` which just wraps `MonopolyUser`.  If we don't want to add any other fields, that's unnecessary!  Instead, we could do
 ```
 query GetMonopolyPlayers {
   game {

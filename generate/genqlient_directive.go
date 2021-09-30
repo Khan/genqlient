@@ -123,12 +123,6 @@ func (dir *genqlientDirective) validate(node interface{}, schema *ast.Schema) er
 			return errorf(dir.pos, "struct is only applicable to fields, not frragment-definitions")
 		}
 
-		if dir.Flatten != nil {
-			if _, err := validateFlattenOption(node.Definition, node.SelectionSet, dir.pos); err != nil {
-				return err
-			}
-		}
-
 		// Like operations, anything else will just apply to the entire
 		// fragment.
 		return nil
