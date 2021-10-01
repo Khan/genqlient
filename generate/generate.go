@@ -244,7 +244,7 @@ func (g *generator) addOperation(op *ast.OperationDefinition) error {
 	f := formatter.NewFormatter(&builder)
 	f.FormatQueryDocument(queryDoc)
 
-	commentLines, directive, err := g.parsePrecedingComment(op, op.Position)
+	commentLines, directive, err := g.parsePrecedingComment(op, nil, op.Position, nil)
 	if err != nil {
 		return err
 	}

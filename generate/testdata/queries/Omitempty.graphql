@@ -1,4 +1,5 @@
 # @genqlient(omitempty: true)
+# @genqlient(for: "UserQueryInput.id", omitempty: false)
 query OmitEmptyQuery(
   $query: UserQueryInput,
   $queries: [UserQueryInput],

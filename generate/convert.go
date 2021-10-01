@@ -164,11 +164,10 @@ func (g *generator) convertArguments(
 	name := "__" + operation.Name + "Input"
 	fields := make([]*goStructField, len(operation.VariableDefinitions))
 	for i, arg := range operation.VariableDefinitions {
-		_, directive, err := g.parsePrecedingComment(arg, arg.Position)
+		_, options, err := g.parsePrecedingComment(arg, nil, arg.Position, queryOptions)
 		if err != nil {
 			return nil, err
 		}
-		options := queryOptions.merge(directive)
 
 		goName := upperFirst(arg.Variable)
 		// Some of the arguments don't apply here, namely the name-prefix (see
@@ -386,11 +385,13 @@ func (g *generator) convertDefinition(
 		}
 
 		for i, field := range def.Fields {
+			_, fieldOptions, err := g.parsePrecedingComment(
+				field, def, field.Position, queryOptions)
+			if err != nil {
+				return nil, err
+			}
+
 			goName := upperFirst(field.Name)
-			// There are no field-specific options for inputs (yet, see #14),
-			// but we still need to merge with an empty directive to clear out
-			// any query-options that shouldn't apply here (namely "typename").
-			fieldOptions := queryOptions.merge(newGenqlientDirective(pos))
 			// Several of the arguments don't really make sense here:
 			// (note field.Type is necessarily a scalar, input, or enum)
 			// - namePrefix is ignored for input types and enums (see
@@ -398,7 +399,7 @@ func (g *generator) convertDefinition(
 			//   names)
 			// - selectionSet is ignored for input types, because we
 			//   just use all fields of the type; and it's nonexistent
-			//   for scalars and enums, our only other possible types,
+			//   for scalars and enums, our only other possible types
 			// TODO(benkraft): Can we refactor to avoid passing the values that
 			// will be ignored?  We know field.Type is a scalar, enum, or input
 			// type.  But plumbing that is a bit tricky in practice.
@@ -414,8 +415,7 @@ func (g *generator) convertDefinition(
 				JSONName:    field.Name,
 				GraphQLName: field.Name,
 				Description: field.Description,
-				// TODO(benkraft): set Omitempty once we have a way for the
-				// user to specify it.
+				Omitempty:   fieldOptions.GetOmitempty(),
 			}
 		}
 		return goType, nil
@@ -506,12 +506,11 @@ func (g *generator) convertSelectionSet(
 ) ([]*goStructField, error) {
 	fields := make([]*goStructField, 0, len(selectionSet))
 	for _, selection := range selectionSet {
-		_, selectionDirective, err := g.parsePrecedingComment(
-			selection, selection.GetPosition())
+		_, selectionOptions, err := g.parsePrecedingComment(
+			selection, nil, selection.GetPosition(), queryOptions)
 		if err != nil {
 			return nil, err
 		}
-		selectionOptions := queryOptions.merge(selectionDirective)
 
 		switch selection := selection.(type) {
 		case *ast.Field:
@@ -705,6 +704,8 @@ func (g *generator) convertFragmentSpread(
 		}
 	}
 
+	// TODO(benkraft): Set directive here if we ever allow @genqlient
+	// directives on fragment-spreads.
 	return &goStructField{GoName: "" /* i.e. embedded */, GoType: typ}, nil
 }
 
@@ -713,7 +714,7 @@ func (g *generator) convertFragmentSpread(
 func (g *generator) convertNamedFragment(fragment *ast.FragmentDefinition) (goType, error) {
 	typ := g.schema.Types[fragment.TypeCondition]
 
-	comment, directive, err := g.parsePrecedingComment(fragment, fragment.Position)
+	comment, directive, err := g.parsePrecedingComment(fragment, nil, fragment.Position, nil)
 	if err != nil {
 		return nil, err
 	}

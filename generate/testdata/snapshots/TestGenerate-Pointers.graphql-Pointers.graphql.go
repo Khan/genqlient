@@ -19,7 +19,7 @@ type PointersQueryOtherUser struct {
 	// id is the user's ID.
 	//
 	// It is stable, unique, and opaque, like all good IDs.
-	Id *testutil.ID `json:"id"`
+	Id testutil.ID `json:"id"`
 }
 
 // PointersQueryResponse is returned by PointersQuery on success.
@@ -75,7 +75,7 @@ type UserQueryInput struct {
 	Email *string `json:"email"`
 	Name  *string `json:"name"`
 	// id looks the user up by ID.  It's a great way to look up users.
-	Id         *testutil.ID      `json:"id"`
+	Id         testutil.ID       `json:"id"`
 	Role       *Role             `json:"role"`
 	Names      []*string         `json:"names"`
 	HasPokemon *testutil.Pokemon `json:"hasPokemon"`
@@ -121,7 +121,7 @@ type __premarshalUserQueryInput struct {
 
 	Name *string `json:"name"`
 
-	Id *testutil.ID `json:"id"`
+	Id testutil.ID `json:"id"`
 
 	Role *Role `json:"role"`
 

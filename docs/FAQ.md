@@ -144,7 +144,7 @@ query MyQuery(
 }
 ```
 
-You can also put the `# @genqlient(omitempty: true)` on the first line, which will apply it to all arguments in the query.
+You can also put the `# @genqlient(omitempty: true)` on the first line, which will apply it to all arguments in the query, or `# @genqlient(for: "MyInput.myField", omitempty: true)` on the first line to apply it to a particular field of a particular input type used by the query (for which there would otherwise be no place to put the directive, as the field never appears explicitly in the query, but only in the schema).
 
 If you need to distinguish null from the empty string (or generally from the Go zero value of your type), you can tell genqlient to use a pointer for the field or argument like this:
 ```graphql
@@ -157,7 +157,40 @@ query MyQuery(
 }
 ```
 
-This will generate a Go field `MyString *string`, and set it to `nil` if the server returns null (and in reverse for arguments).  Such fields can be harder to work with in Go, but allow a clear distinction between null and the Go zero value.  Again, you can put the directive on the first line to apply it to everything in the query, although this usually gets cumbersome.
+This will generate a Go field `MyString *string`, and set it to `nil` if the server returns null (and in reverse for arguments).  Such fields can be harder to work with in Go, but allow a clear distinction between null and the Go zero value.  Again, you can put the directive on the first line to apply it to everything in the query, although this usually gets cumbersome, or use `for` to apply it to a specific input-type field.
+
+As an example of using all these options together:
+```graphql
+# @genqlient(omitempty: true)
+# @genqlient(for: "MyInputType.id", omitempty: false, pointer: true)
+# @genqlient(for: "MyInputType.name", omitempty: false, pointer: true)
+query MyQuery(
+  arg1: MyInputType!,
+  # @genqlient(pointer: true)
+  arg2: String!,
+  # @genqlient(omitempty: false)
+  arg3: String!,
+) {
+  myString(arg1: $arg1, arg2: $arg2, arg3: $arg3)
+}
+```
+This will generate:
+```go
+func MyQuery(
+  ctx context.Context,
+  client graphql.Client,
+  arg1 MyInputType,
+  arg2 *string, // omitempty
+  arg3 string,
+) (*MyQueryResponse, error)
+
+type MyInputType struct {
+  Id    *string `json:"id"`
+  Name  *string `json:"name"`
+  Title string  `json:"title,omitempty"`
+  Age   int     `json:"age,omitempty"`
+}
+```
 
 See [genqlient_directive.graphql](genqlient_directive.graphql) for complete documentation on these options.
 

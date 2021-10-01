@@ -1,4 +1,6 @@
 # @genqlient(pointer: true)
+# @genqlient(for: "UserQueryInput.id", pointer: false)
+# @genqlient(for: "User.id", pointer: false)
 query PointersQuery(
   $query: UserQueryInput,
   # @genqlient(pointer: false)
@@ -6,6 +8,7 @@ query PointersQuery(
   $tz: String,
 ) {
   user(query: $query) {
+    # @genqlient(pointer: true)
     id
     roles
     name
