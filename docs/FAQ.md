@@ -366,7 +366,21 @@ query GetMonopolyPlayers {
 ```
 and genqlient will skip the indirection and give the field `Winner` type `MonopolyUser` directly.  This is often much more convenient if you put all the fields in the fragment, like the first query did.  See the [options documentation](genqlient_directive.graphql) for more details.
 
-**Type names:** Finally, if you always want exactly the same fields, you can use the simpler but more restrictive genqlient option `typename`:
+**Interfaces:** For each struct field it generates, genqlient also generates an interface method.  If you want to share code between two types which to GraphQL are unrelated, you can define an interface containing that getter method, and genqlient's struct types will implement it.  (Depending on your exact query, you may need to do a type-assertion from a genqlient-generated interface to yours.)  For example, in the above query you could simply do:
+```go
+type MonopolyUser interface {
+    GetId() string
+    GetName() string
+}
+
+func FormatUser(user MonopolyUser) { ... }
+
+FormatUser(resp.Game.Winner)
+```
+
+In general in such cases it's better to change the GraphQL schema to show how the types are related, and use one of the other mechanisms, but this option is useful for schemas where you can't do that, or in the meantime.
+
+**Type names:** Finally, if you always want exactly the same fields on exactly the same types, and don't want to deal with interfaces at all, you can use the simpler but more restrictive genqlient option `typename`:
 
 ```graphql
 query GetMonopolyPlayers {
