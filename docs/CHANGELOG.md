@@ -22,6 +22,16 @@ When releasing a new version:
 
 ### Breaking changes:
 
+### New features:
+
+### Bug fixes:
+
+## v0.3.0
+
+Version 0.3.0 adds several new configuration options, allowing simplification of generated types and configuration of input types, as well as marshalers for all genqlient-generated types.
+
+### Breaking changes:
+
 - Previously, `# @genqlient` directives applied to entire operations applied inconsistently to fields of input types used by those operations.  Specifically, `pointer: true`, when applied to the operation, would affect all input-field arguments, but `omitempty: true` would not.  Now, all options apply to fields of input types; this is a behavior change in the case of `omitempty`.
 
 ### New features:
