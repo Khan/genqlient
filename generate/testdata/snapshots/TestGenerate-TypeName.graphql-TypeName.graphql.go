@@ -16,6 +16,9 @@ type TypeNameQueryResponse struct {
 	User TypeNameQueryUser `json:"user"`
 }
 
+// GetUser returns TypeNameQueryResponse.User, and is useful for accessing the field via an interface.
+func (v *TypeNameQueryResponse) GetUser() TypeNameQueryUser { return v.User }
+
 // TypeNameQueryUser includes the requested fields of the GraphQL type User.
 // The GraphQL type's documentation follows.
 //
@@ -27,6 +30,12 @@ type TypeNameQueryUser struct {
 	// It is stable, unique, and opaque, like all good IDs.
 	Id testutil.ID `json:"id"`
 }
+
+// GetTypename returns TypeNameQueryUser.Typename, and is useful for accessing the field via an interface.
+func (v *TypeNameQueryUser) GetTypename() string { return v.Typename }
+
+// GetId returns TypeNameQueryUser.Id, and is useful for accessing the field via an interface.
+func (v *TypeNameQueryUser) GetId() testutil.ID { return v.Id }
 
 func TypeNameQuery(
 	client graphql.Client,

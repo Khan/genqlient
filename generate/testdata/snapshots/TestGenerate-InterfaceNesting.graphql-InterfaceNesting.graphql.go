@@ -15,11 +15,22 @@ type InterfaceNestingResponse struct {
 	Root InterfaceNestingRootTopic `json:"root"`
 }
 
+// GetRoot returns InterfaceNestingResponse.Root, and is useful for accessing the field via an interface.
+func (v *InterfaceNestingResponse) GetRoot() InterfaceNestingRootTopic { return v.Root }
+
 // InterfaceNestingRootTopic includes the requested fields of the GraphQL type Topic.
 type InterfaceNestingRootTopic struct {
 	// ID is documented in the Content interface.
 	Id       testutil.ID                                `json:"id"`
 	Children []InterfaceNestingRootTopicChildrenContent `json:"-"`
+}
+
+// GetId returns InterfaceNestingRootTopic.Id, and is useful for accessing the field via an interface.
+func (v *InterfaceNestingRootTopic) GetId() testutil.ID { return v.Id }
+
+// GetChildren returns InterfaceNestingRootTopic.Children, and is useful for accessing the field via an interface.
+func (v *InterfaceNestingRootTopic) GetChildren() []InterfaceNestingRootTopicChildrenContent {
+	return v.Children
 }
 
 func (v *InterfaceNestingRootTopic) UnmarshalJSON(b []byte) error {
@@ -108,6 +119,17 @@ type InterfaceNestingRootTopicChildrenArticle struct {
 	Parent InterfaceNestingRootTopicChildrenContentParentTopic `json:"parent"`
 }
 
+// GetTypename returns InterfaceNestingRootTopicChildrenArticle.Typename, and is useful for accessing the field via an interface.
+func (v *InterfaceNestingRootTopicChildrenArticle) GetTypename() string { return v.Typename }
+
+// GetId returns InterfaceNestingRootTopicChildrenArticle.Id, and is useful for accessing the field via an interface.
+func (v *InterfaceNestingRootTopicChildrenArticle) GetId() testutil.ID { return v.Id }
+
+// GetParent returns InterfaceNestingRootTopicChildrenArticle.Parent, and is useful for accessing the field via an interface.
+func (v *InterfaceNestingRootTopicChildrenArticle) GetParent() InterfaceNestingRootTopicChildrenContentParentTopic {
+	return v.Parent
+}
+
 // InterfaceNestingRootTopicChildrenContent includes the requested fields of the GraphQL interface Content.
 //
 // InterfaceNestingRootTopicChildrenContent is implemented by the following types:
@@ -132,44 +154,9 @@ type InterfaceNestingRootTopicChildrenContent interface {
 
 func (v *InterfaceNestingRootTopicChildrenArticle) implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenContent() {
 }
-
-// GetTypename is a part of, and documented with, the interface InterfaceNestingRootTopicChildrenContent.
-func (v *InterfaceNestingRootTopicChildrenArticle) GetTypename() string { return v.Typename }
-
-// GetId is a part of, and documented with, the interface InterfaceNestingRootTopicChildrenContent.
-func (v *InterfaceNestingRootTopicChildrenArticle) GetId() testutil.ID { return v.Id }
-
-// GetParent is a part of, and documented with, the interface InterfaceNestingRootTopicChildrenContent.
-func (v *InterfaceNestingRootTopicChildrenArticle) GetParent() InterfaceNestingRootTopicChildrenContentParentTopic {
-	return v.Parent
-}
-
 func (v *InterfaceNestingRootTopicChildrenVideo) implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenContent() {
 }
-
-// GetTypename is a part of, and documented with, the interface InterfaceNestingRootTopicChildrenContent.
-func (v *InterfaceNestingRootTopicChildrenVideo) GetTypename() string { return v.Typename }
-
-// GetId is a part of, and documented with, the interface InterfaceNestingRootTopicChildrenContent.
-func (v *InterfaceNestingRootTopicChildrenVideo) GetId() testutil.ID { return v.Id }
-
-// GetParent is a part of, and documented with, the interface InterfaceNestingRootTopicChildrenContent.
-func (v *InterfaceNestingRootTopicChildrenVideo) GetParent() InterfaceNestingRootTopicChildrenContentParentTopic {
-	return v.Parent
-}
-
 func (v *InterfaceNestingRootTopicChildrenTopic) implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenContent() {
-}
-
-// GetTypename is a part of, and documented with, the interface InterfaceNestingRootTopicChildrenContent.
-func (v *InterfaceNestingRootTopicChildrenTopic) GetTypename() string { return v.Typename }
-
-// GetId is a part of, and documented with, the interface InterfaceNestingRootTopicChildrenContent.
-func (v *InterfaceNestingRootTopicChildrenTopic) GetId() testutil.ID { return v.Id }
-
-// GetParent is a part of, and documented with, the interface InterfaceNestingRootTopicChildrenContent.
-func (v *InterfaceNestingRootTopicChildrenTopic) GetParent() InterfaceNestingRootTopicChildrenContentParentTopic {
-	return v.Parent
 }
 
 func __unmarshalInterfaceNestingRootTopicChildrenContent(b []byte, v *InterfaceNestingRootTopicChildrenContent) error {
@@ -245,6 +232,14 @@ type InterfaceNestingRootTopicChildrenContentParentTopic struct {
 	// ID is documented in the Content interface.
 	Id       testutil.ID                                                          `json:"id"`
 	Children []InterfaceNestingRootTopicChildrenContentParentTopicChildrenContent `json:"-"`
+}
+
+// GetId returns InterfaceNestingRootTopicChildrenContentParentTopic.Id, and is useful for accessing the field via an interface.
+func (v *InterfaceNestingRootTopicChildrenContentParentTopic) GetId() testutil.ID { return v.Id }
+
+// GetChildren returns InterfaceNestingRootTopicChildrenContentParentTopic.Children, and is useful for accessing the field via an interface.
+func (v *InterfaceNestingRootTopicChildrenContentParentTopic) GetChildren() []InterfaceNestingRootTopicChildrenContentParentTopicChildrenContent {
+	return v.Children
 }
 
 func (v *InterfaceNestingRootTopicChildrenContentParentTopic) UnmarshalJSON(b []byte) error {
@@ -332,6 +327,16 @@ type InterfaceNestingRootTopicChildrenContentParentTopicChildrenArticle struct {
 	Id testutil.ID `json:"id"`
 }
 
+// GetTypename returns InterfaceNestingRootTopicChildrenContentParentTopicChildrenArticle.Typename, and is useful for accessing the field via an interface.
+func (v *InterfaceNestingRootTopicChildrenContentParentTopicChildrenArticle) GetTypename() string {
+	return v.Typename
+}
+
+// GetId returns InterfaceNestingRootTopicChildrenContentParentTopicChildrenArticle.Id, and is useful for accessing the field via an interface.
+func (v *InterfaceNestingRootTopicChildrenContentParentTopicChildrenArticle) GetId() testutil.ID {
+	return v.Id
+}
+
 // InterfaceNestingRootTopicChildrenContentParentTopicChildrenContent includes the requested fields of the GraphQL interface Content.
 //
 // InterfaceNestingRootTopicChildrenContentParentTopicChildrenContent is implemented by the following types:
@@ -354,41 +359,9 @@ type InterfaceNestingRootTopicChildrenContentParentTopicChildrenContent interfac
 
 func (v *InterfaceNestingRootTopicChildrenContentParentTopicChildrenArticle) implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenContentParentTopicChildrenContent() {
 }
-
-// GetTypename is a part of, and documented with, the interface InterfaceNestingRootTopicChildrenContentParentTopicChildrenContent.
-func (v *InterfaceNestingRootTopicChildrenContentParentTopicChildrenArticle) GetTypename() string {
-	return v.Typename
-}
-
-// GetId is a part of, and documented with, the interface InterfaceNestingRootTopicChildrenContentParentTopicChildrenContent.
-func (v *InterfaceNestingRootTopicChildrenContentParentTopicChildrenArticle) GetId() testutil.ID {
-	return v.Id
-}
-
 func (v *InterfaceNestingRootTopicChildrenContentParentTopicChildrenVideo) implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenContentParentTopicChildrenContent() {
 }
-
-// GetTypename is a part of, and documented with, the interface InterfaceNestingRootTopicChildrenContentParentTopicChildrenContent.
-func (v *InterfaceNestingRootTopicChildrenContentParentTopicChildrenVideo) GetTypename() string {
-	return v.Typename
-}
-
-// GetId is a part of, and documented with, the interface InterfaceNestingRootTopicChildrenContentParentTopicChildrenContent.
-func (v *InterfaceNestingRootTopicChildrenContentParentTopicChildrenVideo) GetId() testutil.ID {
-	return v.Id
-}
-
 func (v *InterfaceNestingRootTopicChildrenContentParentTopicChildrenTopic) implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenContentParentTopicChildrenContent() {
-}
-
-// GetTypename is a part of, and documented with, the interface InterfaceNestingRootTopicChildrenContentParentTopicChildrenContent.
-func (v *InterfaceNestingRootTopicChildrenContentParentTopicChildrenTopic) GetTypename() string {
-	return v.Typename
-}
-
-// GetId is a part of, and documented with, the interface InterfaceNestingRootTopicChildrenContentParentTopicChildrenContent.
-func (v *InterfaceNestingRootTopicChildrenContentParentTopicChildrenTopic) GetId() testutil.ID {
-	return v.Id
 }
 
 func __unmarshalInterfaceNestingRootTopicChildrenContentParentTopicChildrenContent(b []byte, v *InterfaceNestingRootTopicChildrenContentParentTopicChildrenContent) error {
@@ -466,11 +439,31 @@ type InterfaceNestingRootTopicChildrenContentParentTopicChildrenTopic struct {
 	Id testutil.ID `json:"id"`
 }
 
+// GetTypename returns InterfaceNestingRootTopicChildrenContentParentTopicChildrenTopic.Typename, and is useful for accessing the field via an interface.
+func (v *InterfaceNestingRootTopicChildrenContentParentTopicChildrenTopic) GetTypename() string {
+	return v.Typename
+}
+
+// GetId returns InterfaceNestingRootTopicChildrenContentParentTopicChildrenTopic.Id, and is useful for accessing the field via an interface.
+func (v *InterfaceNestingRootTopicChildrenContentParentTopicChildrenTopic) GetId() testutil.ID {
+	return v.Id
+}
+
 // InterfaceNestingRootTopicChildrenContentParentTopicChildrenVideo includes the requested fields of the GraphQL type Video.
 type InterfaceNestingRootTopicChildrenContentParentTopicChildrenVideo struct {
 	Typename string `json:"__typename"`
 	// ID is the identifier of the content.
 	Id testutil.ID `json:"id"`
+}
+
+// GetTypename returns InterfaceNestingRootTopicChildrenContentParentTopicChildrenVideo.Typename, and is useful for accessing the field via an interface.
+func (v *InterfaceNestingRootTopicChildrenContentParentTopicChildrenVideo) GetTypename() string {
+	return v.Typename
+}
+
+// GetId returns InterfaceNestingRootTopicChildrenContentParentTopicChildrenVideo.Id, and is useful for accessing the field via an interface.
+func (v *InterfaceNestingRootTopicChildrenContentParentTopicChildrenVideo) GetId() testutil.ID {
+	return v.Id
 }
 
 // InterfaceNestingRootTopicChildrenTopic includes the requested fields of the GraphQL type Topic.
@@ -481,12 +474,34 @@ type InterfaceNestingRootTopicChildrenTopic struct {
 	Parent InterfaceNestingRootTopicChildrenContentParentTopic `json:"parent"`
 }
 
+// GetTypename returns InterfaceNestingRootTopicChildrenTopic.Typename, and is useful for accessing the field via an interface.
+func (v *InterfaceNestingRootTopicChildrenTopic) GetTypename() string { return v.Typename }
+
+// GetId returns InterfaceNestingRootTopicChildrenTopic.Id, and is useful for accessing the field via an interface.
+func (v *InterfaceNestingRootTopicChildrenTopic) GetId() testutil.ID { return v.Id }
+
+// GetParent returns InterfaceNestingRootTopicChildrenTopic.Parent, and is useful for accessing the field via an interface.
+func (v *InterfaceNestingRootTopicChildrenTopic) GetParent() InterfaceNestingRootTopicChildrenContentParentTopic {
+	return v.Parent
+}
+
 // InterfaceNestingRootTopicChildrenVideo includes the requested fields of the GraphQL type Video.
 type InterfaceNestingRootTopicChildrenVideo struct {
 	Typename string `json:"__typename"`
 	// ID is the identifier of the content.
 	Id     testutil.ID                                         `json:"id"`
 	Parent InterfaceNestingRootTopicChildrenContentParentTopic `json:"parent"`
+}
+
+// GetTypename returns InterfaceNestingRootTopicChildrenVideo.Typename, and is useful for accessing the field via an interface.
+func (v *InterfaceNestingRootTopicChildrenVideo) GetTypename() string { return v.Typename }
+
+// GetId returns InterfaceNestingRootTopicChildrenVideo.Id, and is useful for accessing the field via an interface.
+func (v *InterfaceNestingRootTopicChildrenVideo) GetId() testutil.ID { return v.Id }
+
+// GetParent returns InterfaceNestingRootTopicChildrenVideo.Parent, and is useful for accessing the field via an interface.
+func (v *InterfaceNestingRootTopicChildrenVideo) GetParent() InterfaceNestingRootTopicChildrenContentParentTopic {
+	return v.Parent
 }
 
 func InterfaceNesting(

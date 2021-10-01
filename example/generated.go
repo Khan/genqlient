@@ -14,11 +14,17 @@ type __getUserInput struct {
 	Login string `json:"Login"`
 }
 
+// GetLogin returns __getUserInput.Login, and is useful for accessing the field via an interface.
+func (v *__getUserInput) GetLogin() string { return v.Login }
+
 // getUserResponse is returned by getUser on success.
 type getUserResponse struct {
 	// Lookup a user by login.
 	User getUserUser `json:"user"`
 }
+
+// GetUser returns getUserResponse.User, and is useful for accessing the field via an interface.
+func (v *getUserResponse) GetUser() getUserUser { return v.User }
 
 // getUserUser includes the requested fields of the GraphQL type User.
 // The GraphQL type's documentation follows.
@@ -31,11 +37,20 @@ type getUserUser struct {
 	CreatedAt time.Time `json:"createdAt"`
 }
 
+// GetTheirName returns getUserUser.TheirName, and is useful for accessing the field via an interface.
+func (v *getUserUser) GetTheirName() string { return v.TheirName }
+
+// GetCreatedAt returns getUserUser.CreatedAt, and is useful for accessing the field via an interface.
+func (v *getUserUser) GetCreatedAt() time.Time { return v.CreatedAt }
+
 // getViewerResponse is returned by getViewer on success.
 type getViewerResponse struct {
 	// The currently authenticated user.
 	Viewer getViewerViewerUser `json:"viewer"`
 }
+
+// GetViewer returns getViewerResponse.Viewer, and is useful for accessing the field via an interface.
+func (v *getViewerResponse) GetViewer() getViewerViewerUser { return v.Viewer }
 
 // getViewerViewerUser includes the requested fields of the GraphQL type User.
 // The GraphQL type's documentation follows.
@@ -47,6 +62,12 @@ type getViewerViewerUser struct {
 	// Identifies the date and time when the object was created.
 	CreatedAt time.Time `json:"createdAt"`
 }
+
+// GetMyName returns getViewerViewerUser.MyName, and is useful for accessing the field via an interface.
+func (v *getViewerViewerUser) GetMyName() string { return v.MyName }
+
+// GetCreatedAt returns getViewerViewerUser.CreatedAt, and is useful for accessing the field via an interface.
+func (v *getViewerViewerUser) GetCreatedAt() time.Time { return v.CreatedAt }
 
 func getViewer(
 	ctx context.Context,

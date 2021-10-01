@@ -19,15 +19,27 @@ type SimpleMutationCreateUser struct {
 	Name string      `json:"name"`
 }
 
+// GetId returns SimpleMutationCreateUser.Id, and is useful for accessing the field via an interface.
+func (v *SimpleMutationCreateUser) GetId() testutil.ID { return v.Id }
+
+// GetName returns SimpleMutationCreateUser.Name, and is useful for accessing the field via an interface.
+func (v *SimpleMutationCreateUser) GetName() string { return v.Name }
+
 // SimpleMutationResponse is returned by SimpleMutation on success.
 type SimpleMutationResponse struct {
 	CreateUser SimpleMutationCreateUser `json:"createUser"`
 }
 
+// GetCreateUser returns SimpleMutationResponse.CreateUser, and is useful for accessing the field via an interface.
+func (v *SimpleMutationResponse) GetCreateUser() SimpleMutationCreateUser { return v.CreateUser }
+
 // __SimpleMutationInput is used internally by genqlient
 type __SimpleMutationInput struct {
 	Name string `json:"name"`
 }
+
+// GetName returns __SimpleMutationInput.Name, and is useful for accessing the field via an interface.
+func (v *__SimpleMutationInput) GetName() string { return v.Name }
 
 // SimpleMutation creates a user.
 //

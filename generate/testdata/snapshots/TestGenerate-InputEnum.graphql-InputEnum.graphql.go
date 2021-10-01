@@ -13,6 +13,11 @@ type InputEnumQueryResponse struct {
 	UsersWithRole []InputEnumQueryUsersWithRoleUser `json:"usersWithRole"`
 }
 
+// GetUsersWithRole returns InputEnumQueryResponse.UsersWithRole, and is useful for accessing the field via an interface.
+func (v *InputEnumQueryResponse) GetUsersWithRole() []InputEnumQueryUsersWithRoleUser {
+	return v.UsersWithRole
+}
+
 // InputEnumQueryUsersWithRoleUser includes the requested fields of the GraphQL type User.
 // The GraphQL type's documentation follows.
 //
@@ -23,6 +28,9 @@ type InputEnumQueryUsersWithRoleUser struct {
 	// It is stable, unique, and opaque, like all good IDs.
 	Id testutil.ID `json:"id"`
 }
+
+// GetId returns InputEnumQueryUsersWithRoleUser.Id, and is useful for accessing the field via an interface.
+func (v *InputEnumQueryUsersWithRoleUser) GetId() testutil.ID { return v.Id }
 
 // Role is a type a user may have.
 type Role string
@@ -42,6 +50,9 @@ const (
 type __InputEnumQueryInput struct {
 	Role Role `json:"role"`
 }
+
+// GetRole returns __InputEnumQueryInput.Role, and is useful for accessing the field via an interface.
+func (v *__InputEnumQueryInput) GetRole() Role { return v.Role }
 
 func InputEnumQuery(
 	client graphql.Client,

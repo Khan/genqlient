@@ -14,6 +14,9 @@ type QueryWithEnumsOtherUser struct {
 	Roles []Role `json:"roles"`
 }
 
+// GetRoles returns QueryWithEnumsOtherUser.Roles, and is useful for accessing the field via an interface.
+func (v *QueryWithEnumsOtherUser) GetRoles() []Role { return v.Roles }
+
 // QueryWithEnumsResponse is returned by QueryWithEnums on success.
 type QueryWithEnumsResponse struct {
 	// user looks up a user by some stuff.
@@ -28,6 +31,12 @@ type QueryWithEnumsResponse struct {
 	OtherUser QueryWithEnumsOtherUser `json:"otherUser"`
 }
 
+// GetUser returns QueryWithEnumsResponse.User, and is useful for accessing the field via an interface.
+func (v *QueryWithEnumsResponse) GetUser() QueryWithEnumsUser { return v.User }
+
+// GetOtherUser returns QueryWithEnumsResponse.OtherUser, and is useful for accessing the field via an interface.
+func (v *QueryWithEnumsResponse) GetOtherUser() QueryWithEnumsOtherUser { return v.OtherUser }
+
 // QueryWithEnumsUser includes the requested fields of the GraphQL type User.
 // The GraphQL type's documentation follows.
 //
@@ -35,6 +44,9 @@ type QueryWithEnumsResponse struct {
 type QueryWithEnumsUser struct {
 	Roles []Role `json:"roles"`
 }
+
+// GetRoles returns QueryWithEnumsUser.Roles, and is useful for accessing the field via an interface.
+func (v *QueryWithEnumsUser) GetRoles() []Role { return v.Roles }
 
 // Role is a type a user may have.
 type Role string

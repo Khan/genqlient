@@ -19,6 +19,15 @@ type AnimalFields struct {
 	Owner AnimalFieldsOwnerBeing     `json:"-"`
 }
 
+// GetId returns AnimalFields.Id, and is useful for accessing the field via an interface.
+func (v *AnimalFields) GetId() string { return v.Id }
+
+// GetHair returns AnimalFields.Hair, and is useful for accessing the field via an interface.
+func (v *AnimalFields) GetHair() AnimalFieldsHairBeingsHair { return v.Hair }
+
+// GetOwner returns AnimalFields.Owner, and is useful for accessing the field via an interface.
+func (v *AnimalFields) GetOwner() AnimalFieldsOwnerBeing { return v.Owner }
+
 func (v *AnimalFields) UnmarshalJSON(b []byte) error {
 
 	if string(b) == "null" {
@@ -93,11 +102,20 @@ type AnimalFieldsHairBeingsHair struct {
 	HasHair bool `json:"hasHair"`
 }
 
+// GetHasHair returns AnimalFieldsHairBeingsHair.HasHair, and is useful for accessing the field via an interface.
+func (v *AnimalFieldsHairBeingsHair) GetHasHair() bool { return v.HasHair }
+
 // AnimalFieldsOwnerAnimal includes the requested fields of the GraphQL type Animal.
 type AnimalFieldsOwnerAnimal struct {
 	Typename string `json:"__typename"`
 	Id       string `json:"id"`
 }
+
+// GetTypename returns AnimalFieldsOwnerAnimal.Typename, and is useful for accessing the field via an interface.
+func (v *AnimalFieldsOwnerAnimal) GetTypename() string { return v.Typename }
+
+// GetId returns AnimalFieldsOwnerAnimal.Id, and is useful for accessing the field via an interface.
+func (v *AnimalFieldsOwnerAnimal) GetId() string { return v.Id }
 
 // AnimalFieldsOwnerBeing includes the requested fields of the GraphQL interface Being.
 //
@@ -112,21 +130,8 @@ type AnimalFieldsOwnerBeing interface {
 	GetId() string
 }
 
-func (v *AnimalFieldsOwnerUser) implementsGraphQLInterfaceAnimalFieldsOwnerBeing() {}
-
-// GetTypename is a part of, and documented with, the interface AnimalFieldsOwnerBeing.
-func (v *AnimalFieldsOwnerUser) GetTypename() string { return v.Typename }
-
-// GetId is a part of, and documented with, the interface AnimalFieldsOwnerBeing.
-func (v *AnimalFieldsOwnerUser) GetId() string { return v.Id }
-
+func (v *AnimalFieldsOwnerUser) implementsGraphQLInterfaceAnimalFieldsOwnerBeing()   {}
 func (v *AnimalFieldsOwnerAnimal) implementsGraphQLInterfaceAnimalFieldsOwnerBeing() {}
-
-// GetTypename is a part of, and documented with, the interface AnimalFieldsOwnerBeing.
-func (v *AnimalFieldsOwnerAnimal) GetTypename() string { return v.Typename }
-
-// GetId is a part of, and documented with, the interface AnimalFieldsOwnerBeing.
-func (v *AnimalFieldsOwnerAnimal) GetId() string { return v.Id }
 
 func __unmarshalAnimalFieldsOwnerBeing(b []byte, v *AnimalFieldsOwnerBeing) error {
 	if string(b) == "null" {
@@ -197,6 +202,18 @@ type AnimalFieldsOwnerUser struct {
 	LuckyFieldsUser `json:"-"`
 }
 
+// GetTypename returns AnimalFieldsOwnerUser.Typename, and is useful for accessing the field via an interface.
+func (v *AnimalFieldsOwnerUser) GetTypename() string { return v.Typename }
+
+// GetId returns AnimalFieldsOwnerUser.Id, and is useful for accessing the field via an interface.
+func (v *AnimalFieldsOwnerUser) GetId() string { return v.Id }
+
+// GetLuckyNumber returns AnimalFieldsOwnerUser.LuckyNumber, and is useful for accessing the field via an interface.
+func (v *AnimalFieldsOwnerUser) GetLuckyNumber() int { return v.LuckyFieldsUser.LuckyNumber }
+
+// GetHair returns AnimalFieldsOwnerUser.Hair, and is useful for accessing the field via an interface.
+func (v *AnimalFieldsOwnerUser) GetHair() MoreUserFieldsHair { return v.UserFields.MoreUserFields.Hair }
+
 func (v *AnimalFieldsOwnerUser) UnmarshalJSON(b []byte) error {
 
 	if string(b) == "null" {
@@ -261,6 +278,12 @@ type FriendsFields struct {
 	Name string `json:"name"`
 }
 
+// GetId returns FriendsFields.Id, and is useful for accessing the field via an interface.
+func (v *FriendsFields) GetId() string { return v.Id }
+
+// GetName returns FriendsFields.Name, and is useful for accessing the field via an interface.
+func (v *FriendsFields) GetName() string { return v.Name }
+
 // InnerBeingFields includes the GraphQL fields of Being requested by the fragment InnerBeingFields.
 //
 // InnerBeingFields is implemented by the following types:
@@ -274,21 +297,8 @@ type InnerBeingFields interface {
 	GetName() string
 }
 
-func (v *InnerBeingFieldsUser) implementsGraphQLInterfaceInnerBeingFields() {}
-
-// GetId is a part of, and documented with, the interface InnerBeingFields.
-func (v *InnerBeingFieldsUser) GetId() string { return v.Id }
-
-// GetName is a part of, and documented with, the interface InnerBeingFields.
-func (v *InnerBeingFieldsUser) GetName() string { return v.Name }
-
+func (v *InnerBeingFieldsUser) implementsGraphQLInterfaceInnerBeingFields()   {}
 func (v *InnerBeingFieldsAnimal) implementsGraphQLInterfaceInnerBeingFields() {}
-
-// GetId is a part of, and documented with, the interface InnerBeingFields.
-func (v *InnerBeingFieldsAnimal) GetId() string { return v.Id }
-
-// GetName is a part of, and documented with, the interface InnerBeingFields.
-func (v *InnerBeingFieldsAnimal) GetName() string { return v.Name }
 
 func __unmarshalInnerBeingFields(b []byte, v *InnerBeingFields) error {
 	if string(b) == "null" {
@@ -353,12 +363,27 @@ type InnerBeingFieldsAnimal struct {
 	Name string `json:"name"`
 }
 
+// GetId returns InnerBeingFieldsAnimal.Id, and is useful for accessing the field via an interface.
+func (v *InnerBeingFieldsAnimal) GetId() string { return v.Id }
+
+// GetName returns InnerBeingFieldsAnimal.Name, and is useful for accessing the field via an interface.
+func (v *InnerBeingFieldsAnimal) GetName() string { return v.Name }
+
 // InnerBeingFields includes the GraphQL fields of User requested by the fragment InnerBeingFields.
 type InnerBeingFieldsUser struct {
 	Id      string          `json:"id"`
 	Name    string          `json:"name"`
 	Friends []FriendsFields `json:"friends"`
 }
+
+// GetId returns InnerBeingFieldsUser.Id, and is useful for accessing the field via an interface.
+func (v *InnerBeingFieldsUser) GetId() string { return v.Id }
+
+// GetName returns InnerBeingFieldsUser.Name, and is useful for accessing the field via an interface.
+func (v *InnerBeingFieldsUser) GetName() string { return v.Name }
+
+// GetFriends returns InnerBeingFieldsUser.Friends, and is useful for accessing the field via an interface.
+func (v *InnerBeingFieldsUser) GetFriends() []FriendsFields { return v.Friends }
 
 // InnerLuckyFields includes the GraphQL fields of Lucky requested by the fragment InnerLuckyFields.
 //
@@ -371,9 +396,6 @@ type InnerLuckyFields interface {
 }
 
 func (v *InnerLuckyFieldsUser) implementsGraphQLInterfaceInnerLuckyFields() {}
-
-// GetLuckyNumber is a part of, and documented with, the interface InnerLuckyFields.
-func (v *InnerLuckyFieldsUser) GetLuckyNumber() int { return v.LuckyNumber }
 
 func __unmarshalInnerLuckyFields(b []byte, v *InnerLuckyFields) error {
 	if string(b) == "null" {
@@ -426,6 +448,9 @@ type InnerLuckyFieldsUser struct {
 	LuckyNumber int `json:"luckyNumber"`
 }
 
+// GetLuckyNumber returns InnerLuckyFieldsUser.LuckyNumber, and is useful for accessing the field via an interface.
+func (v *InnerLuckyFieldsUser) GetLuckyNumber() int { return v.LuckyNumber }
+
 // LuckyFields includes the GraphQL fields of Lucky requested by the fragment LuckyFields.
 //
 // LuckyFields is implemented by the following types:
@@ -437,9 +462,6 @@ type LuckyFields interface {
 }
 
 func (v *LuckyFieldsUser) implementsGraphQLInterfaceLuckyFields() {}
-
-// GetLuckyNumber is a part of, and documented with, the interface LuckyFields.
-func (v *LuckyFieldsUser) GetLuckyNumber() int { return v.LuckyNumber }
 
 func __unmarshalLuckyFields(b []byte, v *LuckyFields) error {
 	if string(b) == "null" {
@@ -497,6 +519,15 @@ type LuckyFieldsUser struct {
 	LuckyNumber    int `json:"luckyNumber"`
 }
 
+// GetLuckyNumber returns LuckyFieldsUser.LuckyNumber, and is useful for accessing the field via an interface.
+func (v *LuckyFieldsUser) GetLuckyNumber() int { return v.LuckyNumber }
+
+// GetId returns LuckyFieldsUser.Id, and is useful for accessing the field via an interface.
+func (v *LuckyFieldsUser) GetId() string { return v.MoreUserFields.Id }
+
+// GetHair returns LuckyFieldsUser.Hair, and is useful for accessing the field via an interface.
+func (v *LuckyFieldsUser) GetHair() MoreUserFieldsHair { return v.MoreUserFields.Hair }
+
 func (v *LuckyFieldsUser) UnmarshalJSON(b []byte) error {
 
 	if string(b) == "null" {
@@ -553,15 +584,27 @@ type MoreUserFields struct {
 	Hair MoreUserFieldsHair `json:"hair"`
 }
 
+// GetId returns MoreUserFields.Id, and is useful for accessing the field via an interface.
+func (v *MoreUserFields) GetId() string { return v.Id }
+
+// GetHair returns MoreUserFields.Hair, and is useful for accessing the field via an interface.
+func (v *MoreUserFields) GetHair() MoreUserFieldsHair { return v.Hair }
+
 // MoreUserFieldsHair includes the requested fields of the GraphQL type Hair.
 type MoreUserFieldsHair struct {
 	Color string `json:"color"`
 }
 
+// GetColor returns MoreUserFieldsHair.Color, and is useful for accessing the field via an interface.
+func (v *MoreUserFieldsHair) GetColor() string { return v.Color }
+
 // QueryFragment includes the GraphQL fields of Query requested by the fragment QueryFragment.
 type QueryFragment struct {
 	Beings []QueryFragmentBeingsBeing `json:"-"`
 }
+
+// GetBeings returns QueryFragment.Beings, and is useful for accessing the field via an interface.
+func (v *QueryFragment) GetBeings() []QueryFragmentBeingsBeing { return v.Beings }
 
 func (v *QueryFragment) UnmarshalJSON(b []byte) error {
 
@@ -645,6 +688,15 @@ type QueryFragmentBeingsAnimal struct {
 	Owner    InnerBeingFields `json:"-"`
 }
 
+// GetTypename returns QueryFragmentBeingsAnimal.Typename, and is useful for accessing the field via an interface.
+func (v *QueryFragmentBeingsAnimal) GetTypename() string { return v.Typename }
+
+// GetId returns QueryFragmentBeingsAnimal.Id, and is useful for accessing the field via an interface.
+func (v *QueryFragmentBeingsAnimal) GetId() string { return v.Id }
+
+// GetOwner returns QueryFragmentBeingsAnimal.Owner, and is useful for accessing the field via an interface.
+func (v *QueryFragmentBeingsAnimal) GetOwner() InnerBeingFields { return v.Owner }
+
 func (v *QueryFragmentBeingsAnimal) UnmarshalJSON(b []byte) error {
 
 	if string(b) == "null" {
@@ -727,21 +779,8 @@ type QueryFragmentBeingsBeing interface {
 	GetId() string
 }
 
-func (v *QueryFragmentBeingsUser) implementsGraphQLInterfaceQueryFragmentBeingsBeing() {}
-
-// GetTypename is a part of, and documented with, the interface QueryFragmentBeingsBeing.
-func (v *QueryFragmentBeingsUser) GetTypename() string { return v.Typename }
-
-// GetId is a part of, and documented with, the interface QueryFragmentBeingsBeing.
-func (v *QueryFragmentBeingsUser) GetId() string { return v.Id }
-
+func (v *QueryFragmentBeingsUser) implementsGraphQLInterfaceQueryFragmentBeingsBeing()   {}
 func (v *QueryFragmentBeingsAnimal) implementsGraphQLInterfaceQueryFragmentBeingsBeing() {}
-
-// GetTypename is a part of, and documented with, the interface QueryFragmentBeingsBeing.
-func (v *QueryFragmentBeingsAnimal) GetTypename() string { return v.Typename }
-
-// GetId is a part of, and documented with, the interface QueryFragmentBeingsBeing.
-func (v *QueryFragmentBeingsAnimal) GetId() string { return v.Id }
 
 func __unmarshalQueryFragmentBeingsBeing(b []byte, v *QueryFragmentBeingsBeing) error {
 	if string(b) == "null" {
@@ -815,6 +854,15 @@ type QueryFragmentBeingsUser struct {
 	InnerLuckyFieldsUser `json:"-"`
 }
 
+// GetTypename returns QueryFragmentBeingsUser.Typename, and is useful for accessing the field via an interface.
+func (v *QueryFragmentBeingsUser) GetTypename() string { return v.Typename }
+
+// GetId returns QueryFragmentBeingsUser.Id, and is useful for accessing the field via an interface.
+func (v *QueryFragmentBeingsUser) GetId() string { return v.Id }
+
+// GetLuckyNumber returns QueryFragmentBeingsUser.LuckyNumber, and is useful for accessing the field via an interface.
+func (v *QueryFragmentBeingsUser) GetLuckyNumber() int { return v.InnerLuckyFieldsUser.LuckyNumber }
+
 func (v *QueryFragmentBeingsUser) UnmarshalJSON(b []byte) error {
 
 	if string(b) == "null" {
@@ -879,6 +927,15 @@ type UserFields struct {
 	MoreUserFields  `json:"-"`
 }
 
+// GetId returns UserFields.Id, and is useful for accessing the field via an interface.
+func (v *UserFields) GetId() string { return v.Id }
+
+// GetLuckyNumber returns UserFields.LuckyNumber, and is useful for accessing the field via an interface.
+func (v *UserFields) GetLuckyNumber() int { return v.LuckyFieldsUser.LuckyNumber }
+
+// GetHair returns UserFields.Hair, and is useful for accessing the field via an interface.
+func (v *UserFields) GetHair() MoreUserFieldsHair { return v.MoreUserFields.Hair }
+
 func (v *UserFields) UnmarshalJSON(b []byte) error {
 
 	if string(b) == "null" {
@@ -938,6 +995,9 @@ func (v *UserFields) __premarshalJSON() (*__premarshalUserFields, error) {
 type __queryWithCustomMarshalInput struct {
 	Date time.Time `json:"-"`
 }
+
+// GetDate returns __queryWithCustomMarshalInput.Date, and is useful for accessing the field via an interface.
+func (v *__queryWithCustomMarshalInput) GetDate() time.Time { return v.Date }
 
 func (v *__queryWithCustomMarshalInput) UnmarshalJSON(b []byte) error {
 
@@ -1007,6 +1067,12 @@ type __queryWithCustomMarshalOptionalInput struct {
 	Date *time.Time `json:"-"`
 	Id   *string    `json:"id"`
 }
+
+// GetDate returns __queryWithCustomMarshalOptionalInput.Date, and is useful for accessing the field via an interface.
+func (v *__queryWithCustomMarshalOptionalInput) GetDate() *time.Time { return v.Date }
+
+// GetId returns __queryWithCustomMarshalOptionalInput.Id, and is useful for accessing the field via an interface.
+func (v *__queryWithCustomMarshalOptionalInput) GetId() *string { return v.Id }
 
 func (v *__queryWithCustomMarshalOptionalInput) UnmarshalJSON(b []byte) error {
 
@@ -1081,6 +1147,9 @@ func (v *__queryWithCustomMarshalOptionalInput) __premarshalJSON() (*__premarsha
 type __queryWithCustomMarshalSliceInput struct {
 	Dates []time.Time `json:"-"`
 }
+
+// GetDates returns __queryWithCustomMarshalSliceInput.Dates, and is useful for accessing the field via an interface.
+func (v *__queryWithCustomMarshalSliceInput) GetDates() []time.Time { return v.Dates }
 
 func (v *__queryWithCustomMarshalSliceInput) UnmarshalJSON(b []byte) error {
 
@@ -1162,45 +1231,72 @@ type __queryWithFlattenInput struct {
 	Ids []string `json:"ids"`
 }
 
+// GetIds returns __queryWithFlattenInput.Ids, and is useful for accessing the field via an interface.
+func (v *__queryWithFlattenInput) GetIds() []string { return v.Ids }
+
 // __queryWithFragmentsInput is used internally by genqlient
 type __queryWithFragmentsInput struct {
 	Ids []string `json:"ids"`
 }
+
+// GetIds returns __queryWithFragmentsInput.Ids, and is useful for accessing the field via an interface.
+func (v *__queryWithFragmentsInput) GetIds() []string { return v.Ids }
 
 // __queryWithInterfaceListFieldInput is used internally by genqlient
 type __queryWithInterfaceListFieldInput struct {
 	Ids []string `json:"ids"`
 }
 
+// GetIds returns __queryWithInterfaceListFieldInput.Ids, and is useful for accessing the field via an interface.
+func (v *__queryWithInterfaceListFieldInput) GetIds() []string { return v.Ids }
+
 // __queryWithInterfaceListPointerFieldInput is used internally by genqlient
 type __queryWithInterfaceListPointerFieldInput struct {
 	Ids []string `json:"ids"`
 }
+
+// GetIds returns __queryWithInterfaceListPointerFieldInput.Ids, and is useful for accessing the field via an interface.
+func (v *__queryWithInterfaceListPointerFieldInput) GetIds() []string { return v.Ids }
 
 // __queryWithInterfaceNoFragmentsInput is used internally by genqlient
 type __queryWithInterfaceNoFragmentsInput struct {
 	Id string `json:"id"`
 }
 
+// GetId returns __queryWithInterfaceNoFragmentsInput.Id, and is useful for accessing the field via an interface.
+func (v *__queryWithInterfaceNoFragmentsInput) GetId() string { return v.Id }
+
 // __queryWithNamedFragmentsInput is used internally by genqlient
 type __queryWithNamedFragmentsInput struct {
 	Ids []string `json:"ids"`
 }
+
+// GetIds returns __queryWithNamedFragmentsInput.Ids, and is useful for accessing the field via an interface.
+func (v *__queryWithNamedFragmentsInput) GetIds() []string { return v.Ids }
 
 // __queryWithOmitemptyInput is used internally by genqlient
 type __queryWithOmitemptyInput struct {
 	Id string `json:"id,omitempty"`
 }
 
+// GetId returns __queryWithOmitemptyInput.Id, and is useful for accessing the field via an interface.
+func (v *__queryWithOmitemptyInput) GetId() string { return v.Id }
+
 // __queryWithVariablesInput is used internally by genqlient
 type __queryWithVariablesInput struct {
 	Id string `json:"id"`
 }
 
+// GetId returns __queryWithVariablesInput.Id, and is useful for accessing the field via an interface.
+func (v *__queryWithVariablesInput) GetId() string { return v.Id }
+
 // failingQueryMeUser includes the requested fields of the GraphQL type User.
 type failingQueryMeUser struct {
 	Id string `json:"id"`
 }
+
+// GetId returns failingQueryMeUser.Id, and is useful for accessing the field via an interface.
+func (v *failingQueryMeUser) GetId() string { return v.Id }
 
 // failingQueryResponse is returned by failingQuery on success.
 type failingQueryResponse struct {
@@ -1208,9 +1304,20 @@ type failingQueryResponse struct {
 	Me   failingQueryMeUser `json:"me"`
 }
 
+// GetFail returns failingQueryResponse.Fail, and is useful for accessing the field via an interface.
+func (v *failingQueryResponse) GetFail() bool { return v.Fail }
+
+// GetMe returns failingQueryResponse.Me, and is useful for accessing the field via an interface.
+func (v *failingQueryResponse) GetMe() failingQueryMeUser { return v.Me }
+
 // queryWithCustomMarshalOptionalResponse is returned by queryWithCustomMarshalOptional on success.
 type queryWithCustomMarshalOptionalResponse struct {
 	UserSearch []queryWithCustomMarshalOptionalUserSearchUser `json:"userSearch"`
+}
+
+// GetUserSearch returns queryWithCustomMarshalOptionalResponse.UserSearch, and is useful for accessing the field via an interface.
+func (v *queryWithCustomMarshalOptionalResponse) GetUserSearch() []queryWithCustomMarshalOptionalUserSearchUser {
+	return v.UserSearch
 }
 
 // queryWithCustomMarshalOptionalUserSearchUser includes the requested fields of the GraphQL type User.
@@ -1219,6 +1326,15 @@ type queryWithCustomMarshalOptionalUserSearchUser struct {
 	Name      string    `json:"name"`
 	Birthdate time.Time `json:"-"`
 }
+
+// GetId returns queryWithCustomMarshalOptionalUserSearchUser.Id, and is useful for accessing the field via an interface.
+func (v *queryWithCustomMarshalOptionalUserSearchUser) GetId() string { return v.Id }
+
+// GetName returns queryWithCustomMarshalOptionalUserSearchUser.Name, and is useful for accessing the field via an interface.
+func (v *queryWithCustomMarshalOptionalUserSearchUser) GetName() string { return v.Name }
+
+// GetBirthdate returns queryWithCustomMarshalOptionalUserSearchUser.Birthdate, and is useful for accessing the field via an interface.
+func (v *queryWithCustomMarshalOptionalUserSearchUser) GetBirthdate() time.Time { return v.Birthdate }
 
 func (v *queryWithCustomMarshalOptionalUserSearchUser) UnmarshalJSON(b []byte) error {
 
@@ -1294,9 +1410,19 @@ type queryWithCustomMarshalResponse struct {
 	UsersBornOn []queryWithCustomMarshalUsersBornOnUser `json:"usersBornOn"`
 }
 
+// GetUsersBornOn returns queryWithCustomMarshalResponse.UsersBornOn, and is useful for accessing the field via an interface.
+func (v *queryWithCustomMarshalResponse) GetUsersBornOn() []queryWithCustomMarshalUsersBornOnUser {
+	return v.UsersBornOn
+}
+
 // queryWithCustomMarshalSliceResponse is returned by queryWithCustomMarshalSlice on success.
 type queryWithCustomMarshalSliceResponse struct {
 	UsersBornOnDates []queryWithCustomMarshalSliceUsersBornOnDatesUser `json:"usersBornOnDates"`
+}
+
+// GetUsersBornOnDates returns queryWithCustomMarshalSliceResponse.UsersBornOnDates, and is useful for accessing the field via an interface.
+func (v *queryWithCustomMarshalSliceResponse) GetUsersBornOnDates() []queryWithCustomMarshalSliceUsersBornOnDatesUser {
+	return v.UsersBornOnDates
 }
 
 // queryWithCustomMarshalSliceUsersBornOnDatesUser includes the requested fields of the GraphQL type User.
@@ -1304,6 +1430,17 @@ type queryWithCustomMarshalSliceUsersBornOnDatesUser struct {
 	Id        string    `json:"id"`
 	Name      string    `json:"name"`
 	Birthdate time.Time `json:"-"`
+}
+
+// GetId returns queryWithCustomMarshalSliceUsersBornOnDatesUser.Id, and is useful for accessing the field via an interface.
+func (v *queryWithCustomMarshalSliceUsersBornOnDatesUser) GetId() string { return v.Id }
+
+// GetName returns queryWithCustomMarshalSliceUsersBornOnDatesUser.Name, and is useful for accessing the field via an interface.
+func (v *queryWithCustomMarshalSliceUsersBornOnDatesUser) GetName() string { return v.Name }
+
+// GetBirthdate returns queryWithCustomMarshalSliceUsersBornOnDatesUser.Birthdate, and is useful for accessing the field via an interface.
+func (v *queryWithCustomMarshalSliceUsersBornOnDatesUser) GetBirthdate() time.Time {
+	return v.Birthdate
 }
 
 func (v *queryWithCustomMarshalSliceUsersBornOnDatesUser) UnmarshalJSON(b []byte) error {
@@ -1382,6 +1519,15 @@ type queryWithCustomMarshalUsersBornOnUser struct {
 	Birthdate time.Time `json:"-"`
 }
 
+// GetId returns queryWithCustomMarshalUsersBornOnUser.Id, and is useful for accessing the field via an interface.
+func (v *queryWithCustomMarshalUsersBornOnUser) GetId() string { return v.Id }
+
+// GetName returns queryWithCustomMarshalUsersBornOnUser.Name, and is useful for accessing the field via an interface.
+func (v *queryWithCustomMarshalUsersBornOnUser) GetName() string { return v.Name }
+
+// GetBirthdate returns queryWithCustomMarshalUsersBornOnUser.Birthdate, and is useful for accessing the field via an interface.
+func (v *queryWithCustomMarshalUsersBornOnUser) GetBirthdate() time.Time { return v.Birthdate }
+
 func (v *queryWithCustomMarshalUsersBornOnUser) UnmarshalJSON(b []byte) error {
 
 	if string(b) == "null" {
@@ -1459,6 +1605,28 @@ type queryWithFragmentsBeingsAnimal struct {
 	Hair     queryWithFragmentsBeingsAnimalHairBeingsHair `json:"hair"`
 	Species  Species                                      `json:"species"`
 	Owner    queryWithFragmentsBeingsAnimalOwnerBeing     `json:"-"`
+}
+
+// GetTypename returns queryWithFragmentsBeingsAnimal.Typename, and is useful for accessing the field via an interface.
+func (v *queryWithFragmentsBeingsAnimal) GetTypename() string { return v.Typename }
+
+// GetId returns queryWithFragmentsBeingsAnimal.Id, and is useful for accessing the field via an interface.
+func (v *queryWithFragmentsBeingsAnimal) GetId() string { return v.Id }
+
+// GetName returns queryWithFragmentsBeingsAnimal.Name, and is useful for accessing the field via an interface.
+func (v *queryWithFragmentsBeingsAnimal) GetName() string { return v.Name }
+
+// GetHair returns queryWithFragmentsBeingsAnimal.Hair, and is useful for accessing the field via an interface.
+func (v *queryWithFragmentsBeingsAnimal) GetHair() queryWithFragmentsBeingsAnimalHairBeingsHair {
+	return v.Hair
+}
+
+// GetSpecies returns queryWithFragmentsBeingsAnimal.Species, and is useful for accessing the field via an interface.
+func (v *queryWithFragmentsBeingsAnimal) GetSpecies() Species { return v.Species }
+
+// GetOwner returns queryWithFragmentsBeingsAnimal.Owner, and is useful for accessing the field via an interface.
+func (v *queryWithFragmentsBeingsAnimal) GetOwner() queryWithFragmentsBeingsAnimalOwnerBeing {
+	return v.Owner
 }
 
 func (v *queryWithFragmentsBeingsAnimal) UnmarshalJSON(b []byte) error {
@@ -1544,12 +1712,24 @@ type queryWithFragmentsBeingsAnimalHairBeingsHair struct {
 	HasHair bool `json:"hasHair"`
 }
 
+// GetHasHair returns queryWithFragmentsBeingsAnimalHairBeingsHair.HasHair, and is useful for accessing the field via an interface.
+func (v *queryWithFragmentsBeingsAnimalHairBeingsHair) GetHasHair() bool { return v.HasHair }
+
 // queryWithFragmentsBeingsAnimalOwnerAnimal includes the requested fields of the GraphQL type Animal.
 type queryWithFragmentsBeingsAnimalOwnerAnimal struct {
 	Typename string `json:"__typename"`
 	Id       string `json:"id"`
 	Name     string `json:"name"`
 }
+
+// GetTypename returns queryWithFragmentsBeingsAnimalOwnerAnimal.Typename, and is useful for accessing the field via an interface.
+func (v *queryWithFragmentsBeingsAnimalOwnerAnimal) GetTypename() string { return v.Typename }
+
+// GetId returns queryWithFragmentsBeingsAnimalOwnerAnimal.Id, and is useful for accessing the field via an interface.
+func (v *queryWithFragmentsBeingsAnimalOwnerAnimal) GetId() string { return v.Id }
+
+// GetName returns queryWithFragmentsBeingsAnimalOwnerAnimal.Name, and is useful for accessing the field via an interface.
+func (v *queryWithFragmentsBeingsAnimalOwnerAnimal) GetName() string { return v.Name }
 
 // queryWithFragmentsBeingsAnimalOwnerBeing includes the requested fields of the GraphQL interface Being.
 //
@@ -1568,27 +1748,8 @@ type queryWithFragmentsBeingsAnimalOwnerBeing interface {
 
 func (v *queryWithFragmentsBeingsAnimalOwnerUser) implementsGraphQLInterfacequeryWithFragmentsBeingsAnimalOwnerBeing() {
 }
-
-// GetTypename is a part of, and documented with, the interface queryWithFragmentsBeingsAnimalOwnerBeing.
-func (v *queryWithFragmentsBeingsAnimalOwnerUser) GetTypename() string { return v.Typename }
-
-// GetId is a part of, and documented with, the interface queryWithFragmentsBeingsAnimalOwnerBeing.
-func (v *queryWithFragmentsBeingsAnimalOwnerUser) GetId() string { return v.Id }
-
-// GetName is a part of, and documented with, the interface queryWithFragmentsBeingsAnimalOwnerBeing.
-func (v *queryWithFragmentsBeingsAnimalOwnerUser) GetName() string { return v.Name }
-
 func (v *queryWithFragmentsBeingsAnimalOwnerAnimal) implementsGraphQLInterfacequeryWithFragmentsBeingsAnimalOwnerBeing() {
 }
-
-// GetTypename is a part of, and documented with, the interface queryWithFragmentsBeingsAnimalOwnerBeing.
-func (v *queryWithFragmentsBeingsAnimalOwnerAnimal) GetTypename() string { return v.Typename }
-
-// GetId is a part of, and documented with, the interface queryWithFragmentsBeingsAnimalOwnerBeing.
-func (v *queryWithFragmentsBeingsAnimalOwnerAnimal) GetId() string { return v.Id }
-
-// GetName is a part of, and documented with, the interface queryWithFragmentsBeingsAnimalOwnerBeing.
-func (v *queryWithFragmentsBeingsAnimalOwnerAnimal) GetName() string { return v.Name }
 
 func __unmarshalqueryWithFragmentsBeingsAnimalOwnerBeing(b []byte, v *queryWithFragmentsBeingsAnimalOwnerBeing) error {
 	if string(b) == "null" {
@@ -1655,6 +1816,18 @@ type queryWithFragmentsBeingsAnimalOwnerUser struct {
 	LuckyNumber int    `json:"luckyNumber"`
 }
 
+// GetTypename returns queryWithFragmentsBeingsAnimalOwnerUser.Typename, and is useful for accessing the field via an interface.
+func (v *queryWithFragmentsBeingsAnimalOwnerUser) GetTypename() string { return v.Typename }
+
+// GetId returns queryWithFragmentsBeingsAnimalOwnerUser.Id, and is useful for accessing the field via an interface.
+func (v *queryWithFragmentsBeingsAnimalOwnerUser) GetId() string { return v.Id }
+
+// GetName returns queryWithFragmentsBeingsAnimalOwnerUser.Name, and is useful for accessing the field via an interface.
+func (v *queryWithFragmentsBeingsAnimalOwnerUser) GetName() string { return v.Name }
+
+// GetLuckyNumber returns queryWithFragmentsBeingsAnimalOwnerUser.LuckyNumber, and is useful for accessing the field via an interface.
+func (v *queryWithFragmentsBeingsAnimalOwnerUser) GetLuckyNumber() int { return v.LuckyNumber }
+
 // queryWithFragmentsBeingsBeing includes the requested fields of the GraphQL interface Being.
 //
 // queryWithFragmentsBeingsBeing is implemented by the following types:
@@ -1670,27 +1843,8 @@ type queryWithFragmentsBeingsBeing interface {
 	GetName() string
 }
 
-func (v *queryWithFragmentsBeingsUser) implementsGraphQLInterfacequeryWithFragmentsBeingsBeing() {}
-
-// GetTypename is a part of, and documented with, the interface queryWithFragmentsBeingsBeing.
-func (v *queryWithFragmentsBeingsUser) GetTypename() string { return v.Typename }
-
-// GetId is a part of, and documented with, the interface queryWithFragmentsBeingsBeing.
-func (v *queryWithFragmentsBeingsUser) GetId() string { return v.Id }
-
-// GetName is a part of, and documented with, the interface queryWithFragmentsBeingsBeing.
-func (v *queryWithFragmentsBeingsUser) GetName() string { return v.Name }
-
+func (v *queryWithFragmentsBeingsUser) implementsGraphQLInterfacequeryWithFragmentsBeingsBeing()   {}
 func (v *queryWithFragmentsBeingsAnimal) implementsGraphQLInterfacequeryWithFragmentsBeingsBeing() {}
-
-// GetTypename is a part of, and documented with, the interface queryWithFragmentsBeingsBeing.
-func (v *queryWithFragmentsBeingsAnimal) GetTypename() string { return v.Typename }
-
-// GetId is a part of, and documented with, the interface queryWithFragmentsBeingsBeing.
-func (v *queryWithFragmentsBeingsAnimal) GetId() string { return v.Id }
-
-// GetName is a part of, and documented with, the interface queryWithFragmentsBeingsBeing.
-func (v *queryWithFragmentsBeingsAnimal) GetName() string { return v.Name }
 
 func __unmarshalqueryWithFragmentsBeingsBeing(b []byte, v *queryWithFragmentsBeingsBeing) error {
 	if string(b) == "null" {
@@ -1762,15 +1916,36 @@ type queryWithFragmentsBeingsUser struct {
 	Hair        queryWithFragmentsBeingsUserHair `json:"hair"`
 }
 
+// GetTypename returns queryWithFragmentsBeingsUser.Typename, and is useful for accessing the field via an interface.
+func (v *queryWithFragmentsBeingsUser) GetTypename() string { return v.Typename }
+
+// GetId returns queryWithFragmentsBeingsUser.Id, and is useful for accessing the field via an interface.
+func (v *queryWithFragmentsBeingsUser) GetId() string { return v.Id }
+
+// GetName returns queryWithFragmentsBeingsUser.Name, and is useful for accessing the field via an interface.
+func (v *queryWithFragmentsBeingsUser) GetName() string { return v.Name }
+
+// GetLuckyNumber returns queryWithFragmentsBeingsUser.LuckyNumber, and is useful for accessing the field via an interface.
+func (v *queryWithFragmentsBeingsUser) GetLuckyNumber() int { return v.LuckyNumber }
+
+// GetHair returns queryWithFragmentsBeingsUser.Hair, and is useful for accessing the field via an interface.
+func (v *queryWithFragmentsBeingsUser) GetHair() queryWithFragmentsBeingsUserHair { return v.Hair }
+
 // queryWithFragmentsBeingsUserHair includes the requested fields of the GraphQL type Hair.
 type queryWithFragmentsBeingsUserHair struct {
 	Color string `json:"color"`
 }
 
+// GetColor returns queryWithFragmentsBeingsUserHair.Color, and is useful for accessing the field via an interface.
+func (v *queryWithFragmentsBeingsUserHair) GetColor() string { return v.Color }
+
 // queryWithFragmentsResponse is returned by queryWithFragments on success.
 type queryWithFragmentsResponse struct {
 	Beings []queryWithFragmentsBeingsBeing `json:"-"`
 }
+
+// GetBeings returns queryWithFragmentsResponse.Beings, and is useful for accessing the field via an interface.
+func (v *queryWithFragmentsResponse) GetBeings() []queryWithFragmentsBeingsBeing { return v.Beings }
 
 func (v *queryWithFragmentsResponse) UnmarshalJSON(b []byte) error {
 
@@ -1854,6 +2029,15 @@ type queryWithInterfaceListFieldBeingsAnimal struct {
 	Name     string `json:"name"`
 }
 
+// GetTypename returns queryWithInterfaceListFieldBeingsAnimal.Typename, and is useful for accessing the field via an interface.
+func (v *queryWithInterfaceListFieldBeingsAnimal) GetTypename() string { return v.Typename }
+
+// GetId returns queryWithInterfaceListFieldBeingsAnimal.Id, and is useful for accessing the field via an interface.
+func (v *queryWithInterfaceListFieldBeingsAnimal) GetId() string { return v.Id }
+
+// GetName returns queryWithInterfaceListFieldBeingsAnimal.Name, and is useful for accessing the field via an interface.
+func (v *queryWithInterfaceListFieldBeingsAnimal) GetName() string { return v.Name }
+
 // queryWithInterfaceListFieldBeingsBeing includes the requested fields of the GraphQL interface Being.
 //
 // queryWithInterfaceListFieldBeingsBeing is implemented by the following types:
@@ -1871,27 +2055,8 @@ type queryWithInterfaceListFieldBeingsBeing interface {
 
 func (v *queryWithInterfaceListFieldBeingsUser) implementsGraphQLInterfacequeryWithInterfaceListFieldBeingsBeing() {
 }
-
-// GetTypename is a part of, and documented with, the interface queryWithInterfaceListFieldBeingsBeing.
-func (v *queryWithInterfaceListFieldBeingsUser) GetTypename() string { return v.Typename }
-
-// GetId is a part of, and documented with, the interface queryWithInterfaceListFieldBeingsBeing.
-func (v *queryWithInterfaceListFieldBeingsUser) GetId() string { return v.Id }
-
-// GetName is a part of, and documented with, the interface queryWithInterfaceListFieldBeingsBeing.
-func (v *queryWithInterfaceListFieldBeingsUser) GetName() string { return v.Name }
-
 func (v *queryWithInterfaceListFieldBeingsAnimal) implementsGraphQLInterfacequeryWithInterfaceListFieldBeingsBeing() {
 }
-
-// GetTypename is a part of, and documented with, the interface queryWithInterfaceListFieldBeingsBeing.
-func (v *queryWithInterfaceListFieldBeingsAnimal) GetTypename() string { return v.Typename }
-
-// GetId is a part of, and documented with, the interface queryWithInterfaceListFieldBeingsBeing.
-func (v *queryWithInterfaceListFieldBeingsAnimal) GetId() string { return v.Id }
-
-// GetName is a part of, and documented with, the interface queryWithInterfaceListFieldBeingsBeing.
-func (v *queryWithInterfaceListFieldBeingsAnimal) GetName() string { return v.Name }
 
 func __unmarshalqueryWithInterfaceListFieldBeingsBeing(b []byte, v *queryWithInterfaceListFieldBeingsBeing) error {
 	if string(b) == "null" {
@@ -1957,9 +2122,23 @@ type queryWithInterfaceListFieldBeingsUser struct {
 	Name     string `json:"name"`
 }
 
+// GetTypename returns queryWithInterfaceListFieldBeingsUser.Typename, and is useful for accessing the field via an interface.
+func (v *queryWithInterfaceListFieldBeingsUser) GetTypename() string { return v.Typename }
+
+// GetId returns queryWithInterfaceListFieldBeingsUser.Id, and is useful for accessing the field via an interface.
+func (v *queryWithInterfaceListFieldBeingsUser) GetId() string { return v.Id }
+
+// GetName returns queryWithInterfaceListFieldBeingsUser.Name, and is useful for accessing the field via an interface.
+func (v *queryWithInterfaceListFieldBeingsUser) GetName() string { return v.Name }
+
 // queryWithInterfaceListFieldResponse is returned by queryWithInterfaceListField on success.
 type queryWithInterfaceListFieldResponse struct {
 	Beings []queryWithInterfaceListFieldBeingsBeing `json:"-"`
+}
+
+// GetBeings returns queryWithInterfaceListFieldResponse.Beings, and is useful for accessing the field via an interface.
+func (v *queryWithInterfaceListFieldResponse) GetBeings() []queryWithInterfaceListFieldBeingsBeing {
+	return v.Beings
 }
 
 func (v *queryWithInterfaceListFieldResponse) UnmarshalJSON(b []byte) error {
@@ -2044,6 +2223,15 @@ type queryWithInterfaceListPointerFieldBeingsAnimal struct {
 	Name     string `json:"name"`
 }
 
+// GetTypename returns queryWithInterfaceListPointerFieldBeingsAnimal.Typename, and is useful for accessing the field via an interface.
+func (v *queryWithInterfaceListPointerFieldBeingsAnimal) GetTypename() string { return v.Typename }
+
+// GetId returns queryWithInterfaceListPointerFieldBeingsAnimal.Id, and is useful for accessing the field via an interface.
+func (v *queryWithInterfaceListPointerFieldBeingsAnimal) GetId() string { return v.Id }
+
+// GetName returns queryWithInterfaceListPointerFieldBeingsAnimal.Name, and is useful for accessing the field via an interface.
+func (v *queryWithInterfaceListPointerFieldBeingsAnimal) GetName() string { return v.Name }
+
 // queryWithInterfaceListPointerFieldBeingsBeing includes the requested fields of the GraphQL interface Being.
 //
 // queryWithInterfaceListPointerFieldBeingsBeing is implemented by the following types:
@@ -2061,27 +2249,8 @@ type queryWithInterfaceListPointerFieldBeingsBeing interface {
 
 func (v *queryWithInterfaceListPointerFieldBeingsUser) implementsGraphQLInterfacequeryWithInterfaceListPointerFieldBeingsBeing() {
 }
-
-// GetTypename is a part of, and documented with, the interface queryWithInterfaceListPointerFieldBeingsBeing.
-func (v *queryWithInterfaceListPointerFieldBeingsUser) GetTypename() string { return v.Typename }
-
-// GetId is a part of, and documented with, the interface queryWithInterfaceListPointerFieldBeingsBeing.
-func (v *queryWithInterfaceListPointerFieldBeingsUser) GetId() string { return v.Id }
-
-// GetName is a part of, and documented with, the interface queryWithInterfaceListPointerFieldBeingsBeing.
-func (v *queryWithInterfaceListPointerFieldBeingsUser) GetName() string { return v.Name }
-
 func (v *queryWithInterfaceListPointerFieldBeingsAnimal) implementsGraphQLInterfacequeryWithInterfaceListPointerFieldBeingsBeing() {
 }
-
-// GetTypename is a part of, and documented with, the interface queryWithInterfaceListPointerFieldBeingsBeing.
-func (v *queryWithInterfaceListPointerFieldBeingsAnimal) GetTypename() string { return v.Typename }
-
-// GetId is a part of, and documented with, the interface queryWithInterfaceListPointerFieldBeingsBeing.
-func (v *queryWithInterfaceListPointerFieldBeingsAnimal) GetId() string { return v.Id }
-
-// GetName is a part of, and documented with, the interface queryWithInterfaceListPointerFieldBeingsBeing.
-func (v *queryWithInterfaceListPointerFieldBeingsAnimal) GetName() string { return v.Name }
 
 func __unmarshalqueryWithInterfaceListPointerFieldBeingsBeing(b []byte, v *queryWithInterfaceListPointerFieldBeingsBeing) error {
 	if string(b) == "null" {
@@ -2147,9 +2316,23 @@ type queryWithInterfaceListPointerFieldBeingsUser struct {
 	Name     string `json:"name"`
 }
 
+// GetTypename returns queryWithInterfaceListPointerFieldBeingsUser.Typename, and is useful for accessing the field via an interface.
+func (v *queryWithInterfaceListPointerFieldBeingsUser) GetTypename() string { return v.Typename }
+
+// GetId returns queryWithInterfaceListPointerFieldBeingsUser.Id, and is useful for accessing the field via an interface.
+func (v *queryWithInterfaceListPointerFieldBeingsUser) GetId() string { return v.Id }
+
+// GetName returns queryWithInterfaceListPointerFieldBeingsUser.Name, and is useful for accessing the field via an interface.
+func (v *queryWithInterfaceListPointerFieldBeingsUser) GetName() string { return v.Name }
+
 // queryWithInterfaceListPointerFieldResponse is returned by queryWithInterfaceListPointerField on success.
 type queryWithInterfaceListPointerFieldResponse struct {
 	Beings []*queryWithInterfaceListPointerFieldBeingsBeing `json:"-"`
+}
+
+// GetBeings returns queryWithInterfaceListPointerFieldResponse.Beings, and is useful for accessing the field via an interface.
+func (v *queryWithInterfaceListPointerFieldResponse) GetBeings() []*queryWithInterfaceListPointerFieldBeingsBeing {
+	return v.Beings
 }
 
 func (v *queryWithInterfaceListPointerFieldResponse) UnmarshalJSON(b []byte) error {
@@ -2247,27 +2430,8 @@ type queryWithInterfaceNoFragmentsBeing interface {
 
 func (v *queryWithInterfaceNoFragmentsBeingUser) implementsGraphQLInterfacequeryWithInterfaceNoFragmentsBeing() {
 }
-
-// GetTypename is a part of, and documented with, the interface queryWithInterfaceNoFragmentsBeing.
-func (v *queryWithInterfaceNoFragmentsBeingUser) GetTypename() string { return v.Typename }
-
-// GetId is a part of, and documented with, the interface queryWithInterfaceNoFragmentsBeing.
-func (v *queryWithInterfaceNoFragmentsBeingUser) GetId() string { return v.Id }
-
-// GetName is a part of, and documented with, the interface queryWithInterfaceNoFragmentsBeing.
-func (v *queryWithInterfaceNoFragmentsBeingUser) GetName() string { return v.Name }
-
 func (v *queryWithInterfaceNoFragmentsBeingAnimal) implementsGraphQLInterfacequeryWithInterfaceNoFragmentsBeing() {
 }
-
-// GetTypename is a part of, and documented with, the interface queryWithInterfaceNoFragmentsBeing.
-func (v *queryWithInterfaceNoFragmentsBeingAnimal) GetTypename() string { return v.Typename }
-
-// GetId is a part of, and documented with, the interface queryWithInterfaceNoFragmentsBeing.
-func (v *queryWithInterfaceNoFragmentsBeingAnimal) GetId() string { return v.Id }
-
-// GetName is a part of, and documented with, the interface queryWithInterfaceNoFragmentsBeing.
-func (v *queryWithInterfaceNoFragmentsBeingAnimal) GetName() string { return v.Name }
 
 func __unmarshalqueryWithInterfaceNoFragmentsBeing(b []byte, v *queryWithInterfaceNoFragmentsBeing) error {
 	if string(b) == "null" {
@@ -2333,6 +2497,15 @@ type queryWithInterfaceNoFragmentsBeingAnimal struct {
 	Name     string `json:"name"`
 }
 
+// GetTypename returns queryWithInterfaceNoFragmentsBeingAnimal.Typename, and is useful for accessing the field via an interface.
+func (v *queryWithInterfaceNoFragmentsBeingAnimal) GetTypename() string { return v.Typename }
+
+// GetId returns queryWithInterfaceNoFragmentsBeingAnimal.Id, and is useful for accessing the field via an interface.
+func (v *queryWithInterfaceNoFragmentsBeingAnimal) GetId() string { return v.Id }
+
+// GetName returns queryWithInterfaceNoFragmentsBeingAnimal.Name, and is useful for accessing the field via an interface.
+func (v *queryWithInterfaceNoFragmentsBeingAnimal) GetName() string { return v.Name }
+
 // queryWithInterfaceNoFragmentsBeingUser includes the requested fields of the GraphQL type User.
 type queryWithInterfaceNoFragmentsBeingUser struct {
 	Typename string `json:"__typename"`
@@ -2340,16 +2513,41 @@ type queryWithInterfaceNoFragmentsBeingUser struct {
 	Name     string `json:"name"`
 }
 
+// GetTypename returns queryWithInterfaceNoFragmentsBeingUser.Typename, and is useful for accessing the field via an interface.
+func (v *queryWithInterfaceNoFragmentsBeingUser) GetTypename() string { return v.Typename }
+
+// GetId returns queryWithInterfaceNoFragmentsBeingUser.Id, and is useful for accessing the field via an interface.
+func (v *queryWithInterfaceNoFragmentsBeingUser) GetId() string { return v.Id }
+
+// GetName returns queryWithInterfaceNoFragmentsBeingUser.Name, and is useful for accessing the field via an interface.
+func (v *queryWithInterfaceNoFragmentsBeingUser) GetName() string { return v.Name }
+
 // queryWithInterfaceNoFragmentsMeUser includes the requested fields of the GraphQL type User.
 type queryWithInterfaceNoFragmentsMeUser struct {
 	Id   string `json:"id"`
 	Name string `json:"name"`
 }
 
+// GetId returns queryWithInterfaceNoFragmentsMeUser.Id, and is useful for accessing the field via an interface.
+func (v *queryWithInterfaceNoFragmentsMeUser) GetId() string { return v.Id }
+
+// GetName returns queryWithInterfaceNoFragmentsMeUser.Name, and is useful for accessing the field via an interface.
+func (v *queryWithInterfaceNoFragmentsMeUser) GetName() string { return v.Name }
+
 // queryWithInterfaceNoFragmentsResponse is returned by queryWithInterfaceNoFragments on success.
 type queryWithInterfaceNoFragmentsResponse struct {
 	Being queryWithInterfaceNoFragmentsBeing  `json:"-"`
 	Me    queryWithInterfaceNoFragmentsMeUser `json:"me"`
+}
+
+// GetBeing returns queryWithInterfaceNoFragmentsResponse.Being, and is useful for accessing the field via an interface.
+func (v *queryWithInterfaceNoFragmentsResponse) GetBeing() queryWithInterfaceNoFragmentsBeing {
+	return v.Being
+}
+
+// GetMe returns queryWithInterfaceNoFragmentsResponse.Me, and is useful for accessing the field via an interface.
+func (v *queryWithInterfaceNoFragmentsResponse) GetMe() queryWithInterfaceNoFragmentsMeUser {
+	return v.Me
 }
 
 func (v *queryWithInterfaceNoFragmentsResponse) UnmarshalJSON(b []byte) error {
@@ -2423,6 +2621,22 @@ type queryWithNamedFragmentsBeingsAnimal struct {
 	Typename     string `json:"__typename"`
 	Id           string `json:"id"`
 	AnimalFields `json:"-"`
+}
+
+// GetTypename returns queryWithNamedFragmentsBeingsAnimal.Typename, and is useful for accessing the field via an interface.
+func (v *queryWithNamedFragmentsBeingsAnimal) GetTypename() string { return v.Typename }
+
+// GetId returns queryWithNamedFragmentsBeingsAnimal.Id, and is useful for accessing the field via an interface.
+func (v *queryWithNamedFragmentsBeingsAnimal) GetId() string { return v.Id }
+
+// GetHair returns queryWithNamedFragmentsBeingsAnimal.Hair, and is useful for accessing the field via an interface.
+func (v *queryWithNamedFragmentsBeingsAnimal) GetHair() AnimalFieldsHairBeingsHair {
+	return v.AnimalFields.Hair
+}
+
+// GetOwner returns queryWithNamedFragmentsBeingsAnimal.Owner, and is useful for accessing the field via an interface.
+func (v *queryWithNamedFragmentsBeingsAnimal) GetOwner() AnimalFieldsOwnerBeing {
+	return v.AnimalFields.Owner
 }
 
 func (v *queryWithNamedFragmentsBeingsAnimal) UnmarshalJSON(b []byte) error {
@@ -2504,21 +2718,8 @@ type queryWithNamedFragmentsBeingsBeing interface {
 
 func (v *queryWithNamedFragmentsBeingsUser) implementsGraphQLInterfacequeryWithNamedFragmentsBeingsBeing() {
 }
-
-// GetTypename is a part of, and documented with, the interface queryWithNamedFragmentsBeingsBeing.
-func (v *queryWithNamedFragmentsBeingsUser) GetTypename() string { return v.Typename }
-
-// GetId is a part of, and documented with, the interface queryWithNamedFragmentsBeingsBeing.
-func (v *queryWithNamedFragmentsBeingsUser) GetId() string { return v.Id }
-
 func (v *queryWithNamedFragmentsBeingsAnimal) implementsGraphQLInterfacequeryWithNamedFragmentsBeingsBeing() {
 }
-
-// GetTypename is a part of, and documented with, the interface queryWithNamedFragmentsBeingsBeing.
-func (v *queryWithNamedFragmentsBeingsAnimal) GetTypename() string { return v.Typename }
-
-// GetId is a part of, and documented with, the interface queryWithNamedFragmentsBeingsBeing.
-func (v *queryWithNamedFragmentsBeingsAnimal) GetId() string { return v.Id }
 
 func __unmarshalqueryWithNamedFragmentsBeingsBeing(b []byte, v *queryWithNamedFragmentsBeingsBeing) error {
 	if string(b) == "null" {
@@ -2592,6 +2793,22 @@ type queryWithNamedFragmentsBeingsUser struct {
 	UserFields `json:"-"`
 }
 
+// GetTypename returns queryWithNamedFragmentsBeingsUser.Typename, and is useful for accessing the field via an interface.
+func (v *queryWithNamedFragmentsBeingsUser) GetTypename() string { return v.Typename }
+
+// GetId returns queryWithNamedFragmentsBeingsUser.Id, and is useful for accessing the field via an interface.
+func (v *queryWithNamedFragmentsBeingsUser) GetId() string { return v.Id }
+
+// GetLuckyNumber returns queryWithNamedFragmentsBeingsUser.LuckyNumber, and is useful for accessing the field via an interface.
+func (v *queryWithNamedFragmentsBeingsUser) GetLuckyNumber() int {
+	return v.UserFields.LuckyFieldsUser.LuckyNumber
+}
+
+// GetHair returns queryWithNamedFragmentsBeingsUser.Hair, and is useful for accessing the field via an interface.
+func (v *queryWithNamedFragmentsBeingsUser) GetHair() MoreUserFieldsHair {
+	return v.UserFields.MoreUserFields.Hair
+}
+
 func (v *queryWithNamedFragmentsBeingsUser) UnmarshalJSON(b []byte) error {
 
 	if string(b) == "null" {
@@ -2648,6 +2865,11 @@ func (v *queryWithNamedFragmentsBeingsUser) __premarshalJSON() (*__premarshalque
 // queryWithNamedFragmentsResponse is returned by queryWithNamedFragments on success.
 type queryWithNamedFragmentsResponse struct {
 	Beings []queryWithNamedFragmentsBeingsBeing `json:"-"`
+}
+
+// GetBeings returns queryWithNamedFragmentsResponse.Beings, and is useful for accessing the field via an interface.
+func (v *queryWithNamedFragmentsResponse) GetBeings() []queryWithNamedFragmentsBeingsBeing {
+	return v.Beings
 }
 
 func (v *queryWithNamedFragmentsResponse) UnmarshalJSON(b []byte) error {
@@ -2730,6 +2952,9 @@ type queryWithOmitemptyResponse struct {
 	User queryWithOmitemptyUser `json:"user"`
 }
 
+// GetUser returns queryWithOmitemptyResponse.User, and is useful for accessing the field via an interface.
+func (v *queryWithOmitemptyResponse) GetUser() queryWithOmitemptyUser { return v.User }
+
 // queryWithOmitemptyUser includes the requested fields of the GraphQL type User.
 type queryWithOmitemptyUser struct {
 	Id          string `json:"id"`
@@ -2737,10 +2962,22 @@ type queryWithOmitemptyUser struct {
 	LuckyNumber int    `json:"luckyNumber"`
 }
 
+// GetId returns queryWithOmitemptyUser.Id, and is useful for accessing the field via an interface.
+func (v *queryWithOmitemptyUser) GetId() string { return v.Id }
+
+// GetName returns queryWithOmitemptyUser.Name, and is useful for accessing the field via an interface.
+func (v *queryWithOmitemptyUser) GetName() string { return v.Name }
+
+// GetLuckyNumber returns queryWithOmitemptyUser.LuckyNumber, and is useful for accessing the field via an interface.
+func (v *queryWithOmitemptyUser) GetLuckyNumber() int { return v.LuckyNumber }
+
 // queryWithVariablesResponse is returned by queryWithVariables on success.
 type queryWithVariablesResponse struct {
 	User queryWithVariablesUser `json:"user"`
 }
+
+// GetUser returns queryWithVariablesResponse.User, and is useful for accessing the field via an interface.
+func (v *queryWithVariablesResponse) GetUser() queryWithVariablesUser { return v.User }
 
 // queryWithVariablesUser includes the requested fields of the GraphQL type User.
 type queryWithVariablesUser struct {
@@ -2749,6 +2986,15 @@ type queryWithVariablesUser struct {
 	LuckyNumber int    `json:"luckyNumber"`
 }
 
+// GetId returns queryWithVariablesUser.Id, and is useful for accessing the field via an interface.
+func (v *queryWithVariablesUser) GetId() string { return v.Id }
+
+// GetName returns queryWithVariablesUser.Name, and is useful for accessing the field via an interface.
+func (v *queryWithVariablesUser) GetName() string { return v.Name }
+
+// GetLuckyNumber returns queryWithVariablesUser.LuckyNumber, and is useful for accessing the field via an interface.
+func (v *queryWithVariablesUser) GetLuckyNumber() int { return v.LuckyNumber }
+
 // simpleQueryMeUser includes the requested fields of the GraphQL type User.
 type simpleQueryMeUser struct {
 	Id          string `json:"id"`
@@ -2756,10 +3002,22 @@ type simpleQueryMeUser struct {
 	LuckyNumber int    `json:"luckyNumber"`
 }
 
+// GetId returns simpleQueryMeUser.Id, and is useful for accessing the field via an interface.
+func (v *simpleQueryMeUser) GetId() string { return v.Id }
+
+// GetName returns simpleQueryMeUser.Name, and is useful for accessing the field via an interface.
+func (v *simpleQueryMeUser) GetName() string { return v.Name }
+
+// GetLuckyNumber returns simpleQueryMeUser.LuckyNumber, and is useful for accessing the field via an interface.
+func (v *simpleQueryMeUser) GetLuckyNumber() int { return v.LuckyNumber }
+
 // simpleQueryResponse is returned by simpleQuery on success.
 type simpleQueryResponse struct {
 	Me simpleQueryMeUser `json:"me"`
 }
+
+// GetMe returns simpleQueryResponse.Me, and is useful for accessing the field via an interface.
+func (v *simpleQueryResponse) GetMe() simpleQueryMeUser { return v.Me }
 
 func simpleQuery(
 	ctx context.Context,

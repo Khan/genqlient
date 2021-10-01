@@ -11,6 +11,11 @@ type ListOfListsOfListsResponse struct {
 	ListOfListsOfLists [][][]string `json:"listOfListsOfLists"`
 }
 
+// GetListOfListsOfLists returns ListOfListsOfListsResponse.ListOfListsOfLists, and is useful for accessing the field via an interface.
+func (v *ListOfListsOfListsResponse) GetListOfListsOfLists() [][][]string {
+	return v.ListOfListsOfLists
+}
+
 func ListOfListsOfLists(
 	client graphql.Client,
 ) (*ListOfListsOfListsResponse, error) {

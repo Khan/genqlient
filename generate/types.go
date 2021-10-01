@@ -363,6 +363,29 @@ func (typ *goStructType) WriteDefinition(w io.Writer, g *generator) error {
 	}
 	fmt.Fprintf(w, "}\n")
 
+	// Write out getter methods for each field.  These are most useful for
+	// shared fields of an interface -- the methods will be included in the
+	// interface.  But they can be useful in other cases, for example where you
+	// have a union several of whose members have a shared field (and can
+	// thereby be handled together).  For simplicity's sake, we just write the
+	// methods always.
+	//
+	// Note we use the *flattened* fields here, which ensures we avoid
+	// conflicts in the case where multiple embedded types include the same
+	// field.
+	flattened, err := typ.FlattenedFields()
+	if err != nil {
+		return err
+	}
+	for _, field := range flattened {
+		description := fmt.Sprintf(
+			"Get%s returns %s.%s, and is useful for accessing the field via an interface.",
+			field.GoName, typ.GoName, field.GoName)
+		writeDescription(w, description)
+		fmt.Fprintf(w, "func (v *%s) Get%s() %s { return v.%s }\n",
+			typ.GoName, field.GoName, field.GoType.Reference(), field.Selector)
+	}
+
 	// Now, if needed, write the marshaler/unmarshaler.  We need one if we have
 	// any interface-typed fields, or any embedded fields.
 	//
@@ -463,22 +486,6 @@ func (typ *goInterfaceType) WriteDefinition(w io.Writer, g *generator) error {
 	for _, impl := range typ.Implementations {
 		fmt.Fprintf(w, "func (v *%s) %s() {}\n",
 			impl.Reference(), implementsMethodName)
-		for _, sharedField := range typ.SharedFields {
-			if sharedField.GoName == "" { // embedded
-				continue // no method needed
-			}
-			description := fmt.Sprintf(
-				"Get%s is a part of, and documented with, the interface %s.",
-				sharedField.GoName, typ.GoName)
-			writeDescription(w, description)
-			// In principle, we should find the corresponding field of the
-			// implementation and use its name in `v.<name>`.  In practice,
-			// they're always the same.
-			fmt.Fprintf(w, "func (v *%s) Get%s() %s { return v.%s }\n",
-				impl.Reference(), sharedField.GoName,
-				sharedField.GoType.Reference(), sharedField.GoName)
-		}
-		fmt.Fprintf(w, "\n") // blank line between each type's implementations
 	}
 
 	// Finally, write the marshal- and unmarshal-helpers, which

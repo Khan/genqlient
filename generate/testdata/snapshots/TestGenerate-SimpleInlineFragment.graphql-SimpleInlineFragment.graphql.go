@@ -19,6 +19,18 @@ type SimpleInlineFragmentRandomItemArticle struct {
 	Text string      `json:"text"`
 }
 
+// GetTypename returns SimpleInlineFragmentRandomItemArticle.Typename, and is useful for accessing the field via an interface.
+func (v *SimpleInlineFragmentRandomItemArticle) GetTypename() string { return v.Typename }
+
+// GetId returns SimpleInlineFragmentRandomItemArticle.Id, and is useful for accessing the field via an interface.
+func (v *SimpleInlineFragmentRandomItemArticle) GetId() testutil.ID { return v.Id }
+
+// GetName returns SimpleInlineFragmentRandomItemArticle.Name, and is useful for accessing the field via an interface.
+func (v *SimpleInlineFragmentRandomItemArticle) GetName() string { return v.Name }
+
+// GetText returns SimpleInlineFragmentRandomItemArticle.Text, and is useful for accessing the field via an interface.
+func (v *SimpleInlineFragmentRandomItemArticle) GetText() string { return v.Text }
+
 // SimpleInlineFragmentRandomItemContent includes the requested fields of the GraphQL interface Content.
 //
 // SimpleInlineFragmentRandomItemContent is implemented by the following types:
@@ -43,39 +55,10 @@ type SimpleInlineFragmentRandomItemContent interface {
 
 func (v *SimpleInlineFragmentRandomItemArticle) implementsGraphQLInterfaceSimpleInlineFragmentRandomItemContent() {
 }
-
-// GetTypename is a part of, and documented with, the interface SimpleInlineFragmentRandomItemContent.
-func (v *SimpleInlineFragmentRandomItemArticle) GetTypename() string { return v.Typename }
-
-// GetId is a part of, and documented with, the interface SimpleInlineFragmentRandomItemContent.
-func (v *SimpleInlineFragmentRandomItemArticle) GetId() testutil.ID { return v.Id }
-
-// GetName is a part of, and documented with, the interface SimpleInlineFragmentRandomItemContent.
-func (v *SimpleInlineFragmentRandomItemArticle) GetName() string { return v.Name }
-
 func (v *SimpleInlineFragmentRandomItemVideo) implementsGraphQLInterfaceSimpleInlineFragmentRandomItemContent() {
 }
-
-// GetTypename is a part of, and documented with, the interface SimpleInlineFragmentRandomItemContent.
-func (v *SimpleInlineFragmentRandomItemVideo) GetTypename() string { return v.Typename }
-
-// GetId is a part of, and documented with, the interface SimpleInlineFragmentRandomItemContent.
-func (v *SimpleInlineFragmentRandomItemVideo) GetId() testutil.ID { return v.Id }
-
-// GetName is a part of, and documented with, the interface SimpleInlineFragmentRandomItemContent.
-func (v *SimpleInlineFragmentRandomItemVideo) GetName() string { return v.Name }
-
 func (v *SimpleInlineFragmentRandomItemTopic) implementsGraphQLInterfaceSimpleInlineFragmentRandomItemContent() {
 }
-
-// GetTypename is a part of, and documented with, the interface SimpleInlineFragmentRandomItemContent.
-func (v *SimpleInlineFragmentRandomItemTopic) GetTypename() string { return v.Typename }
-
-// GetId is a part of, and documented with, the interface SimpleInlineFragmentRandomItemContent.
-func (v *SimpleInlineFragmentRandomItemTopic) GetId() testutil.ID { return v.Id }
-
-// GetName is a part of, and documented with, the interface SimpleInlineFragmentRandomItemContent.
-func (v *SimpleInlineFragmentRandomItemTopic) GetName() string { return v.Name }
 
 func __unmarshalSimpleInlineFragmentRandomItemContent(b []byte, v *SimpleInlineFragmentRandomItemContent) error {
 	if string(b) == "null" {
@@ -153,6 +136,15 @@ type SimpleInlineFragmentRandomItemTopic struct {
 	Name string      `json:"name"`
 }
 
+// GetTypename returns SimpleInlineFragmentRandomItemTopic.Typename, and is useful for accessing the field via an interface.
+func (v *SimpleInlineFragmentRandomItemTopic) GetTypename() string { return v.Typename }
+
+// GetId returns SimpleInlineFragmentRandomItemTopic.Id, and is useful for accessing the field via an interface.
+func (v *SimpleInlineFragmentRandomItemTopic) GetId() testutil.ID { return v.Id }
+
+// GetName returns SimpleInlineFragmentRandomItemTopic.Name, and is useful for accessing the field via an interface.
+func (v *SimpleInlineFragmentRandomItemTopic) GetName() string { return v.Name }
+
 // SimpleInlineFragmentRandomItemVideo includes the requested fields of the GraphQL type Video.
 type SimpleInlineFragmentRandomItemVideo struct {
 	Typename string `json:"__typename"`
@@ -162,9 +154,26 @@ type SimpleInlineFragmentRandomItemVideo struct {
 	Duration int         `json:"duration"`
 }
 
+// GetTypename returns SimpleInlineFragmentRandomItemVideo.Typename, and is useful for accessing the field via an interface.
+func (v *SimpleInlineFragmentRandomItemVideo) GetTypename() string { return v.Typename }
+
+// GetId returns SimpleInlineFragmentRandomItemVideo.Id, and is useful for accessing the field via an interface.
+func (v *SimpleInlineFragmentRandomItemVideo) GetId() testutil.ID { return v.Id }
+
+// GetName returns SimpleInlineFragmentRandomItemVideo.Name, and is useful for accessing the field via an interface.
+func (v *SimpleInlineFragmentRandomItemVideo) GetName() string { return v.Name }
+
+// GetDuration returns SimpleInlineFragmentRandomItemVideo.Duration, and is useful for accessing the field via an interface.
+func (v *SimpleInlineFragmentRandomItemVideo) GetDuration() int { return v.Duration }
+
 // SimpleInlineFragmentResponse is returned by SimpleInlineFragment on success.
 type SimpleInlineFragmentResponse struct {
 	RandomItem SimpleInlineFragmentRandomItemContent `json:"-"`
+}
+
+// GetRandomItem returns SimpleInlineFragmentResponse.RandomItem, and is useful for accessing the field via an interface.
+func (v *SimpleInlineFragmentResponse) GetRandomItem() SimpleInlineFragmentRandomItemContent {
+	return v.RandomItem
 }
 
 func (v *SimpleInlineFragmentResponse) UnmarshalJSON(b []byte) error {

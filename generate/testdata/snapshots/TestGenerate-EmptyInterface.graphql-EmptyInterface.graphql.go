@@ -12,6 +12,14 @@ type EmptyInterfaceResponse struct {
 	GetComplexJunk []map[string]*[]*map[string]interface{} `json:"getComplexJunk"`
 }
 
+// GetGetJunk returns EmptyInterfaceResponse.GetJunk, and is useful for accessing the field via an interface.
+func (v *EmptyInterfaceResponse) GetGetJunk() interface{} { return v.GetJunk }
+
+// GetGetComplexJunk returns EmptyInterfaceResponse.GetComplexJunk, and is useful for accessing the field via an interface.
+func (v *EmptyInterfaceResponse) GetGetComplexJunk() []map[string]*[]*map[string]interface{} {
+	return v.GetComplexJunk
+}
+
 func EmptyInterface(
 	client graphql.Client,
 ) (*EmptyInterfaceResponse, error) {
