@@ -27,6 +27,27 @@ type MyInput struct {
 	Birthdate  *time.Time        `json:"-"`
 }
 
+// GetEmail returns MyInput.Email, and is useful for accessing the field via an interface.
+func (v *MyInput) GetEmail() *string { return v.Email }
+
+// GetName returns MyInput.Name, and is useful for accessing the field via an interface.
+func (v *MyInput) GetName() *string { return v.Name }
+
+// GetId returns MyInput.Id, and is useful for accessing the field via an interface.
+func (v *MyInput) GetId() *testutil.ID { return v.Id }
+
+// GetRole returns MyInput.Role, and is useful for accessing the field via an interface.
+func (v *MyInput) GetRole() *Role { return v.Role }
+
+// GetNames returns MyInput.Names, and is useful for accessing the field via an interface.
+func (v *MyInput) GetNames() []*string { return v.Names }
+
+// GetHasPokemon returns MyInput.HasPokemon, and is useful for accessing the field via an interface.
+func (v *MyInput) GetHasPokemon() *testutil.Pokemon { return v.HasPokemon }
+
+// GetBirthdate returns MyInput.Birthdate, and is useful for accessing the field via an interface.
+func (v *MyInput) GetBirthdate() *time.Time { return v.Birthdate }
+
 func (v *MyInput) UnmarshalJSON(b []byte) error {
 
 	if string(b) == "null" {
@@ -121,6 +142,14 @@ type MyMultipleDirectivesResponse struct {
 	Users []*MyMultipleDirectivesResponseUsersUser `json:"users"`
 }
 
+// GetUser returns MyMultipleDirectivesResponse.User, and is useful for accessing the field via an interface.
+func (v *MyMultipleDirectivesResponse) GetUser() *MyMultipleDirectivesResponseUser { return v.User }
+
+// GetUsers returns MyMultipleDirectivesResponse.Users, and is useful for accessing the field via an interface.
+func (v *MyMultipleDirectivesResponse) GetUsers() []*MyMultipleDirectivesResponseUsersUser {
+	return v.Users
+}
+
 // MyMultipleDirectivesResponseUser includes the requested fields of the GraphQL type User.
 // The GraphQL type's documentation follows.
 //
@@ -132,6 +161,9 @@ type MyMultipleDirectivesResponseUser struct {
 	Id *testutil.ID `json:"id"`
 }
 
+// GetId returns MyMultipleDirectivesResponseUser.Id, and is useful for accessing the field via an interface.
+func (v *MyMultipleDirectivesResponseUser) GetId() *testutil.ID { return v.Id }
+
 // MyMultipleDirectivesResponseUsersUser includes the requested fields of the GraphQL type User.
 // The GraphQL type's documentation follows.
 //
@@ -142,6 +174,9 @@ type MyMultipleDirectivesResponseUsersUser struct {
 	// It is stable, unique, and opaque, like all good IDs.
 	Id *testutil.ID `json:"id"`
 }
+
+// GetId returns MyMultipleDirectivesResponseUsersUser.Id, and is useful for accessing the field via an interface.
+func (v *MyMultipleDirectivesResponseUsersUser) GetId() *testutil.ID { return v.Id }
 
 // Role is a type a user may have.
 type Role string
@@ -172,6 +207,27 @@ type UserQueryInput struct {
 	HasPokemon *testutil.Pokemon `json:"hasPokemon,omitempty"`
 	Birthdate  *time.Time        `json:"-"`
 }
+
+// GetEmail returns UserQueryInput.Email, and is useful for accessing the field via an interface.
+func (v *UserQueryInput) GetEmail() *string { return v.Email }
+
+// GetName returns UserQueryInput.Name, and is useful for accessing the field via an interface.
+func (v *UserQueryInput) GetName() *string { return v.Name }
+
+// GetId returns UserQueryInput.Id, and is useful for accessing the field via an interface.
+func (v *UserQueryInput) GetId() *testutil.ID { return v.Id }
+
+// GetRole returns UserQueryInput.Role, and is useful for accessing the field via an interface.
+func (v *UserQueryInput) GetRole() *Role { return v.Role }
+
+// GetNames returns UserQueryInput.Names, and is useful for accessing the field via an interface.
+func (v *UserQueryInput) GetNames() []*string { return v.Names }
+
+// GetHasPokemon returns UserQueryInput.HasPokemon, and is useful for accessing the field via an interface.
+func (v *UserQueryInput) GetHasPokemon() *testutil.Pokemon { return v.HasPokemon }
+
+// GetBirthdate returns UserQueryInput.Birthdate, and is useful for accessing the field via an interface.
+func (v *UserQueryInput) GetBirthdate() *time.Time { return v.Birthdate }
 
 func (v *UserQueryInput) UnmarshalJSON(b []byte) error {
 
@@ -262,6 +318,12 @@ type __MultipleDirectivesInput struct {
 	Query   MyInput           `json:"query,omitempty"`
 	Queries []*UserQueryInput `json:"queries,omitempty"`
 }
+
+// GetQuery returns __MultipleDirectivesInput.Query, and is useful for accessing the field via an interface.
+func (v *__MultipleDirectivesInput) GetQuery() MyInput { return v.Query }
+
+// GetQueries returns __MultipleDirectivesInput.Queries, and is useful for accessing the field via an interface.
+func (v *__MultipleDirectivesInput) GetQueries() []*UserQueryInput { return v.Queries }
 
 func MultipleDirectives(
 	client graphql.Client,

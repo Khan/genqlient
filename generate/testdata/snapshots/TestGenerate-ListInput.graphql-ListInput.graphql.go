@@ -16,6 +16,9 @@ type ListInputQueryResponse struct {
 	User ListInputQueryUser `json:"user"`
 }
 
+// GetUser returns ListInputQueryResponse.User, and is useful for accessing the field via an interface.
+func (v *ListInputQueryResponse) GetUser() ListInputQueryUser { return v.User }
+
 // ListInputQueryUser includes the requested fields of the GraphQL type User.
 // The GraphQL type's documentation follows.
 //
@@ -27,10 +30,16 @@ type ListInputQueryUser struct {
 	Id testutil.ID `json:"id"`
 }
 
+// GetId returns ListInputQueryUser.Id, and is useful for accessing the field via an interface.
+func (v *ListInputQueryUser) GetId() testutil.ID { return v.Id }
+
 // __ListInputQueryInput is used internally by genqlient
 type __ListInputQueryInput struct {
 	Names []string `json:"names"`
 }
+
+// GetNames returns __ListInputQueryInput.Names, and is useful for accessing the field via an interface.
+func (v *__ListInputQueryInput) GetNames() []string { return v.Names }
 
 func ListInputQuery(
 	client graphql.Client,

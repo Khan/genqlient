@@ -33,37 +33,8 @@ type Item interface {
 }
 
 func (v *ItemArticle) implementsGraphQLInterfaceItem() {}
-
-// GetTypename is a part of, and documented with, the interface Item.
-func (v *ItemArticle) GetTypename() string { return v.Typename }
-
-// GetId is a part of, and documented with, the interface Item.
-func (v *ItemArticle) GetId() testutil.ID { return v.Id }
-
-// GetName is a part of, and documented with, the interface Item.
-func (v *ItemArticle) GetName() string { return v.Name }
-
-func (v *ItemVideo) implementsGraphQLInterfaceItem() {}
-
-// GetTypename is a part of, and documented with, the interface Item.
-func (v *ItemVideo) GetTypename() string { return v.Typename }
-
-// GetId is a part of, and documented with, the interface Item.
-func (v *ItemVideo) GetId() testutil.ID { return v.Id }
-
-// GetName is a part of, and documented with, the interface Item.
-func (v *ItemVideo) GetName() string { return v.Name }
-
-func (v *ItemTopic) implementsGraphQLInterfaceItem() {}
-
-// GetTypename is a part of, and documented with, the interface Item.
-func (v *ItemTopic) GetTypename() string { return v.Typename }
-
-// GetId is a part of, and documented with, the interface Item.
-func (v *ItemTopic) GetId() testutil.ID { return v.Id }
-
-// GetName is a part of, and documented with, the interface Item.
-func (v *ItemTopic) GetName() string { return v.Name }
+func (v *ItemVideo) implementsGraphQLInterfaceItem()   {}
+func (v *ItemTopic) implementsGraphQLInterfaceItem()   {}
 
 func __unmarshalItem(b []byte, v *Item) error {
 	if string(b) == "null" {
@@ -141,6 +112,15 @@ type ItemArticle struct {
 	Name string      `json:"name"`
 }
 
+// GetTypename returns ItemArticle.Typename, and is useful for accessing the field via an interface.
+func (v *ItemArticle) GetTypename() string { return v.Typename }
+
+// GetId returns ItemArticle.Id, and is useful for accessing the field via an interface.
+func (v *ItemArticle) GetId() testutil.ID { return v.Id }
+
+// GetName returns ItemArticle.Name, and is useful for accessing the field via an interface.
+func (v *ItemArticle) GetName() string { return v.Name }
+
 // ItemTopic includes the requested fields of the GraphQL type Topic.
 type ItemTopic struct {
 	Typename string `json:"__typename"`
@@ -149,6 +129,15 @@ type ItemTopic struct {
 	Name string      `json:"name"`
 }
 
+// GetTypename returns ItemTopic.Typename, and is useful for accessing the field via an interface.
+func (v *ItemTopic) GetTypename() string { return v.Typename }
+
+// GetId returns ItemTopic.Id, and is useful for accessing the field via an interface.
+func (v *ItemTopic) GetId() testutil.ID { return v.Id }
+
+// GetName returns ItemTopic.Name, and is useful for accessing the field via an interface.
+func (v *ItemTopic) GetName() string { return v.Name }
+
 // ItemVideo includes the requested fields of the GraphQL type Video.
 type ItemVideo struct {
 	Typename string `json:"__typename"`
@@ -156,6 +145,15 @@ type ItemVideo struct {
 	Id   testutil.ID `json:"id"`
 	Name string      `json:"name"`
 }
+
+// GetTypename returns ItemVideo.Typename, and is useful for accessing the field via an interface.
+func (v *ItemVideo) GetTypename() string { return v.Typename }
+
+// GetId returns ItemVideo.Id, and is useful for accessing the field via an interface.
+func (v *ItemVideo) GetId() testutil.ID { return v.Id }
+
+// GetName returns ItemVideo.Name, and is useful for accessing the field via an interface.
+func (v *ItemVideo) GetName() string { return v.Name }
 
 // Resp is returned by TypeNames on success.
 type Resp struct {
@@ -167,6 +165,15 @@ type Resp struct {
 	RandomItem Item   `json:"-"`
 	Users      []User `json:"users"`
 }
+
+// GetUser returns Resp.User, and is useful for accessing the field via an interface.
+func (v *Resp) GetUser() User { return v.User }
+
+// GetRandomItem returns Resp.RandomItem, and is useful for accessing the field via an interface.
+func (v *Resp) GetRandomItem() Item { return v.RandomItem }
+
+// GetUsers returns Resp.Users, and is useful for accessing the field via an interface.
+func (v *Resp) GetUsers() []User { return v.Users }
 
 func (v *Resp) UnmarshalJSON(b []byte) error {
 
@@ -248,6 +255,12 @@ type User struct {
 	Id   testutil.ID `json:"id"`
 	Name string      `json:"name"`
 }
+
+// GetId returns User.Id, and is useful for accessing the field via an interface.
+func (v *User) GetId() testutil.ID { return v.Id }
+
+// GetName returns User.Name, and is useful for accessing the field via an interface.
+func (v *User) GetName() string { return v.Name }
 
 func TypeNames(
 	client graphql.Client,

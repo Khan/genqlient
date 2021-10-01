@@ -41,6 +41,27 @@ type UserQueryInput struct {
 	Birthdate  time.Time        `json:"-"`
 }
 
+// GetEmail returns UserQueryInput.Email, and is useful for accessing the field via an interface.
+func (v *UserQueryInput) GetEmail() string { return v.Email }
+
+// GetName returns UserQueryInput.Name, and is useful for accessing the field via an interface.
+func (v *UserQueryInput) GetName() string { return v.Name }
+
+// GetId returns UserQueryInput.Id, and is useful for accessing the field via an interface.
+func (v *UserQueryInput) GetId() testutil.ID { return v.Id }
+
+// GetRole returns UserQueryInput.Role, and is useful for accessing the field via an interface.
+func (v *UserQueryInput) GetRole() Role { return v.Role }
+
+// GetNames returns UserQueryInput.Names, and is useful for accessing the field via an interface.
+func (v *UserQueryInput) GetNames() []string { return v.Names }
+
+// GetHasPokemon returns UserQueryInput.HasPokemon, and is useful for accessing the field via an interface.
+func (v *UserQueryInput) GetHasPokemon() testutil.Pokemon { return v.HasPokemon }
+
+// GetBirthdate returns UserQueryInput.Birthdate, and is useful for accessing the field via an interface.
+func (v *UserQueryInput) GetBirthdate() time.Time { return v.Birthdate }
+
 func (v *UserQueryInput) UnmarshalJSON(b []byte) error {
 
 	if string(b) == "null" {
@@ -127,6 +148,9 @@ type __unexportedInput struct {
 	Query UserQueryInput `json:"query"`
 }
 
+// GetQuery returns __unexportedInput.Query, and is useful for accessing the field via an interface.
+func (v *__unexportedInput) GetQuery() UserQueryInput { return v.Query }
+
 // unexportedResponse is returned by unexported on success.
 type unexportedResponse struct {
 	// user looks up a user by some stuff.
@@ -135,6 +159,9 @@ type unexportedResponse struct {
 	// If query is null, returns the current user.
 	User unexportedUser `json:"user"`
 }
+
+// GetUser returns unexportedResponse.User, and is useful for accessing the field via an interface.
+func (v *unexportedResponse) GetUser() unexportedUser { return v.User }
 
 // unexportedUser includes the requested fields of the GraphQL type User.
 // The GraphQL type's documentation follows.
@@ -146,6 +173,9 @@ type unexportedUser struct {
 	// It is stable, unique, and opaque, like all good IDs.
 	Id testutil.ID `json:"id"`
 }
+
+// GetId returns unexportedUser.Id, and is useful for accessing the field via an interface.
+func (v *unexportedUser) GetId() testutil.ID { return v.Id }
 
 func unexported(
 	client graphql.Client,

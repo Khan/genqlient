@@ -17,11 +17,25 @@ type CustomMarshalSliceResponse struct {
 	WithPointer                     bool `json:"withPointer"`
 }
 
+// GetAcceptsListOfListOfListsOfDates returns CustomMarshalSliceResponse.AcceptsListOfListOfListsOfDates, and is useful for accessing the field via an interface.
+func (v *CustomMarshalSliceResponse) GetAcceptsListOfListOfListsOfDates() bool {
+	return v.AcceptsListOfListOfListsOfDates
+}
+
+// GetWithPointer returns CustomMarshalSliceResponse.WithPointer, and is useful for accessing the field via an interface.
+func (v *CustomMarshalSliceResponse) GetWithPointer() bool { return v.WithPointer }
+
 // __CustomMarshalSliceInput is used internally by genqlient
 type __CustomMarshalSliceInput struct {
 	Datesss  [][][]time.Time  `json:"-"`
 	Datesssp [][][]*time.Time `json:"-"`
 }
+
+// GetDatesss returns __CustomMarshalSliceInput.Datesss, and is useful for accessing the field via an interface.
+func (v *__CustomMarshalSliceInput) GetDatesss() [][][]time.Time { return v.Datesss }
+
+// GetDatesssp returns __CustomMarshalSliceInput.Datesssp, and is useful for accessing the field via an interface.
+func (v *__CustomMarshalSliceInput) GetDatesssp() [][][]*time.Time { return v.Datesssp }
 
 func (v *__CustomMarshalSliceInput) UnmarshalJSON(b []byte) error {
 

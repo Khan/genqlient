@@ -34,11 +34,25 @@ type StructOptionResponse struct {
 	User StructOptionUser `json:"user"`
 }
 
+// GetRoot returns StructOptionResponse.Root, and is useful for accessing the field via an interface.
+func (v *StructOptionResponse) GetRoot() StructOptionRootTopic { return v.Root }
+
+// GetUser returns StructOptionResponse.User, and is useful for accessing the field via an interface.
+func (v *StructOptionResponse) GetUser() StructOptionUser { return v.User }
+
 // StructOptionRootTopic includes the requested fields of the GraphQL type Topic.
 type StructOptionRootTopic struct {
 	// ID is documented in the Content interface.
 	Id       testutil.ID                            `json:"id"`
 	Children []StructOptionRootTopicChildrenContent `json:"children"`
+}
+
+// GetId returns StructOptionRootTopic.Id, and is useful for accessing the field via an interface.
+func (v *StructOptionRootTopic) GetId() testutil.ID { return v.Id }
+
+// GetChildren returns StructOptionRootTopic.Children, and is useful for accessing the field via an interface.
+func (v *StructOptionRootTopic) GetChildren() []StructOptionRootTopicChildrenContent {
+	return v.Children
 }
 
 // StructOptionRootTopicChildrenContent includes the requested fields of the GraphQL type Content.
@@ -52,12 +66,36 @@ type StructOptionRootTopicChildrenContent struct {
 	Parent StructOptionRootTopicChildrenContentParentTopic `json:"parent"`
 }
 
+// GetTypename returns StructOptionRootTopicChildrenContent.Typename, and is useful for accessing the field via an interface.
+func (v *StructOptionRootTopicChildrenContent) GetTypename() string { return v.Typename }
+
+// GetId returns StructOptionRootTopicChildrenContent.Id, and is useful for accessing the field via an interface.
+func (v *StructOptionRootTopicChildrenContent) GetId() testutil.ID { return v.Id }
+
+// GetParent returns StructOptionRootTopicChildrenContent.Parent, and is useful for accessing the field via an interface.
+func (v *StructOptionRootTopicChildrenContent) GetParent() StructOptionRootTopicChildrenContentParentTopic {
+	return v.Parent
+}
+
 // StructOptionRootTopicChildrenContentParentTopic includes the requested fields of the GraphQL type Topic.
 type StructOptionRootTopicChildrenContentParentTopic struct {
 	// ID is documented in the Content interface.
 	Id                testutil.ID                                                               `json:"id"`
 	Children          []StructOptionRootTopicChildrenContentParentTopicChildrenContent          `json:"children"`
 	InterfaceChildren []StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenContent `json:"-"`
+}
+
+// GetId returns StructOptionRootTopicChildrenContentParentTopic.Id, and is useful for accessing the field via an interface.
+func (v *StructOptionRootTopicChildrenContentParentTopic) GetId() testutil.ID { return v.Id }
+
+// GetChildren returns StructOptionRootTopicChildrenContentParentTopic.Children, and is useful for accessing the field via an interface.
+func (v *StructOptionRootTopicChildrenContentParentTopic) GetChildren() []StructOptionRootTopicChildrenContentParentTopicChildrenContent {
+	return v.Children
+}
+
+// GetInterfaceChildren returns StructOptionRootTopicChildrenContentParentTopic.InterfaceChildren, and is useful for accessing the field via an interface.
+func (v *StructOptionRootTopicChildrenContentParentTopic) GetInterfaceChildren() []StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenContent {
+	return v.InterfaceChildren
 }
 
 func (v *StructOptionRootTopicChildrenContentParentTopic) UnmarshalJSON(b []byte) error {
@@ -151,11 +189,31 @@ type StructOptionRootTopicChildrenContentParentTopicChildrenContent struct {
 	Id testutil.ID `json:"id"`
 }
 
+// GetTypename returns StructOptionRootTopicChildrenContentParentTopicChildrenContent.Typename, and is useful for accessing the field via an interface.
+func (v *StructOptionRootTopicChildrenContentParentTopicChildrenContent) GetTypename() string {
+	return v.Typename
+}
+
+// GetId returns StructOptionRootTopicChildrenContentParentTopicChildrenContent.Id, and is useful for accessing the field via an interface.
+func (v *StructOptionRootTopicChildrenContentParentTopicChildrenContent) GetId() testutil.ID {
+	return v.Id
+}
+
 // StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenArticle includes the requested fields of the GraphQL type Article.
 type StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenArticle struct {
 	Typename string `json:"__typename"`
 	// ID is the identifier of the content.
 	Id testutil.ID `json:"id"`
+}
+
+// GetTypename returns StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenArticle.Typename, and is useful for accessing the field via an interface.
+func (v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenArticle) GetTypename() string {
+	return v.Typename
+}
+
+// GetId returns StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenArticle.Id, and is useful for accessing the field via an interface.
+func (v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenArticle) GetId() testutil.ID {
+	return v.Id
 }
 
 // StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenContent includes the requested fields of the GraphQL interface Content.
@@ -180,41 +238,9 @@ type StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenContent int
 
 func (v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenArticle) implementsGraphQLInterfaceStructOptionRootTopicChildrenContentParentTopicInterfaceChildrenContent() {
 }
-
-// GetTypename is a part of, and documented with, the interface StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenContent.
-func (v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenArticle) GetTypename() string {
-	return v.Typename
-}
-
-// GetId is a part of, and documented with, the interface StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenContent.
-func (v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenArticle) GetId() testutil.ID {
-	return v.Id
-}
-
 func (v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo) implementsGraphQLInterfaceStructOptionRootTopicChildrenContentParentTopicInterfaceChildrenContent() {
 }
-
-// GetTypename is a part of, and documented with, the interface StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenContent.
-func (v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo) GetTypename() string {
-	return v.Typename
-}
-
-// GetId is a part of, and documented with, the interface StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenContent.
-func (v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo) GetId() testutil.ID {
-	return v.Id
-}
-
 func (v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenTopic) implementsGraphQLInterfaceStructOptionRootTopicChildrenContentParentTopicInterfaceChildrenContent() {
-}
-
-// GetTypename is a part of, and documented with, the interface StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenContent.
-func (v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenTopic) GetTypename() string {
-	return v.Typename
-}
-
-// GetId is a part of, and documented with, the interface StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenContent.
-func (v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenTopic) GetId() testutil.ID {
-	return v.Id
 }
 
 func __unmarshalStructOptionRootTopicChildrenContentParentTopicInterfaceChildrenContent(b []byte, v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenContent) error {
@@ -296,12 +322,37 @@ type StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenTopic struc
 	Id testutil.ID `json:"id"`
 }
 
+// GetTypename returns StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenTopic.Typename, and is useful for accessing the field via an interface.
+func (v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenTopic) GetTypename() string {
+	return v.Typename
+}
+
+// GetId returns StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenTopic.Id, and is useful for accessing the field via an interface.
+func (v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenTopic) GetId() testutil.ID {
+	return v.Id
+}
+
 // StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo includes the requested fields of the GraphQL type Video.
 type StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo struct {
 	Typename string `json:"__typename"`
 	// ID is the identifier of the content.
 	Id          testutil.ID `json:"id"`
 	VideoFields `json:"-"`
+}
+
+// GetTypename returns StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo.Typename, and is useful for accessing the field via an interface.
+func (v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo) GetTypename() string {
+	return v.Typename
+}
+
+// GetId returns StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo.Id, and is useful for accessing the field via an interface.
+func (v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo) GetId() testutil.ID {
+	return v.Id
+}
+
+// GetDuration returns StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo.Duration, and is useful for accessing the field via an interface.
+func (v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo) GetDuration() int {
+	return v.VideoFields.Duration
 }
 
 func (v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo) UnmarshalJSON(b []byte) error {
@@ -362,10 +413,16 @@ type StructOptionUser struct {
 	Roles []Role `json:"roles"`
 }
 
+// GetRoles returns StructOptionUser.Roles, and is useful for accessing the field via an interface.
+func (v *StructOptionUser) GetRoles() []Role { return v.Roles }
+
 // VideoFields includes the GraphQL fields of Video requested by the fragment VideoFields.
 type VideoFields struct {
 	Duration int `json:"duration"`
 }
+
+// GetDuration returns VideoFields.Duration, and is useful for accessing the field via an interface.
+func (v *VideoFields) GetDuration() int { return v.Duration }
 
 func StructOption(
 	client graphql.Client,

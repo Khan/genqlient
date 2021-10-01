@@ -16,6 +16,9 @@ type GetPokemonSiblingsResponse struct {
 	User GetPokemonSiblingsUser `json:"user"`
 }
 
+// GetUser returns GetPokemonSiblingsResponse.User, and is useful for accessing the field via an interface.
+func (v *GetPokemonSiblingsResponse) GetUser() GetPokemonSiblingsUser { return v.User }
+
 // GetPokemonSiblingsUser includes the requested fields of the GraphQL type User.
 // The GraphQL type's documentation follows.
 //
@@ -31,16 +34,42 @@ type GetPokemonSiblingsUser struct {
 	GenqlientPokemon []GetPokemonSiblingsUserGenqlientPokemon `json:"genqlientPokemon"`
 }
 
+// GetId returns GetPokemonSiblingsUser.Id, and is useful for accessing the field via an interface.
+func (v *GetPokemonSiblingsUser) GetId() string { return v.Id }
+
+// GetRoles returns GetPokemonSiblingsUser.Roles, and is useful for accessing the field via an interface.
+func (v *GetPokemonSiblingsUser) GetRoles() []string { return v.Roles }
+
+// GetName returns GetPokemonSiblingsUser.Name, and is useful for accessing the field via an interface.
+func (v *GetPokemonSiblingsUser) GetName() string { return v.Name }
+
+// GetPokemon returns GetPokemonSiblingsUser.Pokemon, and is useful for accessing the field via an interface.
+func (v *GetPokemonSiblingsUser) GetPokemon() []testutil.Pokemon { return v.Pokemon }
+
+// GetGenqlientPokemon returns GetPokemonSiblingsUser.GenqlientPokemon, and is useful for accessing the field via an interface.
+func (v *GetPokemonSiblingsUser) GetGenqlientPokemon() []GetPokemonSiblingsUserGenqlientPokemon {
+	return v.GenqlientPokemon
+}
+
 // GetPokemonSiblingsUserGenqlientPokemon includes the requested fields of the GraphQL type Pokemon.
 type GetPokemonSiblingsUserGenqlientPokemon struct {
 	Species string `json:"species"`
 	Level   int    `json:"level"`
 }
 
+// GetSpecies returns GetPokemonSiblingsUserGenqlientPokemon.Species, and is useful for accessing the field via an interface.
+func (v *GetPokemonSiblingsUserGenqlientPokemon) GetSpecies() string { return v.Species }
+
+// GetLevel returns GetPokemonSiblingsUserGenqlientPokemon.Level, and is useful for accessing the field via an interface.
+func (v *GetPokemonSiblingsUserGenqlientPokemon) GetLevel() int { return v.Level }
+
 // __GetPokemonSiblingsInput is used internally by genqlient
 type __GetPokemonSiblingsInput struct {
 	Input testutil.Pokemon `json:"input"`
 }
+
+// GetInput returns __GetPokemonSiblingsInput.Input, and is useful for accessing the field via an interface.
+func (v *__GetPokemonSiblingsInput) GetInput() testutil.Pokemon { return v.Input }
 
 func GetPokemonSiblings(
 	client graphql.Client,

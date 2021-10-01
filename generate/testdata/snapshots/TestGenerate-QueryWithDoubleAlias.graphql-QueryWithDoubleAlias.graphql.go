@@ -16,6 +16,9 @@ type QueryWithDoubleAliasResponse struct {
 	User QueryWithDoubleAliasUser `json:"user"`
 }
 
+// GetUser returns QueryWithDoubleAliasResponse.User, and is useful for accessing the field via an interface.
+func (v *QueryWithDoubleAliasResponse) GetUser() QueryWithDoubleAliasUser { return v.User }
+
 // QueryWithDoubleAliasUser includes the requested fields of the GraphQL type User.
 // The GraphQL type's documentation follows.
 //
@@ -30,6 +33,12 @@ type QueryWithDoubleAliasUser struct {
 	// It is stable, unique, and opaque, like all good IDs.
 	AlsoID testutil.ID `json:"AlsoID"`
 }
+
+// GetID returns QueryWithDoubleAliasUser.ID, and is useful for accessing the field via an interface.
+func (v *QueryWithDoubleAliasUser) GetID() testutil.ID { return v.ID }
+
+// GetAlsoID returns QueryWithDoubleAliasUser.AlsoID, and is useful for accessing the field via an interface.
+func (v *QueryWithDoubleAliasUser) GetAlsoID() testutil.ID { return v.AlsoID }
 
 func QueryWithDoubleAlias(
 	client graphql.Client,

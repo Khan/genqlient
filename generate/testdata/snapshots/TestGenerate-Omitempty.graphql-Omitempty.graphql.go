@@ -23,6 +23,18 @@ type OmitEmptyQueryResponse struct {
 	Convert2     time.Time                 `json:"convert2"`
 }
 
+// GetUser returns OmitEmptyQueryResponse.User, and is useful for accessing the field via an interface.
+func (v *OmitEmptyQueryResponse) GetUser() OmitEmptyQueryUser { return v.User }
+
+// GetUsers returns OmitEmptyQueryResponse.Users, and is useful for accessing the field via an interface.
+func (v *OmitEmptyQueryResponse) GetUsers() []OmitEmptyQueryUsersUser { return v.Users }
+
+// GetMaybeConvert returns OmitEmptyQueryResponse.MaybeConvert, and is useful for accessing the field via an interface.
+func (v *OmitEmptyQueryResponse) GetMaybeConvert() time.Time { return v.MaybeConvert }
+
+// GetConvert2 returns OmitEmptyQueryResponse.Convert2, and is useful for accessing the field via an interface.
+func (v *OmitEmptyQueryResponse) GetConvert2() time.Time { return v.Convert2 }
+
 // OmitEmptyQueryUser includes the requested fields of the GraphQL type User.
 // The GraphQL type's documentation follows.
 //
@@ -34,6 +46,9 @@ type OmitEmptyQueryUser struct {
 	Id testutil.ID `json:"id"`
 }
 
+// GetId returns OmitEmptyQueryUser.Id, and is useful for accessing the field via an interface.
+func (v *OmitEmptyQueryUser) GetId() testutil.ID { return v.Id }
+
 // OmitEmptyQueryUsersUser includes the requested fields of the GraphQL type User.
 // The GraphQL type's documentation follows.
 //
@@ -44,6 +59,9 @@ type OmitEmptyQueryUsersUser struct {
 	// It is stable, unique, and opaque, like all good IDs.
 	Id testutil.ID `json:"id"`
 }
+
+// GetId returns OmitEmptyQueryUsersUser.Id, and is useful for accessing the field via an interface.
+func (v *OmitEmptyQueryUsersUser) GetId() testutil.ID { return v.Id }
 
 // Role is a type a user may have.
 type Role string
@@ -74,6 +92,27 @@ type UserQueryInput struct {
 	HasPokemon testutil.Pokemon `json:"hasPokemon,omitempty"`
 	Birthdate  time.Time        `json:"-"`
 }
+
+// GetEmail returns UserQueryInput.Email, and is useful for accessing the field via an interface.
+func (v *UserQueryInput) GetEmail() string { return v.Email }
+
+// GetName returns UserQueryInput.Name, and is useful for accessing the field via an interface.
+func (v *UserQueryInput) GetName() string { return v.Name }
+
+// GetId returns UserQueryInput.Id, and is useful for accessing the field via an interface.
+func (v *UserQueryInput) GetId() testutil.ID { return v.Id }
+
+// GetRole returns UserQueryInput.Role, and is useful for accessing the field via an interface.
+func (v *UserQueryInput) GetRole() Role { return v.Role }
+
+// GetNames returns UserQueryInput.Names, and is useful for accessing the field via an interface.
+func (v *UserQueryInput) GetNames() []string { return v.Names }
+
+// GetHasPokemon returns UserQueryInput.HasPokemon, and is useful for accessing the field via an interface.
+func (v *UserQueryInput) GetHasPokemon() testutil.Pokemon { return v.HasPokemon }
+
+// GetBirthdate returns UserQueryInput.Birthdate, and is useful for accessing the field via an interface.
+func (v *UserQueryInput) GetBirthdate() time.Time { return v.Birthdate }
 
 func (v *UserQueryInput) UnmarshalJSON(b []byte) error {
 
@@ -164,6 +203,21 @@ type __OmitEmptyQueryInput struct {
 	Tz            string           `json:"tz,omitempty"`
 	TzNoOmitEmpty string           `json:"tzNoOmitEmpty"`
 }
+
+// GetQuery returns __OmitEmptyQueryInput.Query, and is useful for accessing the field via an interface.
+func (v *__OmitEmptyQueryInput) GetQuery() UserQueryInput { return v.Query }
+
+// GetQueries returns __OmitEmptyQueryInput.Queries, and is useful for accessing the field via an interface.
+func (v *__OmitEmptyQueryInput) GetQueries() []UserQueryInput { return v.Queries }
+
+// GetDt returns __OmitEmptyQueryInput.Dt, and is useful for accessing the field via an interface.
+func (v *__OmitEmptyQueryInput) GetDt() time.Time { return v.Dt }
+
+// GetTz returns __OmitEmptyQueryInput.Tz, and is useful for accessing the field via an interface.
+func (v *__OmitEmptyQueryInput) GetTz() string { return v.Tz }
+
+// GetTzNoOmitEmpty returns __OmitEmptyQueryInput.TzNoOmitEmpty, and is useful for accessing the field via an interface.
+func (v *__OmitEmptyQueryInput) GetTzNoOmitEmpty() string { return v.TzNoOmitEmpty }
 
 func OmitEmptyQuery(
 	client graphql.Client,

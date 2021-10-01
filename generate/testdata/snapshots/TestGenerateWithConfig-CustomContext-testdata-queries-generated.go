@@ -21,6 +21,9 @@ type SimpleQueryResponse struct {
 	User SimpleQueryUser `json:"user"`
 }
 
+// GetUser returns SimpleQueryResponse.User, and is useful for accessing the field via an interface.
+func (v *SimpleQueryResponse) GetUser() SimpleQueryUser { return v.User }
+
 // SimpleQueryUser includes the requested fields of the GraphQL type User.
 // The GraphQL type's documentation follows.
 //
@@ -31,6 +34,9 @@ type SimpleQueryUser struct {
 	// It is stable, unique, and opaque, like all good IDs.
 	Id string `json:"id"`
 }
+
+// GetId returns SimpleQueryUser.Id, and is useful for accessing the field via an interface.
+func (v *SimpleQueryUser) GetId() string { return v.Id }
 
 func SimpleQuery(
 	ctx testutil.MyContext,

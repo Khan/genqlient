@@ -28,6 +28,9 @@ type UsesEnumTwiceQueryMeUser struct {
 	Roles []Role `json:"roles"`
 }
 
+// GetRoles returns UsesEnumTwiceQueryMeUser.Roles, and is useful for accessing the field via an interface.
+func (v *UsesEnumTwiceQueryMeUser) GetRoles() []Role { return v.Roles }
+
 // UsesEnumTwiceQueryOtherUser includes the requested fields of the GraphQL type User.
 // The GraphQL type's documentation follows.
 //
@@ -35,6 +38,9 @@ type UsesEnumTwiceQueryMeUser struct {
 type UsesEnumTwiceQueryOtherUser struct {
 	Roles []Role `json:"roles"`
 }
+
+// GetRoles returns UsesEnumTwiceQueryOtherUser.Roles, and is useful for accessing the field via an interface.
+func (v *UsesEnumTwiceQueryOtherUser) GetRoles() []Role { return v.Roles }
 
 // UsesEnumTwiceQueryResponse is returned by UsesEnumTwiceQuery on success.
 type UsesEnumTwiceQueryResponse struct {
@@ -49,6 +55,12 @@ type UsesEnumTwiceQueryResponse struct {
 	// If query is null, returns the current user.
 	OtherUser UsesEnumTwiceQueryOtherUser `json:"OtherUser"`
 }
+
+// GetMe returns UsesEnumTwiceQueryResponse.Me, and is useful for accessing the field via an interface.
+func (v *UsesEnumTwiceQueryResponse) GetMe() UsesEnumTwiceQueryMeUser { return v.Me }
+
+// GetOtherUser returns UsesEnumTwiceQueryResponse.OtherUser, and is useful for accessing the field via an interface.
+func (v *UsesEnumTwiceQueryResponse) GetOtherUser() UsesEnumTwiceQueryOtherUser { return v.OtherUser }
 
 func UsesEnumTwiceQuery(
 	client graphql.Client,

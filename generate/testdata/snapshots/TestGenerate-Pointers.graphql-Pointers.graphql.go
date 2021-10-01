@@ -22,6 +22,9 @@ type PointersQueryOtherUser struct {
 	Id testutil.ID `json:"id"`
 }
 
+// GetId returns PointersQueryOtherUser.Id, and is useful for accessing the field via an interface.
+func (v *PointersQueryOtherUser) GetId() testutil.ID { return v.Id }
+
 // PointersQueryResponse is returned by PointersQuery on success.
 type PointersQueryResponse struct {
 	// user looks up a user by some stuff.
@@ -37,6 +40,15 @@ type PointersQueryResponse struct {
 	MaybeConvert *time.Time              `json:"maybeConvert"`
 }
 
+// GetUser returns PointersQueryResponse.User, and is useful for accessing the field via an interface.
+func (v *PointersQueryResponse) GetUser() *PointersQueryUser { return v.User }
+
+// GetOtherUser returns PointersQueryResponse.OtherUser, and is useful for accessing the field via an interface.
+func (v *PointersQueryResponse) GetOtherUser() *PointersQueryOtherUser { return v.OtherUser }
+
+// GetMaybeConvert returns PointersQueryResponse.MaybeConvert, and is useful for accessing the field via an interface.
+func (v *PointersQueryResponse) GetMaybeConvert() *time.Time { return v.MaybeConvert }
+
 // PointersQueryUser includes the requested fields of the GraphQL type User.
 // The GraphQL type's documentation follows.
 //
@@ -51,6 +63,21 @@ type PointersQueryUser struct {
 	Emails      []*string    `json:"emails"`
 	EmailsNoPtr []string     `json:"emailsNoPtr"`
 }
+
+// GetId returns PointersQueryUser.Id, and is useful for accessing the field via an interface.
+func (v *PointersQueryUser) GetId() *testutil.ID { return v.Id }
+
+// GetRoles returns PointersQueryUser.Roles, and is useful for accessing the field via an interface.
+func (v *PointersQueryUser) GetRoles() []*Role { return v.Roles }
+
+// GetName returns PointersQueryUser.Name, and is useful for accessing the field via an interface.
+func (v *PointersQueryUser) GetName() *string { return v.Name }
+
+// GetEmails returns PointersQueryUser.Emails, and is useful for accessing the field via an interface.
+func (v *PointersQueryUser) GetEmails() []*string { return v.Emails }
+
+// GetEmailsNoPtr returns PointersQueryUser.EmailsNoPtr, and is useful for accessing the field via an interface.
+func (v *PointersQueryUser) GetEmailsNoPtr() []string { return v.EmailsNoPtr }
 
 // Role is a type a user may have.
 type Role string
@@ -81,6 +108,27 @@ type UserQueryInput struct {
 	HasPokemon *testutil.Pokemon `json:"hasPokemon"`
 	Birthdate  *time.Time        `json:"-"`
 }
+
+// GetEmail returns UserQueryInput.Email, and is useful for accessing the field via an interface.
+func (v *UserQueryInput) GetEmail() *string { return v.Email }
+
+// GetName returns UserQueryInput.Name, and is useful for accessing the field via an interface.
+func (v *UserQueryInput) GetName() *string { return v.Name }
+
+// GetId returns UserQueryInput.Id, and is useful for accessing the field via an interface.
+func (v *UserQueryInput) GetId() testutil.ID { return v.Id }
+
+// GetRole returns UserQueryInput.Role, and is useful for accessing the field via an interface.
+func (v *UserQueryInput) GetRole() *Role { return v.Role }
+
+// GetNames returns UserQueryInput.Names, and is useful for accessing the field via an interface.
+func (v *UserQueryInput) GetNames() []*string { return v.Names }
+
+// GetHasPokemon returns UserQueryInput.HasPokemon, and is useful for accessing the field via an interface.
+func (v *UserQueryInput) GetHasPokemon() *testutil.Pokemon { return v.HasPokemon }
+
+// GetBirthdate returns UserQueryInput.Birthdate, and is useful for accessing the field via an interface.
+func (v *UserQueryInput) GetBirthdate() *time.Time { return v.Birthdate }
 
 func (v *UserQueryInput) UnmarshalJSON(b []byte) error {
 
@@ -172,6 +220,15 @@ type __PointersQueryInput struct {
 	Dt    time.Time       `json:"dt"`
 	Tz    *string         `json:"tz"`
 }
+
+// GetQuery returns __PointersQueryInput.Query, and is useful for accessing the field via an interface.
+func (v *__PointersQueryInput) GetQuery() *UserQueryInput { return v.Query }
+
+// GetDt returns __PointersQueryInput.Dt, and is useful for accessing the field via an interface.
+func (v *__PointersQueryInput) GetDt() time.Time { return v.Dt }
+
+// GetTz returns __PointersQueryInput.Tz, and is useful for accessing the field via an interface.
+func (v *__PointersQueryInput) GetTz() *string { return v.Tz }
 
 func PointersQuery(
 	client graphql.Client,

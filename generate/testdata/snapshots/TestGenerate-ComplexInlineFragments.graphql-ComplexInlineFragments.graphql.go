@@ -16,10 +16,28 @@ type ComplexInlineFragmentsConflictingStuffArticle struct {
 	Thumbnail ComplexInlineFragmentsConflictingStuffArticleThumbnailStuffThumbnail `json:"thumbnail"`
 }
 
+// GetTypename returns ComplexInlineFragmentsConflictingStuffArticle.Typename, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsConflictingStuffArticle) GetTypename() string { return v.Typename }
+
+// GetThumbnail returns ComplexInlineFragmentsConflictingStuffArticle.Thumbnail, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsConflictingStuffArticle) GetThumbnail() ComplexInlineFragmentsConflictingStuffArticleThumbnailStuffThumbnail {
+	return v.Thumbnail
+}
+
 // ComplexInlineFragmentsConflictingStuffArticleThumbnailStuffThumbnail includes the requested fields of the GraphQL type StuffThumbnail.
 type ComplexInlineFragmentsConflictingStuffArticleThumbnailStuffThumbnail struct {
 	Id           testutil.ID `json:"id"`
 	ThumbnailUrl string      `json:"thumbnailUrl"`
+}
+
+// GetId returns ComplexInlineFragmentsConflictingStuffArticleThumbnailStuffThumbnail.Id, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsConflictingStuffArticleThumbnailStuffThumbnail) GetId() testutil.ID {
+	return v.Id
+}
+
+// GetThumbnailUrl returns ComplexInlineFragmentsConflictingStuffArticleThumbnailStuffThumbnail.ThumbnailUrl, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsConflictingStuffArticleThumbnailStuffThumbnail) GetThumbnailUrl() string {
+	return v.ThumbnailUrl
 }
 
 // ComplexInlineFragmentsConflictingStuffContent includes the requested fields of the GraphQL interface Content.
@@ -39,21 +57,10 @@ type ComplexInlineFragmentsConflictingStuffContent interface {
 
 func (v *ComplexInlineFragmentsConflictingStuffArticle) implementsGraphQLInterfaceComplexInlineFragmentsConflictingStuffContent() {
 }
-
-// GetTypename is a part of, and documented with, the interface ComplexInlineFragmentsConflictingStuffContent.
-func (v *ComplexInlineFragmentsConflictingStuffArticle) GetTypename() string { return v.Typename }
-
 func (v *ComplexInlineFragmentsConflictingStuffVideo) implementsGraphQLInterfaceComplexInlineFragmentsConflictingStuffContent() {
 }
-
-// GetTypename is a part of, and documented with, the interface ComplexInlineFragmentsConflictingStuffContent.
-func (v *ComplexInlineFragmentsConflictingStuffVideo) GetTypename() string { return v.Typename }
-
 func (v *ComplexInlineFragmentsConflictingStuffTopic) implementsGraphQLInterfaceComplexInlineFragmentsConflictingStuffContent() {
 }
-
-// GetTypename is a part of, and documented with, the interface ComplexInlineFragmentsConflictingStuffContent.
-func (v *ComplexInlineFragmentsConflictingStuffTopic) GetTypename() string { return v.Typename }
 
 func __unmarshalComplexInlineFragmentsConflictingStuffContent(b []byte, v *ComplexInlineFragmentsConflictingStuffContent) error {
 	if string(b) == "null" {
@@ -128,10 +135,21 @@ type ComplexInlineFragmentsConflictingStuffTopic struct {
 	Typename string `json:"__typename"`
 }
 
+// GetTypename returns ComplexInlineFragmentsConflictingStuffTopic.Typename, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsConflictingStuffTopic) GetTypename() string { return v.Typename }
+
 // ComplexInlineFragmentsConflictingStuffVideo includes the requested fields of the GraphQL type Video.
 type ComplexInlineFragmentsConflictingStuffVideo struct {
 	Typename  string                                               `json:"__typename"`
 	Thumbnail ComplexInlineFragmentsConflictingStuffVideoThumbnail `json:"thumbnail"`
+}
+
+// GetTypename returns ComplexInlineFragmentsConflictingStuffVideo.Typename, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsConflictingStuffVideo) GetTypename() string { return v.Typename }
+
+// GetThumbnail returns ComplexInlineFragmentsConflictingStuffVideo.Thumbnail, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsConflictingStuffVideo) GetThumbnail() ComplexInlineFragmentsConflictingStuffVideoThumbnail {
+	return v.Thumbnail
 }
 
 // ComplexInlineFragmentsConflictingStuffVideoThumbnail includes the requested fields of the GraphQL type Thumbnail.
@@ -140,10 +158,21 @@ type ComplexInlineFragmentsConflictingStuffVideoThumbnail struct {
 	TimestampSec int         `json:"timestampSec"`
 }
 
+// GetId returns ComplexInlineFragmentsConflictingStuffVideoThumbnail.Id, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsConflictingStuffVideoThumbnail) GetId() testutil.ID { return v.Id }
+
+// GetTimestampSec returns ComplexInlineFragmentsConflictingStuffVideoThumbnail.TimestampSec, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsConflictingStuffVideoThumbnail) GetTimestampSec() int {
+	return v.TimestampSec
+}
+
 // ComplexInlineFragmentsNestedStuffArticle includes the requested fields of the GraphQL type Article.
 type ComplexInlineFragmentsNestedStuffArticle struct {
 	Typename string `json:"__typename"`
 }
+
+// GetTypename returns ComplexInlineFragmentsNestedStuffArticle.Typename, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsNestedStuffArticle) GetTypename() string { return v.Typename }
 
 // ComplexInlineFragmentsNestedStuffContent includes the requested fields of the GraphQL interface Content.
 //
@@ -162,21 +191,10 @@ type ComplexInlineFragmentsNestedStuffContent interface {
 
 func (v *ComplexInlineFragmentsNestedStuffArticle) implementsGraphQLInterfaceComplexInlineFragmentsNestedStuffContent() {
 }
-
-// GetTypename is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffContent.
-func (v *ComplexInlineFragmentsNestedStuffArticle) GetTypename() string { return v.Typename }
-
 func (v *ComplexInlineFragmentsNestedStuffVideo) implementsGraphQLInterfaceComplexInlineFragmentsNestedStuffContent() {
 }
-
-// GetTypename is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffContent.
-func (v *ComplexInlineFragmentsNestedStuffVideo) GetTypename() string { return v.Typename }
-
 func (v *ComplexInlineFragmentsNestedStuffTopic) implementsGraphQLInterfaceComplexInlineFragmentsNestedStuffContent() {
 }
-
-// GetTypename is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffContent.
-func (v *ComplexInlineFragmentsNestedStuffTopic) GetTypename() string { return v.Typename }
 
 func __unmarshalComplexInlineFragmentsNestedStuffContent(b []byte, v *ComplexInlineFragmentsNestedStuffContent) error {
 	if string(b) == "null" {
@@ -254,6 +272,14 @@ func __marshalComplexInlineFragmentsNestedStuffContent(v *ComplexInlineFragments
 type ComplexInlineFragmentsNestedStuffTopic struct {
 	Typename string                                                  `json:"__typename"`
 	Children []ComplexInlineFragmentsNestedStuffTopicChildrenContent `json:"-"`
+}
+
+// GetTypename returns ComplexInlineFragmentsNestedStuffTopic.Typename, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsNestedStuffTopic) GetTypename() string { return v.Typename }
+
+// GetChildren returns ComplexInlineFragmentsNestedStuffTopic.Children, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsNestedStuffTopic) GetChildren() []ComplexInlineFragmentsNestedStuffTopicChildrenContent {
+	return v.Children
 }
 
 func (v *ComplexInlineFragmentsNestedStuffTopic) UnmarshalJSON(b []byte) error {
@@ -343,9 +369,30 @@ type ComplexInlineFragmentsNestedStuffTopicChildrenArticle struct {
 	Parent ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentTopic `json:"parent"`
 }
 
+// GetTypename returns ComplexInlineFragmentsNestedStuffTopicChildrenArticle.Typename, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticle) GetTypename() string {
+	return v.Typename
+}
+
+// GetId returns ComplexInlineFragmentsNestedStuffTopicChildrenArticle.Id, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticle) GetId() testutil.ID { return v.Id }
+
+// GetText returns ComplexInlineFragmentsNestedStuffTopicChildrenArticle.Text, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticle) GetText() string { return v.Text }
+
+// GetParent returns ComplexInlineFragmentsNestedStuffTopicChildrenArticle.Parent, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticle) GetParent() ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentTopic {
+	return v.Parent
+}
+
 // ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopic includes the requested fields of the GraphQL type Topic.
 type ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopic struct {
 	Children []ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent `json:"-"`
+}
+
+// GetChildren returns ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopic.Children, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopic) GetChildren() []ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent {
+	return v.Children
 }
 
 func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopic) UnmarshalJSON(b []byte) error {
@@ -431,6 +478,21 @@ type ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTop
 	Name string      `json:"name"`
 }
 
+// GetTypename returns ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenArticle.Typename, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenArticle) GetTypename() string {
+	return v.Typename
+}
+
+// GetId returns ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenArticle.Id, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenArticle) GetId() testutil.ID {
+	return v.Id
+}
+
+// GetName returns ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenArticle.Name, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenArticle) GetName() string {
+	return v.Name
+}
+
 // ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent includes the requested fields of the GraphQL interface Content.
 //
 // ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent is implemented by the following types:
@@ -455,56 +517,9 @@ type ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTop
 
 func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenArticle) implementsGraphQLInterfaceComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent() {
 }
-
-// GetTypename is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent.
-func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenArticle) GetTypename() string {
-	return v.Typename
-}
-
-// GetId is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent.
-func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenArticle) GetId() testutil.ID {
-	return v.Id
-}
-
-// GetName is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent.
-func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenArticle) GetName() string {
-	return v.Name
-}
-
 func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenVideo) implementsGraphQLInterfaceComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent() {
 }
-
-// GetTypename is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent.
-func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenVideo) GetTypename() string {
-	return v.Typename
-}
-
-// GetId is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent.
-func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenVideo) GetId() testutil.ID {
-	return v.Id
-}
-
-// GetName is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent.
-func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenVideo) GetName() string {
-	return v.Name
-}
-
 func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenTopic) implementsGraphQLInterfaceComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent() {
-}
-
-// GetTypename is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent.
-func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenTopic) GetTypename() string {
-	return v.Typename
-}
-
-// GetId is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent.
-func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenTopic) GetId() testutil.ID {
-	return v.Id
-}
-
-// GetName is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent.
-func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenTopic) GetName() string {
-	return v.Name
 }
 
 func __unmarshalComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent(b []byte, v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent) error {
@@ -583,6 +598,21 @@ type ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTop
 	Name string      `json:"name"`
 }
 
+// GetTypename returns ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenTopic.Typename, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenTopic) GetTypename() string {
+	return v.Typename
+}
+
+// GetId returns ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenTopic.Id, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenTopic) GetId() testutil.ID {
+	return v.Id
+}
+
+// GetName returns ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenTopic.Name, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenTopic) GetName() string {
+	return v.Name
+}
+
 // ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenVideo includes the requested fields of the GraphQL type Video.
 type ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenVideo struct {
 	Typename string `json:"__typename"`
@@ -591,10 +621,35 @@ type ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTop
 	Name string      `json:"name"`
 }
 
+// GetTypename returns ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenVideo.Typename, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenVideo) GetTypename() string {
+	return v.Typename
+}
+
+// GetId returns ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenVideo.Id, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenVideo) GetId() testutil.ID {
+	return v.Id
+}
+
+// GetName returns ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenVideo.Name, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenVideo) GetName() string {
+	return v.Name
+}
+
 // ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentTopic includes the requested fields of the GraphQL type Topic.
 type ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentTopic struct {
 	Name   string                                                                        `json:"name"`
 	Parent ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopic `json:"parent"`
+}
+
+// GetName returns ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentTopic.Name, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentTopic) GetName() string {
+	return v.Name
+}
+
+// GetParent returns ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentTopic.Parent, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentTopic) GetParent() ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopic {
+	return v.Parent
 }
 
 // ComplexInlineFragmentsNestedStuffTopicChildrenContent includes the requested fields of the GraphQL interface Content.
@@ -619,32 +674,10 @@ type ComplexInlineFragmentsNestedStuffTopicChildrenContent interface {
 
 func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticle) implementsGraphQLInterfaceComplexInlineFragmentsNestedStuffTopicChildrenContent() {
 }
-
-// GetTypename is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffTopicChildrenContent.
-func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticle) GetTypename() string {
-	return v.Typename
-}
-
-// GetId is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffTopicChildrenContent.
-func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticle) GetId() testutil.ID { return v.Id }
-
 func (v *ComplexInlineFragmentsNestedStuffTopicChildrenVideo) implementsGraphQLInterfaceComplexInlineFragmentsNestedStuffTopicChildrenContent() {
 }
-
-// GetTypename is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffTopicChildrenContent.
-func (v *ComplexInlineFragmentsNestedStuffTopicChildrenVideo) GetTypename() string { return v.Typename }
-
-// GetId is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffTopicChildrenContent.
-func (v *ComplexInlineFragmentsNestedStuffTopicChildrenVideo) GetId() testutil.ID { return v.Id }
-
 func (v *ComplexInlineFragmentsNestedStuffTopicChildrenTopic) implementsGraphQLInterfaceComplexInlineFragmentsNestedStuffTopicChildrenContent() {
 }
-
-// GetTypename is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffTopicChildrenContent.
-func (v *ComplexInlineFragmentsNestedStuffTopicChildrenTopic) GetTypename() string { return v.Typename }
-
-// GetId is a part of, and documented with, the interface ComplexInlineFragmentsNestedStuffTopicChildrenContent.
-func (v *ComplexInlineFragmentsNestedStuffTopicChildrenTopic) GetId() testutil.ID { return v.Id }
 
 func __unmarshalComplexInlineFragmentsNestedStuffTopicChildrenContent(b []byte, v *ComplexInlineFragmentsNestedStuffTopicChildrenContent) error {
 	if string(b) == "null" {
@@ -721,6 +754,12 @@ type ComplexInlineFragmentsNestedStuffTopicChildrenTopic struct {
 	Id testutil.ID `json:"id"`
 }
 
+// GetTypename returns ComplexInlineFragmentsNestedStuffTopicChildrenTopic.Typename, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenTopic) GetTypename() string { return v.Typename }
+
+// GetId returns ComplexInlineFragmentsNestedStuffTopicChildrenTopic.Id, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenTopic) GetId() testutil.ID { return v.Id }
+
 // ComplexInlineFragmentsNestedStuffTopicChildrenVideo includes the requested fields of the GraphQL type Video.
 type ComplexInlineFragmentsNestedStuffTopicChildrenVideo struct {
 	Typename string `json:"__typename"`
@@ -728,10 +767,19 @@ type ComplexInlineFragmentsNestedStuffTopicChildrenVideo struct {
 	Id testutil.ID `json:"id"`
 }
 
+// GetTypename returns ComplexInlineFragmentsNestedStuffTopicChildrenVideo.Typename, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenVideo) GetTypename() string { return v.Typename }
+
+// GetId returns ComplexInlineFragmentsNestedStuffTopicChildrenVideo.Id, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenVideo) GetId() testutil.ID { return v.Id }
+
 // ComplexInlineFragmentsNestedStuffVideo includes the requested fields of the GraphQL type Video.
 type ComplexInlineFragmentsNestedStuffVideo struct {
 	Typename string `json:"__typename"`
 }
+
+// GetTypename returns ComplexInlineFragmentsNestedStuffVideo.Typename, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsNestedStuffVideo) GetTypename() string { return v.Typename }
 
 // ComplexInlineFragmentsRandomItemArticle includes the requested fields of the GraphQL type Article.
 type ComplexInlineFragmentsRandomItemArticle struct {
@@ -741,6 +789,18 @@ type ComplexInlineFragmentsRandomItemArticle struct {
 	Text string      `json:"text"`
 	Name string      `json:"name"`
 }
+
+// GetTypename returns ComplexInlineFragmentsRandomItemArticle.Typename, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsRandomItemArticle) GetTypename() string { return v.Typename }
+
+// GetId returns ComplexInlineFragmentsRandomItemArticle.Id, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsRandomItemArticle) GetId() testutil.ID { return v.Id }
+
+// GetText returns ComplexInlineFragmentsRandomItemArticle.Text, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsRandomItemArticle) GetText() string { return v.Text }
+
+// GetName returns ComplexInlineFragmentsRandomItemArticle.Name, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsRandomItemArticle) GetName() string { return v.Name }
 
 // ComplexInlineFragmentsRandomItemContent includes the requested fields of the GraphQL interface Content.
 //
@@ -766,39 +826,10 @@ type ComplexInlineFragmentsRandomItemContent interface {
 
 func (v *ComplexInlineFragmentsRandomItemArticle) implementsGraphQLInterfaceComplexInlineFragmentsRandomItemContent() {
 }
-
-// GetTypename is a part of, and documented with, the interface ComplexInlineFragmentsRandomItemContent.
-func (v *ComplexInlineFragmentsRandomItemArticle) GetTypename() string { return v.Typename }
-
-// GetId is a part of, and documented with, the interface ComplexInlineFragmentsRandomItemContent.
-func (v *ComplexInlineFragmentsRandomItemArticle) GetId() testutil.ID { return v.Id }
-
-// GetName is a part of, and documented with, the interface ComplexInlineFragmentsRandomItemContent.
-func (v *ComplexInlineFragmentsRandomItemArticle) GetName() string { return v.Name }
-
 func (v *ComplexInlineFragmentsRandomItemVideo) implementsGraphQLInterfaceComplexInlineFragmentsRandomItemContent() {
 }
-
-// GetTypename is a part of, and documented with, the interface ComplexInlineFragmentsRandomItemContent.
-func (v *ComplexInlineFragmentsRandomItemVideo) GetTypename() string { return v.Typename }
-
-// GetId is a part of, and documented with, the interface ComplexInlineFragmentsRandomItemContent.
-func (v *ComplexInlineFragmentsRandomItemVideo) GetId() testutil.ID { return v.Id }
-
-// GetName is a part of, and documented with, the interface ComplexInlineFragmentsRandomItemContent.
-func (v *ComplexInlineFragmentsRandomItemVideo) GetName() string { return v.Name }
-
 func (v *ComplexInlineFragmentsRandomItemTopic) implementsGraphQLInterfaceComplexInlineFragmentsRandomItemContent() {
 }
-
-// GetTypename is a part of, and documented with, the interface ComplexInlineFragmentsRandomItemContent.
-func (v *ComplexInlineFragmentsRandomItemTopic) GetTypename() string { return v.Typename }
-
-// GetId is a part of, and documented with, the interface ComplexInlineFragmentsRandomItemContent.
-func (v *ComplexInlineFragmentsRandomItemTopic) GetId() testutil.ID { return v.Id }
-
-// GetName is a part of, and documented with, the interface ComplexInlineFragmentsRandomItemContent.
-func (v *ComplexInlineFragmentsRandomItemTopic) GetName() string { return v.Name }
 
 func __unmarshalComplexInlineFragmentsRandomItemContent(b []byte, v *ComplexInlineFragmentsRandomItemContent) error {
 	if string(b) == "null" {
@@ -876,6 +907,15 @@ type ComplexInlineFragmentsRandomItemTopic struct {
 	Name string      `json:"name"`
 }
 
+// GetTypename returns ComplexInlineFragmentsRandomItemTopic.Typename, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsRandomItemTopic) GetTypename() string { return v.Typename }
+
+// GetId returns ComplexInlineFragmentsRandomItemTopic.Id, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsRandomItemTopic) GetId() testutil.ID { return v.Id }
+
+// GetName returns ComplexInlineFragmentsRandomItemTopic.Name, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsRandomItemTopic) GetName() string { return v.Name }
+
 // ComplexInlineFragmentsRandomItemVideo includes the requested fields of the GraphQL type Video.
 type ComplexInlineFragmentsRandomItemVideo struct {
 	Typename string `json:"__typename"`
@@ -884,6 +924,18 @@ type ComplexInlineFragmentsRandomItemVideo struct {
 	Name     string      `json:"name"`
 	Duration int         `json:"duration"`
 }
+
+// GetTypename returns ComplexInlineFragmentsRandomItemVideo.Typename, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsRandomItemVideo) GetTypename() string { return v.Typename }
+
+// GetId returns ComplexInlineFragmentsRandomItemVideo.Id, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsRandomItemVideo) GetId() testutil.ID { return v.Id }
+
+// GetName returns ComplexInlineFragmentsRandomItemVideo.Name, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsRandomItemVideo) GetName() string { return v.Name }
+
+// GetDuration returns ComplexInlineFragmentsRandomItemVideo.Duration, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsRandomItemVideo) GetDuration() int { return v.Duration }
 
 // ComplexInlineFragmentsRepeatedStuffArticle includes the requested fields of the GraphQL type Article.
 type ComplexInlineFragmentsRepeatedStuffArticle struct {
@@ -897,6 +949,27 @@ type ComplexInlineFragmentsRepeatedStuffArticle struct {
 	Text      string      `json:"text"`
 	OtherName string      `json:"otherName"`
 }
+
+// GetTypename returns ComplexInlineFragmentsRepeatedStuffArticle.Typename, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsRepeatedStuffArticle) GetTypename() string { return v.Typename }
+
+// GetId returns ComplexInlineFragmentsRepeatedStuffArticle.Id, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsRepeatedStuffArticle) GetId() testutil.ID { return v.Id }
+
+// GetUrl returns ComplexInlineFragmentsRepeatedStuffArticle.Url, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsRepeatedStuffArticle) GetUrl() string { return v.Url }
+
+// GetOtherId returns ComplexInlineFragmentsRepeatedStuffArticle.OtherId, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsRepeatedStuffArticle) GetOtherId() testutil.ID { return v.OtherId }
+
+// GetName returns ComplexInlineFragmentsRepeatedStuffArticle.Name, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsRepeatedStuffArticle) GetName() string { return v.Name }
+
+// GetText returns ComplexInlineFragmentsRepeatedStuffArticle.Text, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsRepeatedStuffArticle) GetText() string { return v.Text }
+
+// GetOtherName returns ComplexInlineFragmentsRepeatedStuffArticle.OtherName, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsRepeatedStuffArticle) GetOtherName() string { return v.OtherName }
 
 // ComplexInlineFragmentsRepeatedStuffContent includes the requested fields of the GraphQL interface Content.
 //
@@ -931,66 +1004,10 @@ type ComplexInlineFragmentsRepeatedStuffContent interface {
 
 func (v *ComplexInlineFragmentsRepeatedStuffArticle) implementsGraphQLInterfaceComplexInlineFragmentsRepeatedStuffContent() {
 }
-
-// GetTypename is a part of, and documented with, the interface ComplexInlineFragmentsRepeatedStuffContent.
-func (v *ComplexInlineFragmentsRepeatedStuffArticle) GetTypename() string { return v.Typename }
-
-// GetId is a part of, and documented with, the interface ComplexInlineFragmentsRepeatedStuffContent.
-func (v *ComplexInlineFragmentsRepeatedStuffArticle) GetId() testutil.ID { return v.Id }
-
-// GetUrl is a part of, and documented with, the interface ComplexInlineFragmentsRepeatedStuffContent.
-func (v *ComplexInlineFragmentsRepeatedStuffArticle) GetUrl() string { return v.Url }
-
-// GetOtherId is a part of, and documented with, the interface ComplexInlineFragmentsRepeatedStuffContent.
-func (v *ComplexInlineFragmentsRepeatedStuffArticle) GetOtherId() testutil.ID { return v.OtherId }
-
-// GetName is a part of, and documented with, the interface ComplexInlineFragmentsRepeatedStuffContent.
-func (v *ComplexInlineFragmentsRepeatedStuffArticle) GetName() string { return v.Name }
-
-// GetOtherName is a part of, and documented with, the interface ComplexInlineFragmentsRepeatedStuffContent.
-func (v *ComplexInlineFragmentsRepeatedStuffArticle) GetOtherName() string { return v.OtherName }
-
 func (v *ComplexInlineFragmentsRepeatedStuffVideo) implementsGraphQLInterfaceComplexInlineFragmentsRepeatedStuffContent() {
 }
-
-// GetTypename is a part of, and documented with, the interface ComplexInlineFragmentsRepeatedStuffContent.
-func (v *ComplexInlineFragmentsRepeatedStuffVideo) GetTypename() string { return v.Typename }
-
-// GetId is a part of, and documented with, the interface ComplexInlineFragmentsRepeatedStuffContent.
-func (v *ComplexInlineFragmentsRepeatedStuffVideo) GetId() testutil.ID { return v.Id }
-
-// GetUrl is a part of, and documented with, the interface ComplexInlineFragmentsRepeatedStuffContent.
-func (v *ComplexInlineFragmentsRepeatedStuffVideo) GetUrl() string { return v.Url }
-
-// GetOtherId is a part of, and documented with, the interface ComplexInlineFragmentsRepeatedStuffContent.
-func (v *ComplexInlineFragmentsRepeatedStuffVideo) GetOtherId() testutil.ID { return v.OtherId }
-
-// GetName is a part of, and documented with, the interface ComplexInlineFragmentsRepeatedStuffContent.
-func (v *ComplexInlineFragmentsRepeatedStuffVideo) GetName() string { return v.Name }
-
-// GetOtherName is a part of, and documented with, the interface ComplexInlineFragmentsRepeatedStuffContent.
-func (v *ComplexInlineFragmentsRepeatedStuffVideo) GetOtherName() string { return v.OtherName }
-
 func (v *ComplexInlineFragmentsRepeatedStuffTopic) implementsGraphQLInterfaceComplexInlineFragmentsRepeatedStuffContent() {
 }
-
-// GetTypename is a part of, and documented with, the interface ComplexInlineFragmentsRepeatedStuffContent.
-func (v *ComplexInlineFragmentsRepeatedStuffTopic) GetTypename() string { return v.Typename }
-
-// GetId is a part of, and documented with, the interface ComplexInlineFragmentsRepeatedStuffContent.
-func (v *ComplexInlineFragmentsRepeatedStuffTopic) GetId() testutil.ID { return v.Id }
-
-// GetUrl is a part of, and documented with, the interface ComplexInlineFragmentsRepeatedStuffContent.
-func (v *ComplexInlineFragmentsRepeatedStuffTopic) GetUrl() string { return v.Url }
-
-// GetOtherId is a part of, and documented with, the interface ComplexInlineFragmentsRepeatedStuffContent.
-func (v *ComplexInlineFragmentsRepeatedStuffTopic) GetOtherId() testutil.ID { return v.OtherId }
-
-// GetName is a part of, and documented with, the interface ComplexInlineFragmentsRepeatedStuffContent.
-func (v *ComplexInlineFragmentsRepeatedStuffTopic) GetName() string { return v.Name }
-
-// GetOtherName is a part of, and documented with, the interface ComplexInlineFragmentsRepeatedStuffContent.
-func (v *ComplexInlineFragmentsRepeatedStuffTopic) GetOtherName() string { return v.OtherName }
 
 func __unmarshalComplexInlineFragmentsRepeatedStuffContent(b []byte, v *ComplexInlineFragmentsRepeatedStuffContent) error {
 	if string(b) == "null" {
@@ -1072,6 +1089,24 @@ type ComplexInlineFragmentsRepeatedStuffTopic struct {
 	OtherName string      `json:"otherName"`
 }
 
+// GetTypename returns ComplexInlineFragmentsRepeatedStuffTopic.Typename, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsRepeatedStuffTopic) GetTypename() string { return v.Typename }
+
+// GetId returns ComplexInlineFragmentsRepeatedStuffTopic.Id, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsRepeatedStuffTopic) GetId() testutil.ID { return v.Id }
+
+// GetUrl returns ComplexInlineFragmentsRepeatedStuffTopic.Url, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsRepeatedStuffTopic) GetUrl() string { return v.Url }
+
+// GetOtherId returns ComplexInlineFragmentsRepeatedStuffTopic.OtherId, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsRepeatedStuffTopic) GetOtherId() testutil.ID { return v.OtherId }
+
+// GetName returns ComplexInlineFragmentsRepeatedStuffTopic.Name, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsRepeatedStuffTopic) GetName() string { return v.Name }
+
+// GetOtherName returns ComplexInlineFragmentsRepeatedStuffTopic.OtherName, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsRepeatedStuffTopic) GetOtherName() string { return v.OtherName }
+
 // ComplexInlineFragmentsRepeatedStuffVideo includes the requested fields of the GraphQL type Video.
 type ComplexInlineFragmentsRepeatedStuffVideo struct {
 	Typename string `json:"__typename"`
@@ -1085,6 +1120,27 @@ type ComplexInlineFragmentsRepeatedStuffVideo struct {
 	Duration  int         `json:"duration"`
 }
 
+// GetTypename returns ComplexInlineFragmentsRepeatedStuffVideo.Typename, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsRepeatedStuffVideo) GetTypename() string { return v.Typename }
+
+// GetId returns ComplexInlineFragmentsRepeatedStuffVideo.Id, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsRepeatedStuffVideo) GetId() testutil.ID { return v.Id }
+
+// GetUrl returns ComplexInlineFragmentsRepeatedStuffVideo.Url, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsRepeatedStuffVideo) GetUrl() string { return v.Url }
+
+// GetOtherId returns ComplexInlineFragmentsRepeatedStuffVideo.OtherId, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsRepeatedStuffVideo) GetOtherId() testutil.ID { return v.OtherId }
+
+// GetName returns ComplexInlineFragmentsRepeatedStuffVideo.Name, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsRepeatedStuffVideo) GetName() string { return v.Name }
+
+// GetOtherName returns ComplexInlineFragmentsRepeatedStuffVideo.OtherName, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsRepeatedStuffVideo) GetOtherName() string { return v.OtherName }
+
+// GetDuration returns ComplexInlineFragmentsRepeatedStuffVideo.Duration, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsRepeatedStuffVideo) GetDuration() int { return v.Duration }
+
 // ComplexInlineFragmentsResponse is returned by ComplexInlineFragments on success.
 type ComplexInlineFragmentsResponse struct {
 	Root             ComplexInlineFragmentsRootTopic               `json:"root"`
@@ -1092,6 +1148,29 @@ type ComplexInlineFragmentsResponse struct {
 	RepeatedStuff    ComplexInlineFragmentsRepeatedStuffContent    `json:"-"`
 	ConflictingStuff ComplexInlineFragmentsConflictingStuffContent `json:"-"`
 	NestedStuff      ComplexInlineFragmentsNestedStuffContent      `json:"-"`
+}
+
+// GetRoot returns ComplexInlineFragmentsResponse.Root, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsResponse) GetRoot() ComplexInlineFragmentsRootTopic { return v.Root }
+
+// GetRandomItem returns ComplexInlineFragmentsResponse.RandomItem, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsResponse) GetRandomItem() ComplexInlineFragmentsRandomItemContent {
+	return v.RandomItem
+}
+
+// GetRepeatedStuff returns ComplexInlineFragmentsResponse.RepeatedStuff, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsResponse) GetRepeatedStuff() ComplexInlineFragmentsRepeatedStuffContent {
+	return v.RepeatedStuff
+}
+
+// GetConflictingStuff returns ComplexInlineFragmentsResponse.ConflictingStuff, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsResponse) GetConflictingStuff() ComplexInlineFragmentsConflictingStuffContent {
+	return v.ConflictingStuff
+}
+
+// GetNestedStuff returns ComplexInlineFragmentsResponse.NestedStuff, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsResponse) GetNestedStuff() ComplexInlineFragmentsNestedStuffContent {
+	return v.NestedStuff
 }
 
 func (v *ComplexInlineFragmentsResponse) UnmarshalJSON(b []byte) error {
@@ -1251,6 +1330,15 @@ type ComplexInlineFragmentsRootTopic struct {
 	SchoolGrade string      `json:"schoolGrade"`
 	Name        string      `json:"name"`
 }
+
+// GetId returns ComplexInlineFragmentsRootTopic.Id, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsRootTopic) GetId() testutil.ID { return v.Id }
+
+// GetSchoolGrade returns ComplexInlineFragmentsRootTopic.SchoolGrade, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsRootTopic) GetSchoolGrade() string { return v.SchoolGrade }
+
+// GetName returns ComplexInlineFragmentsRootTopic.Name, and is useful for accessing the field via an interface.
+func (v *ComplexInlineFragmentsRootTopic) GetName() string { return v.Name }
 
 // We test all the spread cases from docs/DESIGN.md, see there for more context
 // on each, as well as various other nonsense.  But for abstract-in-abstract

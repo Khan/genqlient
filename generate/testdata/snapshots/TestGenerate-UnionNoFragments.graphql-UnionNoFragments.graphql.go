@@ -14,6 +14,9 @@ type UnionNoFragmentsQueryRandomLeafArticle struct {
 	Typename string `json:"__typename"`
 }
 
+// GetTypename returns UnionNoFragmentsQueryRandomLeafArticle.Typename, and is useful for accessing the field via an interface.
+func (v *UnionNoFragmentsQueryRandomLeafArticle) GetTypename() string { return v.Typename }
+
 // UnionNoFragmentsQueryRandomLeafLeafContent includes the requested fields of the GraphQL interface LeafContent.
 //
 // UnionNoFragmentsQueryRandomLeafLeafContent is implemented by the following types:
@@ -30,15 +33,8 @@ type UnionNoFragmentsQueryRandomLeafLeafContent interface {
 
 func (v *UnionNoFragmentsQueryRandomLeafArticle) implementsGraphQLInterfaceUnionNoFragmentsQueryRandomLeafLeafContent() {
 }
-
-// GetTypename is a part of, and documented with, the interface UnionNoFragmentsQueryRandomLeafLeafContent.
-func (v *UnionNoFragmentsQueryRandomLeafArticle) GetTypename() string { return v.Typename }
-
 func (v *UnionNoFragmentsQueryRandomLeafVideo) implementsGraphQLInterfaceUnionNoFragmentsQueryRandomLeafLeafContent() {
 }
-
-// GetTypename is a part of, and documented with, the interface UnionNoFragmentsQueryRandomLeafLeafContent.
-func (v *UnionNoFragmentsQueryRandomLeafVideo) GetTypename() string { return v.Typename }
 
 func __unmarshalUnionNoFragmentsQueryRandomLeafLeafContent(b []byte, v *UnionNoFragmentsQueryRandomLeafLeafContent) error {
 	if string(b) == "null" {
@@ -102,9 +98,17 @@ type UnionNoFragmentsQueryRandomLeafVideo struct {
 	Typename string `json:"__typename"`
 }
 
+// GetTypename returns UnionNoFragmentsQueryRandomLeafVideo.Typename, and is useful for accessing the field via an interface.
+func (v *UnionNoFragmentsQueryRandomLeafVideo) GetTypename() string { return v.Typename }
+
 // UnionNoFragmentsQueryResponse is returned by UnionNoFragmentsQuery on success.
 type UnionNoFragmentsQueryResponse struct {
 	RandomLeaf UnionNoFragmentsQueryRandomLeafLeafContent `json:"-"`
+}
+
+// GetRandomLeaf returns UnionNoFragmentsQueryResponse.RandomLeaf, and is useful for accessing the field via an interface.
+func (v *UnionNoFragmentsQueryResponse) GetRandomLeaf() UnionNoFragmentsQueryRandomLeafLeafContent {
+	return v.RandomLeaf
 }
 
 func (v *UnionNoFragmentsQueryResponse) UnmarshalJSON(b []byte) error {

@@ -16,6 +16,9 @@ type SimpleInputQueryResponse struct {
 	User SimpleInputQueryUser `json:"user"`
 }
 
+// GetUser returns SimpleInputQueryResponse.User, and is useful for accessing the field via an interface.
+func (v *SimpleInputQueryResponse) GetUser() SimpleInputQueryUser { return v.User }
+
 // SimpleInputQueryUser includes the requested fields of the GraphQL type User.
 // The GraphQL type's documentation follows.
 //
@@ -27,10 +30,16 @@ type SimpleInputQueryUser struct {
 	Id testutil.ID `json:"id"`
 }
 
+// GetId returns SimpleInputQueryUser.Id, and is useful for accessing the field via an interface.
+func (v *SimpleInputQueryUser) GetId() testutil.ID { return v.Id }
+
 // __SimpleInputQueryInput is used internally by genqlient
 type __SimpleInputQueryInput struct {
 	Name string `json:"name"`
 }
+
+// GetName returns __SimpleInputQueryInput.Name, and is useful for accessing the field via an interface.
+func (v *__SimpleInputQueryInput) GetName() string { return v.Name }
 
 func SimpleInputQuery(
 	client graphql.Client,
