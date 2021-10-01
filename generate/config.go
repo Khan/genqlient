@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"runtime/debug"
 
 	"gopkg.in/yaml.v2"
 )
@@ -36,6 +37,10 @@ type Config struct {
 	// The directory of the config-file (relative to which all the other paths
 	// are resolved).  Set by ValidateAndFillDefaults.
 	baseDir string
+
+	// The version of genqlient, from runtime.ReadBuildInfo, included in the
+	// generated files.  Set by ValidateAndFillDefaults.
+	Version string
 }
 
 // A TypeBinding represents a Go type to which genqlient will bind a particular
@@ -81,6 +86,14 @@ func (c *Config) ValidateAndFillDefaults(baseDir string) error {
 		}
 
 		c.Package = base
+	}
+
+	buildInfo, ok := debug.ReadBuildInfo()
+	if ok {
+		c.Version = buildInfo.Main.Version
+	}
+	if c.Version == "" {
+		c.Version = "<unknown>"
 	}
 
 	return nil
