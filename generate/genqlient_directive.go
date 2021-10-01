@@ -125,6 +125,9 @@ func (dir *genqlientDirective) add(graphQLDirective *ast.Directive, pos *ast.Pos
 	forField := ""
 	for _, arg := range graphQLDirective.Arguments {
 		if arg.Name == "for" {
+			if forField != "" {
+				return errorf(pos, `@genqlient directive had "for:" twice`)
+			}
 			err = setString("for", &forField, arg.Value, pos)
 			if err != nil {
 				return err
@@ -394,19 +397,22 @@ func fillDefaultString(target *string, defaults ...string) {
 // Note this has slightly different semantics than .add(), see inline for
 // details.
 //
-// parent is as described in parsePrecedingComment.
+// parent is as described in parsePrecedingComment.  operationDirective is the
+// directive applied to this operation or fragment.
 func (dir *genqlientDirective) mergeOperationDirective(
 	node interface{},
-	parent *ast.Definition,
+	parentIfInputField *ast.Definition,
 	operationDirective *genqlientDirective,
 ) {
+	// We'll set forField to the `@genqlient(for: "<this field>", ...)`
+	// directive from our operation/fragment, if any.
 	var forField *genqlientDirective
 	switch field := node.(type) {
 	case *ast.Field: // query field
 		typeName := field.ObjectDefinition.Name
 		forField = operationDirective.FieldDirectives[typeName][field.Name]
 	case *ast.FieldDefinition: // input-type field
-		forField = operationDirective.FieldDirectives[parent.Name][field.Name]
+		forField = operationDirective.FieldDirectives[parentIfInputField.Name][field.Name]
 	}
 	// Just to simplify nil-checking in the code below:
 	if forField == nil {
@@ -435,12 +441,12 @@ func (dir *genqlientDirective) mergeOperationDirective(
 // fragment); the local options will be merged into those.  It should be nil if
 // we are parsing the directive on the entire query.
 //
-// parent need only be set if node is an input-type field; it should be
-// the type containing this field.  (We can get this from gqlparser in other
-// cases, but not input-type fields.)
+// parentIfInputField need only be set if node is an input-type field; it
+// should be the type containing this field.  (We can get this from gqlparser
+// in other cases, but not input-type fields.)
 func (g *generator) parsePrecedingComment(
 	node interface{},
-	parent *ast.Definition,
+	parentIfInputField *ast.Definition,
 	pos *ast.Position,
 	queryOptions *genqlientDirective,
 ) (comment string, directive *genqlientDirective, err error) {
@@ -483,7 +489,7 @@ func (g *generator) parsePrecedingComment(
 
 	if queryOptions != nil {
 		// If we are part of an operation/fragment, merge its options in.
-		directive.mergeOperationDirective(node, parent, queryOptions)
+		directive.mergeOperationDirective(node, parentIfInputField, queryOptions)
 	}
 
 	reverse(commentLines)

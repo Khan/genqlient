@@ -61,12 +61,17 @@ directive genqlient(
   #
   # For example, given the following query:
   #  # @genqlient(for: "MyInput.myField", omitempty: true)
+  #  # @genqlient(for: "MyInput.myOtherField", pointer: true)
+  #  # @genqlient(for: "MyOutput.id", bind: "path/to/pkg.MyOutputID")
   #  query MyQuery($arg: MyInput) { ... }
   # genqlient will generate a type
   #  type MyInput struct {
-  #    MyField <type> `json:"myField,omitempty"`
+  #    MyField      <type>  `json:"myField,omitempty"`
+  #    MyOtherField *<type> `json:"myField"`
+  #    MyThirdField <type>  `json:"myThirdField"`
   #  }
-  # and use it for the argument to MyQuery.
+  # and use it for the argument to MyQuery, and similarly if `MyOutput.id` is
+  # ever requested in the response, it will be set to use the given type.
   for: String
 
   # If set, this argument (or input-type field, see "for") will be omitted if
