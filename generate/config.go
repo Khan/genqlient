@@ -93,7 +93,7 @@ func (c *Config) ValidateAndFillDefaults(baseDir string) error {
 		c.Version = buildInfo.Main.Version
 	}
 	if c.Version == "" {
-		c.Version = "<unknown>"
+		c.Version = "(devel)"
 	}
 
 	return nil
