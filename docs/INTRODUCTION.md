@@ -23,7 +23,7 @@ Now, run `go run github.com/Khan/genqlient --init`.  This will create a configur
 
 ## Step 4: Use your queries
 
-Finally, write your code!  The generated code will expose a function with the same name as your query, here
+Finally, write your code!  The generated code will expose a function with the same name as your query, here:
 ```go
 func getUser(ctx context.Context, client graphql.Client, login string) (*getUserResponse, error)
 ```
@@ -45,7 +45,11 @@ Now run your code!
 
 ## Step 5: Repeat
 
-Over time, as you add or change queries, you'll just need to run `github.com/Khan/genqlient` to re-generate `generated.go`.  (Or add a line `// go:generate https://go.dev/blog/generate` in your source, and run [`go generate`](https://go.dev/blog/generate).)  If you're using an editor or IDE plugin backed by [gopls](https://github.com/golang/tools/blob/master/gopls/README.md) (which is most of them), keep `generated.go` open in the background, and reload it after each run, so your plugin knows about the automated changes.
+Over time, as you add or change queries, you'll just need to run `github.com/Khan/genqlient` to re-generate `generated.go`.  Or in your source add a line:
+```go
+//go:generate go run github.com/Khan/genqlient
+```
+With that line, you can run [`go generate`](https://go.dev/blog/generate), although see below for Troubleshooting Tips on this.  If you're using an editor or IDE plugin backed by [gopls](https://github.com/golang/tools/blob/master/gopls/README.md) (which is most of them), keep `generated.go` open in the background, and reload it after each run, so your plugin knows about the automated changes.
 
 If you prefer, you can specify your queries as string-constants in your Go source, prefixed with `# @genqlient` -- at Khan we put them right next to the calling code, e.g.
 ```go
@@ -64,3 +68,12 @@ resp, err := getUser(...)
 All the filenames above, and many other aspects of genqlient, are configurable; see [genqlient.yaml](genqlient.yaml) for the full range of options.  You can also configure how genqlient converts specific parts of your query with the [`@genqlient` directive](genqlient_directive.graphql).  See the [FAQ](FAQ.md) for common options.
 
 If you want to know even more, and help contribute to genqlient, see [DESIGN.md](DESIGN.md) and [CONTRIBUTING.md](CONTRIBUTING.md).  Happy querying!
+
+## Troubleshooting Tips
+
+If you run into problems, genqlient will attempt to unobtrusively put the genqlient version into the generated source code so you can tell you if you just need to upgrade genqlient to resolve a problem or take advantage of new features.
+If this version is just unhelpfully `(devel)` that indicates when genqlient was built, it didn't know its own version.
+If you used `go run` then you need to set the ldflags:
+```go
+//go:generate go run github.com/Khan/genqlient -ldflags="-X generate.version $(go list -m -f '{{ .Version }}' github.com/Khan/genqlient)" 
+```
