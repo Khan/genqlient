@@ -1,7 +1,6 @@
 package generate
 
 import (
-	"fmt"
 	"go/token"
 	"io"
 	"io/ioutil"
@@ -166,13 +165,13 @@ func loadSchemaSources(schemas StringList) ([]*ast.Source, error) {
 
 				return nil
 			}); err != nil {
-				return nil, fmt.Errorf("failed to walk schema at root %s: %w", pathParts[0], err)
+				return nil, errorf(nil, "failed to walk schema at root %s: %w", pathParts[0], err)
 			}
 		} else {
 			var err error
 			matches, err = filepath.Glob(f)
 			if err != nil {
-				return nil, fmt.Errorf("failed to glob schema filename %s: %w", f, err)
+				return nil, errorf(nil, "failed to glob schema filename %s: %w", f, err)
 			}
 		}
 
@@ -189,7 +188,7 @@ func loadSchemaSources(schemas StringList) ([]*ast.Source, error) {
 		var schemaRaw []byte
 		schemaRaw, err = ioutil.ReadFile(filename)
 		if err != nil {
-			return nil, fmt.Errorf("unable to open schema: %w", err)
+			return nil, errorf(nil, "unable to open schema: %w", err)
 		}
 
 		source = append(source, &ast.Source{Name: filename, Input: string(schemaRaw)})
