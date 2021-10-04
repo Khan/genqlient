@@ -76,7 +76,7 @@ func TestGenerate(t *testing.T) {
 
 		t.Run(sourceFilename, func(t *testing.T) {
 			generated, err := Generate(&Config{
-				Schema:           filepath.Join(dataDir, "schema.graphql"),
+				Schema:           []string{filepath.Join(dataDir, "schema.graphql")},
 				Operations:       []string{filepath.Join(dataDir, sourceFilename)},
 				Package:          "test",
 				Generated:        goFilename,
@@ -197,7 +197,7 @@ func TestGenerateWithConfig(t *testing.T) {
 		baseDir := filepath.Join(dataDir, test.baseDir)
 		t.Run(test.name, func(t *testing.T) {
 			err := config.ValidateAndFillDefaults(baseDir)
-			config.Schema = filepath.Join(dataDir, "schema.graphql")
+			config.Schema = []string{filepath.Join(dataDir, "schema.graphql")}
 			config.Operations = []string{filepath.Join(dataDir, sourceFilename)}
 			if err != nil {
 				t.Fatal(err)
@@ -256,7 +256,7 @@ func TestGenerateErrors(t *testing.T) {
 
 		t.Run(testFilename, func(t *testing.T) {
 			_, err := Generate(&Config{
-				Schema:      filepath.Join(errorsDir, schemaFilename),
+				Schema:      []string{filepath.Join(errorsDir, schemaFilename)},
 				Operations:  []string{filepath.Join(errorsDir, sourceFilename)},
 				Package:     "test",
 				Generated:   os.DevNull,

@@ -16,19 +16,16 @@ import (
 	"github.com/vektah/gqlparser/v2/validator"
 )
 
-func getSchema(filename string) (*ast.Schema, error) {
-	text, err := ioutil.ReadFile(filename)
+func getSchema(filePatterns StringList) (*ast.Schema, error) {
+	sources, err := loadSchemaSources(filePatterns)
 	if err != nil {
-		return nil, errorf(nil, "unreadable schema file %v: %v", filename, err)
+		return nil, err
 	}
-
-	schema, graphqlError := gqlparser.LoadSchema(
-		&ast.Source{Name: filename, Input: string(text)})
+	schema, graphqlError := gqlparser.LoadSchema(sources...)
 	if graphqlError != nil {
-		return nil, errorf(nil, "invalid schema file %v: %v",
-			filename, graphqlError)
+		filename, _ := graphqlError.Extensions["file"].(string)
+		return nil, errorf(nil, "invalid schema file %v: %v", filename, graphqlError)
 	}
-
 	return schema, nil
 }
 
