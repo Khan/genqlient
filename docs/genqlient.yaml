@@ -4,6 +4,11 @@
 
 # The filename with the GraphQL schema (in SDL format), relative to
 # genqlient.yaml.
+# This can also be a list of filenames, such as:
+#  schema:
+#  - user.graphql
+#  - ./schema/*.graphql
+#  - ./another_directory/**/*.graphqls
 schema: schema.graphql
 
 # Filenames or globs with the operations for which to generate code, relative
