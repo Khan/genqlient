@@ -65,6 +65,14 @@ type (
 		GraphQLName            string
 		Marshaler, Unmarshaler string
 	}
+	// goTypenameForBuiltinType represents a builtin type that was
+	// given a different name due to a `typename` directive.  We
+	// create a type like `type MyString string` for it.
+	goTypenameForBuiltinType struct {
+		GoTypename    string
+		GoBuiltinName string
+		GraphQLName   string
+	}
 	// goSliceType represents the Go type []Elem, used to represent GraphQL
 	// list types.
 	goSliceType struct{ Elem goType }
@@ -75,21 +83,29 @@ type (
 )
 
 // Opaque types are defined by the user; pointers and slices need no definition
-func (typ *goOpaqueType) WriteDefinition(io.Writer, *generator) error  { return nil }
+func (typ *goOpaqueType) WriteDefinition(io.Writer, *generator) error { return nil }
+
+func (typ *goTypenameForBuiltinType) WriteDefinition(w io.Writer, g *generator) error {
+	fmt.Fprintf(w, "type %s %s", typ.GoTypename, typ.GoBuiltinName)
+	return nil
+}
 func (typ *goSliceType) WriteDefinition(io.Writer, *generator) error   { return nil }
 func (typ *goPointerType) WriteDefinition(io.Writer, *generator) error { return nil }
 
-func (typ *goOpaqueType) Reference() string  { return typ.GoRef }
-func (typ *goSliceType) Reference() string   { return "[]" + typ.Elem.Reference() }
-func (typ *goPointerType) Reference() string { return "*" + typ.Elem.Reference() }
+func (typ *goOpaqueType) Reference() string             { return typ.GoRef }
+func (typ *goTypenameForBuiltinType) Reference() string { return typ.GoTypename }
+func (typ *goSliceType) Reference() string              { return "[]" + typ.Elem.Reference() }
+func (typ *goPointerType) Reference() string            { return "*" + typ.Elem.Reference() }
 
-func (typ *goOpaqueType) SelectionSet() ast.SelectionSet  { return nil }
-func (typ *goSliceType) SelectionSet() ast.SelectionSet   { return typ.Elem.SelectionSet() }
-func (typ *goPointerType) SelectionSet() ast.SelectionSet { return typ.Elem.SelectionSet() }
+func (typ *goOpaqueType) SelectionSet() ast.SelectionSet             { return nil }
+func (typ *goTypenameForBuiltinType) SelectionSet() ast.SelectionSet { return nil }
+func (typ *goSliceType) SelectionSet() ast.SelectionSet              { return typ.Elem.SelectionSet() }
+func (typ *goPointerType) SelectionSet() ast.SelectionSet            { return typ.Elem.SelectionSet() }
 
-func (typ *goOpaqueType) GraphQLTypeName() string  { return typ.GraphQLName }
-func (typ *goSliceType) GraphQLTypeName() string   { return typ.Elem.GraphQLTypeName() }
-func (typ *goPointerType) GraphQLTypeName() string { return typ.Elem.GraphQLTypeName() }
+func (typ *goOpaqueType) GraphQLTypeName() string             { return typ.GraphQLName }
+func (typ *goTypenameForBuiltinType) GraphQLTypeName() string { return typ.GraphQLName }
+func (typ *goSliceType) GraphQLTypeName() string              { return typ.Elem.GraphQLTypeName() }
+func (typ *goPointerType) GraphQLTypeName() string            { return typ.Elem.GraphQLTypeName() }
 
 // goEnumType represents a Go named-string type used to represent a GraphQL
 // enum.  In this case, we generate both the type (`type T string`) and also a
@@ -502,26 +518,29 @@ func (typ *goInterfaceType) Reference() string              { return typ.GoName 
 func (typ *goInterfaceType) SelectionSet() ast.SelectionSet { return typ.Selection }
 func (typ *goInterfaceType) GraphQLTypeName() string        { return typ.GraphQLName }
 
-func (typ *goOpaqueType) Unwrap() goType    { return typ }
-func (typ *goSliceType) Unwrap() goType     { return typ.Elem.Unwrap() }
-func (typ *goPointerType) Unwrap() goType   { return typ.Elem.Unwrap() }
-func (typ *goEnumType) Unwrap() goType      { return typ }
-func (typ *goStructType) Unwrap() goType    { return typ }
-func (typ *goInterfaceType) Unwrap() goType { return typ }
+func (typ *goOpaqueType) Unwrap() goType             { return typ }
+func (typ *goTypenameForBuiltinType) Unwrap() goType { return typ }
+func (typ *goSliceType) Unwrap() goType              { return typ.Elem.Unwrap() }
+func (typ *goPointerType) Unwrap() goType            { return typ.Elem.Unwrap() }
+func (typ *goEnumType) Unwrap() goType               { return typ }
+func (typ *goStructType) Unwrap() goType             { return typ }
+func (typ *goInterfaceType) Unwrap() goType          { return typ }
 
-func (typ *goOpaqueType) SliceDepth() int    { return 0 }
-func (typ *goSliceType) SliceDepth() int     { return typ.Elem.SliceDepth() + 1 }
-func (typ *goPointerType) SliceDepth() int   { return 0 }
-func (typ *goEnumType) SliceDepth() int      { return 0 }
-func (typ *goStructType) SliceDepth() int    { return 0 }
-func (typ *goInterfaceType) SliceDepth() int { return 0 }
+func (typ *goOpaqueType) SliceDepth() int             { return 0 }
+func (typ *goTypenameForBuiltinType) SliceDepth() int { return 0 }
+func (typ *goSliceType) SliceDepth() int              { return typ.Elem.SliceDepth() + 1 }
+func (typ *goPointerType) SliceDepth() int            { return 0 }
+func (typ *goEnumType) SliceDepth() int               { return 0 }
+func (typ *goStructType) SliceDepth() int             { return 0 }
+func (typ *goInterfaceType) SliceDepth() int          { return 0 }
 
-func (typ *goOpaqueType) IsPointer() bool    { return false }
-func (typ *goSliceType) IsPointer() bool     { return typ.Elem.IsPointer() }
-func (typ *goPointerType) IsPointer() bool   { return true }
-func (typ *goEnumType) IsPointer() bool      { return false }
-func (typ *goStructType) IsPointer() bool    { return false }
-func (typ *goInterfaceType) IsPointer() bool { return false }
+func (typ *goOpaqueType) IsPointer() bool             { return false }
+func (typ *goTypenameForBuiltinType) IsPointer() bool { return false }
+func (typ *goSliceType) IsPointer() bool              { return typ.Elem.IsPointer() }
+func (typ *goPointerType) IsPointer() bool            { return true }
+func (typ *goEnumType) IsPointer() bool               { return false }
+func (typ *goStructType) IsPointer() bool             { return false }
+func (typ *goInterfaceType) IsPointer() bool          { return false }
 
 func writeDescription(w io.Writer, desc string) {
 	if desc != "" {

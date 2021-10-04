@@ -29,7 +29,7 @@ type Item interface {
 	// ID is the identifier of the content.
 	GetId() testutil.ID
 	// GetName returns the interface-field "name" from its implementation.
-	GetName() string
+	GetName() NameType
 }
 
 func (v *ItemArticle) implementsGraphQLInterfaceItem() {}
@@ -109,7 +109,7 @@ type ItemArticle struct {
 	Typename string `json:"__typename"`
 	// ID is the identifier of the content.
 	Id   testutil.ID `json:"id"`
-	Name string      `json:"name"`
+	Name NameType    `json:"name"`
 }
 
 // GetTypename returns ItemArticle.Typename, and is useful for accessing the field via an interface.
@@ -119,14 +119,14 @@ func (v *ItemArticle) GetTypename() string { return v.Typename }
 func (v *ItemArticle) GetId() testutil.ID { return v.Id }
 
 // GetName returns ItemArticle.Name, and is useful for accessing the field via an interface.
-func (v *ItemArticle) GetName() string { return v.Name }
+func (v *ItemArticle) GetName() NameType { return v.Name }
 
 // ItemTopic includes the requested fields of the GraphQL type Topic.
 type ItemTopic struct {
 	Typename string `json:"__typename"`
 	// ID is the identifier of the content.
 	Id   testutil.ID `json:"id"`
-	Name string      `json:"name"`
+	Name NameType    `json:"name"`
 }
 
 // GetTypename returns ItemTopic.Typename, and is useful for accessing the field via an interface.
@@ -136,14 +136,14 @@ func (v *ItemTopic) GetTypename() string { return v.Typename }
 func (v *ItemTopic) GetId() testutil.ID { return v.Id }
 
 // GetName returns ItemTopic.Name, and is useful for accessing the field via an interface.
-func (v *ItemTopic) GetName() string { return v.Name }
+func (v *ItemTopic) GetName() NameType { return v.Name }
 
 // ItemVideo includes the requested fields of the GraphQL type Video.
 type ItemVideo struct {
 	Typename string `json:"__typename"`
 	// ID is the identifier of the content.
 	Id   testutil.ID `json:"id"`
-	Name string      `json:"name"`
+	Name NameType    `json:"name"`
 }
 
 // GetTypename returns ItemVideo.Typename, and is useful for accessing the field via an interface.
@@ -153,7 +153,9 @@ func (v *ItemVideo) GetTypename() string { return v.Typename }
 func (v *ItemVideo) GetId() testutil.ID { return v.Id }
 
 // GetName returns ItemVideo.Name, and is useful for accessing the field via an interface.
-func (v *ItemVideo) GetName() string { return v.Name }
+func (v *ItemVideo) GetName() NameType { return v.Name }
+
+type NameType string
 
 // Resp is returned by TypeNames on success.
 type Resp struct {

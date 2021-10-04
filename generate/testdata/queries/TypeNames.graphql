@@ -1,10 +1,20 @@
 # @genqlient(typename: "Resp")
 query TypeNames {
   # @genqlient(typename: "User")
-  user { id name }
+  user {
+    id
+    name
+  }
   # @genqlient(typename: "Item")
-  randomItem { id name }
+  randomItem {
+     id
+     # @genqlient(typename: "NameType")
+     name
+  }
   # (ok to reuse the name as long as they match)
   # @genqlient(typename: "User")
-  users { id name }
+  users {
+    id
+    name
+  }
 }
