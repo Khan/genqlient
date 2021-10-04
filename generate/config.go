@@ -1,12 +1,16 @@
 package generate
 
 import (
+	"fmt"
 	"go/token"
 	"io"
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"regexp"
+	"strings"
 
+	"github.com/vektah/gqlparser/v2/ast"
 	"gopkg.in/yaml.v2"
 )
 
@@ -17,7 +21,7 @@ import (
 type Config struct {
 	// The following fields are documented at:
 	// https://github.com/Khan/genqlient/blob/main/docs/genqlient.yaml
-	Schema           string                  `yaml:"schema"`
+	Schema           StringList              `yaml:"schema"`
 	Operations       []string                `yaml:"operations"`
 	Generated        string                  `yaml:"generated"`
 	Package          string                  `yaml:"package"`
@@ -55,8 +59,9 @@ type TypeBinding struct {
 // typically the directory of the config file.
 func (c *Config) ValidateAndFillDefaults(baseDir string) error {
 	c.baseDir = baseDir
-	// Make paths relative to config dir
-	c.Schema = filepath.Join(baseDir, c.Schema)
+	for i := range c.Schema {
+		c.Schema[i] = filepath.Join(baseDir, c.Schema[i])
+	}
 	for i := range c.Operations {
 		c.Operations[i] = filepath.Join(baseDir, c.Operations[i])
 	}
@@ -121,4 +126,73 @@ func initConfig(filename string) error {
 	}
 	_, err = io.Copy(w, r)
 	return errorf(nil, "unable to write default genqlient.yaml: %v", err)
+}
+
+var path2regex = strings.NewReplacer(
+	`.`, `\.`,
+	`*`, `.+`,
+	`\`, `[\\/]`,
+	`/`, `[\\/]`,
+)
+
+// loadSchemaSources parses the schema file path globs. Parses graphql files,
+// and returns the parsed ast.Source objects.
+// Sourced From:
+// 		https://github.com/99designs/gqlgen/blob/1a0b19feff6f02d2af6631c9d847bc243f8ede39/codegen/config/config.go#L129-L181
+func loadSchemaSources(schemas StringList) ([]*ast.Source, error) {
+	preGlobbing := schemas
+	schemas = StringList{}
+	source := make([]*ast.Source, 0)
+	for _, f := range preGlobbing {
+		var matches []string
+
+		// for ** we want to override default globbing patterns and walk all
+		// subdirectories to match schema files.
+		if strings.Contains(f, "**") {
+			pathParts := strings.SplitN(f, "**", 2)
+			rest := strings.TrimPrefix(strings.TrimPrefix(pathParts[1], `\`), `/`)
+			// turn the rest of the glob into a regex, anchored only at the end because ** allows
+			// for any number of dirs in between and walk will let us match against the full path name
+			globRe := regexp.MustCompile(path2regex.Replace(rest) + `$`)
+
+			if err := filepath.Walk(pathParts[0], func(path string, info os.FileInfo, err error) error {
+				if err != nil {
+					return err
+				}
+
+				if globRe.MatchString(strings.TrimPrefix(path, pathParts[0])) {
+					matches = append(matches, path)
+				}
+
+				return nil
+			}); err != nil {
+				return nil, fmt.Errorf("failed to walk schema at root %s: %w", pathParts[0], err)
+			}
+		} else {
+			var err error
+			matches, err = filepath.Glob(f)
+			if err != nil {
+				return nil, fmt.Errorf("failed to glob schema filename %s: %w", f, err)
+			}
+		}
+
+		for _, m := range matches {
+			if schemas.Has(m) {
+				continue
+			}
+			schemas = append(schemas, m)
+		}
+	}
+	for _, filename := range schemas {
+		filename = filepath.ToSlash(filename)
+		var err error
+		var schemaRaw []byte
+		schemaRaw, err = ioutil.ReadFile(filename)
+		if err != nil {
+			return nil, fmt.Errorf("unable to open schema: %w", err)
+		}
+
+		source = append(source, &ast.Source{Name: filename, Input: string(schemaRaw)})
+	}
+	return source, nil
 }
