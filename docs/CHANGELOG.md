@@ -25,7 +25,7 @@ When releasing a new version:
 ### New features:
 
 - genqlient now generates getter methods for all fields, even those which do not implement a genqlient-generated interface; this can be useful for callers who wish to define their own interface and have several unrelated genqlient types which have the same fields implement it.
-
+- genqlient config now accepts either a single or multiple schema files for the `schema` field.
 ### Bug fixes:
 
 - In certain very rare cases involving duplicate fields in fragment spreads, genqlient would generate code that failed to compile due to duplicate methods not getting promoted; genqlient now generates correct types.  (See #126 for a more complete description.)
