@@ -481,13 +481,13 @@ func (g *generator) convertDefinition(
 	case ast.Scalar:
 		if builtinTypes[def.Name] != "" {
 			// In this case, the user asked for a custom Go type-name
-			// for a built-in type, e.g. `typename MyString string`.
+			// for a built-in type, e.g. `type MyString string`.
 			goType := &goTypenameForBuiltinType{
-				GoTypename:    name,
+				GoTypeName:    name,
 				GoBuiltinName: builtinTypes[def.Name],
 				GraphQLName:   def.Name,
 			}
-			return g.addType(goType, goType.GoTypename, pos)
+			return g.addType(goType, goType.GoTypeName, pos)
 		}
 
 		// (If you had an entry in bindings, we would have returned it above.)

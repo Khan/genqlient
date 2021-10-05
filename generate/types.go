@@ -69,7 +69,7 @@ type (
 	// given a different name due to a `typename` directive.  We
 	// create a type like `type MyString string` for it.
 	goTypenameForBuiltinType struct {
-		GoTypename    string
+		GoTypeName    string
 		GoBuiltinName string
 		GraphQLName   string
 	}
@@ -86,14 +86,14 @@ type (
 func (typ *goOpaqueType) WriteDefinition(io.Writer, *generator) error { return nil }
 
 func (typ *goTypenameForBuiltinType) WriteDefinition(w io.Writer, g *generator) error {
-	fmt.Fprintf(w, "type %s %s", typ.GoTypename, typ.GoBuiltinName)
+	fmt.Fprintf(w, "type %s %s", typ.GoTypeName, typ.GoBuiltinName)
 	return nil
 }
 func (typ *goSliceType) WriteDefinition(io.Writer, *generator) error   { return nil }
 func (typ *goPointerType) WriteDefinition(io.Writer, *generator) error { return nil }
 
 func (typ *goOpaqueType) Reference() string             { return typ.GoRef }
-func (typ *goTypenameForBuiltinType) Reference() string { return typ.GoTypename }
+func (typ *goTypenameForBuiltinType) Reference() string { return typ.GoTypeName }
 func (typ *goSliceType) Reference() string              { return "[]" + typ.Elem.Reference() }
 func (typ *goPointerType) Reference() string            { return "*" + typ.Elem.Reference() }
 
