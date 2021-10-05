@@ -16,20 +16,30 @@ import (
 	"github.com/vektah/gqlparser/v2/validator"
 )
 
-func getSchema(filePatterns StringList) (*ast.Schema, error) {
-	sources, err := loadSchemaSources(filePatterns)
+func getSchema(globs StringList) (*ast.Schema, error) {
+	filenames, err := expandFilenames(globs)
 	if err != nil {
 		return nil, err
 	}
+
+	sources := make([]*ast.Source, len(filenames))
+	for i, filename := range filenames {
+		text, err := ioutil.ReadFile(filename)
+		if err != nil {
+			return nil, errorf(nil, "unreadable schema file %v: %v", filename, err)
+		}
+		sources[i] = &ast.Source{Name: filename, Input: string(text)}
+	}
+
 	schema, graphqlError := gqlparser.LoadSchema(sources...)
 	if graphqlError != nil {
-		filename, _ := graphqlError.Extensions["file"].(string)
-		return nil, errorf(nil, "invalid schema file %v: %v", filename, graphqlError)
+		return nil, errorf(nil, "invalid schema: %v", graphqlError)
 	}
+
 	return schema, nil
 }
 
-func getAndValidateQueries(basedir string, filenames []string, schema *ast.Schema) (*ast.QueryDocument, error) {
+func getAndValidateQueries(basedir string, filenames StringList, schema *ast.Schema) (*ast.QueryDocument, error) {
 	queryDoc, err := getQueries(basedir, filenames)
 	if err != nil {
 		return nil, err
@@ -44,7 +54,25 @@ func getAndValidateQueries(basedir string, filenames []string, schema *ast.Schem
 	return queryDoc, nil
 }
 
-func getQueries(basedir string, filenames []string) (*ast.QueryDocument, error) {
+func expandFilenames(globs []string) ([]string, error) {
+	uniqFilenames := make(map[string]bool, len(globs))
+	for _, glob := range globs {
+		matches, err := filepath.Glob(glob)
+		if err != nil {
+			return nil, errorf(nil, "can't expand file-glob %v: %v", glob, err)
+		}
+		for _, match := range matches {
+			uniqFilenames[match] = true
+		}
+	}
+	filenames := make([]string, 0, len(uniqFilenames))
+	for filename := range uniqFilenames {
+		filenames = append(filenames, filename)
+	}
+	return filenames, nil
+}
+
+func getQueries(basedir string, globs StringList) (*ast.QueryDocument, error) {
 	// We merge all the queries into a single query-document, since operations
 	// in one might reference fragments in another.
 	//
@@ -57,16 +85,12 @@ func getQueries(basedir string, filenames []string) (*ast.QueryDocument, error) 
 		mergedQueryDoc.Fragments = append(mergedQueryDoc.Fragments, queryDoc.Fragments...)
 	}
 
-	expandedFilenames := make([]string, 0, len(filenames))
-	for _, filename := range filenames {
-		matches, err := filepath.Glob(filename)
-		if err != nil {
-			return nil, errorf(nil, "can't expand file-glob %v: %v", filename, err)
-		}
-		expandedFilenames = append(expandedFilenames, matches...)
+	filenames, err := expandFilenames(globs)
+	if err != nil {
+		return nil, err
 	}
 
-	for _, filename := range expandedFilenames {
+	for _, filename := range filenames {
 		text, err := ioutil.ReadFile(filename)
 		if err != nil {
 			return nil, errorf(nil, "unreadable query-spec file %v: %v", filename, err)
