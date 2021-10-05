@@ -22,12 +22,3 @@ func (a *StringList) UnmarshalYAML(unmarshal func(interface{}) error) error {
 	*a = multi
 	return nil
 }
-
-func (a StringList) Has(file string) bool {
-	for _, existing := range a {
-		if existing == file {
-			return true
-		}
-	}
-	return false
-}

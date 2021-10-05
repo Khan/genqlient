@@ -22,6 +22,8 @@ When releasing a new version:
 
 ### Breaking changes:
 
+- The `Config` fields `Schema` and `Operations` are now both of type `StringList`.  This does not affect configuration via `genqlient.yaml`, only via the Go API.
+
 ### New features:
 
 - genqlient now generates getter methods for all fields, even those which do not implement a genqlient-generated interface; this can be useful for callers who wish to define their own interface and have several unrelated genqlient types which have the same fields implement it.
