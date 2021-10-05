@@ -164,6 +164,10 @@ directive genqlient(
   # you can do that, as long as its UnmarshalJSON method can accept a list
   # of datetimes.)
   #
+  # Note that the type you bind to must be defined elsewhere in your code.
+  # If you want genqlient to create the type definition, use "typename"
+  # instead.
+  #
   # See bindings in genqlient.yaml for more details; this is effectively to a
   # local version of that global setting and should be used with similar care.
   # If set to "-", overrides any such global setting and uses a
@@ -188,6 +192,26 @@ directive genqlient(
   #    Id string
   #  }
   # instead of its usual, more verbose type names.
+  #
+  # You may also use "typename" on basic types, and Go will create a
+  # type definition for that basic type.  For instance:
+  #  query MyQuery {
+  #    user {
+  #      # @genqlient(typename: "NameType")
+  #      name
+  #    }
+  #  }
+  # will cause gnqlient to generate:
+  #  type Resp struct {
+  #    User User
+  #  }
+  #  type NameType string
+  #  type User struct {
+  #    Name NameType
+  #  }
+  # (Compare this to @genqlient(bind: "path/to/pkg.NameType"), which does
+  # something similar but depends on "NameType" being defined in some
+  # other package, rather than having genqlient define it for you.)
   #
   # With great power comes great responsibility: when using typename you'll
   # need to avoid comments; genqlient will complain if you use the same
