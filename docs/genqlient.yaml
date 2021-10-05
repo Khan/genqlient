@@ -8,7 +8,7 @@
 #  schema:
 #  - user.graphql
 #  - ./schema/*.graphql
-#  - ./another_directory/**/*.graphqls
+#  - ./another_directory/*/*.graphql
 schema: schema.graphql
 
 # Filename(s) or globs with the operations for which to generate code, relative
