@@ -1,6 +1,11 @@
 query ConflictingTypeNames {
   # @genqlient(typename: "T")
-  f { g }
+  f {
+    g
+  }
   # @genqlient(typename: "T")
-  otherF: f { g h }
+  otherF: f {
+    g
+    h
+  }
 }

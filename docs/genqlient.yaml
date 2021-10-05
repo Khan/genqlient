@@ -76,11 +76,13 @@ client_getter: "github.com/you/yourpkg.GetClient"
 # A map from GraphQL type name to Go fully-qualified type name to override
 # the Go type genqlient will use for this GraphQL type.
 #
-# This is primarily used for custom scalars, or to map builtin scalars to
-# a nonstandard type.  By default, builtin scalars are mapped to the
-# obvious Go types (String and ID to string, Int to int, Float to float64,
-# and Boolean to bool), but this setting will extend or override those
-# mappings.
+# This is primarily used for custom scalars, or to map builtin scalars
+# to a nonstandard type that is defined elsewhere.  By default,
+# builtin scalars are mapped to the obvious Go types (String and ID to
+# string, Int to int, Float to float64, and Boolean to bool), but this
+# setting will extend or override those mappings.  (See also
+# @genqlient(typename: ...), which can be used to map builtin scalars
+# to a nonstandard type that genqlient defines for you.)
 #
 # genqlient does not validate these types in any way; they must define
 # whatever logic is needed (MarshalJSON/UnmarshalJSON or JSON tags) to

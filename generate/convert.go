@@ -289,7 +289,7 @@ func (g *generator) convertDefinition(
 		}, err
 	}
 	goBuiltinName, ok := builtinTypes[def.Name]
-	if ok {
+	if ok && options.TypeName == "" {
 		return &goOpaqueType{GoRef: goBuiltinName, GraphQLName: def.Name}, nil
 	}
 
@@ -479,6 +479,17 @@ func (g *generator) convertDefinition(
 		return g.addType(goType, goType.GoName, pos)
 
 	case ast.Scalar:
+		if builtinTypes[def.Name] != "" {
+			// In this case, the user asked for a custom Go type-name
+			// for a built-in type, e.g. `type MyString string`.
+			goType := &goTypenameForBuiltinType{
+				GoTypeName:    name,
+				GoBuiltinName: builtinTypes[def.Name],
+				GraphQLName:   def.Name,
+			}
+			return g.addType(goType, goType.GoTypeName, pos)
+		}
+
 		// (If you had an entry in bindings, we would have returned it above.)
 		return nil, errorf(
 			pos, `unknown scalar %v: please add it to "bindings" in genqlient.yaml`, def.Name)
