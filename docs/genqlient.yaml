@@ -8,15 +8,17 @@
 #  schema:
 #  - user.graphql
 #  - ./schema/*.graphql
-#  - ./another_directory/**/*.graphqls
+#  - ./another_directory/*/*.graphql
 schema: schema.graphql
 
-# Filenames or globs with the operations for which to generate code, relative
+# Filename(s) or globs with the operations for which to generate code, relative
 # to genqlient.yaml.
 #
 # These may be .graphql files, containing the queries in SDL format, or
 # Go files, in which case any string-literal starting with (optional
 # whitespace and) the string "# @genqlient" will be extracted as a query.
+#
+# Like schema, this may be a single file or a list.
 operations:
 - genqlient.graphql
 - "pkg/*.go"
