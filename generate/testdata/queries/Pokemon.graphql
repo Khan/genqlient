@@ -6,6 +6,10 @@ query GetPokemonSiblings($input: PokemonInput!) {
     # this is normally an enum, but here we make it a (list of) string:
     # @genqlient(bind: "[]string")
     roles
+    # and we'll fetch it a second time, again making it a list of strings
+    # but creating our own type-name for that list of strings.
+    # @genqlient(bind: "[]string", typename: "StringList")
+    rolesAgain: roles
     name
     # this is mapped globally to internal/testutil.Pokemon:
     # note field ordering matters, but whitespace shouldn't.

@@ -29,6 +29,7 @@ type GetPokemonSiblingsUser struct {
 	// It is stable, unique, and opaque, like all good IDs.
 	Id               string                                   `json:"id"`
 	Roles            []string                                 `json:"roles"`
+	RolesAgain       StringList                               `json:"rolesAgain"`
 	Name             string                                   `json:"name"`
 	Pokemon          []testutil.Pokemon                       `json:"pokemon"`
 	GenqlientPokemon []GetPokemonSiblingsUserGenqlientPokemon `json:"genqlientPokemon"`
@@ -39,6 +40,9 @@ func (v *GetPokemonSiblingsUser) GetId() string { return v.Id }
 
 // GetRoles returns GetPokemonSiblingsUser.Roles, and is useful for accessing the field via an interface.
 func (v *GetPokemonSiblingsUser) GetRoles() []string { return v.Roles }
+
+// GetRolesAgain returns GetPokemonSiblingsUser.RolesAgain, and is useful for accessing the field via an interface.
+func (v *GetPokemonSiblingsUser) GetRolesAgain() StringList { return v.RolesAgain }
 
 // GetName returns GetPokemonSiblingsUser.Name, and is useful for accessing the field via an interface.
 func (v *GetPokemonSiblingsUser) GetName() string { return v.Name }
@@ -62,6 +66,8 @@ func (v *GetPokemonSiblingsUserGenqlientPokemon) GetSpecies() string { return v.
 
 // GetLevel returns GetPokemonSiblingsUserGenqlientPokemon.Level, and is useful for accessing the field via an interface.
 func (v *GetPokemonSiblingsUserGenqlientPokemon) GetLevel() int { return v.Level }
+
+type StringList []string
 
 // __GetPokemonSiblingsInput is used internally by genqlient
 type __GetPokemonSiblingsInput struct {
@@ -89,6 +95,7 @@ query GetPokemonSiblings ($input: PokemonInput!) {
 	user(query: {hasPokemon:$input}) {
 		id
 		roles
+		rolesAgain: roles
 		name
 		pokemon {
 			species

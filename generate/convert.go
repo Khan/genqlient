@@ -229,6 +229,21 @@ func (g *generator) convertType(
 		goRef, err := g.ref(localBinding)
 		// TODO(benkraft): Add syntax to specify a custom (un)marshaler, if
 		// it proves useful.
+		if options.TypeName != "" {
+			// You can combine bind and typename; we make (and use) a
+			// type-alias to the bound type instead of the bound type
+			// directly.
+			goType := &goTypenameForBuiltinType{
+				GoTypeName:    options.TypeName,
+				GoBuiltinName: goRef,
+				GraphQLName:   typ.Name(),
+			}
+			_, err = g.addType(goType, goType.GoTypeName, typ.Position)
+			if err != nil {
+				return nil, err
+			}
+			goRef = options.TypeName
+		}
 		return &goOpaqueType{GoRef: goRef, GraphQLName: typ.Name()}, err
 	}
 
@@ -281,6 +296,21 @@ func (g *generator) convertDefinition(
 			}
 		}
 		goRef, err := g.ref(globalBinding.Type)
+		if options.TypeName != "" {
+			// You can combine bind and typename; we make (and use) a
+			// type-alias to the bound type instead of the bound type
+			// directly.
+			goType := &goTypenameForBuiltinType{
+				GoTypeName:    options.TypeName,
+				GoBuiltinName: goRef,
+				GraphQLName:   def.Name,
+			}
+			_, err = g.addType(goType, goType.GoTypeName, pos)
+			if err != nil {
+				return nil, err
+			}
+			goRef = options.TypeName
+		}
 		return &goOpaqueType{
 			GoRef:       goRef,
 			GraphQLName: def.Name,
