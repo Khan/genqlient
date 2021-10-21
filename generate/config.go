@@ -7,8 +7,11 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/pkg/errors"
 	"gopkg.in/yaml.v2"
 )
+
+var cfgFilenames = []string{".genqlient.yml", ".genqlient.yaml", "genqlient.yml", "genqlient.yaml"}
 
 // Config represents genqlient's configuration, generally read from
 // genqlient.yaml.
@@ -109,6 +112,22 @@ func ReadAndValidateConfig(filename string) (*Config, error) {
 	return &config, nil
 }
 
+// ReadAndValidateConfigFromDefaultLocations looks for a config file in the
+// current directory, and all parent directories walking up the tree. The
+// closest config file will be returned.
+func ReadAndValidateConfigFromDefaultLocations() (*Config, error) {
+	cfgFile, err := findCfg()
+	if err != nil {
+		return nil, err
+	}
+
+	err = os.Chdir(filepath.Dir(cfgFile))
+	if err != nil {
+		return nil, errors.Wrap(err, "unable to enter config dir")
+	}
+	return ReadAndValidateConfig(cfgFile)
+}
+
 func initConfig(filename string) error {
 	// TODO(benkraft): Embed this config file into the binary, see
 	// https://github.com/Khan/genqlient/issues/9.
@@ -122,4 +141,36 @@ func initConfig(filename string) error {
 	}
 	_, err = io.Copy(w, r)
 	return errorf(nil, "unable to write default genqlient.yaml: %v", err)
+}
+
+// findCfg searches for the config file in this directory and all parents up the tree
+// looking for the closest match
+func findCfg() (string, error) {
+	dir, err := os.Getwd()
+	if err != nil {
+		return "", errors.Wrap(err, "unable to get working dir to findCfg")
+	}
+
+	cfg := findCfgInDir(dir)
+
+	for cfg == "" && dir != filepath.Dir(dir) {
+		dir = filepath.Dir(dir)
+		cfg = findCfgInDir(dir)
+	}
+
+	if cfg == "" {
+		return "", os.ErrNotExist
+	}
+
+	return cfg, nil
+}
+
+func findCfgInDir(dir string) string {
+	for _, cfgName := range cfgFilenames {
+		path := filepath.Join(dir, cfgName)
+		if _, err := os.Stat(path); err == nil {
+			return path
+		}
+	}
+	return ""
 }

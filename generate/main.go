@@ -14,9 +14,18 @@ import (
 )
 
 func readConfigGenerateAndWrite(configFilename string) error {
-	config, err := ReadAndValidateConfig(configFilename)
-	if err != nil {
-		return err
+	var config *Config
+	var err error
+	if configFilename != "" {
+		config, err = ReadAndValidateConfig(configFilename)
+		if err != nil {
+			return err
+		}
+	} else {
+		config, err = ReadAndValidateConfigFromDefaultLocations()
+		if err != nil {
+			return err
+		}
 	}
 
 	generated, err := Generate(config)
@@ -42,7 +51,7 @@ func readConfigGenerateAndWrite(configFilename string) error {
 }
 
 type cliArgs struct {
-	ConfigFilename string `arg:"positional" placeholder:"CONFIG" default:"genqlient.yaml" help:"path to genqlient configuration (default genqlient.yaml)"`
+	ConfigFilename string `arg:"positional" placeholder:"CONFIG" default:"" help:"path to genqlient configuration (default genqlient.yaml)"`
 	Init           bool   `arg:"--init" help:"write out and use a default config file"`
 }
 
