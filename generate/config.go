@@ -119,11 +119,6 @@ func ReadAndValidateConfigFromDefaultLocations() (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	err = os.Chdir(filepath.Dir(cfgFile))
-	if err != nil {
-		return nil, errorf(nil, "unable to enter config dir: %v", err)
-	}
 	return ReadAndValidateConfig(cfgFile)
 }
 
