@@ -76,7 +76,12 @@ func Main() {
 	var args cliArgs
 	arg.MustParse(&args)
 	if args.Init {
-		err := initConfig(args.ConfigFilename)
+		filename := args.ConfigFilename
+		if filename == "" {
+			filename = "genqlient.yaml"
+		}
+
+		err := initConfig(filename)
 		exitIfError(err)
 	}
 	err := readConfigGenerateAndWrite(args.ConfigFilename)
