@@ -7,7 +7,6 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/pkg/errors"
 	"gopkg.in/yaml.v2"
 )
 
@@ -123,7 +122,7 @@ func ReadAndValidateConfigFromDefaultLocations() (*Config, error) {
 
 	err = os.Chdir(filepath.Dir(cfgFile))
 	if err != nil {
-		return nil, errors.Wrap(err, "unable to enter config dir")
+		return nil, errorf(nil, "unable to enter config dir: %v", err)
 	}
 	return ReadAndValidateConfig(cfgFile)
 }
@@ -148,7 +147,7 @@ func initConfig(filename string) error {
 func findCfg() (string, error) {
 	dir, err := os.Getwd()
 	if err != nil {
-		return "", errors.Wrap(err, "unable to get working dir to findCfg")
+		return "", errorf(nil, "unable to get working dir to findCfg: %v", err)
 	}
 
 	cfg := findCfgInDir(dir)
