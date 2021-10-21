@@ -51,7 +51,7 @@ func readConfigGenerateAndWrite(configFilename string) error {
 }
 
 type cliArgs struct {
-	ConfigFilename string `arg:"positional" placeholder:"CONFIG" default:"" help:"path to genqlient configuration (default genqlient.yaml)"`
+	ConfigFilename string `arg:"positional" placeholder:"CONFIG" default:"" help:"path to genqlient configuration (default: genqlient.yaml in current or any parent directory)"`
 	Init           bool   `arg:"--init" help:"write out and use a default config file"`
 }
 
