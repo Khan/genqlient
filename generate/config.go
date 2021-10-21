@@ -121,5 +121,8 @@ func initConfig(filename string) error {
 		return errorf(nil, "unable to write default genqlient.yaml: %v", err)
 	}
 	_, err = io.Copy(w, r)
-	return errorf(nil, "unable to write default genqlient.yaml: %v", err)
+	if err != nil {
+		return errorf(nil, "unable to write default genqlient.yaml: %v", err)
+	}
+	return nil
 }
