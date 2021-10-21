@@ -94,7 +94,7 @@ bindings:
     type: int32
 ```
 
-Or, you can bind it to any other type, perhaps one with size-checked constructors; see the [`genqlient.yaml` documentation](`genqlient.yaml`) for more details.
+Or, you can bind it to any other type, perhaps one with size-checked constructors; see the [`genqlient.yaml` documentation](genqlient.yaml) for more details.
 
 ### … let me json-marshal my response objects
 
