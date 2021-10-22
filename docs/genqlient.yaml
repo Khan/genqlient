@@ -1,6 +1,8 @@
 # genqlient.yaml is genqlient's configuration file.  This genqlient.yaml is an
 # example; use `go run github.com/Khan/genqlient --init` to generate a simple
-# starting point.
+# starting point.  By default, genqlient looks for the configuration file
+# named [.]genqlient.y[a]ml in the current directory or any ancestor; or the
+# filename may be given as an argument.
 
 # The filename with the GraphQL schema (in SDL format), relative to
 # genqlient.yaml.
