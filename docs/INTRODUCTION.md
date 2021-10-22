@@ -45,7 +45,7 @@ Now run your code!
 
 ## Step 5: Repeat
 
-Over time, as you add or change queries, you'll just need to run `github.com/Khan/genqlient` to re-generate `generated.go`.  (Or add a line `// go:generate https://go.dev/blog/generate` in your source, and run [`go generate`](https://go.dev/blog/generate).)  If you're using an editor or IDE plugin backed by [gopls](https://github.com/golang/tools/blob/master/gopls/README.md) (which is most of them), keep `generated.go` open in the background, and reload it after each run, so your plugin knows about the automated changes.
+Over time, as you add or change queries, you'll just need to run `github.com/Khan/genqlient` to re-generate `generated.go`.  (Or add a line `//go:generate go run github.com/Khan/genqlient` in your source, and run [`go generate`](https://go.dev/blog/generate).)  If you're using an editor or IDE plugin backed by [gopls](https://github.com/golang/tools/blob/master/gopls/README.md) (which is most of them), keep `generated.go` open in the background, and reload it after each run, so your plugin knows about the automated changes.
 
 If you prefer, you can specify your queries as string-constants in your Go source, prefixed with `# @genqlient` -- at Khan we put them right next to the calling code, e.g.
 ```go
