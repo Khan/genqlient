@@ -12,6 +12,7 @@ import (
 
 	"github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
+	"github.com/vektah/gqlparser/v2/gqlerror"
 	"github.com/vektah/gqlparser/v2/parser"
 	"github.com/vektah/gqlparser/v2/validator"
 )
@@ -31,9 +32,19 @@ func getSchema(globs StringList) (*ast.Schema, error) {
 		sources[i] = &ast.Source{Name: filename, Input: string(text)}
 	}
 
-	schema, graphqlError := gqlparser.LoadSchema(sources...)
+	// Multi step schema validation
+	// Step 1 assume schema implicitly declares types that are required by the graphql spec
+	// Step 2 assume schema explicitly declares types that are required by the graphql spec
+	var (
+		schema       *ast.Schema
+		graphqlError *gqlerror.Error
+	)
+	schema, graphqlError = gqlparser.LoadSchema(sources...)
 	if graphqlError != nil {
-		return nil, errorf(nil, "invalid schema: %v", graphqlError)
+		schema, graphqlError = validator.LoadSchema(sources...)
+		if graphqlError != nil {
+			return nil, errorf(nil, "invalid schema: %v", graphqlError)
+		}
 	}
 
 	return schema, nil
