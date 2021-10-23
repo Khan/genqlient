@@ -109,6 +109,42 @@ var respAgain MyQueryResponse
 err := json.Unmarshal(b, &resp)
 ```
 
+### … let me use introspection to fetch my client schema
+
+This is currently not supported by default. You can however use tool such as [gqlfetch](https://github.com/suessflorian/gqlfetch) to build your client schema using introspection and then let `genqlient` continue from there. Moreover, you can define yourself what happens when `go:generate` is run via managing your own _go runnable_ progam.
+
+For example - suppose the file `generate/main.go`;
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+
+	"github.com/Khan/genqlient/generate"
+	"github.com/suessflorian/gqlfetch"
+)
+
+func main() {
+	schema, err := gqlfetch.BuildClientSchema(context.Background(), "http://localhost:8080/query")
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	if err = os.WriteFile("schema.graphql", []byte(schema), 0644); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	generate.Main()
+}
+```
+
+This can now be invoked upon `go generate` via `//go:generate your_package/generate`.
+
 ## How do I make a query with …
 
 ### … a specific name for a field?
