@@ -96,7 +96,7 @@ bindings:
 
 Or, you can bind it to any other type, perhaps one with size-checked constructors; see the [`genqlient.yaml` documentation](genqlient.yaml) for more details.
 
-### … let me json-marshal my response objects
+### … let me json-marshal my response objects?
 
 This is supported by default!  All genqlient-generated types support both JSON-marshaling and unmarshaling, which can be useful for putting them in a cache, inspecting them by hand, using them in mocks (although this is [not recommended](#-test-my-graphql-apis)), or anything else you can do with JSON.  It's not guaranteed that marshaling a genqlient type will produce the exact GraphQL input -- we try to get as close as we can but there are some limitations around Go zero values -- but unmarshaling again should produce the value genqlient returned.  That is:
 
@@ -109,9 +109,9 @@ var respAgain MyQueryResponse
 err := json.Unmarshal(b, &resp)
 ```
 
-### … let me use introspection to fetch my client schema
+### … let me use introspection to fetch my client schema?
 
-This is currently not supported by default. You can however use tool such as [gqlfetch](https://github.com/suessflorian/gqlfetch) to build your client schema using introspection and then let `genqlient` continue from there. Moreover, you can define yourself what happens when `go:generate` is run via managing your own _go runnable_ progam.
+This is currently not supported by default. You can however use a tool such as [gqlfetch](https://github.com/suessflorian/gqlfetch) to build your client schema using introspection and then let `genqlient` continue from there. Moreover, you can define yourself what happens when `go:generate` is run via managing your own _go runnable_ progam.
 
 For example - suppose the file `generate/main.go`;
 
@@ -143,7 +143,7 @@ func main() {
 }
 ```
 
-This can now be invoked upon `go generate` via `//go:generate your_package/generate`.
+This can now be invoked upon `go generate` via `//go:generate yourpkg/generate`.
 
 ## How do I make a query with …
 
