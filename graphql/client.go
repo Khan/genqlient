@@ -42,7 +42,7 @@ type Client interface {
 		ctx context.Context,
 		opName string,
 		query string,
-		input, retval interface{},
+		retval, input interface{},
 	) error
 }
 
