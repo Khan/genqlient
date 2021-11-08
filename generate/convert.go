@@ -174,7 +174,7 @@ func (g *generator) convertArguments(
 		// names.go) and the selection-set (we use all the input type's fields,
 		// and so on recursively).  See also the `case ast.InputObject` in
 		// convertDefinition, below.
-		goTyp, err := g.convertType(nil, arg.Type, nil, options, queryOptions)
+		goTyp, err := g.convertType(nil, arg.Type, false, nil, options, queryOptions)
 		if err != nil {
 			return nil, err
 		}
@@ -218,6 +218,7 @@ func (g *generator) convertArguments(
 func (g *generator) convertType(
 	namePrefix *prefixList,
 	typ *ast.Type,
+	isStructField bool,
 	selectionSet ast.SelectionSet,
 	options, queryOptions *genqlientDirective,
 ) (goType, error) {
@@ -235,22 +236,41 @@ func (g *generator) convertType(
 	if typ.Elem != nil {
 		// Type is a list.
 		elem, err := g.convertType(
-			namePrefix, typ.Elem, selectionSet, options, queryOptions)
+			namePrefix, typ.Elem, isStructField, selectionSet, options, queryOptions)
 		return &goSliceType{elem}, err
 	}
 
 	// If this is a builtin type or custom scalar, just refer to it.
 	def := g.schema.Types[typ.Name()]
+
 	goTyp, err := g.convertDefinition(
 		namePrefix, def, typ.Position, selectionSet, options, queryOptions)
 
-	if options.GetPointer() {
+	if g.getWeakReference(options, isStructField, def) {
+		if options.Omitempty == nil {
+			oe := true
+			options.Omitempty = &oe
+		}
+		goTyp = &goPointerType{goTyp}
+	} else if options.GetPointer() {
 		// Whatever we get, wrap it in a pointer.  (Because of the way the
 		// options work, recursing here isn't as connvenient.)
 		// Note this does []*T or [][]*T, not e.g. *[][]T.  See #16.
 		goTyp = &goPointerType{goTyp}
 	}
 	return goTyp, err
+}
+
+// getWeakReference decides if a field should be of pointer type and have the omitempty flag set.
+func (g *generator) getWeakReference(
+	options *genqlientDirective,
+	isStructField bool,
+	def *ast.Definition,
+) bool {
+	return options.Pointer == nil &&
+		isStructField &&
+		g.Config.WeakReferences &&
+		len(def.Fields) > 0
 }
 
 // convertDefinition decides the Go type we will generate corresponding to a
@@ -404,7 +424,7 @@ func (g *generator) convertDefinition(
 			// will be ignored?  We know field.Type is a scalar, enum, or input
 			// type.  But plumbing that is a bit tricky in practice.
 			fieldGoType, err := g.convertType(
-				namePrefix, field.Type, nil, fieldOptions, queryOptions)
+				namePrefix, field.Type, true, nil, fieldOptions, queryOptions)
 			if err != nil {
 				return nil, err
 			}
@@ -827,7 +847,7 @@ func (g *generator) convertField(
 	namePrefix = nextPrefix(namePrefix, field)
 
 	fieldGoType, err := g.convertType(
-		namePrefix, field.Definition.Type, field.SelectionSet,
+		namePrefix, field.Definition.Type, true, field.SelectionSet,
 		fieldOptions, queryOptions)
 	if err != nil {
 		return nil, err
