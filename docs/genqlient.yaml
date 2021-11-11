@@ -78,14 +78,14 @@ context_type: context.Context
 client_getter: "github.com/you/yourpkg.GetClient"
 
 
-# if set, fields with a complex type will default to having
-# the "pointer: true, omitempty: true" flag
+# if set, fields with a struct type will default to having
+# the "pointer: true, omitempty: true" flag.
 #
-# This can be useful for complex schema where it would be burdensome
-# to manually set the flags on a large number of fields
+# This can be useful for struct schema where it would be burdensome
+# to manually set the flags on a large number of fields.
 #
 # Defaults to false.
-use_weak_references: boolean
+use_struct_references: boolean
 
 
 # A map from GraphQL type name to Go fully-qualified type name to override
