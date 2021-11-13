@@ -241,15 +241,14 @@ func (g *generator) convertType(
 
 	// If this is a builtin type or custom scalar, just refer to it.
 	def := g.schema.Types[typ.Name()]
-
 	goTyp, err := g.convertDefinition(
 		namePrefix, def, typ.Position, selectionSet, options, queryOptions)
 
-	if g.getStructReference(options, def) {
-		if options.Pointer == nil || *options.Pointer == true {
+	if g.getStructReference(def) {
+		if options.Pointer == nil || *options.Pointer {
 			goTyp = &goPointerType{goTyp}
 		}
-		if options.Omitempty == nil || *options.Omitempty == true {
+		if options.Omitempty == nil || *options.Omitempty {
 			oe := true
 			options.Omitempty = &oe
 		}
@@ -264,7 +263,6 @@ func (g *generator) convertType(
 
 // getStructReference decides if a field should be of pointer type and have the omitempty flag set.
 func (g *generator) getStructReference(
-	options *genqlientDirective,
 	def *ast.Definition,
 ) bool {
 	return g.Config.StructReferences &&
