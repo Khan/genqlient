@@ -244,13 +244,29 @@ func (g *generator) convertType(
 	goTyp, err := g.convertDefinition(
 		namePrefix, def, typ.Position, selectionSet, options, queryOptions)
 
-	if options.GetPointer() {
+	if g.getStructReference(def) {
+		if options.Pointer == nil || *options.Pointer {
+			goTyp = &goPointerType{goTyp}
+		}
+		if options.Omitempty == nil || *options.Omitempty {
+			oe := true
+			options.Omitempty = &oe
+		}
+	} else if options.GetPointer() {
 		// Whatever we get, wrap it in a pointer.  (Because of the way the
 		// options work, recursing here isn't as connvenient.)
 		// Note this does []*T or [][]*T, not e.g. *[][]T.  See #16.
 		goTyp = &goPointerType{goTyp}
 	}
 	return goTyp, err
+}
+
+// getStructReference decides if a field should be of pointer type and have the omitempty flag set.
+func (g *generator) getStructReference(
+	def *ast.Definition,
+) bool {
+	return g.Config.StructReferences &&
+		(def.Kind == ast.Object || def.Kind == ast.InputObject)
 }
 
 // convertDefinition decides the Go type we will generate corresponding to a

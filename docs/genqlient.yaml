@@ -77,6 +77,17 @@ context_type: context.Context
 # without making a query.
 client_getter: "github.com/you/yourpkg.GetClient"
 
+
+# If set, fields with a struct type will default to having
+# the "pointer: true, omitempty: true" flag.
+#
+# This can be useful for struct schema where it would be burdensome
+# to manually set the flags on a large number of fields.
+#
+# Defaults to false.
+use_struct_references: boolean
+
+
 # A map from GraphQL type name to Go fully-qualified type name to override
 # the Go type genqlient will use for this GraphQL type.
 #

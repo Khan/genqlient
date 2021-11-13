@@ -27,6 +27,7 @@ type Config struct {
 	ContextType      string                  `yaml:"context_type"`
 	ClientGetter     string                  `yaml:"client_getter"`
 	Bindings         map[string]*TypeBinding `yaml:"bindings"`
+	StructReferences bool                    `yaml:"use_struct_references"`
 
 	// Set to true to use features that aren't fully ready to use.
 	//
