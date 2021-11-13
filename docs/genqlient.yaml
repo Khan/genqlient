@@ -78,7 +78,7 @@ context_type: context.Context
 client_getter: "github.com/you/yourpkg.GetClient"
 
 
-# if set, fields with a struct type will default to having
+# If set, fields with a struct type will default to having
 # the "pointer: true, omitempty: true" flag.
 #
 # This can be useful for struct schema where it would be burdensome
