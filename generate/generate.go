@@ -341,6 +341,12 @@ func Generate(config *Config) (map[string][]byte, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	// Sort operations to guarantee a stable order
+	sort.Slice(g.Operations, func(i, j int) bool {
+		return g.Operations[i].Name < g.Operations[j].Name
+	})
+
 	for _, operation := range g.Operations {
 		err = g.render("operation.go.tmpl", &bodyBuf, operation)
 		if err != nil {

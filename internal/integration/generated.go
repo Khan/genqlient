@@ -3019,31 +3019,6 @@ type simpleQueryResponse struct {
 // GetMe returns simpleQueryResponse.Me, and is useful for accessing the field via an interface.
 func (v *simpleQueryResponse) GetMe() simpleQueryMeUser { return v.Me }
 
-func simpleQuery(
-	ctx context.Context,
-	client graphql.Client,
-) (*simpleQueryResponse, error) {
-	var err error
-
-	var retval simpleQueryResponse
-	err = client.MakeRequest(
-		ctx,
-		"simpleQuery",
-		`
-query simpleQuery {
-	me {
-		id
-		name
-		luckyNumber
-	}
-}
-`,
-		&retval,
-		nil,
-	)
-	return &retval, err
-}
-
 func failingQuery(
 	ctx context.Context,
 	client graphql.Client,
@@ -3068,64 +3043,6 @@ query failingQuery {
 	return &retval, err
 }
 
-func queryWithVariables(
-	ctx context.Context,
-	client graphql.Client,
-	id string,
-) (*queryWithVariablesResponse, error) {
-	__input := __queryWithVariablesInput{
-		Id: id,
-	}
-	var err error
-
-	var retval queryWithVariablesResponse
-	err = client.MakeRequest(
-		ctx,
-		"queryWithVariables",
-		`
-query queryWithVariables ($id: ID!) {
-	user(id: $id) {
-		id
-		name
-		luckyNumber
-	}
-}
-`,
-		&retval,
-		&__input,
-	)
-	return &retval, err
-}
-
-func queryWithOmitempty(
-	ctx context.Context,
-	client graphql.Client,
-	id string,
-) (*queryWithOmitemptyResponse, error) {
-	__input := __queryWithOmitemptyInput{
-		Id: id,
-	}
-	var err error
-
-	var retval queryWithOmitemptyResponse
-	err = client.MakeRequest(
-		ctx,
-		"queryWithOmitempty",
-		`
-query queryWithOmitempty ($id: ID) {
-	user(id: $id) {
-		id
-		name
-		luckyNumber
-	}
-}
-`,
-		&retval,
-		&__input,
-	)
-	return &retval, err
-}
-
 func queryWithCustomMarshal(
 	ctx context.Context,
 	client graphql.Client,
@@ -3143,35 +3060,6 @@ func queryWithCustomMarshal(
 		`
 query queryWithCustomMarshal ($date: Date!) {
 	usersBornOn(date: $date) {
-		id
-		name
-		birthdate
-	}
-}
-`,
-		&retval,
-		&__input,
-	)
-	return &retval, err
-}
-
-func queryWithCustomMarshalSlice(
-	ctx context.Context,
-	client graphql.Client,
-	dates []time.Time,
-) (*queryWithCustomMarshalSliceResponse, error) {
-	__input := __queryWithCustomMarshalSliceInput{
-		Dates: dates,
-	}
-	var err error
-
-	var retval queryWithCustomMarshalSliceResponse
-	err = client.MakeRequest(
-		ctx,
-		"queryWithCustomMarshalSlice",
-		`
-query queryWithCustomMarshalSlice ($dates: [Date!]!) {
-	usersBornOnDates(dates: $dates) {
 		id
 		name
 		birthdate
@@ -3215,202 +3103,26 @@ query queryWithCustomMarshalOptional ($date: Date, $id: ID) {
 	return &retval, err
 }
 
-func queryWithInterfaceNoFragments(
+func queryWithCustomMarshalSlice(
 	ctx context.Context,
 	client graphql.Client,
-	id string,
-) (*queryWithInterfaceNoFragmentsResponse, error) {
-	__input := __queryWithInterfaceNoFragmentsInput{
-		Id: id,
+	dates []time.Time,
+) (*queryWithCustomMarshalSliceResponse, error) {
+	__input := __queryWithCustomMarshalSliceInput{
+		Dates: dates,
 	}
 	var err error
 
-	var retval queryWithInterfaceNoFragmentsResponse
+	var retval queryWithCustomMarshalSliceResponse
 	err = client.MakeRequest(
 		ctx,
-		"queryWithInterfaceNoFragments",
+		"queryWithCustomMarshalSlice",
 		`
-query queryWithInterfaceNoFragments ($id: ID!) {
-	being(id: $id) {
-		__typename
+query queryWithCustomMarshalSlice ($dates: [Date!]!) {
+	usersBornOnDates(dates: $dates) {
 		id
 		name
-	}
-	me {
-		id
-		name
-	}
-}
-`,
-		&retval,
-		&__input,
-	)
-	return &retval, err
-}
-
-func queryWithInterfaceListField(
-	ctx context.Context,
-	client graphql.Client,
-	ids []string,
-) (*queryWithInterfaceListFieldResponse, error) {
-	__input := __queryWithInterfaceListFieldInput{
-		Ids: ids,
-	}
-	var err error
-
-	var retval queryWithInterfaceListFieldResponse
-	err = client.MakeRequest(
-		ctx,
-		"queryWithInterfaceListField",
-		`
-query queryWithInterfaceListField ($ids: [ID!]!) {
-	beings(ids: $ids) {
-		__typename
-		id
-		name
-	}
-}
-`,
-		&retval,
-		&__input,
-	)
-	return &retval, err
-}
-
-func queryWithInterfaceListPointerField(
-	ctx context.Context,
-	client graphql.Client,
-	ids []string,
-) (*queryWithInterfaceListPointerFieldResponse, error) {
-	__input := __queryWithInterfaceListPointerFieldInput{
-		Ids: ids,
-	}
-	var err error
-
-	var retval queryWithInterfaceListPointerFieldResponse
-	err = client.MakeRequest(
-		ctx,
-		"queryWithInterfaceListPointerField",
-		`
-query queryWithInterfaceListPointerField ($ids: [ID!]!) {
-	beings(ids: $ids) {
-		__typename
-		id
-		name
-	}
-}
-`,
-		&retval,
-		&__input,
-	)
-	return &retval, err
-}
-
-func queryWithFragments(
-	ctx context.Context,
-	client graphql.Client,
-	ids []string,
-) (*queryWithFragmentsResponse, error) {
-	__input := __queryWithFragmentsInput{
-		Ids: ids,
-	}
-	var err error
-
-	var retval queryWithFragmentsResponse
-	err = client.MakeRequest(
-		ctx,
-		"queryWithFragments",
-		`
-query queryWithFragments ($ids: [ID!]!) {
-	beings(ids: $ids) {
-		__typename
-		id
-		... on Being {
-			id
-			name
-		}
-		... on Animal {
-			id
-			hair {
-				hasHair
-			}
-			species
-			owner {
-				__typename
-				id
-				... on Being {
-					name
-				}
-				... on User {
-					luckyNumber
-				}
-			}
-		}
-		... on Lucky {
-			luckyNumber
-		}
-		... on User {
-			hair {
-				color
-			}
-		}
-	}
-}
-`,
-		&retval,
-		&__input,
-	)
-	return &retval, err
-}
-
-func queryWithNamedFragments(
-	ctx context.Context,
-	client graphql.Client,
-	ids []string,
-) (*queryWithNamedFragmentsResponse, error) {
-	__input := __queryWithNamedFragmentsInput{
-		Ids: ids,
-	}
-	var err error
-
-	var retval queryWithNamedFragmentsResponse
-	err = client.MakeRequest(
-		ctx,
-		"queryWithNamedFragments",
-		`
-query queryWithNamedFragments ($ids: [ID!]!) {
-	beings(ids: $ids) {
-		__typename
-		id
-		... AnimalFields
-		... UserFields
-	}
-}
-fragment AnimalFields on Animal {
-	id
-	hair {
-		hasHair
-	}
-	owner {
-		__typename
-		id
-		... UserFields
-		... LuckyFields
-	}
-}
-fragment UserFields on User {
-	id
-	... LuckyFields
-	... MoreUserFields
-}
-fragment LuckyFields on Lucky {
-	... MoreUserFields
-	luckyNumber
-}
-fragment MoreUserFields on User {
-	id
-	hair {
-		color
+		birthdate
 	}
 }
 `,
@@ -3479,6 +3191,294 @@ fragment FriendsFields on User {
 `,
 		&retval,
 		&__input,
+	)
+	return &retval, err
+}
+
+func queryWithFragments(
+	ctx context.Context,
+	client graphql.Client,
+	ids []string,
+) (*queryWithFragmentsResponse, error) {
+	__input := __queryWithFragmentsInput{
+		Ids: ids,
+	}
+	var err error
+
+	var retval queryWithFragmentsResponse
+	err = client.MakeRequest(
+		ctx,
+		"queryWithFragments",
+		`
+query queryWithFragments ($ids: [ID!]!) {
+	beings(ids: $ids) {
+		__typename
+		id
+		... on Being {
+			id
+			name
+		}
+		... on Animal {
+			id
+			hair {
+				hasHair
+			}
+			species
+			owner {
+				__typename
+				id
+				... on Being {
+					name
+				}
+				... on User {
+					luckyNumber
+				}
+			}
+		}
+		... on Lucky {
+			luckyNumber
+		}
+		... on User {
+			hair {
+				color
+			}
+		}
+	}
+}
+`,
+		&retval,
+		&__input,
+	)
+	return &retval, err
+}
+
+func queryWithInterfaceListField(
+	ctx context.Context,
+	client graphql.Client,
+	ids []string,
+) (*queryWithInterfaceListFieldResponse, error) {
+	__input := __queryWithInterfaceListFieldInput{
+		Ids: ids,
+	}
+	var err error
+
+	var retval queryWithInterfaceListFieldResponse
+	err = client.MakeRequest(
+		ctx,
+		"queryWithInterfaceListField",
+		`
+query queryWithInterfaceListField ($ids: [ID!]!) {
+	beings(ids: $ids) {
+		__typename
+		id
+		name
+	}
+}
+`,
+		&retval,
+		&__input,
+	)
+	return &retval, err
+}
+
+func queryWithInterfaceListPointerField(
+	ctx context.Context,
+	client graphql.Client,
+	ids []string,
+) (*queryWithInterfaceListPointerFieldResponse, error) {
+	__input := __queryWithInterfaceListPointerFieldInput{
+		Ids: ids,
+	}
+	var err error
+
+	var retval queryWithInterfaceListPointerFieldResponse
+	err = client.MakeRequest(
+		ctx,
+		"queryWithInterfaceListPointerField",
+		`
+query queryWithInterfaceListPointerField ($ids: [ID!]!) {
+	beings(ids: $ids) {
+		__typename
+		id
+		name
+	}
+}
+`,
+		&retval,
+		&__input,
+	)
+	return &retval, err
+}
+
+func queryWithInterfaceNoFragments(
+	ctx context.Context,
+	client graphql.Client,
+	id string,
+) (*queryWithInterfaceNoFragmentsResponse, error) {
+	__input := __queryWithInterfaceNoFragmentsInput{
+		Id: id,
+	}
+	var err error
+
+	var retval queryWithInterfaceNoFragmentsResponse
+	err = client.MakeRequest(
+		ctx,
+		"queryWithInterfaceNoFragments",
+		`
+query queryWithInterfaceNoFragments ($id: ID!) {
+	being(id: $id) {
+		__typename
+		id
+		name
+	}
+	me {
+		id
+		name
+	}
+}
+`,
+		&retval,
+		&__input,
+	)
+	return &retval, err
+}
+
+func queryWithNamedFragments(
+	ctx context.Context,
+	client graphql.Client,
+	ids []string,
+) (*queryWithNamedFragmentsResponse, error) {
+	__input := __queryWithNamedFragmentsInput{
+		Ids: ids,
+	}
+	var err error
+
+	var retval queryWithNamedFragmentsResponse
+	err = client.MakeRequest(
+		ctx,
+		"queryWithNamedFragments",
+		`
+query queryWithNamedFragments ($ids: [ID!]!) {
+	beings(ids: $ids) {
+		__typename
+		id
+		... AnimalFields
+		... UserFields
+	}
+}
+fragment AnimalFields on Animal {
+	id
+	hair {
+		hasHair
+	}
+	owner {
+		__typename
+		id
+		... UserFields
+		... LuckyFields
+	}
+}
+fragment UserFields on User {
+	id
+	... LuckyFields
+	... MoreUserFields
+}
+fragment LuckyFields on Lucky {
+	... MoreUserFields
+	luckyNumber
+}
+fragment MoreUserFields on User {
+	id
+	hair {
+		color
+	}
+}
+`,
+		&retval,
+		&__input,
+	)
+	return &retval, err
+}
+
+func queryWithOmitempty(
+	ctx context.Context,
+	client graphql.Client,
+	id string,
+) (*queryWithOmitemptyResponse, error) {
+	__input := __queryWithOmitemptyInput{
+		Id: id,
+	}
+	var err error
+
+	var retval queryWithOmitemptyResponse
+	err = client.MakeRequest(
+		ctx,
+		"queryWithOmitempty",
+		`
+query queryWithOmitempty ($id: ID) {
+	user(id: $id) {
+		id
+		name
+		luckyNumber
+	}
+}
+`,
+		&retval,
+		&__input,
+	)
+	return &retval, err
+}
+
+func queryWithVariables(
+	ctx context.Context,
+	client graphql.Client,
+	id string,
+) (*queryWithVariablesResponse, error) {
+	__input := __queryWithVariablesInput{
+		Id: id,
+	}
+	var err error
+
+	var retval queryWithVariablesResponse
+	err = client.MakeRequest(
+		ctx,
+		"queryWithVariables",
+		`
+query queryWithVariables ($id: ID!) {
+	user(id: $id) {
+		id
+		name
+		luckyNumber
+	}
+}
+`,
+		&retval,
+		&__input,
+	)
+	return &retval, err
+}
+
+func simpleQuery(
+	ctx context.Context,
+	client graphql.Client,
+) (*simpleQueryResponse, error) {
+	var err error
+
+	var retval simpleQueryResponse
+	err = client.MakeRequest(
+		ctx,
+		"simpleQuery",
+		`
+query simpleQuery {
+	me {
+		id
+		name
+		luckyNumber
+	}
+}
+`,
+		&retval,
+		nil,
 	)
 	return &retval, err
 }
