@@ -195,10 +195,10 @@ func __unmarshalInterfaceListFieldRootTopicChildrenContent(b []byte, v *Interfac
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
-			"Response was missing Content.__typename")
+			"response was missing Content.__typename")
 	default:
 		return fmt.Errorf(
-			`Unexpected concrete type for InterfaceListFieldRootTopicChildrenContent: "%v"`, tn.TypeName)
+			`unexpected concrete type for InterfaceListFieldRootTopicChildrenContent: "%v"`, tn.TypeName)
 	}
 }
 
@@ -234,7 +234,7 @@ func __marshalInterfaceListFieldRootTopicChildrenContent(v *InterfaceListFieldRo
 		return []byte("null"), nil
 	default:
 		return nil, fmt.Errorf(
-			`Unexpected concrete type for InterfaceListFieldRootTopicChildrenContent: "%T"`, v)
+			`unexpected concrete type for InterfaceListFieldRootTopicChildrenContent: "%T"`, v)
 	}
 }
 
@@ -443,10 +443,10 @@ func __unmarshalInterfaceListFieldWithPointerTopicChildrenContent(b []byte, v *I
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
-			"Response was missing Content.__typename")
+			"response was missing Content.__typename")
 	default:
 		return fmt.Errorf(
-			`Unexpected concrete type for InterfaceListFieldWithPointerTopicChildrenContent: "%v"`, tn.TypeName)
+			`unexpected concrete type for InterfaceListFieldWithPointerTopicChildrenContent: "%v"`, tn.TypeName)
 	}
 }
 
@@ -482,7 +482,7 @@ func __marshalInterfaceListFieldWithPointerTopicChildrenContent(v *InterfaceList
 		return []byte("null"), nil
 	default:
 		return nil, fmt.Errorf(
-			`Unexpected concrete type for InterfaceListFieldWithPointerTopicChildrenContent: "%T"`, v)
+			`unexpected concrete type for InterfaceListFieldWithPointerTopicChildrenContent: "%T"`, v)
 	}
 }
 

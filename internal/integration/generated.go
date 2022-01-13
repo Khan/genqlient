@@ -155,10 +155,10 @@ func __unmarshalAnimalFieldsOwnerBeing(b []byte, v *AnimalFieldsOwnerBeing) erro
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
-			"Response was missing Being.__typename")
+			"response was missing Being.__typename")
 	default:
 		return fmt.Errorf(
-			`Unexpected concrete type for AnimalFieldsOwnerBeing: "%v"`, tn.TypeName)
+			`unexpected concrete type for AnimalFieldsOwnerBeing: "%v"`, tn.TypeName)
 	}
 }
 
@@ -190,7 +190,7 @@ func __marshalAnimalFieldsOwnerBeing(v *AnimalFieldsOwnerBeing) ([]byte, error) 
 		return []byte("null"), nil
 	default:
 		return nil, fmt.Errorf(
-			`Unexpected concrete type for AnimalFieldsOwnerBeing: "%T"`, v)
+			`unexpected concrete type for AnimalFieldsOwnerBeing: "%T"`, v)
 	}
 }
 
@@ -322,10 +322,10 @@ func __unmarshalInnerBeingFields(b []byte, v *InnerBeingFields) error {
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
-			"Response was missing Being.__typename")
+			"response was missing Being.__typename")
 	default:
 		return fmt.Errorf(
-			`Unexpected concrete type for InnerBeingFields: "%v"`, tn.TypeName)
+			`unexpected concrete type for InnerBeingFields: "%v"`, tn.TypeName)
 	}
 }
 
@@ -353,7 +353,7 @@ func __marshalInnerBeingFields(v *InnerBeingFields) ([]byte, error) {
 		return []byte("null"), nil
 	default:
 		return nil, fmt.Errorf(
-			`Unexpected concrete type for InnerBeingFields: "%T"`, v)
+			`unexpected concrete type for InnerBeingFields: "%T"`, v)
 	}
 }
 
@@ -416,10 +416,10 @@ func __unmarshalInnerLuckyFields(b []byte, v *InnerLuckyFields) error {
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
-			"Response was missing Lucky.__typename")
+			"response was missing Lucky.__typename")
 	default:
 		return fmt.Errorf(
-			`Unexpected concrete type for InnerLuckyFields: "%v"`, tn.TypeName)
+			`unexpected concrete type for InnerLuckyFields: "%v"`, tn.TypeName)
 	}
 }
 
@@ -439,7 +439,7 @@ func __marshalInnerLuckyFields(v *InnerLuckyFields) ([]byte, error) {
 		return []byte("null"), nil
 	default:
 		return nil, fmt.Errorf(
-			`Unexpected concrete type for InnerLuckyFields: "%T"`, v)
+			`unexpected concrete type for InnerLuckyFields: "%T"`, v)
 	}
 }
 
@@ -482,10 +482,10 @@ func __unmarshalLuckyFields(b []byte, v *LuckyFields) error {
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
-			"Response was missing Lucky.__typename")
+			"response was missing Lucky.__typename")
 	default:
 		return fmt.Errorf(
-			`Unexpected concrete type for LuckyFields: "%v"`, tn.TypeName)
+			`unexpected concrete type for LuckyFields: "%v"`, tn.TypeName)
 	}
 }
 
@@ -509,7 +509,7 @@ func __marshalLuckyFields(v *LuckyFields) ([]byte, error) {
 		return []byte("null"), nil
 	default:
 		return nil, fmt.Errorf(
-			`Unexpected concrete type for LuckyFields: "%T"`, v)
+			`unexpected concrete type for LuckyFields: "%T"`, v)
 	}
 }
 
@@ -804,10 +804,10 @@ func __unmarshalQueryFragmentBeingsBeing(b []byte, v *QueryFragmentBeingsBeing) 
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
-			"Response was missing Being.__typename")
+			"response was missing Being.__typename")
 	default:
 		return fmt.Errorf(
-			`Unexpected concrete type for QueryFragmentBeingsBeing: "%v"`, tn.TypeName)
+			`unexpected concrete type for QueryFragmentBeingsBeing: "%v"`, tn.TypeName)
 	}
 }
 
@@ -843,7 +843,7 @@ func __marshalQueryFragmentBeingsBeing(v *QueryFragmentBeingsBeing) ([]byte, err
 		return []byte("null"), nil
 	default:
 		return nil, fmt.Errorf(
-			`Unexpected concrete type for QueryFragmentBeingsBeing: "%T"`, v)
+			`unexpected concrete type for QueryFragmentBeingsBeing: "%T"`, v)
 	}
 }
 
@@ -1773,10 +1773,10 @@ func __unmarshalqueryWithFragmentsBeingsAnimalOwnerBeing(b []byte, v *queryWithF
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
-			"Response was missing Being.__typename")
+			"response was missing Being.__typename")
 	default:
 		return fmt.Errorf(
-			`Unexpected concrete type for queryWithFragmentsBeingsAnimalOwnerBeing: "%v"`, tn.TypeName)
+			`unexpected concrete type for queryWithFragmentsBeingsAnimalOwnerBeing: "%v"`, tn.TypeName)
 	}
 }
 
@@ -1804,7 +1804,7 @@ func __marshalqueryWithFragmentsBeingsAnimalOwnerBeing(v *queryWithFragmentsBein
 		return []byte("null"), nil
 	default:
 		return nil, fmt.Errorf(
-			`Unexpected concrete type for queryWithFragmentsBeingsAnimalOwnerBeing: "%T"`, v)
+			`unexpected concrete type for queryWithFragmentsBeingsAnimalOwnerBeing: "%T"`, v)
 	}
 }
 
@@ -1868,10 +1868,10 @@ func __unmarshalqueryWithFragmentsBeingsBeing(b []byte, v *queryWithFragmentsBei
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
-			"Response was missing Being.__typename")
+			"response was missing Being.__typename")
 	default:
 		return fmt.Errorf(
-			`Unexpected concrete type for queryWithFragmentsBeingsBeing: "%v"`, tn.TypeName)
+			`unexpected concrete type for queryWithFragmentsBeingsBeing: "%v"`, tn.TypeName)
 	}
 }
 
@@ -1903,7 +1903,7 @@ func __marshalqueryWithFragmentsBeingsBeing(v *queryWithFragmentsBeingsBeing) ([
 		return []byte("null"), nil
 	default:
 		return nil, fmt.Errorf(
-			`Unexpected concrete type for queryWithFragmentsBeingsBeing: "%T"`, v)
+			`unexpected concrete type for queryWithFragmentsBeingsBeing: "%T"`, v)
 	}
 }
 
@@ -2080,10 +2080,10 @@ func __unmarshalqueryWithInterfaceListFieldBeingsBeing(b []byte, v *queryWithInt
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
-			"Response was missing Being.__typename")
+			"response was missing Being.__typename")
 	default:
 		return fmt.Errorf(
-			`Unexpected concrete type for queryWithInterfaceListFieldBeingsBeing: "%v"`, tn.TypeName)
+			`unexpected concrete type for queryWithInterfaceListFieldBeingsBeing: "%v"`, tn.TypeName)
 	}
 }
 
@@ -2111,7 +2111,7 @@ func __marshalqueryWithInterfaceListFieldBeingsBeing(v *queryWithInterfaceListFi
 		return []byte("null"), nil
 	default:
 		return nil, fmt.Errorf(
-			`Unexpected concrete type for queryWithInterfaceListFieldBeingsBeing: "%T"`, v)
+			`unexpected concrete type for queryWithInterfaceListFieldBeingsBeing: "%T"`, v)
 	}
 }
 
@@ -2274,10 +2274,10 @@ func __unmarshalqueryWithInterfaceListPointerFieldBeingsBeing(b []byte, v *query
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
-			"Response was missing Being.__typename")
+			"response was missing Being.__typename")
 	default:
 		return fmt.Errorf(
-			`Unexpected concrete type for queryWithInterfaceListPointerFieldBeingsBeing: "%v"`, tn.TypeName)
+			`unexpected concrete type for queryWithInterfaceListPointerFieldBeingsBeing: "%v"`, tn.TypeName)
 	}
 }
 
@@ -2305,7 +2305,7 @@ func __marshalqueryWithInterfaceListPointerFieldBeingsBeing(v *queryWithInterfac
 		return []byte("null"), nil
 	default:
 		return nil, fmt.Errorf(
-			`Unexpected concrete type for queryWithInterfaceListPointerFieldBeingsBeing: "%T"`, v)
+			`unexpected concrete type for queryWithInterfaceListPointerFieldBeingsBeing: "%T"`, v)
 	}
 }
 
@@ -2455,10 +2455,10 @@ func __unmarshalqueryWithInterfaceNoFragmentsBeing(b []byte, v *queryWithInterfa
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
-			"Response was missing Being.__typename")
+			"response was missing Being.__typename")
 	default:
 		return fmt.Errorf(
-			`Unexpected concrete type for queryWithInterfaceNoFragmentsBeing: "%v"`, tn.TypeName)
+			`unexpected concrete type for queryWithInterfaceNoFragmentsBeing: "%v"`, tn.TypeName)
 	}
 }
 
@@ -2486,7 +2486,7 @@ func __marshalqueryWithInterfaceNoFragmentsBeing(v *queryWithInterfaceNoFragment
 		return []byte("null"), nil
 	default:
 		return nil, fmt.Errorf(
-			`Unexpected concrete type for queryWithInterfaceNoFragmentsBeing: "%T"`, v)
+			`unexpected concrete type for queryWithInterfaceNoFragmentsBeing: "%T"`, v)
 	}
 }
 
@@ -2743,10 +2743,10 @@ func __unmarshalqueryWithNamedFragmentsBeingsBeing(b []byte, v *queryWithNamedFr
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
-			"Response was missing Being.__typename")
+			"response was missing Being.__typename")
 	default:
 		return fmt.Errorf(
-			`Unexpected concrete type for queryWithNamedFragmentsBeingsBeing: "%v"`, tn.TypeName)
+			`unexpected concrete type for queryWithNamedFragmentsBeingsBeing: "%v"`, tn.TypeName)
 	}
 }
 
@@ -2782,7 +2782,7 @@ func __marshalqueryWithNamedFragmentsBeingsBeing(v *queryWithNamedFragmentsBeing
 		return []byte("null"), nil
 	default:
 		return nil, fmt.Errorf(
-			`Unexpected concrete type for queryWithNamedFragmentsBeingsBeing: "%T"`, v)
+			`unexpected concrete type for queryWithNamedFragmentsBeingsBeing: "%T"`, v)
 	}
 }
 

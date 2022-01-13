@@ -39,6 +39,6 @@ func __marshal{{.GoName}}(v *{{.GoName}}) ([]byte, error) {
         return []byte("null"), nil
     default:
         return nil, {{ref "fmt.Errorf"}}(
-            `Unexpected concrete type for {{.GoName}}: "%T"`, v)
+            `unexpected concrete type for {{.GoName}}: "%T"`, v)
     }
 }

@@ -81,10 +81,10 @@ func __unmarshalInterfaceNoFragmentsQueryRandomItemContent(b []byte, v *Interfac
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
-			"Response was missing Content.__typename")
+			"response was missing Content.__typename")
 	default:
 		return fmt.Errorf(
-			`Unexpected concrete type for InterfaceNoFragmentsQueryRandomItemContent: "%v"`, tn.TypeName)
+			`unexpected concrete type for InterfaceNoFragmentsQueryRandomItemContent: "%v"`, tn.TypeName)
 	}
 }
 
@@ -120,7 +120,7 @@ func __marshalInterfaceNoFragmentsQueryRandomItemContent(v *InterfaceNoFragments
 		return []byte("null"), nil
 	default:
 		return nil, fmt.Errorf(
-			`Unexpected concrete type for InterfaceNoFragmentsQueryRandomItemContent: "%T"`, v)
+			`unexpected concrete type for InterfaceNoFragmentsQueryRandomItemContent: "%T"`, v)
 	}
 }
 
@@ -231,10 +231,10 @@ func __unmarshalInterfaceNoFragmentsQueryRandomItemWithTypeNameContent(b []byte,
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
-			"Response was missing Content.__typename")
+			"response was missing Content.__typename")
 	default:
 		return fmt.Errorf(
-			`Unexpected concrete type for InterfaceNoFragmentsQueryRandomItemWithTypeNameContent: "%v"`, tn.TypeName)
+			`unexpected concrete type for InterfaceNoFragmentsQueryRandomItemWithTypeNameContent: "%v"`, tn.TypeName)
 	}
 }
 
@@ -270,7 +270,7 @@ func __marshalInterfaceNoFragmentsQueryRandomItemWithTypeNameContent(v *Interfac
 		return []byte("null"), nil
 	default:
 		return nil, fmt.Errorf(
-			`Unexpected concrete type for InterfaceNoFragmentsQueryRandomItemWithTypeNameContent: "%T"`, v)
+			`unexpected concrete type for InterfaceNoFragmentsQueryRandomItemWithTypeNameContent: "%T"`, v)
 	}
 }
 
@@ -549,10 +549,10 @@ func __unmarshalInterfaceNoFragmentsQueryWithPointerContent(b []byte, v *Interfa
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
-			"Response was missing Content.__typename")
+			"response was missing Content.__typename")
 	default:
 		return fmt.Errorf(
-			`Unexpected concrete type for InterfaceNoFragmentsQueryWithPointerContent: "%v"`, tn.TypeName)
+			`unexpected concrete type for InterfaceNoFragmentsQueryWithPointerContent: "%v"`, tn.TypeName)
 	}
 }
 
@@ -588,7 +588,7 @@ func __marshalInterfaceNoFragmentsQueryWithPointerContent(v *InterfaceNoFragment
 		return []byte("null"), nil
 	default:
 		return nil, fmt.Errorf(
-			`Unexpected concrete type for InterfaceNoFragmentsQueryWithPointerContent: "%T"`, v)
+			`unexpected concrete type for InterfaceNoFragmentsQueryWithPointerContent: "%T"`, v)
 	}
 }
 

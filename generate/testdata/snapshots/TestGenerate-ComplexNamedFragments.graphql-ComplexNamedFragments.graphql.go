@@ -159,10 +159,10 @@ func __unmarshalContentFields(b []byte, v *ContentFields) error {
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
-			"Response was missing Content.__typename")
+			"response was missing Content.__typename")
 	default:
 		return fmt.Errorf(
-			`Unexpected concrete type for ContentFields: "%v"`, tn.TypeName)
+			`unexpected concrete type for ContentFields: "%v"`, tn.TypeName)
 	}
 }
 
@@ -198,7 +198,7 @@ func __marshalContentFields(v *ContentFields) ([]byte, error) {
 		return []byte("null"), nil
 	default:
 		return nil, fmt.Errorf(
-			`Unexpected concrete type for ContentFields: "%T"`, v)
+			`unexpected concrete type for ContentFields: "%T"`, v)
 	}
 }
 
@@ -495,10 +495,10 @@ func __unmarshalInnerQueryFragmentOtherLeafLeafContent(b []byte, v *InnerQueryFr
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
-			"Response was missing LeafContent.__typename")
+			"response was missing LeafContent.__typename")
 	default:
 		return fmt.Errorf(
-			`Unexpected concrete type for InnerQueryFragmentOtherLeafLeafContent: "%v"`, tn.TypeName)
+			`unexpected concrete type for InnerQueryFragmentOtherLeafLeafContent: "%v"`, tn.TypeName)
 	}
 }
 
@@ -534,7 +534,7 @@ func __marshalInnerQueryFragmentOtherLeafLeafContent(v *InnerQueryFragmentOtherL
 		return []byte("null"), nil
 	default:
 		return nil, fmt.Errorf(
-			`Unexpected concrete type for InnerQueryFragmentOtherLeafLeafContent: "%T"`, v)
+			`unexpected concrete type for InnerQueryFragmentOtherLeafLeafContent: "%T"`, v)
 	}
 }
 
@@ -752,10 +752,10 @@ func __unmarshalInnerQueryFragmentRandomItemContent(b []byte, v *InnerQueryFragm
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
-			"Response was missing Content.__typename")
+			"response was missing Content.__typename")
 	default:
 		return fmt.Errorf(
-			`Unexpected concrete type for InnerQueryFragmentRandomItemContent: "%v"`, tn.TypeName)
+			`unexpected concrete type for InnerQueryFragmentRandomItemContent: "%v"`, tn.TypeName)
 	}
 }
 
@@ -803,7 +803,7 @@ func __marshalInnerQueryFragmentRandomItemContent(v *InnerQueryFragmentRandomIte
 		return []byte("null"), nil
 	default:
 		return nil, fmt.Errorf(
-			`Unexpected concrete type for InnerQueryFragmentRandomItemContent: "%T"`, v)
+			`unexpected concrete type for InnerQueryFragmentRandomItemContent: "%T"`, v)
 	}
 }
 
@@ -1081,10 +1081,10 @@ func __unmarshalInnerQueryFragmentRandomLeafLeafContent(b []byte, v *InnerQueryF
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
-			"Response was missing LeafContent.__typename")
+			"response was missing LeafContent.__typename")
 	default:
 		return fmt.Errorf(
-			`Unexpected concrete type for InnerQueryFragmentRandomLeafLeafContent: "%v"`, tn.TypeName)
+			`unexpected concrete type for InnerQueryFragmentRandomLeafLeafContent: "%v"`, tn.TypeName)
 	}
 }
 
@@ -1120,7 +1120,7 @@ func __marshalInnerQueryFragmentRandomLeafLeafContent(v *InnerQueryFragmentRando
 		return []byte("null"), nil
 	default:
 		return nil, fmt.Errorf(
-			`Unexpected concrete type for InnerQueryFragmentRandomLeafLeafContent: "%T"`, v)
+			`unexpected concrete type for InnerQueryFragmentRandomLeafLeafContent: "%T"`, v)
 	}
 }
 
@@ -1403,10 +1403,10 @@ func __unmarshalMoreVideoFieldsParentTopicChildrenContent(b []byte, v *MoreVideo
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
-			"Response was missing Content.__typename")
+			"response was missing Content.__typename")
 	default:
 		return fmt.Errorf(
-			`Unexpected concrete type for MoreVideoFieldsParentTopicChildrenContent: "%v"`, tn.TypeName)
+			`unexpected concrete type for MoreVideoFieldsParentTopicChildrenContent: "%v"`, tn.TypeName)
 	}
 }
 
@@ -1446,7 +1446,7 @@ func __marshalMoreVideoFieldsParentTopicChildrenContent(v *MoreVideoFieldsParent
 		return []byte("null"), nil
 	default:
 		return nil, fmt.Errorf(
-			`Unexpected concrete type for MoreVideoFieldsParentTopicChildrenContent: "%T"`, v)
+			`unexpected concrete type for MoreVideoFieldsParentTopicChildrenContent: "%T"`, v)
 	}
 }
 

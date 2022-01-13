@@ -184,10 +184,10 @@ func __unmarshalInterfaceNestingRootTopicChildrenContent(b []byte, v *InterfaceN
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
-			"Response was missing Content.__typename")
+			"response was missing Content.__typename")
 	default:
 		return fmt.Errorf(
-			`Unexpected concrete type for InterfaceNestingRootTopicChildrenContent: "%v"`, tn.TypeName)
+			`unexpected concrete type for InterfaceNestingRootTopicChildrenContent: "%v"`, tn.TypeName)
 	}
 }
 
@@ -223,7 +223,7 @@ func __marshalInterfaceNestingRootTopicChildrenContent(v *InterfaceNestingRootTo
 		return []byte("null"), nil
 	default:
 		return nil, fmt.Errorf(
-			`Unexpected concrete type for InterfaceNestingRootTopicChildrenContent: "%T"`, v)
+			`unexpected concrete type for InterfaceNestingRootTopicChildrenContent: "%T"`, v)
 	}
 }
 
@@ -389,10 +389,10 @@ func __unmarshalInterfaceNestingRootTopicChildrenContentParentTopicChildrenConte
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
-			"Response was missing Content.__typename")
+			"response was missing Content.__typename")
 	default:
 		return fmt.Errorf(
-			`Unexpected concrete type for InterfaceNestingRootTopicChildrenContentParentTopicChildrenContent: "%v"`, tn.TypeName)
+			`unexpected concrete type for InterfaceNestingRootTopicChildrenContentParentTopicChildrenContent: "%v"`, tn.TypeName)
 	}
 }
 
@@ -428,7 +428,7 @@ func __marshalInterfaceNestingRootTopicChildrenContentParentTopicChildrenContent
 		return []byte("null"), nil
 	default:
 		return nil, fmt.Errorf(
-			`Unexpected concrete type for InterfaceNestingRootTopicChildrenContentParentTopicChildrenContent: "%T"`, v)
+			`unexpected concrete type for InterfaceNestingRootTopicChildrenContentParentTopicChildrenContent: "%T"`, v)
 	}
 }
 
