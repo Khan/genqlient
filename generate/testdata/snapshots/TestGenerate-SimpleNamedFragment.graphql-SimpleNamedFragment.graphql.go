@@ -81,10 +81,10 @@ func __unmarshalSimpleNamedFragmentRandomItemContent(b []byte, v *SimpleNamedFra
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
-			"Response was missing Content.__typename")
+			"response was missing Content.__typename")
 	default:
 		return fmt.Errorf(
-			`Unexpected concrete type for SimpleNamedFragmentRandomItemContent: "%v"`, tn.TypeName)
+			`unexpected concrete type for SimpleNamedFragmentRandomItemContent: "%v"`, tn.TypeName)
 	}
 }
 
@@ -124,7 +124,7 @@ func __marshalSimpleNamedFragmentRandomItemContent(v *SimpleNamedFragmentRandomI
 		return []byte("null"), nil
 	default:
 		return nil, fmt.Errorf(
-			`Unexpected concrete type for SimpleNamedFragmentRandomItemContent: "%T"`, v)
+			`unexpected concrete type for SimpleNamedFragmentRandomItemContent: "%T"`, v)
 	}
 }
 
@@ -282,10 +282,10 @@ func __unmarshalSimpleNamedFragmentRandomLeafLeafContent(b []byte, v *SimpleName
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
-			"Response was missing LeafContent.__typename")
+			"response was missing LeafContent.__typename")
 	default:
 		return fmt.Errorf(
-			`Unexpected concrete type for SimpleNamedFragmentRandomLeafLeafContent: "%v"`, tn.TypeName)
+			`unexpected concrete type for SimpleNamedFragmentRandomLeafLeafContent: "%v"`, tn.TypeName)
 	}
 }
 
@@ -317,7 +317,7 @@ func __marshalSimpleNamedFragmentRandomLeafLeafContent(v *SimpleNamedFragmentRan
 		return []byte("null"), nil
 	default:
 		return nil, fmt.Errorf(
-			`Unexpected concrete type for SimpleNamedFragmentRandomLeafLeafContent: "%T"`, v)
+			`unexpected concrete type for SimpleNamedFragmentRandomLeafLeafContent: "%T"`, v)
 	}
 }
 

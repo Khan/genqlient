@@ -85,10 +85,10 @@ func __unmarshalSimpleInlineFragmentRandomItemContent(b []byte, v *SimpleInlineF
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
-			"Response was missing Content.__typename")
+			"response was missing Content.__typename")
 	default:
 		return fmt.Errorf(
-			`Unexpected concrete type for SimpleInlineFragmentRandomItemContent: "%v"`, tn.TypeName)
+			`unexpected concrete type for SimpleInlineFragmentRandomItemContent: "%v"`, tn.TypeName)
 	}
 }
 
@@ -124,7 +124,7 @@ func __marshalSimpleInlineFragmentRandomItemContent(v *SimpleInlineFragmentRando
 		return []byte("null"), nil
 	default:
 		return nil, fmt.Errorf(
-			`Unexpected concrete type for SimpleInlineFragmentRandomItemContent: "%T"`, v)
+			`unexpected concrete type for SimpleInlineFragmentRandomItemContent: "%T"`, v)
 	}
 }
 

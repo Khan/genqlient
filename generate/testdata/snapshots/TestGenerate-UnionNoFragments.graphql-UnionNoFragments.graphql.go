@@ -58,10 +58,10 @@ func __unmarshalUnionNoFragmentsQueryRandomLeafLeafContent(b []byte, v *UnionNoF
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
-			"Response was missing LeafContent.__typename")
+			"response was missing LeafContent.__typename")
 	default:
 		return fmt.Errorf(
-			`Unexpected concrete type for UnionNoFragmentsQueryRandomLeafLeafContent: "%v"`, tn.TypeName)
+			`unexpected concrete type for UnionNoFragmentsQueryRandomLeafLeafContent: "%v"`, tn.TypeName)
 	}
 }
 
@@ -89,7 +89,7 @@ func __marshalUnionNoFragmentsQueryRandomLeafLeafContent(v *UnionNoFragmentsQuer
 		return []byte("null"), nil
 	default:
 		return nil, fmt.Errorf(
-			`Unexpected concrete type for UnionNoFragmentsQueryRandomLeafLeafContent: "%T"`, v)
+			`unexpected concrete type for UnionNoFragmentsQueryRandomLeafLeafContent: "%T"`, v)
 	}
 }
 

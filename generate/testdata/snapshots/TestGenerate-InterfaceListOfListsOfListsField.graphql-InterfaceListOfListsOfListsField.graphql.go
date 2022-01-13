@@ -64,10 +64,10 @@ func __unmarshalInterfaceListOfListOfListsFieldListOfListsOfListsOfContent(b []b
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
-			"Response was missing Content.__typename")
+			"response was missing Content.__typename")
 	default:
 		return fmt.Errorf(
-			`Unexpected concrete type for InterfaceListOfListOfListsFieldListOfListsOfListsOfContent: "%v"`, tn.TypeName)
+			`unexpected concrete type for InterfaceListOfListOfListsFieldListOfListsOfListsOfContent: "%v"`, tn.TypeName)
 	}
 }
 
@@ -103,7 +103,7 @@ func __marshalInterfaceListOfListOfListsFieldListOfListsOfListsOfContent(v *Inte
 		return []byte("null"), nil
 	default:
 		return nil, fmt.Errorf(
-			`Unexpected concrete type for InterfaceListOfListOfListsFieldListOfListsOfListsOfContent: "%T"`, v)
+			`unexpected concrete type for InterfaceListOfListOfListsFieldListOfListsOfListsOfContent: "%T"`, v)
 	}
 }
 
@@ -429,10 +429,10 @@ func __unmarshalInterfaceListOfListOfListsFieldWithPointerContent(b []byte, v *I
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
-			"Response was missing Content.__typename")
+			"response was missing Content.__typename")
 	default:
 		return fmt.Errorf(
-			`Unexpected concrete type for InterfaceListOfListOfListsFieldWithPointerContent: "%v"`, tn.TypeName)
+			`unexpected concrete type for InterfaceListOfListOfListsFieldWithPointerContent: "%v"`, tn.TypeName)
 	}
 }
 
@@ -468,7 +468,7 @@ func __marshalInterfaceListOfListOfListsFieldWithPointerContent(v *InterfaceList
 		return []byte("null"), nil
 	default:
 		return nil, fmt.Errorf(
-			`Unexpected concrete type for InterfaceListOfListOfListsFieldWithPointerContent: "%T"`, v)
+			`unexpected concrete type for InterfaceListOfListOfListsFieldWithPointerContent: "%T"`, v)
 	}
 }
 

@@ -69,10 +69,10 @@ func __unmarshalContentFields(b []byte, v *ContentFields) error {
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
-			"Response was missing Content.__typename")
+			"response was missing Content.__typename")
 	default:
 		return fmt.Errorf(
-			`Unexpected concrete type for ContentFields: "%v"`, tn.TypeName)
+			`unexpected concrete type for ContentFields: "%v"`, tn.TypeName)
 	}
 }
 
@@ -108,7 +108,7 @@ func __marshalContentFields(v *ContentFields) ([]byte, error) {
 		return []byte("null"), nil
 	default:
 		return nil, fmt.Errorf(
-			`Unexpected concrete type for ContentFields: "%T"`, v)
+			`unexpected concrete type for ContentFields: "%T"`, v)
 	}
 }
 

@@ -28,9 +28,9 @@ func __unmarshal{{.GoName}}(b []byte, v *{{.GoName}}) error {
              of the mock didn't know to add __typename, so give a special
              error. */ -}}
         return {{ref "fmt.Errorf"}}(
-            "Response was missing {{.GraphQLName}}.__typename")
+            "response was missing {{.GraphQLName}}.__typename")
     default:
         return {{ref "fmt.Errorf"}}(
-            `Unexpected concrete type for {{.GoName}}: "%v"`, tn.TypeName)
+            `unexpected concrete type for {{.GoName}}: "%v"`, tn.TypeName)
     }
 }

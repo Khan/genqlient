@@ -87,10 +87,10 @@ func __unmarshalComplexInlineFragmentsConflictingStuffContent(b []byte, v *Compl
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
-			"Response was missing Content.__typename")
+			"response was missing Content.__typename")
 	default:
 		return fmt.Errorf(
-			`Unexpected concrete type for ComplexInlineFragmentsConflictingStuffContent: "%v"`, tn.TypeName)
+			`unexpected concrete type for ComplexInlineFragmentsConflictingStuffContent: "%v"`, tn.TypeName)
 	}
 }
 
@@ -126,7 +126,7 @@ func __marshalComplexInlineFragmentsConflictingStuffContent(v *ComplexInlineFrag
 		return []byte("null"), nil
 	default:
 		return nil, fmt.Errorf(
-			`Unexpected concrete type for ComplexInlineFragmentsConflictingStuffContent: "%T"`, v)
+			`unexpected concrete type for ComplexInlineFragmentsConflictingStuffContent: "%T"`, v)
 	}
 }
 
@@ -221,10 +221,10 @@ func __unmarshalComplexInlineFragmentsNestedStuffContent(b []byte, v *ComplexInl
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
-			"Response was missing Content.__typename")
+			"response was missing Content.__typename")
 	default:
 		return fmt.Errorf(
-			`Unexpected concrete type for ComplexInlineFragmentsNestedStuffContent: "%v"`, tn.TypeName)
+			`unexpected concrete type for ComplexInlineFragmentsNestedStuffContent: "%v"`, tn.TypeName)
 	}
 }
 
@@ -264,7 +264,7 @@ func __marshalComplexInlineFragmentsNestedStuffContent(v *ComplexInlineFragments
 		return []byte("null"), nil
 	default:
 		return nil, fmt.Errorf(
-			`Unexpected concrete type for ComplexInlineFragmentsNestedStuffContent: "%T"`, v)
+			`unexpected concrete type for ComplexInlineFragmentsNestedStuffContent: "%T"`, v)
 	}
 }
 
@@ -547,10 +547,10 @@ func __unmarshalComplexInlineFragmentsNestedStuffTopicChildrenArticleParentConte
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
-			"Response was missing Content.__typename")
+			"response was missing Content.__typename")
 	default:
 		return fmt.Errorf(
-			`Unexpected concrete type for ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent: "%v"`, tn.TypeName)
+			`unexpected concrete type for ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent: "%v"`, tn.TypeName)
 	}
 }
 
@@ -586,7 +586,7 @@ func __marshalComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContent
 		return []byte("null"), nil
 	default:
 		return nil, fmt.Errorf(
-			`Unexpected concrete type for ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent: "%T"`, v)
+			`unexpected concrete type for ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent: "%T"`, v)
 	}
 }
 
@@ -704,10 +704,10 @@ func __unmarshalComplexInlineFragmentsNestedStuffTopicChildrenContent(b []byte, 
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
-			"Response was missing Content.__typename")
+			"response was missing Content.__typename")
 	default:
 		return fmt.Errorf(
-			`Unexpected concrete type for ComplexInlineFragmentsNestedStuffTopicChildrenContent: "%v"`, tn.TypeName)
+			`unexpected concrete type for ComplexInlineFragmentsNestedStuffTopicChildrenContent: "%v"`, tn.TypeName)
 	}
 }
 
@@ -743,7 +743,7 @@ func __marshalComplexInlineFragmentsNestedStuffTopicChildrenContent(v *ComplexIn
 		return []byte("null"), nil
 	default:
 		return nil, fmt.Errorf(
-			`Unexpected concrete type for ComplexInlineFragmentsNestedStuffTopicChildrenContent: "%T"`, v)
+			`unexpected concrete type for ComplexInlineFragmentsNestedStuffTopicChildrenContent: "%T"`, v)
 	}
 }
 
@@ -856,10 +856,10 @@ func __unmarshalComplexInlineFragmentsRandomItemContent(b []byte, v *ComplexInli
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
-			"Response was missing Content.__typename")
+			"response was missing Content.__typename")
 	default:
 		return fmt.Errorf(
-			`Unexpected concrete type for ComplexInlineFragmentsRandomItemContent: "%v"`, tn.TypeName)
+			`unexpected concrete type for ComplexInlineFragmentsRandomItemContent: "%v"`, tn.TypeName)
 	}
 }
 
@@ -895,7 +895,7 @@ func __marshalComplexInlineFragmentsRandomItemContent(v *ComplexInlineFragmentsR
 		return []byte("null"), nil
 	default:
 		return nil, fmt.Errorf(
-			`Unexpected concrete type for ComplexInlineFragmentsRandomItemContent: "%T"`, v)
+			`unexpected concrete type for ComplexInlineFragmentsRandomItemContent: "%T"`, v)
 	}
 }
 
@@ -1034,10 +1034,10 @@ func __unmarshalComplexInlineFragmentsRepeatedStuffContent(b []byte, v *ComplexI
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
-			"Response was missing Content.__typename")
+			"response was missing Content.__typename")
 	default:
 		return fmt.Errorf(
-			`Unexpected concrete type for ComplexInlineFragmentsRepeatedStuffContent: "%v"`, tn.TypeName)
+			`unexpected concrete type for ComplexInlineFragmentsRepeatedStuffContent: "%v"`, tn.TypeName)
 	}
 }
 
@@ -1073,7 +1073,7 @@ func __marshalComplexInlineFragmentsRepeatedStuffContent(v *ComplexInlineFragmen
 		return []byte("null"), nil
 	default:
 		return nil, fmt.Errorf(
-			`Unexpected concrete type for ComplexInlineFragmentsRepeatedStuffContent: "%T"`, v)
+			`unexpected concrete type for ComplexInlineFragmentsRepeatedStuffContent: "%T"`, v)
 	}
 }
 

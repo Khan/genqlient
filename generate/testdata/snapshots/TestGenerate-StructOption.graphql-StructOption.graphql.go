@@ -268,10 +268,10 @@ func __unmarshalStructOptionRootTopicChildrenContentParentTopicInterfaceChildren
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
-			"Response was missing Content.__typename")
+			"response was missing Content.__typename")
 	default:
 		return fmt.Errorf(
-			`Unexpected concrete type for StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenContent: "%v"`, tn.TypeName)
+			`unexpected concrete type for StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenContent: "%v"`, tn.TypeName)
 	}
 }
 
@@ -311,7 +311,7 @@ func __marshalStructOptionRootTopicChildrenContentParentTopicInterfaceChildrenCo
 		return []byte("null"), nil
 	default:
 		return nil, fmt.Errorf(
-			`Unexpected concrete type for StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenContent: "%T"`, v)
+			`unexpected concrete type for StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenContent: "%T"`, v)
 	}
 }
 
