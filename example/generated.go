@@ -80,18 +80,20 @@ func getUser(
 	}
 	var err error
 
-	var retval getUserResponse
-	err = client.MakeRequest(
-		ctx,
-		"getUser",
-		`
+	var __query = `
 query getUser ($Login: String!) {
 	user(login: $Login) {
 		theirName: name
 		createdAt
 	}
 }
-`,
+`
+
+	var retval getUserResponse
+	err = client.MakeRequest(
+		ctx,
+		"getUser",
+		__query,
 		&retval,
 		&__input,
 	)
@@ -104,18 +106,20 @@ func getViewer(
 ) (*getViewerResponse, error) {
 	var err error
 
-	var retval getViewerResponse
-	err = client.MakeRequest(
-		ctx,
-		"getViewer",
-		`
+	var __query = `
 query getViewer {
 	viewer {
 		MyName: name
 		createdAt
 	}
 }
-`,
+`
+
+	var retval getViewerResponse
+	err = client.MakeRequest(
+		ctx,
+		"getViewer",
+		__query,
 		&retval,
 		nil,
 	)

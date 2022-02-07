@@ -3025,7 +3025,7 @@ func failingQuery(
 ) (*failingQueryResponse, error) {
 	var err error
 
-	var query = `
+	var __query = `
 query failingQuery {
 	fail
 	me {
@@ -3038,7 +3038,7 @@ query failingQuery {
 	err = client.MakeRequest(
 		ctx,
 		"failingQuery",
-		query,
+		__query,
 		&retval,
 		nil,
 	)
@@ -3055,7 +3055,7 @@ func queryWithCustomMarshal(
 	}
 	var err error
 
-	var query = `
+	var __query = `
 query queryWithCustomMarshal ($date: Date!) {
 	usersBornOn(date: $date) {
 		id
@@ -3069,7 +3069,7 @@ query queryWithCustomMarshal ($date: Date!) {
 	err = client.MakeRequest(
 		ctx,
 		"queryWithCustomMarshal",
-		query,
+		__query,
 		&retval,
 		&__input,
 	)
@@ -3088,7 +3088,7 @@ func queryWithCustomMarshalOptional(
 	}
 	var err error
 
-	var query = `
+	var __query = `
 query queryWithCustomMarshalOptional ($date: Date, $id: ID) {
 	userSearch(birthdate: $date, id: $id) {
 		id
@@ -3102,7 +3102,7 @@ query queryWithCustomMarshalOptional ($date: Date, $id: ID) {
 	err = client.MakeRequest(
 		ctx,
 		"queryWithCustomMarshalOptional",
-		query,
+		__query,
 		&retval,
 		&__input,
 	)
@@ -3119,7 +3119,7 @@ func queryWithCustomMarshalSlice(
 	}
 	var err error
 
-	var query = `
+	var __query = `
 query queryWithCustomMarshalSlice ($dates: [Date!]!) {
 	usersBornOnDates(dates: $dates) {
 		id
@@ -3133,7 +3133,7 @@ query queryWithCustomMarshalSlice ($dates: [Date!]!) {
 	err = client.MakeRequest(
 		ctx,
 		"queryWithCustomMarshalSlice",
-		query,
+		__query,
 		&retval,
 		&__input,
 	)
@@ -3150,7 +3150,7 @@ func queryWithFlatten(
 	}
 	var err error
 
-	var query = `
+	var __query = `
 query queryWithFlatten ($ids: [ID!]!) {
 	... QueryFragment
 }
@@ -3198,7 +3198,7 @@ fragment FriendsFields on User {
 	err = client.MakeRequest(
 		ctx,
 		"queryWithFlatten",
-		query,
+		__query,
 		&retval,
 		&__input,
 	)
@@ -3215,7 +3215,7 @@ func queryWithFragments(
 	}
 	var err error
 
-	var query = `
+	var __query = `
 query queryWithFragments ($ids: [ID!]!) {
 	beings(ids: $ids) {
 		__typename
@@ -3257,7 +3257,7 @@ query queryWithFragments ($ids: [ID!]!) {
 	err = client.MakeRequest(
 		ctx,
 		"queryWithFragments",
-		query,
+		__query,
 		&retval,
 		&__input,
 	)
@@ -3274,7 +3274,7 @@ func queryWithInterfaceListField(
 	}
 	var err error
 
-	var query = `
+	var __query = `
 query queryWithInterfaceListField ($ids: [ID!]!) {
 	beings(ids: $ids) {
 		__typename
@@ -3288,7 +3288,7 @@ query queryWithInterfaceListField ($ids: [ID!]!) {
 	err = client.MakeRequest(
 		ctx,
 		"queryWithInterfaceListField",
-		query,
+		__query,
 		&retval,
 		&__input,
 	)
@@ -3305,7 +3305,7 @@ func queryWithInterfaceListPointerField(
 	}
 	var err error
 
-	var query = `
+	var __query = `
 query queryWithInterfaceListPointerField ($ids: [ID!]!) {
 	beings(ids: $ids) {
 		__typename
@@ -3319,7 +3319,7 @@ query queryWithInterfaceListPointerField ($ids: [ID!]!) {
 	err = client.MakeRequest(
 		ctx,
 		"queryWithInterfaceListPointerField",
-		query,
+		__query,
 		&retval,
 		&__input,
 	)
@@ -3336,7 +3336,7 @@ func queryWithInterfaceNoFragments(
 	}
 	var err error
 
-	var query = `
+	var __query = `
 query queryWithInterfaceNoFragments ($id: ID!) {
 	being(id: $id) {
 		__typename
@@ -3354,7 +3354,7 @@ query queryWithInterfaceNoFragments ($id: ID!) {
 	err = client.MakeRequest(
 		ctx,
 		"queryWithInterfaceNoFragments",
-		query,
+		__query,
 		&retval,
 		&__input,
 	)
@@ -3371,7 +3371,7 @@ func queryWithNamedFragments(
 	}
 	var err error
 
-	var query = `
+	var __query = `
 query queryWithNamedFragments ($ids: [ID!]!) {
 	beings(ids: $ids) {
 		__typename
@@ -3413,7 +3413,7 @@ fragment MoreUserFields on User {
 	err = client.MakeRequest(
 		ctx,
 		"queryWithNamedFragments",
-		query,
+		__query,
 		&retval,
 		&__input,
 	)
@@ -3430,7 +3430,7 @@ func queryWithOmitempty(
 	}
 	var err error
 
-	var query = `
+	var __query = `
 query queryWithOmitempty ($id: ID) {
 	user(id: $id) {
 		id
@@ -3444,7 +3444,7 @@ query queryWithOmitempty ($id: ID) {
 	err = client.MakeRequest(
 		ctx,
 		"queryWithOmitempty",
-		query,
+		__query,
 		&retval,
 		&__input,
 	)
@@ -3461,7 +3461,7 @@ func queryWithVariables(
 	}
 	var err error
 
-	var query = `
+	var __query = `
 query queryWithVariables ($id: ID!) {
 	user(id: $id) {
 		id
@@ -3475,7 +3475,7 @@ query queryWithVariables ($id: ID!) {
 	err = client.MakeRequest(
 		ctx,
 		"queryWithVariables",
-		query,
+		__query,
 		&retval,
 		&__input,
 	)
@@ -3488,7 +3488,7 @@ func simpleQuery(
 ) (*simpleQueryResponse, error) {
 	var err error
 
-	var query = `
+	var __query = `
 query simpleQuery {
 	me {
 		id
@@ -3502,7 +3502,7 @@ query simpleQuery {
 	err = client.MakeRequest(
 		ctx,
 		"simpleQuery",
-		query,
+		__query,
 		&retval,
 		nil,
 	)
