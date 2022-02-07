@@ -88,6 +88,11 @@ client_getter: "github.com/you/yourpkg.GetClient"
 use_struct_references: boolean
 
 
+# Auto add list of Type from package.
+# if type is defined in bindings part. Is not replaced.
+auto_binding: github.com/you/yourpkg/model
+
+
 # A map from GraphQL type name to Go fully-qualified type name to override
 # the Go type genqlient will use for this GraphQL type.
 #

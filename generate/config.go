@@ -1,12 +1,15 @@
 package generate
 
 import (
+	"fmt"
 	"go/token"
 	"io"
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"unicode"
 
+	"golang.org/x/tools/go/packages"
 	"gopkg.in/yaml.v2"
 )
 
@@ -27,6 +30,7 @@ type Config struct {
 	ContextType      string                  `yaml:"context_type"`
 	ClientGetter     string                  `yaml:"client_getter"`
 	Bindings         map[string]*TypeBinding `yaml:"bindings"`
+	AutoBindings     string                  `yaml:"auto_bindings"`
 	StructReferences bool                    `yaml:"use_struct_references"`
 
 	// Set to true to use features that aren't fully ready to use.
@@ -85,6 +89,35 @@ func (c *Config) ValidateAndFillDefaults(baseDir string) error {
 		}
 
 		c.Package = base
+	}
+
+	if c.AutoBindings != "" {
+		pkgs, err := packages.Load(&packages.Config{
+			Mode: packages.NeedTypes | packages.NeedTypesInfo,
+		}, c.AutoBindings)
+		if err != nil {
+			return err
+		}
+
+		for idx := range pkgs {
+			p := pkgs[idx].Types
+			if p == nil || p.Scope() == nil {
+				continue
+			}
+
+			for _, typ := range p.Scope().Names() {
+				if unicode.IsUpper(rune(typ[0])) {
+					// Check if type is manual bindings
+					_, exist := c.Bindings[typ]
+					if !exist {
+						pathType := fmt.Sprintf("%s.%s", p.Path(), typ)
+						c.Bindings[typ] = &TypeBinding{
+							Type: pathType,
+						}
+					}
+				}
+			}
+		}
 	}
 
 	return nil
