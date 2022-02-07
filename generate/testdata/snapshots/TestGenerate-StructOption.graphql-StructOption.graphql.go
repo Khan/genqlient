@@ -429,11 +429,7 @@ func StructOption(
 ) (*StructOptionResponse, error) {
 	var err error
 
-	var retval StructOptionResponse
-	err = client.MakeRequest(
-		nil,
-		"StructOption",
-		`
+	var __query = `
 query StructOption {
 	root {
 		id
@@ -461,7 +457,13 @@ query StructOption {
 fragment VideoFields on Video {
 	duration
 }
-`,
+`
+
+	var retval StructOptionResponse
+	err = client.MakeRequest(
+		nil,
+		"StructOption",
+		__query,
 		&retval,
 		nil,
 	)

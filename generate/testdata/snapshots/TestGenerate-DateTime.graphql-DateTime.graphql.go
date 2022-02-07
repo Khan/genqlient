@@ -39,15 +39,17 @@ func convertTimezone(
 	}
 	var err error
 
+	var __query = `
+query convertTimezone ($dt: DateTime!, $tz: String) {
+	convert(dt: $dt, tz: $tz)
+}
+`
+
 	var retval convertTimezoneResponse
 	err = client.MakeRequest(
 		nil,
 		"convertTimezone",
-		`
-query convertTimezone ($dt: DateTime!, $tz: String) {
-	convert(dt: $dt, tz: $tz)
-}
-`,
+		__query,
 		&retval,
 		&__input,
 	)

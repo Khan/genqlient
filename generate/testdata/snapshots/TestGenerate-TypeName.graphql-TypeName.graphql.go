@@ -42,18 +42,20 @@ func TypeNameQuery(
 ) (*TypeNameQueryResponse, error) {
 	var err error
 
-	var retval TypeNameQueryResponse
-	err = client.MakeRequest(
-		nil,
-		"TypeNameQuery",
-		`
+	var __query = `
 query TypeNameQuery {
 	user {
 		__typename
 		id
 	}
 }
-`,
+`
+
+	var retval TypeNameQueryResponse
+	err = client.MakeRequest(
+		nil,
+		"TypeNameQuery",
+		__query,
 		&retval,
 		nil,
 	)

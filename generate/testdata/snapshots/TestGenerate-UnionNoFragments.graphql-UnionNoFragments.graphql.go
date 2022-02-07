@@ -179,17 +179,19 @@ func UnionNoFragmentsQuery(
 ) (*UnionNoFragmentsQueryResponse, error) {
 	var err error
 
-	var retval UnionNoFragmentsQueryResponse
-	err = client.MakeRequest(
-		nil,
-		"UnionNoFragmentsQuery",
-		`
+	var __query = `
 query UnionNoFragmentsQuery {
 	randomLeaf {
 		__typename
 	}
 }
-`,
+`
+
+	var retval UnionNoFragmentsQueryResponse
+	err = client.MakeRequest(
+		nil,
+		"UnionNoFragmentsQuery",
+		__query,
 		&retval,
 		nil,
 	)

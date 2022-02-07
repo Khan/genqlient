@@ -50,17 +50,19 @@ func SimpleInputQuery(
 	}
 	var err error
 
-	var retval SimpleInputQueryResponse
-	err = client.MakeRequest(
-		nil,
-		"SimpleInputQuery",
-		`
+	var __query = `
 query SimpleInputQuery ($name: String!) {
 	user(query: {name:$name}) {
 		id
 	}
 }
-`,
+`
+
+	var retval SimpleInputQueryResponse
+	err = client.MakeRequest(
+		nil,
+		"SimpleInputQuery",
+		__query,
 		&retval,
 		&__input,
 	)

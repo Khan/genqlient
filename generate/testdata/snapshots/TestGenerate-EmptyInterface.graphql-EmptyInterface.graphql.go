@@ -25,16 +25,18 @@ func EmptyInterface(
 ) (*EmptyInterfaceResponse, error) {
 	var err error
 
-	var retval EmptyInterfaceResponse
-	err = client.MakeRequest(
-		nil,
-		"EmptyInterface",
-		`
+	var __query = `
 query EmptyInterface {
 	getJunk
 	getComplexJunk
 }
-`,
+`
+
+	var retval EmptyInterfaceResponse
+	err = client.MakeRequest(
+		nil,
+		"EmptyInterface",
+		__query,
 		&retval,
 		nil,
 	)

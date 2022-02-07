@@ -244,11 +244,7 @@ func SimpleInlineFragment(
 ) (*SimpleInlineFragmentResponse, error) {
 	var err error
 
-	var retval SimpleInlineFragmentResponse
-	err = client.MakeRequest(
-		nil,
-		"SimpleInlineFragment",
-		`
+	var __query = `
 query SimpleInlineFragment {
 	randomItem {
 		__typename
@@ -262,7 +258,13 @@ query SimpleInlineFragment {
 		}
 	}
 }
-`,
+`
+
+	var retval SimpleInlineFragmentResponse
+	err = client.MakeRequest(
+		nil,
+		"SimpleInlineFragment",
+		__query,
 		&retval,
 		nil,
 	)

@@ -77,11 +77,7 @@ func Recursion(
 	}
 	var err error
 
-	var retval RecursionResponse
-	err = client.MakeRequest(
-		nil,
-		"Recursion",
-		`
+	var __query = `
 query Recursion ($input: RecursiveInput!) {
 	recur(input: $input) {
 		rec {
@@ -93,7 +89,13 @@ query Recursion ($input: RecursiveInput!) {
 		}
 	}
 }
-`,
+`
+
+	var retval RecursionResponse
+	err = client.MakeRequest(
+		nil,
+		"Recursion",
+		__query,
 		&retval,
 		&__input,
 	)

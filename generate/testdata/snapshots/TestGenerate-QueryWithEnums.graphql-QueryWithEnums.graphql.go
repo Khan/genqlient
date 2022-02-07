@@ -67,11 +67,7 @@ func QueryWithEnums(
 ) (*QueryWithEnumsResponse, error) {
 	var err error
 
-	var retval QueryWithEnumsResponse
-	err = client.MakeRequest(
-		nil,
-		"QueryWithEnums",
-		`
+	var __query = `
 query QueryWithEnums {
 	user {
 		roles
@@ -80,7 +76,13 @@ query QueryWithEnums {
 		roles
 	}
 }
-`,
+`
+
+	var retval QueryWithEnumsResponse
+	err = client.MakeRequest(
+		nil,
+		"QueryWithEnums",
+		__query,
 		&retval,
 		nil,
 	)

@@ -67,11 +67,7 @@ func UsesEnumTwiceQuery(
 ) (*UsesEnumTwiceQueryResponse, error) {
 	var err error
 
-	var retval UsesEnumTwiceQueryResponse
-	err = client.MakeRequest(
-		nil,
-		"UsesEnumTwiceQuery",
-		`
+	var __query = `
 query UsesEnumTwiceQuery {
 	Me: user {
 		roles
@@ -80,7 +76,13 @@ query UsesEnumTwiceQuery {
 		roles
 	}
 }
-`,
+`
+
+	var retval UsesEnumTwiceQueryResponse
+	err = client.MakeRequest(
+		nil,
+		"UsesEnumTwiceQuery",
+		__query,
 		&retval,
 		nil,
 	)

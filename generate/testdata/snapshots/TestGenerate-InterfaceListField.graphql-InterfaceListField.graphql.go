@@ -525,11 +525,7 @@ func InterfaceListField(
 ) (*InterfaceListFieldResponse, error) {
 	var err error
 
-	var retval InterfaceListFieldResponse
-	err = client.MakeRequest(
-		nil,
-		"InterfaceListField",
-		`
+	var __query = `
 query InterfaceListField {
 	root {
 		id
@@ -550,7 +546,13 @@ query InterfaceListField {
 		}
 	}
 }
-`,
+`
+
+	var retval InterfaceListFieldResponse
+	err = client.MakeRequest(
+		nil,
+		"InterfaceListField",
+		__query,
 		&retval,
 		nil,
 	)

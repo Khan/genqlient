@@ -186,17 +186,19 @@ func unexported(
 	}
 	var err error
 
-	var retval unexportedResponse
-	err = client.MakeRequest(
-		nil,
-		"unexported",
-		`
+	var __query = `
 query unexported ($query: UserQueryInput) {
 	user(query: $query) {
 		id
 	}
 }
-`,
+`
+
+	var retval unexportedResponse
+	err = client.MakeRequest(
+		nil,
+		"unexported",
+		__query,
 		&retval,
 		&__input,
 	)

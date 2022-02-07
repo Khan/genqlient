@@ -183,18 +183,20 @@ func CustomMarshal(
 	}
 	var err error
 
-	var retval CustomMarshalResponse
-	err = client.MakeRequest(
-		nil,
-		"CustomMarshal",
-		`
+	var __query = `
 query CustomMarshal ($date: Date!) {
 	usersBornOn(date: $date) {
 		id
 		birthdate
 	}
 }
-`,
+`
+
+	var retval CustomMarshalResponse
+	err = client.MakeRequest(
+		nil,
+		"CustomMarshal",
+		__query,
 		&retval,
 		&__input,
 	)

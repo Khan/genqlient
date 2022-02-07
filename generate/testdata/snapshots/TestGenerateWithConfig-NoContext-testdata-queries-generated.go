@@ -37,17 +37,19 @@ func SimpleQuery(
 ) (*SimpleQueryResponse, error) {
 	var err error
 
-	var retval SimpleQueryResponse
-	err = client.MakeRequest(
-		nil,
-		"SimpleQuery",
-		`
+	var __query = `
 query SimpleQuery {
 	user {
 		id
 	}
 }
-`,
+`
+
+	var retval SimpleQueryResponse
+	err = client.MakeRequest(
+		nil,
+		"SimpleQuery",
+		__query,
 		&retval,
 		nil,
 	)

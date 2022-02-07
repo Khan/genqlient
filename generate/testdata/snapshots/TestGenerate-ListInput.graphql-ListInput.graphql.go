@@ -50,17 +50,19 @@ func ListInputQuery(
 	}
 	var err error
 
-	var retval ListInputQueryResponse
-	err = client.MakeRequest(
-		nil,
-		"ListInputQuery",
-		`
+	var __query = `
 query ListInputQuery ($names: [String]) {
 	user(query: {names:$names}) {
 		id
 	}
 }
-`,
+`
+
+	var retval ListInputQueryResponse
+	err = client.MakeRequest(
+		nil,
+		"ListInputQuery",
+		__query,
 		&retval,
 		&__input,
 	)

@@ -80,11 +80,7 @@ func GetPokemonSiblings(
 	}
 	var err error
 
-	var retval GetPokemonSiblingsResponse
-	err = client.MakeRequest(
-		nil,
-		"GetPokemonSiblings",
-		`
+	var __query = `
 query GetPokemonSiblings ($input: PokemonInput!) {
 	user(query: {hasPokemon:$input}) {
 		id
@@ -100,7 +96,13 @@ query GetPokemonSiblings ($input: PokemonInput!) {
 		}
 	}
 }
-`,
+`
+
+	var retval GetPokemonSiblingsResponse
+	err = client.MakeRequest(
+		nil,
+		"GetPokemonSiblings",
+		__query,
 		&retval,
 		&__input,
 	)

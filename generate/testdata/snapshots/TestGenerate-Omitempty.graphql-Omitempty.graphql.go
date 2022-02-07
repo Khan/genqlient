@@ -236,11 +236,7 @@ func OmitEmptyQuery(
 	}
 	var err error
 
-	var retval OmitEmptyQueryResponse
-	err = client.MakeRequest(
-		nil,
-		"OmitEmptyQuery",
-		`
+	var __query = `
 query OmitEmptyQuery ($query: UserQueryInput, $queries: [UserQueryInput], $dt: DateTime, $tz: String, $tzNoOmitEmpty: String) {
 	user(query: $query) {
 		id
@@ -251,7 +247,13 @@ query OmitEmptyQuery ($query: UserQueryInput, $queries: [UserQueryInput], $dt: D
 	maybeConvert(dt: $dt, tz: $tz)
 	convert2: maybeConvert(dt: $dt, tz: $tzNoOmitEmpty)
 }
-`,
+`
+
+	var retval OmitEmptyQueryResponse
+	err = client.MakeRequest(
+		nil,
+		"OmitEmptyQuery",
+		__query,
 		&retval,
 		&__input,
 	)

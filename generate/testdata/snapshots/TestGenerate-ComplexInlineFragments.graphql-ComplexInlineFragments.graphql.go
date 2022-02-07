@@ -1350,11 +1350,7 @@ func ComplexInlineFragments(
 ) (*ComplexInlineFragmentsResponse, error) {
 	var err error
 
-	var retval ComplexInlineFragmentsResponse
-	err = client.MakeRequest(
-		nil,
-		"ComplexInlineFragments",
-		`
+	var __query = `
 query ComplexInlineFragments {
 	root {
 		id
@@ -1440,7 +1436,13 @@ query ComplexInlineFragments {
 		}
 	}
 }
-`,
+`
+
+	var retval ComplexInlineFragmentsResponse
+	err = client.MakeRequest(
+		nil,
+		"ComplexInlineFragments",
+		__query,
 		&retval,
 		nil,
 	)

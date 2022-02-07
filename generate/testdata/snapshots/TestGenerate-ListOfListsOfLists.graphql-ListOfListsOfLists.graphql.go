@@ -21,15 +21,17 @@ func ListOfListsOfLists(
 ) (*ListOfListsOfListsResponse, error) {
 	var err error
 
+	var __query = `
+query ListOfListsOfLists {
+	listOfListsOfLists
+}
+`
+
 	var retval ListOfListsOfListsResponse
 	err = client.MakeRequest(
 		nil,
 		"ListOfListsOfLists",
-		`
-query ListOfListsOfLists {
-	listOfListsOfLists
-}
-`,
+		__query,
 		&retval,
 		nil,
 	)

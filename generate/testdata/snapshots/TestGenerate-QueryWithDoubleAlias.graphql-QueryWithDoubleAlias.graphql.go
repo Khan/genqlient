@@ -45,18 +45,20 @@ func QueryWithDoubleAlias(
 ) (*QueryWithDoubleAliasResponse, error) {
 	var err error
 
-	var retval QueryWithDoubleAliasResponse
-	err = client.MakeRequest(
-		nil,
-		"QueryWithDoubleAlias",
-		`
+	var __query = `
 query QueryWithDoubleAlias {
 	user {
 		ID: id
 		AlsoID: id
 	}
 }
-`,
+`
+
+	var retval QueryWithDoubleAliasResponse
+	err = client.MakeRequest(
+		nil,
+		"QueryWithDoubleAlias",
+		__query,
 		&retval,
 		nil,
 	)

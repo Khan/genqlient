@@ -551,11 +551,7 @@ func SimpleNamedFragment(
 ) (*SimpleNamedFragmentResponse, error) {
 	var err error
 
-	var retval SimpleNamedFragmentResponse
-	err = client.MakeRequest(
-		nil,
-		"SimpleNamedFragment",
-		`
+	var __query = `
 query SimpleNamedFragment {
 	randomItem {
 		__typename
@@ -577,7 +573,13 @@ fragment VideoFields on Video {
 		id
 	}
 }
-`,
+`
+
+	var retval SimpleNamedFragmentResponse
+	err = client.MakeRequest(
+		nil,
+		"SimpleNamedFragment",
+		__query,
 		&retval,
 		nil,
 	)

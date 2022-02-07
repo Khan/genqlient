@@ -240,11 +240,7 @@ func PointersQuery(
 	}
 	var err error
 
-	var retval PointersQueryResponse
-	err = client.MakeRequest(
-		nil,
-		"PointersQuery",
-		`
+	var __query = `
 query PointersQuery ($query: UserQueryInput, $dt: DateTime, $tz: String) {
 	user(query: $query) {
 		id
@@ -258,7 +254,13 @@ query PointersQuery ($query: UserQueryInput, $dt: DateTime, $tz: String) {
 	}
 	maybeConvert(dt: $dt, tz: $tz)
 }
-`,
+`
+
+	var retval PointersQueryResponse
+	err = client.MakeRequest(
+		nil,
+		"PointersQuery",
+		__query,
 		&retval,
 		&__input,
 	)

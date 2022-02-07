@@ -186,17 +186,19 @@ func InputObjectQuery(
 	}
 	var err error
 
-	var retval InputObjectQueryResponse
-	err = client.MakeRequest(
-		nil,
-		"InputObjectQuery",
-		`
+	var __query = `
 query InputObjectQuery ($query: UserQueryInput) {
 	user(query: $query) {
 		id
 	}
 }
-`,
+`
+
+	var retval InputObjectQueryResponse
+	err = client.MakeRequest(
+		nil,
+		"InputObjectQuery",
+		__query,
 		&retval,
 		&__input,
 	)

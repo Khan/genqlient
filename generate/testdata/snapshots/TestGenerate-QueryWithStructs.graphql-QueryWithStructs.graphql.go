@@ -48,11 +48,7 @@ func QueryWithStructs(
 ) (*QueryWithStructsResponse, error) {
 	var err error
 
-	var retval QueryWithStructsResponse
-	err = client.MakeRequest(
-		nil,
-		"QueryWithStructs",
-		`
+	var __query = `
 query QueryWithStructs {
 	user {
 		authMethods {
@@ -61,7 +57,13 @@ query QueryWithStructs {
 		}
 	}
 }
-`,
+`
+
+	var retval QueryWithStructsResponse
+	err = client.MakeRequest(
+		nil,
+		"QueryWithStructs",
+		__query,
 		&retval,
 		nil,
 	)

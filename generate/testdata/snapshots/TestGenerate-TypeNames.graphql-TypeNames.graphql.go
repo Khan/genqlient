@@ -269,11 +269,7 @@ func TypeNames(
 ) (*Resp, error) {
 	var err error
 
-	var retval Resp
-	err = client.MakeRequest(
-		nil,
-		"TypeNames",
-		`
+	var __query = `
 query TypeNames {
 	user {
 		id
@@ -289,7 +285,13 @@ query TypeNames {
 		name
 	}
 }
-`,
+`
+
+	var retval Resp
+	err = client.MakeRequest(
+		nil,
+		"TypeNames",
+		__query,
 		&retval,
 		nil,
 	)

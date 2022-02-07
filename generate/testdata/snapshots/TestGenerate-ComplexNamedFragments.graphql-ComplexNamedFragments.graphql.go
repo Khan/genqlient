@@ -1744,11 +1744,7 @@ func ComplexNamedFragments(
 ) (*ComplexNamedFragmentsResponse, error) {
 	var err error
 
-	var retval ComplexNamedFragmentsResponse
-	err = client.MakeRequest(
-		nil,
-		"ComplexNamedFragments",
-		`
+	var __query = `
 query ComplexNamedFragments {
 	... on Query {
 		... QueryFragment
@@ -1806,7 +1802,13 @@ fragment MoreVideoFields on Video {
 		}
 	}
 }
-`,
+`
+
+	var retval ComplexNamedFragmentsResponse
+	err = client.MakeRequest(
+		nil,
+		"ComplexNamedFragments",
+		__query,
 		&retval,
 		nil,
 	)

@@ -46,11 +46,7 @@ func QueryWithSlices(
 ) (*QueryWithSlicesResponse, error) {
 	var err error
 
-	var retval QueryWithSlicesResponse
-	err = client.MakeRequest(
-		nil,
-		"QueryWithSlices",
-		`
+	var __query = `
 query QueryWithSlices {
 	user {
 		emails
@@ -59,7 +55,13 @@ query QueryWithSlices {
 		emailsWithNullsOrNull
 	}
 }
-`,
+`
+
+	var retval QueryWithSlicesResponse
+	err = client.MakeRequest(
+		nil,
+		"QueryWithSlices",
+		__query,
 		&retval,
 		nil,
 	)

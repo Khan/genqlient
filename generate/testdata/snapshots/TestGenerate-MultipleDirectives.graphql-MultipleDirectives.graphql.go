@@ -336,11 +336,7 @@ func MultipleDirectives(
 	}
 	var err error
 
-	var retval MyMultipleDirectivesResponse
-	err = client.MakeRequest(
-		nil,
-		"MultipleDirectives",
-		`
+	var __query = `
 query MultipleDirectives ($query: UserQueryInput, $queries: [UserQueryInput]) {
 	user(query: $query) {
 		id
@@ -349,7 +345,13 @@ query MultipleDirectives ($query: UserQueryInput, $queries: [UserQueryInput]) {
 		id
 	}
 }
-`,
+`
+
+	var retval MyMultipleDirectivesResponse
+	err = client.MakeRequest(
+		nil,
+		"MultipleDirectives",
+		__query,
 		&retval,
 		&__input,
 	)

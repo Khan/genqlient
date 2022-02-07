@@ -509,11 +509,7 @@ func InterfaceNesting(
 ) (*InterfaceNestingResponse, error) {
 	var err error
 
-	var retval InterfaceNestingResponse
-	err = client.MakeRequest(
-		nil,
-		"InterfaceNesting",
-		`
+	var __query = `
 query InterfaceNesting {
 	root {
 		id
@@ -530,7 +526,13 @@ query InterfaceNesting {
 		}
 	}
 }
-`,
+`
+
+	var retval InterfaceNestingResponse
+	err = client.MakeRequest(
+		nil,
+		"InterfaceNesting",
+		__query,
 		&retval,
 		nil,
 	)

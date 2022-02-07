@@ -511,11 +511,7 @@ func InterfaceListOfListOfListsField(
 ) (*InterfaceListOfListOfListsFieldResponse, error) {
 	var err error
 
-	var retval InterfaceListOfListOfListsFieldResponse
-	err = client.MakeRequest(
-		nil,
-		"InterfaceListOfListOfListsField",
-		`
+	var __query = `
 query InterfaceListOfListOfListsField {
 	listOfListsOfListsOfContent {
 		__typename
@@ -528,7 +524,13 @@ query InterfaceListOfListOfListsField {
 		name
 	}
 }
-`,
+`
+
+	var retval InterfaceListOfListOfListsFieldResponse
+	err = client.MakeRequest(
+		nil,
+		"InterfaceListOfListOfListsField",
+		__query,
 		&retval,
 		nil,
 	)

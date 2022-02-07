@@ -54,18 +54,20 @@ func SimpleMutation(
 	}
 	var err error
 
-	var retval SimpleMutationResponse
-	err = client.MakeRequest(
-		nil,
-		"SimpleMutation",
-		`
+	var __query = `
 mutation SimpleMutation ($name: String!) {
 	createUser(name: $name) {
 		id
 		name
 	}
 }
-`,
+`
+
+	var retval SimpleMutationResponse
+	err = client.MakeRequest(
+		nil,
+		"SimpleMutation",
+		__query,
 		&retval,
 		&__input,
 	)

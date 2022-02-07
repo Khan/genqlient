@@ -271,11 +271,7 @@ func ComplexNamedFragments(
 ) (*InnerQueryFragment, error) {
 	var err error
 
-	var retval InnerQueryFragment
-	err = client.MakeRequest(
-		nil,
-		"ComplexNamedFragments",
-		`
+	var __query = `
 query ComplexNamedFragments {
 	... QueryFragment
 }
@@ -310,7 +306,13 @@ fragment ChildVideoFields on Video {
 	id
 	name
 }
-`,
+`
+
+	var retval InnerQueryFragment
+	err = client.MakeRequest(
+		nil,
+		"ComplexNamedFragments",
+		__query,
 		&retval,
 		nil,
 	)

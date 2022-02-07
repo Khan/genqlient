@@ -214,16 +214,18 @@ func CustomMarshalSlice(
 	}
 	var err error
 
-	var retval CustomMarshalSliceResponse
-	err = client.MakeRequest(
-		nil,
-		"CustomMarshalSlice",
-		`
+	var __query = `
 query CustomMarshalSlice ($datesss: [[[Date!]!]!]!, $datesssp: [[[Date!]!]!]!) {
 	acceptsListOfListOfListsOfDates(datesss: $datesss)
 	withPointer: acceptsListOfListOfListsOfDates(datesss: $datesssp)
 }
-`,
+`
+
+	var retval CustomMarshalSliceResponse
+	err = client.MakeRequest(
+		nil,
+		"CustomMarshalSlice",
+		__query,
 		&retval,
 		&__input,
 	)

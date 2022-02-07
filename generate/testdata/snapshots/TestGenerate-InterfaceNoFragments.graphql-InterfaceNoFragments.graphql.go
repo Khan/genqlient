@@ -631,11 +631,7 @@ func InterfaceNoFragmentsQuery(
 ) (*InterfaceNoFragmentsQueryResponse, error) {
 	var err error
 
-	var retval InterfaceNoFragmentsQueryResponse
-	err = client.MakeRequest(
-		nil,
-		"InterfaceNoFragmentsQuery",
-		`
+	var __query = `
 query InterfaceNoFragmentsQuery {
 	root {
 		id
@@ -657,7 +653,13 @@ query InterfaceNoFragmentsQuery {
 		name
 	}
 }
-`,
+`
+
+	var retval InterfaceNoFragmentsQueryResponse
+	err = client.MakeRequest(
+		nil,
+		"InterfaceNoFragmentsQuery",
+		__query,
 		&retval,
 		nil,
 	)

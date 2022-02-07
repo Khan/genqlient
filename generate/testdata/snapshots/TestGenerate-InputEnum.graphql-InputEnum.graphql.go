@@ -63,17 +63,19 @@ func InputEnumQuery(
 	}
 	var err error
 
-	var retval InputEnumQueryResponse
-	err = client.MakeRequest(
-		nil,
-		"InputEnumQuery",
-		`
+	var __query = `
 query InputEnumQuery ($role: Role!) {
 	usersWithRole(role: $role) {
 		id
 	}
 }
-`,
+`
+
+	var retval InputEnumQueryResponse
+	err = client.MakeRequest(
+		nil,
+		"InputEnumQuery",
+		__query,
 		&retval,
 		&__input,
 	)
