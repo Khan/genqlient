@@ -1,10 +1,22 @@
 {{.Doc}}
+
+{{if .DynFragment }}
+const query{{.Name}} = `{{.Body}}`
+
+func ValidQuery_{{.Name}}(df {{ref "github.com/Khan/genqlient/graphql.DynFragment"}}) (string, error) {
+    return df.ComposeQuery(query{{.Name}})
+}
+{{end}}
+
 func {{.Name}}(
     {{if ne .Config.ContextType "-" -}}
     ctx {{ref .Config.ContextType}},
     {{end}}
     {{- if not .Config.ClientGetter -}}
     client {{ref "github.com/Khan/genqlient/graphql.Client"}},
+    {{end}}
+    {{- if .DynFragment -}}
+    dynFragment {{ref "github.com/Khan/genqlient/graphql.DynFragment"}},
     {{end}}
     {{- if .Input -}}
     {{- range .Input.Fields -}}
@@ -33,11 +45,24 @@ func {{.Name}}(
     }
     {{end}}
 
+{{ if not .DynFragment }}
+    var query = `{{.Body}}`
+{{else}}
+    var query string
+{{end}}
+
+{{ if .DynFragment }}
+    query, err = ValidQuery_{{.Name}}(dynFragment)
+    if err != nil {
+        return nil, err
+    }
+{{end}}
+
 	var retval {{.ResponseName}}
     err = client.MakeRequest(
         {{if ne .Config.ContextType "-"}}ctx{{else}}nil{{end}},
         "{{.Name}}",
-        `{{.Body}}`,
+        query,
         &retval,
         {{if .Input}}&__input{{else}}nil{{end}},
     )

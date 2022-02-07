@@ -11,13 +11,14 @@ import (
 // Represents the genqlient directive, described in detail in
 // docs/genqlient_directive.graphql.
 type genqlientDirective struct {
-	pos       *ast.Position
-	Omitempty *bool
-	Pointer   *bool
-	Struct    *bool
-	Flatten   *bool
-	Bind      string
-	TypeName  string
+	pos         *ast.Position
+	Omitempty   *bool
+	Pointer     *bool
+	Struct      *bool
+	Flatten     *bool
+	DynFragment *bool
+	Bind        string
+	TypeName    string
 	// FieldDirectives contains the directives to be
 	// applied to specific fields via the "for" option.
 	// Map from type-name -> field-name -> directive.
@@ -46,6 +47,9 @@ func (dir *genqlientDirective) argsString() string {
 	if dir.Flatten != nil {
 		parts = append(parts, fmt.Sprintf("flatten: %v", *dir.Flatten))
 	}
+	if dir.DynFragment != nil {
+		parts = append(parts, fmt.Sprintf("dynfragment: %v", dir.DynFragment))
+	}
 	if dir.Bind != "" {
 		parts = append(parts, fmt.Sprintf("bind: %v", dir.Bind))
 	}
@@ -71,6 +75,9 @@ func (dir *genqlientDirective) GetOmitempty() bool { return dir.Omitempty != nil
 func (dir *genqlientDirective) GetPointer() bool   { return dir.Pointer != nil && *dir.Pointer }
 func (dir *genqlientDirective) GetStruct() bool    { return dir.Struct != nil && *dir.Struct }
 func (dir *genqlientDirective) GetFlatten() bool   { return dir.Flatten != nil && *dir.Flatten }
+func (dir *genqlientDirective) GetDynFragment() bool {
+	return dir.DynFragment != nil && *dir.DynFragment
+}
 
 func setBool(optionName string, dst **bool, v *ast.Value, pos *ast.Position) error {
 	if *dst != nil {
@@ -163,6 +170,8 @@ func (dir *genqlientDirective) add(graphQLDirective *ast.Directive, pos *ast.Pos
 			err = setBool("struct", &dir.Struct, arg.Value, pos)
 		case "flatten":
 			err = setBool("flatten", &dir.Flatten, arg.Value, pos)
+		case "dynfragment":
+			err = setBool("dynfragment", &dir.DynFragment, arg.Value, pos)
 		case "bind":
 			err = setString("bind", &dir.Bind, arg.Value, pos)
 		case "typename":

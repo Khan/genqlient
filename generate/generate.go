@@ -53,6 +53,8 @@ type operation struct {
 	Name string `json:"operationName"`
 	// The documentation for the operation, from GraphQL.
 	Doc string `json:"-"`
+	// Setup dynamic fragment parameter.
+	DynFragment bool `json:"-"`
 	// The body of the operation to send.
 	Body string `json:"query"`
 	// The type of the argument to the operation, which we use both internally
@@ -240,10 +242,6 @@ func (g *generator) addOperation(op *ast.OperationDefinition) error {
 	}
 	g.preprocessQueryDocument(queryDoc)
 
-	var builder strings.Builder
-	f := formatter.NewFormatter(&builder)
-	f.FormatQueryDocument(queryDoc)
-
 	commentLines, directive, err := g.parsePrecedingComment(op, nil, op.Position, nil)
 	if err != nil {
 		return err
@@ -264,6 +262,13 @@ func (g *generator) addOperation(op *ast.OperationDefinition) error {
 		docComment = "// " + strings.ReplaceAll(commentLines, "\n", "\n// ")
 	}
 
+	var builder strings.Builder
+	f := formatter.NewFormatter(&builder)
+	if directive.GetDynFragment() {
+		queryDoc.Fragments = nil
+	}
+	f.FormatQueryDocument(queryDoc)
+
 	// If the filename is a pseudo-filename filename.go:startline, just
 	// put the filename in the export; we don't figure out the line offset
 	// anyway, and if you want to check those exports in they will change a
@@ -275,9 +280,10 @@ func (g *generator) addOperation(op *ast.OperationDefinition) error {
 	}
 
 	g.Operations = append(g.Operations, &operation{
-		Type: op.Operation,
-		Name: op.Name,
-		Doc:  docComment,
+		Type:        op.Operation,
+		Name:        op.Name,
+		DynFragment: directive.GetDynFragment(),
+		Doc:         docComment,
 		// The newline just makes it format a little nicer.  We add it here
 		// rather than in the template so exported operations will match
 		// *exactly* what we send to the server.

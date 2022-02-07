@@ -3025,18 +3025,20 @@ func failingQuery(
 ) (*failingQueryResponse, error) {
 	var err error
 
-	var retval failingQueryResponse
-	err = client.MakeRequest(
-		ctx,
-		"failingQuery",
-		`
+	var query = `
 query failingQuery {
 	fail
 	me {
 		id
 	}
 }
-`,
+`
+
+	var retval failingQueryResponse
+	err = client.MakeRequest(
+		ctx,
+		"failingQuery",
+		query,
 		&retval,
 		nil,
 	)
@@ -3053,11 +3055,7 @@ func queryWithCustomMarshal(
 	}
 	var err error
 
-	var retval queryWithCustomMarshalResponse
-	err = client.MakeRequest(
-		ctx,
-		"queryWithCustomMarshal",
-		`
+	var query = `
 query queryWithCustomMarshal ($date: Date!) {
 	usersBornOn(date: $date) {
 		id
@@ -3065,7 +3063,13 @@ query queryWithCustomMarshal ($date: Date!) {
 		birthdate
 	}
 }
-`,
+`
+
+	var retval queryWithCustomMarshalResponse
+	err = client.MakeRequest(
+		ctx,
+		"queryWithCustomMarshal",
+		query,
 		&retval,
 		&__input,
 	)
@@ -3084,11 +3088,7 @@ func queryWithCustomMarshalOptional(
 	}
 	var err error
 
-	var retval queryWithCustomMarshalOptionalResponse
-	err = client.MakeRequest(
-		ctx,
-		"queryWithCustomMarshalOptional",
-		`
+	var query = `
 query queryWithCustomMarshalOptional ($date: Date, $id: ID) {
 	userSearch(birthdate: $date, id: $id) {
 		id
@@ -3096,7 +3096,13 @@ query queryWithCustomMarshalOptional ($date: Date, $id: ID) {
 		birthdate
 	}
 }
-`,
+`
+
+	var retval queryWithCustomMarshalOptionalResponse
+	err = client.MakeRequest(
+		ctx,
+		"queryWithCustomMarshalOptional",
+		query,
 		&retval,
 		&__input,
 	)
@@ -3113,11 +3119,7 @@ func queryWithCustomMarshalSlice(
 	}
 	var err error
 
-	var retval queryWithCustomMarshalSliceResponse
-	err = client.MakeRequest(
-		ctx,
-		"queryWithCustomMarshalSlice",
-		`
+	var query = `
 query queryWithCustomMarshalSlice ($dates: [Date!]!) {
 	usersBornOnDates(dates: $dates) {
 		id
@@ -3125,7 +3127,13 @@ query queryWithCustomMarshalSlice ($dates: [Date!]!) {
 		birthdate
 	}
 }
-`,
+`
+
+	var retval queryWithCustomMarshalSliceResponse
+	err = client.MakeRequest(
+		ctx,
+		"queryWithCustomMarshalSlice",
+		query,
 		&retval,
 		&__input,
 	)
@@ -3142,11 +3150,7 @@ func queryWithFlatten(
 	}
 	var err error
 
-	var retval QueryFragment
-	err = client.MakeRequest(
-		ctx,
-		"queryWithFlatten",
-		`
+	var query = `
 query queryWithFlatten ($ids: [ID!]!) {
 	... QueryFragment
 }
@@ -3188,7 +3192,13 @@ fragment FriendsFields on User {
 	id
 	name
 }
-`,
+`
+
+	var retval QueryFragment
+	err = client.MakeRequest(
+		ctx,
+		"queryWithFlatten",
+		query,
 		&retval,
 		&__input,
 	)
@@ -3205,11 +3215,7 @@ func queryWithFragments(
 	}
 	var err error
 
-	var retval queryWithFragmentsResponse
-	err = client.MakeRequest(
-		ctx,
-		"queryWithFragments",
-		`
+	var query = `
 query queryWithFragments ($ids: [ID!]!) {
 	beings(ids: $ids) {
 		__typename
@@ -3245,7 +3251,13 @@ query queryWithFragments ($ids: [ID!]!) {
 		}
 	}
 }
-`,
+`
+
+	var retval queryWithFragmentsResponse
+	err = client.MakeRequest(
+		ctx,
+		"queryWithFragments",
+		query,
 		&retval,
 		&__input,
 	)
@@ -3262,11 +3274,7 @@ func queryWithInterfaceListField(
 	}
 	var err error
 
-	var retval queryWithInterfaceListFieldResponse
-	err = client.MakeRequest(
-		ctx,
-		"queryWithInterfaceListField",
-		`
+	var query = `
 query queryWithInterfaceListField ($ids: [ID!]!) {
 	beings(ids: $ids) {
 		__typename
@@ -3274,7 +3282,13 @@ query queryWithInterfaceListField ($ids: [ID!]!) {
 		name
 	}
 }
-`,
+`
+
+	var retval queryWithInterfaceListFieldResponse
+	err = client.MakeRequest(
+		ctx,
+		"queryWithInterfaceListField",
+		query,
 		&retval,
 		&__input,
 	)
@@ -3291,11 +3305,7 @@ func queryWithInterfaceListPointerField(
 	}
 	var err error
 
-	var retval queryWithInterfaceListPointerFieldResponse
-	err = client.MakeRequest(
-		ctx,
-		"queryWithInterfaceListPointerField",
-		`
+	var query = `
 query queryWithInterfaceListPointerField ($ids: [ID!]!) {
 	beings(ids: $ids) {
 		__typename
@@ -3303,7 +3313,13 @@ query queryWithInterfaceListPointerField ($ids: [ID!]!) {
 		name
 	}
 }
-`,
+`
+
+	var retval queryWithInterfaceListPointerFieldResponse
+	err = client.MakeRequest(
+		ctx,
+		"queryWithInterfaceListPointerField",
+		query,
 		&retval,
 		&__input,
 	)
@@ -3320,11 +3336,7 @@ func queryWithInterfaceNoFragments(
 	}
 	var err error
 
-	var retval queryWithInterfaceNoFragmentsResponse
-	err = client.MakeRequest(
-		ctx,
-		"queryWithInterfaceNoFragments",
-		`
+	var query = `
 query queryWithInterfaceNoFragments ($id: ID!) {
 	being(id: $id) {
 		__typename
@@ -3336,7 +3348,13 @@ query queryWithInterfaceNoFragments ($id: ID!) {
 		name
 	}
 }
-`,
+`
+
+	var retval queryWithInterfaceNoFragmentsResponse
+	err = client.MakeRequest(
+		ctx,
+		"queryWithInterfaceNoFragments",
+		query,
 		&retval,
 		&__input,
 	)
@@ -3353,11 +3371,7 @@ func queryWithNamedFragments(
 	}
 	var err error
 
-	var retval queryWithNamedFragmentsResponse
-	err = client.MakeRequest(
-		ctx,
-		"queryWithNamedFragments",
-		`
+	var query = `
 query queryWithNamedFragments ($ids: [ID!]!) {
 	beings(ids: $ids) {
 		__typename
@@ -3393,7 +3407,13 @@ fragment MoreUserFields on User {
 		color
 	}
 }
-`,
+`
+
+	var retval queryWithNamedFragmentsResponse
+	err = client.MakeRequest(
+		ctx,
+		"queryWithNamedFragments",
+		query,
 		&retval,
 		&__input,
 	)
@@ -3410,11 +3430,7 @@ func queryWithOmitempty(
 	}
 	var err error
 
-	var retval queryWithOmitemptyResponse
-	err = client.MakeRequest(
-		ctx,
-		"queryWithOmitempty",
-		`
+	var query = `
 query queryWithOmitempty ($id: ID) {
 	user(id: $id) {
 		id
@@ -3422,7 +3438,13 @@ query queryWithOmitempty ($id: ID) {
 		luckyNumber
 	}
 }
-`,
+`
+
+	var retval queryWithOmitemptyResponse
+	err = client.MakeRequest(
+		ctx,
+		"queryWithOmitempty",
+		query,
 		&retval,
 		&__input,
 	)
@@ -3439,11 +3461,7 @@ func queryWithVariables(
 	}
 	var err error
 
-	var retval queryWithVariablesResponse
-	err = client.MakeRequest(
-		ctx,
-		"queryWithVariables",
-		`
+	var query = `
 query queryWithVariables ($id: ID!) {
 	user(id: $id) {
 		id
@@ -3451,7 +3469,13 @@ query queryWithVariables ($id: ID!) {
 		luckyNumber
 	}
 }
-`,
+`
+
+	var retval queryWithVariablesResponse
+	err = client.MakeRequest(
+		ctx,
+		"queryWithVariables",
+		query,
 		&retval,
 		&__input,
 	)
@@ -3464,11 +3488,7 @@ func simpleQuery(
 ) (*simpleQueryResponse, error) {
 	var err error
 
-	var retval simpleQueryResponse
-	err = client.MakeRequest(
-		ctx,
-		"simpleQuery",
-		`
+	var query = `
 query simpleQuery {
 	me {
 		id
@@ -3476,7 +3496,13 @@ query simpleQuery {
 		luckyNumber
 	}
 }
-`,
+`
+
+	var retval simpleQueryResponse
+	err = client.MakeRequest(
+		ctx,
+		"simpleQuery",
+		query,
 		&retval,
 		nil,
 	)
