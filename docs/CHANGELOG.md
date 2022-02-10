@@ -23,6 +23,7 @@ When releasing a new version:
 ### Breaking changes:
 
 - The `Config` fields `Schema` and `Operations` are now both of type `StringList`.  This does not affect configuration via `genqlient.yaml`, only via the Go API.
+- The `typename` and `bind` options may no longer be combined; doing so will now result in an error.  In practice, any such use was likely in error (and the rules for which would win were confusing and undocumented).
 
 ### New features:
 
