@@ -226,6 +226,10 @@ directive genqlient(
   # Note that unlike most directives, if applied to the entire operation,
   # typename affects the overall response type, rather than being propagated
   # down to all child fields (which would cause conflicts).
+  #
+  # To avoid confusion, typename may not be combined with local or global
+  # bindings; to use typename instead of a global binding do
+  # `typename: "MyTypeName", bind: "-"`.
   typename: String
 
 # Multiple genqlient directives are allowed in the same location, as long as
