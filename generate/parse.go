@@ -72,6 +72,9 @@ func expandFilenames(globs []string) ([]string, error) {
 		if err != nil {
 			return nil, errorf(nil, "can't expand file-glob %v: %v", glob, err)
 		}
+		if len(matches) == 0 {
+			return nil, errorf(nil, "%v did not match any files", glob)
+		}
 		for _, match := range matches {
 			uniqFilenames[match] = true
 		}
