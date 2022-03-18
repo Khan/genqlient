@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 	"unicode"
+	"unicode/utf8"
 
 	"golang.org/x/tools/go/packages"
 	"gopkg.in/yaml.v2"
@@ -30,7 +31,7 @@ type Config struct {
 	ContextType      string                  `yaml:"context_type"`
 	ClientGetter     string                  `yaml:"client_getter"`
 	Bindings         map[string]*TypeBinding `yaml:"bindings"`
-	AutoBindings     string                  `yaml:"auto_bindings"`
+	AutoBindings     StringList              `yaml:"auto_bindings"`
 	StructReferences bool                    `yaml:"use_struct_references"`
 
 	// Set to true to use features that aren't fully ready to use.
@@ -91,28 +92,36 @@ func (c *Config) ValidateAndFillDefaults(baseDir string) error {
 		c.Package = base
 	}
 
-	if c.AutoBindings != "" {
-		pkgs, err := packages.Load(&packages.Config{
-			Mode: packages.NeedTypes | packages.NeedTypesInfo,
-		}, c.AutoBindings)
-		if err != nil {
-			return err
-		}
-
-		for idx := range pkgs {
-			p := pkgs[idx].Types
-			if p == nil || p.Scope() == nil {
-				continue
+	if len(c.AutoBindings) > 0 {
+		for _, binding := range c.AutoBindings {
+			mode := packages.NeedImports | packages.NeedTypes | packages.NeedTypesSizes
+			pkgs, err := packages.Load(&packages.Config{
+				Mode: mode,
+			}, binding)
+			if err != nil {
+				return err
 			}
 
-			for _, typ := range p.Scope().Names() {
-				if unicode.IsUpper(rune(typ[0])) {
-					// Check if type is manual bindings
-					_, exist := c.Bindings[typ]
-					if !exist {
-						pathType := fmt.Sprintf("%s.%s", p.Path(), typ)
-						c.Bindings[typ] = &TypeBinding{
-							Type: pathType,
+			if c.Bindings == nil {
+				c.Bindings = map[string]*TypeBinding{}
+			}
+
+			for _, pkg := range pkgs {
+				p := pkg.Types
+				if p == nil || p.Scope() == nil {
+					return errorf(nil, "type not found. autobind %s fail", binding)
+				}
+
+				for _, typ := range p.Scope().Names() {
+					runeIsUpper, _ := utf8.DecodeRuneInString(typ)
+					if unicode.IsUpper(runeIsUpper) {
+						// Check if type is manual bindings
+						_, exist := c.Bindings[typ]
+						if !exist {
+							pathType := fmt.Sprintf("%s.%s", p.Path(), typ)
+							c.Bindings[typ] = &TypeBinding{
+								Type: pathType,
+							}
 						}
 					}
 				}
