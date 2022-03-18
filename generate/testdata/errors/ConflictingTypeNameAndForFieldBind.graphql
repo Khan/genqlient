@@ -1,0 +1,7 @@
+# @genqlient(for: "User.name", bind: "[]byte")
+query ConflictingTypeNameAndGlobalBind {
+  user {
+    # @genqlient(typename: "MyID")
+    name
+  }
+}

@@ -289,6 +289,11 @@ func (g *generator) convertDefinition(
 	// unless the binding is "-" which means "ignore the global binding".
 	globalBinding, ok := g.Config.Bindings[def.Name]
 	if ok && options.Bind != "-" {
+		if options.TypeName != "" {
+			return nil, errorf(pos,
+				"typename option conflicts with global binding for %s; "+
+					"use `bind: \"-\"` to override it", def.Name)
+		}
 		if def.Kind == ast.Object || def.Kind == ast.Interface || def.Kind == ast.Union {
 			err := g.validateBindingSelection(
 				def.Name, globalBinding, pos, selectionSet)

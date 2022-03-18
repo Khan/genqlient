@@ -1,0 +1,8 @@
+query ConflictingTypeNameAndGlobalBind {
+  user {
+    # @genqlient(typename: "OtherScalar")
+    name
+  }
+}
+
+

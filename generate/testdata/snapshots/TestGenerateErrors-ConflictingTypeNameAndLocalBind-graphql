@@ -1,0 +1,1 @@
+testdata/errors/ConflictingTypeNameAndLocalBind.graphql:4: typename and bind may not be used together

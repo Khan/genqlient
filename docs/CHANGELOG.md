@@ -22,18 +22,32 @@ When releasing a new version:
 
 ### Breaking changes:
 
+### New features:
+
+### Bug fixes:
+
+## v0.4.0
+
+Version 0.4.0 adds several new configuration options, as well as additional methods to simplify the use of interfaces.
+
+### Breaking changes:
+
 - The `Config` fields `Schema` and `Operations` are now both of type `StringList`.  This does not affect configuration via `genqlient.yaml`, only via the Go API.
+- The `typename` and `bind` options may no longer be combined; doing so will now result in an error.  In practice, any such use was likely in error (and the rules for which would win were confusing and undocumented).
 
 ### New features:
 
 - genqlient now generates getter methods for all fields, even those which do not implement a genqlient-generated interface; this can be useful for callers who wish to define their own interface and have several unrelated genqlient types which have the same fields implement it.
-- genqlient config now accepts either a single or multiple files for the `schema` and `operations` fields (previously it accepted only one `schema`, and required a list of `operations` files).
+- The new `struct_references` option automatically sets the `pointer` and `omitempty` options on fields of struct type; see the [`genqlient.yaml` documentation](docs/genqlient.yaml) for details.
+- genqlient config now accepts either a single or multiple files (or globs) for the `schema` and `operations` fields (previously it accepted only one `schema`, and required a list of `operations` files).
+- genqlient now looks for its config file as `[.]genqlient.y[a]ml` in any ancestor directory, if unspecified, rather than only as `genqlient.yaml` in the current directory.
 - The `typename` option can now be used on basic types (string, int, etc) as well as structs; this can be useful to have genqlient define new types like `type Language string` and use that type for specified fields.
 - genqlient config add `auto_bindings` types from package source. 
 
 ### Bug fixes:
 
 - In certain very rare cases involving duplicate fields in fragment spreads, genqlient would generate code that failed to compile due to duplicate methods not getting promoted; genqlient now generates correct types.  (See #126 for a more complete description.)
+- genqlient no longer rejects schemas which include the implicitly declared types (`scalar String`, etc.) explicitly; this makes it easier to use schemas generate via introspection.
 
 ## v0.3.0
 

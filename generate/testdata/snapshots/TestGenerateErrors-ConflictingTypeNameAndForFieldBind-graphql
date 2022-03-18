@@ -1,0 +1,1 @@
+testdata/errors/ConflictingTypeNameAndForFieldBind.graphql:5: typename and bind may not be used together
