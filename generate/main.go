@@ -5,7 +5,6 @@ package generate
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -41,7 +40,7 @@ func readConfigGenerateAndWrite(configFilename string) error {
 				filename, err)
 		}
 
-		err = ioutil.WriteFile(filename, content, 0o644)
+		err = os.WriteFile(filename, content, 0o644)
 		if err != nil {
 			return errorf(nil, "could not write generated file %v: %v",
 				filename, err)
