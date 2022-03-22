@@ -26,6 +26,8 @@ When releasing a new version:
 
 ### New features:
 
+- genqlient can now run as a portable binary (i.e. without a local checkout of the repository or `go run`).
+
 ### Bug fixes:
 
 ## v0.4.0

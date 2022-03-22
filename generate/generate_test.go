@@ -124,7 +124,7 @@ func TestGenerate(t *testing.T) {
 	}
 }
 
-func defaultConfig(t *testing.T) *Config {
+func getDefaultConfig(t *testing.T) *Config {
 	// Parse the config that `genqlient --init` generates, to make sure that
 	// works.
 	var config Config
@@ -151,7 +151,7 @@ func TestGenerateWithConfig(t *testing.T) {
 		baseDir string  // relative to dataDir
 		config  *Config // omits Schema and Operations, set below.
 	}{
-		{"DefaultConfig", "", defaultConfig(t)},
+		{"DefaultConfig", "", getDefaultConfig(t)},
 		{"Subpackage", "", &Config{
 			Generated: "mypkg/myfile.go",
 		}},
