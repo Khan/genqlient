@@ -42,4 +42,4 @@ jobs:
     - name: Run lint
       uses: golangci/golangci-lint-action@v2
       with:
-        version: v1.42   # should match internal/lint/go.mod
+        version: v1.45   # should match internal/lint/go.mod
