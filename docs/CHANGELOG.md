@@ -22,6 +22,8 @@ When releasing a new version:
 
 ### Breaking changes:
 
+- genqlient now requires Go 1.16 or higher.
+
 ### New features:
 
 ### Bug fixes:
