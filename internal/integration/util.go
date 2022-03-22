@@ -3,7 +3,6 @@ package integration
 import (
 	"bytes"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -42,7 +41,7 @@ func RunGenerateTest(t *testing.T, relConfigFilename string) {
 	}
 
 	for filename, content := range generated {
-		expectedContent, err := ioutil.ReadFile(filename)
+		expectedContent, err := os.ReadFile(filename)
 		if err != nil {
 			t.Fatal(err)
 		}

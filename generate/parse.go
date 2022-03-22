@@ -5,7 +5,7 @@ import (
 	goAst "go/ast"
 	goParser "go/parser"
 	goToken "go/token"
-	"io/ioutil"
+	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -25,7 +25,7 @@ func getSchema(globs StringList) (*ast.Schema, error) {
 
 	sources := make([]*ast.Source, len(filenames))
 	for i, filename := range filenames {
-		text, err := ioutil.ReadFile(filename)
+		text, err := os.ReadFile(filename)
 		if err != nil {
 			return nil, errorf(nil, "unreadable schema file %v: %v", filename, err)
 		}
@@ -105,7 +105,7 @@ func getQueries(basedir string, globs StringList) (*ast.QueryDocument, error) {
 	}
 
 	for _, filename := range filenames {
-		text, err := ioutil.ReadFile(filename)
+		text, err := os.ReadFile(filename)
 		if err != nil {
 			return nil, errorf(nil, "unreadable query-spec file %v: %v", filename, err)
 		}

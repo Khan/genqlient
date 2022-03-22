@@ -2,7 +2,6 @@ package generate
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -24,7 +23,7 @@ const (
 func buildGoFile(namePrefix string, content []byte) error {
 	// We need to put this within the current module, rather than in
 	// /tmp, so that it can access internal/testutil.
-	f, err := ioutil.TempFile("./testdata/tmp", namePrefix+"_*.go")
+	f, err := os.CreateTemp("./testdata/tmp", namePrefix+"_*.go")
 	if err != nil {
 		return err
 	}
@@ -61,7 +60,7 @@ func buildGoFile(namePrefix string, content []byte) error {
 // update the snapshots.  Make sure to check that the output is sensible; the
 // snapshots don't even get compiled!
 func TestGenerate(t *testing.T) {
-	files, err := ioutil.ReadDir(dataDir)
+	files, err := os.ReadDir(dataDir)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -128,7 +127,7 @@ func getDefaultConfig(t *testing.T) *Config {
 	// Parse the config that `genqlient --init` generates, to make sure that
 	// works.
 	var config Config
-	b, err := ioutil.ReadFile("default_genqlient.yaml")
+	b, err := os.ReadFile("default_genqlient.yaml")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -241,7 +240,7 @@ func TestGenerateWithConfig(t *testing.T) {
 // line numbers, etc.  We include both .go and .graphql tests, to make sure the
 // line numbers work in both cases.
 func TestGenerateErrors(t *testing.T) {
-	files, err := ioutil.ReadDir(errorsDir)
+	files, err := os.ReadDir(errorsDir)
 	if err != nil {
 		t.Fatal(err)
 	}

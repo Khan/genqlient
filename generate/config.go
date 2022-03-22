@@ -3,7 +3,6 @@ package generate
 import (
 	_ "embed"
 	"go/token"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 
@@ -93,7 +92,7 @@ func (c *Config) ValidateAndFillDefaults(baseDir string) error {
 // ReadAndValidateConfig reads the configuration from the given file, validates
 // it, and returns it.
 func ReadAndValidateConfig(filename string) (*Config, error) {
-	text, err := ioutil.ReadFile(filename)
+	text, err := os.ReadFile(filename)
 	if err != nil {
 		return nil, errorf(nil, "unreadable config file %v: %v", filename, err)
 	}

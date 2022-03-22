@@ -8,7 +8,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"testing"
 
@@ -29,13 +29,13 @@ func (t *lastResponseTransport) RoundTrip(req *http.Request) (*http.Response, er
 		return resp, err
 	}
 	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return resp, fmt.Errorf("roundtrip failed: unreadable body: %w", err)
 	}
 	t.lastResponseBody = body
 	// Restore the body for the next reader:
-	resp.Body = ioutil.NopCloser(bytes.NewBuffer(body))
+	resp.Body = io.NopCloser(bytes.NewBuffer(body))
 	return resp, err
 }
 
