@@ -484,7 +484,7 @@ func (typ *goInterfaceType) WriteDefinition(w io.Writer, g *generator) error {
 					"(see interface doc for possible values).", methodName)
 		} else {
 			description = fmt.Sprintf(
-				`%s returns the interface-field "%s" from its implementation.`,
+				`%s returns the interface-field %q from its implementation.`,
 				methodName, sharedField.GraphQLName)
 			if sharedField.Description != "" {
 				description = fmt.Sprintf(
