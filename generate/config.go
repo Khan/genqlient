@@ -127,7 +127,7 @@ func ReadAndValidateConfigFromDefaultLocations() (*Config, error) {
 var defaultConfig []byte
 
 func initConfig(filename string) error {
-	return ioutil.WriteFile(filename, defaultConfig, 0o644)
+	return os.WriteFile(filename, defaultConfig, 0o644)
 }
 
 // findCfg searches for the config file in this directory and all parents up the tree
