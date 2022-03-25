@@ -45,25 +45,32 @@ func SimpleInputQuery(
 	client graphql.Client,
 	name string,
 ) (*SimpleInputQueryResponse, error) {
-	__input := __SimpleInputQueryInput{
-		Name: name,
-	}
-	var err error
-
-	var retval SimpleInputQueryResponse
-	err = client.MakeRequest(
-		nil,
-		"SimpleInputQuery",
-		`
+	req := &graphql.Payload{
+		OpName: "SimpleInputQuery",
+		Query: `
 query SimpleInputQuery ($name: String!) {
 	user(query: {name:$name}) {
 		id
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__SimpleInputQueryInput{
+			Name: name,
+		},
+	}
+	var err error
+
+	resp := &graphql.Response{
+		Data: &SimpleInputQueryResponse{},
+	}
+
+	err = client.MakeRequest(
+		nil,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	retval := resp.Data.(*SimpleInputQueryResponse)
+	return retval, err
 }
 

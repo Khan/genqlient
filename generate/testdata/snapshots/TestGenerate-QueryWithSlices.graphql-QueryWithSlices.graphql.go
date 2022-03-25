@@ -44,13 +44,9 @@ func (v *QueryWithSlicesUser) GetEmailsWithNullsOrNull() []string { return v.Ema
 func QueryWithSlices(
 	client graphql.Client,
 ) (*QueryWithSlicesResponse, error) {
-	var err error
-
-	var retval QueryWithSlicesResponse
-	err = client.MakeRequest(
-		nil,
-		"QueryWithSlices",
-		`
+	req := &graphql.Payload{
+		OpName: "QueryWithSlices",
+		Query: `
 query QueryWithSlices {
 	user {
 		emails
@@ -60,9 +56,20 @@ query QueryWithSlices {
 	}
 }
 `,
-		&retval,
+	}
+	var err error
+
+	resp := &graphql.Response{
+		Data: &QueryWithSlicesResponse{},
+	}
+
+	err = client.MakeRequest(
 		nil,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	retval := resp.Data.(*QueryWithSlicesResponse)
+	return retval, err
 }
 

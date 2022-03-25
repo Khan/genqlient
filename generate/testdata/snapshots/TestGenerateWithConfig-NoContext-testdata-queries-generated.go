@@ -35,22 +35,29 @@ func (v *SimpleQueryUser) GetId() string { return v.Id }
 func SimpleQuery(
 	client graphql.Client,
 ) (*SimpleQueryResponse, error) {
-	var err error
-
-	var retval SimpleQueryResponse
-	err = client.MakeRequest(
-		nil,
-		"SimpleQuery",
-		`
+	req := &graphql.Payload{
+		OpName: "SimpleQuery",
+		Query: `
 query SimpleQuery {
 	user {
 		id
 	}
 }
 `,
-		&retval,
+	}
+	var err error
+
+	resp := &graphql.Response{
+		Data: &SimpleQueryResponse{},
+	}
+
+	err = client.MakeRequest(
 		nil,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	retval := resp.Data.(*SimpleQueryResponse)
+	return retval, err
 }
 

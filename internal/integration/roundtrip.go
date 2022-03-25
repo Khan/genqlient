@@ -88,16 +88,16 @@ func (c *roundtripClient) roundtripResponse(resp interface{}) {
 	assert.Equal(c.t, string(body), string(bodyAgain))
 }
 
-func (c *roundtripClient) MakeRequest(ctx context.Context, opName, query string, retval, variables interface{}) error {
+func (c *roundtripClient) MakeRequest(ctx context.Context, req *graphql.Payload, resp *graphql.Response) error {
 	// TODO(benkraft): Also check the variables round-trip.  This is a bit less
 	// important since most of the code is the same (and input types are
 	// strictly simpler), and a bit hard to do because when asserting about
 	// structs we need to worry about things like equality of time.Time values.
-	err := c.wrapped.MakeRequest(ctx, opName, query, retval, variables)
+	err := c.wrapped.MakeRequest(ctx, req, resp)
 	if err != nil {
 		return err
 	}
-	c.roundtripResponse(retval)
+	c.roundtripResponse(resp.Data)
 	return nil
 }
 

@@ -181,25 +181,32 @@ func unexported(
 	client graphql.Client,
 	query UserQueryInput,
 ) (*unexportedResponse, error) {
-	__input := __unexportedInput{
-		Query: query,
-	}
-	var err error
-
-	var retval unexportedResponse
-	err = client.MakeRequest(
-		nil,
-		"unexported",
-		`
+	req := &graphql.Payload{
+		OpName: "unexported",
+		Query: `
 query unexported ($query: UserQueryInput) {
 	user(query: $query) {
 		id
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__unexportedInput{
+			Query: query,
+		},
+	}
+	var err error
+
+	resp := &graphql.Response{
+		Data: &unexportedResponse{},
+	}
+
+	err = client.MakeRequest(
+		nil,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	retval := resp.Data.(*unexportedResponse)
+	return retval, err
 }
 

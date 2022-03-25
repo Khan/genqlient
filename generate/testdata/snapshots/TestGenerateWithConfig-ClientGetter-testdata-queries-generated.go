@@ -5,6 +5,7 @@ package queries
 import (
 	"context"
 
+	"github.com/Khan/genqlient/graphql"
 	"github.com/Khan/genqlient/internal/testutil"
 )
 
@@ -37,26 +38,35 @@ func (v *SimpleQueryUser) GetId() string { return v.Id }
 func SimpleQuery(
 	ctx context.Context,
 ) (*SimpleQueryResponse, error) {
-	var err error
-	client, err := testutil.GetClientFromContext(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	var retval SimpleQueryResponse
-	err = client.MakeRequest(
-		ctx,
-		"SimpleQuery",
-		`
+	req := &graphql.Payload{
+		OpName: "SimpleQuery",
+		Query: `
 query SimpleQuery {
 	user {
 		id
 	}
 }
 `,
-		&retval,
-		nil,
+	}
+	var err error
+	var client graphql.Client
+
+	client, err = testutil.GetClientFromContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	resp := &graphql.Response{
+		Data: &SimpleQueryResponse{},
+	}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	retval := resp.Data.(*SimpleQueryResponse)
+	return retval, err
 }
 

@@ -3,6 +3,7 @@
 package queries
 
 import (
+	"github.com/Khan/genqlient/graphql"
 	"github.com/Khan/genqlient/internal/testutil"
 )
 
@@ -33,26 +34,35 @@ type SimpleQueryUser struct {
 func (v *SimpleQueryUser) GetId() string { return v.Id }
 
 func SimpleQuery() (*SimpleQueryResponse, error) {
-	var err error
-	client, err := testutil.GetClientFromNowhere()
-	if err != nil {
-		return nil, err
-	}
-
-	var retval SimpleQueryResponse
-	err = client.MakeRequest(
-		nil,
-		"SimpleQuery",
-		`
+	req := &graphql.Payload{
+		OpName: "SimpleQuery",
+		Query: `
 query SimpleQuery {
 	user {
 		id
 	}
 }
 `,
-		&retval,
+	}
+	var err error
+	var client graphql.Client
+
+	client, err = testutil.GetClientFromNowhere()
+	if err != nil {
+		return nil, err
+	}
+
+	resp := &graphql.Response{
+		Data: &SimpleQueryResponse{},
+	}
+
+	err = client.MakeRequest(
 		nil,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	retval := resp.Data.(*SimpleQueryResponse)
+	return retval, err
 }
 

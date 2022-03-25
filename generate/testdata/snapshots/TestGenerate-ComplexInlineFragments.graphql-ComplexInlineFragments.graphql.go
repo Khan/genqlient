@@ -1348,13 +1348,9 @@ func (v *ComplexInlineFragmentsRootTopic) GetName() string { return v.Name }
 func ComplexInlineFragments(
 	client graphql.Client,
 ) (*ComplexInlineFragmentsResponse, error) {
-	var err error
-
-	var retval ComplexInlineFragmentsResponse
-	err = client.MakeRequest(
-		nil,
-		"ComplexInlineFragments",
-		`
+	req := &graphql.Payload{
+		OpName: "ComplexInlineFragments",
+		Query: `
 query ComplexInlineFragments {
 	root {
 		id
@@ -1441,9 +1437,20 @@ query ComplexInlineFragments {
 	}
 }
 `,
-		&retval,
+	}
+	var err error
+
+	resp := &graphql.Response{
+		Data: &ComplexInlineFragmentsResponse{},
+	}
+
+	err = client.MakeRequest(
 		nil,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	retval := resp.Data.(*ComplexInlineFragmentsResponse)
+	return retval, err
 }
 

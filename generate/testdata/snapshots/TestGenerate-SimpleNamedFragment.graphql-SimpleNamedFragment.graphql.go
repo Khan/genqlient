@@ -549,13 +549,9 @@ func (v *VideoFieldsThumbnail) GetId() testutil.ID { return v.Id }
 func SimpleNamedFragment(
 	client graphql.Client,
 ) (*SimpleNamedFragmentResponse, error) {
-	var err error
-
-	var retval SimpleNamedFragmentResponse
-	err = client.MakeRequest(
-		nil,
-		"SimpleNamedFragment",
-		`
+	req := &graphql.Payload{
+		OpName: "SimpleNamedFragment",
+		Query: `
 query SimpleNamedFragment {
 	randomItem {
 		__typename
@@ -578,9 +574,20 @@ fragment VideoFields on Video {
 	}
 }
 `,
-		&retval,
+	}
+	var err error
+
+	resp := &graphql.Response{
+		Data: &SimpleNamedFragmentResponse{},
+	}
+
+	err = client.MakeRequest(
 		nil,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	retval := resp.Data.(*SimpleNamedFragmentResponse)
+	return retval, err
 }
 

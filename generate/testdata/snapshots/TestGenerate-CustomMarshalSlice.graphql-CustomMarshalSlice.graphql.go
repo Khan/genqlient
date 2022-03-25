@@ -208,25 +208,32 @@ func CustomMarshalSlice(
 	datesss [][][]time.Time,
 	datesssp [][][]*time.Time,
 ) (*CustomMarshalSliceResponse, error) {
-	__input := __CustomMarshalSliceInput{
-		Datesss:  datesss,
-		Datesssp: datesssp,
-	}
-	var err error
-
-	var retval CustomMarshalSliceResponse
-	err = client.MakeRequest(
-		nil,
-		"CustomMarshalSlice",
-		`
+	req := &graphql.Payload{
+		OpName: "CustomMarshalSlice",
+		Query: `
 query CustomMarshalSlice ($datesss: [[[Date!]!]!]!, $datesssp: [[[Date!]!]!]!) {
 	acceptsListOfListOfListsOfDates(datesss: $datesss)
 	withPointer: acceptsListOfListOfListsOfDates(datesss: $datesssp)
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__CustomMarshalSliceInput{
+			Datesss:  datesss,
+			Datesssp: datesssp,
+		},
+	}
+	var err error
+
+	resp := &graphql.Response{
+		Data: &CustomMarshalSliceResponse{},
+	}
+
+	err = client.MakeRequest(
+		nil,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	retval := resp.Data.(*CustomMarshalSliceResponse)
+	return retval, err
 }
 

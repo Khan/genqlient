@@ -181,25 +181,32 @@ func InputObjectQuery(
 	client graphql.Client,
 	query UserQueryInput,
 ) (*InputObjectQueryResponse, error) {
-	__input := __InputObjectQueryInput{
-		Query: query,
-	}
-	var err error
-
-	var retval InputObjectQueryResponse
-	err = client.MakeRequest(
-		nil,
-		"InputObjectQuery",
-		`
+	req := &graphql.Payload{
+		OpName: "InputObjectQuery",
+		Query: `
 query InputObjectQuery ($query: UserQueryInput) {
 	user(query: $query) {
 		id
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__InputObjectQueryInput{
+			Query: query,
+		},
+	}
+	var err error
+
+	resp := &graphql.Response{
+		Data: &InputObjectQueryResponse{},
+	}
+
+	err = client.MakeRequest(
+		nil,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	retval := resp.Data.(*InputObjectQueryResponse)
+	return retval, err
 }
 

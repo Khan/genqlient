@@ -23,21 +23,28 @@ func (v *EmptyInterfaceResponse) GetGetComplexJunk() []map[string]*[]*map[string
 func EmptyInterface(
 	client graphql.Client,
 ) (*EmptyInterfaceResponse, error) {
-	var err error
-
-	var retval EmptyInterfaceResponse
-	err = client.MakeRequest(
-		nil,
-		"EmptyInterface",
-		`
+	req := &graphql.Payload{
+		OpName: "EmptyInterface",
+		Query: `
 query EmptyInterface {
 	getJunk
 	getComplexJunk
 }
 `,
-		&retval,
+	}
+	var err error
+
+	resp := &graphql.Response{
+		Data: &EmptyInterfaceResponse{},
+	}
+
+	err = client.MakeRequest(
 		nil,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	retval := resp.Data.(*EmptyInterfaceResponse)
+	return retval, err
 }
 

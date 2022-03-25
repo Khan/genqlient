@@ -27,7 +27,7 @@ func TestSimpleQuery(t *testing.T) {
 	defer server.Close()
 	client := newRoundtripClient(t, server.URL)
 
-	resp, err := simpleQuery(ctx, client)
+	resp, _, err := simpleQuery(ctx, client)
 	require.NoError(t, err)
 
 	assert.Equal(t, "1", resp.Me.Id)
@@ -44,7 +44,7 @@ func TestServerError(t *testing.T) {
 	defer server.Close()
 	client := newRoundtripClient(t, server.URL)
 
-	resp, err := failingQuery(ctx, client)
+	resp, _, err := failingQuery(ctx, client)
 	// As long as we get some response back, we should still return a full
 	// response -- and indeed in this case it should even have another field
 	// (which didn't err) set.
@@ -57,7 +57,7 @@ func TestNetworkError(t *testing.T) {
 	ctx := context.Background()
 	client := newRoundtripClient(t, "https://nothing.invalid/graphql")
 
-	resp, err := failingQuery(ctx, client)
+	resp, _, err := failingQuery(ctx, client)
 	// As we guarantee in the README, even on network error you always get a
 	// non-nil response; this is so you can write e.g.
 	//	resp, err := failingQuery(ctx)
@@ -82,17 +82,32 @@ func TestVariables(t *testing.T) {
 	// worry about it.
 	client := graphql.NewClient(server.URL, http.DefaultClient)
 
-	resp, err := queryWithVariables(ctx, client, "2")
+	resp, _, err := queryWithVariables(ctx, client, "2")
 	require.NoError(t, err)
 
 	assert.Equal(t, "2", resp.User.Id)
 	assert.Equal(t, "Raven", resp.User.Name)
 	assert.Equal(t, -1, resp.User.LuckyNumber)
 
-	resp, err = queryWithVariables(ctx, client, "374892379482379")
+	resp, _, err = queryWithVariables(ctx, client, "374892379482379")
 	require.NoError(t, err)
 
 	assert.Zero(t, resp.User)
+}
+
+func TestExtensions(t *testing.T) {
+	_ = `# @genqlient
+	query simpleQueryExt { me { id name luckyNumber } }`
+
+	ctx := context.Background()
+	server := server.RunServer()
+	defer server.Close()
+	client := newRoundtripClient(t, server.URL)
+
+	_, extensions, err := simpleQueryExt(ctx, client)
+	require.NoError(t, err)
+	assert.NotNil(t, extensions)
+	assert.Equal(t, extensions["foobar"], "test")
 }
 
 func TestOmitempty(t *testing.T) {
@@ -106,7 +121,7 @@ func TestOmitempty(t *testing.T) {
 	defer server.Close()
 	client := newRoundtripClient(t, server.URL)
 
-	resp, err := queryWithOmitempty(ctx, client, "2")
+	resp, _, err := queryWithOmitempty(ctx, client, "2")
 	require.NoError(t, err)
 
 	assert.Equal(t, "2", resp.User.Id)
@@ -114,7 +129,7 @@ func TestOmitempty(t *testing.T) {
 	assert.Equal(t, -1, resp.User.LuckyNumber)
 
 	// should return default user, not the user with ID ""
-	resp, err = queryWithOmitempty(ctx, client, "")
+	resp, _, err = queryWithOmitempty(ctx, client, "")
 	require.NoError(t, err)
 
 	assert.Equal(t, "1", resp.User.Id)
@@ -133,7 +148,7 @@ func TestCustomMarshal(t *testing.T) {
 	defer server.Close()
 	client := newRoundtripClient(t, server.URL)
 
-	resp, err := queryWithCustomMarshal(ctx, client,
+	resp, _, err := queryWithCustomMarshal(ctx, client,
 		time.Date(2025, time.January, 1, 12, 34, 56, 789, time.UTC))
 	require.NoError(t, err)
 
@@ -145,7 +160,7 @@ func TestCustomMarshal(t *testing.T) {
 		time.Date(2025, time.January, 1, 0, 0, 0, 0, time.UTC),
 		user.Birthdate)
 
-	resp, err = queryWithCustomMarshal(ctx, client,
+	resp, _, err = queryWithCustomMarshal(ctx, client,
 		time.Date(2021, time.January, 1, 12, 34, 56, 789, time.UTC))
 	require.NoError(t, err)
 	assert.Len(t, resp.UsersBornOn, 0)
@@ -162,7 +177,7 @@ func TestCustomMarshalSlice(t *testing.T) {
 	defer server.Close()
 	client := newRoundtripClient(t, server.URL)
 
-	resp, err := queryWithCustomMarshalSlice(ctx, client,
+	resp, _, err := queryWithCustomMarshalSlice(ctx, client,
 		[]time.Time{time.Date(2025, time.January, 1, 12, 34, 56, 789, time.UTC)})
 	require.NoError(t, err)
 
@@ -174,7 +189,7 @@ func TestCustomMarshalSlice(t *testing.T) {
 		time.Date(2025, time.January, 1, 0, 0, 0, 0, time.UTC),
 		user.Birthdate)
 
-	resp, err = queryWithCustomMarshalSlice(ctx, client,
+	resp, _, err = queryWithCustomMarshalSlice(ctx, client,
 		[]time.Time{time.Date(2021, time.January, 1, 12, 34, 56, 789, time.UTC)})
 	require.NoError(t, err)
 	assert.Len(t, resp.UsersBornOnDates, 0)
@@ -197,7 +212,7 @@ func TestCustomMarshalOptional(t *testing.T) {
 	client := newRoundtripClient(t, server.URL)
 
 	date := time.Date(2025, time.January, 1, 12, 34, 56, 789, time.UTC)
-	resp, err := queryWithCustomMarshalOptional(ctx, client, &date, nil)
+	resp, _, err := queryWithCustomMarshalOptional(ctx, client, &date, nil)
 	require.NoError(t, err)
 
 	assert.Len(t, resp.UserSearch, 1)
@@ -209,7 +224,7 @@ func TestCustomMarshalOptional(t *testing.T) {
 		user.Birthdate)
 
 	id := "2"
-	resp, err = queryWithCustomMarshalOptional(ctx, client, nil, &id)
+	resp, _, err = queryWithCustomMarshalOptional(ctx, client, nil, &id)
 	require.NoError(t, err)
 	assert.Len(t, resp.UserSearch, 1)
 	user = resp.UserSearch[0]
@@ -230,7 +245,7 @@ func TestInterfaceNoFragments(t *testing.T) {
 	defer server.Close()
 	client := newRoundtripClient(t, server.URL)
 
-	resp, err := queryWithInterfaceNoFragments(ctx, client, "1")
+	resp, _, err := queryWithInterfaceNoFragments(ctx, client, "1")
 	require.NoError(t, err)
 
 	// We should get the following response:
@@ -250,7 +265,7 @@ func TestInterfaceNoFragments(t *testing.T) {
 	assert.Equal(t, "1", user.Id)
 	assert.Equal(t, "Yours Truly", user.Name)
 
-	resp, err = queryWithInterfaceNoFragments(ctx, client, "3")
+	resp, _, err = queryWithInterfaceNoFragments(ctx, client, "3")
 	require.NoError(t, err)
 
 	// We should get the following response:
@@ -269,7 +284,7 @@ func TestInterfaceNoFragments(t *testing.T) {
 	assert.Equal(t, "3", animal.Id)
 	assert.Equal(t, "Fido", animal.Name)
 
-	resp, err = queryWithInterfaceNoFragments(ctx, client, "4757233945723")
+	resp, _, err = queryWithInterfaceNoFragments(ctx, client, "4757233945723")
 	require.NoError(t, err)
 
 	// We should get the following response:
@@ -293,7 +308,7 @@ func TestInterfaceListField(t *testing.T) {
 	defer server.Close()
 	client := newRoundtripClient(t, server.URL)
 
-	resp, err := queryWithInterfaceListField(ctx, client,
+	resp, _, err := queryWithInterfaceListField(ctx, client,
 		[]string{"1", "3", "12847394823"})
 	require.NoError(t, err)
 
@@ -340,7 +355,7 @@ func TestInterfaceListPointerField(t *testing.T) {
 	defer server.Close()
 	client := newRoundtripClient(t, server.URL)
 
-	resp, err := queryWithInterfaceListPointerField(ctx, client,
+	resp, _, err := queryWithInterfaceListPointerField(ctx, client,
 		[]string{"1", "3", "12847394823"})
 	require.NoError(t, err)
 
@@ -394,7 +409,7 @@ func TestFragments(t *testing.T) {
 	defer server.Close()
 	client := newRoundtripClient(t, server.URL)
 
-	resp, err := queryWithFragments(ctx, client, []string{"1", "3", "12847394823"})
+	resp, _, err := queryWithFragments(ctx, client, []string{"1", "3", "12847394823"})
 	require.NoError(t, err)
 
 	require.Len(t, resp.Beings, 3)
@@ -487,7 +502,7 @@ func TestNamedFragments(t *testing.T) {
 	defer server.Close()
 	client := newRoundtripClient(t, server.URL)
 
-	resp, err := queryWithNamedFragments(ctx, client, []string{"1", "3", "12847394823"})
+	resp, _, err := queryWithNamedFragments(ctx, client, []string{"1", "3", "12847394823"})
 	require.NoError(t, err)
 
 	require.Len(t, resp.Beings, 3)
@@ -616,7 +631,7 @@ func TestFlatten(t *testing.T) {
 	defer server.Close()
 	client := newRoundtripClient(t, server.URL)
 
-	resp, err := queryWithFlatten(ctx, client, []string{"1", "3", "12847394823"})
+	resp, _, err := queryWithFlatten(ctx, client, []string{"1", "3", "12847394823"})
 	require.NoError(t, err)
 
 	require.Len(t, resp.Beings, 3)

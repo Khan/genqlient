@@ -40,13 +40,9 @@ func (v *TypeNameQueryUser) GetId() testutil.ID { return v.Id }
 func TypeNameQuery(
 	client graphql.Client,
 ) (*TypeNameQueryResponse, error) {
-	var err error
-
-	var retval TypeNameQueryResponse
-	err = client.MakeRequest(
-		nil,
-		"TypeNameQuery",
-		`
+	req := &graphql.Payload{
+		OpName: "TypeNameQuery",
+		Query: `
 query TypeNameQuery {
 	user {
 		__typename
@@ -54,9 +50,20 @@ query TypeNameQuery {
 	}
 }
 `,
-		&retval,
+	}
+	var err error
+
+	resp := &graphql.Response{
+		Data: &TypeNameQueryResponse{},
+	}
+
+	err = client.MakeRequest(
 		nil,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	retval := resp.Data.(*TypeNameQueryResponse)
+	return retval, err
 }
 

@@ -427,13 +427,9 @@ func (v *VideoFields) GetDuration() int { return v.Duration }
 func StructOption(
 	client graphql.Client,
 ) (*StructOptionResponse, error) {
-	var err error
-
-	var retval StructOptionResponse
-	err = client.MakeRequest(
-		nil,
-		"StructOption",
-		`
+	req := &graphql.Payload{
+		OpName: "StructOption",
+		Query: `
 query StructOption {
 	root {
 		id
@@ -462,9 +458,20 @@ fragment VideoFields on Video {
 	duration
 }
 `,
-		&retval,
+	}
+	var err error
+
+	resp := &graphql.Response{
+		Data: &StructOptionResponse{},
+	}
+
+	err = client.MakeRequest(
 		nil,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	retval := resp.Data.(*StructOptionResponse)
+	return retval, err
 }
 

@@ -38,22 +38,29 @@ func SimpleQuery(
 	ctx context.Context,
 	client graphql.Client,
 ) (*SimpleQueryResponse, error) {
-	var err error
-
-	var retval SimpleQueryResponse
-	err = client.MakeRequest(
-		ctx,
-		"SimpleQuery",
-		`
+	req := &graphql.Payload{
+		OpName: "SimpleQuery",
+		Query: `
 query SimpleQuery {
 	user {
 		id
 	}
 }
 `,
-		&retval,
-		nil,
+	}
+	var err error
+
+	resp := &graphql.Response{
+		Data: &SimpleQueryResponse{},
+	}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	retval := resp.Data.(*SimpleQueryResponse)
+	return retval, err
 }
 

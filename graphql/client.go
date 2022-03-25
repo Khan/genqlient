@@ -40,9 +40,8 @@ type Client interface {
 	// (Errors are returned.) But again, MakeRequest may customize this.
 	MakeRequest(
 		ctx context.Context,
-		opName string,
-		query string,
-		retval, input interface{},
+		req *Payload,
+		resp *Response,
 	) error
 }
 
@@ -75,7 +74,9 @@ type Doer interface {
 	Do(*http.Request) (*http.Response, error)
 }
 
-type payload struct {
+// Payload contains all the values required to build queries executed by
+// the graphql.Client.
+type Payload struct {
 	Query     string      `json:"query"`
 	Variables interface{} `json:"variables,omitempty"`
 	// OpName is only required if there are multiple queries in the document,
@@ -83,57 +84,54 @@ type payload struct {
 	OpName string `json:"operationName"`
 }
 
-type response struct {
-	Data   interface{}   `json:"data"`
-	Errors gqlerror.List `json:"errors"`
+// Response that contains data returned by the GraphQL API. Extensions and
+// Errors might not be set, depending on the values returned by the Request.
+type Response struct {
+	Data       interface{}            `json:"data"`
+	Extensions map[string]interface{} `json:"extensions,omitempty"`
+	Errors     gqlerror.List          `json:"errors,omitempty"`
 }
 
-func (c *client) MakeRequest(ctx context.Context, opName string, query string, retval interface{}, variables interface{}) error {
-	body, err := json.Marshal(payload{
-		Query:     query,
-		Variables: variables,
-		OpName:    opName,
-	})
+func (c *client) MakeRequest(ctx context.Context, req *Payload, resp *Response) error {
+	body, err := json.Marshal(req)
 	if err != nil {
 		return err
 	}
 
-	req, err := http.NewRequest(
+	httpReq, err := http.NewRequest(
 		c.method,
 		c.endpoint,
 		bytes.NewReader(body))
 	if err != nil {
 		return err
 	}
-	req.Header.Set("Content-Type", "application/json")
+	httpReq.Header.Set("Content-Type", "application/json")
 
 	if ctx != nil {
-		req = req.WithContext(ctx)
+		httpReq = httpReq.WithContext(ctx)
 	}
-	resp, err := c.httpClient.Do(req)
+
+	httpResp, err := c.httpClient.Do(httpReq)
 	if err != nil {
 		return err
 	}
-	defer resp.Body.Close()
+	defer httpResp.Body.Close()
 
-	if resp.StatusCode != http.StatusOK {
+	if httpResp.StatusCode != http.StatusOK {
 		var respBody []byte
-		respBody, err = io.ReadAll(resp.Body)
+		respBody, err = io.ReadAll(httpResp.Body)
 		if err != nil {
 			respBody = []byte(fmt.Sprintf("<unreadable: %v>", err))
 		}
-		return fmt.Errorf("returned error %v: %s", resp.Status, respBody)
+		return fmt.Errorf("returned error %v: %s", httpResp.Status, respBody)
 	}
 
-	var dataAndErrors response
-	dataAndErrors.Data = retval
-	err = json.NewDecoder(resp.Body).Decode(&dataAndErrors)
+	err = json.NewDecoder(httpResp.Body).Decode(resp)
 	if err != nil {
 		return err
 	}
-
-	if len(dataAndErrors.Errors) > 0 {
-		return dataAndErrors.Errors
+	if len(resp.Errors) > 0 {
+		return resp.Errors
 	}
 	return nil
 }

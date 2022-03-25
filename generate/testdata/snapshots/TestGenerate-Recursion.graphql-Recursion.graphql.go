@@ -72,16 +72,9 @@ func Recursion(
 	client graphql.Client,
 	input RecursiveInput,
 ) (*RecursionResponse, error) {
-	__input := __RecursionInput{
-		Input: input,
-	}
-	var err error
-
-	var retval RecursionResponse
-	err = client.MakeRequest(
-		nil,
-		"Recursion",
-		`
+	req := &graphql.Payload{
+		OpName: "Recursion",
+		Query: `
 query Recursion ($input: RecursiveInput!) {
 	recur(input: $input) {
 		rec {
@@ -94,9 +87,23 @@ query Recursion ($input: RecursiveInput!) {
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__RecursionInput{
+			Input: input,
+		},
+	}
+	var err error
+
+	resp := &graphql.Response{
+		Data: &RecursionResponse{},
+	}
+
+	err = client.MakeRequest(
+		nil,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	retval := resp.Data.(*RecursionResponse)
+	return retval, err
 }
 

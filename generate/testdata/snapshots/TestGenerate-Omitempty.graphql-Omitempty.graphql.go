@@ -227,20 +227,9 @@ func OmitEmptyQuery(
 	tz string,
 	tzNoOmitEmpty string,
 ) (*OmitEmptyQueryResponse, error) {
-	__input := __OmitEmptyQueryInput{
-		Query:         query,
-		Queries:       queries,
-		Dt:            dt,
-		Tz:            tz,
-		TzNoOmitEmpty: tzNoOmitEmpty,
-	}
-	var err error
-
-	var retval OmitEmptyQueryResponse
-	err = client.MakeRequest(
-		nil,
-		"OmitEmptyQuery",
-		`
+	req := &graphql.Payload{
+		OpName: "OmitEmptyQuery",
+		Query: `
 query OmitEmptyQuery ($query: UserQueryInput, $queries: [UserQueryInput], $dt: DateTime, $tz: String, $tzNoOmitEmpty: String) {
 	user(query: $query) {
 		id
@@ -252,9 +241,27 @@ query OmitEmptyQuery ($query: UserQueryInput, $queries: [UserQueryInput], $dt: D
 	convert2: maybeConvert(dt: $dt, tz: $tzNoOmitEmpty)
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__OmitEmptyQueryInput{
+			Query:         query,
+			Queries:       queries,
+			Dt:            dt,
+			Tz:            tz,
+			TzNoOmitEmpty: tzNoOmitEmpty,
+		},
+	}
+	var err error
+
+	resp := &graphql.Response{
+		Data: &OmitEmptyQueryResponse{},
+	}
+
+	err = client.MakeRequest(
+		nil,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	retval := resp.Data.(*OmitEmptyQueryResponse)
+	return retval, err
 }
 
