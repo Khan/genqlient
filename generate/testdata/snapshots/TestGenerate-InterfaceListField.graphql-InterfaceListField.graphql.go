@@ -550,9 +550,8 @@ query InterfaceListField {
 	}
 	var err error
 
-	resp := &graphql.Response{
-		Data: &InterfaceListFieldResponse{},
-	}
+	var data InterfaceListFieldResponse
+	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
 		nil,
@@ -560,7 +559,6 @@ query InterfaceListField {
 		resp,
 	)
 
-	retval := resp.Data.(*InterfaceListFieldResponse)
-	return retval, err
+	return &data, err
 }
 

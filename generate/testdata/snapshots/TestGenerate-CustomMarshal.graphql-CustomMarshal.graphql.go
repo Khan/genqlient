@@ -194,9 +194,8 @@ query CustomMarshal ($date: Date!) {
 	}
 	var err error
 
-	resp := &graphql.Response{
-		Data: &CustomMarshalResponse{},
-	}
+	var data CustomMarshalResponse
+	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
 		nil,
@@ -204,7 +203,6 @@ query CustomMarshal ($date: Date!) {
 		resp,
 	)
 
-	retval := resp.Data.(*CustomMarshalResponse)
-	return retval, err
+	return &data, err
 }
 

@@ -17,10 +17,6 @@ func {{.Name}}(
         OpName: "{{.Name}}",
         Query:  `{{.Body}}`,
     {{if .Input -}}
-    {{/* We need to avoid conflicting with any of the function's argument names
-         which are derived from the GraphQL argument names; notably `input` is
-         a common one.  So we use a name that's not legal in GraphQL, namely
-         one starting with a double-underscore. */ -}}
         Variables: &{{.Input.GoName}}{
         {{range .Input.Fields -}}
         {{.GoName}}: {{.GraphQLName}},
@@ -37,16 +33,14 @@ func {{.Name}}(
         return nil, {{if .Config.Extensions -}}nil,{{end -}} err
     }
     {{end}}
-    resp := &graphql.Response{
-        Data: &{{.ResponseName}}{},
-    }
+    var data {{.ResponseName}}
+    resp := &graphql.Response{Data: &data}
 
     err = client.MakeRequest(
         {{if ne .Config.ContextType "-"}}ctx{{else}}nil{{end}},
         req,
         resp,
     )
-
-	retval := resp.Data.(*{{.ResponseName}})
-    return retval, {{if .Config.Extensions -}}resp.Extensions,{{end -}} err
+	
+    return &data, {{if .Config.Extensions -}}resp.Extensions,{{end -}} err
 }

@@ -189,9 +189,8 @@ query UnionNoFragmentsQuery {
 	}
 	var err error
 
-	resp := &graphql.Response{
-		Data: &UnionNoFragmentsQueryResponse{},
-	}
+	var data UnionNoFragmentsQueryResponse
+	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
 		nil,
@@ -199,7 +198,6 @@ query UnionNoFragmentsQuery {
 		resp,
 	)
 
-	retval := resp.Data.(*UnionNoFragmentsQueryResponse)
-	return retval, err
+	return &data, err
 }
 

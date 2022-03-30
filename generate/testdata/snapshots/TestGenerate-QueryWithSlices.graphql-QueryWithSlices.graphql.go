@@ -59,9 +59,8 @@ query QueryWithSlices {
 	}
 	var err error
 
-	resp := &graphql.Response{
-		Data: &QueryWithSlicesResponse{},
-	}
+	var data QueryWithSlicesResponse
+	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
 		nil,
@@ -69,7 +68,6 @@ query QueryWithSlices {
 		resp,
 	)
 
-	retval := resp.Data.(*QueryWithSlicesResponse)
-	return retval, err
+	return &data, err
 }
 

@@ -530,9 +530,8 @@ query InterfaceNesting {
 	}
 	var err error
 
-	resp := &graphql.Response{
-		Data: &InterfaceNestingResponse{},
-	}
+	var data InterfaceNestingResponse
+	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
 		nil,
@@ -540,7 +539,6 @@ query InterfaceNesting {
 		resp,
 	)
 
-	retval := resp.Data.(*InterfaceNestingResponse)
-	return retval, err
+	return &data, err
 }
 

@@ -349,9 +349,8 @@ query MultipleDirectives ($query: UserQueryInput, $queries: [UserQueryInput]) {
 	}
 	var err error
 
-	resp := &graphql.Response{
-		Data: &MyMultipleDirectivesResponse{},
-	}
+	var data MyMultipleDirectivesResponse
+	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
 		nil,
@@ -359,7 +358,6 @@ query MultipleDirectives ($query: UserQueryInput, $queries: [UserQueryInput]) {
 		resp,
 	)
 
-	retval := resp.Data.(*MyMultipleDirectivesResponse)
-	return retval, err
+	return &data, err
 }
 

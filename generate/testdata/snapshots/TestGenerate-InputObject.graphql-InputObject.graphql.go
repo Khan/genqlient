@@ -196,9 +196,8 @@ query InputObjectQuery ($query: UserQueryInput) {
 	}
 	var err error
 
-	resp := &graphql.Response{
-		Data: &InputObjectQueryResponse{},
-	}
+	var data InputObjectQueryResponse
+	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
 		nil,
@@ -206,7 +205,6 @@ query InputObjectQuery ($query: UserQueryInput) {
 		resp,
 	)
 
-	retval := resp.Data.(*InputObjectQueryResponse)
-	return retval, err
+	return &data, err
 }
 

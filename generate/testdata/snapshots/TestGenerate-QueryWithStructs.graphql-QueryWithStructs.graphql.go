@@ -61,9 +61,8 @@ query QueryWithStructs {
 	}
 	var err error
 
-	resp := &graphql.Response{
-		Data: &QueryWithStructsResponse{},
-	}
+	var data QueryWithStructsResponse
+	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
 		nil,
@@ -71,7 +70,6 @@ query QueryWithStructs {
 		resp,
 	)
 
-	retval := resp.Data.(*QueryWithStructsResponse)
-	return retval, err
+	return &data, err
 }
 

@@ -50,9 +50,8 @@ query SimpleQuery {
 	}
 	var err error
 
-	resp := &graphql.Response{
-		Data: &SimpleQueryResponse{},
-	}
+	var data SimpleQueryResponse
+	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
 		ctx,
@@ -60,7 +59,6 @@ query SimpleQuery {
 		resp,
 	)
 
-	retval := resp.Data.(*SimpleQueryResponse)
-	return retval, resp.Extensions, err
+	return &data, resp.Extensions, err
 }
 

@@ -80,9 +80,8 @@ query QueryWithEnums {
 	}
 	var err error
 
-	resp := &graphql.Response{
-		Data: &QueryWithEnumsResponse{},
-	}
+	var data QueryWithEnumsResponse
+	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
 		nil,
@@ -90,7 +89,6 @@ query QueryWithEnums {
 		resp,
 	)
 
-	retval := resp.Data.(*QueryWithEnumsResponse)
-	return retval, err
+	return &data, err
 }
 

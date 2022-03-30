@@ -3060,9 +3060,8 @@ query failingQuery {
 	}
 	var err error
 
-	resp := &graphql.Response{
-		Data: &failingQueryResponse{},
-	}
+	var data failingQueryResponse
+	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
 		ctx,
@@ -3070,8 +3069,7 @@ query failingQuery {
 		resp,
 	)
 
-	retval := resp.Data.(*failingQueryResponse)
-	return retval, resp.Extensions, err
+	return &data, resp.Extensions, err
 }
 
 func queryWithCustomMarshal(
@@ -3096,9 +3094,8 @@ query queryWithCustomMarshal ($date: Date!) {
 	}
 	var err error
 
-	resp := &graphql.Response{
-		Data: &queryWithCustomMarshalResponse{},
-	}
+	var data queryWithCustomMarshalResponse
+	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
 		ctx,
@@ -3106,8 +3103,7 @@ query queryWithCustomMarshal ($date: Date!) {
 		resp,
 	)
 
-	retval := resp.Data.(*queryWithCustomMarshalResponse)
-	return retval, resp.Extensions, err
+	return &data, resp.Extensions, err
 }
 
 func queryWithCustomMarshalOptional(
@@ -3134,9 +3130,8 @@ query queryWithCustomMarshalOptional ($date: Date, $id: ID) {
 	}
 	var err error
 
-	resp := &graphql.Response{
-		Data: &queryWithCustomMarshalOptionalResponse{},
-	}
+	var data queryWithCustomMarshalOptionalResponse
+	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
 		ctx,
@@ -3144,8 +3139,7 @@ query queryWithCustomMarshalOptional ($date: Date, $id: ID) {
 		resp,
 	)
 
-	retval := resp.Data.(*queryWithCustomMarshalOptionalResponse)
-	return retval, resp.Extensions, err
+	return &data, resp.Extensions, err
 }
 
 func queryWithCustomMarshalSlice(
@@ -3170,9 +3164,8 @@ query queryWithCustomMarshalSlice ($dates: [Date!]!) {
 	}
 	var err error
 
-	resp := &graphql.Response{
-		Data: &queryWithCustomMarshalSliceResponse{},
-	}
+	var data queryWithCustomMarshalSliceResponse
+	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
 		ctx,
@@ -3180,8 +3173,7 @@ query queryWithCustomMarshalSlice ($dates: [Date!]!) {
 		resp,
 	)
 
-	retval := resp.Data.(*queryWithCustomMarshalSliceResponse)
-	return retval, resp.Extensions, err
+	return &data, resp.Extensions, err
 }
 
 func queryWithFlatten(
@@ -3240,9 +3232,8 @@ fragment FriendsFields on User {
 	}
 	var err error
 
-	resp := &graphql.Response{
-		Data: &QueryFragment{},
-	}
+	var data QueryFragment
+	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
 		ctx,
@@ -3250,8 +3241,7 @@ fragment FriendsFields on User {
 		resp,
 	)
 
-	retval := resp.Data.(*QueryFragment)
-	return retval, resp.Extensions, err
+	return &data, resp.Extensions, err
 }
 
 func queryWithFragments(
@@ -3304,9 +3294,8 @@ query queryWithFragments ($ids: [ID!]!) {
 	}
 	var err error
 
-	resp := &graphql.Response{
-		Data: &queryWithFragmentsResponse{},
-	}
+	var data queryWithFragmentsResponse
+	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
 		ctx,
@@ -3314,8 +3303,7 @@ query queryWithFragments ($ids: [ID!]!) {
 		resp,
 	)
 
-	retval := resp.Data.(*queryWithFragmentsResponse)
-	return retval, resp.Extensions, err
+	return &data, resp.Extensions, err
 }
 
 func queryWithInterfaceListField(
@@ -3340,9 +3328,8 @@ query queryWithInterfaceListField ($ids: [ID!]!) {
 	}
 	var err error
 
-	resp := &graphql.Response{
-		Data: &queryWithInterfaceListFieldResponse{},
-	}
+	var data queryWithInterfaceListFieldResponse
+	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
 		ctx,
@@ -3350,8 +3337,7 @@ query queryWithInterfaceListField ($ids: [ID!]!) {
 		resp,
 	)
 
-	retval := resp.Data.(*queryWithInterfaceListFieldResponse)
-	return retval, resp.Extensions, err
+	return &data, resp.Extensions, err
 }
 
 func queryWithInterfaceListPointerField(
@@ -3376,9 +3362,8 @@ query queryWithInterfaceListPointerField ($ids: [ID!]!) {
 	}
 	var err error
 
-	resp := &graphql.Response{
-		Data: &queryWithInterfaceListPointerFieldResponse{},
-	}
+	var data queryWithInterfaceListPointerFieldResponse
+	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
 		ctx,
@@ -3386,8 +3371,7 @@ query queryWithInterfaceListPointerField ($ids: [ID!]!) {
 		resp,
 	)
 
-	retval := resp.Data.(*queryWithInterfaceListPointerFieldResponse)
-	return retval, resp.Extensions, err
+	return &data, resp.Extensions, err
 }
 
 func queryWithInterfaceNoFragments(
@@ -3416,9 +3400,8 @@ query queryWithInterfaceNoFragments ($id: ID!) {
 	}
 	var err error
 
-	resp := &graphql.Response{
-		Data: &queryWithInterfaceNoFragmentsResponse{},
-	}
+	var data queryWithInterfaceNoFragmentsResponse
+	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
 		ctx,
@@ -3426,8 +3409,7 @@ query queryWithInterfaceNoFragments ($id: ID!) {
 		resp,
 	)
 
-	retval := resp.Data.(*queryWithInterfaceNoFragmentsResponse)
-	return retval, resp.Extensions, err
+	return &data, resp.Extensions, err
 }
 
 func queryWithNamedFragments(
@@ -3480,9 +3462,8 @@ fragment MoreUserFields on User {
 	}
 	var err error
 
-	resp := &graphql.Response{
-		Data: &queryWithNamedFragmentsResponse{},
-	}
+	var data queryWithNamedFragmentsResponse
+	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
 		ctx,
@@ -3490,8 +3471,7 @@ fragment MoreUserFields on User {
 		resp,
 	)
 
-	retval := resp.Data.(*queryWithNamedFragmentsResponse)
-	return retval, resp.Extensions, err
+	return &data, resp.Extensions, err
 }
 
 func queryWithOmitempty(
@@ -3516,9 +3496,8 @@ query queryWithOmitempty ($id: ID) {
 	}
 	var err error
 
-	resp := &graphql.Response{
-		Data: &queryWithOmitemptyResponse{},
-	}
+	var data queryWithOmitemptyResponse
+	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
 		ctx,
@@ -3526,8 +3505,7 @@ query queryWithOmitempty ($id: ID) {
 		resp,
 	)
 
-	retval := resp.Data.(*queryWithOmitemptyResponse)
-	return retval, resp.Extensions, err
+	return &data, resp.Extensions, err
 }
 
 func queryWithVariables(
@@ -3552,9 +3530,8 @@ query queryWithVariables ($id: ID!) {
 	}
 	var err error
 
-	resp := &graphql.Response{
-		Data: &queryWithVariablesResponse{},
-	}
+	var data queryWithVariablesResponse
+	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
 		ctx,
@@ -3562,8 +3539,7 @@ query queryWithVariables ($id: ID!) {
 		resp,
 	)
 
-	retval := resp.Data.(*queryWithVariablesResponse)
-	return retval, resp.Extensions, err
+	return &data, resp.Extensions, err
 }
 
 func simpleQuery(
@@ -3584,9 +3560,8 @@ query simpleQuery {
 	}
 	var err error
 
-	resp := &graphql.Response{
-		Data: &simpleQueryResponse{},
-	}
+	var data simpleQueryResponse
+	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
 		ctx,
@@ -3594,8 +3569,7 @@ query simpleQuery {
 		resp,
 	)
 
-	retval := resp.Data.(*simpleQueryResponse)
-	return retval, resp.Extensions, err
+	return &data, resp.Extensions, err
 }
 
 func simpleQueryExt(
@@ -3616,9 +3590,8 @@ query simpleQueryExt {
 	}
 	var err error
 
-	resp := &graphql.Response{
-		Data: &simpleQueryExtResponse{},
-	}
+	var data simpleQueryExtResponse
+	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
 		ctx,
@@ -3626,6 +3599,5 @@ query simpleQueryExt {
 		resp,
 	)
 
-	retval := resp.Data.(*simpleQueryExtResponse)
-	return retval, resp.Extensions, err
+	return &data, resp.Extensions, err
 }

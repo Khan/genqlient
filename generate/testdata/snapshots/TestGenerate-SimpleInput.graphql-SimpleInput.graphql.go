@@ -60,9 +60,8 @@ query SimpleInputQuery ($name: String!) {
 	}
 	var err error
 
-	resp := &graphql.Response{
-		Data: &SimpleInputQueryResponse{},
-	}
+	var data SimpleInputQueryResponse
+	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
 		nil,
@@ -70,7 +69,6 @@ query SimpleInputQuery ($name: String!) {
 		resp,
 	)
 
-	retval := resp.Data.(*SimpleInputQueryResponse)
-	return retval, err
+	return &data, err
 }
 

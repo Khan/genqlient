@@ -34,9 +34,8 @@ query EmptyInterface {
 	}
 	var err error
 
-	resp := &graphql.Response{
-		Data: &EmptyInterfaceResponse{},
-	}
+	var data EmptyInterfaceResponse
+	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
 		nil,
@@ -44,7 +43,6 @@ query EmptyInterface {
 		resp,
 	)
 
-	retval := resp.Data.(*EmptyInterfaceResponse)
-	return retval, err
+	return &data, err
 }
 

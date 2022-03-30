@@ -310,9 +310,8 @@ fragment ChildVideoFields on Video {
 	}
 	var err error
 
-	resp := &graphql.Response{
-		Data: &InnerQueryFragment{},
-	}
+	var data InnerQueryFragment
+	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
 		nil,
@@ -320,7 +319,6 @@ fragment ChildVideoFields on Video {
 		resp,
 	)
 
-	retval := resp.Data.(*InnerQueryFragment)
-	return retval, err
+	return &data, err
 }
 

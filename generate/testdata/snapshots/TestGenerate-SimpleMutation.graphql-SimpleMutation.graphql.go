@@ -65,9 +65,8 @@ mutation SimpleMutation ($name: String!) {
 	}
 	var err error
 
-	resp := &graphql.Response{
-		Data: &SimpleMutationResponse{},
-	}
+	var data SimpleMutationResponse
+	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
 		nil,
@@ -75,7 +74,6 @@ mutation SimpleMutation ($name: String!) {
 		resp,
 	)
 
-	retval := resp.Data.(*SimpleMutationResponse)
-	return retval, err
+	return &data, err
 }
 

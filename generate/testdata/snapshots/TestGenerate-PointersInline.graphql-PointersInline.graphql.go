@@ -258,9 +258,8 @@ query PointersQuery ($query: UserQueryInput, $dt: DateTime, $tz: String) {
 	}
 	var err error
 
-	resp := &graphql.Response{
-		Data: &PointersQueryResponse{},
-	}
+	var data PointersQueryResponse
+	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
 		nil,
@@ -268,7 +267,6 @@ query PointersQuery ($query: UserQueryInput, $dt: DateTime, $tz: String) {
 		resp,
 	)
 
-	retval := resp.Data.(*PointersQueryResponse)
-	return retval, err
+	return &data, err
 }
 

@@ -60,9 +60,8 @@ query ListInputQuery ($names: [String]) {
 	}
 	var err error
 
-	resp := &graphql.Response{
-		Data: &ListInputQueryResponse{},
-	}
+	var data ListInputQueryResponse
+	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
 		nil,
@@ -70,7 +69,6 @@ query ListInputQuery ($names: [String]) {
 		resp,
 	)
 
-	retval := resp.Data.(*ListInputQueryResponse)
-	return retval, err
+	return &data, err
 }
 

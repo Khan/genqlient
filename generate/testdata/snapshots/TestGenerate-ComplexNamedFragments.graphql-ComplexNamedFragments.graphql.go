@@ -1806,9 +1806,8 @@ fragment MoreVideoFields on Video {
 	}
 	var err error
 
-	resp := &graphql.Response{
-		Data: &ComplexNamedFragmentsResponse{},
-	}
+	var data ComplexNamedFragmentsResponse
+	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
 		nil,
@@ -1816,7 +1815,6 @@ fragment MoreVideoFields on Video {
 		resp,
 	)
 
-	retval := resp.Data.(*ComplexNamedFragmentsResponse)
-	return retval, err
+	return &data, err
 }
 

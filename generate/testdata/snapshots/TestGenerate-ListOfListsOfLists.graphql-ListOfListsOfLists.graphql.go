@@ -29,9 +29,8 @@ query ListOfListsOfLists {
 	}
 	var err error
 
-	resp := &graphql.Response{
-		Data: &ListOfListsOfListsResponse{},
-	}
+	var data ListOfListsOfListsResponse
+	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
 		nil,
@@ -39,7 +38,6 @@ query ListOfListsOfLists {
 		resp,
 	)
 
-	retval := resp.Data.(*ListOfListsOfListsResponse)
-	return retval, err
+	return &data, err
 }
 

@@ -1440,9 +1440,8 @@ query ComplexInlineFragments {
 	}
 	var err error
 
-	resp := &graphql.Response{
-		Data: &ComplexInlineFragmentsResponse{},
-	}
+	var data ComplexInlineFragmentsResponse
+	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
 		nil,
@@ -1450,7 +1449,6 @@ query ComplexInlineFragments {
 		resp,
 	)
 
-	retval := resp.Data.(*ComplexInlineFragmentsResponse)
-	return retval, err
+	return &data, err
 }
 

@@ -53,9 +53,8 @@ query TypeNameQuery {
 	}
 	var err error
 
-	resp := &graphql.Response{
-		Data: &TypeNameQueryResponse{},
-	}
+	var data TypeNameQueryResponse
+	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
 		nil,
@@ -63,7 +62,6 @@ query TypeNameQuery {
 		resp,
 	)
 
-	retval := resp.Data.(*TypeNameQueryResponse)
-	return retval, err
+	return &data, err
 }
 

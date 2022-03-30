@@ -528,9 +528,8 @@ query InterfaceListOfListOfListsField {
 	}
 	var err error
 
-	resp := &graphql.Response{
-		Data: &InterfaceListOfListOfListsFieldResponse{},
-	}
+	var data InterfaceListOfListOfListsFieldResponse
+	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
 		nil,
@@ -538,7 +537,6 @@ query InterfaceListOfListOfListsField {
 		resp,
 	)
 
-	retval := resp.Data.(*InterfaceListOfListOfListsFieldResponse)
-	return retval, err
+	return &data, err
 }
 

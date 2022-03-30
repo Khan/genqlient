@@ -47,9 +47,8 @@ query convertTimezone ($dt: DateTime!, $tz: String) {
 	}
 	var err error
 
-	resp := &graphql.Response{
-		Data: &convertTimezoneResponse{},
-	}
+	var data convertTimezoneResponse
+	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
 		nil,
@@ -57,7 +56,6 @@ query convertTimezone ($dt: DateTime!, $tz: String) {
 		resp,
 	)
 
-	retval := resp.Data.(*convertTimezoneResponse)
-	return retval, err
+	return &data, err
 }
 

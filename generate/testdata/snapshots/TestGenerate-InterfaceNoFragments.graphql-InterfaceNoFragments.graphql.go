@@ -657,9 +657,8 @@ query InterfaceNoFragmentsQuery {
 	}
 	var err error
 
-	resp := &graphql.Response{
-		Data: &InterfaceNoFragmentsQueryResponse{},
-	}
+	var data InterfaceNoFragmentsQueryResponse
+	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
 		nil,
@@ -667,7 +666,6 @@ query InterfaceNoFragmentsQuery {
 		resp,
 	)
 
-	retval := resp.Data.(*InterfaceNoFragmentsQueryResponse)
-	return retval, err
+	return &data, err
 }
 

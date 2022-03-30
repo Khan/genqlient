@@ -251,9 +251,8 @@ query OmitEmptyQuery ($query: UserQueryInput, $queries: [UserQueryInput], $dt: D
 	}
 	var err error
 
-	resp := &graphql.Response{
-		Data: &OmitEmptyQueryResponse{},
-	}
+	var data OmitEmptyQueryResponse
+	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
 		nil,
@@ -261,7 +260,6 @@ query OmitEmptyQuery ($query: UserQueryInput, $queries: [UserQueryInput], $dt: D
 		resp,
 	)
 
-	retval := resp.Data.(*OmitEmptyQueryResponse)
-	return retval, err
+	return &data, err
 }
 

@@ -91,9 +91,8 @@ query getUser ($Login: String!) {
 	}
 	var err error
 
-	resp := &graphql.Response{
-		Data: &getUserResponse{},
-	}
+	var data getUserResponse
+	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
 		ctx,
@@ -101,8 +100,7 @@ query getUser ($Login: String!) {
 		resp,
 	)
 
-	retval := resp.Data.(*getUserResponse)
-	return retval, err
+	return &data, err
 }
 
 func getViewer(
@@ -122,9 +120,8 @@ query getViewer {
 	}
 	var err error
 
-	resp := &graphql.Response{
-		Data: &getViewerResponse{},
-	}
+	var data getViewerResponse
+	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
 		ctx,
@@ -132,6 +129,5 @@ query getViewer {
 		resp,
 	)
 
-	retval := resp.Data.(*getViewerResponse)
-	return retval, err
+	return &data, err
 }

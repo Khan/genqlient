@@ -56,9 +56,8 @@ query QueryWithDoubleAlias {
 	}
 	var err error
 
-	resp := &graphql.Response{
-		Data: &QueryWithDoubleAliasResponse{},
-	}
+	var data QueryWithDoubleAliasResponse
+	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
 		nil,
@@ -66,7 +65,6 @@ query QueryWithDoubleAlias {
 		resp,
 	)
 
-	retval := resp.Data.(*QueryWithDoubleAliasResponse)
-	return retval, err
+	return &data, err
 }
 

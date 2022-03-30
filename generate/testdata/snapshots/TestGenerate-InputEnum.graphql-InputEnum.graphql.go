@@ -73,9 +73,8 @@ query InputEnumQuery ($role: Role!) {
 	}
 	var err error
 
-	resp := &graphql.Response{
-		Data: &InputEnumQueryResponse{},
-	}
+	var data InputEnumQueryResponse
+	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
 		nil,
@@ -83,7 +82,6 @@ query InputEnumQuery ($role: Role!) {
 		resp,
 	)
 
-	retval := resp.Data.(*InputEnumQueryResponse)
-	return retval, err
+	return &data, err
 }
 

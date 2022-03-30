@@ -93,9 +93,8 @@ query Recursion ($input: RecursiveInput!) {
 	}
 	var err error
 
-	resp := &graphql.Response{
-		Data: &RecursionResponse{},
-	}
+	var data RecursionResponse
+	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
 		nil,
@@ -103,7 +102,6 @@ query Recursion ($input: RecursiveInput!) {
 		resp,
 	)
 
-	retval := resp.Data.(*RecursionResponse)
-	return retval, err
+	return &data, err
 }
 

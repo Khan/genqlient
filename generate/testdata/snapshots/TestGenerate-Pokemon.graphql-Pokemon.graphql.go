@@ -100,9 +100,8 @@ query GetPokemonSiblings ($input: PokemonInput!) {
 	}
 	var err error
 
-	resp := &graphql.Response{
-		Data: &GetPokemonSiblingsResponse{},
-	}
+	var data GetPokemonSiblingsResponse
+	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
 		nil,
@@ -110,7 +109,6 @@ query GetPokemonSiblings ($input: PokemonInput!) {
 		resp,
 	)
 
-	retval := resp.Data.(*GetPokemonSiblingsResponse)
-	return retval, err
+	return &data, err
 }
 

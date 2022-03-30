@@ -196,9 +196,8 @@ query unexported ($query: UserQueryInput) {
 	}
 	var err error
 
-	resp := &graphql.Response{
-		Data: &unexportedResponse{},
-	}
+	var data unexportedResponse
+	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
 		nil,
@@ -206,7 +205,6 @@ query unexported ($query: UserQueryInput) {
 		resp,
 	)
 
-	retval := resp.Data.(*unexportedResponse)
-	return retval, err
+	return &data, err
 }
 

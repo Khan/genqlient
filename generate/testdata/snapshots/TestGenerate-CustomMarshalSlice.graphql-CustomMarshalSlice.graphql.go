@@ -223,9 +223,8 @@ query CustomMarshalSlice ($datesss: [[[Date!]!]!]!, $datesssp: [[[Date!]!]!]!) {
 	}
 	var err error
 
-	resp := &graphql.Response{
-		Data: &CustomMarshalSliceResponse{},
-	}
+	var data CustomMarshalSliceResponse
+	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
 		nil,
@@ -233,7 +232,6 @@ query CustomMarshalSlice ($datesss: [[[Date!]!]!]!, $datesssp: [[[Date!]!]!]!) {
 		resp,
 	)
 
-	retval := resp.Data.(*CustomMarshalSliceResponse)
-	return retval, err
+	return &data, err
 }
 
