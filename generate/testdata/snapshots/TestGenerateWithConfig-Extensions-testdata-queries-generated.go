@@ -38,7 +38,7 @@ func SimpleQuery(
 	ctx context.Context,
 	client graphql.Client,
 ) (*SimpleQueryResponse, map[string]interface{}, error) {
-	req := &graphql.Payload{
+	req := &graphql.Request{
 		OpName: "SimpleQuery",
 		Query: `
 query SimpleQuery {

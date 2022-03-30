@@ -65,7 +65,7 @@ const (
 func QueryWithEnums(
 	client graphql.Client,
 ) (*QueryWithEnumsResponse, error) {
-	req := &graphql.Payload{
+	req := &graphql.Request{
 		OpName: "QueryWithEnums",
 		Query: `
 query QueryWithEnums {

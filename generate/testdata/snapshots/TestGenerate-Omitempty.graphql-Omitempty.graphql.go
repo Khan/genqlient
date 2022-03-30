@@ -227,7 +227,7 @@ func OmitEmptyQuery(
 	tz string,
 	tzNoOmitEmpty string,
 ) (*OmitEmptyQueryResponse, error) {
-	req := &graphql.Payload{
+	req := &graphql.Request{
 		OpName: "OmitEmptyQuery",
 		Query: `
 query OmitEmptyQuery ($query: UserQueryInput, $queries: [UserQueryInput], $dt: DateTime, $tz: String, $tzNoOmitEmpty: String) {

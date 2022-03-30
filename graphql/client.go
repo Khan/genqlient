@@ -40,7 +40,7 @@ type Client interface {
 	// (Errors are returned.) But again, MakeRequest may customize this.
 	MakeRequest(
 		ctx context.Context,
-		req *Payload,
+		req *Request,
 		resp *Response,
 	) error
 }
@@ -74,9 +74,9 @@ type Doer interface {
 	Do(*http.Request) (*http.Response, error)
 }
 
-// Payload contains all the values required to build queries executed by
+// Request contains all the values required to build queries executed by
 // the graphql.Client.
-type Payload struct {
+type Request struct {
 	Query     string      `json:"query"`
 	Variables interface{} `json:"variables,omitempty"`
 	// OpName is only required if there are multiple queries in the document,
@@ -92,7 +92,7 @@ type Response struct {
 	Errors     gqlerror.List          `json:"errors,omitempty"`
 }
 
-func (c *client) MakeRequest(ctx context.Context, req *Payload, resp *Response) error {
+func (c *client) MakeRequest(ctx context.Context, req *Request, resp *Response) error {
 	body, err := json.Marshal(req)
 	if err != nil {
 		return err

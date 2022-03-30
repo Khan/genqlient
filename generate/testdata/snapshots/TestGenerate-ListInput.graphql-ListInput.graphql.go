@@ -45,7 +45,7 @@ func ListInputQuery(
 	client graphql.Client,
 	names []string,
 ) (*ListInputQueryResponse, error) {
-	req := &graphql.Payload{
+	req := &graphql.Request{
 		OpName: "ListInputQuery",
 		Query: `
 query ListInputQuery ($names: [String]) {

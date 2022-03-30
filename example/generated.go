@@ -75,7 +75,7 @@ func getUser(
 	client graphql.Client,
 	Login string,
 ) (*getUserResponse, error) {
-	req := &graphql.Payload{
+	req := &graphql.Request{
 		OpName: "getUser",
 		Query: `
 query getUser ($Login: String!) {
@@ -109,7 +109,7 @@ func getViewer(
 	ctx context.Context,
 	client graphql.Client,
 ) (*getViewerResponse, error) {
-	req := &graphql.Payload{
+	req := &graphql.Request{
 		OpName: "getViewer",
 		Query: `
 query getViewer {

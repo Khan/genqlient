@@ -427,7 +427,7 @@ func (v *VideoFields) GetDuration() int { return v.Duration }
 func StructOption(
 	client graphql.Client,
 ) (*StructOptionResponse, error) {
-	req := &graphql.Payload{
+	req := &graphql.Request{
 		OpName: "StructOption",
 		Query: `
 query StructOption {

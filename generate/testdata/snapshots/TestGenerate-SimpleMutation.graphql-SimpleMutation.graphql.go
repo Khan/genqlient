@@ -49,7 +49,7 @@ func SimpleMutation(
 	client graphql.Client,
 	name string,
 ) (*SimpleMutationResponse, error) {
-	req := &graphql.Payload{
+	req := &graphql.Request{
 		OpName: "SimpleMutation",
 		Query: `
 mutation SimpleMutation ($name: String!) {

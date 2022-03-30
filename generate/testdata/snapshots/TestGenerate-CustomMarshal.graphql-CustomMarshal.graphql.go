@@ -178,7 +178,7 @@ func CustomMarshal(
 	client graphql.Client,
 	date time.Time,
 ) (*CustomMarshalResponse, error) {
-	req := &graphql.Payload{
+	req := &graphql.Request{
 		OpName: "CustomMarshal",
 		Query: `
 query CustomMarshal ($date: Date!) {

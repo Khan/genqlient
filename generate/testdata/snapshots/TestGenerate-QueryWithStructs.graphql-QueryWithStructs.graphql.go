@@ -46,7 +46,7 @@ func (v *QueryWithStructsUserAuthMethodsAuthMethod) GetEmail() string { return v
 func QueryWithStructs(
 	client graphql.Client,
 ) (*QueryWithStructsResponse, error) {
-	req := &graphql.Payload{
+	req := &graphql.Request{
 		OpName: "QueryWithStructs",
 		Query: `
 query QueryWithStructs {

@@ -45,7 +45,7 @@ func SimpleInputQuery(
 	client graphql.Client,
 	name string,
 ) (*SimpleInputQueryResponse, error) {
-	req := &graphql.Payload{
+	req := &graphql.Request{
 		OpName: "SimpleInputQuery",
 		Query: `
 query SimpleInputQuery ($name: String!) {

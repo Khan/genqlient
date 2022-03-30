@@ -177,7 +177,7 @@ func (v *UnionNoFragmentsQueryResponse) __premarshalJSON() (*__premarshalUnionNo
 func UnionNoFragmentsQuery(
 	client graphql.Client,
 ) (*UnionNoFragmentsQueryResponse, error) {
-	req := &graphql.Payload{
+	req := &graphql.Request{
 		OpName: "UnionNoFragmentsQuery",
 		Query: `
 query UnionNoFragmentsQuery {

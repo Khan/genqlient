@@ -181,7 +181,7 @@ func unexported(
 	client graphql.Client,
 	query UserQueryInput,
 ) (*unexportedResponse, error) {
-	req := &graphql.Payload{
+	req := &graphql.Request{
 		OpName: "unexported",
 		Query: `
 query unexported ($query: UserQueryInput) {

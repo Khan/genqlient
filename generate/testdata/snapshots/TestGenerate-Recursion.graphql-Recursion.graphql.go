@@ -72,7 +72,7 @@ func Recursion(
 	client graphql.Client,
 	input RecursiveInput,
 ) (*RecursionResponse, error) {
-	req := &graphql.Payload{
+	req := &graphql.Request{
 		OpName: "Recursion",
 		Query: `
 query Recursion ($input: RecursiveInput!) {

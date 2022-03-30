@@ -58,7 +58,7 @@ func InputEnumQuery(
 	client graphql.Client,
 	role Role,
 ) (*InputEnumQueryResponse, error) {
-	req := &graphql.Payload{
+	req := &graphql.Request{
 		OpName: "InputEnumQuery",
 		Query: `
 query InputEnumQuery ($role: Role!) {

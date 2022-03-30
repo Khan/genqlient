@@ -1348,7 +1348,7 @@ func (v *ComplexInlineFragmentsRootTopic) GetName() string { return v.Name }
 func ComplexInlineFragments(
 	client graphql.Client,
 ) (*ComplexInlineFragmentsResponse, error) {
-	req := &graphql.Payload{
+	req := &graphql.Request{
 		OpName: "ComplexInlineFragments",
 		Query: `
 query ComplexInlineFragments {

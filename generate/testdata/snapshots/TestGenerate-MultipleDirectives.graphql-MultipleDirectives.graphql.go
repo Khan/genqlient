@@ -330,7 +330,7 @@ func MultipleDirectives(
 	query MyInput,
 	queries []*UserQueryInput,
 ) (*MyMultipleDirectivesResponse, error) {
-	req := &graphql.Payload{
+	req := &graphql.Request{
 		OpName: "MultipleDirectives",
 		Query: `
 query MultipleDirectives ($query: UserQueryInput, $queries: [UserQueryInput]) {

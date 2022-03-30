@@ -269,7 +269,7 @@ func (v *VideoFieldsParentTopic) GetVideoChildren() []ChildVideoFields { return 
 func ComplexNamedFragments(
 	client graphql.Client,
 ) (*InnerQueryFragment, error) {
-	req := &graphql.Payload{
+	req := &graphql.Request{
 		OpName: "ComplexNamedFragments",
 		Query: `
 query ComplexNamedFragments {

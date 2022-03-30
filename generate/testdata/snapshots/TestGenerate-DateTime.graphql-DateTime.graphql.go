@@ -33,7 +33,7 @@ func convertTimezone(
 	dt time.Time,
 	tz string,
 ) (*convertTimezoneResponse, error) {
-	req := &graphql.Payload{
+	req := &graphql.Request{
 		OpName: "convertTimezone",
 		Query: `
 query convertTimezone ($dt: DateTime!, $tz: String) {

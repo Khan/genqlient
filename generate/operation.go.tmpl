@@ -13,7 +13,7 @@ func {{.Name}}(
     {{end -}}
     {{end -}}
 ) (*{{.ResponseName}}, {{if .Config.Extensions -}}map[string]interface{},{{end}} error) {
-    req := &graphql.Payload{
+    req := &graphql.Request{
         OpName: "{{.Name}}",
         Query:  `{{.Body}}`,
     {{if .Input -}}

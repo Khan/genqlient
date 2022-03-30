@@ -236,7 +236,7 @@ func PointersQuery(
 	dt time.Time,
 	tz *string,
 ) (*PointersQueryResponse, error) {
-	req := &graphql.Payload{
+	req := &graphql.Request{
 		OpName: "PointersQuery",
 		Query: `
 query PointersQuery ($query: UserQueryInput, $dt: DateTime, $tz: String) {

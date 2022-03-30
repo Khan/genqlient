@@ -42,7 +42,7 @@ func SimpleQuery(
 	ctx testutil.MyContext,
 	client graphql.Client,
 ) (*SimpleQueryResponse, error) {
-	req := &graphql.Payload{
+	req := &graphql.Request{
 		OpName: "SimpleQuery",
 		Query: `
 query SimpleQuery {

@@ -19,7 +19,7 @@ func (v *ListOfListsOfListsResponse) GetListOfListsOfLists() [][][]string {
 func ListOfListsOfLists(
 	client graphql.Client,
 ) (*ListOfListsOfListsResponse, error) {
-	req := &graphql.Payload{
+	req := &graphql.Request{
 		OpName: "ListOfListsOfLists",
 		Query: `
 query ListOfListsOfLists {

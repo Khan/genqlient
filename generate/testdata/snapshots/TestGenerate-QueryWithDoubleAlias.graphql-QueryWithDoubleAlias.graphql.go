@@ -43,7 +43,7 @@ func (v *QueryWithDoubleAliasUser) GetAlsoID() testutil.ID { return v.AlsoID }
 func QueryWithDoubleAlias(
 	client graphql.Client,
 ) (*QueryWithDoubleAliasResponse, error) {
-	req := &graphql.Payload{
+	req := &graphql.Request{
 		OpName: "QueryWithDoubleAlias",
 		Query: `
 query QueryWithDoubleAlias {

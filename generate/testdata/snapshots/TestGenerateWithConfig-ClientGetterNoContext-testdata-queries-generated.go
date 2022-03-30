@@ -34,7 +34,7 @@ type SimpleQueryUser struct {
 func (v *SimpleQueryUser) GetId() string { return v.Id }
 
 func SimpleQuery() (*SimpleQueryResponse, error) {
-	req := &graphql.Payload{
+	req := &graphql.Request{
 		OpName: "SimpleQuery",
 		Query: `
 query SimpleQuery {

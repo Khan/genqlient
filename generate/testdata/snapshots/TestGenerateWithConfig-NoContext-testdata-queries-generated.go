@@ -35,7 +35,7 @@ func (v *SimpleQueryUser) GetId() string { return v.Id }
 func SimpleQuery(
 	client graphql.Client,
 ) (*SimpleQueryResponse, error) {
-	req := &graphql.Payload{
+	req := &graphql.Request{
 		OpName: "SimpleQuery",
 		Query: `
 query SimpleQuery {

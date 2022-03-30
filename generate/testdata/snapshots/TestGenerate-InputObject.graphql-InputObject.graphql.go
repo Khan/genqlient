@@ -181,7 +181,7 @@ func InputObjectQuery(
 	client graphql.Client,
 	query UserQueryInput,
 ) (*InputObjectQueryResponse, error) {
-	req := &graphql.Payload{
+	req := &graphql.Request{
 		OpName: "InputObjectQuery",
 		Query: `
 query InputObjectQuery ($query: UserQueryInput) {

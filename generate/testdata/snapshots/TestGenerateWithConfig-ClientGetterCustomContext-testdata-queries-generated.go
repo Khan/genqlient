@@ -41,7 +41,7 @@ func (v *SimpleQueryUser) GetId() string { return v.Id }
 func SimpleQuery(
 	ctx testutil.MyContext,
 ) (*SimpleQueryResponse, error) {
-	req := &graphql.Payload{
+	req := &graphql.Request{
 		OpName: "SimpleQuery",
 		Query: `
 query SimpleQuery {
