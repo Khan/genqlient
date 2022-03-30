@@ -23,21 +23,18 @@ type Client interface {
 	// is disabled in the genqlient settings, this will be set to
 	// context.Background().
 	//
-	// query is the literal string representing the GraphQL query, e.g.
-	// `query myQuery { myField }`.  variables contains a JSON-marshalable
-	// value containing the variables to be sent along with the query,
-	// or may be nil if there are none.  Typically, GraphQL APIs will
-	// accept a JSON payload of the form
-	//	{"query": "query myQuery { ... }", "variables": {...}}`
-	// but MakeRequest may use some other transport, handle extensions, or set
-	// other parameters, if it wishes.
+	// req is the Request object that should be sent to the GraphQL server.
+	// MakeRequest is marshalling this into a byte sequence readable by
+	// the API server.
 	//
-	// retval is a pointer to the struct representing the query result, e.g.
-	// new(myQueryResponse).  Typically, GraphQL APIs will return a JSON
-	// payload of the form
-	//	{"data": {...}, "errors": {...}}
-	// and retval is designed so that `data` will json-unmarshal into `retval`.
-	// (Errors are returned.) But again, MakeRequest may customize this.
+	// resp is the Response object that will be used to store the returned
+	// data to. MakeRequest will try to unmarshal the data returend by the GraphQL
+	// server. Thus it is expected, that you set the Data field to your expected
+	// Datatype. example:
+	//     var data complexDataStruct
+	//     resp := &graphql.Response{Data: &data}
+	// In case errors are returned in the response, Makerequest will return these.
+	// Extensions are added as well, if sent by the server, during regular unmarshalling
 	MakeRequest(
 		ctx context.Context,
 		req *Request,
@@ -76,16 +73,28 @@ type Doer interface {
 
 // Request contains all the values required to build queries executed by
 // the graphql.Client.
+//
+// Query is the literal string representing the GraphQL query, e.g.
+// `query myQuery { myField }`.
+// Variables contains a JSON-marshalable value containing the variables
+// to be sent along with the query, or may be nil if there are none.
+// Typically, GraphQL APIs will  accept a JSON payload of the form
+//	{"query": "query myQuery { ... }", "variables": {...}}`
+// OpName is only required if there are multiple queries in the document,
+// but we set it unconditionally, because that's easier.
 type Request struct {
 	Query     string      `json:"query"`
 	Variables interface{} `json:"variables,omitempty"`
-	// OpName is only required if there are multiple queries in the document,
-	// but we set it unconditionally, because that's easier.
-	OpName string `json:"operationName"`
+	OpName    string      `json:"operationName"`
 }
 
-// Response that contains data returned by the GraphQL API. Extensions and
-// Errors might not be set, depending on the values returned by the Request.
+// Response that contains data returned by the GraphQL API.
+//
+// Typically, GraphQL APIs will return a JSON payload of the form
+//	{"data": {...}, "errors": {...}}, additionally it can contain a key
+// named "extensions", that might hold GraphQL protocol extensions.
+// Extensions and Errors are optional, depending on the values
+// returned by the Request.
 type Response struct {
 	Data       interface{}            `json:"data"`
 	Extensions map[string]interface{} `json:"extensions,omitempty"`
