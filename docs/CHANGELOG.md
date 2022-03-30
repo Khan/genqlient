@@ -23,10 +23,12 @@ When releasing a new version:
 ### Breaking changes:
 
 - genqlient now requires Go 1.16 or higher.
+- The [`graphql.Client`](https://pkg.go.dev/github.com/Khan/genqlient/graphql#Client) interface now accepts two structs for the request and response, to allow future expansion, rather than several individual arguments.  Clients implementing the interface themselves will need to change the signature; clients who simply call `graphql.NewClient` are unaffected.
 
 ### New features:
 
 - genqlient can now run as a portable binary (i.e. without a local checkout of the repository or `go run`).
+- You can now enable `use_extensions` in the configuration file, to receive extensions returned by the GraphQL API server. Generated functions will return extensions as `map[string]interface{}`, if enabled.
 
 ### Bug fixes:
 

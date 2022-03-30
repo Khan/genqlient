@@ -178,16 +178,9 @@ func CustomMarshal(
 	client graphql.Client,
 	date time.Time,
 ) (*CustomMarshalResponse, error) {
-	__input := __CustomMarshalInput{
-		Date: date,
-	}
-	var err error
-
-	var retval CustomMarshalResponse
-	err = client.MakeRequest(
-		nil,
-		"CustomMarshal",
-		`
+	req := &graphql.Request{
+		OpName: "CustomMarshal",
+		Query: `
 query CustomMarshal ($date: Date!) {
 	usersBornOn(date: $date) {
 		id
@@ -195,9 +188,21 @@ query CustomMarshal ($date: Date!) {
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__CustomMarshalInput{
+			Date: date,
+		},
+	}
+	var err error
+
+	var data CustomMarshalResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		nil,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 

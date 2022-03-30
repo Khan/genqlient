@@ -49,16 +49,9 @@ func SimpleMutation(
 	client graphql.Client,
 	name string,
 ) (*SimpleMutationResponse, error) {
-	__input := __SimpleMutationInput{
-		Name: name,
-	}
-	var err error
-
-	var retval SimpleMutationResponse
-	err = client.MakeRequest(
-		nil,
-		"SimpleMutation",
-		`
+	req := &graphql.Request{
+		OpName: "SimpleMutation",
+		Query: `
 mutation SimpleMutation ($name: String!) {
 	createUser(name: $name) {
 		id
@@ -66,9 +59,21 @@ mutation SimpleMutation ($name: String!) {
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__SimpleMutationInput{
+			Name: name,
+		},
+	}
+	var err error
+
+	var data SimpleMutationResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		nil,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 

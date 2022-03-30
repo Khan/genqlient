@@ -330,17 +330,9 @@ func MultipleDirectives(
 	query MyInput,
 	queries []*UserQueryInput,
 ) (*MyMultipleDirectivesResponse, error) {
-	__input := __MultipleDirectivesInput{
-		Query:   query,
-		Queries: queries,
-	}
-	var err error
-
-	var retval MyMultipleDirectivesResponse
-	err = client.MakeRequest(
-		nil,
-		"MultipleDirectives",
-		`
+	req := &graphql.Request{
+		OpName: "MultipleDirectives",
+		Query: `
 query MultipleDirectives ($query: UserQueryInput, $queries: [UserQueryInput]) {
 	user(query: $query) {
 		id
@@ -350,9 +342,22 @@ query MultipleDirectives ($query: UserQueryInput, $queries: [UserQueryInput]) {
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__MultipleDirectivesInput{
+			Query:   query,
+			Queries: queries,
+		},
+	}
+	var err error
+
+	var data MyMultipleDirectivesResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		nil,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 

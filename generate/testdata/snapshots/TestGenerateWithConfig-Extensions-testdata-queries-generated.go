@@ -14,11 +14,11 @@ type SimpleQueryResponse struct {
 	//
 	// See UserQueryInput for what stuff is supported.
 	// If query is null, returns the current user.
-	User *SimpleQueryUser `json:"user"`
+	User SimpleQueryUser `json:"user"`
 }
 
 // GetUser returns SimpleQueryResponse.User, and is useful for accessing the field via an interface.
-func (v *SimpleQueryResponse) GetUser() *SimpleQueryUser { return v.User }
+func (v *SimpleQueryResponse) GetUser() SimpleQueryUser { return v.User }
 
 // SimpleQueryUser includes the requested fields of the GraphQL type User.
 // The GraphQL type's documentation follows.
@@ -37,7 +37,7 @@ func (v *SimpleQueryUser) GetId() string { return v.Id }
 func SimpleQuery(
 	ctx context.Context,
 	client graphql.Client,
-) (*SimpleQueryResponse, error) {
+) (*SimpleQueryResponse, map[string]interface{}, error) {
 	req := &graphql.Request{
 		OpName: "SimpleQuery",
 		Query: `
@@ -59,6 +59,6 @@ query SimpleQuery {
 		resp,
 	)
 
-	return &data, err
+	return &data, resp.Extensions, err
 }
 

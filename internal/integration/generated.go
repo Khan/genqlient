@@ -2995,6 +2995,30 @@ func (v *queryWithVariablesUser) GetName() string { return v.Name }
 // GetLuckyNumber returns queryWithVariablesUser.LuckyNumber, and is useful for accessing the field via an interface.
 func (v *queryWithVariablesUser) GetLuckyNumber() int { return v.LuckyNumber }
 
+// simpleQueryExtMeUser includes the requested fields of the GraphQL type User.
+type simpleQueryExtMeUser struct {
+	Id          string `json:"id"`
+	Name        string `json:"name"`
+	LuckyNumber int    `json:"luckyNumber"`
+}
+
+// GetId returns simpleQueryExtMeUser.Id, and is useful for accessing the field via an interface.
+func (v *simpleQueryExtMeUser) GetId() string { return v.Id }
+
+// GetName returns simpleQueryExtMeUser.Name, and is useful for accessing the field via an interface.
+func (v *simpleQueryExtMeUser) GetName() string { return v.Name }
+
+// GetLuckyNumber returns simpleQueryExtMeUser.LuckyNumber, and is useful for accessing the field via an interface.
+func (v *simpleQueryExtMeUser) GetLuckyNumber() int { return v.LuckyNumber }
+
+// simpleQueryExtResponse is returned by simpleQueryExt on success.
+type simpleQueryExtResponse struct {
+	Me simpleQueryExtMeUser `json:"me"`
+}
+
+// GetMe returns simpleQueryExtResponse.Me, and is useful for accessing the field via an interface.
+func (v *simpleQueryExtResponse) GetMe() simpleQueryExtMeUser { return v.Me }
+
 // simpleQueryMeUser includes the requested fields of the GraphQL type User.
 type simpleQueryMeUser struct {
 	Id          string `json:"id"`
@@ -3022,14 +3046,10 @@ func (v *simpleQueryResponse) GetMe() simpleQueryMeUser { return v.Me }
 func failingQuery(
 	ctx context.Context,
 	client graphql.Client,
-) (*failingQueryResponse, error) {
-	var err error
-
-	var retval failingQueryResponse
-	err = client.MakeRequest(
-		ctx,
-		"failingQuery",
-		`
+) (*failingQueryResponse, map[string]interface{}, error) {
+	req := &graphql.Request{
+		OpName: "failingQuery",
+		Query: `
 query failingQuery {
 	fail
 	me {
@@ -3037,27 +3057,29 @@ query failingQuery {
 	}
 }
 `,
-		&retval,
-		nil,
+	}
+	var err error
+
+	var data failingQueryResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, resp.Extensions, err
 }
 
 func queryWithCustomMarshal(
 	ctx context.Context,
 	client graphql.Client,
 	date time.Time,
-) (*queryWithCustomMarshalResponse, error) {
-	__input := __queryWithCustomMarshalInput{
-		Date: date,
-	}
-	var err error
-
-	var retval queryWithCustomMarshalResponse
-	err = client.MakeRequest(
-		ctx,
-		"queryWithCustomMarshal",
-		`
+) (*queryWithCustomMarshalResponse, map[string]interface{}, error) {
+	req := &graphql.Request{
+		OpName: "queryWithCustomMarshal",
+		Query: `
 query queryWithCustomMarshal ($date: Date!) {
 	usersBornOn(date: $date) {
 		id
@@ -3066,10 +3088,22 @@ query queryWithCustomMarshal ($date: Date!) {
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__queryWithCustomMarshalInput{
+			Date: date,
+		},
+	}
+	var err error
+
+	var data queryWithCustomMarshalResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, resp.Extensions, err
 }
 
 func queryWithCustomMarshalOptional(
@@ -3077,18 +3111,10 @@ func queryWithCustomMarshalOptional(
 	client graphql.Client,
 	date *time.Time,
 	id *string,
-) (*queryWithCustomMarshalOptionalResponse, error) {
-	__input := __queryWithCustomMarshalOptionalInput{
-		Date: date,
-		Id:   id,
-	}
-	var err error
-
-	var retval queryWithCustomMarshalOptionalResponse
-	err = client.MakeRequest(
-		ctx,
-		"queryWithCustomMarshalOptional",
-		`
+) (*queryWithCustomMarshalOptionalResponse, map[string]interface{}, error) {
+	req := &graphql.Request{
+		OpName: "queryWithCustomMarshalOptional",
+		Query: `
 query queryWithCustomMarshalOptional ($date: Date, $id: ID) {
 	userSearch(birthdate: $date, id: $id) {
 		id
@@ -3097,27 +3123,33 @@ query queryWithCustomMarshalOptional ($date: Date, $id: ID) {
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__queryWithCustomMarshalOptionalInput{
+			Date: date,
+			Id:   id,
+		},
+	}
+	var err error
+
+	var data queryWithCustomMarshalOptionalResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, resp.Extensions, err
 }
 
 func queryWithCustomMarshalSlice(
 	ctx context.Context,
 	client graphql.Client,
 	dates []time.Time,
-) (*queryWithCustomMarshalSliceResponse, error) {
-	__input := __queryWithCustomMarshalSliceInput{
-		Dates: dates,
-	}
-	var err error
-
-	var retval queryWithCustomMarshalSliceResponse
-	err = client.MakeRequest(
-		ctx,
-		"queryWithCustomMarshalSlice",
-		`
+) (*queryWithCustomMarshalSliceResponse, map[string]interface{}, error) {
+	req := &graphql.Request{
+		OpName: "queryWithCustomMarshalSlice",
+		Query: `
 query queryWithCustomMarshalSlice ($dates: [Date!]!) {
 	usersBornOnDates(dates: $dates) {
 		id
@@ -3126,27 +3158,32 @@ query queryWithCustomMarshalSlice ($dates: [Date!]!) {
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__queryWithCustomMarshalSliceInput{
+			Dates: dates,
+		},
+	}
+	var err error
+
+	var data queryWithCustomMarshalSliceResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, resp.Extensions, err
 }
 
 func queryWithFlatten(
 	ctx context.Context,
 	client graphql.Client,
 	ids []string,
-) (*QueryFragment, error) {
-	__input := __queryWithFlattenInput{
-		Ids: ids,
-	}
-	var err error
-
-	var retval QueryFragment
-	err = client.MakeRequest(
-		ctx,
-		"queryWithFlatten",
-		`
+) (*QueryFragment, map[string]interface{}, error) {
+	req := &graphql.Request{
+		OpName: "queryWithFlatten",
+		Query: `
 query queryWithFlatten ($ids: [ID!]!) {
 	... QueryFragment
 }
@@ -3189,27 +3226,32 @@ fragment FriendsFields on User {
 	name
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__queryWithFlattenInput{
+			Ids: ids,
+		},
+	}
+	var err error
+
+	var data QueryFragment
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, resp.Extensions, err
 }
 
 func queryWithFragments(
 	ctx context.Context,
 	client graphql.Client,
 	ids []string,
-) (*queryWithFragmentsResponse, error) {
-	__input := __queryWithFragmentsInput{
-		Ids: ids,
-	}
-	var err error
-
-	var retval queryWithFragmentsResponse
-	err = client.MakeRequest(
-		ctx,
-		"queryWithFragments",
-		`
+) (*queryWithFragmentsResponse, map[string]interface{}, error) {
+	req := &graphql.Request{
+		OpName: "queryWithFragments",
+		Query: `
 query queryWithFragments ($ids: [ID!]!) {
 	beings(ids: $ids) {
 		__typename
@@ -3246,27 +3288,32 @@ query queryWithFragments ($ids: [ID!]!) {
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__queryWithFragmentsInput{
+			Ids: ids,
+		},
+	}
+	var err error
+
+	var data queryWithFragmentsResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, resp.Extensions, err
 }
 
 func queryWithInterfaceListField(
 	ctx context.Context,
 	client graphql.Client,
 	ids []string,
-) (*queryWithInterfaceListFieldResponse, error) {
-	__input := __queryWithInterfaceListFieldInput{
-		Ids: ids,
-	}
-	var err error
-
-	var retval queryWithInterfaceListFieldResponse
-	err = client.MakeRequest(
-		ctx,
-		"queryWithInterfaceListField",
-		`
+) (*queryWithInterfaceListFieldResponse, map[string]interface{}, error) {
+	req := &graphql.Request{
+		OpName: "queryWithInterfaceListField",
+		Query: `
 query queryWithInterfaceListField ($ids: [ID!]!) {
 	beings(ids: $ids) {
 		__typename
@@ -3275,27 +3322,32 @@ query queryWithInterfaceListField ($ids: [ID!]!) {
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__queryWithInterfaceListFieldInput{
+			Ids: ids,
+		},
+	}
+	var err error
+
+	var data queryWithInterfaceListFieldResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, resp.Extensions, err
 }
 
 func queryWithInterfaceListPointerField(
 	ctx context.Context,
 	client graphql.Client,
 	ids []string,
-) (*queryWithInterfaceListPointerFieldResponse, error) {
-	__input := __queryWithInterfaceListPointerFieldInput{
-		Ids: ids,
-	}
-	var err error
-
-	var retval queryWithInterfaceListPointerFieldResponse
-	err = client.MakeRequest(
-		ctx,
-		"queryWithInterfaceListPointerField",
-		`
+) (*queryWithInterfaceListPointerFieldResponse, map[string]interface{}, error) {
+	req := &graphql.Request{
+		OpName: "queryWithInterfaceListPointerField",
+		Query: `
 query queryWithInterfaceListPointerField ($ids: [ID!]!) {
 	beings(ids: $ids) {
 		__typename
@@ -3304,27 +3356,32 @@ query queryWithInterfaceListPointerField ($ids: [ID!]!) {
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__queryWithInterfaceListPointerFieldInput{
+			Ids: ids,
+		},
+	}
+	var err error
+
+	var data queryWithInterfaceListPointerFieldResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, resp.Extensions, err
 }
 
 func queryWithInterfaceNoFragments(
 	ctx context.Context,
 	client graphql.Client,
 	id string,
-) (*queryWithInterfaceNoFragmentsResponse, error) {
-	__input := __queryWithInterfaceNoFragmentsInput{
-		Id: id,
-	}
-	var err error
-
-	var retval queryWithInterfaceNoFragmentsResponse
-	err = client.MakeRequest(
-		ctx,
-		"queryWithInterfaceNoFragments",
-		`
+) (*queryWithInterfaceNoFragmentsResponse, map[string]interface{}, error) {
+	req := &graphql.Request{
+		OpName: "queryWithInterfaceNoFragments",
+		Query: `
 query queryWithInterfaceNoFragments ($id: ID!) {
 	being(id: $id) {
 		__typename
@@ -3337,27 +3394,32 @@ query queryWithInterfaceNoFragments ($id: ID!) {
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__queryWithInterfaceNoFragmentsInput{
+			Id: id,
+		},
+	}
+	var err error
+
+	var data queryWithInterfaceNoFragmentsResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, resp.Extensions, err
 }
 
 func queryWithNamedFragments(
 	ctx context.Context,
 	client graphql.Client,
 	ids []string,
-) (*queryWithNamedFragmentsResponse, error) {
-	__input := __queryWithNamedFragmentsInput{
-		Ids: ids,
-	}
-	var err error
-
-	var retval queryWithNamedFragmentsResponse
-	err = client.MakeRequest(
-		ctx,
-		"queryWithNamedFragments",
-		`
+) (*queryWithNamedFragmentsResponse, map[string]interface{}, error) {
+	req := &graphql.Request{
+		OpName: "queryWithNamedFragments",
+		Query: `
 query queryWithNamedFragments ($ids: [ID!]!) {
 	beings(ids: $ids) {
 		__typename
@@ -3394,27 +3456,32 @@ fragment MoreUserFields on User {
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__queryWithNamedFragmentsInput{
+			Ids: ids,
+		},
+	}
+	var err error
+
+	var data queryWithNamedFragmentsResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, resp.Extensions, err
 }
 
 func queryWithOmitempty(
 	ctx context.Context,
 	client graphql.Client,
 	id string,
-) (*queryWithOmitemptyResponse, error) {
-	__input := __queryWithOmitemptyInput{
-		Id: id,
-	}
-	var err error
-
-	var retval queryWithOmitemptyResponse
-	err = client.MakeRequest(
-		ctx,
-		"queryWithOmitempty",
-		`
+) (*queryWithOmitemptyResponse, map[string]interface{}, error) {
+	req := &graphql.Request{
+		OpName: "queryWithOmitempty",
+		Query: `
 query queryWithOmitempty ($id: ID) {
 	user(id: $id) {
 		id
@@ -3423,27 +3490,32 @@ query queryWithOmitempty ($id: ID) {
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__queryWithOmitemptyInput{
+			Id: id,
+		},
+	}
+	var err error
+
+	var data queryWithOmitemptyResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, resp.Extensions, err
 }
 
 func queryWithVariables(
 	ctx context.Context,
 	client graphql.Client,
 	id string,
-) (*queryWithVariablesResponse, error) {
-	__input := __queryWithVariablesInput{
-		Id: id,
-	}
-	var err error
-
-	var retval queryWithVariablesResponse
-	err = client.MakeRequest(
-		ctx,
-		"queryWithVariables",
-		`
+) (*queryWithVariablesResponse, map[string]interface{}, error) {
+	req := &graphql.Request{
+		OpName: "queryWithVariables",
+		Query: `
 query queryWithVariables ($id: ID!) {
 	user(id: $id) {
 		id
@@ -3452,23 +3524,31 @@ query queryWithVariables ($id: ID!) {
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__queryWithVariablesInput{
+			Id: id,
+		},
+	}
+	var err error
+
+	var data queryWithVariablesResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, resp.Extensions, err
 }
 
 func simpleQuery(
 	ctx context.Context,
 	client graphql.Client,
-) (*simpleQueryResponse, error) {
-	var err error
-
-	var retval simpleQueryResponse
-	err = client.MakeRequest(
-		ctx,
-		"simpleQuery",
-		`
+) (*simpleQueryResponse, map[string]interface{}, error) {
+	req := &graphql.Request{
+		OpName: "simpleQuery",
+		Query: `
 query simpleQuery {
 	me {
 		id
@@ -3477,8 +3557,47 @@ query simpleQuery {
 	}
 }
 `,
-		&retval,
-		nil,
+	}
+	var err error
+
+	var data simpleQueryResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, resp.Extensions, err
+}
+
+func simpleQueryExt(
+	ctx context.Context,
+	client graphql.Client,
+) (*simpleQueryExtResponse, map[string]interface{}, error) {
+	req := &graphql.Request{
+		OpName: "simpleQueryExt",
+		Query: `
+query simpleQueryExt {
+	me {
+		id
+		name
+		luckyNumber
+	}
+}
+`,
+	}
+	var err error
+
+	var data simpleQueryExtResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, resp.Extensions, err
 }

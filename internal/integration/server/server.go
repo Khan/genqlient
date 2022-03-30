@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http/httptest"
 
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 )
@@ -131,6 +132,10 @@ func (r *queryResolver) Fail(ctx context.Context) (*bool, error) {
 func RunServer() *httptest.Server {
 	gqlgenServer := handler.New(NewExecutableSchema(Config{Resolvers: &resolver{}}))
 	gqlgenServer.AddTransport(transport.POST{})
+	gqlgenServer.AroundResponses(func(ctx context.Context, next graphql.ResponseHandler) *graphql.Response {
+		graphql.RegisterExtension(ctx, "foobar", "test")
+		return next(ctx)
+	})
 	return httptest.NewServer(gqlgenServer)
 }
 

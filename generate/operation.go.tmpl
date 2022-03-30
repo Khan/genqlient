@@ -12,34 +12,35 @@ func {{.Name}}(
     {{.GraphQLName}} {{.GoType.Reference}},
     {{end -}}
     {{end -}}
-) (*{{.ResponseName}}, error) {
-    {{- if .Input -}}
-    {{/* We need to avoid conflicting with any of the function's argument names
-         which are derived from the GraphQL argument names; notably `input` is
-         a common one.  So we use a name that's not legal in GraphQL, namely
-         one starting with a double-underscore. */ -}}
-    __input := {{.Input.GoName}}{
+) (*{{.ResponseName}}, {{if .Config.Extensions -}}map[string]interface{},{{end}} error) {
+    req := &graphql.Request{
+        OpName: "{{.Name}}",
+        Query:  `{{.Body}}`,
+    {{if .Input -}}
+        Variables: &{{.Input.GoName}}{
         {{range .Input.Fields -}}
         {{.GoName}}: {{.GraphQLName}},
         {{end -}}
-    }
+        },
     {{end -}}
-
+    }
     var err error
     {{if .Config.ClientGetter -}}
-    client, err := {{ref .Config.ClientGetter}}({{if ne .Config.ContextType "-"}}ctx{{else}}{{end}})
+    var client graphql.Client
+
+    client, err = {{ref .Config.ClientGetter}}({{if ne .Config.ContextType "-"}}ctx{{else}}{{end}})
     if err != nil {
-        return nil, err
+        return nil, {{if .Config.Extensions -}}nil,{{end -}} err
     }
     {{end}}
+    var data {{.ResponseName}}
+    resp := &graphql.Response{Data: &data}
 
-	var retval {{.ResponseName}}
     err = client.MakeRequest(
         {{if ne .Config.ContextType "-"}}ctx{{else}}nil{{end}},
-        "{{.Name}}",
-        `{{.Body}}`,
-        &retval,
-        {{if .Input}}&__input{{else}}nil{{end}},
+        req,
+        resp,
     )
-    return &retval, err
+	
+    return &data, {{if .Config.Extensions -}}resp.Extensions,{{end -}} err
 }

@@ -75,16 +75,9 @@ func GetPokemonSiblings(
 	client graphql.Client,
 	input testutil.Pokemon,
 ) (*GetPokemonSiblingsResponse, error) {
-	__input := __GetPokemonSiblingsInput{
-		Input: input,
-	}
-	var err error
-
-	var retval GetPokemonSiblingsResponse
-	err = client.MakeRequest(
-		nil,
-		"GetPokemonSiblings",
-		`
+	req := &graphql.Request{
+		OpName: "GetPokemonSiblings",
+		Query: `
 query GetPokemonSiblings ($input: PokemonInput!) {
 	user(query: {hasPokemon:$input}) {
 		id
@@ -101,9 +94,21 @@ query GetPokemonSiblings ($input: PokemonInput!) {
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__GetPokemonSiblingsInput{
+			Input: input,
+		},
+	}
+	var err error
+
+	var data GetPokemonSiblingsResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		nil,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 

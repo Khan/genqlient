@@ -19,20 +19,25 @@ func (v *ListOfListsOfListsResponse) GetListOfListsOfLists() [][][]string {
 func ListOfListsOfLists(
 	client graphql.Client,
 ) (*ListOfListsOfListsResponse, error) {
-	var err error
-
-	var retval ListOfListsOfListsResponse
-	err = client.MakeRequest(
-		nil,
-		"ListOfListsOfLists",
-		`
+	req := &graphql.Request{
+		OpName: "ListOfListsOfLists",
+		Query: `
 query ListOfListsOfLists {
 	listOfListsOfLists
 }
 `,
-		&retval,
+	}
+	var err error
+
+	var data ListOfListsOfListsResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
 		nil,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 

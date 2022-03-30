@@ -2,6 +2,7 @@ schema: schema.graphql
 operations: "*_test.go"
 generated: generated.go
 allow_broken_features: true
+use_extensions: true
 bindings:
   Date:
     type: time.Time

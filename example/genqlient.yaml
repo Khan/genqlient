@@ -2,7 +2,6 @@ schema: schema.graphql
 operations:
 - genqlient.graphql
 generated: generated.go
-
 # needed since it doesn't match the directory name:
 package: main
 

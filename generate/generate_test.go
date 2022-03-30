@@ -191,6 +191,10 @@ func TestGenerateWithConfig(t *testing.T) {
 			ClientGetter: "github.com/Khan/genqlient/internal/testutil.GetClientFromNowhere",
 			ContextType:  "-",
 		}},
+		{"Extensions", "", &Config{
+			Generated:  "generated.go",
+			Extensions: true,
+		}},
 	}
 
 	sourceFilename := "SimpleQuery.graphql"

@@ -13,9 +13,6 @@ import (
 
 // Client is the interface that the generated code calls into to actually make
 // requests.
-//
-// Unstable: This interface is likely to change before v1.0, see #19.  Creating
-// a client with NewClient will remain the same.
 type Client interface {
 	// MakeRequest must make a request to the client's GraphQL API.
 	//
@@ -23,26 +20,20 @@ type Client interface {
 	// is disabled in the genqlient settings, this will be set to
 	// context.Background().
 	//
-	// query is the literal string representing the GraphQL query, e.g.
-	// `query myQuery { myField }`.  variables contains a JSON-marshalable
-	// value containing the variables to be sent along with the query,
-	// or may be nil if there are none.  Typically, GraphQL APIs will
-	// accept a JSON payload of the form
-	//	{"query": "query myQuery { ... }", "variables": {...}}`
-	// but MakeRequest may use some other transport, handle extensions, or set
-	// other parameters, if it wishes.
+	// req contains the data to be sent to the GraphQL server.  Typically GraphQL
+	// APIs will expect it to simply be marshalled as JSON, but MakeRequest may
+	// customize this.
 	//
-	// retval is a pointer to the struct representing the query result, e.g.
-	// new(myQueryResponse).  Typically, GraphQL APIs will return a JSON
-	// payload of the form
-	//	{"data": {...}, "errors": {...}}
-	// and retval is designed so that `data` will json-unmarshal into `retval`.
-	// (Errors are returned.) But again, MakeRequest may customize this.
+	// resp is the Response object into which the server's response will be
+	// unmarshalled. Typically GraphQL APIs will return JSON which can be
+	// unmarshalled directly into resp, but MakeRequest can customize it.
+	// If the response contains an error, this must also be returned by
+	// MakeRequest.  The field resp.Data will be prepopulated with a pointer
+	// to an empty struct of the correct generated type (e.g. MyQueryResponse).
 	MakeRequest(
 		ctx context.Context,
-		opName string,
-		query string,
-		retval, input interface{},
+		req *Request,
+		resp *Response,
 	) error
 }
 
@@ -75,65 +66,79 @@ type Doer interface {
 	Do(*http.Request) (*http.Response, error)
 }
 
-type payload struct {
-	Query     string      `json:"query"`
+// Request contains all the values required to build queries executed by
+// the graphql.Client.
+//
+// Typically, GraphQL APIs will accept a JSON payload of the form
+//	{"query": "query myQuery { ... }", "variables": {...}}`
+// and Request marshals to this format.  However, MakeRequest may
+// marshal the data in some other way desired by the backend.
+type Request struct {
+	// The literal string representing the GraphQL query, e.g.
+	// `query myQuery { myField }`.
+	Query string `json:"query"`
+	// A JSON-marshalable value containing the variables to be sent
+	// along with the query, or nil if there are none.
 	Variables interface{} `json:"variables,omitempty"`
-	// OpName is only required if there are multiple queries in the document,
-	// but we set it unconditionally, because that's easier.
+	// The GraphQL operation name. The server typically doesn't
+	// require this unless there are multiple queries in the
+	// document, but genqlient sets it unconditionally anyway.
 	OpName string `json:"operationName"`
 }
 
-type response struct {
-	Data   interface{}   `json:"data"`
-	Errors gqlerror.List `json:"errors"`
+// Response that contains data returned by the GraphQL API.
+//
+// Typically, GraphQL APIs will return a JSON payload of the form
+//	{"data": {...}, "errors": {...}}
+// It may additionally contain a key named "extensions", that
+// might hold GraphQL protocol extensions. Extensions and Errors
+// are optional, depending on the values returned by the server.
+type Response struct {
+	Data       interface{}            `json:"data"`
+	Extensions map[string]interface{} `json:"extensions,omitempty"`
+	Errors     gqlerror.List          `json:"errors,omitempty"`
 }
 
-func (c *client) MakeRequest(ctx context.Context, opName string, query string, retval interface{}, variables interface{}) error {
-	body, err := json.Marshal(payload{
-		Query:     query,
-		Variables: variables,
-		OpName:    opName,
-	})
+func (c *client) MakeRequest(ctx context.Context, req *Request, resp *Response) error {
+	body, err := json.Marshal(req)
 	if err != nil {
 		return err
 	}
 
-	req, err := http.NewRequest(
+	httpReq, err := http.NewRequest(
 		c.method,
 		c.endpoint,
 		bytes.NewReader(body))
 	if err != nil {
 		return err
 	}
-	req.Header.Set("Content-Type", "application/json")
+	httpReq.Header.Set("Content-Type", "application/json")
 
 	if ctx != nil {
-		req = req.WithContext(ctx)
+		httpReq = httpReq.WithContext(ctx)
 	}
-	resp, err := c.httpClient.Do(req)
+
+	httpResp, err := c.httpClient.Do(httpReq)
 	if err != nil {
 		return err
 	}
-	defer resp.Body.Close()
+	defer httpResp.Body.Close()
 
-	if resp.StatusCode != http.StatusOK {
+	if httpResp.StatusCode != http.StatusOK {
 		var respBody []byte
-		respBody, err = io.ReadAll(resp.Body)
+		respBody, err = io.ReadAll(httpResp.Body)
 		if err != nil {
 			respBody = []byte(fmt.Sprintf("<unreadable: %v>", err))
 		}
-		return fmt.Errorf("returned error %v: %s", resp.Status, respBody)
+		return fmt.Errorf("returned error %v: %s", httpResp.Status, respBody)
 	}
 
-	var dataAndErrors response
-	dataAndErrors.Data = retval
-	err = json.NewDecoder(resp.Body).Decode(&dataAndErrors)
+	err = json.NewDecoder(httpResp.Body).Decode(resp)
 	if err != nil {
 		return err
 	}
-
-	if len(dataAndErrors.Errors) > 0 {
-		return dataAndErrors.Errors
+	if len(resp.Errors) > 0 {
+		return resp.Errors
 	}
 	return nil
 }

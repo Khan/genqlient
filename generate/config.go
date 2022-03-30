@@ -27,6 +27,7 @@ type Config struct {
 	ClientGetter     string                  `yaml:"client_getter"`
 	Bindings         map[string]*TypeBinding `yaml:"bindings"`
 	StructReferences bool                    `yaml:"use_struct_references"`
+	Extensions       bool                    `yaml:"use_extensions"`
 
 	// Set to true to use features that aren't fully ready to use.
 	//

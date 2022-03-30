@@ -242,13 +242,9 @@ func (v *SimpleInlineFragmentResponse) __premarshalJSON() (*__premarshalSimpleIn
 func SimpleInlineFragment(
 	client graphql.Client,
 ) (*SimpleInlineFragmentResponse, error) {
-	var err error
-
-	var retval SimpleInlineFragmentResponse
-	err = client.MakeRequest(
-		nil,
-		"SimpleInlineFragment",
-		`
+	req := &graphql.Request{
+		OpName: "SimpleInlineFragment",
+		Query: `
 query SimpleInlineFragment {
 	randomItem {
 		__typename
@@ -263,9 +259,18 @@ query SimpleInlineFragment {
 	}
 }
 `,
-		&retval,
+	}
+	var err error
+
+	var data SimpleInlineFragmentResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
 		nil,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 
