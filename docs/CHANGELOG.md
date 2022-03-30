@@ -23,10 +23,12 @@ When releasing a new version:
 ### Breaking changes:
 
 - genqlient now requires Go 1.16 or higher.
+- Return types of generated functions might change from `data, error` to `data, map[string]interface{}, error` if you enable `use_extensions`.
 
 ### New features:
 
 - genqlient can now run as a portable binary (i.e. without a local checkout of the repository or `go run`).
+- You can now enable `use_extensions` in the configuration file, to receive extensions returned by the GraphQL API server. Generated functions will return Extensions as `map[string]interface{}`, if enabled.
 
 ### Bug fixes:
 
