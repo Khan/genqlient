@@ -76,14 +76,14 @@ type Doer interface {
 type Request struct {
 	// The literal string representing the GraphQL query, e.g.
 	// `query myQuery { myField }`.
-	Query     string      `json:"query"`
+	Query string `json:"query"`
 	// A JSON-marshalable value containing the variables to be sent
 	// along with the query, or nil if there are none.
 	Variables interface{} `json:"variables,omitempty"`
 	// The GraphQL operation name. The server typically doesn't
 	// require this unless there are multiple queries in the
 	// document, but genqlient sets it unconditionally anyway.
-	OpName    string      `json:"operationName"`
+	OpName string `json:"operationName"`
 }
 
 // Response that contains data returned by the GraphQL API.
