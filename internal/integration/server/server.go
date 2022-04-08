@@ -132,6 +132,7 @@ func (r *queryResolver) Fail(ctx context.Context) (*bool, error) {
 func RunServer() *httptest.Server {
 	gqlgenServer := handler.New(NewExecutableSchema(Config{Resolvers: &resolver{}}))
 	gqlgenServer.AddTransport(transport.POST{})
+	gqlgenServer.AddTransport(transport.GET{})
 	gqlgenServer.AroundResponses(func(ctx context.Context, next graphql.ResponseHandler) *graphql.Response {
 		graphql.RegisterExtension(ctx, "foobar", "test")
 		return next(ctx)

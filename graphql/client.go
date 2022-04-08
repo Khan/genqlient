@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 
 	"github.com/vektah/gqlparser/v2/gqlerror"
 )
@@ -53,10 +54,27 @@ type client struct {
 // The typical method of adding authentication headers is to wrap the client's
 // Transport to add those headers.  See example/caller.go for an example.
 func NewClient(endpoint string, httpClient Doer) Client {
+	return newClient(endpoint, httpClient, http.MethodPost)
+}
+
+// NewClientUsingGet returns a Client which makes requests to the given endpoint,
+// suitable for most users.
+//
+// The client makes GET requests to the given GraphQL endpoint using standard
+// GraphQL HTTP-over-JSON transport.  It will use the given http client, or
+// http.DefaultClient if a nil client is passed.
+//
+// The typical method of adding authentication headers is to wrap the client's
+// Transport to add those headers.  See example/caller.go for an example.
+func NewClientUsingGet(endpoint string, httpClient Doer) Client {
+	return newClient(endpoint, httpClient, http.MethodGet)
+}
+
+func newClient(endpoint string, httpClient Doer, method string) Client {
 	if httpClient == nil || httpClient == (*http.Client)(nil) {
 		httpClient = http.DefaultClient
 	}
-	return &client{httpClient, endpoint, http.MethodPost}
+	return &client{httpClient, endpoint, method}
 }
 
 // Doer encapsulates the methods from *http.Client needed by Client.
@@ -100,15 +118,14 @@ type Response struct {
 }
 
 func (c *client) MakeRequest(ctx context.Context, req *Request, resp *Response) error {
-	body, err := json.Marshal(req)
-	if err != nil {
-		return err
+	var httpReq *http.Request
+	var err error
+	if c.method == http.MethodGet {
+		httpReq, err = c.createGetRequest(req)
+	} else {
+		httpReq, err = c.createPostRequest(req)
 	}
 
-	httpReq, err := http.NewRequest(
-		c.method,
-		c.endpoint,
-		bytes.NewReader(body))
 	if err != nil {
 		return err
 	}
@@ -141,4 +158,64 @@ func (c *client) MakeRequest(ctx context.Context, req *Request, resp *Response) 
 		return resp.Errors
 	}
 	return nil
+}
+
+func (c *client) createPostRequest(req *Request) (*http.Request, error) {
+	body, err := json.Marshal(req)
+	if err != nil {
+		return nil, err
+	}
+
+	httpReq, err := http.NewRequest(
+		c.method,
+		c.endpoint,
+		bytes.NewReader(body))
+	if err != nil {
+		return nil, err
+	}
+
+	return httpReq, nil
+}
+
+func (c *client) createGetRequest(req *Request) (*http.Request, error) {
+	parsedURL, err := url.Parse(c.endpoint)
+	if err != nil {
+		return nil, err
+	}
+
+	queryParams := parsedURL.Query()
+	queryUpdated := false
+
+	if req.Query != "" {
+		queryParams.Set("query", req.Query)
+		queryUpdated = true
+	}
+
+	if req.OpName != "" {
+		queryParams.Set("operationName", req.OpName)
+		queryUpdated = true
+	}
+
+	if req.Variables != nil {
+		variables, variablesErr := json.Marshal(req.Variables)
+		if variablesErr != nil {
+			return nil, variablesErr
+		}
+		queryParams.Set("variables", string(variables))
+		queryUpdated = true
+	}
+
+	if queryUpdated {
+		parsedURL.RawQuery = queryParams.Encode()
+	}
+
+	httpReq, err := http.NewRequest(
+		c.method,
+		parsedURL.String(),
+		http.NoBody)
+	if err != nil {
+		return nil, err
+	}
+
+	return httpReq, nil
 }

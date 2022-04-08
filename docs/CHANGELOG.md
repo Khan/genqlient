@@ -29,6 +29,7 @@ When releasing a new version:
 
 - genqlient can now run as a portable binary (i.e. without a local checkout of the repository or `go run`).
 - You can now enable `use_extensions` in the configuration file, to receive extensions returned by the GraphQL API server. Generated functions will return extensions as `map[string]interface{}`, if enabled.
+- You can now use `graphql.NewClientUsingGet` to create a client that uses query parameters to pass the query to the GraphQL API server.
 
 ### Bug fixes:
 
