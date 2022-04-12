@@ -37,6 +37,25 @@ func TestSimpleQuery(t *testing.T) {
 	}
 }
 
+func TestMutation(t *testing.T) {
+	_ = `# @genqlient
+	mutation createUser($user: NewUser!) { createUser(input: $user) { id name } }`
+
+	ctx := context.Background()
+	server := server.RunServer()
+	defer server.Close()
+	postClient := newRoundtripClient(t, server.URL)
+	getClient := newRoundtripGetClient(t, server.URL)
+
+	resp, _, err := createUser(ctx, postClient, NewUser{Name: "Jack"})
+	require.NoError(t, err)
+	assert.Equal(t, "5", resp.CreateUser.Id)
+	assert.Equal(t, "Jack", resp.CreateUser.Name)
+
+	_, _, err = createUser(ctx, getClient, NewUser{Name: "Jill"})
+	require.Errorf(t, err, "client does not support mutations")
+}
+
 func TestServerError(t *testing.T) {
 	_ = `# @genqlient
 	query failingQuery { fail me { id } }`

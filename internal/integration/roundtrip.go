@@ -102,15 +102,25 @@ func (c *roundtripClient) MakeRequest(ctx context.Context, req *graphql.Request,
 }
 
 func newRoundtripClients(t *testing.T, endpoint string) []graphql.Client {
+	return []graphql.Client{newRoundtripClient(t, endpoint), newRoundtripGetClient(t, endpoint)}
+}
+
+func newRoundtripClient(t *testing.T, endpoint string) graphql.Client {
 	transport := &lastResponseTransport{wrapped: http.DefaultTransport}
 	httpClient := &http.Client{Transport: transport}
-	return []graphql.Client{&roundtripClient{
+	return &roundtripClient{
 		wrapped:   graphql.NewClient(endpoint, httpClient),
 		transport: transport,
 		t:         t,
-	}, &roundtripClient{
+	}
+}
+
+func newRoundtripGetClient(t *testing.T, endpoint string) graphql.Client {
+	transport := &lastResponseTransport{wrapped: http.DefaultTransport}
+	httpClient := &http.Client{Transport: transport}
+	return &roundtripClient{
 		wrapped:   graphql.NewClientUsingGet(endpoint, httpClient),
 		transport: transport,
 		t:         t,
-	}}
+	}
 }

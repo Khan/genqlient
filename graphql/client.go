@@ -4,10 +4,12 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
 	"net/url"
+	"strings"
 
 	"github.com/vektah/gqlparser/v2/gqlerror"
 )
@@ -60,9 +62,12 @@ func NewClient(endpoint string, httpClient Doer) Client {
 // NewClientUsingGet returns a Client which makes requests to the given endpoint,
 // suitable for most users.
 //
-// The client makes GET requests to the given GraphQL endpoint using standard
-// GraphQL HTTP-over-JSON transport.  It will use the given http client, or
-// http.DefaultClient if a nil client is passed.
+// The client makes GET requests to the given GraphQL endpoint using a GET query,
+// with the query, operation name and variables encoded as URL parameters.
+// It will use the given http client, or http.DefaultClient if a nil client is passed.
+//
+// The client does not support mutations, and will return an error if passed a request
+// that attempts one.
 //
 // The typical method of adding authentication headers is to wrap the client's
 // Transport to add those headers.  See example/caller.go for an example.
@@ -187,6 +192,9 @@ func (c *client) createGetRequest(req *Request) (*http.Request, error) {
 	queryUpdated := false
 
 	if req.Query != "" {
+		if strings.HasPrefix(strings.TrimSpace(req.Query), "mutation") {
+			return nil, errors.New("client does not support mutations")
+		}
 		queryParams.Set("query", req.Query)
 		queryUpdated = true
 	}
