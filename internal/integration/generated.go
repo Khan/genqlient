@@ -598,6 +598,13 @@ type MoreUserFieldsHair struct {
 // GetColor returns MoreUserFieldsHair.Color, and is useful for accessing the field via an interface.
 func (v *MoreUserFieldsHair) GetColor() string { return v.Color }
 
+type NewUser struct {
+	Name string `json:"name"`
+}
+
+// GetName returns NewUser.Name, and is useful for accessing the field via an interface.
+func (v *NewUser) GetName() string { return v.Name }
+
 // QueryFragment includes the GraphQL fields of Query requested by the fragment QueryFragment.
 type QueryFragment struct {
 	Beings []QueryFragmentBeingsBeing `json:"-"`
@@ -991,6 +998,14 @@ func (v *UserFields) __premarshalJSON() (*__premarshalUserFields, error) {
 	return &retval, nil
 }
 
+// __createUserInput is used internally by genqlient
+type __createUserInput struct {
+	User NewUser `json:"user"`
+}
+
+// GetUser returns __createUserInput.User, and is useful for accessing the field via an interface.
+func (v *__createUserInput) GetUser() NewUser { return v.User }
+
 // __queryWithCustomMarshalInput is used internally by genqlient
 type __queryWithCustomMarshalInput struct {
 	Date time.Time `json:"-"`
@@ -1289,6 +1304,26 @@ type __queryWithVariablesInput struct {
 
 // GetId returns __queryWithVariablesInput.Id, and is useful for accessing the field via an interface.
 func (v *__queryWithVariablesInput) GetId() string { return v.Id }
+
+// createUserCreateUser includes the requested fields of the GraphQL type User.
+type createUserCreateUser struct {
+	Id   string `json:"id"`
+	Name string `json:"name"`
+}
+
+// GetId returns createUserCreateUser.Id, and is useful for accessing the field via an interface.
+func (v *createUserCreateUser) GetId() string { return v.Id }
+
+// GetName returns createUserCreateUser.Name, and is useful for accessing the field via an interface.
+func (v *createUserCreateUser) GetName() string { return v.Name }
+
+// createUserResponse is returned by createUser on success.
+type createUserResponse struct {
+	CreateUser createUserCreateUser `json:"createUser"`
+}
+
+// GetCreateUser returns createUserResponse.CreateUser, and is useful for accessing the field via an interface.
+func (v *createUserResponse) GetCreateUser() createUserCreateUser { return v.CreateUser }
 
 // failingQueryMeUser includes the requested fields of the GraphQL type User.
 type failingQueryMeUser struct {
@@ -3042,6 +3077,39 @@ type simpleQueryResponse struct {
 
 // GetMe returns simpleQueryResponse.Me, and is useful for accessing the field via an interface.
 func (v *simpleQueryResponse) GetMe() simpleQueryMeUser { return v.Me }
+
+func createUser(
+	ctx context.Context,
+	client graphql.Client,
+	user NewUser,
+) (*createUserResponse, map[string]interface{}, error) {
+	req := &graphql.Request{
+		OpName: "createUser",
+		Query: `
+mutation createUser ($user: NewUser!) {
+	createUser(input: $user) {
+		id
+		name
+	}
+}
+`,
+		Variables: &__createUserInput{
+			User: user,
+		},
+	}
+	var err error
+
+	var data createUserResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, resp.Extensions, err
+}
 
 func failingQuery(
 	ctx context.Context,

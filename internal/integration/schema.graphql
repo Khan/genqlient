@@ -12,6 +12,10 @@ type Query {
   fail: Boolean
 }
 
+type Mutation {
+  createUser(input: NewUser!): User!
+}
+
 type User implements Being & Lucky {
   id: ID!
   name: String!
@@ -19,6 +23,10 @@ type User implements Being & Lucky {
   hair: Hair
   birthdate: Date
   friends: [User!]!
+}
+
+input NewUser {
+    name: String!
 }
 
 type Hair { color: String }   # silly name to confuse the name-generator

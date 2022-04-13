@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/http/httptest"
+	"strconv"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
@@ -73,6 +74,24 @@ func beingByID(id string) Being {
 	return nil
 }
 
+func getNewID() string {
+	maxID := 0
+	for _, user := range users {
+		intID, _ := strconv.Atoi(user.ID)
+		if intID > maxID {
+			maxID = intID
+		}
+	}
+	for _, animal := range animals {
+		intID, _ := strconv.Atoi(animal.ID)
+		if intID > maxID {
+			maxID = intID
+		}
+	}
+	newID := maxID + 1
+	return strconv.Itoa(newID)
+}
+
 func (r *queryResolver) Me(ctx context.Context) (*User, error) {
 	return userByID("1"), nil
 }
@@ -129,9 +148,16 @@ func (r *queryResolver) Fail(ctx context.Context) (*bool, error) {
 	return &f, fmt.Errorf("oh no")
 }
 
+func (m mutationResolver) CreateUser(ctx context.Context, input NewUser) (*User, error) {
+	newUser := User{ID: getNewID(), Name: input.Name, Friends: []*User{}}
+	users = append(users, &newUser)
+	return &newUser, nil
+}
+
 func RunServer() *httptest.Server {
 	gqlgenServer := handler.New(NewExecutableSchema(Config{Resolvers: &resolver{}}))
 	gqlgenServer.AddTransport(transport.POST{})
+	gqlgenServer.AddTransport(transport.GET{})
 	gqlgenServer.AroundResponses(func(ctx context.Context, next graphql.ResponseHandler) *graphql.Response {
 		graphql.RegisterExtension(ctx, "foobar", "test")
 		return next(ctx)
@@ -140,9 +166,14 @@ func RunServer() *httptest.Server {
 }
 
 type (
-	resolver      struct{}
-	queryResolver struct{}
+	resolver         struct{}
+	queryResolver    struct{}
+	mutationResolver struct{}
 )
+
+func (r *resolver) Mutation() MutationResolver {
+	return &mutationResolver{}
+}
 
 func (r *resolver) Query() QueryResolver { return &queryResolver{} }
 
