@@ -173,9 +173,9 @@ func TestGenerateWithConfig(t *testing.T) {
 			StructReferences: true,
 			Generated:        "generated-structrefs.go",
 		}},
-		{"TypeAutoBindings", "", &Config{
-			AutoBindings: StringList{
-				"github.com/Khan/genqlient/internal/testutil",
+		{"PackageBindings", "", &Config{
+			PackageBindings: []*PackageBinding{
+				{Package: "github.com/Khan/genqlient/internal/testutil"},
 			},
 		}},
 		{"NoContext", "", &Config{

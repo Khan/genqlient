@@ -97,12 +97,6 @@ use_struct_references: boolean
 # Defaults to false.
 use_extensions: boolean
 
-
-# Auto add list of Type from package.
-# if type is defined in bindings part. Is not replaced.
-auto_binding: github.com/you/yourpkg/model
-
-
 # A map from GraphQL type name to Go fully-qualified type name to override
 # the Go type genqlient will use for this GraphQL type.
 #
@@ -198,3 +192,13 @@ bindings:
     # certain fields but others are optional.
     expect_exact_fields: "{ id name }"
     # unmarshaler and marshaler are also valid here, see above for details.
+
+# A list of packages for which genqlient should automatically generate
+# bindings.  This is equivalent to adding a entry
+#   TypeName:
+#       type: github.com/you/yourpkg/models.TypeName
+# to the bindings map, above, for each exported type in the package.  Multiple
+# packages may be specified, and later ones take precedence over earlier ones.
+# Explicit entries in bindings take precedence over all package bindings.
+package_bindings:
+- package: github.com/you/yourpkg/models

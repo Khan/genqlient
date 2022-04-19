@@ -30,6 +30,7 @@ When releasing a new version:
 - genqlient can now run as a portable binary (i.e. without a local checkout of the repository or `go run`).
 - You can now enable `use_extensions` in the configuration file, to receive extensions returned by the GraphQL API server. Generated functions will return extensions as `map[string]interface{}`, if enabled.
 - You can now use `graphql.NewClientUsingGet` to create a client that uses query parameters to pass the query to the GraphQL API server.
+- You can now bind all types from a package in `genqlient.yaml` using the new `package_bindings` option.
 
 ### Bug fixes:
 
@@ -49,7 +50,6 @@ Version 0.4.0 adds several new configuration options, as well as additional meth
 - genqlient config now accepts either a single or multiple files (or globs) for the `schema` and `operations` fields (previously it accepted only one `schema`, and required a list of `operations` files).
 - genqlient now looks for its config file as `[.]genqlient.y[a]ml` in any ancestor directory, if unspecified, rather than only as `genqlient.yaml` in the current directory.
 - The `typename` option can now be used on basic types (string, int, etc) as well as structs; this can be useful to have genqlient define new types like `type Language string` and use that type for specified fields.
-- genqlient config add `auto_bindings` types from package source. 
 
 ### Bug fixes:
 
