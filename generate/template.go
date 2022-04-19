@@ -1,19 +1,14 @@
 package generate
 
 import (
+	"embed"
 	"io"
-	"path/filepath"
-	"runtime"
 	"strings"
 	"text/template"
 )
 
-var (
-	// TODO(benkraft): Embed templates into the binary, see
-	// https://github.com/Khan/genqlient/issues/9.
-	_, thisFilename, _, _ = runtime.Caller(0)
-	thisDir               = filepath.Dir(thisFilename)
-)
+//go:embed *.tmpl
+var templates embed.FS
 
 func repeat(n int, s string) string {
 	var builder strings.Builder
@@ -37,7 +32,6 @@ func sub(x, y int) int { return x - y }
 func (g *generator) render(tmplRelFilename string, w io.Writer, data interface{}) error {
 	tmpl := g.templateCache[tmplRelFilename]
 	if tmpl == nil {
-		absFilename := filepath.Join(thisDir, tmplRelFilename)
 		funcMap := template.FuncMap{
 			"ref":      g.ref,
 			"repeat":   repeat,
@@ -45,9 +39,9 @@ func (g *generator) render(tmplRelFilename string, w io.Writer, data interface{}
 			"sub":      sub,
 		}
 		var err error
-		tmpl, err = template.New(tmplRelFilename).Funcs(funcMap).ParseFiles(absFilename)
+		tmpl, err = template.New(tmplRelFilename).Funcs(funcMap).ParseFS(templates, tmplRelFilename)
 		if err != nil {
-			return errorf(nil, "could not load template %v: %v", absFilename, err)
+			return errorf(nil, "could not load template %v: %v", tmplRelFilename, err)
 		}
 		g.templateCache[tmplRelFilename] = tmpl
 	}

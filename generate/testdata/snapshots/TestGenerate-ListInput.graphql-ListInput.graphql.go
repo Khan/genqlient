@@ -45,25 +45,30 @@ func ListInputQuery(
 	client graphql.Client,
 	names []string,
 ) (*ListInputQueryResponse, error) {
-	__input := __ListInputQueryInput{
-		Names: names,
-	}
-	var err error
-
-	var retval ListInputQueryResponse
-	err = client.MakeRequest(
-		nil,
-		"ListInputQuery",
-		`
+	req := &graphql.Request{
+		OpName: "ListInputQuery",
+		Query: `
 query ListInputQuery ($names: [String]) {
 	user(query: {names:$names}) {
 		id
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__ListInputQueryInput{
+			Names: names,
+		},
+	}
+	var err error
+
+	var data ListInputQueryResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		nil,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 

@@ -177,22 +177,27 @@ func (v *UnionNoFragmentsQueryResponse) __premarshalJSON() (*__premarshalUnionNo
 func UnionNoFragmentsQuery(
 	client graphql.Client,
 ) (*UnionNoFragmentsQueryResponse, error) {
-	var err error
-
-	var retval UnionNoFragmentsQueryResponse
-	err = client.MakeRequest(
-		nil,
-		"UnionNoFragmentsQuery",
-		`
+	req := &graphql.Request{
+		OpName: "UnionNoFragmentsQuery",
+		Query: `
 query UnionNoFragmentsQuery {
 	randomLeaf {
 		__typename
 	}
 }
 `,
-		&retval,
+	}
+	var err error
+
+	var data UnionNoFragmentsQueryResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
 		nil,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 

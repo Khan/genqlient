@@ -1,10 +1,9 @@
 package generate
 
 import (
+	_ "embed"
 	"fmt"
 	"go/token"
-	"io"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"unicode"
@@ -33,6 +32,7 @@ type Config struct {
 	Bindings         map[string]*TypeBinding `yaml:"bindings"`
 	AutoBindings     StringList              `yaml:"auto_bindings"`
 	StructReferences bool                    `yaml:"use_struct_references"`
+	Extensions       bool                    `yaml:"use_extensions"`
 
 	// Set to true to use features that aren't fully ready to use.
 	//
@@ -135,7 +135,7 @@ func (c *Config) ValidateAndFillDefaults(baseDir string) error {
 // ReadAndValidateConfig reads the configuration from the given file, validates
 // it, and returns it.
 func ReadAndValidateConfig(filename string) (*Config, error) {
-	text, err := ioutil.ReadFile(filename)
+	text, err := os.ReadFile(filename)
 	if err != nil {
 		return nil, errorf(nil, "unreadable config file %v: %v", filename, err)
 	}
@@ -165,22 +165,11 @@ func ReadAndValidateConfigFromDefaultLocations() (*Config, error) {
 	return ReadAndValidateConfig(cfgFile)
 }
 
+//go:embed default_genqlient.yaml
+var defaultConfig []byte
+
 func initConfig(filename string) error {
-	// TODO(benkraft): Embed this config file into the binary, see
-	// https://github.com/Khan/genqlient/issues/9.
-	r, err := os.Open(filepath.Join(thisDir, "default_genqlient.yaml"))
-	if err != nil {
-		return err
-	}
-	w, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0o644)
-	if err != nil {
-		return errorf(nil, "unable to write default genqlient.yaml: %v", err)
-	}
-	_, err = io.Copy(w, r)
-	if err != nil {
-		return errorf(nil, "unable to write default genqlient.yaml: %v", err)
-	}
-	return nil
+	return os.WriteFile(filename, defaultConfig, 0o644)
 }
 
 // findCfg searches for the config file in this directory and all parents up the tree

@@ -42,22 +42,27 @@ func SimpleQuery(
 	ctx testutil.MyContext,
 	client graphql.Client,
 ) (*SimpleQueryResponse, error) {
-	var err error
-
-	var retval SimpleQueryResponse
-	err = client.MakeRequest(
-		ctx,
-		"SimpleQuery",
-		`
+	req := &graphql.Request{
+		OpName: "SimpleQuery",
+		Query: `
 query SimpleQuery {
 	user {
 		id
 	}
 }
 `,
-		&retval,
-		nil,
+	}
+	var err error
+
+	var data SimpleQueryResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 

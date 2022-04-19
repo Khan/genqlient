@@ -58,25 +58,30 @@ func InputEnumQuery(
 	client graphql.Client,
 	role Role,
 ) (*InputEnumQueryResponse, error) {
-	__input := __InputEnumQueryInput{
-		Role: role,
-	}
-	var err error
-
-	var retval InputEnumQueryResponse
-	err = client.MakeRequest(
-		nil,
-		"InputEnumQuery",
-		`
+	req := &graphql.Request{
+		OpName: "InputEnumQuery",
+		Query: `
 query InputEnumQuery ($role: Role!) {
 	usersWithRole(role: $role) {
 		id
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__InputEnumQueryInput{
+			Role: role,
+		},
+	}
+	var err error
+
+	var data InputEnumQueryResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		nil,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 

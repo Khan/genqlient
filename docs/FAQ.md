@@ -8,6 +8,34 @@ This document describes common questions about genqlient, and provides an index 
 
 There's a [doc for that](INTRODUCTION.md)!
 
+##  … use GET requests instead of POST requests?
+
+You can use `graphql.NewClientUsingGet` to create a client that will use query parameters to create the request. For example:
+```go
+ctx := context.Background()
+client := graphql.NewClientUsingGet("https://api.github.com/graphql", http.DefaultClient)
+resp, err := getUser(ctx, client, "benjaminjkraft")
+fmt.Println(resp.User.Name, err)
+```
+
+This request will be sent via an HTTP GET request, with the query, operation name and variables encoded in the URL.
+
+For example, if the query is defined as:
+
+```graphql
+query getUser($login: String!) {
+  user(login: $login) {
+    name
+  }
+}
+```
+
+The URL requested will be:
+
+`https://api.github.com/graphql?operationName%3DgetUser%26query%3D%0Aquery%20getUser(%24login%3A%20String!)%20%7B%0A%20%20user(login%3A%20%24login)%20%7B%0A%20%20%20%20name%0A%20%20%7D%0A%7D%0A%26variables%3D%7B%22login%22%3A%22benjaminjkraft%22%7D`
+
+The client does not support mutations, and will return an error if passed a request that attempts one.
+
 ### … use an API that requires authentication?
 
 When you call `graphql.NewClient`, pass in an HTTP client that adds whatever authentication headers you need (typically by wrapping the client's `Transport`).  For example:

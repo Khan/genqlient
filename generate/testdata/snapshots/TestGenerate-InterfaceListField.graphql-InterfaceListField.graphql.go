@@ -523,13 +523,9 @@ func (v *InterfaceListFieldWithPointerTopicChildrenVideo) GetName() string { ret
 func InterfaceListField(
 	client graphql.Client,
 ) (*InterfaceListFieldResponse, error) {
-	var err error
-
-	var retval InterfaceListFieldResponse
-	err = client.MakeRequest(
-		nil,
-		"InterfaceListField",
-		`
+	req := &graphql.Request{
+		OpName: "InterfaceListField",
+		Query: `
 query InterfaceListField {
 	root {
 		id
@@ -551,9 +547,18 @@ query InterfaceListField {
 	}
 }
 `,
-		&retval,
+	}
+	var err error
+
+	var data InterfaceListFieldResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
 		nil,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 

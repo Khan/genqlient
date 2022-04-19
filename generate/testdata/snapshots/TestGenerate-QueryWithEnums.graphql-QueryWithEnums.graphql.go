@@ -65,13 +65,9 @@ const (
 func QueryWithEnums(
 	client graphql.Client,
 ) (*QueryWithEnumsResponse, error) {
-	var err error
-
-	var retval QueryWithEnumsResponse
-	err = client.MakeRequest(
-		nil,
-		"QueryWithEnums",
-		`
+	req := &graphql.Request{
+		OpName: "QueryWithEnums",
+		Query: `
 query QueryWithEnums {
 	user {
 		roles
@@ -81,9 +77,18 @@ query QueryWithEnums {
 	}
 }
 `,
-		&retval,
+	}
+	var err error
+
+	var data QueryWithEnumsResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
 		nil,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 

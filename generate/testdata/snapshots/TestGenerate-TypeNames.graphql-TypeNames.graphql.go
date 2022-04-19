@@ -267,13 +267,9 @@ func (v *User) GetName() string { return v.Name }
 func TypeNames(
 	client graphql.Client,
 ) (*Resp, error) {
-	var err error
-
-	var retval Resp
-	err = client.MakeRequest(
-		nil,
-		"TypeNames",
-		`
+	req := &graphql.Request{
+		OpName: "TypeNames",
+		Query: `
 query TypeNames {
 	user {
 		id
@@ -290,9 +286,18 @@ query TypeNames {
 	}
 }
 `,
-		&retval,
+	}
+	var err error
+
+	var data Resp
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
 		nil,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 

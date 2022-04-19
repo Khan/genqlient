@@ -8,7 +8,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"testing"
 
@@ -29,13 +29,13 @@ func (t *lastResponseTransport) RoundTrip(req *http.Request) (*http.Response, er
 		return resp, err
 	}
 	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return resp, fmt.Errorf("roundtrip failed: unreadable body: %w", err)
 	}
 	t.lastResponseBody = body
 	// Restore the body for the next reader:
-	resp.Body = ioutil.NopCloser(bytes.NewBuffer(body))
+	resp.Body = io.NopCloser(bytes.NewBuffer(body))
 	return resp, err
 }
 
@@ -88,23 +88,38 @@ func (c *roundtripClient) roundtripResponse(resp interface{}) {
 	assert.Equal(c.t, string(body), string(bodyAgain))
 }
 
-func (c *roundtripClient) MakeRequest(ctx context.Context, opName, query string, retval, variables interface{}) error {
+func (c *roundtripClient) MakeRequest(ctx context.Context, req *graphql.Request, resp *graphql.Response) error {
 	// TODO(benkraft): Also check the variables round-trip.  This is a bit less
 	// important since most of the code is the same (and input types are
 	// strictly simpler), and a bit hard to do because when asserting about
 	// structs we need to worry about things like equality of time.Time values.
-	err := c.wrapped.MakeRequest(ctx, opName, query, retval, variables)
+	err := c.wrapped.MakeRequest(ctx, req, resp)
 	if err != nil {
 		return err
 	}
-	c.roundtripResponse(retval)
+	c.roundtripResponse(resp.Data)
 	return nil
+}
+
+func newRoundtripClients(t *testing.T, endpoint string) []graphql.Client {
+	return []graphql.Client{newRoundtripClient(t, endpoint), newRoundtripGetClient(t, endpoint)}
 }
 
 func newRoundtripClient(t *testing.T, endpoint string) graphql.Client {
 	transport := &lastResponseTransport{wrapped: http.DefaultTransport}
+	httpClient := &http.Client{Transport: transport}
 	return &roundtripClient{
-		wrapped:   graphql.NewClient(endpoint, &http.Client{Transport: transport}),
+		wrapped:   graphql.NewClient(endpoint, httpClient),
+		transport: transport,
+		t:         t,
+	}
+}
+
+func newRoundtripGetClient(t *testing.T, endpoint string) graphql.Client {
+	transport := &lastResponseTransport{wrapped: http.DefaultTransport}
+	httpClient := &http.Client{Transport: transport}
+	return &roundtripClient{
+		wrapped:   graphql.NewClientUsingGet(endpoint, httpClient),
 		transport: transport,
 		t:         t,
 	}

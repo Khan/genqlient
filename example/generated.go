@@ -75,16 +75,9 @@ func getUser(
 	client graphql.Client,
 	Login string,
 ) (*getUserResponse, error) {
-	__input := __getUserInput{
-		Login: Login,
-	}
-	var err error
-
-	var retval getUserResponse
-	err = client.MakeRequest(
-		ctx,
-		"getUser",
-		`
+	req := &graphql.Request{
+		OpName: "getUser",
+		Query: `
 query getUser ($Login: String!) {
 	user(login: $Login) {
 		theirName: name
@@ -92,23 +85,31 @@ query getUser ($Login: String!) {
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__getUserInput{
+			Login: Login,
+		},
+	}
+	var err error
+
+	var data getUserResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 
 func getViewer(
 	ctx context.Context,
 	client graphql.Client,
 ) (*getViewerResponse, error) {
-	var err error
-
-	var retval getViewerResponse
-	err = client.MakeRequest(
-		ctx,
-		"getViewer",
-		`
+	req := &graphql.Request{
+		OpName: "getViewer",
+		Query: `
 query getViewer {
 	viewer {
 		MyName: name
@@ -116,8 +117,17 @@ query getViewer {
 	}
 }
 `,
-		&retval,
-		nil,
+	}
+	var err error
+
+	var data getViewerResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }

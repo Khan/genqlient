@@ -46,13 +46,9 @@ func (v *QueryWithStructsUserAuthMethodsAuthMethod) GetEmail() string { return v
 func QueryWithStructs(
 	client graphql.Client,
 ) (*QueryWithStructsResponse, error) {
-	var err error
-
-	var retval QueryWithStructsResponse
-	err = client.MakeRequest(
-		nil,
-		"QueryWithStructs",
-		`
+	req := &graphql.Request{
+		OpName: "QueryWithStructs",
+		Query: `
 query QueryWithStructs {
 	user {
 		authMethods {
@@ -62,9 +58,18 @@ query QueryWithStructs {
 	}
 }
 `,
-		&retval,
+	}
+	var err error
+
+	var data QueryWithStructsResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
 		nil,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 

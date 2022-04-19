@@ -236,18 +236,9 @@ func PointersQuery(
 	dt time.Time,
 	tz *string,
 ) (*PointersQueryResponse, error) {
-	__input := __PointersQueryInput{
-		Query: query,
-		Dt:    dt,
-		Tz:    tz,
-	}
-	var err error
-
-	var retval PointersQueryResponse
-	err = client.MakeRequest(
-		nil,
-		"PointersQuery",
-		`
+	req := &graphql.Request{
+		OpName: "PointersQuery",
+		Query: `
 query PointersQuery ($query: UserQueryInput, $dt: DateTime, $tz: String) {
 	user(query: $query) {
 		id
@@ -262,9 +253,23 @@ query PointersQuery ($query: UserQueryInput, $dt: DateTime, $tz: String) {
 	maybeConvert(dt: $dt, tz: $tz)
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__PointersQueryInput{
+			Query: query,
+			Dt:    dt,
+			Tz:    tz,
+		},
+	}
+	var err error
+
+	var data PointersQueryResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		nil,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 
