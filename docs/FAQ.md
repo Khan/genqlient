@@ -8,7 +8,7 @@ This document describes common questions about genqlient, and provides an index 
 
 There's a [doc for that](INTRODUCTION.md)!
 
-##  … use GET requests instead of POST requests?
+###  … use GET requests instead of POST requests?
 
 You can use `graphql.NewClientUsingGet` to create a client that will use query parameters to create the request. For example:
 ```go
@@ -549,3 +549,7 @@ genqlient will instead generate types with the given names.  (You'll need to avo
 ### … my editor/IDE plugin not know about the code genqlient just generated?
 
 If your tools are backed by [gopls](https://github.com/golang/tools/blob/master/gopls/README.md) (which is most of them), they simply don't know it was updated.  In most cases, keeping the generated file (typically `generated.go`) open in the background, and reloading it after each run of `genqlient`, will do the trick.
+
+### … genqlient fail after `go mod tidy`?
+
+If genqlient fails with an error `missing go.sum entry for module providing package`, this is typically because `go mod tidy` removed its dependencies  because they weren't imported by your Go module.  You can read more about this in golang/go#45552; see in particular [this comment](https://github.com/golang/go/issues/45552#issuecomment-819545037).  In short, if you want to be able to `go run` on newer Go you'll need to have a (blank) import of genqlient's entrypoint in a special `tools.go` file somewhere in your module so `go mod tidy` doesn't prune it.
