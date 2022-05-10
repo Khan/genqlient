@@ -100,7 +100,7 @@ func TestAbsoluteAndRelativePathsInConfigFiles(t *testing.T) {
 	require.Equal(t, 1, len(config.Schema))
 	require.Equal(
 		t,
-		cwd + "/testdata/find-config/current/schema.graphql",
+		cwd+"/testdata/find-config/current/schema.graphql",
 		config.Schema[0],
 	)
 	require.Equal(t, 1, len(config.Operations))
