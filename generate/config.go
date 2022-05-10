@@ -51,6 +51,16 @@ type TypeBinding struct {
 	Unmarshaler       string `yaml:"unmarshaler"`
 }
 
+// pathJoin is like filepath.Join but 1) it only takes two argsuments,
+// and b) if the second argument is an absolute path the first argument
+// is ignored (similar to how python's os.path.join() works).
+func pathJoin(a, b string) string {
+	if filepath.IsAbs(b) {
+		return b
+	}
+	return filepath.Join(a, b)
+}
+
 // ValidateAndFillDefaults ensures that the configuration is valid, and fills
 // in any options that were unspecified.
 //
@@ -59,14 +69,14 @@ type TypeBinding struct {
 func (c *Config) ValidateAndFillDefaults(baseDir string) error {
 	c.baseDir = baseDir
 	for i := range c.Schema {
-		c.Schema[i] = filepath.Join(baseDir, c.Schema[i])
+		c.Schema[i] = pathJoin(baseDir, c.Schema[i])
 	}
 	for i := range c.Operations {
-		c.Operations[i] = filepath.Join(baseDir, c.Operations[i])
+		c.Operations[i] = pathJoin(baseDir, c.Operations[i])
 	}
 	c.Generated = filepath.Join(baseDir, c.Generated)
 	if c.ExportOperations != "" {
-		c.ExportOperations = filepath.Join(baseDir, c.ExportOperations)
+		c.ExportOperations = pathJoin(baseDir, c.ExportOperations)
 	}
 
 	if c.ContextType == "" {
@@ -154,7 +164,7 @@ func findCfg() (string, error) {
 
 func findCfgInDir(dir string) string {
 	for _, cfgName := range cfgFilenames {
-		path := filepath.Join(dir, cfgName)
+		path := pathJoin(dir, cfgName)
 		if _, err := os.Stat(path); err == nil {
 			return path
 		}

@@ -88,3 +88,21 @@ func TestFindCfgInDir(t *testing.T) {
 		})
 	}
 }
+
+func TestAbsoluteAndRelativePathsInConfigFiles(t *testing.T) {
+	cwd, err := os.Getwd()
+	require.NoError(t, err)
+
+	config, err := ReadAndValidateConfig(
+		cwd + "/testdata/find-config/current/genqlient.yaml")
+	require.NoError(t, err)
+
+	require.Equal(t, 1, len(config.Schema))
+	require.Equal(
+		t,
+		cwd + "/testdata/find-config/current/schema.graphql",
+		config.Schema[0],
+	)
+	require.Equal(t, 1, len(config.Operations))
+	require.Equal(t, "/tmp/genqlient.graphql", config.Operations[0])
+}
