@@ -1,0 +1,1 @@
+testdata/errors/KeywordTypeName.schema.graphql:1: typename option must not be a go keyword

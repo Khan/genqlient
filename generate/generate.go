@@ -232,6 +232,8 @@ func (g *generator) preprocessQueryDocument(doc *ast.QueryDocument) {
 func (g *generator) addOperation(op *ast.OperationDefinition) error {
 	if op.Name == "" {
 		return errorf(op.Position, "operations must have operation-names")
+	} else if goKeywords[op.Name] {
+		return errorf(op.Position, "operation name must not be a go keyword")
 	}
 
 	queryDoc := &ast.QueryDocument{

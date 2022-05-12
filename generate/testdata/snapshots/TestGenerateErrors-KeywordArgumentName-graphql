@@ -1,0 +1,1 @@
+testdata/errors/KeywordArgumentName.graphql:1: variable name must not be a go keyword

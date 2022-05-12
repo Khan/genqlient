@@ -1,0 +1,6 @@
+query KeywordTypeName {
+  # @genqlient(typename: "type")
+  f {
+    g
+  }
+}

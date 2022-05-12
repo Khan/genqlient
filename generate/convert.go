@@ -164,6 +164,10 @@ func (g *generator) convertArguments(
 	name := "__" + operation.Name + "Input"
 	fields := make([]*goStructField, len(operation.VariableDefinitions))
 	for i, arg := range operation.VariableDefinitions {
+		if goKeywords[arg.Variable] {
+			return nil, errorf(arg.Position, "variable name must not be a go keyword")
+		}
+
 		_, options, err := g.parsePrecedingComment(arg, nil, arg.Position, queryOptions)
 		if err != nil {
 			return nil, err
@@ -317,6 +321,9 @@ func (g *generator) convertDefinition(
 	// Determine the name to use for this type.
 	var name string
 	if options.TypeName != "" {
+		if goKeywords[options.TypeName] {
+			return nil, errorf(pos, "typename option must not be a go keyword")
+		}
 		// If the user specified a name, use it!
 		name = options.TypeName
 		if namePrefix != nil && namePrefix.head == name && namePrefix.tail == nil {

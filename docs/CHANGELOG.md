@@ -34,6 +34,8 @@ When releasing a new version:
 
 ### Bug fixes:
 
+- genqlient now explicitly rejects argument, operation, and type names which are Go keywords, rather than failing with an opaque error.
+
 ## v0.4.0
 
 Version 0.4.0 adds several new configuration options, as well as additional methods to simplify the use of interfaces.
