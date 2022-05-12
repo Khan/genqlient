@@ -74,7 +74,7 @@ func (c *Config) ValidateAndFillDefaults(baseDir string) error {
 	for i := range c.Operations {
 		c.Operations[i] = pathJoin(baseDir, c.Operations[i])
 	}
-	c.Generated = filepath.Join(baseDir, c.Generated)
+	c.Generated = pathJoin(baseDir, c.Generated)
 	if c.ExportOperations != "" {
 		c.ExportOperations = pathJoin(baseDir, c.ExportOperations)
 	}
