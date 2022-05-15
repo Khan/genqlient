@@ -1,4 +1,5 @@
 type Query {
+  f: String
   user: User
 }
 

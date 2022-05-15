@@ -290,7 +290,8 @@ func (g *generator) convertDefinition(
 	globalBinding, ok := g.Config.Bindings[def.Name]
 	if ok && options.Bind != "-" {
 		if options.TypeName != "" {
-			return nil, errorf(pos,
+			// The option position (in the query) is more useful here.
+			return nil, errorf(options.pos,
 				"typename option conflicts with global binding for %s; "+
 					"use `bind: \"-\"` to override it", def.Name)
 		}
