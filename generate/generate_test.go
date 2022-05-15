@@ -1,6 +1,7 @@
 package generate
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"os/exec"
@@ -235,14 +236,15 @@ func TestGenerateWithConfig(t *testing.T) {
 	}
 }
 
-// TestGenerate is a snapshot-based test of error text.
+// TestGenerateErrors is a snapshot-based test of error text.
 //
-// For each .go or .graphql file in testdata/errors, and corresponding
-// .schema.graphql file, it asserts that the given query returns an error, and
-// that that error's string-text matches the snapshot.  The snapshotting is
-// useful to ensure we don't accidentally make the text less readable, drop the
-// line numbers, etc.  We include both .go and .graphql tests, to make sure the
-// line numbers work in both cases.
+// For each .go or .graphql file in testdata/errors, it asserts that the given
+// query returns an error, and that that error's string-text matches the
+// snapshot.  The snapshotting is useful to ensure we don't accidentally make
+// the text less readable, drop the line numbers, etc.  We include both .go and
+// .graphql tests for some of the test cases, to make sure the line numbers
+// work in both cases.  Tests may include a .schema.graphql file of their own,
+// or use the shared schema.graphql in the same directory for convenience.
 func TestGenerateErrors(t *testing.T) {
 	files, err := os.ReadDir(errorsDir)
 	if err != nil {
@@ -253,13 +255,24 @@ func TestGenerateErrors(t *testing.T) {
 		sourceFilename := file.Name()
 		if !strings.HasSuffix(sourceFilename, ".graphql") &&
 			!strings.HasSuffix(sourceFilename, ".go") ||
-			strings.HasSuffix(sourceFilename, ".schema.graphql") {
+			strings.HasSuffix(sourceFilename, ".schema.graphql") ||
+			sourceFilename == "schema.graphql" {
 			continue
 		}
 
 		baseFilename := strings.TrimSuffix(sourceFilename, filepath.Ext(sourceFilename))
-		schemaFilename := baseFilename + ".schema.graphql"
 		testFilename := strings.ReplaceAll(sourceFilename, ".", "/")
+
+		// Schema is either <base>.schema.graphql, or <dir>/schema.graphql if
+		// that doesn't exist.
+		schemaFilename := baseFilename + ".schema.graphql"
+		if _, err := os.Stat(filepath.Join(errorsDir, schemaFilename)); err != nil {
+			if errors.Is(err, os.ErrNotExist) {
+				schemaFilename = "schema.graphql"
+			} else {
+				t.Fatal(err)
+			}
+		}
 
 		t.Run(testFilename, func(t *testing.T) {
 			_, err := Generate(&Config{
