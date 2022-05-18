@@ -224,16 +224,40 @@ func (g *generator) preprocessQueryDocument(doc *ast.QueryDocument) {
 	validator.Walk(g.schema, doc, &observers)
 }
 
+// validateOperation checks for a few classes of operations that gqlparser
+// considers valid but we don't allow, and returns an error if this operation
+// is invalid for genqlient's purposes.
+func (g *generator) validateOperation(op *ast.OperationDefinition) error {
+	opType, err := g.baseTypeForOperation(op.Operation)
+	switch {
+	case err != nil:
+		// (e.g. operation has subscriptions, which we don't support)
+		return err
+	case opType == nil:
+		// gqlparser should err here, but doesn't [1], so we err to prevent
+		// panics later.
+		// TODO(benkraft): Remove once gqlparser is fixed.
+		// [1] https://github.com/vektah/gqlparser/issues/221
+		return errorf(op.Position, "schema has no %v type", op.Operation)
+	}
+
+	if op.Name == "" {
+		return errorf(op.Position, "operations must have operation-names")
+	} else if goKeywords[op.Name] {
+		return errorf(op.Position, "operation name must not be a go keyword")
+	}
+
+	return nil
+}
+
 // addOperation adds to g.Operations the information needed to generate a
 // genqlient entrypoint function for the given operation.  It also adds to
 // g.typeMap any types referenced by the operation, except for types belonging
 // to named fragments, which are added separately by Generate via
 // convertFragment.
 func (g *generator) addOperation(op *ast.OperationDefinition) error {
-	if op.Name == "" {
-		return errorf(op.Position, "operations must have operation-names")
-	} else if goKeywords[op.Name] {
-		return errorf(op.Position, "operation name must not be a go keyword")
+	if err := g.validateOperation(op); err != nil {
+		return err
 	}
 
 	queryDoc := &ast.QueryDocument{
