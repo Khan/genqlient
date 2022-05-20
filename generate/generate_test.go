@@ -147,54 +147,63 @@ func getDefaultConfig(t *testing.T) *Config {
 // configurations.  It uses snapshots, just like TestGenerate.
 func TestGenerateWithConfig(t *testing.T) {
 	tests := []struct {
-		name    string
-		baseDir string  // relative to dataDir
-		config  *Config // omits Schema and Operations, set below.
+		name       string
+		baseDir    string   // relative to dataDir
+		operations []string // overrides the default set below
+		config     *Config  // omits Schema and Operations, set below.
 	}{
-		{"DefaultConfig", "", getDefaultConfig(t)},
-		{"Subpackage", "", &Config{
+		{"DefaultConfig", "", nil, getDefaultConfig(t)},
+		{"Subpackage", "", nil, &Config{
 			Generated: "mypkg/myfile.go",
 		}},
-		{"SubpackageConfig", "mypkg", &Config{
+		{"SubpackageConfig", "mypkg", nil, &Config{
 			Generated: "myfile.go", // (relative to genqlient.yaml)
 		}},
-		{"PackageName", "", &Config{
+		{"PackageName", "", nil, &Config{
 			Generated: "myfile.go",
 			Package:   "mypkg",
 		}},
-		{"ExportOperations", "", &Config{
+		{"ExportOperations", "", nil, &Config{
 			Generated:        "generated.go",
 			ExportOperations: "operations.json",
 		}},
-		{"CustomContext", "", &Config{
+		{"CustomContext", "", nil, &Config{
 			Generated:   "generated.go",
 			ContextType: "github.com/Khan/genqlient/internal/testutil.MyContext",
 		}},
-		{"StructReferences", "", &Config{
+		{"StructReferences", "", nil, &Config{
 			StructReferences: true,
 			Generated:        "generated-structrefs.go",
 		}},
-		{"NoContext", "", &Config{
+		{"NoContext", "", nil, &Config{
 			Generated:   "generated.go",
 			ContextType: "-",
 		}},
-		{"ClientGetter", "", &Config{
+		{"ClientGetter", "", nil, &Config{
 			Generated:    "generated.go",
 			ClientGetter: "github.com/Khan/genqlient/internal/testutil.GetClientFromContext",
 		}},
-		{"ClientGetterCustomContext", "", &Config{
+		{"ClientGetterCustomContext", "", nil, &Config{
 			Generated:    "generated.go",
 			ClientGetter: "github.com/Khan/genqlient/internal/testutil.GetClientFromMyContext",
 			ContextType:  "github.com/Khan/genqlient/internal/testutil.MyContext",
 		}},
-		{"ClientGetterNoContext", "", &Config{
+		{"ClientGetterNoContext", "", nil, &Config{
 			Generated:    "generated.go",
 			ClientGetter: "github.com/Khan/genqlient/internal/testutil.GetClientFromNowhere",
 			ContextType:  "-",
 		}},
-		{"Extensions", "", &Config{
+		{"Extensions", "", nil, &Config{
 			Generated:  "generated.go",
 			Extensions: true,
+		}},
+		{"OptionalValue", "", []string{"ListInput.graphql", "QueryWithSlices.graphql"}, &Config{
+			Generated: "generated.go",
+			Optional:  "value",
+		}},
+		{"OptionalPointer", "", []string{"ListInput.graphql", "QueryWithSlices.graphql"}, &Config{
+			Generated: "generated.go",
+			Optional:  "pointer",
 		}},
 	}
 
@@ -206,7 +215,14 @@ func TestGenerateWithConfig(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			err := config.ValidateAndFillDefaults(baseDir)
 			config.Schema = []string{filepath.Join(dataDir, "schema.graphql")}
-			config.Operations = []string{filepath.Join(dataDir, sourceFilename)}
+			if test.operations == nil {
+				config.Operations = []string{filepath.Join(dataDir, sourceFilename)}
+			} else {
+				config.Operations = make([]string, len(test.operations))
+				for i := range test.operations {
+					config.Operations[i] = filepath.Join(dataDir, test.operations[i])
+				}
+			}
 			if err != nil {
 				t.Fatal(err)
 			}
