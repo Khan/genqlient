@@ -26,6 +26,7 @@ type Config struct {
 	ContextType      string                  `yaml:"context_type"`
 	ClientGetter     string                  `yaml:"client_getter"`
 	Bindings         map[string]*TypeBinding `yaml:"bindings"`
+	Optional         OptionalConfig          `yaml:"optional"`
 	StructReferences bool                    `yaml:"use_struct_references"`
 	Extensions       bool                    `yaml:"use_extensions"`
 
@@ -49,6 +50,11 @@ type TypeBinding struct {
 	ExpectExactFields string `yaml:"expect_exact_fields"`
 	Marshaler         string `yaml:"marshaler"`
 	Unmarshaler       string `yaml:"unmarshaler"`
+}
+
+// OptionalConfig describes the configuration for handling optional fields and arguments.
+type OptionalConfig struct {
+	Output string `yaml:"output"`
 }
 
 // pathJoin is like filepath.Join but 1) it only takes two argsuments,
