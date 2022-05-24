@@ -256,7 +256,7 @@ func (g *generator) convertType(
 			oe := true
 			options.Omitempty = &oe
 		}
-	} else if options.GetPointer() {
+	} else if options.GetPointer() || (!typ.NonNull && g.Config.Optional == "pointer") {
 		// Whatever we get, wrap it in a pointer.  (Because of the way the
 		// options work, recursing here isn't as connvenient.)
 		// Note this does []*T or [][]*T, not e.g. *[][]T.  See #16.

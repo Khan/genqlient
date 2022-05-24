@@ -26,6 +26,7 @@ type Config struct {
 	ContextType      string                  `yaml:"context_type"`
 	ClientGetter     string                  `yaml:"client_getter"`
 	Bindings         map[string]*TypeBinding `yaml:"bindings"`
+	Optional         string                  `yaml:"optional"`
 	StructReferences bool                    `yaml:"use_struct_references"`
 	Extensions       bool                    `yaml:"use_extensions"`
 
