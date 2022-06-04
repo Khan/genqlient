@@ -1,0 +1,23 @@
+query CovariantInterfaceImplementation {
+  randomItem {
+    id
+    next { ...ContentFields }
+    related { ...ContentFields }
+  }
+  root {
+    ...ContentFields
+    ...TopicFields
+    next { ...TopicFields }
+    related { ...TopicFields }
+  }
+}
+
+fragment ContentFields on Content {
+  next { id }
+  related { id }
+}
+
+fragment TopicFields on Topic {
+  next { id }
+  related { id }
+}

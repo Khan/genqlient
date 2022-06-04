@@ -84,6 +84,8 @@ interface Content {
   name: String!
   parent: Topic
   url: String!
+  next: Content
+  related: [Content!]
 }
 
 """An object with a duration, like a video."""
@@ -102,6 +104,8 @@ type Article implements Content {
   url: String!
   text: String!
   thumbnail: StuffThumbnail
+  next: Content
+  related: [Content!]
 }
 
 type StuffThumbnail {  # for articles, but let's give the name-generator a hard time.
@@ -117,6 +121,8 @@ type Video implements Content & HasDuration {
   url: String!
   duration: Int!
   thumbnail: Thumbnail
+  next: Content
+  related: [Content!]
 }
 
 type Thumbnail {  # for videos, but let's give the name-generator a hard time.
@@ -133,6 +139,8 @@ type Topic implements Content {
   children: [Content!]!
   videoChildren: [Video!]!
   schoolGrade: String
+  next: Topic
+  related: [Topic!]
 }
 
 input RecursiveInput {
