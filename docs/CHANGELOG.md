@@ -36,6 +36,7 @@ When releasing a new version:
 ### Bug fixes:
 
 - genqlient now explicitly rejects argument, operation, and type names which are Go keywords, rather than failing with an opaque error.
+- genqlient now gives better error messages if it thinks your schema is invalid.
 
 ## v0.4.0
 
