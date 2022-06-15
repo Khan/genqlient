@@ -2,5 +2,6 @@
 # https://github.com/Khan/genqlient/blob/main/docs/genqlient.yaml
 schema: schema.graphql
 operations:
-- genqlient.graphql
+# Also use this config to test absolute paths in config files.
+- /tmp/genqlient.graphql
 generated: generated.go

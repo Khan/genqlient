@@ -1,0 +1,3 @@
+query KeywordArgumentName($type: String) {
+  f(type: $type)
+}

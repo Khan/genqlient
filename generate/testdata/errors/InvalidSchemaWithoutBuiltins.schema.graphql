@@ -1,3 +1,4 @@
 type Query {
   f: String
+  g: Bogus
 }

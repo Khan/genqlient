@@ -10,11 +10,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
-	"github.com/vektah/gqlparser/v2/gqlerror"
 	"github.com/vektah/gqlparser/v2/parser"
 	"github.com/vektah/gqlparser/v2/validator"
+	_ "github.com/vektah/gqlparser/v2/validator/rules"
 )
 
 func getSchema(globs StringList) (*ast.Schema, error) {
@@ -32,19 +31,39 @@ func getSchema(globs StringList) (*ast.Schema, error) {
 		sources[i] = &ast.Source{Name: filename, Input: string(text)}
 	}
 
-	// Multi step schema validation
-	// Step 1 assume schema implicitly declares types that are required by the graphql spec
-	// Step 2 assume schema explicitly declares types that are required by the graphql spec
-	var (
-		schema       *ast.Schema
-		graphqlError *gqlerror.Error
-	)
-	schema, graphqlError = gqlparser.LoadSchema(sources...)
+	// Ideally here we'd just call gqlparser.LoadSchema. But the schema we are
+	// given may or may not contain the builtin types String, Int, etc. (The
+	// spec says it shouldn't, but introspection will return those types, and
+	// some introspection-to-SDL tools aren't smart enough to remove them.) So
+	// we inline LoadSchema and insert some checks.
+	document, graphqlError := parser.ParseSchemas(sources...)
 	if graphqlError != nil {
-		schema, graphqlError = validator.LoadSchema(sources...)
-		if graphqlError != nil {
-			return nil, errorf(nil, "invalid schema: %v", graphqlError)
+		// Schema doesn't even parse.
+		return nil, errorf(nil, "invalid schema: %v", graphqlError)
+	}
+
+	// Check if we have a builtin type. (String is an arbitrary choice.)
+	hasBuiltins := false
+	for _, def := range document.Definitions {
+		if def.Name == "String" {
+			hasBuiltins = true
+			break
 		}
+	}
+
+	if !hasBuiltins {
+		// modified from parser.ParseSchemas
+		var preludeAST *ast.SchemaDocument
+		preludeAST, graphqlError = parser.ParseSchema(validator.Prelude)
+		if graphqlError != nil {
+			return nil, errorf(nil, "invalid prelude (probably a gqlparser bug): %v", graphqlError)
+		}
+		document.Merge(preludeAST)
+	}
+
+	schema, graphqlError := validator.ValidateSchemaDocument(document)
+	if graphqlError != nil {
+		return nil, errorf(nil, "invalid schema: %v", graphqlError)
 	}
 
 	return schema, nil

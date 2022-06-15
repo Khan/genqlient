@@ -1,0 +1,1 @@
+testdata/errors/KeywordOperationName.graphql:1: operation name must not be a go keyword

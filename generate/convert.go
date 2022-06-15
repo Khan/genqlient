@@ -164,6 +164,10 @@ func (g *generator) convertArguments(
 	name := "__" + operation.Name + "Input"
 	fields := make([]*goStructField, len(operation.VariableDefinitions))
 	for i, arg := range operation.VariableDefinitions {
+		if goKeywords[arg.Variable] {
+			return nil, errorf(arg.Position, "variable name must not be a go keyword")
+		}
+
 		_, options, err := g.parsePrecedingComment(arg, nil, arg.Position, queryOptions)
 		if err != nil {
 			return nil, err
@@ -252,7 +256,7 @@ func (g *generator) convertType(
 			oe := true
 			options.Omitempty = &oe
 		}
-	} else if options.GetPointer() {
+	} else if options.GetPointer() || (!typ.NonNull && g.Config.Optional == "pointer") {
 		// Whatever we get, wrap it in a pointer.  (Because of the way the
 		// options work, recursing here isn't as connvenient.)
 		// Note this does []*T or [][]*T, not e.g. *[][]T.  See #16.
@@ -290,7 +294,8 @@ func (g *generator) convertDefinition(
 	globalBinding, ok := g.Config.Bindings[def.Name]
 	if ok && options.Bind != "-" {
 		if options.TypeName != "" {
-			return nil, errorf(pos,
+			// The option position (in the query) is more useful here.
+			return nil, errorf(options.pos,
 				"typename option conflicts with global binding for %s; "+
 					"use `bind: \"-\"` to override it", def.Name)
 		}
@@ -317,6 +322,9 @@ func (g *generator) convertDefinition(
 	// Determine the name to use for this type.
 	var name string
 	if options.TypeName != "" {
+		if goKeywords[options.TypeName] {
+			return nil, errorf(pos, "typename option must not be a go keyword")
+		}
 		// If the user specified a name, use it!
 		name = options.TypeName
 		if namePrefix != nil && namePrefix.head == name && namePrefix.tail == nil {

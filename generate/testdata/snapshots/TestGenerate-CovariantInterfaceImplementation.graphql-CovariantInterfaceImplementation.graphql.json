@@ -1,0 +1,9 @@
+{
+  "operations": [
+    {
+      "operationName": "CovariantInterfaceImplementation",
+      "query": "\nquery CovariantInterfaceImplementation {\n\trandomItem {\n\t\t__typename\n\t\tid\n\t\tnext {\n\t\t\t__typename\n\t\t\t... ContentFields\n\t\t}\n\t\trelated {\n\t\t\t__typename\n\t\t\t... ContentFields\n\t\t}\n\t}\n\troot {\n\t\t... ContentFields\n\t\t... TopicFields\n\t\tnext {\n\t\t\t... TopicFields\n\t\t}\n\t\trelated {\n\t\t\t... TopicFields\n\t\t}\n\t}\n}\nfragment ContentFields on Content {\n\tnext {\n\t\t__typename\n\t\tid\n\t}\n\trelated {\n\t\t__typename\n\t\tid\n\t}\n}\nfragment TopicFields on Topic {\n\tnext {\n\t\tid\n\t}\n\trelated {\n\t\tid\n\t}\n}\n",
+      "sourceLocation": "testdata/queries/CovariantInterfaceImplementation.graphql"
+    }
+  ]
+}

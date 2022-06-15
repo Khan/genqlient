@@ -31,8 +31,13 @@ When releasing a new version:
 - You can now enable `use_extensions` in the configuration file, to receive extensions returned by the GraphQL API server. Generated functions will return extensions as `map[string]interface{}`, if enabled.
 - You can now use `graphql.NewClientUsingGet` to create a client that uses query parameters to pass the query to the GraphQL API server.
 - You can now bind all types from a package in `genqlient.yaml` using the new `package_bindings` option.
+- In config files, `schema`, `operations`, and `generated` can now be absolute paths.
+- You can now configure how nullable types are mapped to Go types in the configuration file. Specifically, you can set `optional: pointer` to have all nullable GraphQL arguments, input fields, and output fields map to pointers.
 
 ### Bug fixes:
+
+- genqlient now explicitly rejects argument, operation, and type names which are Go keywords, rather than failing with an opaque error.
+- genqlient now gives better error messages if it thinks your schema is invalid.
 
 ## v0.4.0
 
