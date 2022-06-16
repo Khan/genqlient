@@ -228,17 +228,10 @@ func (g *generator) preprocessQueryDocument(doc *ast.QueryDocument) {
 // considers valid but we don't allow, and returns an error if this operation
 // is invalid for genqlient's purposes.
 func (g *generator) validateOperation(op *ast.OperationDefinition) error {
-	opType, err := g.baseTypeForOperation(op.Operation)
-	switch {
-	case err != nil:
+	_, err := g.baseTypeForOperation(op.Operation)
+	if err != nil {
 		// (e.g. operation has subscriptions, which we don't support)
 		return err
-	case opType == nil:
-		// gqlparser should err here, but doesn't [1], so we err to prevent
-		// panics later.
-		// TODO(benkraft): Remove once gqlparser is fixed.
-		// [1] https://github.com/vektah/gqlparser/issues/221
-		return errorf(op.Position, "schema has no %v type", op.Operation)
 	}
 
 	if op.Name == "" {
