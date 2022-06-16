@@ -1,1 +1,1 @@
-testdata/errors/NoQueryType.graphql:1: schema has no query type
+testdata/errors/NoQueryType.graphql:1: query-spec does not match schema: Schema does not support operation type "query"
