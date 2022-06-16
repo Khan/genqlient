@@ -22,6 +22,16 @@ When releasing a new version:
 
 ### Breaking changes:
 
+### New features:
+
+### Bug fixes:
+
+## v0.5.0
+
+Version 0.5.0 adds several new configuration options and convenience features. Note that genqlient now requires Go 1.16 or higher, and is tested through Go 1.18.
+
+### Breaking changes:
+
 - genqlient now requires Go 1.16 or higher.
 - The [`graphql.Client`](https://pkg.go.dev/github.com/Khan/genqlient/graphql#Client) interface now accepts two structs for the request and response, to allow future expansion, rather than several individual arguments.  Clients implementing the interface themselves will need to change the signature; clients who simply call `graphql.NewClient` are unaffected.
 
