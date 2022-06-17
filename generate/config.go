@@ -2,10 +2,12 @@ package generate
 
 import (
 	_ "embed"
+	"fmt"
 	"go/token"
 	"os"
 	"path/filepath"
 
+	"golang.org/x/tools/go/packages"
 	"gopkg.in/yaml.v2"
 )
 
@@ -26,6 +28,7 @@ type Config struct {
 	ContextType      string                  `yaml:"context_type"`
 	ClientGetter     string                  `yaml:"client_getter"`
 	Bindings         map[string]*TypeBinding `yaml:"bindings"`
+	PackageBindings  []*PackageBinding       `yaml:"package_bindings"`
 	Optional         string                  `yaml:"optional"`
 	StructReferences bool                    `yaml:"use_struct_references"`
 	Extensions       bool                    `yaml:"use_extensions"`
@@ -50,6 +53,13 @@ type TypeBinding struct {
 	ExpectExactFields string `yaml:"expect_exact_fields"`
 	Marshaler         string `yaml:"marshaler"`
 	Unmarshaler       string `yaml:"unmarshaler"`
+}
+
+// A PackageBinding represents a Go package for which genqlient will
+// automatically generate TypeBindings, and is documented further at:
+// https://github.com/Khan/genqlient/blob/main/docs/genqlient.yaml
+type PackageBinding struct {
+	Package string `yaml:"package"`
 }
 
 // pathJoin is like filepath.Join but 1) it only takes two argsuments,
@@ -96,6 +106,42 @@ func (c *Config) ValidateAndFillDefaults(baseDir string) error {
 		}
 
 		c.Package = base
+	}
+
+	if len(c.PackageBindings) > 0 {
+		for _, binding := range c.PackageBindings {
+			mode := packages.NeedImports | packages.NeedTypes | packages.NeedTypesSizes
+			pkgs, err := packages.Load(&packages.Config{
+				Mode: mode,
+			}, binding.Package)
+			if err != nil {
+				return err
+			}
+
+			if c.Bindings == nil {
+				c.Bindings = map[string]*TypeBinding{}
+			}
+
+			for _, pkg := range pkgs {
+				p := pkg.Types
+				if p == nil || p.Scope() == nil {
+					return errorf(nil, "unable to bind package %s: no types found", binding.Package)
+				}
+
+				for _, typ := range p.Scope().Names() {
+					if token.IsExported(typ) {
+						// Check if type is manual bindings
+						_, exist := c.Bindings[typ]
+						if !exist {
+							pathType := fmt.Sprintf("%s.%s", p.Path(), typ)
+							c.Bindings[typ] = &TypeBinding{
+								Type: pathType,
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
 	return nil
