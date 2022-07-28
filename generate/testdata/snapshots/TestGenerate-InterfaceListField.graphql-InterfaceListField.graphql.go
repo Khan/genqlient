@@ -145,8 +145,8 @@ func (v *InterfaceListFieldRootTopicChildrenArticle) GetName() string { return v
 //
 // InterfaceListFieldRootTopicChildrenContent is implemented by the following types:
 // InterfaceListFieldRootTopicChildrenArticle
-// InterfaceListFieldRootTopicChildrenVideo
 // InterfaceListFieldRootTopicChildrenTopic
+// InterfaceListFieldRootTopicChildrenVideo
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
@@ -165,9 +165,9 @@ type InterfaceListFieldRootTopicChildrenContent interface {
 
 func (v *InterfaceListFieldRootTopicChildrenArticle) implementsGraphQLInterfaceInterfaceListFieldRootTopicChildrenContent() {
 }
-func (v *InterfaceListFieldRootTopicChildrenVideo) implementsGraphQLInterfaceInterfaceListFieldRootTopicChildrenContent() {
-}
 func (v *InterfaceListFieldRootTopicChildrenTopic) implementsGraphQLInterfaceInterfaceListFieldRootTopicChildrenContent() {
+}
+func (v *InterfaceListFieldRootTopicChildrenVideo) implementsGraphQLInterfaceInterfaceListFieldRootTopicChildrenContent() {
 }
 
 func __unmarshalInterfaceListFieldRootTopicChildrenContent(b []byte, v *InterfaceListFieldRootTopicChildrenContent) error {
@@ -187,11 +187,11 @@ func __unmarshalInterfaceListFieldRootTopicChildrenContent(b []byte, v *Interfac
 	case "Article":
 		*v = new(InterfaceListFieldRootTopicChildrenArticle)
 		return json.Unmarshal(b, *v)
-	case "Video":
-		*v = new(InterfaceListFieldRootTopicChildrenVideo)
-		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(InterfaceListFieldRootTopicChildrenTopic)
+		return json.Unmarshal(b, *v)
+	case "Video":
+		*v = new(InterfaceListFieldRootTopicChildrenVideo)
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
@@ -214,20 +214,20 @@ func __marshalInterfaceListFieldRootTopicChildrenContent(v *InterfaceListFieldRo
 			*InterfaceListFieldRootTopicChildrenArticle
 		}{typename, v}
 		return json.Marshal(result)
-	case *InterfaceListFieldRootTopicChildrenVideo:
-		typename = "Video"
-
-		result := struct {
-			TypeName string `json:"__typename"`
-			*InterfaceListFieldRootTopicChildrenVideo
-		}{typename, v}
-		return json.Marshal(result)
 	case *InterfaceListFieldRootTopicChildrenTopic:
 		typename = "Topic"
 
 		result := struct {
 			TypeName string `json:"__typename"`
 			*InterfaceListFieldRootTopicChildrenTopic
+		}{typename, v}
+		return json.Marshal(result)
+	case *InterfaceListFieldRootTopicChildrenVideo:
+		typename = "Video"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*InterfaceListFieldRootTopicChildrenVideo
 		}{typename, v}
 		return json.Marshal(result)
 	case nil:
@@ -393,8 +393,8 @@ func (v *InterfaceListFieldWithPointerTopicChildrenArticle) GetName() string { r
 //
 // InterfaceListFieldWithPointerTopicChildrenContent is implemented by the following types:
 // InterfaceListFieldWithPointerTopicChildrenArticle
-// InterfaceListFieldWithPointerTopicChildrenVideo
 // InterfaceListFieldWithPointerTopicChildrenTopic
+// InterfaceListFieldWithPointerTopicChildrenVideo
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
@@ -413,9 +413,9 @@ type InterfaceListFieldWithPointerTopicChildrenContent interface {
 
 func (v *InterfaceListFieldWithPointerTopicChildrenArticle) implementsGraphQLInterfaceInterfaceListFieldWithPointerTopicChildrenContent() {
 }
-func (v *InterfaceListFieldWithPointerTopicChildrenVideo) implementsGraphQLInterfaceInterfaceListFieldWithPointerTopicChildrenContent() {
-}
 func (v *InterfaceListFieldWithPointerTopicChildrenTopic) implementsGraphQLInterfaceInterfaceListFieldWithPointerTopicChildrenContent() {
+}
+func (v *InterfaceListFieldWithPointerTopicChildrenVideo) implementsGraphQLInterfaceInterfaceListFieldWithPointerTopicChildrenContent() {
 }
 
 func __unmarshalInterfaceListFieldWithPointerTopicChildrenContent(b []byte, v *InterfaceListFieldWithPointerTopicChildrenContent) error {
@@ -435,11 +435,11 @@ func __unmarshalInterfaceListFieldWithPointerTopicChildrenContent(b []byte, v *I
 	case "Article":
 		*v = new(InterfaceListFieldWithPointerTopicChildrenArticle)
 		return json.Unmarshal(b, *v)
-	case "Video":
-		*v = new(InterfaceListFieldWithPointerTopicChildrenVideo)
-		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(InterfaceListFieldWithPointerTopicChildrenTopic)
+		return json.Unmarshal(b, *v)
+	case "Video":
+		*v = new(InterfaceListFieldWithPointerTopicChildrenVideo)
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
@@ -462,20 +462,20 @@ func __marshalInterfaceListFieldWithPointerTopicChildrenContent(v *InterfaceList
 			*InterfaceListFieldWithPointerTopicChildrenArticle
 		}{typename, v}
 		return json.Marshal(result)
-	case *InterfaceListFieldWithPointerTopicChildrenVideo:
-		typename = "Video"
-
-		result := struct {
-			TypeName string `json:"__typename"`
-			*InterfaceListFieldWithPointerTopicChildrenVideo
-		}{typename, v}
-		return json.Marshal(result)
 	case *InterfaceListFieldWithPointerTopicChildrenTopic:
 		typename = "Topic"
 
 		result := struct {
 			TypeName string `json:"__typename"`
 			*InterfaceListFieldWithPointerTopicChildrenTopic
+		}{typename, v}
+		return json.Marshal(result)
+	case *InterfaceListFieldWithPointerTopicChildrenVideo:
+		typename = "Video"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*InterfaceListFieldWithPointerTopicChildrenVideo
 		}{typename, v}
 		return json.Marshal(result)
 	case nil:

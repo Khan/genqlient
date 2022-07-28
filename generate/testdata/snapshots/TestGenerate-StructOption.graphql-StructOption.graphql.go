@@ -220,8 +220,8 @@ func (v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenArticle
 //
 // StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenContent is implemented by the following types:
 // StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenArticle
-// StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo
 // StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenTopic
+// StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
@@ -238,9 +238,9 @@ type StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenContent int
 
 func (v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenArticle) implementsGraphQLInterfaceStructOptionRootTopicChildrenContentParentTopicInterfaceChildrenContent() {
 }
-func (v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo) implementsGraphQLInterfaceStructOptionRootTopicChildrenContentParentTopicInterfaceChildrenContent() {
-}
 func (v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenTopic) implementsGraphQLInterfaceStructOptionRootTopicChildrenContentParentTopicInterfaceChildrenContent() {
+}
+func (v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo) implementsGraphQLInterfaceStructOptionRootTopicChildrenContentParentTopicInterfaceChildrenContent() {
 }
 
 func __unmarshalStructOptionRootTopicChildrenContentParentTopicInterfaceChildrenContent(b []byte, v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenContent) error {
@@ -260,11 +260,11 @@ func __unmarshalStructOptionRootTopicChildrenContentParentTopicInterfaceChildren
 	case "Article":
 		*v = new(StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenArticle)
 		return json.Unmarshal(b, *v)
-	case "Video":
-		*v = new(StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo)
-		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenTopic)
+		return json.Unmarshal(b, *v)
+	case "Video":
+		*v = new(StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo)
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
@@ -287,6 +287,14 @@ func __marshalStructOptionRootTopicChildrenContentParentTopicInterfaceChildrenCo
 			*StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenArticle
 		}{typename, v}
 		return json.Marshal(result)
+	case *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenTopic:
+		typename = "Topic"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenTopic
+		}{typename, v}
+		return json.Marshal(result)
 	case *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo:
 		typename = "Video"
 
@@ -298,14 +306,6 @@ func __marshalStructOptionRootTopicChildrenContentParentTopicInterfaceChildrenCo
 			TypeName string `json:"__typename"`
 			*__premarshalStructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo
 		}{typename, premarshaled}
-		return json.Marshal(result)
-	case *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenTopic:
-		typename = "Topic"
-
-		result := struct {
-			TypeName string `json:"__typename"`
-			*StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenTopic
-		}{typename, v}
 		return json.Marshal(result)
 	case nil:
 		return []byte("null"), nil

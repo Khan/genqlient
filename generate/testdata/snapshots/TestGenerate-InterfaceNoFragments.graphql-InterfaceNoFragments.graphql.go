@@ -31,8 +31,8 @@ func (v *InterfaceNoFragmentsQueryRandomItemArticle) GetName() string { return v
 //
 // InterfaceNoFragmentsQueryRandomItemContent is implemented by the following types:
 // InterfaceNoFragmentsQueryRandomItemArticle
-// InterfaceNoFragmentsQueryRandomItemVideo
 // InterfaceNoFragmentsQueryRandomItemTopic
+// InterfaceNoFragmentsQueryRandomItemVideo
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
@@ -51,9 +51,9 @@ type InterfaceNoFragmentsQueryRandomItemContent interface {
 
 func (v *InterfaceNoFragmentsQueryRandomItemArticle) implementsGraphQLInterfaceInterfaceNoFragmentsQueryRandomItemContent() {
 }
-func (v *InterfaceNoFragmentsQueryRandomItemVideo) implementsGraphQLInterfaceInterfaceNoFragmentsQueryRandomItemContent() {
-}
 func (v *InterfaceNoFragmentsQueryRandomItemTopic) implementsGraphQLInterfaceInterfaceNoFragmentsQueryRandomItemContent() {
+}
+func (v *InterfaceNoFragmentsQueryRandomItemVideo) implementsGraphQLInterfaceInterfaceNoFragmentsQueryRandomItemContent() {
 }
 
 func __unmarshalInterfaceNoFragmentsQueryRandomItemContent(b []byte, v *InterfaceNoFragmentsQueryRandomItemContent) error {
@@ -73,11 +73,11 @@ func __unmarshalInterfaceNoFragmentsQueryRandomItemContent(b []byte, v *Interfac
 	case "Article":
 		*v = new(InterfaceNoFragmentsQueryRandomItemArticle)
 		return json.Unmarshal(b, *v)
-	case "Video":
-		*v = new(InterfaceNoFragmentsQueryRandomItemVideo)
-		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(InterfaceNoFragmentsQueryRandomItemTopic)
+		return json.Unmarshal(b, *v)
+	case "Video":
+		*v = new(InterfaceNoFragmentsQueryRandomItemVideo)
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
@@ -100,20 +100,20 @@ func __marshalInterfaceNoFragmentsQueryRandomItemContent(v *InterfaceNoFragments
 			*InterfaceNoFragmentsQueryRandomItemArticle
 		}{typename, v}
 		return json.Marshal(result)
-	case *InterfaceNoFragmentsQueryRandomItemVideo:
-		typename = "Video"
-
-		result := struct {
-			TypeName string `json:"__typename"`
-			*InterfaceNoFragmentsQueryRandomItemVideo
-		}{typename, v}
-		return json.Marshal(result)
 	case *InterfaceNoFragmentsQueryRandomItemTopic:
 		typename = "Topic"
 
 		result := struct {
 			TypeName string `json:"__typename"`
 			*InterfaceNoFragmentsQueryRandomItemTopic
+		}{typename, v}
+		return json.Marshal(result)
+	case *InterfaceNoFragmentsQueryRandomItemVideo:
+		typename = "Video"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*InterfaceNoFragmentsQueryRandomItemVideo
 		}{typename, v}
 		return json.Marshal(result)
 	case nil:
@@ -181,8 +181,8 @@ func (v *InterfaceNoFragmentsQueryRandomItemWithTypeNameArticle) GetName() strin
 //
 // InterfaceNoFragmentsQueryRandomItemWithTypeNameContent is implemented by the following types:
 // InterfaceNoFragmentsQueryRandomItemWithTypeNameArticle
-// InterfaceNoFragmentsQueryRandomItemWithTypeNameVideo
 // InterfaceNoFragmentsQueryRandomItemWithTypeNameTopic
+// InterfaceNoFragmentsQueryRandomItemWithTypeNameVideo
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
@@ -201,9 +201,9 @@ type InterfaceNoFragmentsQueryRandomItemWithTypeNameContent interface {
 
 func (v *InterfaceNoFragmentsQueryRandomItemWithTypeNameArticle) implementsGraphQLInterfaceInterfaceNoFragmentsQueryRandomItemWithTypeNameContent() {
 }
-func (v *InterfaceNoFragmentsQueryRandomItemWithTypeNameVideo) implementsGraphQLInterfaceInterfaceNoFragmentsQueryRandomItemWithTypeNameContent() {
-}
 func (v *InterfaceNoFragmentsQueryRandomItemWithTypeNameTopic) implementsGraphQLInterfaceInterfaceNoFragmentsQueryRandomItemWithTypeNameContent() {
+}
+func (v *InterfaceNoFragmentsQueryRandomItemWithTypeNameVideo) implementsGraphQLInterfaceInterfaceNoFragmentsQueryRandomItemWithTypeNameContent() {
 }
 
 func __unmarshalInterfaceNoFragmentsQueryRandomItemWithTypeNameContent(b []byte, v *InterfaceNoFragmentsQueryRandomItemWithTypeNameContent) error {
@@ -223,11 +223,11 @@ func __unmarshalInterfaceNoFragmentsQueryRandomItemWithTypeNameContent(b []byte,
 	case "Article":
 		*v = new(InterfaceNoFragmentsQueryRandomItemWithTypeNameArticle)
 		return json.Unmarshal(b, *v)
-	case "Video":
-		*v = new(InterfaceNoFragmentsQueryRandomItemWithTypeNameVideo)
-		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(InterfaceNoFragmentsQueryRandomItemWithTypeNameTopic)
+		return json.Unmarshal(b, *v)
+	case "Video":
+		*v = new(InterfaceNoFragmentsQueryRandomItemWithTypeNameVideo)
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
@@ -250,20 +250,20 @@ func __marshalInterfaceNoFragmentsQueryRandomItemWithTypeNameContent(v *Interfac
 			*InterfaceNoFragmentsQueryRandomItemWithTypeNameArticle
 		}{typename, v}
 		return json.Marshal(result)
-	case *InterfaceNoFragmentsQueryRandomItemWithTypeNameVideo:
-		typename = "Video"
-
-		result := struct {
-			TypeName string `json:"__typename"`
-			*InterfaceNoFragmentsQueryRandomItemWithTypeNameVideo
-		}{typename, v}
-		return json.Marshal(result)
 	case *InterfaceNoFragmentsQueryRandomItemWithTypeNameTopic:
 		typename = "Topic"
 
 		result := struct {
 			TypeName string `json:"__typename"`
 			*InterfaceNoFragmentsQueryRandomItemWithTypeNameTopic
+		}{typename, v}
+		return json.Marshal(result)
+	case *InterfaceNoFragmentsQueryRandomItemWithTypeNameVideo:
+		typename = "Video"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*InterfaceNoFragmentsQueryRandomItemWithTypeNameVideo
 		}{typename, v}
 		return json.Marshal(result)
 	case nil:
@@ -499,8 +499,8 @@ func (v *InterfaceNoFragmentsQueryWithPointerArticle) GetName() *string { return
 //
 // InterfaceNoFragmentsQueryWithPointerContent is implemented by the following types:
 // InterfaceNoFragmentsQueryWithPointerArticle
-// InterfaceNoFragmentsQueryWithPointerVideo
 // InterfaceNoFragmentsQueryWithPointerTopic
+// InterfaceNoFragmentsQueryWithPointerVideo
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
@@ -519,9 +519,9 @@ type InterfaceNoFragmentsQueryWithPointerContent interface {
 
 func (v *InterfaceNoFragmentsQueryWithPointerArticle) implementsGraphQLInterfaceInterfaceNoFragmentsQueryWithPointerContent() {
 }
-func (v *InterfaceNoFragmentsQueryWithPointerVideo) implementsGraphQLInterfaceInterfaceNoFragmentsQueryWithPointerContent() {
-}
 func (v *InterfaceNoFragmentsQueryWithPointerTopic) implementsGraphQLInterfaceInterfaceNoFragmentsQueryWithPointerContent() {
+}
+func (v *InterfaceNoFragmentsQueryWithPointerVideo) implementsGraphQLInterfaceInterfaceNoFragmentsQueryWithPointerContent() {
 }
 
 func __unmarshalInterfaceNoFragmentsQueryWithPointerContent(b []byte, v *InterfaceNoFragmentsQueryWithPointerContent) error {
@@ -541,11 +541,11 @@ func __unmarshalInterfaceNoFragmentsQueryWithPointerContent(b []byte, v *Interfa
 	case "Article":
 		*v = new(InterfaceNoFragmentsQueryWithPointerArticle)
 		return json.Unmarshal(b, *v)
-	case "Video":
-		*v = new(InterfaceNoFragmentsQueryWithPointerVideo)
-		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(InterfaceNoFragmentsQueryWithPointerTopic)
+		return json.Unmarshal(b, *v)
+	case "Video":
+		*v = new(InterfaceNoFragmentsQueryWithPointerVideo)
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
@@ -568,20 +568,20 @@ func __marshalInterfaceNoFragmentsQueryWithPointerContent(v *InterfaceNoFragment
 			*InterfaceNoFragmentsQueryWithPointerArticle
 		}{typename, v}
 		return json.Marshal(result)
-	case *InterfaceNoFragmentsQueryWithPointerVideo:
-		typename = "Video"
-
-		result := struct {
-			TypeName string `json:"__typename"`
-			*InterfaceNoFragmentsQueryWithPointerVideo
-		}{typename, v}
-		return json.Marshal(result)
 	case *InterfaceNoFragmentsQueryWithPointerTopic:
 		typename = "Topic"
 
 		result := struct {
 			TypeName string `json:"__typename"`
 			*InterfaceNoFragmentsQueryWithPointerTopic
+		}{typename, v}
+		return json.Marshal(result)
+	case *InterfaceNoFragmentsQueryWithPointerVideo:
+		typename = "Video"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*InterfaceNoFragmentsQueryWithPointerVideo
 		}{typename, v}
 		return json.Marshal(result)
 	case nil:

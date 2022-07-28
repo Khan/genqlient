@@ -17,8 +17,8 @@ import (
 //
 // ContentFields is implemented by the following types:
 // ContentFieldsArticle
-// ContentFieldsVideo
 // ContentFieldsTopic
+// ContentFieldsVideo
 type ContentFields interface {
 	implementsGraphQLInterfaceContentFields()
 	// GetNext returns the interface-field "next" from its implementation.
@@ -28,8 +28,8 @@ type ContentFields interface {
 }
 
 func (v *ContentFieldsArticle) implementsGraphQLInterfaceContentFields() {}
-func (v *ContentFieldsVideo) implementsGraphQLInterfaceContentFields()   {}
 func (v *ContentFieldsTopic) implementsGraphQLInterfaceContentFields()   {}
+func (v *ContentFieldsVideo) implementsGraphQLInterfaceContentFields()   {}
 
 func __unmarshalContentFields(b []byte, v *ContentFields) error {
 	if string(b) == "null" {
@@ -48,11 +48,11 @@ func __unmarshalContentFields(b []byte, v *ContentFields) error {
 	case "Article":
 		*v = new(ContentFieldsArticle)
 		return json.Unmarshal(b, *v)
-	case "Video":
-		*v = new(ContentFieldsVideo)
-		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(ContentFieldsTopic)
+		return json.Unmarshal(b, *v)
+	case "Video":
+		*v = new(ContentFieldsVideo)
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
@@ -79,18 +79,6 @@ func __marshalContentFields(v *ContentFields) ([]byte, error) {
 			*__premarshalContentFieldsArticle
 		}{typename, premarshaled}
 		return json.Marshal(result)
-	case *ContentFieldsVideo:
-		typename = "Video"
-
-		premarshaled, err := v.__premarshalJSON()
-		if err != nil {
-			return nil, err
-		}
-		result := struct {
-			TypeName string `json:"__typename"`
-			*__premarshalContentFieldsVideo
-		}{typename, premarshaled}
-		return json.Marshal(result)
 	case *ContentFieldsTopic:
 		typename = "Topic"
 
@@ -101,6 +89,18 @@ func __marshalContentFields(v *ContentFields) ([]byte, error) {
 		result := struct {
 			TypeName string `json:"__typename"`
 			*__premarshalContentFieldsTopic
+		}{typename, premarshaled}
+		return json.Marshal(result)
+	case *ContentFieldsVideo:
+		typename = "Video"
+
+		premarshaled, err := v.__premarshalJSON()
+		if err != nil {
+			return nil, err
+		}
+		result := struct {
+			TypeName string `json:"__typename"`
+			*__premarshalContentFieldsVideo
 		}{typename, premarshaled}
 		return json.Marshal(result)
 	case nil:
@@ -246,8 +246,8 @@ func (v *ContentFieldsNextArticle) GetId() testutil.ID { return v.Id }
 //
 // ContentFieldsNextContent is implemented by the following types:
 // ContentFieldsNextArticle
-// ContentFieldsNextVideo
 // ContentFieldsNextTopic
+// ContentFieldsNextVideo
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
@@ -263,8 +263,8 @@ type ContentFieldsNextContent interface {
 }
 
 func (v *ContentFieldsNextArticle) implementsGraphQLInterfaceContentFieldsNextContent() {}
-func (v *ContentFieldsNextVideo) implementsGraphQLInterfaceContentFieldsNextContent()   {}
 func (v *ContentFieldsNextTopic) implementsGraphQLInterfaceContentFieldsNextContent()   {}
+func (v *ContentFieldsNextVideo) implementsGraphQLInterfaceContentFieldsNextContent()   {}
 
 func __unmarshalContentFieldsNextContent(b []byte, v *ContentFieldsNextContent) error {
 	if string(b) == "null" {
@@ -283,11 +283,11 @@ func __unmarshalContentFieldsNextContent(b []byte, v *ContentFieldsNextContent) 
 	case "Article":
 		*v = new(ContentFieldsNextArticle)
 		return json.Unmarshal(b, *v)
-	case "Video":
-		*v = new(ContentFieldsNextVideo)
-		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(ContentFieldsNextTopic)
+		return json.Unmarshal(b, *v)
+	case "Video":
+		*v = new(ContentFieldsNextVideo)
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
@@ -310,20 +310,20 @@ func __marshalContentFieldsNextContent(v *ContentFieldsNextContent) ([]byte, err
 			*ContentFieldsNextArticle
 		}{typename, v}
 		return json.Marshal(result)
-	case *ContentFieldsNextVideo:
-		typename = "Video"
-
-		result := struct {
-			TypeName string `json:"__typename"`
-			*ContentFieldsNextVideo
-		}{typename, v}
-		return json.Marshal(result)
 	case *ContentFieldsNextTopic:
 		typename = "Topic"
 
 		result := struct {
 			TypeName string `json:"__typename"`
 			*ContentFieldsNextTopic
+		}{typename, v}
+		return json.Marshal(result)
+	case *ContentFieldsNextVideo:
+		typename = "Video"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*ContentFieldsNextVideo
 		}{typename, v}
 		return json.Marshal(result)
 	case nil:
@@ -377,8 +377,8 @@ func (v *ContentFieldsRelatedArticle) GetId() testutil.ID { return v.Id }
 //
 // ContentFieldsRelatedContent is implemented by the following types:
 // ContentFieldsRelatedArticle
-// ContentFieldsRelatedVideo
 // ContentFieldsRelatedTopic
+// ContentFieldsRelatedVideo
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
@@ -394,8 +394,8 @@ type ContentFieldsRelatedContent interface {
 }
 
 func (v *ContentFieldsRelatedArticle) implementsGraphQLInterfaceContentFieldsRelatedContent() {}
-func (v *ContentFieldsRelatedVideo) implementsGraphQLInterfaceContentFieldsRelatedContent()   {}
 func (v *ContentFieldsRelatedTopic) implementsGraphQLInterfaceContentFieldsRelatedContent()   {}
+func (v *ContentFieldsRelatedVideo) implementsGraphQLInterfaceContentFieldsRelatedContent()   {}
 
 func __unmarshalContentFieldsRelatedContent(b []byte, v *ContentFieldsRelatedContent) error {
 	if string(b) == "null" {
@@ -414,11 +414,11 @@ func __unmarshalContentFieldsRelatedContent(b []byte, v *ContentFieldsRelatedCon
 	case "Article":
 		*v = new(ContentFieldsRelatedArticle)
 		return json.Unmarshal(b, *v)
-	case "Video":
-		*v = new(ContentFieldsRelatedVideo)
-		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(ContentFieldsRelatedTopic)
+		return json.Unmarshal(b, *v)
+	case "Video":
+		*v = new(ContentFieldsRelatedVideo)
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
@@ -441,20 +441,20 @@ func __marshalContentFieldsRelatedContent(v *ContentFieldsRelatedContent) ([]byt
 			*ContentFieldsRelatedArticle
 		}{typename, v}
 		return json.Marshal(result)
-	case *ContentFieldsRelatedVideo:
-		typename = "Video"
-
-		result := struct {
-			TypeName string `json:"__typename"`
-			*ContentFieldsRelatedVideo
-		}{typename, v}
-		return json.Marshal(result)
 	case *ContentFieldsRelatedTopic:
 		typename = "Topic"
 
 		result := struct {
 			TypeName string `json:"__typename"`
 			*ContentFieldsRelatedTopic
+		}{typename, v}
+		return json.Marshal(result)
+	case *ContentFieldsRelatedVideo:
+		typename = "Video"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*ContentFieldsRelatedVideo
 		}{typename, v}
 		return json.Marshal(result)
 	case nil:
@@ -865,8 +865,8 @@ func (v *CovariantInterfaceImplementationRandomItemArticle) __premarshalJSON() (
 //
 // CovariantInterfaceImplementationRandomItemContent is implemented by the following types:
 // CovariantInterfaceImplementationRandomItemArticle
-// CovariantInterfaceImplementationRandomItemVideo
 // CovariantInterfaceImplementationRandomItemTopic
+// CovariantInterfaceImplementationRandomItemVideo
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
@@ -887,9 +887,9 @@ type CovariantInterfaceImplementationRandomItemContent interface {
 
 func (v *CovariantInterfaceImplementationRandomItemArticle) implementsGraphQLInterfaceCovariantInterfaceImplementationRandomItemContent() {
 }
-func (v *CovariantInterfaceImplementationRandomItemVideo) implementsGraphQLInterfaceCovariantInterfaceImplementationRandomItemContent() {
-}
 func (v *CovariantInterfaceImplementationRandomItemTopic) implementsGraphQLInterfaceCovariantInterfaceImplementationRandomItemContent() {
+}
+func (v *CovariantInterfaceImplementationRandomItemVideo) implementsGraphQLInterfaceCovariantInterfaceImplementationRandomItemContent() {
 }
 
 func __unmarshalCovariantInterfaceImplementationRandomItemContent(b []byte, v *CovariantInterfaceImplementationRandomItemContent) error {
@@ -909,11 +909,11 @@ func __unmarshalCovariantInterfaceImplementationRandomItemContent(b []byte, v *C
 	case "Article":
 		*v = new(CovariantInterfaceImplementationRandomItemArticle)
 		return json.Unmarshal(b, *v)
-	case "Video":
-		*v = new(CovariantInterfaceImplementationRandomItemVideo)
-		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(CovariantInterfaceImplementationRandomItemTopic)
+		return json.Unmarshal(b, *v)
+	case "Video":
+		*v = new(CovariantInterfaceImplementationRandomItemVideo)
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
@@ -940,18 +940,6 @@ func __marshalCovariantInterfaceImplementationRandomItemContent(v *CovariantInte
 			*__premarshalCovariantInterfaceImplementationRandomItemArticle
 		}{typename, premarshaled}
 		return json.Marshal(result)
-	case *CovariantInterfaceImplementationRandomItemVideo:
-		typename = "Video"
-
-		premarshaled, err := v.__premarshalJSON()
-		if err != nil {
-			return nil, err
-		}
-		result := struct {
-			TypeName string `json:"__typename"`
-			*__premarshalCovariantInterfaceImplementationRandomItemVideo
-		}{typename, premarshaled}
-		return json.Marshal(result)
 	case *CovariantInterfaceImplementationRandomItemTopic:
 		typename = "Topic"
 
@@ -962,6 +950,18 @@ func __marshalCovariantInterfaceImplementationRandomItemContent(v *CovariantInte
 		result := struct {
 			TypeName string `json:"__typename"`
 			*__premarshalCovariantInterfaceImplementationRandomItemTopic
+		}{typename, premarshaled}
+		return json.Marshal(result)
+	case *CovariantInterfaceImplementationRandomItemVideo:
+		typename = "Video"
+
+		premarshaled, err := v.__premarshalJSON()
+		if err != nil {
+			return nil, err
+		}
+		result := struct {
+			TypeName string `json:"__typename"`
+			*__premarshalCovariantInterfaceImplementationRandomItemVideo
 		}{typename, premarshaled}
 		return json.Marshal(result)
 	case nil:
@@ -1075,8 +1075,8 @@ func (v *CovariantInterfaceImplementationRandomItemContentNextArticle) __premars
 //
 // CovariantInterfaceImplementationRandomItemContentNextContent is implemented by the following types:
 // CovariantInterfaceImplementationRandomItemContentNextArticle
-// CovariantInterfaceImplementationRandomItemContentNextVideo
 // CovariantInterfaceImplementationRandomItemContentNextTopic
+// CovariantInterfaceImplementationRandomItemContentNextVideo
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
@@ -1089,9 +1089,9 @@ type CovariantInterfaceImplementationRandomItemContentNextContent interface {
 
 func (v *CovariantInterfaceImplementationRandomItemContentNextArticle) implementsGraphQLInterfaceCovariantInterfaceImplementationRandomItemContentNextContent() {
 }
-func (v *CovariantInterfaceImplementationRandomItemContentNextVideo) implementsGraphQLInterfaceCovariantInterfaceImplementationRandomItemContentNextContent() {
-}
 func (v *CovariantInterfaceImplementationRandomItemContentNextTopic) implementsGraphQLInterfaceCovariantInterfaceImplementationRandomItemContentNextContent() {
+}
+func (v *CovariantInterfaceImplementationRandomItemContentNextVideo) implementsGraphQLInterfaceCovariantInterfaceImplementationRandomItemContentNextContent() {
 }
 
 func __unmarshalCovariantInterfaceImplementationRandomItemContentNextContent(b []byte, v *CovariantInterfaceImplementationRandomItemContentNextContent) error {
@@ -1111,11 +1111,11 @@ func __unmarshalCovariantInterfaceImplementationRandomItemContentNextContent(b [
 	case "Article":
 		*v = new(CovariantInterfaceImplementationRandomItemContentNextArticle)
 		return json.Unmarshal(b, *v)
-	case "Video":
-		*v = new(CovariantInterfaceImplementationRandomItemContentNextVideo)
-		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(CovariantInterfaceImplementationRandomItemContentNextTopic)
+		return json.Unmarshal(b, *v)
+	case "Video":
+		*v = new(CovariantInterfaceImplementationRandomItemContentNextVideo)
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
@@ -1142,18 +1142,6 @@ func __marshalCovariantInterfaceImplementationRandomItemContentNextContent(v *Co
 			*__premarshalCovariantInterfaceImplementationRandomItemContentNextArticle
 		}{typename, premarshaled}
 		return json.Marshal(result)
-	case *CovariantInterfaceImplementationRandomItemContentNextVideo:
-		typename = "Video"
-
-		premarshaled, err := v.__premarshalJSON()
-		if err != nil {
-			return nil, err
-		}
-		result := struct {
-			TypeName string `json:"__typename"`
-			*__premarshalCovariantInterfaceImplementationRandomItemContentNextVideo
-		}{typename, premarshaled}
-		return json.Marshal(result)
 	case *CovariantInterfaceImplementationRandomItemContentNextTopic:
 		typename = "Topic"
 
@@ -1164,6 +1152,18 @@ func __marshalCovariantInterfaceImplementationRandomItemContentNextContent(v *Co
 		result := struct {
 			TypeName string `json:"__typename"`
 			*__premarshalCovariantInterfaceImplementationRandomItemContentNextTopic
+		}{typename, premarshaled}
+		return json.Marshal(result)
+	case *CovariantInterfaceImplementationRandomItemContentNextVideo:
+		typename = "Video"
+
+		premarshaled, err := v.__premarshalJSON()
+		if err != nil {
+			return nil, err
+		}
+		result := struct {
+			TypeName string `json:"__typename"`
+			*__premarshalCovariantInterfaceImplementationRandomItemContentNextVideo
 		}{typename, premarshaled}
 		return json.Marshal(result)
 	case nil:
@@ -1475,8 +1475,8 @@ func (v *CovariantInterfaceImplementationRandomItemContentRelatedArticle) __prem
 //
 // CovariantInterfaceImplementationRandomItemContentRelatedContent is implemented by the following types:
 // CovariantInterfaceImplementationRandomItemContentRelatedArticle
-// CovariantInterfaceImplementationRandomItemContentRelatedVideo
 // CovariantInterfaceImplementationRandomItemContentRelatedTopic
+// CovariantInterfaceImplementationRandomItemContentRelatedVideo
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
@@ -1489,9 +1489,9 @@ type CovariantInterfaceImplementationRandomItemContentRelatedContent interface {
 
 func (v *CovariantInterfaceImplementationRandomItemContentRelatedArticle) implementsGraphQLInterfaceCovariantInterfaceImplementationRandomItemContentRelatedContent() {
 }
-func (v *CovariantInterfaceImplementationRandomItemContentRelatedVideo) implementsGraphQLInterfaceCovariantInterfaceImplementationRandomItemContentRelatedContent() {
-}
 func (v *CovariantInterfaceImplementationRandomItemContentRelatedTopic) implementsGraphQLInterfaceCovariantInterfaceImplementationRandomItemContentRelatedContent() {
+}
+func (v *CovariantInterfaceImplementationRandomItemContentRelatedVideo) implementsGraphQLInterfaceCovariantInterfaceImplementationRandomItemContentRelatedContent() {
 }
 
 func __unmarshalCovariantInterfaceImplementationRandomItemContentRelatedContent(b []byte, v *CovariantInterfaceImplementationRandomItemContentRelatedContent) error {
@@ -1511,11 +1511,11 @@ func __unmarshalCovariantInterfaceImplementationRandomItemContentRelatedContent(
 	case "Article":
 		*v = new(CovariantInterfaceImplementationRandomItemContentRelatedArticle)
 		return json.Unmarshal(b, *v)
-	case "Video":
-		*v = new(CovariantInterfaceImplementationRandomItemContentRelatedVideo)
-		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(CovariantInterfaceImplementationRandomItemContentRelatedTopic)
+		return json.Unmarshal(b, *v)
+	case "Video":
+		*v = new(CovariantInterfaceImplementationRandomItemContentRelatedVideo)
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
@@ -1542,18 +1542,6 @@ func __marshalCovariantInterfaceImplementationRandomItemContentRelatedContent(v 
 			*__premarshalCovariantInterfaceImplementationRandomItemContentRelatedArticle
 		}{typename, premarshaled}
 		return json.Marshal(result)
-	case *CovariantInterfaceImplementationRandomItemContentRelatedVideo:
-		typename = "Video"
-
-		premarshaled, err := v.__premarshalJSON()
-		if err != nil {
-			return nil, err
-		}
-		result := struct {
-			TypeName string `json:"__typename"`
-			*__premarshalCovariantInterfaceImplementationRandomItemContentRelatedVideo
-		}{typename, premarshaled}
-		return json.Marshal(result)
 	case *CovariantInterfaceImplementationRandomItemContentRelatedTopic:
 		typename = "Topic"
 
@@ -1564,6 +1552,18 @@ func __marshalCovariantInterfaceImplementationRandomItemContentRelatedContent(v 
 		result := struct {
 			TypeName string `json:"__typename"`
 			*__premarshalCovariantInterfaceImplementationRandomItemContentRelatedTopic
+		}{typename, premarshaled}
+		return json.Marshal(result)
+	case *CovariantInterfaceImplementationRandomItemContentRelatedVideo:
+		typename = "Video"
+
+		premarshaled, err := v.__premarshalJSON()
+		if err != nil {
+			return nil, err
+		}
+		result := struct {
+			TypeName string `json:"__typename"`
+			*__premarshalCovariantInterfaceImplementationRandomItemContentRelatedVideo
 		}{typename, premarshaled}
 		return json.Marshal(result)
 	case nil:
