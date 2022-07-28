@@ -35,7 +35,7 @@ Go style should generally follow the conventions of [Effective Go](https://golan
 To run tests and lint, `make check`.  (GitHub Actions also runs them.)
 
 Notes for contributors:
-- Most of the tests are snapshot-based; see `generate/generate_test.go`.  All new code-generation logic should be snapshot-tested.  Some code additionally has standalone unit tests, when convenient.
+- Most of the tests are snapshot-based; see `generate/generate_test.go`.  All new code-generation logic should be snapshot-tested.  Some code additionally has standalone unit tests, when convenient.  The snapshot tests use [cupaloy](https://github.com/bradleyjkemp/cupaloy); to update the snapshots run e.g. `UPDATE_SNAPSHOTS=1 go test ./...`.
 - Integration tests run against a gqlgen server in `internal/integration/integration_test.go`, and should cover everything that snapshot tests can't, including the GraphQL client code and JSON marshaling.
 - If `GITHUB_TOKEN` is available in the environment, it also checks that the example returns the expected output when run against the real API.  This is configured automatically in GitHub Actions, but you can also use a [personal access token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) with no scopes.  There's no need for this to cover anything in particular; it's just to make sure the example in fact works.
 - Tests should use `testify/assert` and `testify/require` where convenient (when making many simple assertions).
