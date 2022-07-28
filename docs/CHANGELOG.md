@@ -26,6 +26,8 @@ When releasing a new version:
 
 ### Bug fixes:
 
+- Fixed non-deterministic generated code when querying graphql interfaces
+
 ## v0.5.0
 
 Version 0.5.0 adds several new configuration options and convenience features. Note that genqlient now requires Go 1.16 or higher, and is tested through Go 1.18.

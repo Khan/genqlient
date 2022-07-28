@@ -31,8 +31,8 @@ func (v *SimpleNamedFragmentRandomItemArticle) GetName() string { return v.Name 
 //
 // SimpleNamedFragmentRandomItemContent is implemented by the following types:
 // SimpleNamedFragmentRandomItemArticle
-// SimpleNamedFragmentRandomItemVideo
 // SimpleNamedFragmentRandomItemTopic
+// SimpleNamedFragmentRandomItemVideo
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
@@ -51,9 +51,9 @@ type SimpleNamedFragmentRandomItemContent interface {
 
 func (v *SimpleNamedFragmentRandomItemArticle) implementsGraphQLInterfaceSimpleNamedFragmentRandomItemContent() {
 }
-func (v *SimpleNamedFragmentRandomItemVideo) implementsGraphQLInterfaceSimpleNamedFragmentRandomItemContent() {
-}
 func (v *SimpleNamedFragmentRandomItemTopic) implementsGraphQLInterfaceSimpleNamedFragmentRandomItemContent() {
+}
+func (v *SimpleNamedFragmentRandomItemVideo) implementsGraphQLInterfaceSimpleNamedFragmentRandomItemContent() {
 }
 
 func __unmarshalSimpleNamedFragmentRandomItemContent(b []byte, v *SimpleNamedFragmentRandomItemContent) error {
@@ -73,11 +73,11 @@ func __unmarshalSimpleNamedFragmentRandomItemContent(b []byte, v *SimpleNamedFra
 	case "Article":
 		*v = new(SimpleNamedFragmentRandomItemArticle)
 		return json.Unmarshal(b, *v)
-	case "Video":
-		*v = new(SimpleNamedFragmentRandomItemVideo)
-		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(SimpleNamedFragmentRandomItemTopic)
+		return json.Unmarshal(b, *v)
+	case "Video":
+		*v = new(SimpleNamedFragmentRandomItemVideo)
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
@@ -100,6 +100,14 @@ func __marshalSimpleNamedFragmentRandomItemContent(v *SimpleNamedFragmentRandomI
 			*SimpleNamedFragmentRandomItemArticle
 		}{typename, v}
 		return json.Marshal(result)
+	case *SimpleNamedFragmentRandomItemTopic:
+		typename = "Topic"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*SimpleNamedFragmentRandomItemTopic
+		}{typename, v}
+		return json.Marshal(result)
 	case *SimpleNamedFragmentRandomItemVideo:
 		typename = "Video"
 
@@ -111,14 +119,6 @@ func __marshalSimpleNamedFragmentRandomItemContent(v *SimpleNamedFragmentRandomI
 			TypeName string `json:"__typename"`
 			*__premarshalSimpleNamedFragmentRandomItemVideo
 		}{typename, premarshaled}
-		return json.Marshal(result)
-	case *SimpleNamedFragmentRandomItemTopic:
-		typename = "Topic"
-
-		result := struct {
-			TypeName string `json:"__typename"`
-			*SimpleNamedFragmentRandomItemTopic
-		}{typename, v}
 		return json.Marshal(result)
 	case nil:
 		return []byte("null"), nil

@@ -120,8 +120,8 @@ func (v *AnimalFieldsOwnerAnimal) GetId() string { return v.Id }
 // AnimalFieldsOwnerBeing includes the requested fields of the GraphQL interface Being.
 //
 // AnimalFieldsOwnerBeing is implemented by the following types:
-// AnimalFieldsOwnerUser
 // AnimalFieldsOwnerAnimal
+// AnimalFieldsOwnerUser
 type AnimalFieldsOwnerBeing interface {
 	implementsGraphQLInterfaceAnimalFieldsOwnerBeing()
 	// GetTypename returns the receiver's concrete GraphQL type-name (see interface doc for possible values).
@@ -130,8 +130,8 @@ type AnimalFieldsOwnerBeing interface {
 	GetId() string
 }
 
-func (v *AnimalFieldsOwnerUser) implementsGraphQLInterfaceAnimalFieldsOwnerBeing()   {}
 func (v *AnimalFieldsOwnerAnimal) implementsGraphQLInterfaceAnimalFieldsOwnerBeing() {}
+func (v *AnimalFieldsOwnerUser) implementsGraphQLInterfaceAnimalFieldsOwnerBeing()   {}
 
 func __unmarshalAnimalFieldsOwnerBeing(b []byte, v *AnimalFieldsOwnerBeing) error {
 	if string(b) == "null" {
@@ -147,11 +147,11 @@ func __unmarshalAnimalFieldsOwnerBeing(b []byte, v *AnimalFieldsOwnerBeing) erro
 	}
 
 	switch tn.TypeName {
-	case "User":
-		*v = new(AnimalFieldsOwnerUser)
-		return json.Unmarshal(b, *v)
 	case "Animal":
 		*v = new(AnimalFieldsOwnerAnimal)
+		return json.Unmarshal(b, *v)
+	case "User":
+		*v = new(AnimalFieldsOwnerUser)
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
@@ -166,6 +166,14 @@ func __marshalAnimalFieldsOwnerBeing(v *AnimalFieldsOwnerBeing) ([]byte, error) 
 
 	var typename string
 	switch v := (*v).(type) {
+	case *AnimalFieldsOwnerAnimal:
+		typename = "Animal"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*AnimalFieldsOwnerAnimal
+		}{typename, v}
+		return json.Marshal(result)
 	case *AnimalFieldsOwnerUser:
 		typename = "User"
 
@@ -177,14 +185,6 @@ func __marshalAnimalFieldsOwnerBeing(v *AnimalFieldsOwnerBeing) ([]byte, error) 
 			TypeName string `json:"__typename"`
 			*__premarshalAnimalFieldsOwnerUser
 		}{typename, premarshaled}
-		return json.Marshal(result)
-	case *AnimalFieldsOwnerAnimal:
-		typename = "Animal"
-
-		result := struct {
-			TypeName string `json:"__typename"`
-			*AnimalFieldsOwnerAnimal
-		}{typename, v}
 		return json.Marshal(result)
 	case nil:
 		return []byte("null"), nil
@@ -287,8 +287,8 @@ func (v *FriendsFields) GetName() string { return v.Name }
 // InnerBeingFields includes the GraphQL fields of Being requested by the fragment InnerBeingFields.
 //
 // InnerBeingFields is implemented by the following types:
-// InnerBeingFieldsUser
 // InnerBeingFieldsAnimal
+// InnerBeingFieldsUser
 type InnerBeingFields interface {
 	implementsGraphQLInterfaceInnerBeingFields()
 	// GetId returns the interface-field "id" from its implementation.
@@ -297,8 +297,8 @@ type InnerBeingFields interface {
 	GetName() string
 }
 
-func (v *InnerBeingFieldsUser) implementsGraphQLInterfaceInnerBeingFields()   {}
 func (v *InnerBeingFieldsAnimal) implementsGraphQLInterfaceInnerBeingFields() {}
+func (v *InnerBeingFieldsUser) implementsGraphQLInterfaceInnerBeingFields()   {}
 
 func __unmarshalInnerBeingFields(b []byte, v *InnerBeingFields) error {
 	if string(b) == "null" {
@@ -314,11 +314,11 @@ func __unmarshalInnerBeingFields(b []byte, v *InnerBeingFields) error {
 	}
 
 	switch tn.TypeName {
-	case "User":
-		*v = new(InnerBeingFieldsUser)
-		return json.Unmarshal(b, *v)
 	case "Animal":
 		*v = new(InnerBeingFieldsAnimal)
+		return json.Unmarshal(b, *v)
+	case "User":
+		*v = new(InnerBeingFieldsUser)
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
@@ -333,20 +333,20 @@ func __marshalInnerBeingFields(v *InnerBeingFields) ([]byte, error) {
 
 	var typename string
 	switch v := (*v).(type) {
-	case *InnerBeingFieldsUser:
-		typename = "User"
-
-		result := struct {
-			TypeName string `json:"__typename"`
-			*InnerBeingFieldsUser
-		}{typename, v}
-		return json.Marshal(result)
 	case *InnerBeingFieldsAnimal:
 		typename = "Animal"
 
 		result := struct {
 			TypeName string `json:"__typename"`
 			*InnerBeingFieldsAnimal
+		}{typename, v}
+		return json.Marshal(result)
+	case *InnerBeingFieldsUser:
+		typename = "User"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*InnerBeingFieldsUser
 		}{typename, v}
 		return json.Marshal(result)
 	case nil:
@@ -776,8 +776,8 @@ func (v *QueryFragmentBeingsAnimal) __premarshalJSON() (*__premarshalQueryFragme
 // QueryFragmentBeingsBeing includes the requested fields of the GraphQL interface Being.
 //
 // QueryFragmentBeingsBeing is implemented by the following types:
-// QueryFragmentBeingsUser
 // QueryFragmentBeingsAnimal
+// QueryFragmentBeingsUser
 type QueryFragmentBeingsBeing interface {
 	implementsGraphQLInterfaceQueryFragmentBeingsBeing()
 	// GetTypename returns the receiver's concrete GraphQL type-name (see interface doc for possible values).
@@ -786,8 +786,8 @@ type QueryFragmentBeingsBeing interface {
 	GetId() string
 }
 
-func (v *QueryFragmentBeingsUser) implementsGraphQLInterfaceQueryFragmentBeingsBeing()   {}
 func (v *QueryFragmentBeingsAnimal) implementsGraphQLInterfaceQueryFragmentBeingsBeing() {}
+func (v *QueryFragmentBeingsUser) implementsGraphQLInterfaceQueryFragmentBeingsBeing()   {}
 
 func __unmarshalQueryFragmentBeingsBeing(b []byte, v *QueryFragmentBeingsBeing) error {
 	if string(b) == "null" {
@@ -803,11 +803,11 @@ func __unmarshalQueryFragmentBeingsBeing(b []byte, v *QueryFragmentBeingsBeing) 
 	}
 
 	switch tn.TypeName {
-	case "User":
-		*v = new(QueryFragmentBeingsUser)
-		return json.Unmarshal(b, *v)
 	case "Animal":
 		*v = new(QueryFragmentBeingsAnimal)
+		return json.Unmarshal(b, *v)
+	case "User":
+		*v = new(QueryFragmentBeingsUser)
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
@@ -822,18 +822,6 @@ func __marshalQueryFragmentBeingsBeing(v *QueryFragmentBeingsBeing) ([]byte, err
 
 	var typename string
 	switch v := (*v).(type) {
-	case *QueryFragmentBeingsUser:
-		typename = "User"
-
-		premarshaled, err := v.__premarshalJSON()
-		if err != nil {
-			return nil, err
-		}
-		result := struct {
-			TypeName string `json:"__typename"`
-			*__premarshalQueryFragmentBeingsUser
-		}{typename, premarshaled}
-		return json.Marshal(result)
 	case *QueryFragmentBeingsAnimal:
 		typename = "Animal"
 
@@ -844,6 +832,18 @@ func __marshalQueryFragmentBeingsBeing(v *QueryFragmentBeingsBeing) ([]byte, err
 		result := struct {
 			TypeName string `json:"__typename"`
 			*__premarshalQueryFragmentBeingsAnimal
+		}{typename, premarshaled}
+		return json.Marshal(result)
+	case *QueryFragmentBeingsUser:
+		typename = "User"
+
+		premarshaled, err := v.__premarshalJSON()
+		if err != nil {
+			return nil, err
+		}
+		result := struct {
+			TypeName string `json:"__typename"`
+			*__premarshalQueryFragmentBeingsUser
 		}{typename, premarshaled}
 		return json.Marshal(result)
 	case nil:
@@ -1769,8 +1769,8 @@ func (v *queryWithFragmentsBeingsAnimalOwnerAnimal) GetName() string { return v.
 // queryWithFragmentsBeingsAnimalOwnerBeing includes the requested fields of the GraphQL interface Being.
 //
 // queryWithFragmentsBeingsAnimalOwnerBeing is implemented by the following types:
-// queryWithFragmentsBeingsAnimalOwnerUser
 // queryWithFragmentsBeingsAnimalOwnerAnimal
+// queryWithFragmentsBeingsAnimalOwnerUser
 type queryWithFragmentsBeingsAnimalOwnerBeing interface {
 	implementsGraphQLInterfacequeryWithFragmentsBeingsAnimalOwnerBeing()
 	// GetTypename returns the receiver's concrete GraphQL type-name (see interface doc for possible values).
@@ -1781,9 +1781,9 @@ type queryWithFragmentsBeingsAnimalOwnerBeing interface {
 	GetName() string
 }
 
-func (v *queryWithFragmentsBeingsAnimalOwnerUser) implementsGraphQLInterfacequeryWithFragmentsBeingsAnimalOwnerBeing() {
-}
 func (v *queryWithFragmentsBeingsAnimalOwnerAnimal) implementsGraphQLInterfacequeryWithFragmentsBeingsAnimalOwnerBeing() {
+}
+func (v *queryWithFragmentsBeingsAnimalOwnerUser) implementsGraphQLInterfacequeryWithFragmentsBeingsAnimalOwnerBeing() {
 }
 
 func __unmarshalqueryWithFragmentsBeingsAnimalOwnerBeing(b []byte, v *queryWithFragmentsBeingsAnimalOwnerBeing) error {
@@ -1800,11 +1800,11 @@ func __unmarshalqueryWithFragmentsBeingsAnimalOwnerBeing(b []byte, v *queryWithF
 	}
 
 	switch tn.TypeName {
-	case "User":
-		*v = new(queryWithFragmentsBeingsAnimalOwnerUser)
-		return json.Unmarshal(b, *v)
 	case "Animal":
 		*v = new(queryWithFragmentsBeingsAnimalOwnerAnimal)
+		return json.Unmarshal(b, *v)
+	case "User":
+		*v = new(queryWithFragmentsBeingsAnimalOwnerUser)
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
@@ -1819,20 +1819,20 @@ func __marshalqueryWithFragmentsBeingsAnimalOwnerBeing(v *queryWithFragmentsBein
 
 	var typename string
 	switch v := (*v).(type) {
-	case *queryWithFragmentsBeingsAnimalOwnerUser:
-		typename = "User"
-
-		result := struct {
-			TypeName string `json:"__typename"`
-			*queryWithFragmentsBeingsAnimalOwnerUser
-		}{typename, v}
-		return json.Marshal(result)
 	case *queryWithFragmentsBeingsAnimalOwnerAnimal:
 		typename = "Animal"
 
 		result := struct {
 			TypeName string `json:"__typename"`
 			*queryWithFragmentsBeingsAnimalOwnerAnimal
+		}{typename, v}
+		return json.Marshal(result)
+	case *queryWithFragmentsBeingsAnimalOwnerUser:
+		typename = "User"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*queryWithFragmentsBeingsAnimalOwnerUser
 		}{typename, v}
 		return json.Marshal(result)
 	case nil:
@@ -1866,8 +1866,8 @@ func (v *queryWithFragmentsBeingsAnimalOwnerUser) GetLuckyNumber() int { return 
 // queryWithFragmentsBeingsBeing includes the requested fields of the GraphQL interface Being.
 //
 // queryWithFragmentsBeingsBeing is implemented by the following types:
-// queryWithFragmentsBeingsUser
 // queryWithFragmentsBeingsAnimal
+// queryWithFragmentsBeingsUser
 type queryWithFragmentsBeingsBeing interface {
 	implementsGraphQLInterfacequeryWithFragmentsBeingsBeing()
 	// GetTypename returns the receiver's concrete GraphQL type-name (see interface doc for possible values).
@@ -1878,8 +1878,8 @@ type queryWithFragmentsBeingsBeing interface {
 	GetName() string
 }
 
-func (v *queryWithFragmentsBeingsUser) implementsGraphQLInterfacequeryWithFragmentsBeingsBeing()   {}
 func (v *queryWithFragmentsBeingsAnimal) implementsGraphQLInterfacequeryWithFragmentsBeingsBeing() {}
+func (v *queryWithFragmentsBeingsUser) implementsGraphQLInterfacequeryWithFragmentsBeingsBeing()   {}
 
 func __unmarshalqueryWithFragmentsBeingsBeing(b []byte, v *queryWithFragmentsBeingsBeing) error {
 	if string(b) == "null" {
@@ -1895,11 +1895,11 @@ func __unmarshalqueryWithFragmentsBeingsBeing(b []byte, v *queryWithFragmentsBei
 	}
 
 	switch tn.TypeName {
-	case "User":
-		*v = new(queryWithFragmentsBeingsUser)
-		return json.Unmarshal(b, *v)
 	case "Animal":
 		*v = new(queryWithFragmentsBeingsAnimal)
+		return json.Unmarshal(b, *v)
+	case "User":
+		*v = new(queryWithFragmentsBeingsUser)
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
@@ -1914,14 +1914,6 @@ func __marshalqueryWithFragmentsBeingsBeing(v *queryWithFragmentsBeingsBeing) ([
 
 	var typename string
 	switch v := (*v).(type) {
-	case *queryWithFragmentsBeingsUser:
-		typename = "User"
-
-		result := struct {
-			TypeName string `json:"__typename"`
-			*queryWithFragmentsBeingsUser
-		}{typename, v}
-		return json.Marshal(result)
 	case *queryWithFragmentsBeingsAnimal:
 		typename = "Animal"
 
@@ -1933,6 +1925,14 @@ func __marshalqueryWithFragmentsBeingsBeing(v *queryWithFragmentsBeingsBeing) ([
 			TypeName string `json:"__typename"`
 			*__premarshalqueryWithFragmentsBeingsAnimal
 		}{typename, premarshaled}
+		return json.Marshal(result)
+	case *queryWithFragmentsBeingsUser:
+		typename = "User"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*queryWithFragmentsBeingsUser
+		}{typename, v}
 		return json.Marshal(result)
 	case nil:
 		return []byte("null"), nil
@@ -2076,8 +2076,8 @@ func (v *queryWithInterfaceListFieldBeingsAnimal) GetName() string { return v.Na
 // queryWithInterfaceListFieldBeingsBeing includes the requested fields of the GraphQL interface Being.
 //
 // queryWithInterfaceListFieldBeingsBeing is implemented by the following types:
-// queryWithInterfaceListFieldBeingsUser
 // queryWithInterfaceListFieldBeingsAnimal
+// queryWithInterfaceListFieldBeingsUser
 type queryWithInterfaceListFieldBeingsBeing interface {
 	implementsGraphQLInterfacequeryWithInterfaceListFieldBeingsBeing()
 	// GetTypename returns the receiver's concrete GraphQL type-name (see interface doc for possible values).
@@ -2088,9 +2088,9 @@ type queryWithInterfaceListFieldBeingsBeing interface {
 	GetName() string
 }
 
-func (v *queryWithInterfaceListFieldBeingsUser) implementsGraphQLInterfacequeryWithInterfaceListFieldBeingsBeing() {
-}
 func (v *queryWithInterfaceListFieldBeingsAnimal) implementsGraphQLInterfacequeryWithInterfaceListFieldBeingsBeing() {
+}
+func (v *queryWithInterfaceListFieldBeingsUser) implementsGraphQLInterfacequeryWithInterfaceListFieldBeingsBeing() {
 }
 
 func __unmarshalqueryWithInterfaceListFieldBeingsBeing(b []byte, v *queryWithInterfaceListFieldBeingsBeing) error {
@@ -2107,11 +2107,11 @@ func __unmarshalqueryWithInterfaceListFieldBeingsBeing(b []byte, v *queryWithInt
 	}
 
 	switch tn.TypeName {
-	case "User":
-		*v = new(queryWithInterfaceListFieldBeingsUser)
-		return json.Unmarshal(b, *v)
 	case "Animal":
 		*v = new(queryWithInterfaceListFieldBeingsAnimal)
+		return json.Unmarshal(b, *v)
+	case "User":
+		*v = new(queryWithInterfaceListFieldBeingsUser)
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
@@ -2126,20 +2126,20 @@ func __marshalqueryWithInterfaceListFieldBeingsBeing(v *queryWithInterfaceListFi
 
 	var typename string
 	switch v := (*v).(type) {
-	case *queryWithInterfaceListFieldBeingsUser:
-		typename = "User"
-
-		result := struct {
-			TypeName string `json:"__typename"`
-			*queryWithInterfaceListFieldBeingsUser
-		}{typename, v}
-		return json.Marshal(result)
 	case *queryWithInterfaceListFieldBeingsAnimal:
 		typename = "Animal"
 
 		result := struct {
 			TypeName string `json:"__typename"`
 			*queryWithInterfaceListFieldBeingsAnimal
+		}{typename, v}
+		return json.Marshal(result)
+	case *queryWithInterfaceListFieldBeingsUser:
+		typename = "User"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*queryWithInterfaceListFieldBeingsUser
 		}{typename, v}
 		return json.Marshal(result)
 	case nil:
@@ -2270,8 +2270,8 @@ func (v *queryWithInterfaceListPointerFieldBeingsAnimal) GetName() string { retu
 // queryWithInterfaceListPointerFieldBeingsBeing includes the requested fields of the GraphQL interface Being.
 //
 // queryWithInterfaceListPointerFieldBeingsBeing is implemented by the following types:
-// queryWithInterfaceListPointerFieldBeingsUser
 // queryWithInterfaceListPointerFieldBeingsAnimal
+// queryWithInterfaceListPointerFieldBeingsUser
 type queryWithInterfaceListPointerFieldBeingsBeing interface {
 	implementsGraphQLInterfacequeryWithInterfaceListPointerFieldBeingsBeing()
 	// GetTypename returns the receiver's concrete GraphQL type-name (see interface doc for possible values).
@@ -2282,9 +2282,9 @@ type queryWithInterfaceListPointerFieldBeingsBeing interface {
 	GetName() string
 }
 
-func (v *queryWithInterfaceListPointerFieldBeingsUser) implementsGraphQLInterfacequeryWithInterfaceListPointerFieldBeingsBeing() {
-}
 func (v *queryWithInterfaceListPointerFieldBeingsAnimal) implementsGraphQLInterfacequeryWithInterfaceListPointerFieldBeingsBeing() {
+}
+func (v *queryWithInterfaceListPointerFieldBeingsUser) implementsGraphQLInterfacequeryWithInterfaceListPointerFieldBeingsBeing() {
 }
 
 func __unmarshalqueryWithInterfaceListPointerFieldBeingsBeing(b []byte, v *queryWithInterfaceListPointerFieldBeingsBeing) error {
@@ -2301,11 +2301,11 @@ func __unmarshalqueryWithInterfaceListPointerFieldBeingsBeing(b []byte, v *query
 	}
 
 	switch tn.TypeName {
-	case "User":
-		*v = new(queryWithInterfaceListPointerFieldBeingsUser)
-		return json.Unmarshal(b, *v)
 	case "Animal":
 		*v = new(queryWithInterfaceListPointerFieldBeingsAnimal)
+		return json.Unmarshal(b, *v)
+	case "User":
+		*v = new(queryWithInterfaceListPointerFieldBeingsUser)
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
@@ -2320,20 +2320,20 @@ func __marshalqueryWithInterfaceListPointerFieldBeingsBeing(v *queryWithInterfac
 
 	var typename string
 	switch v := (*v).(type) {
-	case *queryWithInterfaceListPointerFieldBeingsUser:
-		typename = "User"
-
-		result := struct {
-			TypeName string `json:"__typename"`
-			*queryWithInterfaceListPointerFieldBeingsUser
-		}{typename, v}
-		return json.Marshal(result)
 	case *queryWithInterfaceListPointerFieldBeingsAnimal:
 		typename = "Animal"
 
 		result := struct {
 			TypeName string `json:"__typename"`
 			*queryWithInterfaceListPointerFieldBeingsAnimal
+		}{typename, v}
+		return json.Marshal(result)
+	case *queryWithInterfaceListPointerFieldBeingsUser:
+		typename = "User"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*queryWithInterfaceListPointerFieldBeingsUser
 		}{typename, v}
 		return json.Marshal(result)
 	case nil:
@@ -2451,8 +2451,8 @@ func (v *queryWithInterfaceListPointerFieldResponse) __premarshalJSON() (*__prem
 // queryWithInterfaceNoFragmentsBeing includes the requested fields of the GraphQL interface Being.
 //
 // queryWithInterfaceNoFragmentsBeing is implemented by the following types:
-// queryWithInterfaceNoFragmentsBeingUser
 // queryWithInterfaceNoFragmentsBeingAnimal
+// queryWithInterfaceNoFragmentsBeingUser
 type queryWithInterfaceNoFragmentsBeing interface {
 	implementsGraphQLInterfacequeryWithInterfaceNoFragmentsBeing()
 	// GetTypename returns the receiver's concrete GraphQL type-name (see interface doc for possible values).
@@ -2463,9 +2463,9 @@ type queryWithInterfaceNoFragmentsBeing interface {
 	GetName() string
 }
 
-func (v *queryWithInterfaceNoFragmentsBeingUser) implementsGraphQLInterfacequeryWithInterfaceNoFragmentsBeing() {
-}
 func (v *queryWithInterfaceNoFragmentsBeingAnimal) implementsGraphQLInterfacequeryWithInterfaceNoFragmentsBeing() {
+}
+func (v *queryWithInterfaceNoFragmentsBeingUser) implementsGraphQLInterfacequeryWithInterfaceNoFragmentsBeing() {
 }
 
 func __unmarshalqueryWithInterfaceNoFragmentsBeing(b []byte, v *queryWithInterfaceNoFragmentsBeing) error {
@@ -2482,11 +2482,11 @@ func __unmarshalqueryWithInterfaceNoFragmentsBeing(b []byte, v *queryWithInterfa
 	}
 
 	switch tn.TypeName {
-	case "User":
-		*v = new(queryWithInterfaceNoFragmentsBeingUser)
-		return json.Unmarshal(b, *v)
 	case "Animal":
 		*v = new(queryWithInterfaceNoFragmentsBeingAnimal)
+		return json.Unmarshal(b, *v)
+	case "User":
+		*v = new(queryWithInterfaceNoFragmentsBeingUser)
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
@@ -2501,20 +2501,20 @@ func __marshalqueryWithInterfaceNoFragmentsBeing(v *queryWithInterfaceNoFragment
 
 	var typename string
 	switch v := (*v).(type) {
-	case *queryWithInterfaceNoFragmentsBeingUser:
-		typename = "User"
-
-		result := struct {
-			TypeName string `json:"__typename"`
-			*queryWithInterfaceNoFragmentsBeingUser
-		}{typename, v}
-		return json.Marshal(result)
 	case *queryWithInterfaceNoFragmentsBeingAnimal:
 		typename = "Animal"
 
 		result := struct {
 			TypeName string `json:"__typename"`
 			*queryWithInterfaceNoFragmentsBeingAnimal
+		}{typename, v}
+		return json.Marshal(result)
+	case *queryWithInterfaceNoFragmentsBeingUser:
+		typename = "User"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*queryWithInterfaceNoFragmentsBeingUser
 		}{typename, v}
 		return json.Marshal(result)
 	case nil:
@@ -2741,8 +2741,8 @@ func (v *queryWithNamedFragmentsBeingsAnimal) __premarshalJSON() (*__premarshalq
 // queryWithNamedFragmentsBeingsBeing includes the requested fields of the GraphQL interface Being.
 //
 // queryWithNamedFragmentsBeingsBeing is implemented by the following types:
-// queryWithNamedFragmentsBeingsUser
 // queryWithNamedFragmentsBeingsAnimal
+// queryWithNamedFragmentsBeingsUser
 type queryWithNamedFragmentsBeingsBeing interface {
 	implementsGraphQLInterfacequeryWithNamedFragmentsBeingsBeing()
 	// GetTypename returns the receiver's concrete GraphQL type-name (see interface doc for possible values).
@@ -2751,9 +2751,9 @@ type queryWithNamedFragmentsBeingsBeing interface {
 	GetId() string
 }
 
-func (v *queryWithNamedFragmentsBeingsUser) implementsGraphQLInterfacequeryWithNamedFragmentsBeingsBeing() {
-}
 func (v *queryWithNamedFragmentsBeingsAnimal) implementsGraphQLInterfacequeryWithNamedFragmentsBeingsBeing() {
+}
+func (v *queryWithNamedFragmentsBeingsUser) implementsGraphQLInterfacequeryWithNamedFragmentsBeingsBeing() {
 }
 
 func __unmarshalqueryWithNamedFragmentsBeingsBeing(b []byte, v *queryWithNamedFragmentsBeingsBeing) error {
@@ -2770,11 +2770,11 @@ func __unmarshalqueryWithNamedFragmentsBeingsBeing(b []byte, v *queryWithNamedFr
 	}
 
 	switch tn.TypeName {
-	case "User":
-		*v = new(queryWithNamedFragmentsBeingsUser)
-		return json.Unmarshal(b, *v)
 	case "Animal":
 		*v = new(queryWithNamedFragmentsBeingsAnimal)
+		return json.Unmarshal(b, *v)
+	case "User":
+		*v = new(queryWithNamedFragmentsBeingsUser)
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
@@ -2789,18 +2789,6 @@ func __marshalqueryWithNamedFragmentsBeingsBeing(v *queryWithNamedFragmentsBeing
 
 	var typename string
 	switch v := (*v).(type) {
-	case *queryWithNamedFragmentsBeingsUser:
-		typename = "User"
-
-		premarshaled, err := v.__premarshalJSON()
-		if err != nil {
-			return nil, err
-		}
-		result := struct {
-			TypeName string `json:"__typename"`
-			*__premarshalqueryWithNamedFragmentsBeingsUser
-		}{typename, premarshaled}
-		return json.Marshal(result)
 	case *queryWithNamedFragmentsBeingsAnimal:
 		typename = "Animal"
 
@@ -2811,6 +2799,18 @@ func __marshalqueryWithNamedFragmentsBeingsBeing(v *queryWithNamedFragmentsBeing
 		result := struct {
 			TypeName string `json:"__typename"`
 			*__premarshalqueryWithNamedFragmentsBeingsAnimal
+		}{typename, premarshaled}
+		return json.Marshal(result)
+	case *queryWithNamedFragmentsBeingsUser:
+		typename = "User"
+
+		premarshaled, err := v.__premarshalJSON()
+		if err != nil {
+			return nil, err
+		}
+		result := struct {
+			TypeName string `json:"__typename"`
+			*__premarshalqueryWithNamedFragmentsBeingsUser
 		}{typename, premarshaled}
 		return json.Marshal(result)
 	case nil:

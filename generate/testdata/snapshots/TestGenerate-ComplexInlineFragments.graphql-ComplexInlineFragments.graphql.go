@@ -44,8 +44,8 @@ func (v *ComplexInlineFragmentsConflictingStuffArticleThumbnailStuffThumbnail) G
 //
 // ComplexInlineFragmentsConflictingStuffContent is implemented by the following types:
 // ComplexInlineFragmentsConflictingStuffArticle
-// ComplexInlineFragmentsConflictingStuffVideo
 // ComplexInlineFragmentsConflictingStuffTopic
+// ComplexInlineFragmentsConflictingStuffVideo
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
@@ -57,9 +57,9 @@ type ComplexInlineFragmentsConflictingStuffContent interface {
 
 func (v *ComplexInlineFragmentsConflictingStuffArticle) implementsGraphQLInterfaceComplexInlineFragmentsConflictingStuffContent() {
 }
-func (v *ComplexInlineFragmentsConflictingStuffVideo) implementsGraphQLInterfaceComplexInlineFragmentsConflictingStuffContent() {
-}
 func (v *ComplexInlineFragmentsConflictingStuffTopic) implementsGraphQLInterfaceComplexInlineFragmentsConflictingStuffContent() {
+}
+func (v *ComplexInlineFragmentsConflictingStuffVideo) implementsGraphQLInterfaceComplexInlineFragmentsConflictingStuffContent() {
 }
 
 func __unmarshalComplexInlineFragmentsConflictingStuffContent(b []byte, v *ComplexInlineFragmentsConflictingStuffContent) error {
@@ -79,11 +79,11 @@ func __unmarshalComplexInlineFragmentsConflictingStuffContent(b []byte, v *Compl
 	case "Article":
 		*v = new(ComplexInlineFragmentsConflictingStuffArticle)
 		return json.Unmarshal(b, *v)
-	case "Video":
-		*v = new(ComplexInlineFragmentsConflictingStuffVideo)
-		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(ComplexInlineFragmentsConflictingStuffTopic)
+		return json.Unmarshal(b, *v)
+	case "Video":
+		*v = new(ComplexInlineFragmentsConflictingStuffVideo)
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
@@ -106,20 +106,20 @@ func __marshalComplexInlineFragmentsConflictingStuffContent(v *ComplexInlineFrag
 			*ComplexInlineFragmentsConflictingStuffArticle
 		}{typename, v}
 		return json.Marshal(result)
-	case *ComplexInlineFragmentsConflictingStuffVideo:
-		typename = "Video"
-
-		result := struct {
-			TypeName string `json:"__typename"`
-			*ComplexInlineFragmentsConflictingStuffVideo
-		}{typename, v}
-		return json.Marshal(result)
 	case *ComplexInlineFragmentsConflictingStuffTopic:
 		typename = "Topic"
 
 		result := struct {
 			TypeName string `json:"__typename"`
 			*ComplexInlineFragmentsConflictingStuffTopic
+		}{typename, v}
+		return json.Marshal(result)
+	case *ComplexInlineFragmentsConflictingStuffVideo:
+		typename = "Video"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*ComplexInlineFragmentsConflictingStuffVideo
 		}{typename, v}
 		return json.Marshal(result)
 	case nil:
@@ -178,8 +178,8 @@ func (v *ComplexInlineFragmentsNestedStuffArticle) GetTypename() string { return
 //
 // ComplexInlineFragmentsNestedStuffContent is implemented by the following types:
 // ComplexInlineFragmentsNestedStuffArticle
-// ComplexInlineFragmentsNestedStuffVideo
 // ComplexInlineFragmentsNestedStuffTopic
+// ComplexInlineFragmentsNestedStuffVideo
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
@@ -191,9 +191,9 @@ type ComplexInlineFragmentsNestedStuffContent interface {
 
 func (v *ComplexInlineFragmentsNestedStuffArticle) implementsGraphQLInterfaceComplexInlineFragmentsNestedStuffContent() {
 }
-func (v *ComplexInlineFragmentsNestedStuffVideo) implementsGraphQLInterfaceComplexInlineFragmentsNestedStuffContent() {
-}
 func (v *ComplexInlineFragmentsNestedStuffTopic) implementsGraphQLInterfaceComplexInlineFragmentsNestedStuffContent() {
+}
+func (v *ComplexInlineFragmentsNestedStuffVideo) implementsGraphQLInterfaceComplexInlineFragmentsNestedStuffContent() {
 }
 
 func __unmarshalComplexInlineFragmentsNestedStuffContent(b []byte, v *ComplexInlineFragmentsNestedStuffContent) error {
@@ -213,11 +213,11 @@ func __unmarshalComplexInlineFragmentsNestedStuffContent(b []byte, v *ComplexInl
 	case "Article":
 		*v = new(ComplexInlineFragmentsNestedStuffArticle)
 		return json.Unmarshal(b, *v)
-	case "Video":
-		*v = new(ComplexInlineFragmentsNestedStuffVideo)
-		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(ComplexInlineFragmentsNestedStuffTopic)
+		return json.Unmarshal(b, *v)
+	case "Video":
+		*v = new(ComplexInlineFragmentsNestedStuffVideo)
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
@@ -240,14 +240,6 @@ func __marshalComplexInlineFragmentsNestedStuffContent(v *ComplexInlineFragments
 			*ComplexInlineFragmentsNestedStuffArticle
 		}{typename, v}
 		return json.Marshal(result)
-	case *ComplexInlineFragmentsNestedStuffVideo:
-		typename = "Video"
-
-		result := struct {
-			TypeName string `json:"__typename"`
-			*ComplexInlineFragmentsNestedStuffVideo
-		}{typename, v}
-		return json.Marshal(result)
 	case *ComplexInlineFragmentsNestedStuffTopic:
 		typename = "Topic"
 
@@ -259,6 +251,14 @@ func __marshalComplexInlineFragmentsNestedStuffContent(v *ComplexInlineFragments
 			TypeName string `json:"__typename"`
 			*__premarshalComplexInlineFragmentsNestedStuffTopic
 		}{typename, premarshaled}
+		return json.Marshal(result)
+	case *ComplexInlineFragmentsNestedStuffVideo:
+		typename = "Video"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*ComplexInlineFragmentsNestedStuffVideo
+		}{typename, v}
 		return json.Marshal(result)
 	case nil:
 		return []byte("null"), nil
@@ -497,8 +497,8 @@ func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParen
 //
 // ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent is implemented by the following types:
 // ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenArticle
-// ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenVideo
 // ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenTopic
+// ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenVideo
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
@@ -517,9 +517,9 @@ type ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTop
 
 func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenArticle) implementsGraphQLInterfaceComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent() {
 }
-func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenVideo) implementsGraphQLInterfaceComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent() {
-}
 func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenTopic) implementsGraphQLInterfaceComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent() {
+}
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenVideo) implementsGraphQLInterfaceComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent() {
 }
 
 func __unmarshalComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent(b []byte, v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent) error {
@@ -539,11 +539,11 @@ func __unmarshalComplexInlineFragmentsNestedStuffTopicChildrenArticleParentConte
 	case "Article":
 		*v = new(ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenArticle)
 		return json.Unmarshal(b, *v)
-	case "Video":
-		*v = new(ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenVideo)
-		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenTopic)
+		return json.Unmarshal(b, *v)
+	case "Video":
+		*v = new(ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenVideo)
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
@@ -566,20 +566,20 @@ func __marshalComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContent
 			*ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenArticle
 		}{typename, v}
 		return json.Marshal(result)
-	case *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenVideo:
-		typename = "Video"
-
-		result := struct {
-			TypeName string `json:"__typename"`
-			*ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenVideo
-		}{typename, v}
-		return json.Marshal(result)
 	case *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenTopic:
 		typename = "Topic"
 
 		result := struct {
 			TypeName string `json:"__typename"`
 			*ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenTopic
+		}{typename, v}
+		return json.Marshal(result)
+	case *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenVideo:
+		typename = "Video"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenVideo
 		}{typename, v}
 		return json.Marshal(result)
 	case nil:
@@ -656,8 +656,8 @@ func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentTopic) GetPa
 //
 // ComplexInlineFragmentsNestedStuffTopicChildrenContent is implemented by the following types:
 // ComplexInlineFragmentsNestedStuffTopicChildrenArticle
-// ComplexInlineFragmentsNestedStuffTopicChildrenVideo
 // ComplexInlineFragmentsNestedStuffTopicChildrenTopic
+// ComplexInlineFragmentsNestedStuffTopicChildrenVideo
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
@@ -674,9 +674,9 @@ type ComplexInlineFragmentsNestedStuffTopicChildrenContent interface {
 
 func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticle) implementsGraphQLInterfaceComplexInlineFragmentsNestedStuffTopicChildrenContent() {
 }
-func (v *ComplexInlineFragmentsNestedStuffTopicChildrenVideo) implementsGraphQLInterfaceComplexInlineFragmentsNestedStuffTopicChildrenContent() {
-}
 func (v *ComplexInlineFragmentsNestedStuffTopicChildrenTopic) implementsGraphQLInterfaceComplexInlineFragmentsNestedStuffTopicChildrenContent() {
+}
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenVideo) implementsGraphQLInterfaceComplexInlineFragmentsNestedStuffTopicChildrenContent() {
 }
 
 func __unmarshalComplexInlineFragmentsNestedStuffTopicChildrenContent(b []byte, v *ComplexInlineFragmentsNestedStuffTopicChildrenContent) error {
@@ -696,11 +696,11 @@ func __unmarshalComplexInlineFragmentsNestedStuffTopicChildrenContent(b []byte, 
 	case "Article":
 		*v = new(ComplexInlineFragmentsNestedStuffTopicChildrenArticle)
 		return json.Unmarshal(b, *v)
-	case "Video":
-		*v = new(ComplexInlineFragmentsNestedStuffTopicChildrenVideo)
-		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(ComplexInlineFragmentsNestedStuffTopicChildrenTopic)
+		return json.Unmarshal(b, *v)
+	case "Video":
+		*v = new(ComplexInlineFragmentsNestedStuffTopicChildrenVideo)
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
@@ -723,20 +723,20 @@ func __marshalComplexInlineFragmentsNestedStuffTopicChildrenContent(v *ComplexIn
 			*ComplexInlineFragmentsNestedStuffTopicChildrenArticle
 		}{typename, v}
 		return json.Marshal(result)
-	case *ComplexInlineFragmentsNestedStuffTopicChildrenVideo:
-		typename = "Video"
-
-		result := struct {
-			TypeName string `json:"__typename"`
-			*ComplexInlineFragmentsNestedStuffTopicChildrenVideo
-		}{typename, v}
-		return json.Marshal(result)
 	case *ComplexInlineFragmentsNestedStuffTopicChildrenTopic:
 		typename = "Topic"
 
 		result := struct {
 			TypeName string `json:"__typename"`
 			*ComplexInlineFragmentsNestedStuffTopicChildrenTopic
+		}{typename, v}
+		return json.Marshal(result)
+	case *ComplexInlineFragmentsNestedStuffTopicChildrenVideo:
+		typename = "Video"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*ComplexInlineFragmentsNestedStuffTopicChildrenVideo
 		}{typename, v}
 		return json.Marshal(result)
 	case nil:
@@ -806,8 +806,8 @@ func (v *ComplexInlineFragmentsRandomItemArticle) GetName() string { return v.Na
 //
 // ComplexInlineFragmentsRandomItemContent is implemented by the following types:
 // ComplexInlineFragmentsRandomItemArticle
-// ComplexInlineFragmentsRandomItemVideo
 // ComplexInlineFragmentsRandomItemTopic
+// ComplexInlineFragmentsRandomItemVideo
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
@@ -826,9 +826,9 @@ type ComplexInlineFragmentsRandomItemContent interface {
 
 func (v *ComplexInlineFragmentsRandomItemArticle) implementsGraphQLInterfaceComplexInlineFragmentsRandomItemContent() {
 }
-func (v *ComplexInlineFragmentsRandomItemVideo) implementsGraphQLInterfaceComplexInlineFragmentsRandomItemContent() {
-}
 func (v *ComplexInlineFragmentsRandomItemTopic) implementsGraphQLInterfaceComplexInlineFragmentsRandomItemContent() {
+}
+func (v *ComplexInlineFragmentsRandomItemVideo) implementsGraphQLInterfaceComplexInlineFragmentsRandomItemContent() {
 }
 
 func __unmarshalComplexInlineFragmentsRandomItemContent(b []byte, v *ComplexInlineFragmentsRandomItemContent) error {
@@ -848,11 +848,11 @@ func __unmarshalComplexInlineFragmentsRandomItemContent(b []byte, v *ComplexInli
 	case "Article":
 		*v = new(ComplexInlineFragmentsRandomItemArticle)
 		return json.Unmarshal(b, *v)
-	case "Video":
-		*v = new(ComplexInlineFragmentsRandomItemVideo)
-		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(ComplexInlineFragmentsRandomItemTopic)
+		return json.Unmarshal(b, *v)
+	case "Video":
+		*v = new(ComplexInlineFragmentsRandomItemVideo)
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
@@ -875,20 +875,20 @@ func __marshalComplexInlineFragmentsRandomItemContent(v *ComplexInlineFragmentsR
 			*ComplexInlineFragmentsRandomItemArticle
 		}{typename, v}
 		return json.Marshal(result)
-	case *ComplexInlineFragmentsRandomItemVideo:
-		typename = "Video"
-
-		result := struct {
-			TypeName string `json:"__typename"`
-			*ComplexInlineFragmentsRandomItemVideo
-		}{typename, v}
-		return json.Marshal(result)
 	case *ComplexInlineFragmentsRandomItemTopic:
 		typename = "Topic"
 
 		result := struct {
 			TypeName string `json:"__typename"`
 			*ComplexInlineFragmentsRandomItemTopic
+		}{typename, v}
+		return json.Marshal(result)
+	case *ComplexInlineFragmentsRandomItemVideo:
+		typename = "Video"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*ComplexInlineFragmentsRandomItemVideo
 		}{typename, v}
 		return json.Marshal(result)
 	case nil:
@@ -975,8 +975,8 @@ func (v *ComplexInlineFragmentsRepeatedStuffArticle) GetOtherName() string { ret
 //
 // ComplexInlineFragmentsRepeatedStuffContent is implemented by the following types:
 // ComplexInlineFragmentsRepeatedStuffArticle
-// ComplexInlineFragmentsRepeatedStuffVideo
 // ComplexInlineFragmentsRepeatedStuffTopic
+// ComplexInlineFragmentsRepeatedStuffVideo
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
@@ -1004,9 +1004,9 @@ type ComplexInlineFragmentsRepeatedStuffContent interface {
 
 func (v *ComplexInlineFragmentsRepeatedStuffArticle) implementsGraphQLInterfaceComplexInlineFragmentsRepeatedStuffContent() {
 }
-func (v *ComplexInlineFragmentsRepeatedStuffVideo) implementsGraphQLInterfaceComplexInlineFragmentsRepeatedStuffContent() {
-}
 func (v *ComplexInlineFragmentsRepeatedStuffTopic) implementsGraphQLInterfaceComplexInlineFragmentsRepeatedStuffContent() {
+}
+func (v *ComplexInlineFragmentsRepeatedStuffVideo) implementsGraphQLInterfaceComplexInlineFragmentsRepeatedStuffContent() {
 }
 
 func __unmarshalComplexInlineFragmentsRepeatedStuffContent(b []byte, v *ComplexInlineFragmentsRepeatedStuffContent) error {
@@ -1026,11 +1026,11 @@ func __unmarshalComplexInlineFragmentsRepeatedStuffContent(b []byte, v *ComplexI
 	case "Article":
 		*v = new(ComplexInlineFragmentsRepeatedStuffArticle)
 		return json.Unmarshal(b, *v)
-	case "Video":
-		*v = new(ComplexInlineFragmentsRepeatedStuffVideo)
-		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(ComplexInlineFragmentsRepeatedStuffTopic)
+		return json.Unmarshal(b, *v)
+	case "Video":
+		*v = new(ComplexInlineFragmentsRepeatedStuffVideo)
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
@@ -1053,20 +1053,20 @@ func __marshalComplexInlineFragmentsRepeatedStuffContent(v *ComplexInlineFragmen
 			*ComplexInlineFragmentsRepeatedStuffArticle
 		}{typename, v}
 		return json.Marshal(result)
-	case *ComplexInlineFragmentsRepeatedStuffVideo:
-		typename = "Video"
-
-		result := struct {
-			TypeName string `json:"__typename"`
-			*ComplexInlineFragmentsRepeatedStuffVideo
-		}{typename, v}
-		return json.Marshal(result)
 	case *ComplexInlineFragmentsRepeatedStuffTopic:
 		typename = "Topic"
 
 		result := struct {
 			TypeName string `json:"__typename"`
 			*ComplexInlineFragmentsRepeatedStuffTopic
+		}{typename, v}
+		return json.Marshal(result)
+	case *ComplexInlineFragmentsRepeatedStuffVideo:
+		typename = "Video"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*ComplexInlineFragmentsRepeatedStuffVideo
 		}{typename, v}
 		return json.Marshal(result)
 	case nil:

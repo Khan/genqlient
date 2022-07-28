@@ -11,6 +11,7 @@ package generate
 
 import (
 	"fmt"
+	"sort"
 
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -465,6 +466,8 @@ func (g *generator) convertDefinition(
 		}
 
 		implementationTypes := g.schema.GetPossibleTypes(def)
+		// Make sure we generate stable output by sorting the types by name when we get them
+		sort.Slice(implementationTypes, func(i, j int) bool { return implementationTypes[i].Name < implementationTypes[j].Name })
 		goType := &goInterfaceType{
 			GoName:          name,
 			SharedFields:    sharedFields,

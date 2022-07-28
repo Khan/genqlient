@@ -35,8 +35,8 @@ func (v *SimpleInlineFragmentRandomItemArticle) GetText() string { return v.Text
 //
 // SimpleInlineFragmentRandomItemContent is implemented by the following types:
 // SimpleInlineFragmentRandomItemArticle
-// SimpleInlineFragmentRandomItemVideo
 // SimpleInlineFragmentRandomItemTopic
+// SimpleInlineFragmentRandomItemVideo
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
@@ -55,9 +55,9 @@ type SimpleInlineFragmentRandomItemContent interface {
 
 func (v *SimpleInlineFragmentRandomItemArticle) implementsGraphQLInterfaceSimpleInlineFragmentRandomItemContent() {
 }
-func (v *SimpleInlineFragmentRandomItemVideo) implementsGraphQLInterfaceSimpleInlineFragmentRandomItemContent() {
-}
 func (v *SimpleInlineFragmentRandomItemTopic) implementsGraphQLInterfaceSimpleInlineFragmentRandomItemContent() {
+}
+func (v *SimpleInlineFragmentRandomItemVideo) implementsGraphQLInterfaceSimpleInlineFragmentRandomItemContent() {
 }
 
 func __unmarshalSimpleInlineFragmentRandomItemContent(b []byte, v *SimpleInlineFragmentRandomItemContent) error {
@@ -77,11 +77,11 @@ func __unmarshalSimpleInlineFragmentRandomItemContent(b []byte, v *SimpleInlineF
 	case "Article":
 		*v = new(SimpleInlineFragmentRandomItemArticle)
 		return json.Unmarshal(b, *v)
-	case "Video":
-		*v = new(SimpleInlineFragmentRandomItemVideo)
-		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(SimpleInlineFragmentRandomItemTopic)
+		return json.Unmarshal(b, *v)
+	case "Video":
+		*v = new(SimpleInlineFragmentRandomItemVideo)
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
@@ -104,20 +104,20 @@ func __marshalSimpleInlineFragmentRandomItemContent(v *SimpleInlineFragmentRando
 			*SimpleInlineFragmentRandomItemArticle
 		}{typename, v}
 		return json.Marshal(result)
-	case *SimpleInlineFragmentRandomItemVideo:
-		typename = "Video"
-
-		result := struct {
-			TypeName string `json:"__typename"`
-			*SimpleInlineFragmentRandomItemVideo
-		}{typename, v}
-		return json.Marshal(result)
 	case *SimpleInlineFragmentRandomItemTopic:
 		typename = "Topic"
 
 		result := struct {
 			TypeName string `json:"__typename"`
 			*SimpleInlineFragmentRandomItemTopic
+		}{typename, v}
+		return json.Marshal(result)
+	case *SimpleInlineFragmentRandomItemVideo:
+		typename = "Video"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*SimpleInlineFragmentRandomItemVideo
 		}{typename, v}
 		return json.Marshal(result)
 	case nil:
