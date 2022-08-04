@@ -234,7 +234,7 @@ func (v *InterfaceListOfListOfListsFieldResponse) UnmarshalJSON(b []byte) error 
 							src, dst)
 						if err != nil {
 							return fmt.Errorf(
-								"Unable to unmarshal InterfaceListOfListOfListsFieldResponse.ListOfListsOfListsOfContent: %w", err)
+								"unable to unmarshal InterfaceListOfListOfListsFieldResponse.ListOfListsOfListsOfContent: %w", err)
 						}
 					}
 				}
@@ -266,7 +266,7 @@ func (v *InterfaceListOfListOfListsFieldResponse) UnmarshalJSON(b []byte) error 
 							src, *dst)
 						if err != nil {
 							return fmt.Errorf(
-								"Unable to unmarshal InterfaceListOfListOfListsFieldResponse.WithPointer: %w", err)
+								"unable to unmarshal InterfaceListOfListOfListsFieldResponse.WithPointer: %w", err)
 						}
 					}
 				}
@@ -317,7 +317,7 @@ func (v *InterfaceListOfListOfListsFieldResponse) __premarshalJSON() (*__premars
 						&src)
 					if err != nil {
 						return nil, fmt.Errorf(
-							"Unable to marshal InterfaceListOfListOfListsFieldResponse.ListOfListsOfListsOfContent: %w", err)
+							"unable to marshal InterfaceListOfListOfListsFieldResponse.ListOfListsOfListsOfContent: %w", err)
 					}
 				}
 			}
@@ -348,7 +348,7 @@ func (v *InterfaceListOfListOfListsFieldResponse) __premarshalJSON() (*__premars
 							src)
 						if err != nil {
 							return nil, fmt.Errorf(
-								"Unable to marshal InterfaceListOfListOfListsFieldResponse.WithPointer: %w", err)
+								"unable to marshal InterfaceListOfListOfListsFieldResponse.WithPointer: %w", err)
 						}
 					}
 				}

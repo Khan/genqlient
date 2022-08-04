@@ -202,7 +202,7 @@ func (v *SimpleInlineFragmentResponse) UnmarshalJSON(b []byte) error {
 				src, dst)
 			if err != nil {
 				return fmt.Errorf(
-					"Unable to unmarshal SimpleInlineFragmentResponse.RandomItem: %w", err)
+					"unable to unmarshal SimpleInlineFragmentResponse.RandomItem: %w", err)
 			}
 		}
 	}
@@ -233,7 +233,7 @@ func (v *SimpleInlineFragmentResponse) __premarshalJSON() (*__premarshalSimpleIn
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal SimpleInlineFragmentResponse.RandomItem: %w", err)
+				"unable to marshal SimpleInlineFragmentResponse.RandomItem: %w", err)
 		}
 	}
 	return &retval, nil

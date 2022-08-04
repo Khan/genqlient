@@ -313,7 +313,7 @@ func (v *ComplexInlineFragmentsNestedStuffTopic) UnmarshalJSON(b []byte) error {
 					src, dst)
 				if err != nil {
 					return fmt.Errorf(
-						"Unable to unmarshal ComplexInlineFragmentsNestedStuffTopic.Children: %w", err)
+						"unable to unmarshal ComplexInlineFragmentsNestedStuffTopic.Children: %w", err)
 				}
 			}
 		}
@@ -353,7 +353,7 @@ func (v *ComplexInlineFragmentsNestedStuffTopic) __premarshalJSON() (*__premarsh
 				&src)
 			if err != nil {
 				return nil, fmt.Errorf(
-					"Unable to marshal ComplexInlineFragmentsNestedStuffTopic.Children: %w", err)
+					"unable to marshal ComplexInlineFragmentsNestedStuffTopic.Children: %w", err)
 			}
 		}
 	}
@@ -426,7 +426,7 @@ func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParen
 					src, dst)
 				if err != nil {
 					return fmt.Errorf(
-						"Unable to unmarshal ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopic.Children: %w", err)
+						"unable to unmarshal ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopic.Children: %w", err)
 				}
 			}
 		}
@@ -463,7 +463,7 @@ func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParen
 				&src)
 			if err != nil {
 				return nil, fmt.Errorf(
-					"Unable to marshal ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopic.Children: %w", err)
+					"unable to marshal ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopic.Children: %w", err)
 			}
 		}
 	}
@@ -1202,7 +1202,7 @@ func (v *ComplexInlineFragmentsResponse) UnmarshalJSON(b []byte) error {
 				src, dst)
 			if err != nil {
 				return fmt.Errorf(
-					"Unable to unmarshal ComplexInlineFragmentsResponse.RandomItem: %w", err)
+					"unable to unmarshal ComplexInlineFragmentsResponse.RandomItem: %w", err)
 			}
 		}
 	}
@@ -1215,7 +1215,7 @@ func (v *ComplexInlineFragmentsResponse) UnmarshalJSON(b []byte) error {
 				src, dst)
 			if err != nil {
 				return fmt.Errorf(
-					"Unable to unmarshal ComplexInlineFragmentsResponse.RepeatedStuff: %w", err)
+					"unable to unmarshal ComplexInlineFragmentsResponse.RepeatedStuff: %w", err)
 			}
 		}
 	}
@@ -1228,7 +1228,7 @@ func (v *ComplexInlineFragmentsResponse) UnmarshalJSON(b []byte) error {
 				src, dst)
 			if err != nil {
 				return fmt.Errorf(
-					"Unable to unmarshal ComplexInlineFragmentsResponse.ConflictingStuff: %w", err)
+					"unable to unmarshal ComplexInlineFragmentsResponse.ConflictingStuff: %w", err)
 			}
 		}
 	}
@@ -1241,7 +1241,7 @@ func (v *ComplexInlineFragmentsResponse) UnmarshalJSON(b []byte) error {
 				src, dst)
 			if err != nil {
 				return fmt.Errorf(
-					"Unable to unmarshal ComplexInlineFragmentsResponse.NestedStuff: %w", err)
+					"unable to unmarshal ComplexInlineFragmentsResponse.NestedStuff: %w", err)
 			}
 		}
 	}
@@ -1281,7 +1281,7 @@ func (v *ComplexInlineFragmentsResponse) __premarshalJSON() (*__premarshalComple
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal ComplexInlineFragmentsResponse.RandomItem: %w", err)
+				"unable to marshal ComplexInlineFragmentsResponse.RandomItem: %w", err)
 		}
 	}
 	{
@@ -1293,7 +1293,7 @@ func (v *ComplexInlineFragmentsResponse) __premarshalJSON() (*__premarshalComple
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal ComplexInlineFragmentsResponse.RepeatedStuff: %w", err)
+				"unable to marshal ComplexInlineFragmentsResponse.RepeatedStuff: %w", err)
 		}
 	}
 	{
@@ -1305,7 +1305,7 @@ func (v *ComplexInlineFragmentsResponse) __premarshalJSON() (*__premarshalComple
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal ComplexInlineFragmentsResponse.ConflictingStuff: %w", err)
+				"unable to marshal ComplexInlineFragmentsResponse.ConflictingStuff: %w", err)
 		}
 	}
 	{
@@ -1317,7 +1317,7 @@ func (v *ComplexInlineFragmentsResponse) __premarshalJSON() (*__premarshalComple
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal ComplexInlineFragmentsResponse.NestedStuff: %w", err)
+				"unable to marshal ComplexInlineFragmentsResponse.NestedStuff: %w", err)
 		}
 	}
 	return &retval, nil

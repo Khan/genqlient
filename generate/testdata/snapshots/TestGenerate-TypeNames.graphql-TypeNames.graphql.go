@@ -203,7 +203,7 @@ func (v *Resp) UnmarshalJSON(b []byte) error {
 				src, dst)
 			if err != nil {
 				return fmt.Errorf(
-					"Unable to unmarshal Resp.RandomItem: %w", err)
+					"unable to unmarshal Resp.RandomItem: %w", err)
 			}
 		}
 	}
@@ -239,7 +239,7 @@ func (v *Resp) __premarshalJSON() (*__premarshalResp, error) {
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal Resp.RandomItem: %w", err)
+				"unable to marshal Resp.RandomItem: %w", err)
 		}
 	}
 	retval.Users = v.Users

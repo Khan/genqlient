@@ -129,7 +129,7 @@ func (v *StructOptionRootTopicChildrenContentParentTopic) UnmarshalJSON(b []byte
 					src, dst)
 				if err != nil {
 					return fmt.Errorf(
-						"Unable to unmarshal StructOptionRootTopicChildrenContentParentTopic.InterfaceChildren: %w", err)
+						"unable to unmarshal StructOptionRootTopicChildrenContentParentTopic.InterfaceChildren: %w", err)
 				}
 			}
 		}
@@ -172,7 +172,7 @@ func (v *StructOptionRootTopicChildrenContentParentTopic) __premarshalJSON() (*_
 				&src)
 			if err != nil {
 				return nil, fmt.Errorf(
-					"Unable to marshal StructOptionRootTopicChildrenContentParentTopic.InterfaceChildren: %w", err)
+					"unable to marshal StructOptionRootTopicChildrenContentParentTopic.InterfaceChildren: %w", err)
 			}
 		}
 	}
