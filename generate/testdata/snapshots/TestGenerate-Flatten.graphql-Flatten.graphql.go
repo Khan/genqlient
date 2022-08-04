@@ -202,7 +202,7 @@ func (v *InnerQueryFragment) UnmarshalJSON(b []byte) error {
 				src, dst)
 			if err != nil {
 				return fmt.Errorf(
-					"Unable to unmarshal InnerQueryFragment.RandomItem: %w", err)
+					"unable to unmarshal InnerQueryFragment.RandomItem: %w", err)
 			}
 		}
 	}
@@ -238,7 +238,7 @@ func (v *InnerQueryFragment) __premarshalJSON() (*__premarshalInnerQueryFragment
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal InnerQueryFragment.RandomItem: %w", err)
+				"unable to marshal InnerQueryFragment.RandomItem: %w", err)
 		}
 	}
 	retval.OtherVideo = v.OtherVideo

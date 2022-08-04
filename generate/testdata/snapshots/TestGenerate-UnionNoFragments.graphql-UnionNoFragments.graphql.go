@@ -137,7 +137,7 @@ func (v *UnionNoFragmentsQueryResponse) UnmarshalJSON(b []byte) error {
 				src, dst)
 			if err != nil {
 				return fmt.Errorf(
-					"Unable to unmarshal UnionNoFragmentsQueryResponse.RandomLeaf: %w", err)
+					"unable to unmarshal UnionNoFragmentsQueryResponse.RandomLeaf: %w", err)
 			}
 		}
 	}
@@ -168,7 +168,7 @@ func (v *UnionNoFragmentsQueryResponse) __premarshalJSON() (*__premarshalUnionNo
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal UnionNoFragmentsQueryResponse.RandomLeaf: %w", err)
+				"unable to marshal UnionNoFragmentsQueryResponse.RandomLeaf: %w", err)
 		}
 	}
 	return &retval, nil

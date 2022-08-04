@@ -75,7 +75,7 @@ func (v *MyInput) UnmarshalJSON(b []byte) error {
 				src, *dst)
 			if err != nil {
 				return fmt.Errorf(
-					"Unable to unmarshal MyInput.Birthdate: %w", err)
+					"unable to unmarshal MyInput.Birthdate: %w", err)
 			}
 		}
 	}
@@ -125,7 +125,7 @@ func (v *MyInput) __premarshalJSON() (*__premarshalMyInput, error) {
 				src)
 			if err != nil {
 				return nil, fmt.Errorf(
-					"Unable to marshal MyInput.Birthdate: %w", err)
+					"unable to marshal MyInput.Birthdate: %w", err)
 			}
 		}
 	}
@@ -256,7 +256,7 @@ func (v *UserQueryInput) UnmarshalJSON(b []byte) error {
 				src, *dst)
 			if err != nil {
 				return fmt.Errorf(
-					"Unable to unmarshal UserQueryInput.Birthdate: %w", err)
+					"unable to unmarshal UserQueryInput.Birthdate: %w", err)
 			}
 		}
 	}
@@ -306,7 +306,7 @@ func (v *UserQueryInput) __premarshalJSON() (*__premarshalUserQueryInput, error)
 				src)
 			if err != nil {
 				return nil, fmt.Errorf(
-					"Unable to marshal UserQueryInput.Birthdate: %w", err)
+					"unable to marshal UserQueryInput.Birthdate: %w", err)
 			}
 		}
 	}

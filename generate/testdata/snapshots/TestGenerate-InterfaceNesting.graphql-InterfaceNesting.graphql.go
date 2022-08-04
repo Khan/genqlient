@@ -64,7 +64,7 @@ func (v *InterfaceNestingRootTopic) UnmarshalJSON(b []byte) error {
 					src, dst)
 				if err != nil {
 					return fmt.Errorf(
-						"Unable to unmarshal InterfaceNestingRootTopic.Children: %w", err)
+						"unable to unmarshal InterfaceNestingRootTopic.Children: %w", err)
 				}
 			}
 		}
@@ -104,7 +104,7 @@ func (v *InterfaceNestingRootTopic) __premarshalJSON() (*__premarshalInterfaceNe
 				&src)
 			if err != nil {
 				return nil, fmt.Errorf(
-					"Unable to marshal InterfaceNestingRootTopic.Children: %w", err)
+					"unable to marshal InterfaceNestingRootTopic.Children: %w", err)
 			}
 		}
 	}
@@ -273,7 +273,7 @@ func (v *InterfaceNestingRootTopicChildrenContentParentTopic) UnmarshalJSON(b []
 					src, dst)
 				if err != nil {
 					return fmt.Errorf(
-						"Unable to unmarshal InterfaceNestingRootTopicChildrenContentParentTopic.Children: %w", err)
+						"unable to unmarshal InterfaceNestingRootTopicChildrenContentParentTopic.Children: %w", err)
 				}
 			}
 		}
@@ -313,7 +313,7 @@ func (v *InterfaceNestingRootTopicChildrenContentParentTopic) __premarshalJSON()
 				&src)
 			if err != nil {
 				return nil, fmt.Errorf(
-					"Unable to marshal InterfaceNestingRootTopicChildrenContentParentTopic.Children: %w", err)
+					"unable to marshal InterfaceNestingRootTopicChildrenContentParentTopic.Children: %w", err)
 			}
 		}
 	}

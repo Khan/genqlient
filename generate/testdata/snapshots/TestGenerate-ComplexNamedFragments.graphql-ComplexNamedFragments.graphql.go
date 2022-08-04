@@ -83,7 +83,7 @@ func (v *ComplexNamedFragmentsResponse) __premarshalJSON() (*__premarshalComplex
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal ComplexNamedFragmentsResponse.QueryFragment.InnerQueryFragment.RandomItem: %w", err)
+				"unable to marshal ComplexNamedFragmentsResponse.QueryFragment.InnerQueryFragment.RandomItem: %w", err)
 		}
 	}
 	{
@@ -95,7 +95,7 @@ func (v *ComplexNamedFragmentsResponse) __premarshalJSON() (*__premarshalComplex
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal ComplexNamedFragmentsResponse.QueryFragment.InnerQueryFragment.RandomLeaf: %w", err)
+				"unable to marshal ComplexNamedFragmentsResponse.QueryFragment.InnerQueryFragment.RandomLeaf: %w", err)
 		}
 	}
 	{
@@ -107,7 +107,7 @@ func (v *ComplexNamedFragmentsResponse) __premarshalJSON() (*__premarshalComplex
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal ComplexNamedFragmentsResponse.QueryFragment.InnerQueryFragment.OtherLeaf: %w", err)
+				"unable to marshal ComplexNamedFragmentsResponse.QueryFragment.InnerQueryFragment.OtherLeaf: %w", err)
 		}
 	}
 	return &retval, nil
@@ -298,7 +298,7 @@ func (v *InnerQueryFragment) UnmarshalJSON(b []byte) error {
 				src, dst)
 			if err != nil {
 				return fmt.Errorf(
-					"Unable to unmarshal InnerQueryFragment.RandomItem: %w", err)
+					"unable to unmarshal InnerQueryFragment.RandomItem: %w", err)
 			}
 		}
 	}
@@ -311,7 +311,7 @@ func (v *InnerQueryFragment) UnmarshalJSON(b []byte) error {
 				src, dst)
 			if err != nil {
 				return fmt.Errorf(
-					"Unable to unmarshal InnerQueryFragment.RandomLeaf: %w", err)
+					"unable to unmarshal InnerQueryFragment.RandomLeaf: %w", err)
 			}
 		}
 	}
@@ -324,7 +324,7 @@ func (v *InnerQueryFragment) UnmarshalJSON(b []byte) error {
 				src, dst)
 			if err != nil {
 				return fmt.Errorf(
-					"Unable to unmarshal InnerQueryFragment.OtherLeaf: %w", err)
+					"unable to unmarshal InnerQueryFragment.OtherLeaf: %w", err)
 			}
 		}
 	}
@@ -359,7 +359,7 @@ func (v *InnerQueryFragment) __premarshalJSON() (*__premarshalInnerQueryFragment
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal InnerQueryFragment.RandomItem: %w", err)
+				"unable to marshal InnerQueryFragment.RandomItem: %w", err)
 		}
 	}
 	{
@@ -371,7 +371,7 @@ func (v *InnerQueryFragment) __premarshalJSON() (*__premarshalInnerQueryFragment
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal InnerQueryFragment.RandomLeaf: %w", err)
+				"unable to marshal InnerQueryFragment.RandomLeaf: %w", err)
 		}
 	}
 	{
@@ -383,7 +383,7 @@ func (v *InnerQueryFragment) __premarshalJSON() (*__premarshalInnerQueryFragment
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal InnerQueryFragment.OtherLeaf: %w", err)
+				"unable to marshal InnerQueryFragment.OtherLeaf: %w", err)
 		}
 	}
 	return &retval, nil
@@ -1298,7 +1298,7 @@ func (v *MoreVideoFieldsParentTopic) UnmarshalJSON(b []byte) error {
 					src, dst)
 				if err != nil {
 					return fmt.Errorf(
-						"Unable to unmarshal MoreVideoFieldsParentTopic.Children: %w", err)
+						"unable to unmarshal MoreVideoFieldsParentTopic.Children: %w", err)
 				}
 			}
 		}
@@ -1341,7 +1341,7 @@ func (v *MoreVideoFieldsParentTopic) __premarshalJSON() (*__premarshalMoreVideoF
 				&src)
 			if err != nil {
 				return nil, fmt.Errorf(
-					"Unable to marshal MoreVideoFieldsParentTopic.Children: %w", err)
+					"unable to marshal MoreVideoFieldsParentTopic.Children: %w", err)
 			}
 		}
 	}
@@ -1619,7 +1619,7 @@ func (v *QueryFragment) __premarshalJSON() (*__premarshalQueryFragment, error) {
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal QueryFragment.InnerQueryFragment.RandomItem: %w", err)
+				"unable to marshal QueryFragment.InnerQueryFragment.RandomItem: %w", err)
 		}
 	}
 	{
@@ -1631,7 +1631,7 @@ func (v *QueryFragment) __premarshalJSON() (*__premarshalQueryFragment, error) {
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal QueryFragment.InnerQueryFragment.RandomLeaf: %w", err)
+				"unable to marshal QueryFragment.InnerQueryFragment.RandomLeaf: %w", err)
 		}
 	}
 	{
@@ -1643,7 +1643,7 @@ func (v *QueryFragment) __premarshalJSON() (*__premarshalQueryFragment, error) {
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal QueryFragment.InnerQueryFragment.OtherLeaf: %w", err)
+				"unable to marshal QueryFragment.InnerQueryFragment.OtherLeaf: %w", err)
 		}
 	}
 	return &retval, nil

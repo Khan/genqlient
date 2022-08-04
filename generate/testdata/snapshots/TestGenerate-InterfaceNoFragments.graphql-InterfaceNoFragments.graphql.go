@@ -368,7 +368,7 @@ func (v *InterfaceNoFragmentsQueryResponse) UnmarshalJSON(b []byte) error {
 				src, dst)
 			if err != nil {
 				return fmt.Errorf(
-					"Unable to unmarshal InterfaceNoFragmentsQueryResponse.RandomItem: %w", err)
+					"unable to unmarshal InterfaceNoFragmentsQueryResponse.RandomItem: %w", err)
 			}
 		}
 	}
@@ -381,7 +381,7 @@ func (v *InterfaceNoFragmentsQueryResponse) UnmarshalJSON(b []byte) error {
 				src, dst)
 			if err != nil {
 				return fmt.Errorf(
-					"Unable to unmarshal InterfaceNoFragmentsQueryResponse.RandomItemWithTypeName: %w", err)
+					"unable to unmarshal InterfaceNoFragmentsQueryResponse.RandomItemWithTypeName: %w", err)
 			}
 		}
 	}
@@ -395,7 +395,7 @@ func (v *InterfaceNoFragmentsQueryResponse) UnmarshalJSON(b []byte) error {
 				src, *dst)
 			if err != nil {
 				return fmt.Errorf(
-					"Unable to unmarshal InterfaceNoFragmentsQueryResponse.WithPointer: %w", err)
+					"unable to unmarshal InterfaceNoFragmentsQueryResponse.WithPointer: %w", err)
 			}
 		}
 	}
@@ -433,7 +433,7 @@ func (v *InterfaceNoFragmentsQueryResponse) __premarshalJSON() (*__premarshalInt
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal InterfaceNoFragmentsQueryResponse.RandomItem: %w", err)
+				"unable to marshal InterfaceNoFragmentsQueryResponse.RandomItem: %w", err)
 		}
 	}
 	{
@@ -445,7 +445,7 @@ func (v *InterfaceNoFragmentsQueryResponse) __premarshalJSON() (*__premarshalInt
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal InterfaceNoFragmentsQueryResponse.RandomItemWithTypeName: %w", err)
+				"unable to marshal InterfaceNoFragmentsQueryResponse.RandomItemWithTypeName: %w", err)
 		}
 	}
 	{
@@ -458,7 +458,7 @@ func (v *InterfaceNoFragmentsQueryResponse) __premarshalJSON() (*__premarshalInt
 				src)
 			if err != nil {
 				return nil, fmt.Errorf(
-					"Unable to marshal InterfaceNoFragmentsQueryResponse.WithPointer: %w", err)
+					"unable to marshal InterfaceNoFragmentsQueryResponse.WithPointer: %w", err)
 			}
 		}
 	}

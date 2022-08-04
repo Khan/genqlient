@@ -77,7 +77,7 @@ func (v *{{.GoName}}) __premarshalJSON() (*__premarshal{{.GoName}}, error) {
             {{if not $field.GoType.IsPointer}}&{{end}}src)
         if err != nil {
             return nil, fmt.Errorf(
-                "Unable to marshal {{$.GoName}}.{{$field.Selector}}: %w", err)
+                "unable to marshal {{$.GoName}}.{{$field.Selector}}: %w", err)
         }
         {{if $field.GoType.IsPointer -}}
         }{{/* end if src != nil */}}

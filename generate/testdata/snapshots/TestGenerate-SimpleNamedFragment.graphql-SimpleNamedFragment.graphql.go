@@ -449,7 +449,7 @@ func (v *SimpleNamedFragmentResponse) UnmarshalJSON(b []byte) error {
 				src, dst)
 			if err != nil {
 				return fmt.Errorf(
-					"Unable to unmarshal SimpleNamedFragmentResponse.RandomItem: %w", err)
+					"unable to unmarshal SimpleNamedFragmentResponse.RandomItem: %w", err)
 			}
 		}
 	}
@@ -462,7 +462,7 @@ func (v *SimpleNamedFragmentResponse) UnmarshalJSON(b []byte) error {
 				src, dst)
 			if err != nil {
 				return fmt.Errorf(
-					"Unable to unmarshal SimpleNamedFragmentResponse.RandomLeaf: %w", err)
+					"unable to unmarshal SimpleNamedFragmentResponse.RandomLeaf: %w", err)
 			}
 		}
 	}
@@ -495,7 +495,7 @@ func (v *SimpleNamedFragmentResponse) __premarshalJSON() (*__premarshalSimpleNam
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal SimpleNamedFragmentResponse.RandomItem: %w", err)
+				"unable to marshal SimpleNamedFragmentResponse.RandomItem: %w", err)
 		}
 	}
 	{
@@ -507,7 +507,7 @@ func (v *SimpleNamedFragmentResponse) __premarshalJSON() (*__premarshalSimpleNam
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal SimpleNamedFragmentResponse.RandomLeaf: %w", err)
+				"unable to marshal SimpleNamedFragmentResponse.RandomLeaf: %w", err)
 		}
 	}
 	return &retval, nil

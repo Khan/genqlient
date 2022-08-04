@@ -54,7 +54,7 @@ func (v *AnimalFields) UnmarshalJSON(b []byte) error {
 				src, dst)
 			if err != nil {
 				return fmt.Errorf(
-					"Unable to unmarshal AnimalFields.Owner: %w", err)
+					"unable to unmarshal AnimalFields.Owner: %w", err)
 			}
 		}
 	}
@@ -91,7 +91,7 @@ func (v *AnimalFields) __premarshalJSON() (*__premarshalAnimalFields, error) {
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal AnimalFields.Owner: %w", err)
+				"unable to marshal AnimalFields.Owner: %w", err)
 		}
 	}
 	return &retval, nil
@@ -644,7 +644,7 @@ func (v *QueryFragment) UnmarshalJSON(b []byte) error {
 					src, dst)
 				if err != nil {
 					return fmt.Errorf(
-						"Unable to unmarshal QueryFragment.Beings: %w", err)
+						"unable to unmarshal QueryFragment.Beings: %w", err)
 				}
 			}
 		}
@@ -681,7 +681,7 @@ func (v *QueryFragment) __premarshalJSON() (*__premarshalQueryFragment, error) {
 				&src)
 			if err != nil {
 				return nil, fmt.Errorf(
-					"Unable to marshal QueryFragment.Beings: %w", err)
+					"unable to marshal QueryFragment.Beings: %w", err)
 			}
 		}
 	}
@@ -730,7 +730,7 @@ func (v *QueryFragmentBeingsAnimal) UnmarshalJSON(b []byte) error {
 				src, dst)
 			if err != nil {
 				return fmt.Errorf(
-					"Unable to unmarshal QueryFragmentBeingsAnimal.Owner: %w", err)
+					"unable to unmarshal QueryFragmentBeingsAnimal.Owner: %w", err)
 			}
 		}
 	}
@@ -767,7 +767,7 @@ func (v *QueryFragmentBeingsAnimal) __premarshalJSON() (*__premarshalQueryFragme
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal QueryFragmentBeingsAnimal.Owner: %w", err)
+				"unable to marshal QueryFragmentBeingsAnimal.Owner: %w", err)
 		}
 	}
 	return &retval, nil
@@ -1040,7 +1040,7 @@ func (v *__queryWithCustomMarshalInput) UnmarshalJSON(b []byte) error {
 				src, dst)
 			if err != nil {
 				return fmt.Errorf(
-					"Unable to unmarshal __queryWithCustomMarshalInput.Date: %w", err)
+					"unable to unmarshal __queryWithCustomMarshalInput.Date: %w", err)
 			}
 		}
 	}
@@ -1071,7 +1071,7 @@ func (v *__queryWithCustomMarshalInput) __premarshalJSON() (*__premarshal__query
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal __queryWithCustomMarshalInput.Date: %w", err)
+				"unable to marshal __queryWithCustomMarshalInput.Date: %w", err)
 		}
 	}
 	return &retval, nil
@@ -1116,7 +1116,7 @@ func (v *__queryWithCustomMarshalOptionalInput) UnmarshalJSON(b []byte) error {
 				src, *dst)
 			if err != nil {
 				return fmt.Errorf(
-					"Unable to unmarshal __queryWithCustomMarshalOptionalInput.Date: %w", err)
+					"unable to unmarshal __queryWithCustomMarshalOptionalInput.Date: %w", err)
 			}
 		}
 	}
@@ -1150,7 +1150,7 @@ func (v *__queryWithCustomMarshalOptionalInput) __premarshalJSON() (*__premarsha
 				src)
 			if err != nil {
 				return nil, fmt.Errorf(
-					"Unable to marshal __queryWithCustomMarshalOptionalInput.Date: %w", err)
+					"unable to marshal __queryWithCustomMarshalOptionalInput.Date: %w", err)
 			}
 		}
 	}
@@ -1197,7 +1197,7 @@ func (v *__queryWithCustomMarshalSliceInput) UnmarshalJSON(b []byte) error {
 					src, dst)
 				if err != nil {
 					return fmt.Errorf(
-						"Unable to unmarshal __queryWithCustomMarshalSliceInput.Dates: %w", err)
+						"unable to unmarshal __queryWithCustomMarshalSliceInput.Dates: %w", err)
 				}
 			}
 		}
@@ -1234,7 +1234,7 @@ func (v *__queryWithCustomMarshalSliceInput) __premarshalJSON() (*__premarshal__
 				&src)
 			if err != nil {
 				return nil, fmt.Errorf(
-					"Unable to marshal __queryWithCustomMarshalSliceInput.Dates: %w", err)
+					"unable to marshal __queryWithCustomMarshalSliceInput.Dates: %w", err)
 			}
 		}
 	}
@@ -1397,7 +1397,7 @@ func (v *queryWithCustomMarshalOptionalUserSearchUser) UnmarshalJSON(b []byte) e
 				src, dst)
 			if err != nil {
 				return fmt.Errorf(
-					"Unable to unmarshal queryWithCustomMarshalOptionalUserSearchUser.Birthdate: %w", err)
+					"unable to unmarshal queryWithCustomMarshalOptionalUserSearchUser.Birthdate: %w", err)
 			}
 		}
 	}
@@ -1434,7 +1434,7 @@ func (v *queryWithCustomMarshalOptionalUserSearchUser) __premarshalJSON() (*__pr
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal queryWithCustomMarshalOptionalUserSearchUser.Birthdate: %w", err)
+				"unable to marshal queryWithCustomMarshalOptionalUserSearchUser.Birthdate: %w", err)
 		}
 	}
 	return &retval, nil
@@ -1504,7 +1504,7 @@ func (v *queryWithCustomMarshalSliceUsersBornOnDatesUser) UnmarshalJSON(b []byte
 				src, dst)
 			if err != nil {
 				return fmt.Errorf(
-					"Unable to unmarshal queryWithCustomMarshalSliceUsersBornOnDatesUser.Birthdate: %w", err)
+					"unable to unmarshal queryWithCustomMarshalSliceUsersBornOnDatesUser.Birthdate: %w", err)
 			}
 		}
 	}
@@ -1541,7 +1541,7 @@ func (v *queryWithCustomMarshalSliceUsersBornOnDatesUser) __premarshalJSON() (*_
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal queryWithCustomMarshalSliceUsersBornOnDatesUser.Birthdate: %w", err)
+				"unable to marshal queryWithCustomMarshalSliceUsersBornOnDatesUser.Birthdate: %w", err)
 		}
 	}
 	return &retval, nil
@@ -1589,7 +1589,7 @@ func (v *queryWithCustomMarshalUsersBornOnUser) UnmarshalJSON(b []byte) error {
 				src, dst)
 			if err != nil {
 				return fmt.Errorf(
-					"Unable to unmarshal queryWithCustomMarshalUsersBornOnUser.Birthdate: %w", err)
+					"unable to unmarshal queryWithCustomMarshalUsersBornOnUser.Birthdate: %w", err)
 			}
 		}
 	}
@@ -1626,7 +1626,7 @@ func (v *queryWithCustomMarshalUsersBornOnUser) __premarshalJSON() (*__premarsha
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal queryWithCustomMarshalUsersBornOnUser.Birthdate: %w", err)
+				"unable to marshal queryWithCustomMarshalUsersBornOnUser.Birthdate: %w", err)
 		}
 	}
 	return &retval, nil
@@ -1690,7 +1690,7 @@ func (v *queryWithFragmentsBeingsAnimal) UnmarshalJSON(b []byte) error {
 				src, dst)
 			if err != nil {
 				return fmt.Errorf(
-					"Unable to unmarshal queryWithFragmentsBeingsAnimal.Owner: %w", err)
+					"unable to unmarshal queryWithFragmentsBeingsAnimal.Owner: %w", err)
 			}
 		}
 	}
@@ -1736,7 +1736,7 @@ func (v *queryWithFragmentsBeingsAnimal) __premarshalJSON() (*__premarshalqueryW
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal queryWithFragmentsBeingsAnimal.Owner: %w", err)
+				"unable to marshal queryWithFragmentsBeingsAnimal.Owner: %w", err)
 		}
 	}
 	return &retval, nil
@@ -2013,7 +2013,7 @@ func (v *queryWithFragmentsResponse) UnmarshalJSON(b []byte) error {
 					src, dst)
 				if err != nil {
 					return fmt.Errorf(
-						"Unable to unmarshal queryWithFragmentsResponse.Beings: %w", err)
+						"unable to unmarshal queryWithFragmentsResponse.Beings: %w", err)
 				}
 			}
 		}
@@ -2050,7 +2050,7 @@ func (v *queryWithFragmentsResponse) __premarshalJSON() (*__premarshalqueryWithF
 				&src)
 			if err != nil {
 				return nil, fmt.Errorf(
-					"Unable to marshal queryWithFragmentsResponse.Beings: %w", err)
+					"unable to marshal queryWithFragmentsResponse.Beings: %w", err)
 			}
 		}
 	}
@@ -2207,7 +2207,7 @@ func (v *queryWithInterfaceListFieldResponse) UnmarshalJSON(b []byte) error {
 					src, dst)
 				if err != nil {
 					return fmt.Errorf(
-						"Unable to unmarshal queryWithInterfaceListFieldResponse.Beings: %w", err)
+						"unable to unmarshal queryWithInterfaceListFieldResponse.Beings: %w", err)
 				}
 			}
 		}
@@ -2244,7 +2244,7 @@ func (v *queryWithInterfaceListFieldResponse) __premarshalJSON() (*__premarshalq
 				&src)
 			if err != nil {
 				return nil, fmt.Errorf(
-					"Unable to marshal queryWithInterfaceListFieldResponse.Beings: %w", err)
+					"unable to marshal queryWithInterfaceListFieldResponse.Beings: %w", err)
 			}
 		}
 	}
@@ -2402,7 +2402,7 @@ func (v *queryWithInterfaceListPointerFieldResponse) UnmarshalJSON(b []byte) err
 					src, *dst)
 				if err != nil {
 					return fmt.Errorf(
-						"Unable to unmarshal queryWithInterfaceListPointerFieldResponse.Beings: %w", err)
+						"unable to unmarshal queryWithInterfaceListPointerFieldResponse.Beings: %w", err)
 				}
 			}
 		}
@@ -2440,7 +2440,7 @@ func (v *queryWithInterfaceListPointerFieldResponse) __premarshalJSON() (*__prem
 					src)
 				if err != nil {
 					return nil, fmt.Errorf(
-						"Unable to marshal queryWithInterfaceListPointerFieldResponse.Beings: %w", err)
+						"unable to marshal queryWithInterfaceListPointerFieldResponse.Beings: %w", err)
 				}
 			}
 		}
@@ -2611,7 +2611,7 @@ func (v *queryWithInterfaceNoFragmentsResponse) UnmarshalJSON(b []byte) error {
 				src, dst)
 			if err != nil {
 				return fmt.Errorf(
-					"Unable to unmarshal queryWithInterfaceNoFragmentsResponse.Being: %w", err)
+					"unable to unmarshal queryWithInterfaceNoFragmentsResponse.Being: %w", err)
 			}
 		}
 	}
@@ -2644,7 +2644,7 @@ func (v *queryWithInterfaceNoFragmentsResponse) __premarshalJSON() (*__premarsha
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal queryWithInterfaceNoFragmentsResponse.Being: %w", err)
+				"unable to marshal queryWithInterfaceNoFragmentsResponse.Being: %w", err)
 		}
 	}
 	retval.Me = v.Me
@@ -2732,7 +2732,7 @@ func (v *queryWithNamedFragmentsBeingsAnimal) __premarshalJSON() (*__premarshalq
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal queryWithNamedFragmentsBeingsAnimal.AnimalFields.Owner: %w", err)
+				"unable to marshal queryWithNamedFragmentsBeingsAnimal.AnimalFields.Owner: %w", err)
 		}
 	}
 	return &retval, nil
@@ -2938,7 +2938,7 @@ func (v *queryWithNamedFragmentsResponse) UnmarshalJSON(b []byte) error {
 					src, dst)
 				if err != nil {
 					return fmt.Errorf(
-						"Unable to unmarshal queryWithNamedFragmentsResponse.Beings: %w", err)
+						"unable to unmarshal queryWithNamedFragmentsResponse.Beings: %w", err)
 				}
 			}
 		}
@@ -2975,7 +2975,7 @@ func (v *queryWithNamedFragmentsResponse) __premarshalJSON() (*__premarshalquery
 				&src)
 			if err != nil {
 				return nil, fmt.Errorf(
-					"Unable to marshal queryWithNamedFragmentsResponse.Beings: %w", err)
+					"unable to marshal queryWithNamedFragmentsResponse.Beings: %w", err)
 			}
 		}
 	}

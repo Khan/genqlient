@@ -79,7 +79,7 @@ func (v *__CustomMarshalSliceInput) UnmarshalJSON(b []byte) error {
 							src, dst)
 						if err != nil {
 							return fmt.Errorf(
-								"Unable to unmarshal __CustomMarshalSliceInput.Datesss: %w", err)
+								"unable to unmarshal __CustomMarshalSliceInput.Datesss: %w", err)
 						}
 					}
 				}
@@ -111,7 +111,7 @@ func (v *__CustomMarshalSliceInput) UnmarshalJSON(b []byte) error {
 							src, *dst)
 						if err != nil {
 							return fmt.Errorf(
-								"Unable to unmarshal __CustomMarshalSliceInput.Datesssp: %w", err)
+								"unable to unmarshal __CustomMarshalSliceInput.Datesssp: %w", err)
 						}
 					}
 				}
@@ -162,7 +162,7 @@ func (v *__CustomMarshalSliceInput) __premarshalJSON() (*__premarshal__CustomMar
 						&src)
 					if err != nil {
 						return nil, fmt.Errorf(
-							"Unable to marshal __CustomMarshalSliceInput.Datesss: %w", err)
+							"unable to marshal __CustomMarshalSliceInput.Datesss: %w", err)
 					}
 				}
 			}
@@ -193,7 +193,7 @@ func (v *__CustomMarshalSliceInput) __premarshalJSON() (*__premarshal__CustomMar
 							src)
 						if err != nil {
 							return nil, fmt.Errorf(
-								"Unable to marshal __CustomMarshalSliceInput.Datesssp: %w", err)
+								"unable to marshal __CustomMarshalSliceInput.Datesssp: %w", err)
 						}
 					}
 				}

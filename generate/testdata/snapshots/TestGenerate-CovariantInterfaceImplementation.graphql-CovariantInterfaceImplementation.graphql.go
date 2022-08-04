@@ -153,7 +153,7 @@ func (v *ContentFieldsArticle) UnmarshalJSON(b []byte) error {
 				src, dst)
 			if err != nil {
 				return fmt.Errorf(
-					"Unable to unmarshal ContentFieldsArticle.Next: %w", err)
+					"unable to unmarshal ContentFieldsArticle.Next: %w", err)
 			}
 		}
 	}
@@ -171,7 +171,7 @@ func (v *ContentFieldsArticle) UnmarshalJSON(b []byte) error {
 					src, dst)
 				if err != nil {
 					return fmt.Errorf(
-						"Unable to unmarshal ContentFieldsArticle.Related: %w", err)
+						"unable to unmarshal ContentFieldsArticle.Related: %w", err)
 				}
 			}
 		}
@@ -205,7 +205,7 @@ func (v *ContentFieldsArticle) __premarshalJSON() (*__premarshalContentFieldsArt
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal ContentFieldsArticle.Next: %w", err)
+				"unable to marshal ContentFieldsArticle.Next: %w", err)
 		}
 	}
 	{
@@ -222,7 +222,7 @@ func (v *ContentFieldsArticle) __premarshalJSON() (*__premarshalContentFieldsArt
 				&src)
 			if err != nil {
 				return nil, fmt.Errorf(
-					"Unable to marshal ContentFieldsArticle.Related: %w", err)
+					"unable to marshal ContentFieldsArticle.Related: %w", err)
 			}
 		}
 	}
@@ -533,7 +533,7 @@ func (v *ContentFieldsTopic) UnmarshalJSON(b []byte) error {
 				src, dst)
 			if err != nil {
 				return fmt.Errorf(
-					"Unable to unmarshal ContentFieldsTopic.Next: %w", err)
+					"unable to unmarshal ContentFieldsTopic.Next: %w", err)
 			}
 		}
 	}
@@ -551,7 +551,7 @@ func (v *ContentFieldsTopic) UnmarshalJSON(b []byte) error {
 					src, dst)
 				if err != nil {
 					return fmt.Errorf(
-						"Unable to unmarshal ContentFieldsTopic.Related: %w", err)
+						"unable to unmarshal ContentFieldsTopic.Related: %w", err)
 				}
 			}
 		}
@@ -585,7 +585,7 @@ func (v *ContentFieldsTopic) __premarshalJSON() (*__premarshalContentFieldsTopic
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal ContentFieldsTopic.Next: %w", err)
+				"unable to marshal ContentFieldsTopic.Next: %w", err)
 		}
 	}
 	{
@@ -602,7 +602,7 @@ func (v *ContentFieldsTopic) __premarshalJSON() (*__premarshalContentFieldsTopic
 				&src)
 			if err != nil {
 				return nil, fmt.Errorf(
-					"Unable to marshal ContentFieldsTopic.Related: %w", err)
+					"unable to marshal ContentFieldsTopic.Related: %w", err)
 			}
 		}
 	}
@@ -651,7 +651,7 @@ func (v *ContentFieldsVideo) UnmarshalJSON(b []byte) error {
 				src, dst)
 			if err != nil {
 				return fmt.Errorf(
-					"Unable to unmarshal ContentFieldsVideo.Next: %w", err)
+					"unable to unmarshal ContentFieldsVideo.Next: %w", err)
 			}
 		}
 	}
@@ -669,7 +669,7 @@ func (v *ContentFieldsVideo) UnmarshalJSON(b []byte) error {
 					src, dst)
 				if err != nil {
 					return fmt.Errorf(
-						"Unable to unmarshal ContentFieldsVideo.Related: %w", err)
+						"unable to unmarshal ContentFieldsVideo.Related: %w", err)
 				}
 			}
 		}
@@ -703,7 +703,7 @@ func (v *ContentFieldsVideo) __premarshalJSON() (*__premarshalContentFieldsVideo
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal ContentFieldsVideo.Next: %w", err)
+				"unable to marshal ContentFieldsVideo.Next: %w", err)
 		}
 	}
 	{
@@ -720,7 +720,7 @@ func (v *ContentFieldsVideo) __premarshalJSON() (*__premarshalContentFieldsVideo
 				&src)
 			if err != nil {
 				return nil, fmt.Errorf(
-					"Unable to marshal ContentFieldsVideo.Related: %w", err)
+					"unable to marshal ContentFieldsVideo.Related: %w", err)
 			}
 		}
 	}
@@ -779,7 +779,7 @@ func (v *CovariantInterfaceImplementationRandomItemArticle) UnmarshalJSON(b []by
 				src, dst)
 			if err != nil {
 				return fmt.Errorf(
-					"Unable to unmarshal CovariantInterfaceImplementationRandomItemArticle.Next: %w", err)
+					"unable to unmarshal CovariantInterfaceImplementationRandomItemArticle.Next: %w", err)
 			}
 		}
 	}
@@ -797,7 +797,7 @@ func (v *CovariantInterfaceImplementationRandomItemArticle) UnmarshalJSON(b []by
 					src, dst)
 				if err != nil {
 					return fmt.Errorf(
-						"Unable to unmarshal CovariantInterfaceImplementationRandomItemArticle.Related: %w", err)
+						"unable to unmarshal CovariantInterfaceImplementationRandomItemArticle.Related: %w", err)
 				}
 			}
 		}
@@ -837,7 +837,7 @@ func (v *CovariantInterfaceImplementationRandomItemArticle) __premarshalJSON() (
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal CovariantInterfaceImplementationRandomItemArticle.Next: %w", err)
+				"unable to marshal CovariantInterfaceImplementationRandomItemArticle.Next: %w", err)
 		}
 	}
 	{
@@ -854,7 +854,7 @@ func (v *CovariantInterfaceImplementationRandomItemArticle) __premarshalJSON() (
 				&src)
 			if err != nil {
 				return nil, fmt.Errorf(
-					"Unable to marshal CovariantInterfaceImplementationRandomItemArticle.Related: %w", err)
+					"unable to marshal CovariantInterfaceImplementationRandomItemArticle.Related: %w", err)
 			}
 		}
 	}
@@ -1047,7 +1047,7 @@ func (v *CovariantInterfaceImplementationRandomItemContentNextArticle) __premars
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal CovariantInterfaceImplementationRandomItemContentNextArticle.ContentFieldsArticle.Next: %w", err)
+				"unable to marshal CovariantInterfaceImplementationRandomItemContentNextArticle.ContentFieldsArticle.Next: %w", err)
 		}
 	}
 	{
@@ -1064,7 +1064,7 @@ func (v *CovariantInterfaceImplementationRandomItemContentNextArticle) __premars
 				&src)
 			if err != nil {
 				return nil, fmt.Errorf(
-					"Unable to marshal CovariantInterfaceImplementationRandomItemContentNextArticle.ContentFieldsArticle.Related: %w", err)
+					"unable to marshal CovariantInterfaceImplementationRandomItemContentNextArticle.ContentFieldsArticle.Related: %w", err)
 			}
 		}
 	}
@@ -1249,7 +1249,7 @@ func (v *CovariantInterfaceImplementationRandomItemContentNextTopic) __premarsha
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal CovariantInterfaceImplementationRandomItemContentNextTopic.ContentFieldsTopic.Next: %w", err)
+				"unable to marshal CovariantInterfaceImplementationRandomItemContentNextTopic.ContentFieldsTopic.Next: %w", err)
 		}
 	}
 	{
@@ -1266,7 +1266,7 @@ func (v *CovariantInterfaceImplementationRandomItemContentNextTopic) __premarsha
 				&src)
 			if err != nil {
 				return nil, fmt.Errorf(
-					"Unable to marshal CovariantInterfaceImplementationRandomItemContentNextTopic.ContentFieldsTopic.Related: %w", err)
+					"unable to marshal CovariantInterfaceImplementationRandomItemContentNextTopic.ContentFieldsTopic.Related: %w", err)
 			}
 		}
 	}
@@ -1348,7 +1348,7 @@ func (v *CovariantInterfaceImplementationRandomItemContentNextVideo) __premarsha
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal CovariantInterfaceImplementationRandomItemContentNextVideo.ContentFieldsVideo.Next: %w", err)
+				"unable to marshal CovariantInterfaceImplementationRandomItemContentNextVideo.ContentFieldsVideo.Next: %w", err)
 		}
 	}
 	{
@@ -1365,7 +1365,7 @@ func (v *CovariantInterfaceImplementationRandomItemContentNextVideo) __premarsha
 				&src)
 			if err != nil {
 				return nil, fmt.Errorf(
-					"Unable to marshal CovariantInterfaceImplementationRandomItemContentNextVideo.ContentFieldsVideo.Related: %w", err)
+					"unable to marshal CovariantInterfaceImplementationRandomItemContentNextVideo.ContentFieldsVideo.Related: %w", err)
 			}
 		}
 	}
@@ -1447,7 +1447,7 @@ func (v *CovariantInterfaceImplementationRandomItemContentRelatedArticle) __prem
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal CovariantInterfaceImplementationRandomItemContentRelatedArticle.ContentFieldsArticle.Next: %w", err)
+				"unable to marshal CovariantInterfaceImplementationRandomItemContentRelatedArticle.ContentFieldsArticle.Next: %w", err)
 		}
 	}
 	{
@@ -1464,7 +1464,7 @@ func (v *CovariantInterfaceImplementationRandomItemContentRelatedArticle) __prem
 				&src)
 			if err != nil {
 				return nil, fmt.Errorf(
-					"Unable to marshal CovariantInterfaceImplementationRandomItemContentRelatedArticle.ContentFieldsArticle.Related: %w", err)
+					"unable to marshal CovariantInterfaceImplementationRandomItemContentRelatedArticle.ContentFieldsArticle.Related: %w", err)
 			}
 		}
 	}
@@ -1649,7 +1649,7 @@ func (v *CovariantInterfaceImplementationRandomItemContentRelatedTopic) __premar
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal CovariantInterfaceImplementationRandomItemContentRelatedTopic.ContentFieldsTopic.Next: %w", err)
+				"unable to marshal CovariantInterfaceImplementationRandomItemContentRelatedTopic.ContentFieldsTopic.Next: %w", err)
 		}
 	}
 	{
@@ -1666,7 +1666,7 @@ func (v *CovariantInterfaceImplementationRandomItemContentRelatedTopic) __premar
 				&src)
 			if err != nil {
 				return nil, fmt.Errorf(
-					"Unable to marshal CovariantInterfaceImplementationRandomItemContentRelatedTopic.ContentFieldsTopic.Related: %w", err)
+					"unable to marshal CovariantInterfaceImplementationRandomItemContentRelatedTopic.ContentFieldsTopic.Related: %w", err)
 			}
 		}
 	}
@@ -1748,7 +1748,7 @@ func (v *CovariantInterfaceImplementationRandomItemContentRelatedVideo) __premar
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal CovariantInterfaceImplementationRandomItemContentRelatedVideo.ContentFieldsVideo.Next: %w", err)
+				"unable to marshal CovariantInterfaceImplementationRandomItemContentRelatedVideo.ContentFieldsVideo.Next: %w", err)
 		}
 	}
 	{
@@ -1765,7 +1765,7 @@ func (v *CovariantInterfaceImplementationRandomItemContentRelatedVideo) __premar
 				&src)
 			if err != nil {
 				return nil, fmt.Errorf(
-					"Unable to marshal CovariantInterfaceImplementationRandomItemContentRelatedVideo.ContentFieldsVideo.Related: %w", err)
+					"unable to marshal CovariantInterfaceImplementationRandomItemContentRelatedVideo.ContentFieldsVideo.Related: %w", err)
 			}
 		}
 	}
@@ -1824,7 +1824,7 @@ func (v *CovariantInterfaceImplementationRandomItemTopic) UnmarshalJSON(b []byte
 				src, dst)
 			if err != nil {
 				return fmt.Errorf(
-					"Unable to unmarshal CovariantInterfaceImplementationRandomItemTopic.Next: %w", err)
+					"unable to unmarshal CovariantInterfaceImplementationRandomItemTopic.Next: %w", err)
 			}
 		}
 	}
@@ -1842,7 +1842,7 @@ func (v *CovariantInterfaceImplementationRandomItemTopic) UnmarshalJSON(b []byte
 					src, dst)
 				if err != nil {
 					return fmt.Errorf(
-						"Unable to unmarshal CovariantInterfaceImplementationRandomItemTopic.Related: %w", err)
+						"unable to unmarshal CovariantInterfaceImplementationRandomItemTopic.Related: %w", err)
 				}
 			}
 		}
@@ -1882,7 +1882,7 @@ func (v *CovariantInterfaceImplementationRandomItemTopic) __premarshalJSON() (*_
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal CovariantInterfaceImplementationRandomItemTopic.Next: %w", err)
+				"unable to marshal CovariantInterfaceImplementationRandomItemTopic.Next: %w", err)
 		}
 	}
 	{
@@ -1899,7 +1899,7 @@ func (v *CovariantInterfaceImplementationRandomItemTopic) __premarshalJSON() (*_
 				&src)
 			if err != nil {
 				return nil, fmt.Errorf(
-					"Unable to marshal CovariantInterfaceImplementationRandomItemTopic.Related: %w", err)
+					"unable to marshal CovariantInterfaceImplementationRandomItemTopic.Related: %w", err)
 			}
 		}
 	}
@@ -1958,7 +1958,7 @@ func (v *CovariantInterfaceImplementationRandomItemVideo) UnmarshalJSON(b []byte
 				src, dst)
 			if err != nil {
 				return fmt.Errorf(
-					"Unable to unmarshal CovariantInterfaceImplementationRandomItemVideo.Next: %w", err)
+					"unable to unmarshal CovariantInterfaceImplementationRandomItemVideo.Next: %w", err)
 			}
 		}
 	}
@@ -1976,7 +1976,7 @@ func (v *CovariantInterfaceImplementationRandomItemVideo) UnmarshalJSON(b []byte
 					src, dst)
 				if err != nil {
 					return fmt.Errorf(
-						"Unable to unmarshal CovariantInterfaceImplementationRandomItemVideo.Related: %w", err)
+						"unable to unmarshal CovariantInterfaceImplementationRandomItemVideo.Related: %w", err)
 				}
 			}
 		}
@@ -2016,7 +2016,7 @@ func (v *CovariantInterfaceImplementationRandomItemVideo) __premarshalJSON() (*_
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal CovariantInterfaceImplementationRandomItemVideo.Next: %w", err)
+				"unable to marshal CovariantInterfaceImplementationRandomItemVideo.Next: %w", err)
 		}
 	}
 	{
@@ -2033,7 +2033,7 @@ func (v *CovariantInterfaceImplementationRandomItemVideo) __premarshalJSON() (*_
 				&src)
 			if err != nil {
 				return nil, fmt.Errorf(
-					"Unable to marshal CovariantInterfaceImplementationRandomItemVideo.Related: %w", err)
+					"unable to marshal CovariantInterfaceImplementationRandomItemVideo.Related: %w", err)
 			}
 		}
 	}
@@ -2082,7 +2082,7 @@ func (v *CovariantInterfaceImplementationResponse) UnmarshalJSON(b []byte) error
 				src, dst)
 			if err != nil {
 				return fmt.Errorf(
-					"Unable to unmarshal CovariantInterfaceImplementationResponse.RandomItem: %w", err)
+					"unable to unmarshal CovariantInterfaceImplementationResponse.RandomItem: %w", err)
 			}
 		}
 	}
@@ -2115,7 +2115,7 @@ func (v *CovariantInterfaceImplementationResponse) __premarshalJSON() (*__premar
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal CovariantInterfaceImplementationResponse.RandomItem: %w", err)
+				"unable to marshal CovariantInterfaceImplementationResponse.RandomItem: %w", err)
 		}
 	}
 	retval.Root = v.Root
