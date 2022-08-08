@@ -236,6 +236,14 @@ func (g *generator) convertType(
 		// Type is a list.
 		elem, err := g.convertType(
 			namePrefix, typ.Elem, selectionSet, options, queryOptions)
+
+		// [String!]! -> `json:"xxx"`
+		// [String!]  -> `json:"xxx,omitempty"`
+		if !typ.NonNull {
+			oe := true
+			options.Omitempty = &oe
+		}
+
 		return &goSliceType{elem}, err
 	}
 
@@ -258,6 +266,14 @@ func (g *generator) convertType(
 		// Note this does []*T or [][]*T, not e.g. *[][]T.  See #16.
 		goTyp = &goPointerType{goTyp}
 	}
+
+	// String! -> `json:"xxx"`
+	// String  -> `json:"xxx,omitempty"`
+	if !typ.NonNull {
+		oe := true
+		options.Omitempty = &oe
+	}
+
 	return goTyp, err
 }
 
