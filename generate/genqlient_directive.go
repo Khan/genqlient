@@ -107,8 +107,10 @@ func setString(optionName string, dst *string, v *ast.Value, pos *ast.Position) 
 //
 // If there are multiple genqlient directives are applied to the same node,
 // e.g.
+//
 //	# @genqlient(...)
 //	# @genqlient(...)
+//
 // add will be called several times.  In this case, conflicts between the
 // options are an error.
 func (dir *genqlientDirective) add(graphQLDirective *ast.Directive, pos *ast.Position) error {

@@ -46,31 +46,39 @@ type client struct {
 	method     string
 }
 
-// NewClient returns a Client which makes requests to the given endpoint,
+// NewClient returns a [Client] which makes requests to the given endpoint,
 // suitable for most users.
 //
 // The client makes POST requests to the given GraphQL endpoint using standard
-// GraphQL HTTP-over-JSON transport.  It will use the given http client, or
-// http.DefaultClient if a nil client is passed.
+// GraphQL HTTP-over-JSON transport.  It will use the given [http.Client], or
+// [http.DefaultClient] if a nil client is passed.
 //
 // The typical method of adding authentication headers is to wrap the client's
-// Transport to add those headers.  See example/caller.go for an example.
+// [http.Transport] to add those headers.  See [example/main.go] for an
+// example.
+//
+// [example/main.go]: https://github.com/Khan/genqlient/blob/main/example/main.go#L12-L20
 func NewClient(endpoint string, httpClient Doer) Client {
 	return newClient(endpoint, httpClient, http.MethodPost)
 }
 
-// NewClientUsingGet returns a Client which makes requests to the given endpoint,
-// suitable for most users.
+// NewClientUsingGet returns a [Client] which makes GET requests to the given
+// endpoint suitable for most users who wish to make GET requests instead of
+// POST.
 //
-// The client makes GET requests to the given GraphQL endpoint using a GET query,
-// with the query, operation name and variables encoded as URL parameters.
-// It will use the given http client, or http.DefaultClient if a nil client is passed.
+// The client makes GET requests to the given GraphQL endpoint using a GET
+// query, with the query, operation name and variables encoded as URL
+// parameters.  It will use the given [http.Client], or [http.DefaultClient] if
+// a nil client is passed.
 //
-// The client does not support mutations, and will return an error if passed a request
-// that attempts one.
+// The client does not support mutations, and will return an error if passed a
+// request that attempts one.
 //
 // The typical method of adding authentication headers is to wrap the client's
-// Transport to add those headers.  See example/caller.go for an example.
+// [http.Transport] to add those headers.  See [example/main.go] for an
+// example.
+//
+// [example/main.go]: https://github.com/Khan/genqlient/blob/main/example/main.go#L12-L20
 func NewClientUsingGet(endpoint string, httpClient Doer) Client {
 	return newClient(endpoint, httpClient, http.MethodGet)
 }
@@ -82,18 +90,20 @@ func newClient(endpoint string, httpClient Doer, method string) Client {
 	return &client{httpClient, endpoint, method}
 }
 
-// Doer encapsulates the methods from *http.Client needed by Client.
-// The methods should have behavior to match that of *http.Client
+// Doer encapsulates the methods from [*http.Client] needed by [Client].
+// The methods should have behavior to match that of [*http.Client]
 // (or mocks for the same).
 type Doer interface {
 	Do(*http.Request) (*http.Response, error)
 }
 
 // Request contains all the values required to build queries executed by
-// the graphql.Client.
+// the [Client].
 //
 // Typically, GraphQL APIs will accept a JSON payload of the form
+//
 //	{"query": "query myQuery { ... }", "variables": {...}}`
+//
 // and Request marshals to this format.  However, MakeRequest may
 // marshal the data in some other way desired by the backend.
 type Request struct {
@@ -112,7 +122,9 @@ type Request struct {
 // Response that contains data returned by the GraphQL API.
 //
 // Typically, GraphQL APIs will return a JSON payload of the form
+//
 //	{"data": {...}, "errors": {...}}
+//
 // It may additionally contain a key named "extensions", that
 // might hold GraphQL protocol extensions. Extensions and Errors
 // are optional, depending on the values returned by the server.

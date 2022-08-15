@@ -29,20 +29,24 @@ var _sliceOrMapPrefixRegexp = regexp.MustCompile(`^(\*|\[\d*\]|map\[string\])*`)
 //
 // Ideally, we want to allow a reference to basically an arbitrary symbol.
 // But that's very hard, because it might be quite complicated, like
+//
 //	struct{ F []map[mypkg.K]otherpkg.V }
+//
 // Now in practice, using an unnamed struct is not a great idea, but we do
 // want to allow as much as we can that encoding/json knows how to work
 // with, since you would reasonably expect us to accept, say,
 // map[string][]interface{}.  So we allow:
-// - any named type (mypkg.T)
-// - any predeclared basic type (string, int, etc.)
-// - interface{}
-// - for any allowed type T, *T, []T, [N]T, and map[string]T
+//   - any named type (mypkg.T)
+//   - any predeclared basic type (string, int, etc.)
+//   - interface{}
+//   - for any allowed type T, *T, []T, [N]T, and map[string]T
+//
 // which effectively excludes:
-// - unnamed struct types
-// - map[K]V where K is a named type wrapping string
-// - any nonstandard spelling of those (interface {/* hi */},
-//	 map[  string      ]T)
+//   - unnamed struct types
+//   - map[K]V where K is a named type wrapping string
+//   - any nonstandard spelling of those (interface {/* hi */},
+//     map[  string      ]T)
+//
 // (This is documented in docs/genqlient.yaml)
 func (g *generator) ref(fullyQualifiedName string) (qualifiedName string, err error) {
 	errorMsg := `invalid type-name "%v" (%v); expected a builtin, ` +
