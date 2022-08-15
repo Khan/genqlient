@@ -313,9 +313,9 @@ func (g *generator) addOperation(op *ast.OperationDefinition) error {
 // Generate is the main programmatic entrypoint to genqlient, and generates and
 // returns Go source code based on the given configuration.
 //
-// See Config for more on creating a configuration.  The return value is a map
-// from filename to the generated file-content (e.g. Go source).  Callers who
-// don't want to manage reading and writing the files should call Main.
+// See [Config] for more on creating a configuration.  The return value is a
+// map from filename to the generated file-content (e.g. Go source).  Callers
+// who don't want to manage reading and writing the files should call [Main].
 func Generate(config *Config) (map[string][]byte, error) {
 	// Step 1: Read in the schema and operations from the files defined by the
 	// config (and validate the operations against the schema).  This is all
