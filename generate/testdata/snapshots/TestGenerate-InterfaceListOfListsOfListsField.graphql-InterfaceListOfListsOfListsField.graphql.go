@@ -14,8 +14,8 @@ import (
 //
 // InterfaceListOfListOfListsFieldListOfListsOfListsOfContent is implemented by the following types:
 // InterfaceListOfListOfListsFieldListOfListsOfListsOfContentArticle
-// InterfaceListOfListOfListsFieldListOfListsOfListsOfContentVideo
 // InterfaceListOfListOfListsFieldListOfListsOfListsOfContentTopic
+// InterfaceListOfListOfListsFieldListOfListsOfListsOfContentVideo
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
@@ -34,9 +34,9 @@ type InterfaceListOfListOfListsFieldListOfListsOfListsOfContent interface {
 
 func (v *InterfaceListOfListOfListsFieldListOfListsOfListsOfContentArticle) implementsGraphQLInterfaceInterfaceListOfListOfListsFieldListOfListsOfListsOfContent() {
 }
-func (v *InterfaceListOfListOfListsFieldListOfListsOfListsOfContentVideo) implementsGraphQLInterfaceInterfaceListOfListOfListsFieldListOfListsOfListsOfContent() {
-}
 func (v *InterfaceListOfListOfListsFieldListOfListsOfListsOfContentTopic) implementsGraphQLInterfaceInterfaceListOfListOfListsFieldListOfListsOfListsOfContent() {
+}
+func (v *InterfaceListOfListOfListsFieldListOfListsOfListsOfContentVideo) implementsGraphQLInterfaceInterfaceListOfListOfListsFieldListOfListsOfListsOfContent() {
 }
 
 func __unmarshalInterfaceListOfListOfListsFieldListOfListsOfListsOfContent(b []byte, v *InterfaceListOfListOfListsFieldListOfListsOfListsOfContent) error {
@@ -56,11 +56,11 @@ func __unmarshalInterfaceListOfListOfListsFieldListOfListsOfListsOfContent(b []b
 	case "Article":
 		*v = new(InterfaceListOfListOfListsFieldListOfListsOfListsOfContentArticle)
 		return json.Unmarshal(b, *v)
-	case "Video":
-		*v = new(InterfaceListOfListOfListsFieldListOfListsOfListsOfContentVideo)
-		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(InterfaceListOfListOfListsFieldListOfListsOfListsOfContentTopic)
+		return json.Unmarshal(b, *v)
+	case "Video":
+		*v = new(InterfaceListOfListOfListsFieldListOfListsOfListsOfContentVideo)
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
@@ -83,20 +83,20 @@ func __marshalInterfaceListOfListOfListsFieldListOfListsOfListsOfContent(v *Inte
 			*InterfaceListOfListOfListsFieldListOfListsOfListsOfContentArticle
 		}{typename, v}
 		return json.Marshal(result)
-	case *InterfaceListOfListOfListsFieldListOfListsOfListsOfContentVideo:
-		typename = "Video"
-
-		result := struct {
-			TypeName string `json:"__typename"`
-			*InterfaceListOfListOfListsFieldListOfListsOfListsOfContentVideo
-		}{typename, v}
-		return json.Marshal(result)
 	case *InterfaceListOfListOfListsFieldListOfListsOfListsOfContentTopic:
 		typename = "Topic"
 
 		result := struct {
 			TypeName string `json:"__typename"`
 			*InterfaceListOfListOfListsFieldListOfListsOfListsOfContentTopic
+		}{typename, v}
+		return json.Marshal(result)
+	case *InterfaceListOfListOfListsFieldListOfListsOfListsOfContentVideo:
+		typename = "Video"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*InterfaceListOfListOfListsFieldListOfListsOfListsOfContentVideo
 		}{typename, v}
 		return json.Marshal(result)
 	case nil:
@@ -234,7 +234,7 @@ func (v *InterfaceListOfListOfListsFieldResponse) UnmarshalJSON(b []byte) error 
 							src, dst)
 						if err != nil {
 							return fmt.Errorf(
-								"Unable to unmarshal InterfaceListOfListOfListsFieldResponse.ListOfListsOfListsOfContent: %w", err)
+								"unable to unmarshal InterfaceListOfListOfListsFieldResponse.ListOfListsOfListsOfContent: %w", err)
 						}
 					}
 				}
@@ -266,7 +266,7 @@ func (v *InterfaceListOfListOfListsFieldResponse) UnmarshalJSON(b []byte) error 
 							src, *dst)
 						if err != nil {
 							return fmt.Errorf(
-								"Unable to unmarshal InterfaceListOfListOfListsFieldResponse.WithPointer: %w", err)
+								"unable to unmarshal InterfaceListOfListOfListsFieldResponse.WithPointer: %w", err)
 						}
 					}
 				}
@@ -317,7 +317,7 @@ func (v *InterfaceListOfListOfListsFieldResponse) __premarshalJSON() (*__premars
 						&src)
 					if err != nil {
 						return nil, fmt.Errorf(
-							"Unable to marshal InterfaceListOfListOfListsFieldResponse.ListOfListsOfListsOfContent: %w", err)
+							"unable to marshal InterfaceListOfListOfListsFieldResponse.ListOfListsOfListsOfContent: %w", err)
 					}
 				}
 			}
@@ -348,7 +348,7 @@ func (v *InterfaceListOfListOfListsFieldResponse) __premarshalJSON() (*__premars
 							src)
 						if err != nil {
 							return nil, fmt.Errorf(
-								"Unable to marshal InterfaceListOfListOfListsFieldResponse.WithPointer: %w", err)
+								"unable to marshal InterfaceListOfListOfListsFieldResponse.WithPointer: %w", err)
 						}
 					}
 				}
@@ -379,8 +379,8 @@ func (v *InterfaceListOfListOfListsFieldWithPointerArticle) GetName() *string { 
 //
 // InterfaceListOfListOfListsFieldWithPointerContent is implemented by the following types:
 // InterfaceListOfListOfListsFieldWithPointerArticle
-// InterfaceListOfListOfListsFieldWithPointerVideo
 // InterfaceListOfListOfListsFieldWithPointerTopic
+// InterfaceListOfListOfListsFieldWithPointerVideo
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
@@ -399,9 +399,9 @@ type InterfaceListOfListOfListsFieldWithPointerContent interface {
 
 func (v *InterfaceListOfListOfListsFieldWithPointerArticle) implementsGraphQLInterfaceInterfaceListOfListOfListsFieldWithPointerContent() {
 }
-func (v *InterfaceListOfListOfListsFieldWithPointerVideo) implementsGraphQLInterfaceInterfaceListOfListOfListsFieldWithPointerContent() {
-}
 func (v *InterfaceListOfListOfListsFieldWithPointerTopic) implementsGraphQLInterfaceInterfaceListOfListOfListsFieldWithPointerContent() {
+}
+func (v *InterfaceListOfListOfListsFieldWithPointerVideo) implementsGraphQLInterfaceInterfaceListOfListOfListsFieldWithPointerContent() {
 }
 
 func __unmarshalInterfaceListOfListOfListsFieldWithPointerContent(b []byte, v *InterfaceListOfListOfListsFieldWithPointerContent) error {
@@ -421,11 +421,11 @@ func __unmarshalInterfaceListOfListOfListsFieldWithPointerContent(b []byte, v *I
 	case "Article":
 		*v = new(InterfaceListOfListOfListsFieldWithPointerArticle)
 		return json.Unmarshal(b, *v)
-	case "Video":
-		*v = new(InterfaceListOfListOfListsFieldWithPointerVideo)
-		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(InterfaceListOfListOfListsFieldWithPointerTopic)
+		return json.Unmarshal(b, *v)
+	case "Video":
+		*v = new(InterfaceListOfListOfListsFieldWithPointerVideo)
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
@@ -448,20 +448,20 @@ func __marshalInterfaceListOfListOfListsFieldWithPointerContent(v *InterfaceList
 			*InterfaceListOfListOfListsFieldWithPointerArticle
 		}{typename, v}
 		return json.Marshal(result)
-	case *InterfaceListOfListOfListsFieldWithPointerVideo:
-		typename = "Video"
-
-		result := struct {
-			TypeName string `json:"__typename"`
-			*InterfaceListOfListOfListsFieldWithPointerVideo
-		}{typename, v}
-		return json.Marshal(result)
 	case *InterfaceListOfListOfListsFieldWithPointerTopic:
 		typename = "Topic"
 
 		result := struct {
 			TypeName string `json:"__typename"`
 			*InterfaceListOfListOfListsFieldWithPointerTopic
+		}{typename, v}
+		return json.Marshal(result)
+	case *InterfaceListOfListOfListsFieldWithPointerVideo:
+		typename = "Video"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*InterfaceListOfListOfListsFieldWithPointerVideo
 		}{typename, v}
 		return json.Marshal(result)
 	case nil:

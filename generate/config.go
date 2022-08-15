@@ -17,10 +17,11 @@ var cfgFilenames = []string{".genqlient.yml", ".genqlient.yaml", "genqlient.yml"
 // Config represents genqlient's configuration, generally read from
 // genqlient.yaml.
 //
-// Callers must call ValidateAndFillDefaults before using the config.
+// Callers must call [Config.ValidateAndFillDefaults] before using the config.
 type Config struct {
-	// The following fields are documented at:
-	// https://github.com/Khan/genqlient/blob/main/docs/genqlient.yaml
+	// The following fields are documented in the [genqlient.yaml docs].
+	//
+	// [genqlient.yaml docs]: https://github.com/Khan/genqlient/blob/main/docs/genqlient.yaml
 	Schema           StringList              `yaml:"schema"`
 	Operations       StringList              `yaml:"operations"`
 	Generated        string                  `yaml:"generated"`
@@ -47,8 +48,9 @@ type Config struct {
 }
 
 // A TypeBinding represents a Go type to which genqlient will bind a particular
-// GraphQL type, and is documented further at:
-// https://github.com/Khan/genqlient/blob/main/docs/genqlient.yaml
+// GraphQL type, and is documented further in the [genqlient.yaml docs].
+//
+// [genqlient.yaml docs]: https://github.com/Khan/genqlient/blob/main/docs/genqlient.yaml
 type TypeBinding struct {
 	Type              string `yaml:"type"`
 	ExpectExactFields string `yaml:"expect_exact_fields"`
@@ -57,8 +59,10 @@ type TypeBinding struct {
 }
 
 // A PackageBinding represents a Go package for which genqlient will
-// automatically generate TypeBindings, and is documented further at:
-// https://github.com/Khan/genqlient/blob/main/docs/genqlient.yaml
+// automatically generate [TypeBinding] values, and is documented further in
+// the [genqlient.yaml docs].
+//
+// [genqlient.yaml docs]: https://github.com/Khan/genqlient/blob/main/docs/genqlient.yaml
 type PackageBinding struct {
 	Package string `yaml:"package"`
 }

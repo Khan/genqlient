@@ -83,7 +83,7 @@ func (v *ComplexNamedFragmentsResponse) __premarshalJSON() (*__premarshalComplex
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal ComplexNamedFragmentsResponse.QueryFragment.InnerQueryFragment.RandomItem: %w", err)
+				"unable to marshal ComplexNamedFragmentsResponse.QueryFragment.InnerQueryFragment.RandomItem: %w", err)
 		}
 	}
 	{
@@ -95,7 +95,7 @@ func (v *ComplexNamedFragmentsResponse) __premarshalJSON() (*__premarshalComplex
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal ComplexNamedFragmentsResponse.QueryFragment.InnerQueryFragment.RandomLeaf: %w", err)
+				"unable to marshal ComplexNamedFragmentsResponse.QueryFragment.InnerQueryFragment.RandomLeaf: %w", err)
 		}
 	}
 	{
@@ -107,7 +107,7 @@ func (v *ComplexNamedFragmentsResponse) __premarshalJSON() (*__premarshalComplex
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal ComplexNamedFragmentsResponse.QueryFragment.InnerQueryFragment.OtherLeaf: %w", err)
+				"unable to marshal ComplexNamedFragmentsResponse.QueryFragment.InnerQueryFragment.OtherLeaf: %w", err)
 		}
 	}
 	return &retval, nil
@@ -298,7 +298,7 @@ func (v *InnerQueryFragment) UnmarshalJSON(b []byte) error {
 				src, dst)
 			if err != nil {
 				return fmt.Errorf(
-					"Unable to unmarshal InnerQueryFragment.RandomItem: %w", err)
+					"unable to unmarshal InnerQueryFragment.RandomItem: %w", err)
 			}
 		}
 	}
@@ -311,7 +311,7 @@ func (v *InnerQueryFragment) UnmarshalJSON(b []byte) error {
 				src, dst)
 			if err != nil {
 				return fmt.Errorf(
-					"Unable to unmarshal InnerQueryFragment.RandomLeaf: %w", err)
+					"unable to unmarshal InnerQueryFragment.RandomLeaf: %w", err)
 			}
 		}
 	}
@@ -324,7 +324,7 @@ func (v *InnerQueryFragment) UnmarshalJSON(b []byte) error {
 				src, dst)
 			if err != nil {
 				return fmt.Errorf(
-					"Unable to unmarshal InnerQueryFragment.OtherLeaf: %w", err)
+					"unable to unmarshal InnerQueryFragment.OtherLeaf: %w", err)
 			}
 		}
 	}
@@ -359,7 +359,7 @@ func (v *InnerQueryFragment) __premarshalJSON() (*__premarshalInnerQueryFragment
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal InnerQueryFragment.RandomItem: %w", err)
+				"unable to marshal InnerQueryFragment.RandomItem: %w", err)
 		}
 	}
 	{
@@ -371,7 +371,7 @@ func (v *InnerQueryFragment) __premarshalJSON() (*__premarshalInnerQueryFragment
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal InnerQueryFragment.RandomLeaf: %w", err)
+				"unable to marshal InnerQueryFragment.RandomLeaf: %w", err)
 		}
 	}
 	{
@@ -383,7 +383,7 @@ func (v *InnerQueryFragment) __premarshalJSON() (*__premarshalInnerQueryFragment
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal InnerQueryFragment.OtherLeaf: %w", err)
+				"unable to marshal InnerQueryFragment.OtherLeaf: %w", err)
 		}
 	}
 	return &retval, nil
@@ -701,8 +701,8 @@ func (v *InnerQueryFragmentRandomItemArticle) __premarshalJSON() (*__premarshalI
 //
 // InnerQueryFragmentRandomItemContent is implemented by the following types:
 // InnerQueryFragmentRandomItemArticle
-// InnerQueryFragmentRandomItemVideo
 // InnerQueryFragmentRandomItemTopic
+// InnerQueryFragmentRandomItemVideo
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
@@ -722,9 +722,9 @@ type InnerQueryFragmentRandomItemContent interface {
 
 func (v *InnerQueryFragmentRandomItemArticle) implementsGraphQLInterfaceInnerQueryFragmentRandomItemContent() {
 }
-func (v *InnerQueryFragmentRandomItemVideo) implementsGraphQLInterfaceInnerQueryFragmentRandomItemContent() {
-}
 func (v *InnerQueryFragmentRandomItemTopic) implementsGraphQLInterfaceInnerQueryFragmentRandomItemContent() {
+}
+func (v *InnerQueryFragmentRandomItemVideo) implementsGraphQLInterfaceInnerQueryFragmentRandomItemContent() {
 }
 
 func __unmarshalInnerQueryFragmentRandomItemContent(b []byte, v *InnerQueryFragmentRandomItemContent) error {
@@ -744,11 +744,11 @@ func __unmarshalInnerQueryFragmentRandomItemContent(b []byte, v *InnerQueryFragm
 	case "Article":
 		*v = new(InnerQueryFragmentRandomItemArticle)
 		return json.Unmarshal(b, *v)
-	case "Video":
-		*v = new(InnerQueryFragmentRandomItemVideo)
-		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(InnerQueryFragmentRandomItemTopic)
+		return json.Unmarshal(b, *v)
+	case "Video":
+		*v = new(InnerQueryFragmentRandomItemVideo)
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
@@ -775,18 +775,6 @@ func __marshalInnerQueryFragmentRandomItemContent(v *InnerQueryFragmentRandomIte
 			*__premarshalInnerQueryFragmentRandomItemArticle
 		}{typename, premarshaled}
 		return json.Marshal(result)
-	case *InnerQueryFragmentRandomItemVideo:
-		typename = "Video"
-
-		premarshaled, err := v.__premarshalJSON()
-		if err != nil {
-			return nil, err
-		}
-		result := struct {
-			TypeName string `json:"__typename"`
-			*__premarshalInnerQueryFragmentRandomItemVideo
-		}{typename, premarshaled}
-		return json.Marshal(result)
 	case *InnerQueryFragmentRandomItemTopic:
 		typename = "Topic"
 
@@ -797,6 +785,18 @@ func __marshalInnerQueryFragmentRandomItemContent(v *InnerQueryFragmentRandomIte
 		result := struct {
 			TypeName string `json:"__typename"`
 			*__premarshalInnerQueryFragmentRandomItemTopic
+		}{typename, premarshaled}
+		return json.Marshal(result)
+	case *InnerQueryFragmentRandomItemVideo:
+		typename = "Video"
+
+		premarshaled, err := v.__premarshalJSON()
+		if err != nil {
+			return nil, err
+		}
+		result := struct {
+			TypeName string `json:"__typename"`
+			*__premarshalInnerQueryFragmentRandomItemVideo
 		}{typename, premarshaled}
 		return json.Marshal(result)
 	case nil:
@@ -1298,7 +1298,7 @@ func (v *MoreVideoFieldsParentTopic) UnmarshalJSON(b []byte) error {
 					src, dst)
 				if err != nil {
 					return fmt.Errorf(
-						"Unable to unmarshal MoreVideoFieldsParentTopic.Children: %w", err)
+						"unable to unmarshal MoreVideoFieldsParentTopic.Children: %w", err)
 				}
 			}
 		}
@@ -1341,7 +1341,7 @@ func (v *MoreVideoFieldsParentTopic) __premarshalJSON() (*__premarshalMoreVideoF
 				&src)
 			if err != nil {
 				return nil, fmt.Errorf(
-					"Unable to marshal MoreVideoFieldsParentTopic.Children: %w", err)
+					"unable to marshal MoreVideoFieldsParentTopic.Children: %w", err)
 			}
 		}
 	}
@@ -1360,8 +1360,8 @@ func (v *MoreVideoFieldsParentTopicChildrenArticle) GetTypename() *string { retu
 //
 // MoreVideoFieldsParentTopicChildrenContent is implemented by the following types:
 // MoreVideoFieldsParentTopicChildrenArticle
-// MoreVideoFieldsParentTopicChildrenVideo
 // MoreVideoFieldsParentTopicChildrenTopic
+// MoreVideoFieldsParentTopicChildrenVideo
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
@@ -1373,9 +1373,9 @@ type MoreVideoFieldsParentTopicChildrenContent interface {
 
 func (v *MoreVideoFieldsParentTopicChildrenArticle) implementsGraphQLInterfaceMoreVideoFieldsParentTopicChildrenContent() {
 }
-func (v *MoreVideoFieldsParentTopicChildrenVideo) implementsGraphQLInterfaceMoreVideoFieldsParentTopicChildrenContent() {
-}
 func (v *MoreVideoFieldsParentTopicChildrenTopic) implementsGraphQLInterfaceMoreVideoFieldsParentTopicChildrenContent() {
+}
+func (v *MoreVideoFieldsParentTopicChildrenVideo) implementsGraphQLInterfaceMoreVideoFieldsParentTopicChildrenContent() {
 }
 
 func __unmarshalMoreVideoFieldsParentTopicChildrenContent(b []byte, v *MoreVideoFieldsParentTopicChildrenContent) error {
@@ -1395,11 +1395,11 @@ func __unmarshalMoreVideoFieldsParentTopicChildrenContent(b []byte, v *MoreVideo
 	case "Article":
 		*v = new(MoreVideoFieldsParentTopicChildrenArticle)
 		return json.Unmarshal(b, *v)
-	case "Video":
-		*v = new(MoreVideoFieldsParentTopicChildrenVideo)
-		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(MoreVideoFieldsParentTopicChildrenTopic)
+		return json.Unmarshal(b, *v)
+	case "Video":
+		*v = new(MoreVideoFieldsParentTopicChildrenVideo)
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
@@ -1422,6 +1422,14 @@ func __marshalMoreVideoFieldsParentTopicChildrenContent(v *MoreVideoFieldsParent
 			*MoreVideoFieldsParentTopicChildrenArticle
 		}{typename, v}
 		return json.Marshal(result)
+	case *MoreVideoFieldsParentTopicChildrenTopic:
+		typename = "Topic"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*MoreVideoFieldsParentTopicChildrenTopic
+		}{typename, v}
+		return json.Marshal(result)
 	case *MoreVideoFieldsParentTopicChildrenVideo:
 		typename = "Video"
 
@@ -1433,14 +1441,6 @@ func __marshalMoreVideoFieldsParentTopicChildrenContent(v *MoreVideoFieldsParent
 			TypeName string `json:"__typename"`
 			*__premarshalMoreVideoFieldsParentTopicChildrenVideo
 		}{typename, premarshaled}
-		return json.Marshal(result)
-	case *MoreVideoFieldsParentTopicChildrenTopic:
-		typename = "Topic"
-
-		result := struct {
-			TypeName string `json:"__typename"`
-			*MoreVideoFieldsParentTopicChildrenTopic
-		}{typename, v}
 		return json.Marshal(result)
 	case nil:
 		return []byte("null"), nil
@@ -1619,7 +1619,7 @@ func (v *QueryFragment) __premarshalJSON() (*__premarshalQueryFragment, error) {
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal QueryFragment.InnerQueryFragment.RandomItem: %w", err)
+				"unable to marshal QueryFragment.InnerQueryFragment.RandomItem: %w", err)
 		}
 	}
 	{
@@ -1631,7 +1631,7 @@ func (v *QueryFragment) __premarshalJSON() (*__premarshalQueryFragment, error) {
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal QueryFragment.InnerQueryFragment.RandomLeaf: %w", err)
+				"unable to marshal QueryFragment.InnerQueryFragment.RandomLeaf: %w", err)
 		}
 	}
 	{
@@ -1643,7 +1643,7 @@ func (v *QueryFragment) __premarshalJSON() (*__premarshalQueryFragment, error) {
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal QueryFragment.InnerQueryFragment.OtherLeaf: %w", err)
+				"unable to marshal QueryFragment.InnerQueryFragment.OtherLeaf: %w", err)
 		}
 	}
 	return &retval, nil

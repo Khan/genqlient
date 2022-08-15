@@ -63,7 +63,7 @@ func (v *CustomMarshalUsersBornOnUser) UnmarshalJSON(b []byte) error {
 				src, dst)
 			if err != nil {
 				return fmt.Errorf(
-					"Unable to unmarshal CustomMarshalUsersBornOnUser.Birthdate: %w", err)
+					"unable to unmarshal CustomMarshalUsersBornOnUser.Birthdate: %w", err)
 			}
 		}
 	}
@@ -97,7 +97,7 @@ func (v *CustomMarshalUsersBornOnUser) __premarshalJSON() (*__premarshalCustomMa
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal CustomMarshalUsersBornOnUser.Birthdate: %w", err)
+				"unable to marshal CustomMarshalUsersBornOnUser.Birthdate: %w", err)
 		}
 	}
 	return &retval, nil
@@ -137,7 +137,7 @@ func (v *__CustomMarshalInput) UnmarshalJSON(b []byte) error {
 				src, dst)
 			if err != nil {
 				return fmt.Errorf(
-					"Unable to unmarshal __CustomMarshalInput.Date: %w", err)
+					"unable to unmarshal __CustomMarshalInput.Date: %w", err)
 			}
 		}
 	}
@@ -168,7 +168,7 @@ func (v *__CustomMarshalInput) __premarshalJSON() (*__premarshal__CustomMarshalI
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal __CustomMarshalInput.Date: %w", err)
+				"unable to marshal __CustomMarshalInput.Date: %w", err)
 		}
 	}
 	return &retval, nil

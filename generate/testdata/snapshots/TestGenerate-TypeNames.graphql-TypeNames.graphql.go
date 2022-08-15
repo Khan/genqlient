@@ -14,8 +14,8 @@ import (
 //
 // Item is implemented by the following types:
 // ItemArticle
-// ItemVideo
 // ItemTopic
+// ItemVideo
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
@@ -33,8 +33,8 @@ type Item interface {
 }
 
 func (v *ItemArticle) implementsGraphQLInterfaceItem() {}
-func (v *ItemVideo) implementsGraphQLInterfaceItem()   {}
 func (v *ItemTopic) implementsGraphQLInterfaceItem()   {}
+func (v *ItemVideo) implementsGraphQLInterfaceItem()   {}
 
 func __unmarshalItem(b []byte, v *Item) error {
 	if string(b) == "null" {
@@ -53,11 +53,11 @@ func __unmarshalItem(b []byte, v *Item) error {
 	case "Article":
 		*v = new(ItemArticle)
 		return json.Unmarshal(b, *v)
-	case "Video":
-		*v = new(ItemVideo)
-		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(ItemTopic)
+		return json.Unmarshal(b, *v)
+	case "Video":
+		*v = new(ItemVideo)
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
@@ -80,20 +80,20 @@ func __marshalItem(v *Item) ([]byte, error) {
 			*ItemArticle
 		}{typename, v}
 		return json.Marshal(result)
-	case *ItemVideo:
-		typename = "Video"
-
-		result := struct {
-			TypeName string `json:"__typename"`
-			*ItemVideo
-		}{typename, v}
-		return json.Marshal(result)
 	case *ItemTopic:
 		typename = "Topic"
 
 		result := struct {
 			TypeName string `json:"__typename"`
 			*ItemTopic
+		}{typename, v}
+		return json.Marshal(result)
+	case *ItemVideo:
+		typename = "Video"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*ItemVideo
 		}{typename, v}
 		return json.Marshal(result)
 	case nil:
@@ -203,7 +203,7 @@ func (v *Resp) UnmarshalJSON(b []byte) error {
 				src, dst)
 			if err != nil {
 				return fmt.Errorf(
-					"Unable to unmarshal Resp.RandomItem: %w", err)
+					"unable to unmarshal Resp.RandomItem: %w", err)
 			}
 		}
 	}
@@ -239,7 +239,7 @@ func (v *Resp) __premarshalJSON() (*__premarshalResp, error) {
 			&src)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"Unable to marshal Resp.RandomItem: %w", err)
+				"unable to marshal Resp.RandomItem: %w", err)
 		}
 	}
 	retval.Users = v.Users

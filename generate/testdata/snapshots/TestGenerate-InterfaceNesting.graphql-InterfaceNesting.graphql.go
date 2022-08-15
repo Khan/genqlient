@@ -64,7 +64,7 @@ func (v *InterfaceNestingRootTopic) UnmarshalJSON(b []byte) error {
 					src, dst)
 				if err != nil {
 					return fmt.Errorf(
-						"Unable to unmarshal InterfaceNestingRootTopic.Children: %w", err)
+						"unable to unmarshal InterfaceNestingRootTopic.Children: %w", err)
 				}
 			}
 		}
@@ -104,7 +104,7 @@ func (v *InterfaceNestingRootTopic) __premarshalJSON() (*__premarshalInterfaceNe
 				&src)
 			if err != nil {
 				return nil, fmt.Errorf(
-					"Unable to marshal InterfaceNestingRootTopic.Children: %w", err)
+					"unable to marshal InterfaceNestingRootTopic.Children: %w", err)
 			}
 		}
 	}
@@ -134,8 +134,8 @@ func (v *InterfaceNestingRootTopicChildrenArticle) GetParent() InterfaceNestingR
 //
 // InterfaceNestingRootTopicChildrenContent is implemented by the following types:
 // InterfaceNestingRootTopicChildrenArticle
-// InterfaceNestingRootTopicChildrenVideo
 // InterfaceNestingRootTopicChildrenTopic
+// InterfaceNestingRootTopicChildrenVideo
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
@@ -154,9 +154,9 @@ type InterfaceNestingRootTopicChildrenContent interface {
 
 func (v *InterfaceNestingRootTopicChildrenArticle) implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenContent() {
 }
-func (v *InterfaceNestingRootTopicChildrenVideo) implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenContent() {
-}
 func (v *InterfaceNestingRootTopicChildrenTopic) implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenContent() {
+}
+func (v *InterfaceNestingRootTopicChildrenVideo) implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenContent() {
 }
 
 func __unmarshalInterfaceNestingRootTopicChildrenContent(b []byte, v *InterfaceNestingRootTopicChildrenContent) error {
@@ -176,11 +176,11 @@ func __unmarshalInterfaceNestingRootTopicChildrenContent(b []byte, v *InterfaceN
 	case "Article":
 		*v = new(InterfaceNestingRootTopicChildrenArticle)
 		return json.Unmarshal(b, *v)
-	case "Video":
-		*v = new(InterfaceNestingRootTopicChildrenVideo)
-		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(InterfaceNestingRootTopicChildrenTopic)
+		return json.Unmarshal(b, *v)
+	case "Video":
+		*v = new(InterfaceNestingRootTopicChildrenVideo)
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
@@ -203,20 +203,20 @@ func __marshalInterfaceNestingRootTopicChildrenContent(v *InterfaceNestingRootTo
 			*InterfaceNestingRootTopicChildrenArticle
 		}{typename, v}
 		return json.Marshal(result)
-	case *InterfaceNestingRootTopicChildrenVideo:
-		typename = "Video"
-
-		result := struct {
-			TypeName string `json:"__typename"`
-			*InterfaceNestingRootTopicChildrenVideo
-		}{typename, v}
-		return json.Marshal(result)
 	case *InterfaceNestingRootTopicChildrenTopic:
 		typename = "Topic"
 
 		result := struct {
 			TypeName string `json:"__typename"`
 			*InterfaceNestingRootTopicChildrenTopic
+		}{typename, v}
+		return json.Marshal(result)
+	case *InterfaceNestingRootTopicChildrenVideo:
+		typename = "Video"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*InterfaceNestingRootTopicChildrenVideo
 		}{typename, v}
 		return json.Marshal(result)
 	case nil:
@@ -273,7 +273,7 @@ func (v *InterfaceNestingRootTopicChildrenContentParentTopic) UnmarshalJSON(b []
 					src, dst)
 				if err != nil {
 					return fmt.Errorf(
-						"Unable to unmarshal InterfaceNestingRootTopicChildrenContentParentTopic.Children: %w", err)
+						"unable to unmarshal InterfaceNestingRootTopicChildrenContentParentTopic.Children: %w", err)
 				}
 			}
 		}
@@ -313,7 +313,7 @@ func (v *InterfaceNestingRootTopicChildrenContentParentTopic) __premarshalJSON()
 				&src)
 			if err != nil {
 				return nil, fmt.Errorf(
-					"Unable to marshal InterfaceNestingRootTopicChildrenContentParentTopic.Children: %w", err)
+					"unable to marshal InterfaceNestingRootTopicChildrenContentParentTopic.Children: %w", err)
 			}
 		}
 	}
@@ -341,8 +341,8 @@ func (v *InterfaceNestingRootTopicChildrenContentParentTopicChildrenArticle) Get
 //
 // InterfaceNestingRootTopicChildrenContentParentTopicChildrenContent is implemented by the following types:
 // InterfaceNestingRootTopicChildrenContentParentTopicChildrenArticle
-// InterfaceNestingRootTopicChildrenContentParentTopicChildrenVideo
 // InterfaceNestingRootTopicChildrenContentParentTopicChildrenTopic
+// InterfaceNestingRootTopicChildrenContentParentTopicChildrenVideo
 // The GraphQL type's documentation follows.
 //
 // Content is implemented by various types like Article, Video, and Topic.
@@ -359,9 +359,9 @@ type InterfaceNestingRootTopicChildrenContentParentTopicChildrenContent interfac
 
 func (v *InterfaceNestingRootTopicChildrenContentParentTopicChildrenArticle) implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenContentParentTopicChildrenContent() {
 }
-func (v *InterfaceNestingRootTopicChildrenContentParentTopicChildrenVideo) implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenContentParentTopicChildrenContent() {
-}
 func (v *InterfaceNestingRootTopicChildrenContentParentTopicChildrenTopic) implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenContentParentTopicChildrenContent() {
+}
+func (v *InterfaceNestingRootTopicChildrenContentParentTopicChildrenVideo) implementsGraphQLInterfaceInterfaceNestingRootTopicChildrenContentParentTopicChildrenContent() {
 }
 
 func __unmarshalInterfaceNestingRootTopicChildrenContentParentTopicChildrenContent(b []byte, v *InterfaceNestingRootTopicChildrenContentParentTopicChildrenContent) error {
@@ -381,11 +381,11 @@ func __unmarshalInterfaceNestingRootTopicChildrenContentParentTopicChildrenConte
 	case "Article":
 		*v = new(InterfaceNestingRootTopicChildrenContentParentTopicChildrenArticle)
 		return json.Unmarshal(b, *v)
-	case "Video":
-		*v = new(InterfaceNestingRootTopicChildrenContentParentTopicChildrenVideo)
-		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(InterfaceNestingRootTopicChildrenContentParentTopicChildrenTopic)
+		return json.Unmarshal(b, *v)
+	case "Video":
+		*v = new(InterfaceNestingRootTopicChildrenContentParentTopicChildrenVideo)
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
@@ -408,20 +408,20 @@ func __marshalInterfaceNestingRootTopicChildrenContentParentTopicChildrenContent
 			*InterfaceNestingRootTopicChildrenContentParentTopicChildrenArticle
 		}{typename, v}
 		return json.Marshal(result)
-	case *InterfaceNestingRootTopicChildrenContentParentTopicChildrenVideo:
-		typename = "Video"
-
-		result := struct {
-			TypeName string `json:"__typename"`
-			*InterfaceNestingRootTopicChildrenContentParentTopicChildrenVideo
-		}{typename, v}
-		return json.Marshal(result)
 	case *InterfaceNestingRootTopicChildrenContentParentTopicChildrenTopic:
 		typename = "Topic"
 
 		result := struct {
 			TypeName string `json:"__typename"`
 			*InterfaceNestingRootTopicChildrenContentParentTopicChildrenTopic
+		}{typename, v}
+		return json.Marshal(result)
+	case *InterfaceNestingRootTopicChildrenContentParentTopicChildrenVideo:
+		typename = "Video"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*InterfaceNestingRootTopicChildrenContentParentTopicChildrenVideo
 		}{typename, v}
 		return json.Marshal(result)
 	case nil:

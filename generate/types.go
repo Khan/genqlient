@@ -186,11 +186,11 @@ func (field *goStructField) Selector() string {
 }
 
 // unmarshaler returns:
-// - the name of the function to use to unmarshal this field
-// - true if this is a fully-qualified name (false if it is a package-local
-//   unqualified name)
-// - true if we need to generate an unmarshaler at all, false if the default
-//   behavior will suffice
+//   - the name of the function to use to unmarshal this field
+//   - true if this is a fully-qualified name (false if it is a package-local
+//     unqualified name)
+//   - true if we need to generate an unmarshaler at all, false if the default
+//     behavior will suffice
 func (field *goStructField) unmarshaler() (qualifiedName string, needsImport bool, needsUnmarshaler bool) {
 	switch typ := field.GoType.Unwrap().(type) {
 	case *goOpaqueType:
@@ -214,9 +214,9 @@ func (field *goStructField) Unmarshaler(g *generator) (string, error) {
 }
 
 // marshaler returns:
-// - the fully-qualified name of the function to use to marshal this field
-// - true if we need to generate an marshaler at all, false if the default
-//   behavior will suffice
+//   - the fully-qualified name of the function to use to marshal this field
+//   - true if we need to generate an marshaler at all, false if the default
+//     behavior will suffice
 func (field *goStructField) marshaler() (qualifiedName string, needsImport bool, needsMarshaler bool) {
 	switch typ := field.GoType.Unwrap().(type) {
 	case *goOpaqueType:
@@ -273,17 +273,21 @@ type selector struct {
 // and the paths to reach them (via those embeds), but with different
 // visibility rules for conflicting fields than Go.
 //
-// (Before you read further, now's a good time to review Go's rules:
-// https://golang.org/ref/spec#Selectors. Done? Good.)
+// (Before you read further, now's a good time to review [Go's rules].
+// Done?  Good.)
 //
 // To illustrate the need, consider the following query:
+//
 //	fragment A on T { id }
 //	fragment B on T { id }
 //	query Q { t { ...A ...B } }
+//
 // We generate types:
+//
 //	type A struct { Id string `json:"id"` }
 //	type B struct { Id string `json:"id"` }
 //	type QT struct { A; B }
+//
 // According to Go's embedding rules, QT has no field Id: since QT.A.Id and
 // QT.B.Id are at equal depth, neither wins and gets promoted.  (Go's JSON
 // library uses similar logic to decide which field to write to JSON, except
@@ -307,7 +311,10 @@ type selector struct {
 // practice, hopefully, they all match, but validating that is even more work
 // for a fairly rare case.)  This function returns, for each JSON-name, the Go
 // field we want to use.  In the example above, it would return:
+//
 //	[]selector{{<goStructField for QT.A.Id>, "A.Id"}}
+//
+// [Go's rules]: https://golang.org/ref/spec#Selectors
 func (typ *goStructType) FlattenedFields() ([]*selector, error) {
 	seenJSONNames := map[string]bool{}
 	retval := make([]*selector, 0, len(typ.Fields))
