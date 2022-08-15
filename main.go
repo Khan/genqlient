@@ -5,7 +5,9 @@
 //	go run github.com/Khan/genqlient
 //
 // For programmatic access, see the "generate" package, below.  For
-// user documentation, see github.com/Khan/genqlient.
+// user documentation, see the project [GitHub].
+//
+// [GitHub]: https://github.com/Khan/genqlient
 package main
 
 import (
