@@ -424,12 +424,12 @@ func (g *generator) convertDefinition(
 			goName := upperFirst(field.Name)
 			// Several of the arguments don't really make sense here:
 			// (note field.Type is necessarily a scalar, input, or enum)
-			// - namePrefix is ignored for input types and enums (see
-			//   names.go) and for scalars (they use client-specified
-			//   names)
-			// - selectionSet is ignored for input types, because we
-			//   just use all fields of the type; and it's nonexistent
-			//   for scalars and enums, our only other possible types
+			//  - namePrefix is ignored for input types and enums (see
+			//    names.go) and for scalars (they use client-specified
+			//    names)
+			//  - selectionSet is ignored for input types, because we
+			//    just use all fields of the type; and it's nonexistent
+			//    for scalars and enums, our only other possible types
 			// TODO(benkraft): Can we refactor to avoid passing the values that
 			// will be ignored?  We know field.Type is a scalar, enum, or input
 			// type.  But plumbing that is a bit tricky in practice.
@@ -650,12 +650,14 @@ func (g *generator) convertSelectionSet(
 // of the given type", which is true when the given type is or implements
 // the fragment's type.  This is distinct from the rules for when a fragment
 // spread is legal, which is true when the fragment would be active for *any*
-// of the concrete types the spread-context could have (see
-// https://spec.graphql.org/draft/#sec-Fragment-Spreads or docs/DESIGN.md).
+// of the concrete types the spread-context could have (see the [GraphQL spec]
+// or docs/DESIGN.md).
 //
 // containingTypedef is as described in convertInlineFragment, below.
 // fragmentTypedef is the definition of the fragment's type-condition, i.e. the
 // definition of MyType in a fragment `on MyType`.
+//
+// [GraphQL spec]: https://spec.graphql.org/draft/#sec-Fragment-Spreads
 func fragmentMatches(containingTypedef, fragmentTypedef *ast.Definition) bool {
 	if containingTypedef.Name == fragmentTypedef.Name {
 		return true
@@ -663,10 +665,11 @@ func fragmentMatches(containingTypedef, fragmentTypedef *ast.Definition) bool {
 	for _, iface := range containingTypedef.Interfaces {
 		// Note we don't need to recurse into the interfaces here, because in
 		// GraphQL types must list all the interfaces they implement, including
-		// all types those interfaces implement [1].  Actually, at present
+		// all types those interfaces implement ([spec]).  Actually, at present
 		// gqlparser doesn't even support interfaces implementing other
 		// interfaces, but our code would handle that too.
-		// [1] https://spec.graphql.org/draft/#sec-Interfaces.Interfaces-Implementing-Interfaces
+		//
+		// [spec]: https://spec.graphql.org/draft/#sec-Interfaces.Interfaces-Implementing-Interfaces
 		if iface == fragmentTypedef.Name {
 			return true
 		}

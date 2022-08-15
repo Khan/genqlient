@@ -40,7 +40,9 @@ func (t *lastResponseTransport) RoundTrip(req *http.Request) (*http.Response, er
 }
 
 // roundtripClient is a graphql.Client that checks that
+//
 //	unmarshal(marshal(req)) == req && marshal(unmarshal(resp)) == resp
+//
 // for each request it processes.
 type roundtripClient struct {
 	wrapped   graphql.Client

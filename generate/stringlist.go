@@ -1,8 +1,9 @@
 package generate
 
 // StringList provides yaml unmarshaler to accept both `string` and `[]string` as a valid type.
-// Sourced from:
-//		https://github.com/99designs/gqlgen/blob/1a0b19feff6f02d2af6631c9d847bc243f8ede39/codegen/config/config.go#L302-L329
+// Sourced from [gqlgen].
+//
+// [gqlgen]: https://github.com/99designs/gqlgen/blob/1a0b19feff6f02d2af6631c9d847bc243f8ede39/codegen/config/config.go#L302-L329
 type StringList []string
 
 func (a *StringList) UnmarshalYAML(unmarshal func(interface{}) error) error {
