@@ -6,6 +6,7 @@ import (
 	"go/token"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"golang.org/x/tools/go/packages"
 	"gopkg.in/yaml.v2"
@@ -114,6 +115,14 @@ func (c *Config) ValidateAndFillDefaults(baseDir string) error {
 
 	if len(c.PackageBindings) > 0 {
 		for _, binding := range c.PackageBindings {
+			if strings.HasSuffix(binding.Package, ".go") {
+				// total heuristic -- but this is an easy mistake to make and
+				// results in rather bizarre behavior from go/packages.
+				return errorf(nil,
+					"package %v looks like a file, but should be a package-name",
+					binding.Package)
+			}
+
 			mode := packages.NeedImports | packages.NeedTypes | packages.NeedTypesSizes
 			pkgs, err := packages.Load(&packages.Config{
 				Mode: mode,
