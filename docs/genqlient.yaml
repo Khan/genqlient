@@ -97,21 +97,19 @@ use_struct_references: boolean
 # Defaults to false.
 use_extensions: boolean
 
-# Customize how optional fields are handled.
-optional:
-  # Customize how models are generated for optional fields. This can currently
-  # be set to one of the following values:
-  # - value (default): optional fields are generated as values, the same as
-  #   non-optional fields. E.g. fields with GraphQL types `String` or `String!`
-  #   will both map to the Go type `string`. When values are absent in
-  #   responses the zero value will be used.
-  # - pointer: optional fields are generated as pointers. E.g. fields with
-  #   GraphQL type `String` will map to the Go type `*string`. When values are
-  #   absent in responses `nil` will be used. Optional list fields do not use
-  #   pointers-to-slices, so the GraphQL type `[String]` will map to the Go
-  #   type `[]*string`, not `*[]*string`; GraphQL null and empty list simply
-  #   map to Go nil- and empty-slice.
-  output: value
+# Customize how models are generated for optional fields. This can currently
+# be set to one of the following values:
+# - value (default): optional fields are generated as values, the same as
+#   non-optional fields. E.g. fields with GraphQL types `String` or `String!`
+#   will both map to the Go type `string`. When values are absent in
+#   responses the zero value will be used.
+# - pointer: optional fields are generated as pointers. E.g. fields with
+#   GraphQL type `String` will map to the Go type `*string`. When values are
+#   absent in responses `nil` will be used. Optional list fields do not use
+#   pointers-to-slices, so the GraphQL type `[String]` will map to the Go
+#   type `[]*string`, not `*[]*string`; GraphQL null and empty list simply
+#   map to Go nil- and empty-slice.
+optional: value
 
 # A map from GraphQL type name to Go fully-qualified type name to override
 # the Go type genqlient will use for this GraphQL type.
