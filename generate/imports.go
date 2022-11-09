@@ -2,14 +2,43 @@ package generate
 
 import (
 	"fmt"
+	"go/token"
 	"go/types"
 	"regexp"
 	"strconv"
 	"strings"
+	"unicode"
 )
 
+// makeIdentifier takes a string and returns a valid go identifier like it.
+//
+// If the string is an identifier, return the input. Otherwise, munge it to
+// make a valid identifier, which at worst (if the input is entirely emoji,
+// say) means coming up with one out of whole cloth. This identifier need not
+// be particularly unique; the caller may add a suffix.
+func makeIdentifier(candidateIdentifier string) string {
+	if token.IsIdentifier(candidateIdentifier) {
+		return candidateIdentifier
+	}
+
+	var goodChars strings.Builder
+	for _, c := range candidateIdentifier {
+		// modified from token.IsIdentifier
+		if unicode.IsLetter(c) || c == '_' ||
+			// digits only valid after first char
+			goodChars.Len() > 0 && unicode.IsDigit(c) {
+			goodChars.WriteRune(c)
+		}
+	}
+	if goodChars.Len() > 0 {
+		return goodChars.String()
+	}
+
+	return "alias"
+}
+
 func (g *generator) addImportFor(pkgPath string) (alias string) {
-	pkgName := pkgPath[strings.LastIndex(pkgPath, "/")+1:]
+	pkgName := makeIdentifier(pkgPath[strings.LastIndex(pkgPath, "/")+1:])
 	alias = pkgName
 	suffix := 2
 	for g.usedAliases[alias] {

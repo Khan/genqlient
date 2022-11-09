@@ -171,6 +171,10 @@ func TestGenerateWithConfig(t *testing.T) {
 			Generated:   "generated.go",
 			ContextType: "github.com/Khan/genqlient/internal/testutil.MyContext",
 		}},
+		{"CustomContextWithAlias", "", nil, &Config{
+			Generated:   "generated.go",
+			ContextType: "github.com/Khan/genqlient/internal/testutil/junk---fun.name.MyContext",
+		}},
 		{"StructReferences", "", nil, &Config{
 			StructReferences: true,
 			Generated:        "generated-structrefs.go",
