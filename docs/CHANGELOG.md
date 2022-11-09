@@ -28,7 +28,8 @@ When releasing a new version:
 
 ### Bug fixes:
 
-- Fixed non-deterministic generated code when querying graphql interfaces
+- Fixed non-deterministic generated code when querying graphql interfaces.
+- Fixed generated code when last component of package name is not a valid identifier (e.g. `"path/to/my-package"`).
 
 ## v0.5.0
 
