@@ -1,0 +1,5 @@
+query QueryWithAll {
+  user {
+    __all
+  }
+}

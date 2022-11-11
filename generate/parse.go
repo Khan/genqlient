@@ -69,8 +69,95 @@ func getSchema(globs StringList) (*ast.Schema, error) {
 	return schema, nil
 }
 
+// TODO document, note take care bc document may be wildly invalid
+// TODO: consider merging preprocessQueryDocument into here (can't put __all
+// there bc needs to happen before validation)
+// TODO: document __all, looks roughly like __all(depth: Int = 1)
+func mungeQueries(schema *ast.Schema, queryDoc *ast.QueryDocument) error {
+	var observers validator.Events
+	handleAllField := func(field *ast.Field, parentDef *ast.Definition) ast.SelectionSet {
+		if field.Alias != "__all" {
+			panic("can't have alias for __all")
+		}
+
+		depth := 1
+		seenDepth := false
+		for _, argument := range field.Arguments {
+			if argument.Name != "depth" || seenDepth {
+				panic("must have at most one argument, called depth")
+			}
+			// TODO: also ban directives, selections
+			seenDepth = true
+			// TODO: be explicit about handling of variables
+			v, err := argument.Value.Value(nil)
+			if err != nil {
+				panic(err)
+			}
+			depth = int(v.(int64))
+			if depth <= 0 {
+				panic("depth must be positive")
+			}
+		}
+
+		if depth != 1 {
+			panic("TODO: implement depth != 1")
+		}
+
+		var replacements ast.SelectionSet
+		for _, fieldDef := range parentDef.Fields {
+			fieldTyp := schema.Types[fieldDef.Type.Name()]
+			if fieldTyp.Kind != ast.Scalar && fieldTyp.Kind != ast.Enum {
+				continue // not a leaf, TODO recurse for depth
+			}
+			replacements = append(replacements, &ast.Field{
+				Alias: fieldDef.Name,
+				Name:  fieldDef.Name,
+				// TODO: what if it has required args? skip?
+			})
+		}
+
+		return replacements
+	}
+
+	handleSelectionSet := func(selectionSet ast.SelectionSet, parentDef *ast.Definition) ast.SelectionSet {
+		for i := 0; i < len(selectionSet); {
+			field, ok := selectionSet[i].(*ast.Field)
+			if !ok || field.Name != "__all" {
+				i++
+				continue
+			}
+			replacements := handleAllField(field, parentDef)
+			selectionSet = append(append(append(
+				// TODO: update in-place? nontrivial to do safely
+				ast.SelectionSet{},
+				selectionSet[:i]...),
+				replacements...),
+				selectionSet[i+1:]...)
+			i += len(replacements)
+		}
+		return selectionSet
+	}
+
+	// TODO: also wire up to OnInlineFragment, OnFragmentSpread,
+	// OnOperation
+	observers.OnField(func(_ *validator.Walker, field *ast.Field) {
+		if field.Definition == nil || field.Definition.Type == nil {
+			return
+		}
+		field.SelectionSet = handleSelectionSet(field.SelectionSet, schema.Types[field.Definition.Type.Name()])
+	})
+
+	validator.Walk(schema, queryDoc, &observers)
+	return nil
+}
+
 func getAndValidateQueries(basedir string, filenames StringList, schema *ast.Schema) (*ast.QueryDocument, error) {
 	queryDoc, err := getQueries(basedir, filenames)
+	if err != nil {
+		return nil, err
+	}
+
+	err = mungeQueries(schema, queryDoc)
 	if err != nil {
 		return nil, err
 	}

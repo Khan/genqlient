@@ -1,0 +1,9 @@
+{
+  "operations": [
+    {
+      "operationName": "QueryWithAll",
+      "query": "\nquery QueryWithAll {\n\tuser {\n\t\tid\n\t\troles\n\t\tname\n\t\temails\n\t\temailsOrNull\n\t\temailsWithNulls\n\t\temailsWithNullsOrNull\n\t\tbirthdate\n\t}\n}\n",
+      "sourceLocation": "testdata/queries/QueryWithAll.graphql"
+    }
+  ]
+}
