@@ -30,6 +30,7 @@ When releasing a new version:
 
 - Fixed non-deterministic generated code when querying graphql interfaces.
 - Fixed generated code when last component of package name is not a valid identifier (e.g. `"path/to/my-package"`).
+- Fixed incorrect documentation of `for` directive.
 
 ## v0.5.0
 

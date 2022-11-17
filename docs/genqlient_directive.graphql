@@ -63,7 +63,9 @@ directive genqlient(
   #  # @genqlient(for: "MyInput.myField", omitempty: true)
   #  # @genqlient(for: "MyInput.myOtherField", pointer: true)
   #  # @genqlient(for: "MyOutput.id", bind: "path/to/pkg.MyOutputID")
-  #  query MyQuery($arg: MyInput) { ... }
+  #  query MyQuery(
+  #    $arg: MyInput
+  #  ) { ... }
   # genqlient will generate a type
   #  type MyInput struct {
   #    MyField      <type>  `json:"myField,omitempty"`
