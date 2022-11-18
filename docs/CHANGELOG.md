@@ -25,6 +25,7 @@ When releasing a new version:
 ### New features:
 
 - You can now bind all types from a package in `genqlient.yaml` using the new `package_bindings` option.
+- The graphql operation (query or mutation) as sent over the wire is now exposed via a constant in the generated genqlient .go file.
 
 ### Bug fixes:
 
