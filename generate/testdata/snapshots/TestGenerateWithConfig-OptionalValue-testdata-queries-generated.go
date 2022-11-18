@@ -77,6 +77,14 @@ type __ListInputQueryInput struct {
 // GetNames returns __ListInputQueryInput.Names, and is useful for accessing the field via an interface.
 func (v *__ListInputQueryInput) GetNames() []string { return v.Names }
 
+const ListInputQueryOperation = `
+query ListInputQuery ($names: [String]) {
+	user(query: {names:$names}) {
+		id
+	}
+}
+`
+
 func ListInputQuery(
 	ctx context.Context,
 	client graphql.Client,
@@ -84,13 +92,7 @@ func ListInputQuery(
 ) (*ListInputQueryResponse, error) {
 	req := &graphql.Request{
 		OpName: "ListInputQuery",
-		Query: `
-query ListInputQuery ($names: [String]) {
-	user(query: {names:$names}) {
-		id
-	}
-}
-`,
+		Query:  ListInputQueryOperation,
 		Variables: &__ListInputQueryInput{
 			Names: names,
 		},
@@ -109,13 +111,7 @@ query ListInputQuery ($names: [String]) {
 	return &data, err
 }
 
-func QueryWithSlices(
-	ctx context.Context,
-	client graphql.Client,
-) (*QueryWithSlicesResponse, error) {
-	req := &graphql.Request{
-		OpName: "QueryWithSlices",
-		Query: `
+const QueryWithSlicesOperation = `
 query QueryWithSlices {
 	user {
 		emails
@@ -124,7 +120,15 @@ query QueryWithSlices {
 		emailsWithNullsOrNull
 	}
 }
-`,
+`
+
+func QueryWithSlices(
+	ctx context.Context,
+	client graphql.Client,
+) (*QueryWithSlicesResponse, error) {
+	req := &graphql.Request{
+		OpName: "QueryWithSlices",
+		Query:  QueryWithSlicesOperation,
 	}
 	var err error
 

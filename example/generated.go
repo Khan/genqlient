@@ -69,6 +69,15 @@ func (v *getViewerViewerUser) GetMyName() string { return v.MyName }
 // GetCreatedAt returns getViewerViewerUser.CreatedAt, and is useful for accessing the field via an interface.
 func (v *getViewerViewerUser) GetCreatedAt() time.Time { return v.CreatedAt }
 
+const getUserOperation = `
+query getUser ($Login: String!) {
+	user(login: $Login) {
+		theirName: name
+		createdAt
+	}
+}
+`
+
 // getUser gets the given user's name from their username.
 func getUser(
 	ctx context.Context,
@@ -77,14 +86,7 @@ func getUser(
 ) (*getUserResponse, error) {
 	req := &graphql.Request{
 		OpName: "getUser",
-		Query: `
-query getUser ($Login: String!) {
-	user(login: $Login) {
-		theirName: name
-		createdAt
-	}
-}
-`,
+		Query:  getUserOperation,
 		Variables: &__getUserInput{
 			Login: Login,
 		},
@@ -103,20 +105,22 @@ query getUser ($Login: String!) {
 	return &data, err
 }
 
-func getViewer(
-	ctx context.Context,
-	client graphql.Client,
-) (*getViewerResponse, error) {
-	req := &graphql.Request{
-		OpName: "getViewer",
-		Query: `
+const getViewerOperation = `
 query getViewer {
 	viewer {
 		MyName: name
 		createdAt
 	}
 }
-`,
+`
+
+func getViewer(
+	ctx context.Context,
+	client graphql.Client,
+) (*getViewerResponse, error) {
+	req := &graphql.Request{
+		OpName: "getViewer",
+		Query:  getViewerOperation,
 	}
 	var err error
 

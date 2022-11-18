@@ -37,19 +37,21 @@ func (v *TypeNameQueryUser) GetTypename() string { return v.Typename }
 // GetId returns TypeNameQueryUser.Id, and is useful for accessing the field via an interface.
 func (v *TypeNameQueryUser) GetId() testutil.ID { return v.Id }
 
-func TypeNameQuery(
-	client graphql.Client,
-) (*TypeNameQueryResponse, error) {
-	req := &graphql.Request{
-		OpName: "TypeNameQuery",
-		Query: `
+const TypeNameQueryOperation = `
 query TypeNameQuery {
 	user {
 		__typename
 		id
 	}
 }
-`,
+`
+
+func TypeNameQuery(
+	client graphql.Client,
+) (*TypeNameQueryResponse, error) {
+	req := &graphql.Request{
+		OpName: "TypeNameQuery",
+		Query:  TypeNameQueryOperation,
 	}
 	var err error
 

@@ -219,17 +219,7 @@ func (v *__OmitEmptyQueryInput) GetTz() string { return v.Tz }
 // GetTzNoOmitEmpty returns __OmitEmptyQueryInput.TzNoOmitEmpty, and is useful for accessing the field via an interface.
 func (v *__OmitEmptyQueryInput) GetTzNoOmitEmpty() string { return v.TzNoOmitEmpty }
 
-func OmitEmptyQuery(
-	client graphql.Client,
-	query UserQueryInput,
-	queries []UserQueryInput,
-	dt time.Time,
-	tz string,
-	tzNoOmitEmpty string,
-) (*OmitEmptyQueryResponse, error) {
-	req := &graphql.Request{
-		OpName: "OmitEmptyQuery",
-		Query: `
+const OmitEmptyQueryOperation = `
 query OmitEmptyQuery ($query: UserQueryInput, $queries: [UserQueryInput], $dt: DateTime, $tz: String, $tzNoOmitEmpty: String) {
 	user(query: $query) {
 		id
@@ -240,7 +230,19 @@ query OmitEmptyQuery ($query: UserQueryInput, $queries: [UserQueryInput], $dt: D
 	maybeConvert(dt: $dt, tz: $tz)
 	convert2: maybeConvert(dt: $dt, tz: $tzNoOmitEmpty)
 }
-`,
+`
+
+func OmitEmptyQuery(
+	client graphql.Client,
+	query UserQueryInput,
+	queries []UserQueryInput,
+	dt time.Time,
+	tz string,
+	tzNoOmitEmpty string,
+) (*OmitEmptyQueryResponse, error) {
+	req := &graphql.Request{
+		OpName: "OmitEmptyQuery",
+		Query:  OmitEmptyQueryOperation,
 		Variables: &__OmitEmptyQueryInput{
 			Query:         query,
 			Queries:       queries,

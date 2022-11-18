@@ -54,19 +54,21 @@ type __InputEnumQueryInput struct {
 // GetRole returns __InputEnumQueryInput.Role, and is useful for accessing the field via an interface.
 func (v *__InputEnumQueryInput) GetRole() Role { return v.Role }
 
+const InputEnumQueryOperation = `
+query InputEnumQuery ($role: Role!) {
+	usersWithRole(role: $role) {
+		id
+	}
+}
+`
+
 func InputEnumQuery(
 	client graphql.Client,
 	role Role,
 ) (*InputEnumQueryResponse, error) {
 	req := &graphql.Request{
 		OpName: "InputEnumQuery",
-		Query: `
-query InputEnumQuery ($role: Role!) {
-	usersWithRole(role: $role) {
-		id
-	}
-}
-`,
+		Query:  InputEnumQueryOperation,
 		Variables: &__InputEnumQueryInput{
 			Role: role,
 		},

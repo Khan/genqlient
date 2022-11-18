@@ -174,18 +174,20 @@ func (v *UnionNoFragmentsQueryResponse) __premarshalJSON() (*__premarshalUnionNo
 	return &retval, nil
 }
 
-func UnionNoFragmentsQuery(
-	client graphql.Client,
-) (*UnionNoFragmentsQueryResponse, error) {
-	req := &graphql.Request{
-		OpName: "UnionNoFragmentsQuery",
-		Query: `
+const UnionNoFragmentsQueryOperation = `
 query UnionNoFragmentsQuery {
 	randomLeaf {
 		__typename
 	}
 }
-`,
+`
+
+func UnionNoFragmentsQuery(
+	client graphql.Client,
+) (*UnionNoFragmentsQueryResponse, error) {
+	req := &graphql.Request{
+		OpName: "UnionNoFragmentsQuery",
+		Query:  UnionNoFragmentsQueryOperation,
 	}
 	var err error
 

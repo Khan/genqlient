@@ -62,12 +62,7 @@ const (
 	RoleTeacher Role = "TEACHER"
 )
 
-func QueryWithEnums(
-	client graphql.Client,
-) (*QueryWithEnumsResponse, error) {
-	req := &graphql.Request{
-		OpName: "QueryWithEnums",
-		Query: `
+const QueryWithEnumsOperation = `
 query QueryWithEnums {
 	user {
 		roles
@@ -76,7 +71,14 @@ query QueryWithEnums {
 		roles
 	}
 }
-`,
+`
+
+func QueryWithEnums(
+	client graphql.Client,
+) (*QueryWithEnumsResponse, error) {
+	req := &graphql.Request{
+		OpName: "QueryWithEnums",
+		Query:  QueryWithEnumsOperation,
 	}
 	var err error
 

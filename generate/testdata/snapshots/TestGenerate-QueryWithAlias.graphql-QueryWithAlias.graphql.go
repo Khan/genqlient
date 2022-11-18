@@ -40,19 +40,21 @@ func (v *QueryWithAliasUser) GetID() testutil.ID { return v.ID }
 // GetOtherID returns QueryWithAliasUser.OtherID, and is useful for accessing the field via an interface.
 func (v *QueryWithAliasUser) GetOtherID() testutil.ID { return v.OtherID }
 
-func QueryWithAlias(
-	client graphql.Client,
-) (*QueryWithAliasResponse, error) {
-	req := &graphql.Request{
-		OpName: "QueryWithAlias",
-		Query: `
+const QueryWithAliasOperation = `
 query QueryWithAlias {
 	User: user {
 		ID: id
 		otherID: id
 	}
 }
-`,
+`
+
+func QueryWithAlias(
+	client graphql.Client,
+) (*QueryWithAliasResponse, error) {
+	req := &graphql.Request{
+		OpName: "QueryWithAlias",
+		Query:  QueryWithAliasOperation,
 	}
 	var err error
 

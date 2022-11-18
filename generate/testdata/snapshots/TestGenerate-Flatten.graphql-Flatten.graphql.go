@@ -266,12 +266,7 @@ type VideoFieldsParentTopic struct {
 // GetVideoChildren returns VideoFieldsParentTopic.VideoChildren, and is useful for accessing the field via an interface.
 func (v *VideoFieldsParentTopic) GetVideoChildren() []ChildVideoFields { return v.VideoChildren }
 
-func ComplexNamedFragments(
-	client graphql.Client,
-) (*InnerQueryFragment, error) {
-	req := &graphql.Request{
-		OpName: "ComplexNamedFragments",
-		Query: `
+const ComplexNamedFragmentsOperation = `
 query ComplexNamedFragments {
 	... QueryFragment
 }
@@ -306,7 +301,14 @@ fragment ChildVideoFields on Video {
 	id
 	name
 }
-`,
+`
+
+func ComplexNamedFragments(
+	client graphql.Client,
+) (*InnerQueryFragment, error) {
+	req := &graphql.Request{
+		OpName: "ComplexNamedFragments",
+		Query:  ComplexNamedFragmentsOperation,
 	}
 	var err error
 

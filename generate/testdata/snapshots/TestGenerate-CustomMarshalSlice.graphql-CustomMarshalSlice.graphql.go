@@ -203,6 +203,13 @@ func (v *__CustomMarshalSliceInput) __premarshalJSON() (*__premarshal__CustomMar
 	return &retval, nil
 }
 
+const CustomMarshalSliceOperation = `
+query CustomMarshalSlice ($datesss: [[[Date!]!]!]!, $datesssp: [[[Date!]!]!]!) {
+	acceptsListOfListOfListsOfDates(datesss: $datesss)
+	withPointer: acceptsListOfListOfListsOfDates(datesss: $datesssp)
+}
+`
+
 func CustomMarshalSlice(
 	client graphql.Client,
 	datesss [][][]time.Time,
@@ -210,12 +217,7 @@ func CustomMarshalSlice(
 ) (*CustomMarshalSliceResponse, error) {
 	req := &graphql.Request{
 		OpName: "CustomMarshalSlice",
-		Query: `
-query CustomMarshalSlice ($datesss: [[[Date!]!]!]!, $datesssp: [[[Date!]!]!]!) {
-	acceptsListOfListOfListsOfDates(datesss: $datesss)
-	withPointer: acceptsListOfListOfListsOfDates(datesss: $datesssp)
-}
-`,
+		Query:  CustomMarshalSliceOperation,
 		Variables: &__CustomMarshalSliceInput{
 			Datesss:  datesss,
 			Datesssp: datesssp,

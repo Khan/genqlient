@@ -1340,17 +1340,7 @@ func (v *ComplexInlineFragmentsRootTopic) GetSchoolGrade() string { return v.Sch
 // GetName returns ComplexInlineFragmentsRootTopic.Name, and is useful for accessing the field via an interface.
 func (v *ComplexInlineFragmentsRootTopic) GetName() string { return v.Name }
 
-// We test all the spread cases from docs/DESIGN.md, see there for more context
-// on each, as well as various other nonsense.  But for abstract-in-abstract
-// spreads, we can't test cases (4b) and (4c), where I implements J or vice
-// versa, because gqlparser doesn't support interfaces that implement other
-// interfaces yet.
-func ComplexInlineFragments(
-	client graphql.Client,
-) (*ComplexInlineFragmentsResponse, error) {
-	req := &graphql.Request{
-		OpName: "ComplexInlineFragments",
-		Query: `
+const ComplexInlineFragmentsOperation = `
 query ComplexInlineFragments {
 	root {
 		id
@@ -1436,7 +1426,19 @@ query ComplexInlineFragments {
 		}
 	}
 }
-`,
+`
+
+// We test all the spread cases from docs/DESIGN.md, see there for more context
+// on each, as well as various other nonsense.  But for abstract-in-abstract
+// spreads, we can't test cases (4b) and (4c), where I implements J or vice
+// versa, because gqlparser doesn't support interfaces that implement other
+// interfaces yet.
+func ComplexInlineFragments(
+	client graphql.Client,
+) (*ComplexInlineFragmentsResponse, error) {
+	req := &graphql.Request{
+		OpName: "ComplexInlineFragments",
+		Query:  ComplexInlineFragmentsOperation,
 	}
 	var err error
 

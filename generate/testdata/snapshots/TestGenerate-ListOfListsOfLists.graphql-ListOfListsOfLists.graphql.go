@@ -16,16 +16,18 @@ func (v *ListOfListsOfListsResponse) GetListOfListsOfLists() [][][]string {
 	return v.ListOfListsOfLists
 }
 
+const ListOfListsOfListsOperation = `
+query ListOfListsOfLists {
+	listOfListsOfLists
+}
+`
+
 func ListOfListsOfLists(
 	client graphql.Client,
 ) (*ListOfListsOfListsResponse, error) {
 	req := &graphql.Request{
 		OpName: "ListOfListsOfLists",
-		Query: `
-query ListOfListsOfLists {
-	listOfListsOfLists
-}
-`,
+		Query:  ListOfListsOfListsOperation,
 	}
 	var err error
 

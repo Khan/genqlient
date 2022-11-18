@@ -504,12 +504,7 @@ func (v *InterfaceNestingRootTopicChildrenVideo) GetParent() InterfaceNestingRoo
 	return v.Parent
 }
 
-func InterfaceNesting(
-	client graphql.Client,
-) (*InterfaceNestingResponse, error) {
-	req := &graphql.Request{
-		OpName: "InterfaceNesting",
-		Query: `
+const InterfaceNestingOperation = `
 query InterfaceNesting {
 	root {
 		id
@@ -526,7 +521,14 @@ query InterfaceNesting {
 		}
 	}
 }
-`,
+`
+
+func InterfaceNesting(
+	client graphql.Client,
+) (*InterfaceNestingResponse, error) {
+	req := &graphql.Request{
+		OpName: "InterfaceNesting",
+		Query:  InterfaceNestingOperation,
 	}
 	var err error
 
