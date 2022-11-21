@@ -41,6 +41,7 @@ type __SimpleMutationInput struct {
 // GetName returns __SimpleMutationInput.Name, and is useful for accessing the field via an interface.
 func (v *__SimpleMutationInput) GetName() string { return v.Name }
 
+// The query or mutation executed by SimpleMutation.
 const SimpleMutationOperation = `
 mutation SimpleMutation ($name: String!) {
 	createUser(name: $name) {

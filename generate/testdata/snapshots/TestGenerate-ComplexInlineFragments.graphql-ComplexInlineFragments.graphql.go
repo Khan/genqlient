@@ -1340,6 +1340,7 @@ func (v *ComplexInlineFragmentsRootTopic) GetSchoolGrade() string { return v.Sch
 // GetName returns ComplexInlineFragmentsRootTopic.Name, and is useful for accessing the field via an interface.
 func (v *ComplexInlineFragmentsRootTopic) GetName() string { return v.Name }
 
+// The query or mutation executed by ComplexInlineFragments.
 const ComplexInlineFragmentsOperation = `
 query ComplexInlineFragments {
 	root {

@@ -177,6 +177,7 @@ type unexportedUser struct {
 // GetId returns unexportedUser.Id, and is useful for accessing the field via an interface.
 func (v *unexportedUser) GetId() testutil.ID { return v.Id }
 
+// The query or mutation executed by unexported.
 const unexportedOperation = `
 query unexported ($query: UserQueryInput) {
 	user(query: $query) {

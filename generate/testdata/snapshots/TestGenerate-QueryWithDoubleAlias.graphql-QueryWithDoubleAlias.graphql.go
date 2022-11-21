@@ -40,6 +40,7 @@ func (v *QueryWithDoubleAliasUser) GetID() testutil.ID { return v.ID }
 // GetAlsoID returns QueryWithDoubleAliasUser.AlsoID, and is useful for accessing the field via an interface.
 func (v *QueryWithDoubleAliasUser) GetAlsoID() testutil.ID { return v.AlsoID }
 
+// The query or mutation executed by QueryWithDoubleAlias.
 const QueryWithDoubleAliasOperation = `
 query QueryWithDoubleAlias {
 	user {

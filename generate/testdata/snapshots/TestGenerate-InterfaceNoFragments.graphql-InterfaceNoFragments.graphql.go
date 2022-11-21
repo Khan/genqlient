@@ -626,6 +626,7 @@ func (v *InterfaceNoFragmentsQueryWithPointerVideo) GetId() *testutil.ID { retur
 // GetName returns InterfaceNoFragmentsQueryWithPointerVideo.Name, and is useful for accessing the field via an interface.
 func (v *InterfaceNoFragmentsQueryWithPointerVideo) GetName() *string { return v.Name }
 
+// The query or mutation executed by InterfaceNoFragmentsQuery.
 const InterfaceNoFragmentsQueryOperation = `
 query InterfaceNoFragmentsQuery {
 	root {

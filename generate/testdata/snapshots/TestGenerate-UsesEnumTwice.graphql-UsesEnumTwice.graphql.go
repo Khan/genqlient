@@ -62,6 +62,7 @@ func (v *UsesEnumTwiceQueryResponse) GetMe() UsesEnumTwiceQueryMeUser { return v
 // GetOtherUser returns UsesEnumTwiceQueryResponse.OtherUser, and is useful for accessing the field via an interface.
 func (v *UsesEnumTwiceQueryResponse) GetOtherUser() UsesEnumTwiceQueryOtherUser { return v.OtherUser }
 
+// The query or mutation executed by UsesEnumTwiceQuery.
 const UsesEnumTwiceQueryOperation = `
 query UsesEnumTwiceQuery {
 	Me: user {

@@ -203,6 +203,7 @@ func (v *__CustomMarshalSliceInput) __premarshalJSON() (*__premarshal__CustomMar
 	return &retval, nil
 }
 
+// The query or mutation executed by CustomMarshalSlice.
 const CustomMarshalSliceOperation = `
 query CustomMarshalSlice ($datesss: [[[Date!]!]!]!, $datesssp: [[[Date!]!]!]!) {
 	acceptsListOfListOfListsOfDates(datesss: $datesss)

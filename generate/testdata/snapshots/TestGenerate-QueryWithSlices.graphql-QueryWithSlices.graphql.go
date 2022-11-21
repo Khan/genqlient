@@ -41,6 +41,7 @@ func (v *QueryWithSlicesUser) GetEmailsWithNulls() []string { return v.EmailsWit
 // GetEmailsWithNullsOrNull returns QueryWithSlicesUser.EmailsWithNullsOrNull, and is useful for accessing the field via an interface.
 func (v *QueryWithSlicesUser) GetEmailsWithNullsOrNull() []string { return v.EmailsWithNullsOrNull }
 
+// The query or mutation executed by QueryWithSlices.
 const QueryWithSlicesOperation = `
 query QueryWithSlices {
 	user {

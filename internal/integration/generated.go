@@ -3078,6 +3078,7 @@ type simpleQueryResponse struct {
 // GetMe returns simpleQueryResponse.Me, and is useful for accessing the field via an interface.
 func (v *simpleQueryResponse) GetMe() simpleQueryMeUser { return v.Me }
 
+// The query or mutation executed by createUser.
 const createUserOperation = `
 mutation createUser ($user: NewUser!) {
 	createUser(input: $user) {
@@ -3113,6 +3114,7 @@ func createUser(
 	return &data, resp.Extensions, err
 }
 
+// The query or mutation executed by failingQuery.
 const failingQueryOperation = `
 query failingQuery {
 	fail
@@ -3144,6 +3146,7 @@ func failingQuery(
 	return &data, resp.Extensions, err
 }
 
+// The query or mutation executed by queryWithCustomMarshal.
 const queryWithCustomMarshalOperation = `
 query queryWithCustomMarshal ($date: Date!) {
 	usersBornOn(date: $date) {
@@ -3180,6 +3183,7 @@ func queryWithCustomMarshal(
 	return &data, resp.Extensions, err
 }
 
+// The query or mutation executed by queryWithCustomMarshalOptional.
 const queryWithCustomMarshalOptionalOperation = `
 query queryWithCustomMarshalOptional ($date: Date, $id: ID) {
 	userSearch(birthdate: $date, id: $id) {
@@ -3218,6 +3222,7 @@ func queryWithCustomMarshalOptional(
 	return &data, resp.Extensions, err
 }
 
+// The query or mutation executed by queryWithCustomMarshalSlice.
 const queryWithCustomMarshalSliceOperation = `
 query queryWithCustomMarshalSlice ($dates: [Date!]!) {
 	usersBornOnDates(dates: $dates) {
@@ -3254,6 +3259,7 @@ func queryWithCustomMarshalSlice(
 	return &data, resp.Extensions, err
 }
 
+// The query or mutation executed by queryWithFlatten.
 const queryWithFlattenOperation = `
 query queryWithFlatten ($ids: [ID!]!) {
 	... QueryFragment
@@ -3324,6 +3330,7 @@ func queryWithFlatten(
 	return &data, resp.Extensions, err
 }
 
+// The query or mutation executed by queryWithFragments.
 const queryWithFragmentsOperation = `
 query queryWithFragments ($ids: [ID!]!) {
 	beings(ids: $ids) {
@@ -3388,6 +3395,7 @@ func queryWithFragments(
 	return &data, resp.Extensions, err
 }
 
+// The query or mutation executed by queryWithInterfaceListField.
 const queryWithInterfaceListFieldOperation = `
 query queryWithInterfaceListField ($ids: [ID!]!) {
 	beings(ids: $ids) {
@@ -3424,6 +3432,7 @@ func queryWithInterfaceListField(
 	return &data, resp.Extensions, err
 }
 
+// The query or mutation executed by queryWithInterfaceListPointerField.
 const queryWithInterfaceListPointerFieldOperation = `
 query queryWithInterfaceListPointerField ($ids: [ID!]!) {
 	beings(ids: $ids) {
@@ -3460,6 +3469,7 @@ func queryWithInterfaceListPointerField(
 	return &data, resp.Extensions, err
 }
 
+// The query or mutation executed by queryWithInterfaceNoFragments.
 const queryWithInterfaceNoFragmentsOperation = `
 query queryWithInterfaceNoFragments ($id: ID!) {
 	being(id: $id) {
@@ -3500,6 +3510,7 @@ func queryWithInterfaceNoFragments(
 	return &data, resp.Extensions, err
 }
 
+// The query or mutation executed by queryWithNamedFragments.
 const queryWithNamedFragmentsOperation = `
 query queryWithNamedFragments ($ids: [ID!]!) {
 	beings(ids: $ids) {
@@ -3564,6 +3575,7 @@ func queryWithNamedFragments(
 	return &data, resp.Extensions, err
 }
 
+// The query or mutation executed by queryWithOmitempty.
 const queryWithOmitemptyOperation = `
 query queryWithOmitempty ($id: ID) {
 	user(id: $id) {
@@ -3600,6 +3612,7 @@ func queryWithOmitempty(
 	return &data, resp.Extensions, err
 }
 
+// The query or mutation executed by queryWithVariables.
 const queryWithVariablesOperation = `
 query queryWithVariables ($id: ID!) {
 	user(id: $id) {
@@ -3636,6 +3649,7 @@ func queryWithVariables(
 	return &data, resp.Extensions, err
 }
 
+// The query or mutation executed by simpleQuery.
 const simpleQueryOperation = `
 query simpleQuery {
 	me {
@@ -3668,6 +3682,7 @@ func simpleQuery(
 	return &data, resp.Extensions, err
 }
 
+// The query or mutation executed by simpleQueryExt.
 const simpleQueryExtOperation = `
 query simpleQueryExt {
 	me {

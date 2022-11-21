@@ -41,6 +41,7 @@ type __ListInputQueryInput struct {
 // GetNames returns __ListInputQueryInput.Names, and is useful for accessing the field via an interface.
 func (v *__ListInputQueryInput) GetNames() []string { return v.Names }
 
+// The query or mutation executed by ListInputQuery.
 const ListInputQueryOperation = `
 query ListInputQuery ($names: [String]) {
 	user(query: {names:$names}) {

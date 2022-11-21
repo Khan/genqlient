@@ -38,6 +38,7 @@ type SimpleQueryUser struct {
 // GetId returns SimpleQueryUser.Id, and is useful for accessing the field via an interface.
 func (v *SimpleQueryUser) GetId() string { return v.Id }
 
+// The query or mutation executed by SimpleQuery.
 const SimpleQueryOperation = `
 query SimpleQuery {
 	user {

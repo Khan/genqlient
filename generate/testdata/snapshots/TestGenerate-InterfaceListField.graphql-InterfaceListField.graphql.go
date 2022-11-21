@@ -520,6 +520,7 @@ func (v *InterfaceListFieldWithPointerTopicChildrenVideo) GetId() testutil.ID { 
 // GetName returns InterfaceListFieldWithPointerTopicChildrenVideo.Name, and is useful for accessing the field via an interface.
 func (v *InterfaceListFieldWithPointerTopicChildrenVideo) GetName() string { return v.Name }
 
+// The query or mutation executed by InterfaceListField.
 const InterfaceListFieldOperation = `
 query InterfaceListField {
 	root {

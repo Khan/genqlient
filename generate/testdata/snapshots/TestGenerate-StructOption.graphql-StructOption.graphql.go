@@ -424,6 +424,7 @@ type VideoFields struct {
 // GetDuration returns VideoFields.Duration, and is useful for accessing the field via an interface.
 func (v *VideoFields) GetDuration() int { return v.Duration }
 
+// The query or mutation executed by StructOption.
 const StructOptionOperation = `
 query StructOption {
 	root {

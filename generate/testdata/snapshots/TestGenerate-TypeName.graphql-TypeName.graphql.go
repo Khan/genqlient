@@ -37,6 +37,7 @@ func (v *TypeNameQueryUser) GetTypename() string { return v.Typename }
 // GetId returns TypeNameQueryUser.Id, and is useful for accessing the field via an interface.
 func (v *TypeNameQueryUser) GetId() testutil.ID { return v.Id }
 
+// The query or mutation executed by TypeNameQuery.
 const TypeNameQueryOperation = `
 query TypeNameQuery {
 	user {

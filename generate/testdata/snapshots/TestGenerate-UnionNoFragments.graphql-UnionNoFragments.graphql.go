@@ -174,6 +174,7 @@ func (v *UnionNoFragmentsQueryResponse) __premarshalJSON() (*__premarshalUnionNo
 	return &retval, nil
 }
 
+// The query or mutation executed by UnionNoFragmentsQuery.
 const UnionNoFragmentsQueryOperation = `
 query UnionNoFragmentsQuery {
 	randomLeaf {

@@ -69,6 +69,7 @@ func (v *getViewerViewerUser) GetMyName() string { return v.MyName }
 // GetCreatedAt returns getViewerViewerUser.CreatedAt, and is useful for accessing the field via an interface.
 func (v *getViewerViewerUser) GetCreatedAt() time.Time { return v.CreatedAt }
 
+// The query or mutation executed by getUser.
 const getUserOperation = `
 query getUser ($Login: String!) {
 	user(login: $Login) {
@@ -105,6 +106,7 @@ func getUser(
 	return &data, err
 }
 
+// The query or mutation executed by getViewer.
 const getViewerOperation = `
 query getViewer {
 	viewer {

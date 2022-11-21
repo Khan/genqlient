@@ -325,6 +325,7 @@ func (v *__MultipleDirectivesInput) GetQuery() MyInput { return v.Query }
 // GetQueries returns __MultipleDirectivesInput.Queries, and is useful for accessing the field via an interface.
 func (v *__MultipleDirectivesInput) GetQueries() []*UserQueryInput { return v.Queries }
 
+// The query or mutation executed by MultipleDirectives.
 const MultipleDirectivesOperation = `
 query MultipleDirectives ($query: UserQueryInput, $queries: [UserQueryInput]) {
 	user(query: $query) {

@@ -62,6 +62,7 @@ const (
 	RoleTeacher Role = "TEACHER"
 )
 
+// The query or mutation executed by QueryWithEnums.
 const QueryWithEnumsOperation = `
 query QueryWithEnums {
 	user {

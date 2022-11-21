@@ -54,6 +54,7 @@ type __InputEnumQueryInput struct {
 // GetRole returns __InputEnumQueryInput.Role, and is useful for accessing the field via an interface.
 func (v *__InputEnumQueryInput) GetRole() Role { return v.Role }
 
+// The query or mutation executed by InputEnumQuery.
 const InputEnumQueryOperation = `
 query InputEnumQuery ($role: Role!) {
 	usersWithRole(role: $role) {

@@ -68,6 +68,7 @@ type __RecursionInput struct {
 // GetInput returns __RecursionInput.Input, and is useful for accessing the field via an interface.
 func (v *__RecursionInput) GetInput() RecursiveInput { return v.Input }
 
+// The query or mutation executed by Recursion.
 const RecursionOperation = `
 query Recursion ($input: RecursiveInput!) {
 	recur(input: $input) {

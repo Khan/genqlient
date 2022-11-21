@@ -41,6 +41,7 @@ type __SimpleInputQueryInput struct {
 // GetName returns __SimpleInputQueryInput.Name, and is useful for accessing the field via an interface.
 func (v *__SimpleInputQueryInput) GetName() string { return v.Name }
 
+// The query or mutation executed by SimpleInputQuery.
 const SimpleInputQueryOperation = `
 query SimpleInputQuery ($name: String!) {
 	user(query: {name:$name}) {

@@ -504,6 +504,7 @@ func (v *InterfaceNestingRootTopicChildrenVideo) GetParent() InterfaceNestingRoo
 	return v.Parent
 }
 
+// The query or mutation executed by InterfaceNesting.
 const InterfaceNestingOperation = `
 query InterfaceNesting {
 	root {

@@ -239,6 +239,7 @@ func (v *SimpleInlineFragmentResponse) __premarshalJSON() (*__premarshalSimpleIn
 	return &retval, nil
 }
 
+// The query or mutation executed by SimpleInlineFragment.
 const SimpleInlineFragmentOperation = `
 query SimpleInlineFragment {
 	randomItem {
