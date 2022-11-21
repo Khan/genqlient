@@ -177,19 +177,22 @@ type __InputObjectQueryInput struct {
 // GetQuery returns __InputObjectQueryInput.Query, and is useful for accessing the field via an interface.
 func (v *__InputObjectQueryInput) GetQuery() UserQueryInput { return v.Query }
 
+// The query or mutation executed by InputObjectQuery.
+const InputObjectQueryOperation = `
+query InputObjectQuery ($query: UserQueryInput) {
+	user(query: $query) {
+		id
+	}
+}
+`
+
 func InputObjectQuery(
 	client graphql.Client,
 	query UserQueryInput,
 ) (*InputObjectQueryResponse, error) {
 	req := &graphql.Request{
 		OpName: "InputObjectQuery",
-		Query: `
-query InputObjectQuery ($query: UserQueryInput) {
-	user(query: $query) {
-		id
-	}
-}
-`,
+		Query:  InputObjectQueryOperation,
 		Variables: &__InputObjectQueryInput{
 			Query: query,
 		},

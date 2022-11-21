@@ -41,12 +41,8 @@ func (v *QueryWithSlicesUser) GetEmailsWithNulls() []string { return v.EmailsWit
 // GetEmailsWithNullsOrNull returns QueryWithSlicesUser.EmailsWithNullsOrNull, and is useful for accessing the field via an interface.
 func (v *QueryWithSlicesUser) GetEmailsWithNullsOrNull() []string { return v.EmailsWithNullsOrNull }
 
-func QueryWithSlices(
-	client graphql.Client,
-) (*QueryWithSlicesResponse, error) {
-	req := &graphql.Request{
-		OpName: "QueryWithSlices",
-		Query: `
+// The query or mutation executed by QueryWithSlices.
+const QueryWithSlicesOperation = `
 query QueryWithSlices {
 	user {
 		emails
@@ -55,7 +51,14 @@ query QueryWithSlices {
 		emailsWithNullsOrNull
 	}
 }
-`,
+`
+
+func QueryWithSlices(
+	client graphql.Client,
+) (*QueryWithSlicesResponse, error) {
+	req := &graphql.Request{
+		OpName: "QueryWithSlices",
+		Query:  QueryWithSlicesOperation,
 	}
 	var err error
 

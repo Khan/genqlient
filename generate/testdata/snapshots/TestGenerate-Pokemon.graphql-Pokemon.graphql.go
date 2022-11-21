@@ -71,13 +71,8 @@ type __GetPokemonSiblingsInput struct {
 // GetInput returns __GetPokemonSiblingsInput.Input, and is useful for accessing the field via an interface.
 func (v *__GetPokemonSiblingsInput) GetInput() testutil.Pokemon { return v.Input }
 
-func GetPokemonSiblings(
-	client graphql.Client,
-	input testutil.Pokemon,
-) (*GetPokemonSiblingsResponse, error) {
-	req := &graphql.Request{
-		OpName: "GetPokemonSiblings",
-		Query: `
+// The query or mutation executed by GetPokemonSiblings.
+const GetPokemonSiblingsOperation = `
 query GetPokemonSiblings ($input: PokemonInput!) {
 	user(query: {hasPokemon:$input}) {
 		id
@@ -93,7 +88,15 @@ query GetPokemonSiblings ($input: PokemonInput!) {
 		}
 	}
 }
-`,
+`
+
+func GetPokemonSiblings(
+	client graphql.Client,
+	input testutil.Pokemon,
+) (*GetPokemonSiblingsResponse, error) {
+	req := &graphql.Request{
+		OpName: "GetPokemonSiblings",
+		Query:  GetPokemonSiblingsOperation,
 		Variables: &__GetPokemonSiblingsInput{
 			Input: input,
 		},

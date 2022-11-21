@@ -20,17 +20,20 @@ func (v *EmptyInterfaceResponse) GetGetComplexJunk() []map[string]*[]*map[string
 	return v.GetComplexJunk
 }
 
+// The query or mutation executed by EmptyInterface.
+const EmptyInterfaceOperation = `
+query EmptyInterface {
+	getJunk
+	getComplexJunk
+}
+`
+
 func EmptyInterface(
 	client graphql.Client,
 ) (*EmptyInterfaceResponse, error) {
 	req := &graphql.Request{
 		OpName: "EmptyInterface",
-		Query: `
-query EmptyInterface {
-	getJunk
-	getComplexJunk
-}
-`,
+		Query:  EmptyInterfaceOperation,
 	}
 	var err error
 

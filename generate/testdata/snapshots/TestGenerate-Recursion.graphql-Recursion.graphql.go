@@ -68,13 +68,8 @@ type __RecursionInput struct {
 // GetInput returns __RecursionInput.Input, and is useful for accessing the field via an interface.
 func (v *__RecursionInput) GetInput() RecursiveInput { return v.Input }
 
-func Recursion(
-	client graphql.Client,
-	input RecursiveInput,
-) (*RecursionResponse, error) {
-	req := &graphql.Request{
-		OpName: "Recursion",
-		Query: `
+// The query or mutation executed by Recursion.
+const RecursionOperation = `
 query Recursion ($input: RecursiveInput!) {
 	recur(input: $input) {
 		rec {
@@ -86,7 +81,15 @@ query Recursion ($input: RecursiveInput!) {
 		}
 	}
 }
-`,
+`
+
+func Recursion(
+	client graphql.Client,
+	input RecursiveInput,
+) (*RecursionResponse, error) {
+	req := &graphql.Request{
+		OpName: "Recursion",
+		Query:  RecursionOperation,
 		Variables: &__RecursionInput{
 			Input: input,
 		},

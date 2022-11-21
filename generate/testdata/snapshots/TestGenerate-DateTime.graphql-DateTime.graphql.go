@@ -28,6 +28,13 @@ type convertTimezoneResponse struct {
 // GetConvert returns convertTimezoneResponse.Convert, and is useful for accessing the field via an interface.
 func (v *convertTimezoneResponse) GetConvert() time.Time { return v.Convert }
 
+// The query or mutation executed by convertTimezone.
+const convertTimezoneOperation = `
+query convertTimezone ($dt: DateTime!, $tz: String) {
+	convert(dt: $dt, tz: $tz)
+}
+`
+
 func convertTimezone(
 	client graphql.Client,
 	dt time.Time,
@@ -35,11 +42,7 @@ func convertTimezone(
 ) (*convertTimezoneResponse, error) {
 	req := &graphql.Request{
 		OpName: "convertTimezone",
-		Query: `
-query convertTimezone ($dt: DateTime!, $tz: String) {
-	convert(dt: $dt, tz: $tz)
-}
-`,
+		Query:  convertTimezoneOperation,
 		Variables: &__convertTimezoneInput{
 			Dt: dt,
 			Tz: tz,

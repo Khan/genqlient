@@ -40,19 +40,22 @@ func (v *QueryWithDoubleAliasUser) GetID() testutil.ID { return v.ID }
 // GetAlsoID returns QueryWithDoubleAliasUser.AlsoID, and is useful for accessing the field via an interface.
 func (v *QueryWithDoubleAliasUser) GetAlsoID() testutil.ID { return v.AlsoID }
 
-func QueryWithDoubleAlias(
-	client graphql.Client,
-) (*QueryWithDoubleAliasResponse, error) {
-	req := &graphql.Request{
-		OpName: "QueryWithDoubleAlias",
-		Query: `
+// The query or mutation executed by QueryWithDoubleAlias.
+const QueryWithDoubleAliasOperation = `
 query QueryWithDoubleAlias {
 	user {
 		ID: id
 		AlsoID: id
 	}
 }
-`,
+`
+
+func QueryWithDoubleAlias(
+	client graphql.Client,
+) (*QueryWithDoubleAliasResponse, error) {
+	req := &graphql.Request{
+		OpName: "QueryWithDoubleAlias",
+		Query:  QueryWithDoubleAliasOperation,
 	}
 	var err error
 

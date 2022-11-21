@@ -1,3 +1,6 @@
+// The query or mutation executed by {{.Name}}.
+const {{.Name}}Operation = `{{$.Body}}`
+
 {{.Doc}}
 func {{.Name}}(
     {{if ne .Config.ContextType "-" -}}
@@ -15,7 +18,7 @@ func {{.Name}}(
 ) (*{{.ResponseName}}, {{if .Config.Extensions -}}map[string]interface{},{{end}} error) {
     req := &graphql.Request{
         OpName: "{{.Name}}",
-        Query:  `{{.Body}}`,
+        Query:  {{.Name}}Operation,
     {{if .Input -}}
         Variables: &{{.Input.GoName}}{
         {{range .Input.Fields -}}
