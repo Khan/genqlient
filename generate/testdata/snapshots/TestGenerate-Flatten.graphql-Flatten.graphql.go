@@ -267,7 +267,7 @@ type VideoFieldsParentTopic struct {
 func (v *VideoFieldsParentTopic) GetVideoChildren() []ChildVideoFields { return v.VideoChildren }
 
 // The query or mutation executed by ComplexNamedFragments.
-const ComplexNamedFragmentsOperation = `
+const ComplexNamedFragments_Operation = `
 query ComplexNamedFragments {
 	... QueryFragment
 }
@@ -309,7 +309,7 @@ func ComplexNamedFragments(
 ) (*InnerQueryFragment, error) {
 	req := &graphql.Request{
 		OpName: "ComplexNamedFragments",
-		Query:  ComplexNamedFragmentsOperation,
+		Query:  ComplexNamedFragments_Operation,
 	}
 	var err error
 

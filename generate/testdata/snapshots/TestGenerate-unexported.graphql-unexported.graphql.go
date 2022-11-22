@@ -178,7 +178,7 @@ type unexportedUser struct {
 func (v *unexportedUser) GetId() testutil.ID { return v.Id }
 
 // The query or mutation executed by unexported.
-const unexportedOperation = `
+const unexported_Operation = `
 query unexported ($query: UserQueryInput) {
 	user(query: $query) {
 		id
@@ -192,7 +192,7 @@ func unexported(
 ) (*unexportedResponse, error) {
 	req := &graphql.Request{
 		OpName: "unexported",
-		Query:  unexportedOperation,
+		Query:  unexported_Operation,
 		Variables: &__unexportedInput{
 			Query: query,
 		},

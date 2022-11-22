@@ -29,7 +29,7 @@ type convertTimezoneResponse struct {
 func (v *convertTimezoneResponse) GetConvert() time.Time { return v.Convert }
 
 // The query or mutation executed by convertTimezone.
-const convertTimezoneOperation = `
+const convertTimezone_Operation = `
 query convertTimezone ($dt: DateTime!, $tz: String) {
 	convert(dt: $dt, tz: $tz)
 }
@@ -42,7 +42,7 @@ func convertTimezone(
 ) (*convertTimezoneResponse, error) {
 	req := &graphql.Request{
 		OpName: "convertTimezone",
-		Query:  convertTimezoneOperation,
+		Query:  convertTimezone_Operation,
 		Variables: &__convertTimezoneInput{
 			Dt: dt,
 			Tz: tz,

@@ -204,7 +204,7 @@ func (v *__CustomMarshalSliceInput) __premarshalJSON() (*__premarshal__CustomMar
 }
 
 // The query or mutation executed by CustomMarshalSlice.
-const CustomMarshalSliceOperation = `
+const CustomMarshalSlice_Operation = `
 query CustomMarshalSlice ($datesss: [[[Date!]!]!]!, $datesssp: [[[Date!]!]!]!) {
 	acceptsListOfListOfListsOfDates(datesss: $datesss)
 	withPointer: acceptsListOfListOfListsOfDates(datesss: $datesssp)
@@ -218,7 +218,7 @@ func CustomMarshalSlice(
 ) (*CustomMarshalSliceResponse, error) {
 	req := &graphql.Request{
 		OpName: "CustomMarshalSlice",
-		Query:  CustomMarshalSliceOperation,
+		Query:  CustomMarshalSlice_Operation,
 		Variables: &__CustomMarshalSliceInput{
 			Datesss:  datesss,
 			Datesssp: datesssp,

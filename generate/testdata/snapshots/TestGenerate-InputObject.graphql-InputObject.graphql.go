@@ -178,7 +178,7 @@ type __InputObjectQueryInput struct {
 func (v *__InputObjectQueryInput) GetQuery() UserQueryInput { return v.Query }
 
 // The query or mutation executed by InputObjectQuery.
-const InputObjectQueryOperation = `
+const InputObjectQuery_Operation = `
 query InputObjectQuery ($query: UserQueryInput) {
 	user(query: $query) {
 		id
@@ -192,7 +192,7 @@ func InputObjectQuery(
 ) (*InputObjectQueryResponse, error) {
 	req := &graphql.Request{
 		OpName: "InputObjectQuery",
-		Query:  InputObjectQueryOperation,
+		Query:  InputObjectQuery_Operation,
 		Variables: &__InputObjectQueryInput{
 			Query: query,
 		},

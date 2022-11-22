@@ -41,7 +41,7 @@ func (v *QueryWithDoubleAliasUser) GetID() testutil.ID { return v.ID }
 func (v *QueryWithDoubleAliasUser) GetAlsoID() testutil.ID { return v.AlsoID }
 
 // The query or mutation executed by QueryWithDoubleAlias.
-const QueryWithDoubleAliasOperation = `
+const QueryWithDoubleAlias_Operation = `
 query QueryWithDoubleAlias {
 	user {
 		ID: id
@@ -55,7 +55,7 @@ func QueryWithDoubleAlias(
 ) (*QueryWithDoubleAliasResponse, error) {
 	req := &graphql.Request{
 		OpName: "QueryWithDoubleAlias",
-		Query:  QueryWithDoubleAliasOperation,
+		Query:  QueryWithDoubleAlias_Operation,
 	}
 	var err error
 

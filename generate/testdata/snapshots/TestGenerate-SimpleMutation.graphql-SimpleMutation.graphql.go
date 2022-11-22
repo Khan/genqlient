@@ -42,7 +42,7 @@ type __SimpleMutationInput struct {
 func (v *__SimpleMutationInput) GetName() string { return v.Name }
 
 // The query or mutation executed by SimpleMutation.
-const SimpleMutationOperation = `
+const SimpleMutation_Operation = `
 mutation SimpleMutation ($name: String!) {
 	createUser(name: $name) {
 		id
@@ -61,7 +61,7 @@ func SimpleMutation(
 ) (*SimpleMutationResponse, error) {
 	req := &graphql.Request{
 		OpName: "SimpleMutation",
-		Query:  SimpleMutationOperation,
+		Query:  SimpleMutation_Operation,
 		Variables: &__SimpleMutationInput{
 			Name: name,
 		},

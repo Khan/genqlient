@@ -41,7 +41,7 @@ func (v *QueryWithAliasUser) GetID() testutil.ID { return v.ID }
 func (v *QueryWithAliasUser) GetOtherID() testutil.ID { return v.OtherID }
 
 // The query or mutation executed by QueryWithAlias.
-const QueryWithAliasOperation = `
+const QueryWithAlias_Operation = `
 query QueryWithAlias {
 	User: user {
 		ID: id
@@ -55,7 +55,7 @@ func QueryWithAlias(
 ) (*QueryWithAliasResponse, error) {
 	req := &graphql.Request{
 		OpName: "QueryWithAlias",
-		Query:  QueryWithAliasOperation,
+		Query:  QueryWithAlias_Operation,
 	}
 	var err error
 

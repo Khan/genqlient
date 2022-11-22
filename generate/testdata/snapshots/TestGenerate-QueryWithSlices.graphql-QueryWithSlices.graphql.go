@@ -42,7 +42,7 @@ func (v *QueryWithSlicesUser) GetEmailsWithNulls() []string { return v.EmailsWit
 func (v *QueryWithSlicesUser) GetEmailsWithNullsOrNull() []string { return v.EmailsWithNullsOrNull }
 
 // The query or mutation executed by QueryWithSlices.
-const QueryWithSlicesOperation = `
+const QueryWithSlices_Operation = `
 query QueryWithSlices {
 	user {
 		emails
@@ -58,7 +58,7 @@ func QueryWithSlices(
 ) (*QueryWithSlicesResponse, error) {
 	req := &graphql.Request{
 		OpName: "QueryWithSlices",
-		Query:  QueryWithSlicesOperation,
+		Query:  QueryWithSlices_Operation,
 	}
 	var err error
 

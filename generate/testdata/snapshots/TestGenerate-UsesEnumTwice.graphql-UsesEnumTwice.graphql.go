@@ -63,7 +63,7 @@ func (v *UsesEnumTwiceQueryResponse) GetMe() UsesEnumTwiceQueryMeUser { return v
 func (v *UsesEnumTwiceQueryResponse) GetOtherUser() UsesEnumTwiceQueryOtherUser { return v.OtherUser }
 
 // The query or mutation executed by UsesEnumTwiceQuery.
-const UsesEnumTwiceQueryOperation = `
+const UsesEnumTwiceQuery_Operation = `
 query UsesEnumTwiceQuery {
 	Me: user {
 		roles
@@ -79,7 +79,7 @@ func UsesEnumTwiceQuery(
 ) (*UsesEnumTwiceQueryResponse, error) {
 	req := &graphql.Request{
 		OpName: "UsesEnumTwiceQuery",
-		Query:  UsesEnumTwiceQueryOperation,
+		Query:  UsesEnumTwiceQuery_Operation,
 	}
 	var err error
 

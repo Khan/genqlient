@@ -70,7 +70,7 @@ func (v *getViewerViewerUser) GetMyName() string { return v.MyName }
 func (v *getViewerViewerUser) GetCreatedAt() time.Time { return v.CreatedAt }
 
 // The query or mutation executed by getUser.
-const getUserOperation = `
+const getUser_Operation = `
 query getUser ($Login: String!) {
 	user(login: $Login) {
 		theirName: name
@@ -87,7 +87,7 @@ func getUser(
 ) (*getUserResponse, error) {
 	req := &graphql.Request{
 		OpName: "getUser",
-		Query:  getUserOperation,
+		Query:  getUser_Operation,
 		Variables: &__getUserInput{
 			Login: Login,
 		},
@@ -107,7 +107,7 @@ func getUser(
 }
 
 // The query or mutation executed by getViewer.
-const getViewerOperation = `
+const getViewer_Operation = `
 query getViewer {
 	viewer {
 		MyName: name
@@ -122,7 +122,7 @@ func getViewer(
 ) (*getViewerResponse, error) {
 	req := &graphql.Request{
 		OpName: "getViewer",
-		Query:  getViewerOperation,
+		Query:  getViewer_Operation,
 	}
 	var err error
 

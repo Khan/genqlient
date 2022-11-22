@@ -3079,7 +3079,7 @@ type simpleQueryResponse struct {
 func (v *simpleQueryResponse) GetMe() simpleQueryMeUser { return v.Me }
 
 // The query or mutation executed by createUser.
-const createUserOperation = `
+const createUser_Operation = `
 mutation createUser ($user: NewUser!) {
 	createUser(input: $user) {
 		id
@@ -3095,7 +3095,7 @@ func createUser(
 ) (*createUserResponse, map[string]interface{}, error) {
 	req := &graphql.Request{
 		OpName: "createUser",
-		Query:  createUserOperation,
+		Query:  createUser_Operation,
 		Variables: &__createUserInput{
 			User: user,
 		},
@@ -3115,7 +3115,7 @@ func createUser(
 }
 
 // The query or mutation executed by failingQuery.
-const failingQueryOperation = `
+const failingQuery_Operation = `
 query failingQuery {
 	fail
 	me {
@@ -3130,7 +3130,7 @@ func failingQuery(
 ) (*failingQueryResponse, map[string]interface{}, error) {
 	req := &graphql.Request{
 		OpName: "failingQuery",
-		Query:  failingQueryOperation,
+		Query:  failingQuery_Operation,
 	}
 	var err error
 
@@ -3147,7 +3147,7 @@ func failingQuery(
 }
 
 // The query or mutation executed by queryWithCustomMarshal.
-const queryWithCustomMarshalOperation = `
+const queryWithCustomMarshal_Operation = `
 query queryWithCustomMarshal ($date: Date!) {
 	usersBornOn(date: $date) {
 		id
@@ -3164,7 +3164,7 @@ func queryWithCustomMarshal(
 ) (*queryWithCustomMarshalResponse, map[string]interface{}, error) {
 	req := &graphql.Request{
 		OpName: "queryWithCustomMarshal",
-		Query:  queryWithCustomMarshalOperation,
+		Query:  queryWithCustomMarshal_Operation,
 		Variables: &__queryWithCustomMarshalInput{
 			Date: date,
 		},
@@ -3184,7 +3184,7 @@ func queryWithCustomMarshal(
 }
 
 // The query or mutation executed by queryWithCustomMarshalOptional.
-const queryWithCustomMarshalOptionalOperation = `
+const queryWithCustomMarshalOptional_Operation = `
 query queryWithCustomMarshalOptional ($date: Date, $id: ID) {
 	userSearch(birthdate: $date, id: $id) {
 		id
@@ -3202,7 +3202,7 @@ func queryWithCustomMarshalOptional(
 ) (*queryWithCustomMarshalOptionalResponse, map[string]interface{}, error) {
 	req := &graphql.Request{
 		OpName: "queryWithCustomMarshalOptional",
-		Query:  queryWithCustomMarshalOptionalOperation,
+		Query:  queryWithCustomMarshalOptional_Operation,
 		Variables: &__queryWithCustomMarshalOptionalInput{
 			Date: date,
 			Id:   id,
@@ -3223,7 +3223,7 @@ func queryWithCustomMarshalOptional(
 }
 
 // The query or mutation executed by queryWithCustomMarshalSlice.
-const queryWithCustomMarshalSliceOperation = `
+const queryWithCustomMarshalSlice_Operation = `
 query queryWithCustomMarshalSlice ($dates: [Date!]!) {
 	usersBornOnDates(dates: $dates) {
 		id
@@ -3240,7 +3240,7 @@ func queryWithCustomMarshalSlice(
 ) (*queryWithCustomMarshalSliceResponse, map[string]interface{}, error) {
 	req := &graphql.Request{
 		OpName: "queryWithCustomMarshalSlice",
-		Query:  queryWithCustomMarshalSliceOperation,
+		Query:  queryWithCustomMarshalSlice_Operation,
 		Variables: &__queryWithCustomMarshalSliceInput{
 			Dates: dates,
 		},
@@ -3260,7 +3260,7 @@ func queryWithCustomMarshalSlice(
 }
 
 // The query or mutation executed by queryWithFlatten.
-const queryWithFlattenOperation = `
+const queryWithFlatten_Operation = `
 query queryWithFlatten ($ids: [ID!]!) {
 	... QueryFragment
 }
@@ -3311,7 +3311,7 @@ func queryWithFlatten(
 ) (*QueryFragment, map[string]interface{}, error) {
 	req := &graphql.Request{
 		OpName: "queryWithFlatten",
-		Query:  queryWithFlattenOperation,
+		Query:  queryWithFlatten_Operation,
 		Variables: &__queryWithFlattenInput{
 			Ids: ids,
 		},
@@ -3331,7 +3331,7 @@ func queryWithFlatten(
 }
 
 // The query or mutation executed by queryWithFragments.
-const queryWithFragmentsOperation = `
+const queryWithFragments_Operation = `
 query queryWithFragments ($ids: [ID!]!) {
 	beings(ids: $ids) {
 		__typename
@@ -3376,7 +3376,7 @@ func queryWithFragments(
 ) (*queryWithFragmentsResponse, map[string]interface{}, error) {
 	req := &graphql.Request{
 		OpName: "queryWithFragments",
-		Query:  queryWithFragmentsOperation,
+		Query:  queryWithFragments_Operation,
 		Variables: &__queryWithFragmentsInput{
 			Ids: ids,
 		},
@@ -3396,7 +3396,7 @@ func queryWithFragments(
 }
 
 // The query or mutation executed by queryWithInterfaceListField.
-const queryWithInterfaceListFieldOperation = `
+const queryWithInterfaceListField_Operation = `
 query queryWithInterfaceListField ($ids: [ID!]!) {
 	beings(ids: $ids) {
 		__typename
@@ -3413,7 +3413,7 @@ func queryWithInterfaceListField(
 ) (*queryWithInterfaceListFieldResponse, map[string]interface{}, error) {
 	req := &graphql.Request{
 		OpName: "queryWithInterfaceListField",
-		Query:  queryWithInterfaceListFieldOperation,
+		Query:  queryWithInterfaceListField_Operation,
 		Variables: &__queryWithInterfaceListFieldInput{
 			Ids: ids,
 		},
@@ -3433,7 +3433,7 @@ func queryWithInterfaceListField(
 }
 
 // The query or mutation executed by queryWithInterfaceListPointerField.
-const queryWithInterfaceListPointerFieldOperation = `
+const queryWithInterfaceListPointerField_Operation = `
 query queryWithInterfaceListPointerField ($ids: [ID!]!) {
 	beings(ids: $ids) {
 		__typename
@@ -3450,7 +3450,7 @@ func queryWithInterfaceListPointerField(
 ) (*queryWithInterfaceListPointerFieldResponse, map[string]interface{}, error) {
 	req := &graphql.Request{
 		OpName: "queryWithInterfaceListPointerField",
-		Query:  queryWithInterfaceListPointerFieldOperation,
+		Query:  queryWithInterfaceListPointerField_Operation,
 		Variables: &__queryWithInterfaceListPointerFieldInput{
 			Ids: ids,
 		},
@@ -3470,7 +3470,7 @@ func queryWithInterfaceListPointerField(
 }
 
 // The query or mutation executed by queryWithInterfaceNoFragments.
-const queryWithInterfaceNoFragmentsOperation = `
+const queryWithInterfaceNoFragments_Operation = `
 query queryWithInterfaceNoFragments ($id: ID!) {
 	being(id: $id) {
 		__typename
@@ -3491,7 +3491,7 @@ func queryWithInterfaceNoFragments(
 ) (*queryWithInterfaceNoFragmentsResponse, map[string]interface{}, error) {
 	req := &graphql.Request{
 		OpName: "queryWithInterfaceNoFragments",
-		Query:  queryWithInterfaceNoFragmentsOperation,
+		Query:  queryWithInterfaceNoFragments_Operation,
 		Variables: &__queryWithInterfaceNoFragmentsInput{
 			Id: id,
 		},
@@ -3511,7 +3511,7 @@ func queryWithInterfaceNoFragments(
 }
 
 // The query or mutation executed by queryWithNamedFragments.
-const queryWithNamedFragmentsOperation = `
+const queryWithNamedFragments_Operation = `
 query queryWithNamedFragments ($ids: [ID!]!) {
 	beings(ids: $ids) {
 		__typename
@@ -3556,7 +3556,7 @@ func queryWithNamedFragments(
 ) (*queryWithNamedFragmentsResponse, map[string]interface{}, error) {
 	req := &graphql.Request{
 		OpName: "queryWithNamedFragments",
-		Query:  queryWithNamedFragmentsOperation,
+		Query:  queryWithNamedFragments_Operation,
 		Variables: &__queryWithNamedFragmentsInput{
 			Ids: ids,
 		},
@@ -3576,7 +3576,7 @@ func queryWithNamedFragments(
 }
 
 // The query or mutation executed by queryWithOmitempty.
-const queryWithOmitemptyOperation = `
+const queryWithOmitempty_Operation = `
 query queryWithOmitempty ($id: ID) {
 	user(id: $id) {
 		id
@@ -3593,7 +3593,7 @@ func queryWithOmitempty(
 ) (*queryWithOmitemptyResponse, map[string]interface{}, error) {
 	req := &graphql.Request{
 		OpName: "queryWithOmitempty",
-		Query:  queryWithOmitemptyOperation,
+		Query:  queryWithOmitempty_Operation,
 		Variables: &__queryWithOmitemptyInput{
 			Id: id,
 		},
@@ -3613,7 +3613,7 @@ func queryWithOmitempty(
 }
 
 // The query or mutation executed by queryWithVariables.
-const queryWithVariablesOperation = `
+const queryWithVariables_Operation = `
 query queryWithVariables ($id: ID!) {
 	user(id: $id) {
 		id
@@ -3630,7 +3630,7 @@ func queryWithVariables(
 ) (*queryWithVariablesResponse, map[string]interface{}, error) {
 	req := &graphql.Request{
 		OpName: "queryWithVariables",
-		Query:  queryWithVariablesOperation,
+		Query:  queryWithVariables_Operation,
 		Variables: &__queryWithVariablesInput{
 			Id: id,
 		},
@@ -3650,7 +3650,7 @@ func queryWithVariables(
 }
 
 // The query or mutation executed by simpleQuery.
-const simpleQueryOperation = `
+const simpleQuery_Operation = `
 query simpleQuery {
 	me {
 		id
@@ -3666,7 +3666,7 @@ func simpleQuery(
 ) (*simpleQueryResponse, map[string]interface{}, error) {
 	req := &graphql.Request{
 		OpName: "simpleQuery",
-		Query:  simpleQueryOperation,
+		Query:  simpleQuery_Operation,
 	}
 	var err error
 
@@ -3683,7 +3683,7 @@ func simpleQuery(
 }
 
 // The query or mutation executed by simpleQueryExt.
-const simpleQueryExtOperation = `
+const simpleQueryExt_Operation = `
 query simpleQueryExt {
 	me {
 		id
@@ -3699,7 +3699,7 @@ func simpleQueryExt(
 ) (*simpleQueryExtResponse, map[string]interface{}, error) {
 	req := &graphql.Request{
 		OpName: "simpleQueryExt",
-		Query:  simpleQueryExtOperation,
+		Query:  simpleQueryExt_Operation,
 	}
 	var err error
 

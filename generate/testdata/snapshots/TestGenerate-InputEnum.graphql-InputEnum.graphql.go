@@ -55,7 +55,7 @@ type __InputEnumQueryInput struct {
 func (v *__InputEnumQueryInput) GetRole() Role { return v.Role }
 
 // The query or mutation executed by InputEnumQuery.
-const InputEnumQueryOperation = `
+const InputEnumQuery_Operation = `
 query InputEnumQuery ($role: Role!) {
 	usersWithRole(role: $role) {
 		id
@@ -69,7 +69,7 @@ func InputEnumQuery(
 ) (*InputEnumQueryResponse, error) {
 	req := &graphql.Request{
 		OpName: "InputEnumQuery",
-		Query:  InputEnumQueryOperation,
+		Query:  InputEnumQuery_Operation,
 		Variables: &__InputEnumQueryInput{
 			Role: role,
 		},

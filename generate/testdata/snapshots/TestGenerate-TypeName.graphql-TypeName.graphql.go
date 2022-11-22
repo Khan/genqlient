@@ -38,7 +38,7 @@ func (v *TypeNameQueryUser) GetTypename() string { return v.Typename }
 func (v *TypeNameQueryUser) GetId() testutil.ID { return v.Id }
 
 // The query or mutation executed by TypeNameQuery.
-const TypeNameQueryOperation = `
+const TypeNameQuery_Operation = `
 query TypeNameQuery {
 	user {
 		__typename
@@ -52,7 +52,7 @@ func TypeNameQuery(
 ) (*TypeNameQueryResponse, error) {
 	req := &graphql.Request{
 		OpName: "TypeNameQuery",
-		Query:  TypeNameQueryOperation,
+		Query:  TypeNameQuery_Operation,
 	}
 	var err error
 
