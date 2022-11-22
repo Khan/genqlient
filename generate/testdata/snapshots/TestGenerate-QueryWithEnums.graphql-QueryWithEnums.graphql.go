@@ -63,7 +63,7 @@ const (
 )
 
 // The query or mutation executed by QueryWithEnums.
-const QueryWithEnumsOperation = `
+const QueryWithEnums_Operation = `
 query QueryWithEnums {
 	user {
 		roles
@@ -79,7 +79,7 @@ func QueryWithEnums(
 ) (*QueryWithEnumsResponse, error) {
 	req := &graphql.Request{
 		OpName: "QueryWithEnums",
-		Query:  QueryWithEnumsOperation,
+		Query:  QueryWithEnums_Operation,
 	}
 	var err error
 

@@ -69,7 +69,7 @@ type __RecursionInput struct {
 func (v *__RecursionInput) GetInput() RecursiveInput { return v.Input }
 
 // The query or mutation executed by Recursion.
-const RecursionOperation = `
+const Recursion_Operation = `
 query Recursion ($input: RecursiveInput!) {
 	recur(input: $input) {
 		rec {
@@ -89,7 +89,7 @@ func Recursion(
 ) (*RecursionResponse, error) {
 	req := &graphql.Request{
 		OpName: "Recursion",
-		Query:  RecursionOperation,
+		Query:  Recursion_Operation,
 		Variables: &__RecursionInput{
 			Input: input,
 		},

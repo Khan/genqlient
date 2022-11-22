@@ -2347,7 +2347,7 @@ type TopicFieldsRelatedTopic struct {
 func (v *TopicFieldsRelatedTopic) GetId() testutil.ID { return v.Id }
 
 // The query or mutation executed by CovariantInterfaceImplementation.
-const CovariantInterfaceImplementationOperation = `
+const CovariantInterfaceImplementation_Operation = `
 query CovariantInterfaceImplementation {
 	randomItem {
 		__typename
@@ -2397,7 +2397,7 @@ func CovariantInterfaceImplementation(
 ) (*CovariantInterfaceImplementationResponse, error) {
 	req := &graphql.Request{
 		OpName: "CovariantInterfaceImplementation",
-		Query:  CovariantInterfaceImplementationOperation,
+		Query:  CovariantInterfaceImplementation_Operation,
 	}
 	var err error
 

@@ -265,7 +265,7 @@ func (v *User) GetId() testutil.ID { return v.Id }
 func (v *User) GetName() string { return v.Name }
 
 // The query or mutation executed by TypeNames.
-const TypeNamesOperation = `
+const TypeNames_Operation = `
 query TypeNames {
 	user {
 		id
@@ -288,7 +288,7 @@ func TypeNames(
 ) (*Resp, error) {
 	req := &graphql.Request{
 		OpName: "TypeNames",
-		Query:  TypeNamesOperation,
+		Query:  TypeNames_Operation,
 	}
 	var err error
 

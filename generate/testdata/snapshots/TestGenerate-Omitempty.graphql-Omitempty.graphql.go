@@ -220,7 +220,7 @@ func (v *__OmitEmptyQueryInput) GetTz() string { return v.Tz }
 func (v *__OmitEmptyQueryInput) GetTzNoOmitEmpty() string { return v.TzNoOmitEmpty }
 
 // The query or mutation executed by OmitEmptyQuery.
-const OmitEmptyQueryOperation = `
+const OmitEmptyQuery_Operation = `
 query OmitEmptyQuery ($query: UserQueryInput, $queries: [UserQueryInput], $dt: DateTime, $tz: String, $tzNoOmitEmpty: String) {
 	user(query: $query) {
 		id
@@ -243,7 +243,7 @@ func OmitEmptyQuery(
 ) (*OmitEmptyQueryResponse, error) {
 	req := &graphql.Request{
 		OpName: "OmitEmptyQuery",
-		Query:  OmitEmptyQueryOperation,
+		Query:  OmitEmptyQuery_Operation,
 		Variables: &__OmitEmptyQueryInput{
 			Query:         query,
 			Queries:       queries,

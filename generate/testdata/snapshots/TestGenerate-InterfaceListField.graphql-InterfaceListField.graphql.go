@@ -521,7 +521,7 @@ func (v *InterfaceListFieldWithPointerTopicChildrenVideo) GetId() testutil.ID { 
 func (v *InterfaceListFieldWithPointerTopicChildrenVideo) GetName() string { return v.Name }
 
 // The query or mutation executed by InterfaceListField.
-const InterfaceListFieldOperation = `
+const InterfaceListField_Operation = `
 query InterfaceListField {
 	root {
 		id
@@ -549,7 +549,7 @@ func InterfaceListField(
 ) (*InterfaceListFieldResponse, error) {
 	req := &graphql.Request{
 		OpName: "InterfaceListField",
-		Query:  InterfaceListFieldOperation,
+		Query:  InterfaceListField_Operation,
 	}
 	var err error
 

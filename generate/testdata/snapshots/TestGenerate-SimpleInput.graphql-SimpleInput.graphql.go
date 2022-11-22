@@ -42,7 +42,7 @@ type __SimpleInputQueryInput struct {
 func (v *__SimpleInputQueryInput) GetName() string { return v.Name }
 
 // The query or mutation executed by SimpleInputQuery.
-const SimpleInputQueryOperation = `
+const SimpleInputQuery_Operation = `
 query SimpleInputQuery ($name: String!) {
 	user(query: {name:$name}) {
 		id
@@ -56,7 +56,7 @@ func SimpleInputQuery(
 ) (*SimpleInputQueryResponse, error) {
 	req := &graphql.Request{
 		OpName: "SimpleInputQuery",
-		Query:  SimpleInputQueryOperation,
+		Query:  SimpleInputQuery_Operation,
 		Variables: &__SimpleInputQueryInput{
 			Name: name,
 		},

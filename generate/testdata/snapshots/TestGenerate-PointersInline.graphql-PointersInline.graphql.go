@@ -228,7 +228,7 @@ func (v *__PointersQueryInput) GetDt() *time.Time { return v.Dt }
 func (v *__PointersQueryInput) GetTz() string { return v.Tz }
 
 // The query or mutation executed by PointersQuery.
-const PointersQueryOperation = `
+const PointersQuery_Operation = `
 query PointersQuery ($query: UserQueryInput, $dt: DateTime, $tz: String) {
 	user(query: $query) {
 		id
@@ -252,7 +252,7 @@ func PointersQuery(
 ) (*PointersQueryResponse, error) {
 	req := &graphql.Request{
 		OpName: "PointersQuery",
-		Query:  PointersQueryOperation,
+		Query:  PointersQuery_Operation,
 		Variables: &__PointersQueryInput{
 			Query: query,
 			Dt:    dt,

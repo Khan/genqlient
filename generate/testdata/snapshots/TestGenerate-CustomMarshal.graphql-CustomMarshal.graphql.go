@@ -175,7 +175,7 @@ func (v *__CustomMarshalInput) __premarshalJSON() (*__premarshal__CustomMarshalI
 }
 
 // The query or mutation executed by CustomMarshal.
-const CustomMarshalOperation = `
+const CustomMarshal_Operation = `
 query CustomMarshal ($date: Date!) {
 	usersBornOn(date: $date) {
 		id
@@ -190,7 +190,7 @@ func CustomMarshal(
 ) (*CustomMarshalResponse, error) {
 	req := &graphql.Request{
 		OpName: "CustomMarshal",
-		Query:  CustomMarshalOperation,
+		Query:  CustomMarshal_Operation,
 		Variables: &__CustomMarshalInput{
 			Date: date,
 		},

@@ -1740,7 +1740,7 @@ type VideoFieldsThumbnail struct {
 func (v *VideoFieldsThumbnail) GetId() testutil.ID { return v.Id }
 
 // The query or mutation executed by ComplexNamedFragments.
-const ComplexNamedFragmentsOperation = `
+const ComplexNamedFragments_Operation = `
 query ComplexNamedFragments {
 	... on Query {
 		... QueryFragment
@@ -1805,7 +1805,7 @@ func ComplexNamedFragments(
 ) (*ComplexNamedFragmentsResponse, error) {
 	req := &graphql.Request{
 		OpName: "ComplexNamedFragments",
-		Query:  ComplexNamedFragmentsOperation,
+		Query:  ComplexNamedFragments_Operation,
 	}
 	var err error
 

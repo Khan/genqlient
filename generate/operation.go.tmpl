@@ -1,5 +1,5 @@
 // The query or mutation executed by {{.Name}}.
-const {{.Name}}Operation = `{{$.Body}}`
+const {{.Name}}_Operation = `{{$.Body}}`
 
 {{.Doc}}
 func {{.Name}}(
@@ -18,7 +18,7 @@ func {{.Name}}(
 ) (*{{.ResponseName}}, {{if .Config.Extensions -}}map[string]interface{},{{end}} error) {
     req := &graphql.Request{
         OpName: "{{.Name}}",
-        Query:  {{.Name}}Operation,
+        Query:  {{.Name}}_Operation,
     {{if .Input -}}
         Variables: &{{.Input.GoName}}{
         {{range .Input.Fields -}}

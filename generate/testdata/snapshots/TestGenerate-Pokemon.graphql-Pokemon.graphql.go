@@ -72,7 +72,7 @@ type __GetPokemonSiblingsInput struct {
 func (v *__GetPokemonSiblingsInput) GetInput() testutil.Pokemon { return v.Input }
 
 // The query or mutation executed by GetPokemonSiblings.
-const GetPokemonSiblingsOperation = `
+const GetPokemonSiblings_Operation = `
 query GetPokemonSiblings ($input: PokemonInput!) {
 	user(query: {hasPokemon:$input}) {
 		id
@@ -96,7 +96,7 @@ func GetPokemonSiblings(
 ) (*GetPokemonSiblingsResponse, error) {
 	req := &graphql.Request{
 		OpName: "GetPokemonSiblings",
-		Query:  GetPokemonSiblingsOperation,
+		Query:  GetPokemonSiblings_Operation,
 		Variables: &__GetPokemonSiblingsInput{
 			Input: input,
 		},

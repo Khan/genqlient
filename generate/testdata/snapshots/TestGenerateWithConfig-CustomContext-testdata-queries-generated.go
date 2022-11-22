@@ -39,7 +39,7 @@ type SimpleQueryUser struct {
 func (v *SimpleQueryUser) GetId() string { return v.Id }
 
 // The query or mutation executed by SimpleQuery.
-const SimpleQueryOperation = `
+const SimpleQuery_Operation = `
 query SimpleQuery {
 	user {
 		id
@@ -53,7 +53,7 @@ func SimpleQuery(
 ) (*SimpleQueryResponse, error) {
 	req := &graphql.Request{
 		OpName: "SimpleQuery",
-		Query:  SimpleQueryOperation,
+		Query:  SimpleQuery_Operation,
 	}
 	var err error
 

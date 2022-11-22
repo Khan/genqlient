@@ -547,7 +547,7 @@ type VideoFieldsThumbnail struct {
 func (v *VideoFieldsThumbnail) GetId() testutil.ID { return v.Id }
 
 // The query or mutation executed by SimpleNamedFragment.
-const SimpleNamedFragmentOperation = `
+const SimpleNamedFragment_Operation = `
 query SimpleNamedFragment {
 	randomItem {
 		__typename
@@ -576,7 +576,7 @@ func SimpleNamedFragment(
 ) (*SimpleNamedFragmentResponse, error) {
 	req := &graphql.Request{
 		OpName: "SimpleNamedFragment",
-		Query:  SimpleNamedFragmentOperation,
+		Query:  SimpleNamedFragment_Operation,
 	}
 	var err error
 

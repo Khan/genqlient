@@ -326,7 +326,7 @@ func (v *__MultipleDirectivesInput) GetQuery() MyInput { return v.Query }
 func (v *__MultipleDirectivesInput) GetQueries() []*UserQueryInput { return v.Queries }
 
 // The query or mutation executed by MultipleDirectives.
-const MultipleDirectivesOperation = `
+const MultipleDirectives_Operation = `
 query MultipleDirectives ($query: UserQueryInput, $queries: [UserQueryInput]) {
 	user(query: $query) {
 		id
@@ -344,7 +344,7 @@ func MultipleDirectives(
 ) (*MyMultipleDirectivesResponse, error) {
 	req := &graphql.Request{
 		OpName: "MultipleDirectives",
-		Query:  MultipleDirectivesOperation,
+		Query:  MultipleDirectives_Operation,
 		Variables: &__MultipleDirectivesInput{
 			Query:   query,
 			Queries: queries,

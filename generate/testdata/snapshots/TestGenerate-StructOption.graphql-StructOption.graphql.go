@@ -425,7 +425,7 @@ type VideoFields struct {
 func (v *VideoFields) GetDuration() int { return v.Duration }
 
 // The query or mutation executed by StructOption.
-const StructOptionOperation = `
+const StructOption_Operation = `
 query StructOption {
 	root {
 		id
@@ -460,7 +460,7 @@ func StructOption(
 ) (*StructOptionResponse, error) {
 	req := &graphql.Request{
 		OpName: "StructOption",
-		Query:  StructOptionOperation,
+		Query:  StructOption_Operation,
 	}
 	var err error
 

@@ -1341,7 +1341,7 @@ func (v *ComplexInlineFragmentsRootTopic) GetSchoolGrade() string { return v.Sch
 func (v *ComplexInlineFragmentsRootTopic) GetName() string { return v.Name }
 
 // The query or mutation executed by ComplexInlineFragments.
-const ComplexInlineFragmentsOperation = `
+const ComplexInlineFragments_Operation = `
 query ComplexInlineFragments {
 	root {
 		id
@@ -1439,7 +1439,7 @@ func ComplexInlineFragments(
 ) (*ComplexInlineFragmentsResponse, error) {
 	req := &graphql.Request{
 		OpName: "ComplexInlineFragments",
-		Query:  ComplexInlineFragmentsOperation,
+		Query:  ComplexInlineFragments_Operation,
 	}
 	var err error
 

@@ -78,7 +78,7 @@ type __ListInputQueryInput struct {
 func (v *__ListInputQueryInput) GetNames() []*string { return v.Names }
 
 // The query or mutation executed by ListInputQuery.
-const ListInputQueryOperation = `
+const ListInputQuery_Operation = `
 query ListInputQuery ($names: [String]) {
 	user(query: {names:$names}) {
 		id
@@ -93,7 +93,7 @@ func ListInputQuery(
 ) (*ListInputQueryResponse, error) {
 	req := &graphql.Request{
 		OpName: "ListInputQuery",
-		Query:  ListInputQueryOperation,
+		Query:  ListInputQuery_Operation,
 		Variables: &__ListInputQueryInput{
 			Names: names,
 		},
@@ -113,7 +113,7 @@ func ListInputQuery(
 }
 
 // The query or mutation executed by QueryWithSlices.
-const QueryWithSlicesOperation = `
+const QueryWithSlices_Operation = `
 query QueryWithSlices {
 	user {
 		emails
@@ -130,7 +130,7 @@ func QueryWithSlices(
 ) (*QueryWithSlicesResponse, error) {
 	req := &graphql.Request{
 		OpName: "QueryWithSlices",
-		Query:  QueryWithSlicesOperation,
+		Query:  QueryWithSlices_Operation,
 	}
 	var err error
 

@@ -44,7 +44,7 @@ func (v *QueryWithStructsUserAuthMethodsAuthMethod) GetProvider() string { retur
 func (v *QueryWithStructsUserAuthMethodsAuthMethod) GetEmail() string { return v.Email }
 
 // The query or mutation executed by QueryWithStructs.
-const QueryWithStructsOperation = `
+const QueryWithStructs_Operation = `
 query QueryWithStructs {
 	user {
 		authMethods {
@@ -60,7 +60,7 @@ func QueryWithStructs(
 ) (*QueryWithStructsResponse, error) {
 	req := &graphql.Request{
 		OpName: "QueryWithStructs",
-		Query:  QueryWithStructsOperation,
+		Query:  QueryWithStructs_Operation,
 	}
 	var err error
 

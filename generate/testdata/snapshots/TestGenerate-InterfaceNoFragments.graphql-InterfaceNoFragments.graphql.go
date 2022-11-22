@@ -627,7 +627,7 @@ func (v *InterfaceNoFragmentsQueryWithPointerVideo) GetId() *testutil.ID { retur
 func (v *InterfaceNoFragmentsQueryWithPointerVideo) GetName() *string { return v.Name }
 
 // The query or mutation executed by InterfaceNoFragmentsQuery.
-const InterfaceNoFragmentsQueryOperation = `
+const InterfaceNoFragmentsQuery_Operation = `
 query InterfaceNoFragmentsQuery {
 	root {
 		id
@@ -656,7 +656,7 @@ func InterfaceNoFragmentsQuery(
 ) (*InterfaceNoFragmentsQueryResponse, error) {
 	req := &graphql.Request{
 		OpName: "InterfaceNoFragmentsQuery",
-		Query:  InterfaceNoFragmentsQueryOperation,
+		Query:  InterfaceNoFragmentsQuery_Operation,
 	}
 	var err error
 
