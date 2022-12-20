@@ -103,15 +103,15 @@ func (c *Config) ValidateAndFillDefaults(baseDir string) error {
 		abs, err := filepath.Abs(c.Generated)
 		if err != nil {
 			return errorf(nil, "unable to guess package-name: %v is not a valid identifier"+
-			"\nSet package name in genqlient.yaml" + 
-			"\nExample: https://github.com/Khan/genqlient/blob/main/example/genqlient.yaml#L6", err)
+				"\nSet package name in genqlient.yaml"+
+				"\nExample: https://github.com/Khan/genqlient/blob/main/example/genqlient.yaml#L6", err)
 		}
 
 		base := filepath.Base(filepath.Dir(abs))
 		if !token.IsIdentifier(base) {
 			return errorf(nil, "unable to guess package-name: %v is not a valid identifier"+
-			"\nSet package name in genqlient.yaml" + 
-			"\nExample: https://github.com/Khan/genqlient/blob/main/example/genqlient.yaml#L6", base)
+				"\nSet package name in genqlient.yaml"+
+				"\nExample: https://github.com/Khan/genqlient/blob/main/example/genqlient.yaml#L6", base)
 		}
 
 		c.Package = base

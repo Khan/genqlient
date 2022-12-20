@@ -525,7 +525,7 @@ func (g *generator) convertDefinition(
 		// (If you had an entry in bindings, we would have returned it above.)
 		return nil, errorf(
 			pos, "unknown scalar %v: please add it to \"bindings\" in genqlient.yaml"+
-			"\nExample: https://github.com/Khan/genqlient/blob/main/example/genqlient.yaml#L12", def.Name)
+				"\nExample: https://github.com/Khan/genqlient/blob/main/example/genqlient.yaml#L12", def.Name)
 	default:
 		return nil, errorf(pos, "unexpected kind: %v", def.Kind)
 	}
