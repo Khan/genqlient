@@ -388,6 +388,13 @@ func Generate(config *Config) (map[string][]byte, error) {
 		}
 	}
 
+	if g.Config.Optional == "generic" {
+		_, err = g.ref(g.Config.OptionalGenericType)
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	// Now really glue it all together, and format.
 	var buf bytes.Buffer
 	err = g.render("header.go.tmpl", &buf, g)
