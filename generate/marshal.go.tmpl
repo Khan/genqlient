@@ -38,7 +38,7 @@ type __premarshal{{.GoName}} struct{
     {{end}}
 }
 
-func (v *{{.GoName}}) MarshalJSON() ([]byte, error) {
+func (v {{.GoName}}) MarshalJSON() ([]byte, error) {
     premarshaled, err := v.__premarshalJSON()
     if err != nil {
         return nil, err
