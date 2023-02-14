@@ -218,7 +218,7 @@ type __premarshalResp struct {
 	Users []User `json:"users"`
 }
 
-func (v *Resp) MarshalJSON() ([]byte, error) {
+func (v Resp) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err

@@ -69,7 +69,7 @@ type __premarshalAnimalFields struct {
 	Owner json.RawMessage `json:"owner"`
 }
 
-func (v *AnimalFields) MarshalJSON() ([]byte, error) {
+func (v AnimalFields) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -254,7 +254,7 @@ type __premarshalAnimalFieldsOwnerUser struct {
 	Hair MoreUserFieldsHair `json:"hair"`
 }
 
-func (v *AnimalFieldsOwnerUser) MarshalJSON() ([]byte, error) {
+func (v AnimalFieldsOwnerUser) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -561,7 +561,7 @@ type __premarshalLuckyFieldsUser struct {
 	Hair MoreUserFieldsHair `json:"hair"`
 }
 
-func (v *LuckyFieldsUser) MarshalJSON() ([]byte, error) {
+func (v LuckyFieldsUser) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -656,7 +656,7 @@ type __premarshalQueryFragment struct {
 	Beings []json.RawMessage `json:"beings"`
 }
 
-func (v *QueryFragment) MarshalJSON() ([]byte, error) {
+func (v QueryFragment) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -745,7 +745,7 @@ type __premarshalQueryFragmentBeingsAnimal struct {
 	Owner json.RawMessage `json:"owner"`
 }
 
-func (v *QueryFragmentBeingsAnimal) MarshalJSON() ([]byte, error) {
+func (v QueryFragmentBeingsAnimal) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -903,7 +903,7 @@ type __premarshalQueryFragmentBeingsUser struct {
 	LuckyNumber int `json:"luckyNumber"`
 }
 
-func (v *QueryFragmentBeingsUser) MarshalJSON() ([]byte, error) {
+func (v QueryFragmentBeingsUser) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -981,7 +981,7 @@ type __premarshalUserFields struct {
 	Hair MoreUserFieldsHair `json:"hair"`
 }
 
-func (v *UserFields) MarshalJSON() ([]byte, error) {
+func (v UserFields) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -1051,7 +1051,7 @@ type __premarshal__queryWithCustomMarshalInput struct {
 	Date json.RawMessage `json:"date"`
 }
 
-func (v *__queryWithCustomMarshalInput) MarshalJSON() ([]byte, error) {
+func (v __queryWithCustomMarshalInput) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -1129,7 +1129,7 @@ type __premarshal__queryWithCustomMarshalOptionalInput struct {
 	Id *string `json:"id"`
 }
 
-func (v *__queryWithCustomMarshalOptionalInput) MarshalJSON() ([]byte, error) {
+func (v __queryWithCustomMarshalOptionalInput) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -1209,7 +1209,7 @@ type __premarshal__queryWithCustomMarshalSliceInput struct {
 	Dates []json.RawMessage `json:"dates"`
 }
 
-func (v *__queryWithCustomMarshalSliceInput) MarshalJSON() ([]byte, error) {
+func (v __queryWithCustomMarshalSliceInput) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -1412,7 +1412,7 @@ type __premarshalqueryWithCustomMarshalOptionalUserSearchUser struct {
 	Birthdate json.RawMessage `json:"birthdate"`
 }
 
-func (v *queryWithCustomMarshalOptionalUserSearchUser) MarshalJSON() ([]byte, error) {
+func (v queryWithCustomMarshalOptionalUserSearchUser) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -1519,7 +1519,7 @@ type __premarshalqueryWithCustomMarshalSliceUsersBornOnDatesUser struct {
 	Birthdate json.RawMessage `json:"birthdate"`
 }
 
-func (v *queryWithCustomMarshalSliceUsersBornOnDatesUser) MarshalJSON() ([]byte, error) {
+func (v queryWithCustomMarshalSliceUsersBornOnDatesUser) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -1604,7 +1604,7 @@ type __premarshalqueryWithCustomMarshalUsersBornOnUser struct {
 	Birthdate json.RawMessage `json:"birthdate"`
 }
 
-func (v *queryWithCustomMarshalUsersBornOnUser) MarshalJSON() ([]byte, error) {
+func (v queryWithCustomMarshalUsersBornOnUser) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -1711,7 +1711,7 @@ type __premarshalqueryWithFragmentsBeingsAnimal struct {
 	Owner json.RawMessage `json:"owner"`
 }
 
-func (v *queryWithFragmentsBeingsAnimal) MarshalJSON() ([]byte, error) {
+func (v queryWithFragmentsBeingsAnimal) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -2025,7 +2025,7 @@ type __premarshalqueryWithFragmentsResponse struct {
 	Beings []json.RawMessage `json:"beings"`
 }
 
-func (v *queryWithFragmentsResponse) MarshalJSON() ([]byte, error) {
+func (v queryWithFragmentsResponse) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -2219,7 +2219,7 @@ type __premarshalqueryWithInterfaceListFieldResponse struct {
 	Beings []json.RawMessage `json:"beings"`
 }
 
-func (v *queryWithInterfaceListFieldResponse) MarshalJSON() ([]byte, error) {
+func (v queryWithInterfaceListFieldResponse) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -2414,7 +2414,7 @@ type __premarshalqueryWithInterfaceListPointerFieldResponse struct {
 	Beings []json.RawMessage `json:"beings"`
 }
 
-func (v *queryWithInterfaceListPointerFieldResponse) MarshalJSON() ([]byte, error) {
+func (v queryWithInterfaceListPointerFieldResponse) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -2624,7 +2624,7 @@ type __premarshalqueryWithInterfaceNoFragmentsResponse struct {
 	Me queryWithInterfaceNoFragmentsMeUser `json:"me"`
 }
 
-func (v *queryWithInterfaceNoFragmentsResponse) MarshalJSON() ([]byte, error) {
+func (v queryWithInterfaceNoFragmentsResponse) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -2709,7 +2709,7 @@ type __premarshalqueryWithNamedFragmentsBeingsAnimal struct {
 	Owner json.RawMessage `json:"owner"`
 }
 
-func (v *queryWithNamedFragmentsBeingsAnimal) MarshalJSON() ([]byte, error) {
+func (v queryWithNamedFragmentsBeingsAnimal) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -2879,7 +2879,7 @@ type __premarshalqueryWithNamedFragmentsBeingsUser struct {
 	Hair MoreUserFieldsHair `json:"hair"`
 }
 
-func (v *queryWithNamedFragmentsBeingsUser) MarshalJSON() ([]byte, error) {
+func (v queryWithNamedFragmentsBeingsUser) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -2950,7 +2950,7 @@ type __premarshalqueryWithNamedFragmentsResponse struct {
 	Beings []json.RawMessage `json:"beings"`
 }
 
-func (v *queryWithNamedFragmentsResponse) MarshalJSON() ([]byte, error) {
+func (v queryWithNamedFragmentsResponse) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err

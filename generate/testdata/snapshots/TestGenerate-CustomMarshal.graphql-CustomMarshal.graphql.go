@@ -76,7 +76,7 @@ type __premarshalCustomMarshalUsersBornOnUser struct {
 	Birthdate json.RawMessage `json:"birthdate"`
 }
 
-func (v *CustomMarshalUsersBornOnUser) MarshalJSON() ([]byte, error) {
+func (v CustomMarshalUsersBornOnUser) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -148,7 +148,7 @@ type __premarshal__CustomMarshalInput struct {
 	Date json.RawMessage `json:"date"`
 }
 
-func (v *__CustomMarshalInput) MarshalJSON() ([]byte, error) {
+func (v __CustomMarshalInput) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err

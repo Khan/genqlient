@@ -412,7 +412,7 @@ type __premarshalInterfaceNoFragmentsQueryResponse struct {
 	WithPointer json.RawMessage `json:"withPointer"`
 }
 
-func (v *InterfaceNoFragmentsQueryResponse) MarshalJSON() ([]byte, error) {
+func (v InterfaceNoFragmentsQueryResponse) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err

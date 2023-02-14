@@ -213,7 +213,7 @@ type __premarshalSimpleInlineFragmentResponse struct {
 	RandomItem json.RawMessage `json:"randomItem"`
 }
 
-func (v *SimpleInlineFragmentResponse) MarshalJSON() ([]byte, error) {
+func (v SimpleInlineFragmentResponse) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err

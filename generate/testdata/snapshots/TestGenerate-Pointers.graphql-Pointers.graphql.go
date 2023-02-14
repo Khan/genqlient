@@ -180,7 +180,7 @@ type __premarshalUserQueryInput struct {
 	Birthdate json.RawMessage `json:"birthdate"`
 }
 
-func (v *UserQueryInput) MarshalJSON() ([]byte, error) {
+func (v UserQueryInput) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err

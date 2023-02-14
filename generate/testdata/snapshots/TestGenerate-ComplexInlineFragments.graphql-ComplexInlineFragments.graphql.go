@@ -327,7 +327,7 @@ type __premarshalComplexInlineFragmentsNestedStuffTopic struct {
 	Children []json.RawMessage `json:"children"`
 }
 
-func (v *ComplexInlineFragmentsNestedStuffTopic) MarshalJSON() ([]byte, error) {
+func (v ComplexInlineFragmentsNestedStuffTopic) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -438,7 +438,7 @@ type __premarshalComplexInlineFragmentsNestedStuffTopicChildrenArticleParentCont
 	Children []json.RawMessage `json:"children"`
 }
 
-func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopic) MarshalJSON() ([]byte, error) {
+func (v ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopic) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -1260,7 +1260,7 @@ type __premarshalComplexInlineFragmentsResponse struct {
 	NestedStuff json.RawMessage `json:"nestedStuff"`
 }
 
-func (v *ComplexInlineFragmentsResponse) MarshalJSON() ([]byte, error) {
+func (v ComplexInlineFragmentsResponse) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err

@@ -185,7 +185,7 @@ type __premarshalContentFieldsArticle struct {
 	Related []json.RawMessage `json:"related"`
 }
 
-func (v *ContentFieldsArticle) MarshalJSON() ([]byte, error) {
+func (v ContentFieldsArticle) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -565,7 +565,7 @@ type __premarshalContentFieldsTopic struct {
 	Related []json.RawMessage `json:"related"`
 }
 
-func (v *ContentFieldsTopic) MarshalJSON() ([]byte, error) {
+func (v ContentFieldsTopic) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -683,7 +683,7 @@ type __premarshalContentFieldsVideo struct {
 	Related []json.RawMessage `json:"related"`
 }
 
-func (v *ContentFieldsVideo) MarshalJSON() ([]byte, error) {
+func (v ContentFieldsVideo) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -815,7 +815,7 @@ type __premarshalCovariantInterfaceImplementationRandomItemArticle struct {
 	Related []json.RawMessage `json:"related"`
 }
 
-func (v *CovariantInterfaceImplementationRandomItemArticle) MarshalJSON() ([]byte, error) {
+func (v CovariantInterfaceImplementationRandomItemArticle) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -1026,7 +1026,7 @@ type __premarshalCovariantInterfaceImplementationRandomItemContentNextArticle st
 	Related []json.RawMessage `json:"related"`
 }
 
-func (v *CovariantInterfaceImplementationRandomItemContentNextArticle) MarshalJSON() ([]byte, error) {
+func (v CovariantInterfaceImplementationRandomItemContentNextArticle) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -1228,7 +1228,7 @@ type __premarshalCovariantInterfaceImplementationRandomItemContentNextTopic stru
 	Related []json.RawMessage `json:"related"`
 }
 
-func (v *CovariantInterfaceImplementationRandomItemContentNextTopic) MarshalJSON() ([]byte, error) {
+func (v CovariantInterfaceImplementationRandomItemContentNextTopic) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -1327,7 +1327,7 @@ type __premarshalCovariantInterfaceImplementationRandomItemContentNextVideo stru
 	Related []json.RawMessage `json:"related"`
 }
 
-func (v *CovariantInterfaceImplementationRandomItemContentNextVideo) MarshalJSON() ([]byte, error) {
+func (v CovariantInterfaceImplementationRandomItemContentNextVideo) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -1426,7 +1426,7 @@ type __premarshalCovariantInterfaceImplementationRandomItemContentRelatedArticle
 	Related []json.RawMessage `json:"related"`
 }
 
-func (v *CovariantInterfaceImplementationRandomItemContentRelatedArticle) MarshalJSON() ([]byte, error) {
+func (v CovariantInterfaceImplementationRandomItemContentRelatedArticle) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -1628,7 +1628,7 @@ type __premarshalCovariantInterfaceImplementationRandomItemContentRelatedTopic s
 	Related []json.RawMessage `json:"related"`
 }
 
-func (v *CovariantInterfaceImplementationRandomItemContentRelatedTopic) MarshalJSON() ([]byte, error) {
+func (v CovariantInterfaceImplementationRandomItemContentRelatedTopic) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -1727,7 +1727,7 @@ type __premarshalCovariantInterfaceImplementationRandomItemContentRelatedVideo s
 	Related []json.RawMessage `json:"related"`
 }
 
-func (v *CovariantInterfaceImplementationRandomItemContentRelatedVideo) MarshalJSON() ([]byte, error) {
+func (v CovariantInterfaceImplementationRandomItemContentRelatedVideo) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -1860,7 +1860,7 @@ type __premarshalCovariantInterfaceImplementationRandomItemTopic struct {
 	Related []json.RawMessage `json:"related"`
 }
 
-func (v *CovariantInterfaceImplementationRandomItemTopic) MarshalJSON() ([]byte, error) {
+func (v CovariantInterfaceImplementationRandomItemTopic) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -1994,7 +1994,7 @@ type __premarshalCovariantInterfaceImplementationRandomItemVideo struct {
 	Related []json.RawMessage `json:"related"`
 }
 
-func (v *CovariantInterfaceImplementationRandomItemVideo) MarshalJSON() ([]byte, error) {
+func (v CovariantInterfaceImplementationRandomItemVideo) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -2095,7 +2095,7 @@ type __premarshalCovariantInterfaceImplementationResponse struct {
 	Root CovariantInterfaceImplementationRootTopic `json:"root"`
 }
 
-func (v *CovariantInterfaceImplementationResponse) MarshalJSON() ([]byte, error) {
+func (v CovariantInterfaceImplementationResponse) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -2176,7 +2176,7 @@ type __premarshalCovariantInterfaceImplementationRootTopic struct {
 	Related []CovariantInterfaceImplementationRootTopicRelatedTopic `json:"related"`
 }
 
-func (v *CovariantInterfaceImplementationRootTopic) MarshalJSON() ([]byte, error) {
+func (v CovariantInterfaceImplementationRootTopic) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -2238,7 +2238,7 @@ type __premarshalCovariantInterfaceImplementationRootTopicNextTopic struct {
 	Related []TopicFieldsRelatedTopic `json:"related"`
 }
 
-func (v *CovariantInterfaceImplementationRootTopicNextTopic) MarshalJSON() ([]byte, error) {
+func (v CovariantInterfaceImplementationRootTopicNextTopic) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -2300,7 +2300,7 @@ type __premarshalCovariantInterfaceImplementationRootTopicRelatedTopic struct {
 	Related []TopicFieldsRelatedTopic `json:"related"`
 }
 
-func (v *CovariantInterfaceImplementationRootTopicRelatedTopic) MarshalJSON() ([]byte, error) {
+func (v CovariantInterfaceImplementationRootTopicRelatedTopic) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err

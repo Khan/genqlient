@@ -282,7 +282,7 @@ type __premarshalInterfaceListOfListOfListsFieldResponse struct {
 	WithPointer [][][]json.RawMessage `json:"withPointer"`
 }
 
-func (v *InterfaceListOfListOfListsFieldResponse) MarshalJSON() ([]byte, error) {
+func (v InterfaceListOfListOfListsFieldResponse) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err

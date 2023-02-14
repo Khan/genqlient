@@ -127,7 +127,7 @@ type __premarshal__CustomMarshalSliceInput struct {
 	Datesssp [][][]json.RawMessage `json:"datesssp"`
 }
 
-func (v *__CustomMarshalSliceInput) MarshalJSON() ([]byte, error) {
+func (v __CustomMarshalSliceInput) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err

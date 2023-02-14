@@ -90,7 +90,7 @@ type __premarshalInterfaceListFieldRootTopic struct {
 	Children []json.RawMessage `json:"children"`
 }
 
-func (v *InterfaceListFieldRootTopic) MarshalJSON() ([]byte, error) {
+func (v InterfaceListFieldRootTopic) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -338,7 +338,7 @@ type __premarshalInterfaceListFieldWithPointerTopic struct {
 	Children []json.RawMessage `json:"children"`
 }
 
-func (v *InterfaceListFieldWithPointerTopic) MarshalJSON() ([]byte, error) {
+func (v InterfaceListFieldWithPointerTopic) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err

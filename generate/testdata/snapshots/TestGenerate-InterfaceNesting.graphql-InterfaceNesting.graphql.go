@@ -78,7 +78,7 @@ type __premarshalInterfaceNestingRootTopic struct {
 	Children []json.RawMessage `json:"children"`
 }
 
-func (v *InterfaceNestingRootTopic) MarshalJSON() ([]byte, error) {
+func (v InterfaceNestingRootTopic) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -287,7 +287,7 @@ type __premarshalInterfaceNestingRootTopicChildrenContentParentTopic struct {
 	Children []json.RawMessage `json:"children"`
 }
 
-func (v *InterfaceNestingRootTopicChildrenContentParentTopic) MarshalJSON() ([]byte, error) {
+func (v InterfaceNestingRootTopicChildrenContentParentTopic) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err

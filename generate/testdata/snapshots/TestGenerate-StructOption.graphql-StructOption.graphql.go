@@ -145,7 +145,7 @@ type __premarshalStructOptionRootTopicChildrenContentParentTopic struct {
 	InterfaceChildren []json.RawMessage `json:"interfaceChildren"`
 }
 
-func (v *StructOptionRootTopicChildrenContentParentTopic) MarshalJSON() ([]byte, error) {
+func (v StructOptionRootTopicChildrenContentParentTopic) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -388,7 +388,7 @@ type __premarshalStructOptionRootTopicChildrenContentParentTopicInterfaceChildre
 	Duration int `json:"duration"`
 }
 
-func (v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo) MarshalJSON() ([]byte, error) {
+func (v StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err

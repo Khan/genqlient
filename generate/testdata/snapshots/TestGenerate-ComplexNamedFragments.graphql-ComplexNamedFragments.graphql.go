@@ -63,7 +63,7 @@ type __premarshalComplexNamedFragmentsResponse struct {
 	OtherLeaf json.RawMessage `json:"otherLeaf"`
 }
 
-func (v *ComplexNamedFragmentsResponse) MarshalJSON() ([]byte, error) {
+func (v ComplexNamedFragmentsResponse) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -339,7 +339,7 @@ type __premarshalInnerQueryFragment struct {
 	OtherLeaf json.RawMessage `json:"otherLeaf"`
 }
 
-func (v *InnerQueryFragment) MarshalJSON() ([]byte, error) {
+func (v InnerQueryFragment) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -437,7 +437,7 @@ type __premarshalInnerQueryFragmentOtherLeafArticle struct {
 	Url string `json:"url"`
 }
 
-func (v *InnerQueryFragmentOtherLeafArticle) MarshalJSON() ([]byte, error) {
+func (v InnerQueryFragmentOtherLeafArticle) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -604,7 +604,7 @@ type __premarshalInnerQueryFragmentOtherLeafVideo struct {
 	Url string `json:"url"`
 }
 
-func (v *InnerQueryFragmentOtherLeafVideo) MarshalJSON() ([]byte, error) {
+func (v InnerQueryFragmentOtherLeafVideo) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -679,7 +679,7 @@ type __premarshalInnerQueryFragmentRandomItemArticle struct {
 	Url string `json:"url"`
 }
 
-func (v *InnerQueryFragmentRandomItemArticle) MarshalJSON() ([]byte, error) {
+func (v InnerQueryFragmentRandomItemArticle) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -863,7 +863,7 @@ type __premarshalInnerQueryFragmentRandomItemTopic struct {
 	Url string `json:"url"`
 }
 
-func (v *InnerQueryFragmentRandomItemTopic) MarshalJSON() ([]byte, error) {
+func (v InnerQueryFragmentRandomItemTopic) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -955,7 +955,7 @@ type __premarshalInnerQueryFragmentRandomItemVideo struct {
 	Thumbnail VideoFieldsThumbnail `json:"thumbnail"`
 }
 
-func (v *InnerQueryFragmentRandomItemVideo) MarshalJSON() ([]byte, error) {
+func (v InnerQueryFragmentRandomItemVideo) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -1023,7 +1023,7 @@ type __premarshalInnerQueryFragmentRandomLeafArticle struct {
 	Url string `json:"url"`
 }
 
-func (v *InnerQueryFragmentRandomLeafArticle) MarshalJSON() ([]byte, error) {
+func (v InnerQueryFragmentRandomLeafArticle) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -1208,7 +1208,7 @@ type __premarshalInnerQueryFragmentRandomLeafVideo struct {
 	Parent *MoreVideoFieldsParentTopic `json:"parent"`
 }
 
-func (v *InnerQueryFragmentRandomLeafVideo) MarshalJSON() ([]byte, error) {
+func (v InnerQueryFragmentRandomLeafVideo) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -1314,7 +1314,7 @@ type __premarshalMoreVideoFieldsParentTopic struct {
 	Children []json.RawMessage `json:"children"`
 }
 
-func (v *MoreVideoFieldsParentTopic) MarshalJSON() ([]byte, error) {
+func (v MoreVideoFieldsParentTopic) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -1523,7 +1523,7 @@ type __premarshalMoreVideoFieldsParentTopicChildrenVideo struct {
 	Thumbnail VideoFieldsThumbnail `json:"thumbnail"`
 }
 
-func (v *MoreVideoFieldsParentTopicChildrenVideo) MarshalJSON() ([]byte, error) {
+func (v MoreVideoFieldsParentTopicChildrenVideo) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -1599,7 +1599,7 @@ type __premarshalQueryFragment struct {
 	OtherLeaf json.RawMessage `json:"otherLeaf"`
 }
 
-func (v *QueryFragment) MarshalJSON() ([]byte, error) {
+func (v QueryFragment) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -1712,7 +1712,7 @@ type __premarshalVideoFields struct {
 	Thumbnail VideoFieldsThumbnail `json:"thumbnail"`
 }
 
-func (v *VideoFields) MarshalJSON() ([]byte, error) {
+func (v VideoFields) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err

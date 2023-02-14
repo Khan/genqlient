@@ -213,7 +213,7 @@ type __premarshalSimpleNamedFragmentRandomItemVideo struct {
 	Thumbnail VideoFieldsThumbnail `json:"thumbnail"`
 }
 
-func (v *SimpleNamedFragmentRandomItemVideo) MarshalJSON() ([]byte, error) {
+func (v SimpleNamedFragmentRandomItemVideo) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -386,7 +386,7 @@ type __premarshalSimpleNamedFragmentRandomLeafVideo struct {
 	Thumbnail VideoFieldsThumbnail `json:"thumbnail"`
 }
 
-func (v *SimpleNamedFragmentRandomLeafVideo) MarshalJSON() ([]byte, error) {
+func (v SimpleNamedFragmentRandomLeafVideo) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -475,7 +475,7 @@ type __premarshalSimpleNamedFragmentResponse struct {
 	RandomLeaf json.RawMessage `json:"randomLeaf"`
 }
 
-func (v *SimpleNamedFragmentResponse) MarshalJSON() ([]byte, error) {
+func (v SimpleNamedFragmentResponse) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err

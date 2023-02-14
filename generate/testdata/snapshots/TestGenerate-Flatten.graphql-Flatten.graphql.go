@@ -217,7 +217,7 @@ type __premarshalInnerQueryFragment struct {
 	OtherVideo ContentFieldsVideo `json:"otherVideo"`
 }
 
-func (v *InnerQueryFragment) MarshalJSON() ([]byte, error) {
+func (v InnerQueryFragment) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err

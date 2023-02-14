@@ -148,7 +148,7 @@ type __premarshalUnionNoFragmentsQueryResponse struct {
 	RandomLeaf json.RawMessage `json:"randomLeaf"`
 }
 
-func (v *UnionNoFragmentsQueryResponse) MarshalJSON() ([]byte, error) {
+func (v UnionNoFragmentsQueryResponse) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
