@@ -37,7 +37,7 @@ var resp struct {
 	}
 }
 client.Query(ctx, query, &resp, variables)
-fmt.Println(query.Me.Name)
+fmt.Println(resp.Me.Name)
 // Output: Luke Skywalker
 ```
 
