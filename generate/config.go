@@ -100,6 +100,16 @@ func (c *Config) ValidateAndFillDefaults(baseDir string) error {
 		c.ContextType = "context.Context"
 	}
 
+	if c.Optional != "" && c.Optional != "value" && c.Optional != "pointer" && c.Optional != "generic" {
+		return errorf(nil, "optional must be one of: 'value' (default), 'pointer', or 'generic'")
+	}
+
+	if c.Optional == "generic" && c.OptionalGenericType == "" {
+		return errorf(nil, "if optional is set to 'generic', optional_generic_type must be set to the fully"+
+			"qualified name of a type with a single generic parameter"+
+			"\nExample: \"github.com/Org/Repo/optional.Value\"")
+	}
+
 	if c.Package == "" {
 		abs, err := filepath.Abs(c.Generated)
 		if err != nil {

@@ -11,7 +11,6 @@ package generate
 
 import (
 	"fmt"
-	"regexp"
 	"sort"
 
 	"github.com/vektah/gqlparser/v2/ast"
@@ -264,11 +263,15 @@ func (g *generator) convertType(
 		// Note this does []*T or [][]*T, not e.g. *[][]T.  See #16.
 		goTyp = &goPointerType{goTyp}
 	} else if !typ.NonNull && g.Config.Optional == "generic" {
-		qualifiedTypeName := regexp.MustCompile("[^/]+$").FindString(g.Config.OptionalGenericType)
+		var genericRef string
+		genericRef, err = g.ref(g.Config.OptionalGenericType)
+		if err != nil {
+			return nil, err
+		}
 
 		goTyp = &goGenericType{
-			GenericName: qualifiedTypeName,
-			Elem:        goTyp,
+			GoGenericRef: genericRef,
+			Elem:         goTyp,
 		}
 	}
 	return goTyp, err

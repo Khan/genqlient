@@ -81,11 +81,11 @@ type (
 	// user (perhaps to handle nulls explicitly, or to avoid copying large
 	// structures).
 	goPointerType struct{ Elem goType }
-	// goGenericType represent the Go type ELem, used when requested by the
-	// user (to box null explicitly)
+	// goGenericType represent the Go type GoGenericRef[Elem], used when requested by the
+	// user to box nullable data without using pointers or sentinel values
 	goGenericType struct {
-		GenericName string
-		Elem        goType
+		GoGenericRef string
+		Elem         goType
 	}
 )
 
@@ -105,7 +105,7 @@ func (typ *goTypenameForBuiltinType) Reference() string { return typ.GoTypeName 
 func (typ *goSliceType) Reference() string              { return "[]" + typ.Elem.Reference() }
 func (typ *goPointerType) Reference() string            { return "*" + typ.Elem.Reference() }
 func (typ *goGenericType) Reference() string {
-	return strings.Replace(typ.GenericName, "%", typ.Elem.Reference(), 1)
+	return fmt.Sprintf("%s[%s]", typ.GoGenericRef, typ.Elem.Reference())
 }
 
 func (typ *goOpaqueType) SelectionSet() ast.SelectionSet             { return nil }

@@ -2,6 +2,7 @@ package testutil
 
 import (
 	"context"
+	"encoding/json"
 	"time"
 
 	"github.com/Khan/genqlient/graphql"
@@ -48,4 +49,61 @@ func UnmarshalDate(b []byte, t *time.Time) error {
 	var err error
 	*t, err = time.Parse(`"`+dateFormat+`"`, string(b))
 	return err
+}
+
+type Option[V any] struct {
+	value V
+	ok    bool
+}
+
+func Some[V any](value V) Option[V] {
+	return Option[V]{value: value, ok: true}
+}
+
+func None[V any]() Option[V] {
+	return Option[V]{ok: false}
+}
+
+func (v Option[V]) Unpack() (V, bool) {
+	return v.value, v.ok
+}
+
+func (v Option[V]) Get(fallback V) V {
+	if v.ok {
+		return v.value
+	}
+
+	return fallback
+}
+
+func FromPtr[V any](ptr *V) Option[V] {
+	if ptr == nil {
+		return None[V]()
+	}
+
+	return Some(*ptr)
+}
+
+func (value Option[V]) MarshalJSON() ([]byte, error) {
+	if value.ok {
+		return json.Marshal(value.value)
+	} else {
+		return json.Marshal((*V)(nil))
+	}
+}
+
+func (value *Option[V]) UnmarshalJSON(data []byte) error {
+	v := (*V)(nil)
+
+	err := json.Unmarshal(data, &v)
+	if err != nil {
+		return err
+	}
+
+	if v != nil {
+		value.value = *v
+		value.ok = true
+	}
+
+	return nil
 }
