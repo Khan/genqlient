@@ -6,10 +6,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/prometheus/client_golang/prometheus"
 	"io"
 	"net/http"
 	"net/url"
 	"strings"
+	"time"
 
 	"github.com/vektah/gqlparser/v2/gqlerror"
 )
@@ -38,6 +40,10 @@ type Client interface {
 		req *Request,
 		resp *Response,
 	) error
+
+	// GetMetricsToRegister must return a collection of Prom metrics related to latency request count
+	// and operation
+	GetMetricsToRegister() []prometheus.Collector
 }
 
 type client struct {
@@ -134,6 +140,10 @@ type Response struct {
 	Errors     gqlerror.List          `json:"errors,omitempty"`
 }
 
+func (c *client) GetMetricsToRegister() []prometheus.Collector {
+	return []prometheus.Collector{gqlLatency, gqlRequests}
+}
+
 func (c *client) MakeRequest(ctx context.Context, req *Request, resp *Response) error {
 	var httpReq *http.Request
 	var err error
@@ -151,8 +161,11 @@ func (c *client) MakeRequest(ctx context.Context, req *Request, resp *Response) 
 	if ctx != nil {
 		httpReq = httpReq.WithContext(ctx)
 	}
-
+	startTime := time.Now()
 	httpResp, err := c.httpClient.Do(httpReq)
+	statusCode := fmt.Sprint(httpResp.StatusCode)
+	gqlLatency.WithLabelValues(req.OpName, statusCode, c.method).Observe(time.Since(startTime).Seconds())
+	gqlRequests.WithLabelValues(req.OpName, statusCode, c.method).Inc()
 	if err != nil {
 		return err
 	}
@@ -172,6 +185,8 @@ func (c *client) MakeRequest(ctx context.Context, req *Request, resp *Response) 
 		return err
 	}
 	if len(resp.Errors) > 0 {
+		errorCount := float64(len(resp.Errors))
+		gqlResponseErrors.WithLabelValues(req.OpName, statusCode, c.method).Add(errorCount)
 		return resp.Errors
 	}
 	return nil
