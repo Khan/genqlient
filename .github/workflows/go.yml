@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        go: [ '1.16', '1.17', '1.18', '1.19' ]
+        go: [ '1.18', '1.19', '1.20' ]
 
     steps:
     - name: Set up Go
@@ -42,4 +42,4 @@ jobs:
     - name: Run lint
       uses: golangci/golangci-lint-action@v2
       with:
-        version: v1.48   # should match internal/lint/go.mod
+        version: v1.52.2   # should match internal/lint/go.mod

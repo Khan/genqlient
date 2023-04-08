@@ -22,6 +22,8 @@ When releasing a new version:
 
 ### Breaking changes:
 
+- genqlient now requires Go 1.18 or higher.
+
 ### New features:
 
 - You can now bind all types from a package in `genqlient.yaml` using the new `package_bindings` option.
