@@ -439,6 +439,11 @@ func (g *generator) convertDefinition(
 				return nil, err
 			}
 
+			if options.GetPointer() || (!field.Type.NonNull && g.Config.Optional == "pointer") {
+				oe := true
+				fieldOptions.Omitempty = &oe
+			}
+
 			goType.Fields[i] = &goStructField{
 				GoName:      goName,
 				GoType:      fieldGoType,
