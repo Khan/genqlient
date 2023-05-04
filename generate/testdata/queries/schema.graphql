@@ -180,8 +180,28 @@ type Query {
   listOfListsOfListsOfContent: [[[Content!]!]!]!
   recur(input: RecursiveInput!): Recursive
   acceptsListOfListOfListsOfDates(datesss: [[[Date!]!]!]!): Boolean
+  getPokemon(where: getPokemonBoolExp): [Pokemon!]!
 }
 
 type Mutation {
   createUser(name: String!, email: String): User 
+}
+
+input getPokemonBoolExp {
+  _and: [getPokemonBoolExp!]
+  _not: getPokemonBoolExp
+  _or: [getPokemonBoolExp!]
+  level: IntComparisonExp
+}
+
+input IntComparisonExp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _isNull: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
 }

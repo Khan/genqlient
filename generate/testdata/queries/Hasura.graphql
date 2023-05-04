@@ -1,0 +1,5 @@
+query GetPokemon($where: getPokemonBoolExp!) {
+  getPokemon(where: $where) {
+    level
+  }
+}
