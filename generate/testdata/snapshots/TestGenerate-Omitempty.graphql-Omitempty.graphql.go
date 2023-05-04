@@ -148,19 +148,19 @@ func (v *UserQueryInput) UnmarshalJSON(b []byte) error {
 }
 
 type __premarshalUserQueryInput struct {
-	Email string `json:"email"`
+	Email string `json:"email,omitempty"`
 
-	Name string `json:"name"`
+	Name string `json:"name,omitempty"`
 
 	Id testutil.ID `json:"id"`
 
-	Role Role `json:"role"`
+	Role Role `json:"role,omitempty"`
 
-	Names []string `json:"names"`
+	Names []string `json:"names,omitempty"`
 
-	HasPokemon testutil.Pokemon `json:"hasPokemon"`
+	HasPokemon testutil.Pokemon `json:"hasPokemon,omitempty"`
 
-	Birthdate json.RawMessage `json:"birthdate"`
+	Birthdate json.RawMessage `json:"birthdate,omitempty"`
 }
 
 func (v *UserQueryInput) MarshalJSON() ([]byte, error) {
