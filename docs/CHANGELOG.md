@@ -34,7 +34,7 @@ When releasing a new version:
 - Fixed non-deterministic generated code when querying graphql interfaces.
 - Fixed generated code when last component of package name is not a valid identifier (e.g. `"path/to/my-package"`).
 - Fixed incorrect documentation of `for` directive.
-- Fixed bug where `omitempty` JSON tags were not being correctly applied to `__premarshal` structs
+- Fixed bug where `omitempty` JSON tags were not being correctly applied to `__premarshal` structs.
 
 ## v0.5.0
 
