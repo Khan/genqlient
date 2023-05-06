@@ -131,7 +131,8 @@ type goEnumType struct {
 }
 
 type goEnumValue struct {
-	Name        string
+	GoName      string
+	GraphQLName string
 	Description string
 }
 
@@ -143,8 +144,7 @@ func (typ *goEnumType) WriteDefinition(w io.Writer, g *generator) error {
 	for _, val := range typ.Values {
 		writeDescription(w, val.Description)
 		fmt.Fprintf(w, "%s %s = \"%s\"\n",
-			typ.GoName+goConstName(val.Name),
-			typ.GoName, val.Name)
+			val.GoName, typ.GoName, val.GraphQLName)
 	}
 	fmt.Fprintf(w, ")\n")
 	return nil

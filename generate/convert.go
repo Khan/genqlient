@@ -516,8 +516,23 @@ func (g *generator) convertDefinition(
 			Description: def.Description,
 			Values:      make([]goEnumValue, len(def.EnumValues)),
 		}
+		goNames := map[string]*goEnumValue{}
 		for i, val := range def.EnumValues {
-			goType.Values[i] = goEnumValue{Name: val.Name, Description: val.Description}
+			goName := g.Config.Casing.enumValueName(name, def, val)
+			if conflict := goNames[goName]; conflict != nil {
+				return nil, errorf(val.Position,
+					"enum values %s and %s have conflicting Go name %s; "+
+						"add 'all_enums: raw' or 'enums: %v: raw' "+
+						"to 'casing' in genqlient.yaml to fix",
+					val.Name, conflict.GraphQLName, goName, def.Name)
+			}
+
+			goType.Values[i] = goEnumValue{
+				GoName:      goName,
+				GraphQLName: val.Name,
+				Description: val.Description,
+			}
+			goNames[goName] = &goType.Values[i]
 		}
 		return g.addType(goType, goType.GoName, pos)
 

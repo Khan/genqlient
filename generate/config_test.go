@@ -2,10 +2,17 @@ package generate
 
 import (
 	"os"
+	"path/filepath"
 	"testing"
 
+	"github.com/Khan/genqlient/internal/testutil"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+)
+
+const (
+	findConfigDir    = "testdata/find-config"
+	invalidConfigDir = "testdata/invalid-config"
 )
 
 func TestFindCfg(t *testing.T) {
@@ -18,15 +25,15 @@ func TestFindCfg(t *testing.T) {
 		expectedErr error
 	}{
 		"yaml in parent directory": {
-			startDir:    cwd + "/testdata/find-config/parent/child",
-			expectedCfg: cwd + "/testdata/find-config/parent/genqlient.yaml",
+			startDir:    filepath.Join(cwd, findConfigDir, "parent/child"),
+			expectedCfg: filepath.Join(cwd, findConfigDir, "parent/genqlient.yaml"),
 		},
 		"yaml in current directory": {
-			startDir:    cwd + "/testdata/find-config/current",
-			expectedCfg: cwd + "/testdata/find-config/current/genqlient.yaml",
+			startDir:    filepath.Join(cwd, findConfigDir, "current"),
+			expectedCfg: filepath.Join(cwd, findConfigDir, "current/genqlient.yaml"),
 		},
 		"no yaml": {
-			startDir:    cwd + "/testdata/find-config/none/child",
+			startDir:    filepath.Join(cwd, findConfigDir, "none/child"),
 			expectedErr: os.ErrNotExist,
 		},
 	}
@@ -56,23 +63,23 @@ func TestFindCfgInDir(t *testing.T) {
 		found    bool
 	}{
 		"yaml": {
-			startDir: cwd + "/testdata/find-config/filenames/yaml",
+			startDir: filepath.Join(cwd, findConfigDir, "filenames/yaml"),
 			found:    true,
 		},
 		"yml": {
-			startDir: cwd + "/testdata/find-config/filenames/yml",
+			startDir: filepath.Join(cwd, findConfigDir, "filenames/yml"),
 			found:    true,
 		},
 		".yaml": {
-			startDir: cwd + "/testdata/find-config/filenames/dotyaml",
+			startDir: filepath.Join(cwd, findConfigDir, "filenames/dotyaml"),
 			found:    true,
 		},
 		".yml": {
-			startDir: cwd + "/testdata/find-config/filenames/dotyml",
+			startDir: filepath.Join(cwd, findConfigDir, "filenames/dotyml"),
 			found:    true,
 		},
 		"none": {
-			startDir: cwd + "/testdata/find-config/filenames/none",
+			startDir: filepath.Join(cwd, findConfigDir, "filenames/none"),
 			found:    false,
 		},
 	}
@@ -94,15 +101,31 @@ func TestAbsoluteAndRelativePathsInConfigFiles(t *testing.T) {
 	require.NoError(t, err)
 
 	config, err := ReadAndValidateConfig(
-		cwd + "/testdata/find-config/current/genqlient.yaml")
+		filepath.Join(cwd, findConfigDir, "current/genqlient.yaml"))
 	require.NoError(t, err)
 
 	require.Equal(t, 1, len(config.Schema))
 	require.Equal(
 		t,
-		cwd+"/testdata/find-config/current/schema.graphql",
+		filepath.Join(cwd, findConfigDir, "current/schema.graphql"),
 		config.Schema[0],
 	)
 	require.Equal(t, 1, len(config.Operations))
 	require.Equal(t, "/tmp/genqlient.graphql", config.Operations[0])
+}
+
+func TestInvalidConfigs(t *testing.T) {
+	files, err := os.ReadDir(invalidConfigDir)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	for _, file := range files {
+		t.Run(file.Name(), func(t *testing.T) {
+			filename := filepath.Join(invalidConfigDir, file.Name())
+			_, err := ReadAndValidateConfig(filename)
+			require.Error(t, err)
+			testutil.Cupaloy.SnapshotT(t, err.Error())
+		})
+	}
 }

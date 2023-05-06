@@ -1,0 +1,9 @@
+enum AnnoyingEnum {
+  first_value
+  second_value
+  FIRST_VALUE
+}
+
+type Query {
+  f: AnnoyingEnum
+}
