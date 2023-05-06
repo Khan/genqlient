@@ -22,18 +22,19 @@ type Config struct {
 	// The following fields are documented in the [genqlient.yaml docs].
 	//
 	// [genqlient.yaml docs]: https://github.com/Khan/genqlient/blob/main/docs/genqlient.yaml
-	Schema           StringList              `yaml:"schema"`
-	Operations       StringList              `yaml:"operations"`
-	Generated        string                  `yaml:"generated"`
-	Package          string                  `yaml:"package"`
-	ExportOperations string                  `yaml:"export_operations"`
-	ContextType      string                  `yaml:"context_type"`
-	ClientGetter     string                  `yaml:"client_getter"`
-	Bindings         map[string]*TypeBinding `yaml:"bindings"`
-	PackageBindings  []*PackageBinding       `yaml:"package_bindings"`
-	Optional         string                  `yaml:"optional"`
-	StructReferences bool                    `yaml:"use_struct_references"`
-	Extensions       bool                    `yaml:"use_extensions"`
+	Schema              StringList              `yaml:"schema"`
+	Operations          StringList              `yaml:"operations"`
+	Generated           string                  `yaml:"generated"`
+	Package             string                  `yaml:"package"`
+	ExportOperations    string                  `yaml:"export_operations"`
+	ContextType         string                  `yaml:"context_type"`
+	ClientGetter        string                  `yaml:"client_getter"`
+	Bindings            map[string]*TypeBinding `yaml:"bindings"`
+	PackageBindings     []*PackageBinding       `yaml:"package_bindings"`
+	Optional            string                  `yaml:"optional"`
+	OptionalGenericType string                  `yaml:"optional_generic_type"`
+	StructReferences    bool                    `yaml:"use_struct_references"`
+	Extensions          bool                    `yaml:"use_extensions"`
 
 	// Set to true to use features that aren't fully ready to use.
 	//
@@ -97,6 +98,16 @@ func (c *Config) ValidateAndFillDefaults(baseDir string) error {
 
 	if c.ContextType == "" {
 		c.ContextType = "context.Context"
+	}
+
+	if c.Optional != "" && c.Optional != "value" && c.Optional != "pointer" && c.Optional != "generic" {
+		return errorf(nil, "optional must be one of: 'value' (default), 'pointer', or 'generic'")
+	}
+
+	if c.Optional == "generic" && c.OptionalGenericType == "" {
+		return errorf(nil, "if optional is set to 'generic', optional_generic_type must be set to the fully"+
+			"qualified name of a type with a single generic parameter"+
+			"\nExample: \"github.com/Org/Repo/optional.Value\"")
 	}
 
 	if c.Package == "" {

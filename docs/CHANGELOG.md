@@ -24,6 +24,8 @@ When releasing a new version:
 
 ### New features:
 
+- The new `optional: generic` allows using a generic type to represent optionality. See the [documentation](genqlient.yaml) for details.
+
 ### Bug fixes:
 
 ## v0.6.0

@@ -262,6 +262,17 @@ func (g *generator) convertType(
 		// options work, recursing here isn't as connvenient.)
 		// Note this does []*T or [][]*T, not e.g. *[][]T.  See #16.
 		goTyp = &goPointerType{goTyp}
+	} else if !typ.NonNull && g.Config.Optional == "generic" {
+		var genericRef string
+		genericRef, err = g.ref(g.Config.OptionalGenericType)
+		if err != nil {
+			return nil, err
+		}
+
+		goTyp = &goGenericType{
+			GoGenericRef: genericRef,
+			Elem:         goTyp,
+		}
 	}
 	return goTyp, err
 }

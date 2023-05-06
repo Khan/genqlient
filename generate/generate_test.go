@@ -214,6 +214,11 @@ func TestGenerateWithConfig(t *testing.T) {
 			Generated: "generated.go",
 			Optional:  "pointer",
 		}},
+		{"OptionalGeneric", "", []string{"ListInput.graphql", "QueryWithSlices.graphql"}, &Config{
+			Generated:           "generated.go",
+			Optional:            "generic",
+			OptionalGenericType: "github.com/Khan/genqlient/internal/testutil.Option",
+		}},
 	}
 
 	sourceFilename := "SimpleQuery.graphql"
