@@ -22,6 +22,8 @@ When releasing a new version:
 
 ### Breaking changes:
 
+- genqlient now requires Go 1.18 or higher.
+
 ### New features:
 
 - You can now bind all types from a package in `genqlient.yaml` using the new `package_bindings` option.
@@ -32,6 +34,7 @@ When releasing a new version:
 - Fixed non-deterministic generated code when querying graphql interfaces.
 - Fixed generated code when last component of package name is not a valid identifier (e.g. `"path/to/my-package"`).
 - Fixed incorrect documentation of `for` directive.
+- Fixed bug where `omitempty` JSON tags were not being correctly applied to `__premarshal` structs.
 
 ## v0.5.0
 

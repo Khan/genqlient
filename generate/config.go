@@ -138,7 +138,7 @@ func (c *Config) ValidateAndFillDefaults(baseDir string) error {
 					binding.Package)
 			}
 
-			mode := packages.NeedImports | packages.NeedTypes | packages.NeedTypesSizes
+			mode := packages.NeedDeps | packages.NeedTypes
 			pkgs, err := packages.Load(&packages.Config{
 				Mode: mode,
 			}, binding.Package)
@@ -152,7 +152,7 @@ func (c *Config) ValidateAndFillDefaults(baseDir string) error {
 
 			for _, pkg := range pkgs {
 				p := pkg.Types
-				if p == nil || p.Scope() == nil {
+				if p == nil || p.Scope() == nil || p.Scope().Len() == 0 {
 					return errorf(nil, "unable to bind package %s: no types found", binding.Package)
 				}
 

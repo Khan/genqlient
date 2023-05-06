@@ -7,17 +7,14 @@ linters:
   disable-all: true
   enable:
     # golangci enables these by default.
-    - deadcode
     - errcheck
     - gofumpt  # (replaces gofmt)
     - gosimple
     - govet
     - ineffassign
     - staticcheck
-    - structcheck
     - typecheck
     - unused
-    - varcheck
     # golangci disables these by default, but we use them.
     - bodyclose
     - depguard
