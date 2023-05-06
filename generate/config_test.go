@@ -25,15 +25,15 @@ func TestFindCfg(t *testing.T) {
 		expectedErr error
 	}{
 		"yaml in parent directory": {
-			startDir:    filepath.Join(cwd, findConfigDir, "parent/child"),
-			expectedCfg: filepath.Join(cwd, findConfigDir, "parent/genqlient.yaml"),
+			startDir:    filepath.Join(cwd, findConfigDir, "parent", "child"),
+			expectedCfg: filepath.Join(cwd, findConfigDir, "parent", "genqlient.yaml"),
 		},
 		"yaml in current directory": {
 			startDir:    filepath.Join(cwd, findConfigDir, "current"),
-			expectedCfg: filepath.Join(cwd, findConfigDir, "current/genqlient.yaml"),
+			expectedCfg: filepath.Join(cwd, findConfigDir, "current", "genqlient.yaml"),
 		},
 		"no yaml": {
-			startDir:    filepath.Join(cwd, findConfigDir, "none/child"),
+			startDir:    filepath.Join(cwd, findConfigDir, "none", "child"),
 			expectedErr: os.ErrNotExist,
 		},
 	}
@@ -63,23 +63,23 @@ func TestFindCfgInDir(t *testing.T) {
 		found    bool
 	}{
 		"yaml": {
-			startDir: filepath.Join(cwd, findConfigDir, "filenames/yaml"),
+			startDir: filepath.Join(cwd, findConfigDir, "filenames", "yaml"),
 			found:    true,
 		},
 		"yml": {
-			startDir: filepath.Join(cwd, findConfigDir, "filenames/yml"),
+			startDir: filepath.Join(cwd, findConfigDir, "filenames", "yml"),
 			found:    true,
 		},
 		".yaml": {
-			startDir: filepath.Join(cwd, findConfigDir, "filenames/dotyaml"),
+			startDir: filepath.Join(cwd, findConfigDir, "filenames", "dotyaml"),
 			found:    true,
 		},
 		".yml": {
-			startDir: filepath.Join(cwd, findConfigDir, "filenames/dotyml"),
+			startDir: filepath.Join(cwd, findConfigDir, "filenames", "dotyml"),
 			found:    true,
 		},
 		"none": {
-			startDir: filepath.Join(cwd, findConfigDir, "filenames/none"),
+			startDir: filepath.Join(cwd, findConfigDir, "filenames", "none"),
 			found:    false,
 		},
 	}
@@ -101,13 +101,13 @@ func TestAbsoluteAndRelativePathsInConfigFiles(t *testing.T) {
 	require.NoError(t, err)
 
 	config, err := ReadAndValidateConfig(
-		filepath.Join(cwd, findConfigDir, "current/genqlient.yaml"))
+		filepath.Join(cwd, findConfigDir, "current", "genqlient.yaml"))
 	require.NoError(t, err)
 
 	require.Equal(t, 1, len(config.Schema))
 	require.Equal(
 		t,
-		filepath.Join(cwd, findConfigDir, "current/schema.graphql"),
+		filepath.Join(cwd, findConfigDir, "current", "schema.graphql"),
 		config.Schema[0],
 	)
 	require.Equal(t, 1, len(config.Operations))
