@@ -175,9 +175,28 @@ func TestGenerateWithConfig(t *testing.T) {
 			Generated:   "generated.go",
 			ContextType: "github.com/Khan/genqlient/internal/testutil/junk---fun.name.MyContext",
 		}},
-		{"StructReferences", "", nil, &Config{
+		{"StructReferences", "", []string{"InputObject.graphql", "QueryWithStructs.graphql"}, &Config{
 			StructReferences: true,
-			Generated:        "generated-structrefs.go",
+			Generated:        "generated.go",
+			Bindings: map[string]*TypeBinding{
+				"Date": {
+					Type:        "time.Time",
+					Marshaler:   "github.com/Khan/genqlient/internal/testutil.MarshalDate",
+					Unmarshaler: "github.com/Khan/genqlient/internal/testutil.UnmarshalDate",
+				},
+			},
+		}},
+		{"StructReferencesAndOptionalPointer", "", []string{"InputObject.graphql", "QueryWithStructs.graphql"}, &Config{
+			StructReferences: true,
+			Optional:         "pointer",
+			Generated:        "generated.go",
+			Bindings: map[string]*TypeBinding{
+				"Date": {
+					Type:        "time.Time",
+					Marshaler:   "github.com/Khan/genqlient/internal/testutil.MarshalDate",
+					Unmarshaler: "github.com/Khan/genqlient/internal/testutil.UnmarshalDate",
+				},
+			},
 		}},
 		{"PackageBindings", "", nil, &Config{
 			PackageBindings: []*PackageBinding{
