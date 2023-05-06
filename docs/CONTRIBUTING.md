@@ -53,6 +53,7 @@ We try to cut releases periodically. To make a release:
 - Scan PRs since the last release to check we didn't miss anything in the changelog.
 - Check if there are any regressions or major problems with new features we want to fix before cutting the release.
 - Decide the new version number. We do a minor version bump for anything with breaking changes or significant new features, otherwise it can be a patch version bump.
-- Add a new section to the changelog (see comments in the changelog for instructions).
+- Add a new section to the changelog for the release (see comments in the changelog for instructions), and add a brief summary of the release at the top.
 - Make a PR with the above. (Example: [#208](https://github.com/Khan/genqlient/pull/208).)
-- When it merges, tag it as the new release, e.g. `git checkout main && git pull && git tag v0.X.Y && git push origin v0.X.Y`.
+- After it merges, tag it as the new release, e.g. `git checkout main && git pull && git tag v0.X.Y && git push origin v0.X.Y`.
+- Then, create a release in github, either [on the web](https://github.com/Khan/genqlient/releases/new) or with `export VERSION=v0.6.0; gh release create $VERSION --latest --verify-tag --generate-notes --title $VERSION`. (TODO(benkraft): Figure out how to pull in the changelog we've already written instead!)
