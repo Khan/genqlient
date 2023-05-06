@@ -45,3 +45,14 @@ If you update any code-generation logic or templates, even if no new tests are n
 ## Finding your way around
 
 If you're new to genqlient, start out by reading the source of `generate.Generate`, whose comments describe most of the high-level operation of genqlient.  In general, the code is documented inline, often with an introductory comment at the top of the file.  See [DESIGN.md](DESIGN.md) for documentation of major design decisions, which is a good way to get a sense of why genqlient is structured the way it is.
+
+## Making a release
+
+We try to cut releases periodically. To make a release:
+
+- Scan PRs since the last release to check we didn't miss anything in the changelog.
+- Check if there are any regressions or major problems with new features we want to fix before cutting the release.
+- Decide the new version number. We do a minor version bump for anything with breaking changes or significant new features, otherwise it can be a patch version bump.
+- Add a new section to the changelog (see comments in the changelog for instructions).
+- Make a PR with the above. (Example: [#208](https://github.com/Khan/genqlient/pull/208).)
+- When it merges, tag it as the new release, e.g. `git checkout main && git pull && git tag v0.X.Y && git push origin v0.X.Y`.
