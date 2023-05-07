@@ -516,7 +516,7 @@ func (g *generator) convertDefinition(
 			Description: def.Description,
 			Values:      make([]goEnumValue, len(def.EnumValues)),
 		}
-		goNames := map[string]*goEnumValue{}
+		goNames := make(map[string]*goEnumValue, len(def.EnumValues))
 		for i, val := range def.EnumValues {
 			goName := g.Config.Casing.enumValueName(name, def, val)
 			if conflict := goNames[goName]; conflict != nil {
