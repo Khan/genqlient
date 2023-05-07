@@ -31,6 +31,7 @@ type Config struct {
 	ClientGetter        string                  `yaml:"client_getter"`
 	Bindings            map[string]*TypeBinding `yaml:"bindings"`
 	PackageBindings     []*PackageBinding       `yaml:"package_bindings"`
+	Casing              Casing                  `yaml:"casing"`
 	Optional            string                  `yaml:"optional"`
 	OptionalGenericType string                  `yaml:"optional_generic_type"`
 	StructReferences    bool                    `yaml:"use_struct_references"`
@@ -66,6 +67,59 @@ type TypeBinding struct {
 // [genqlient.yaml docs]: https://github.com/Khan/genqlient/blob/main/docs/genqlient.yaml
 type PackageBinding struct {
 	Package string `yaml:"package"`
+}
+
+// CasingAlgorithm represents a way that genqlient can handle casing, and is
+// documented further in the [genqlient.yaml docs].
+//
+// [genqlient.yaml docs]: https://github.com/Khan/genqlient/blob/main/docs/genqlient.yaml
+type CasingAlgorithm string
+
+const (
+	CasingDefault CasingAlgorithm = "default"
+	CasingRaw     CasingAlgorithm = "raw"
+)
+
+func (algo CasingAlgorithm) validate() error {
+	switch algo {
+	case CasingDefault, CasingRaw:
+		return nil
+	default:
+		return errorf(nil, "unknown casing algorithm: %s", algo)
+	}
+}
+
+// Casing wraps the casing-related options, and is documented further in
+// the [genqlient.yaml docs].
+//
+// [genqlient.yaml docs]: https://github.com/Khan/genqlient/blob/main/docs/genqlient.yaml
+type Casing struct {
+	AllEnums CasingAlgorithm            `yaml:"all_enums"`
+	Enums    map[string]CasingAlgorithm `yaml:"enums"`
+}
+
+func (casing *Casing) validate() error {
+	if casing.AllEnums != "" {
+		if err := casing.AllEnums.validate(); err != nil {
+			return err
+		}
+	}
+	for _, algo := range casing.Enums {
+		if err := algo.validate(); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (casing *Casing) forEnum(graphQLTypeName string) CasingAlgorithm {
+	if specificConfig, ok := casing.Enums[graphQLTypeName]; ok {
+		return specificConfig
+	}
+	if casing.AllEnums != "" {
+		return casing.AllEnums
+	}
+	return CasingDefault
 }
 
 // pathJoin is like filepath.Join but 1) it only takes two argsuments,
@@ -170,6 +224,10 @@ func (c *Config) ValidateAndFillDefaults(baseDir string) error {
 				}
 			}
 		}
+	}
+
+	if err := c.Casing.validate(); err != nil {
+		return err
 	}
 
 	return nil

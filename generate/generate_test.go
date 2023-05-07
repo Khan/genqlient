@@ -238,6 +238,18 @@ func TestGenerateWithConfig(t *testing.T) {
 			Optional:            "generic",
 			OptionalGenericType: "github.com/Khan/genqlient/internal/testutil.Option",
 		}},
+		{"EnumRawCasingAll", "", []string{"QueryWithEnums.graphql"}, &Config{
+			Generated: "generated.go",
+			Casing: Casing{
+				AllEnums: CasingRaw,
+			},
+		}},
+		{"EnumRawCasingSpecific", "", []string{"QueryWithEnums.graphql"}, &Config{
+			Generated: "generated.go",
+			Casing: Casing{
+				Enums: map[string]CasingAlgorithm{"Role": CasingRaw},
+			},
+		}},
 	}
 
 	sourceFilename := "SimpleQuery.graphql"

@@ -227,3 +227,24 @@ bindings:
 # Explicit entries in bindings take precedence over all package bindings.
 package_bindings:
 - package: github.com/you/yourpkg/models
+
+# Configuration for genqlient's smart-casing.
+#
+# By default genqlient tries to convert GraphQL type names to Go style
+# automatically. Sometimes it doesn't do a great job; this suite of options
+# lets you configure its algorithm as makes sense for your schema.
+#
+# Options below support the following values:
+# - default: use genqlient's default algorithm, which tries to convert GraphQL
+#   names to exported Go names. This is usually best for GraphQL schemas using
+#   idiomatic GraphQL types.
+# - raw: map the GraphQL type exactly; don't try to convert it to Go style.
+#   This is usually best for schemas with casing conflicts, e.g. enums with
+#   values which differ only in casing.
+casing:
+  # Use the given casing-style (see above) for all GraphQL enum values.
+  all_enums: raw
+  # Use the given casing-style (see above) for the enum values in the given
+  # GraphQL types (takes precedence over all_enum_values).
+  enums:
+    MyEnum: raw

@@ -99,6 +99,7 @@ package generate
 // response object (inline in convertOperation).
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/vektah/gqlparser/v2/ast"
@@ -177,4 +178,16 @@ func makeTypeName(prefix *prefixList, typeName string) string {
 func makeLongTypeName(prefix *prefixList, typeName string) string {
 	typeName = upperFirst(typeName)
 	return joinPrefixList(&prefixList{typeName, prefix})
+}
+
+func (casing *Casing) enumValueName(goTypeName string, enum *ast.Definition, val *ast.EnumValueDefinition) string {
+	switch algo := casing.forEnum(enum.Name); algo {
+	case CasingDefault:
+		return goTypeName + goConstName(val.Name)
+	case CasingRaw:
+		return goTypeName + "_" + val.Name
+	default:
+		// Should already be caught by validation.
+		panic(fmt.Sprintf("unknown casing algorithm %s", algo))
+	}
 }
