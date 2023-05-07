@@ -145,6 +145,9 @@ func (c *Config) ValidateAndFillDefaults(baseDir string) error {
 	for i := range c.Operations {
 		c.Operations[i] = pathJoin(baseDir, c.Operations[i])
 	}
+	if c.Generated == "" {
+		c.Generated = "generated.go"
+	}
 	c.Generated = pathJoin(baseDir, c.Generated)
 	if c.ExportOperations != "" {
 		c.ExportOperations = pathJoin(baseDir, c.ExportOperations)
@@ -164,17 +167,23 @@ func (c *Config) ValidateAndFillDefaults(baseDir string) error {
 			"\nExample: \"github.com/Org/Repo/optional.Value\"")
 	}
 
-	if c.Package == "" {
+	if c.Package != "" {
+		if !token.IsIdentifier(c.Package) {
+			// No need for link here -- if you're already setting the package
+			// you know where to set the package.
+			return errorf(nil, "invalid package in genqlient.yaml: '%v' is not a valid identifier", c.Package)
+		}
+	} else {
 		abs, err := filepath.Abs(c.Generated)
 		if err != nil {
-			return errorf(nil, "unable to guess package-name: %v is not a valid identifier"+
+			return errorf(nil, "unable to guess package-name: %v"+
 				"\nSet package name in genqlient.yaml"+
 				"\nExample: https://github.com/Khan/genqlient/blob/main/example/genqlient.yaml#L6", err)
 		}
 
 		base := filepath.Base(filepath.Dir(abs))
 		if !token.IsIdentifier(base) {
-			return errorf(nil, "unable to guess package-name: %v is not a valid identifier"+
+			return errorf(nil, "unable to guess package-name: '%v' is not a valid identifier"+
 				"\nSet package name in genqlient.yaml"+
 				"\nExample: https://github.com/Khan/genqlient/blob/main/example/genqlient.yaml#L6", base)
 		}

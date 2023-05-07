@@ -1,3 +1,4 @@
+package: invalidConfig
 casing:
   enums:
     MyType: bogus
