@@ -12,6 +12,7 @@ import (
 
 const (
 	findConfigDir    = "testdata/find-config"
+	validConfigDir   = "testdata/valid-config"
 	invalidConfigDir = "testdata/invalid-config"
 )
 
@@ -114,18 +115,40 @@ func TestAbsoluteAndRelativePathsInConfigFiles(t *testing.T) {
 	require.Equal(t, "/tmp/genqlient.graphql", config.Operations[0])
 }
 
-func TestInvalidConfigs(t *testing.T) {
-	files, err := os.ReadDir(invalidConfigDir)
+func testAllSnapshots(
+	t *testing.T,
+	dir string,
+	testfunc func(t *testing.T, filename string),
+) {
+	files, err := os.ReadDir(dir)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	for _, file := range files {
-		t.Run(file.Name(), func(t *testing.T) {
-			filename := filepath.Join(invalidConfigDir, file.Name())
-			_, err := ReadAndValidateConfig(filename)
-			require.Error(t, err)
-			testutil.Cupaloy.SnapshotT(t, err.Error())
+		name := file.Name()
+		if name[0] == '.' {
+			continue // editor backup files, etc.
+		}
+		t.Run(name, func(t *testing.T) {
+			filename := filepath.Join(dir, file.Name())
+			testfunc(t, filename)
 		})
 	}
+}
+
+func TestValidConfigs(t *testing.T) {
+	testAllSnapshots(t, validConfigDir, func(t *testing.T, filename string) {
+		config, err := ReadAndValidateConfig(filename)
+		require.NoError(t, err)
+		testutil.Cupaloy.SnapshotT(t, config)
+	})
+}
+
+func TestInvalidConfigs(t *testing.T) {
+	testAllSnapshots(t, invalidConfigDir, func(t *testing.T, filename string) {
+		_, err := ReadAndValidateConfig(filename)
+		require.Error(t, err)
+		testutil.Cupaloy.SnapshotT(t, err.Error())
+	})
 }

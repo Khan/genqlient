@@ -164,20 +164,16 @@ func TestGenerateWithConfig(t *testing.T) {
 			Package:   "mypkg",
 		}},
 		{"ExportOperations", "", nil, &Config{
-			Generated:        "generated.go",
 			ExportOperations: "operations.json",
 		}},
 		{"CustomContext", "", nil, &Config{
-			Generated:   "generated.go",
 			ContextType: "github.com/Khan/genqlient/internal/testutil.MyContext",
 		}},
 		{"CustomContextWithAlias", "", nil, &Config{
-			Generated:   "generated.go",
 			ContextType: "github.com/Khan/genqlient/internal/testutil/junk---fun.name.MyContext",
 		}},
 		{"StructReferences", "", []string{"InputObject.graphql", "QueryWithStructs.graphql"}, &Config{
 			StructReferences: true,
-			Generated:        "generated.go",
 			Bindings: map[string]*TypeBinding{
 				"Date": {
 					Type:        "time.Time",
@@ -189,7 +185,6 @@ func TestGenerateWithConfig(t *testing.T) {
 		{"StructReferencesAndOptionalPointer", "", []string{"InputObject.graphql", "QueryWithStructs.graphql"}, &Config{
 			StructReferences: true,
 			Optional:         "pointer",
-			Generated:        "generated.go",
 			Bindings: map[string]*TypeBinding{
 				"Date": {
 					Type:        "time.Time",
@@ -204,48 +199,38 @@ func TestGenerateWithConfig(t *testing.T) {
 			},
 		}},
 		{"NoContext", "", nil, &Config{
-			Generated:   "generated.go",
 			ContextType: "-",
 		}},
 		{"ClientGetter", "", nil, &Config{
-			Generated:    "generated.go",
 			ClientGetter: "github.com/Khan/genqlient/internal/testutil.GetClientFromContext",
 		}},
 		{"ClientGetterCustomContext", "", nil, &Config{
-			Generated:    "generated.go",
 			ClientGetter: "github.com/Khan/genqlient/internal/testutil.GetClientFromMyContext",
 			ContextType:  "github.com/Khan/genqlient/internal/testutil.MyContext",
 		}},
 		{"ClientGetterNoContext", "", nil, &Config{
-			Generated:    "generated.go",
 			ClientGetter: "github.com/Khan/genqlient/internal/testutil.GetClientFromNowhere",
 			ContextType:  "-",
 		}},
 		{"Extensions", "", nil, &Config{
-			Generated:  "generated.go",
 			Extensions: true,
 		}},
 		{"OptionalValue", "", []string{"ListInput.graphql", "QueryWithSlices.graphql"}, &Config{
-			Generated: "generated.go",
-			Optional:  "value",
+			Optional: "value",
 		}},
 		{"OptionalPointer", "", []string{"ListInput.graphql", "QueryWithSlices.graphql"}, &Config{
-			Generated: "generated.go",
-			Optional:  "pointer",
+			Optional: "pointer",
 		}},
 		{"OptionalGeneric", "", []string{"ListInput.graphql", "QueryWithSlices.graphql"}, &Config{
-			Generated:           "generated.go",
 			Optional:            "generic",
 			OptionalGenericType: "github.com/Khan/genqlient/internal/testutil.Option",
 		}},
 		{"EnumRawCasingAll", "", []string{"QueryWithEnums.graphql"}, &Config{
-			Generated: "generated.go",
 			Casing: Casing{
 				AllEnums: CasingRaw,
 			},
 		}},
 		{"EnumRawCasingSpecific", "", []string{"QueryWithEnums.graphql"}, &Config{
-			Generated: "generated.go",
 			Casing: Casing{
 				Enums: map[string]CasingAlgorithm{"Role": CasingRaw},
 			},

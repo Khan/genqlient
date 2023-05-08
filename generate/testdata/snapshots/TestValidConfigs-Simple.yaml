@@ -1,0 +1,21 @@
+(*generate.Config)({
+  Schema: (generate.StringList) <nil>,
+  Operations: (generate.StringList) <nil>,
+  Generated: (string) (len=34) "testdata/valid-config/generated.go",
+  Package: (string) (len=11) "validConfig",
+  ExportOperations: (string) "",
+  ContextType: (string) (len=15) "context.Context",
+  ClientGetter: (string) "",
+  Bindings: (map[string]*generate.TypeBinding) <nil>,
+  PackageBindings: ([]*generate.PackageBinding) <nil>,
+  Casing: (generate.Casing) {
+    AllEnums: (generate.CasingAlgorithm) "",
+    Enums: (map[string]generate.CasingAlgorithm) <nil>
+  },
+  Optional: (string) "",
+  OptionalGenericType: (string) "",
+  StructReferences: (bool) false,
+  Extensions: (bool) false,
+  AllowBrokenFeatures: (bool) false,
+  baseDir: (string) (len=21) "testdata/valid-config"
+})

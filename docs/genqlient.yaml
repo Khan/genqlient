@@ -26,7 +26,7 @@ operations:
 - "pkg/*.go"
 
 # The filename to which to write the generated code, relative to
-# genqlient.yaml.
+# genqlient.yaml. Default: generated.go.
 generated: generated/genqlient.go
 
 # The package name for the output code; defaults to the directory name of
@@ -76,7 +76,6 @@ context_type: context.Context
 # client-getter returns an error, the helper will return the error
 # without making a query.
 client_getter: "github.com/you/yourpkg.GetClient"
-
 
 # If set, fields with a struct type will default to having
 # the "pointer: true, omitempty: true" flag.
