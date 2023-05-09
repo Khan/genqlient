@@ -51,31 +51,31 @@ func (v *QueryWithSlicesResponse) GetUser() *QueryWithSlicesUser { return v.User
 //
 // A User is a user!
 type QueryWithSlicesUser struct {
-	Emails                []string  `json:"emails"`
-	EmailsOrNull          []string  `json:"emailsOrNull"`
-	EmailsWithNulls       []*string `json:"emailsWithNulls"`
-	EmailsWithNullsOrNull []*string `json:"emailsWithNullsOrNull"`
+	Emails                []string   `json:"emails"`
+	EmailsOrNull          *[]string  `json:"emailsOrNull"`
+	EmailsWithNulls       []*string  `json:"emailsWithNulls"`
+	EmailsWithNullsOrNull *[]*string `json:"emailsWithNullsOrNull"`
 }
 
 // GetEmails returns QueryWithSlicesUser.Emails, and is useful for accessing the field via an interface.
 func (v *QueryWithSlicesUser) GetEmails() []string { return v.Emails }
 
 // GetEmailsOrNull returns QueryWithSlicesUser.EmailsOrNull, and is useful for accessing the field via an interface.
-func (v *QueryWithSlicesUser) GetEmailsOrNull() []string { return v.EmailsOrNull }
+func (v *QueryWithSlicesUser) GetEmailsOrNull() *[]string { return v.EmailsOrNull }
 
 // GetEmailsWithNulls returns QueryWithSlicesUser.EmailsWithNulls, and is useful for accessing the field via an interface.
 func (v *QueryWithSlicesUser) GetEmailsWithNulls() []*string { return v.EmailsWithNulls }
 
 // GetEmailsWithNullsOrNull returns QueryWithSlicesUser.EmailsWithNullsOrNull, and is useful for accessing the field via an interface.
-func (v *QueryWithSlicesUser) GetEmailsWithNullsOrNull() []*string { return v.EmailsWithNullsOrNull }
+func (v *QueryWithSlicesUser) GetEmailsWithNullsOrNull() *[]*string { return v.EmailsWithNullsOrNull }
 
 // __ListInputQueryInput is used internally by genqlient
 type __ListInputQueryInput struct {
-	Names []*string `json:"names"`
+	Names *[]*string `json:"names"`
 }
 
 // GetNames returns __ListInputQueryInput.Names, and is useful for accessing the field via an interface.
-func (v *__ListInputQueryInput) GetNames() []*string { return v.Names }
+func (v *__ListInputQueryInput) GetNames() *[]*string { return v.Names }
 
 // The query or mutation executed by ListInputQuery.
 const ListInputQuery_Operation = `
@@ -89,7 +89,7 @@ query ListInputQuery ($names: [String]) {
 func ListInputQuery(
 	ctx context.Context,
 	client graphql.Client,
-	names []*string,
+	names *[]*string,
 ) (*ListInputQueryResponse, error) {
 	req := &graphql.Request{
 		OpName: "ListInputQuery",

@@ -22,7 +22,7 @@ type MyInput struct {
 	// id looks the user up by ID.  It's a great way to look up users.
 	Id         *testutil.ID      `json:"id,omitempty"`
 	Role       *Role             `json:"role,omitempty"`
-	Names      []*string         `json:"names,omitempty"`
+	Names      *[]*string        `json:"names,omitempty"`
 	HasPokemon *testutil.Pokemon `json:"hasPokemon,omitempty"`
 	Birthdate  *time.Time        `json:"-"`
 }
@@ -40,7 +40,7 @@ func (v *MyInput) GetId() *testutil.ID { return v.Id }
 func (v *MyInput) GetRole() *Role { return v.Role }
 
 // GetNames returns MyInput.Names, and is useful for accessing the field via an interface.
-func (v *MyInput) GetNames() []*string { return v.Names }
+func (v *MyInput) GetNames() *[]*string { return v.Names }
 
 // GetHasPokemon returns MyInput.HasPokemon, and is useful for accessing the field via an interface.
 func (v *MyInput) GetHasPokemon() *testutil.Pokemon { return v.HasPokemon }
@@ -91,7 +91,7 @@ type __premarshalMyInput struct {
 
 	Role *Role `json:"role,omitempty"`
 
-	Names []*string `json:"names,omitempty"`
+	Names *[]*string `json:"names,omitempty"`
 
 	HasPokemon *testutil.Pokemon `json:"hasPokemon,omitempty"`
 
@@ -138,15 +138,15 @@ type MyMultipleDirectivesResponse struct {
 	//
 	// See UserQueryInput for what stuff is supported.
 	// If query is null, returns the current user.
-	User  *MyMultipleDirectivesResponseUser        `json:"user"`
-	Users []*MyMultipleDirectivesResponseUsersUser `json:"users"`
+	User  *MyMultipleDirectivesResponseUser         `json:"user"`
+	Users *[]*MyMultipleDirectivesResponseUsersUser `json:"users"`
 }
 
 // GetUser returns MyMultipleDirectivesResponse.User, and is useful for accessing the field via an interface.
 func (v *MyMultipleDirectivesResponse) GetUser() *MyMultipleDirectivesResponseUser { return v.User }
 
 // GetUsers returns MyMultipleDirectivesResponse.Users, and is useful for accessing the field via an interface.
-func (v *MyMultipleDirectivesResponse) GetUsers() []*MyMultipleDirectivesResponseUsersUser {
+func (v *MyMultipleDirectivesResponse) GetUsers() *[]*MyMultipleDirectivesResponseUsersUser {
 	return v.Users
 }
 
@@ -203,7 +203,7 @@ type UserQueryInput struct {
 	// id looks the user up by ID.  It's a great way to look up users.
 	Id         *testutil.ID      `json:"id,omitempty"`
 	Role       *Role             `json:"role,omitempty"`
-	Names      []*string         `json:"names,omitempty"`
+	Names      *[]*string        `json:"names,omitempty"`
 	HasPokemon *testutil.Pokemon `json:"hasPokemon,omitempty"`
 	Birthdate  *time.Time        `json:"-"`
 }
@@ -221,7 +221,7 @@ func (v *UserQueryInput) GetId() *testutil.ID { return v.Id }
 func (v *UserQueryInput) GetRole() *Role { return v.Role }
 
 // GetNames returns UserQueryInput.Names, and is useful for accessing the field via an interface.
-func (v *UserQueryInput) GetNames() []*string { return v.Names }
+func (v *UserQueryInput) GetNames() *[]*string { return v.Names }
 
 // GetHasPokemon returns UserQueryInput.HasPokemon, and is useful for accessing the field via an interface.
 func (v *UserQueryInput) GetHasPokemon() *testutil.Pokemon { return v.HasPokemon }
@@ -272,7 +272,7 @@ type __premarshalUserQueryInput struct {
 
 	Role *Role `json:"role,omitempty"`
 
-	Names []*string `json:"names,omitempty"`
+	Names *[]*string `json:"names,omitempty"`
 
 	HasPokemon *testutil.Pokemon `json:"hasPokemon,omitempty"`
 
@@ -315,15 +315,15 @@ func (v *UserQueryInput) __premarshalJSON() (*__premarshalUserQueryInput, error)
 
 // __MultipleDirectivesInput is used internally by genqlient
 type __MultipleDirectivesInput struct {
-	Query   MyInput           `json:"query,omitempty"`
-	Queries []*UserQueryInput `json:"queries,omitempty"`
+	Query   MyInput            `json:"query,omitempty"`
+	Queries *[]*UserQueryInput `json:"queries,omitempty"`
 }
 
 // GetQuery returns __MultipleDirectivesInput.Query, and is useful for accessing the field via an interface.
 func (v *__MultipleDirectivesInput) GetQuery() MyInput { return v.Query }
 
 // GetQueries returns __MultipleDirectivesInput.Queries, and is useful for accessing the field via an interface.
-func (v *__MultipleDirectivesInput) GetQueries() []*UserQueryInput { return v.Queries }
+func (v *__MultipleDirectivesInput) GetQueries() *[]*UserQueryInput { return v.Queries }
 
 // The query or mutation executed by MultipleDirectives.
 const MultipleDirectives_Operation = `
@@ -340,7 +340,7 @@ query MultipleDirectives ($query: UserQueryInput, $queries: [UserQueryInput]) {
 func MultipleDirectives(
 	client graphql.Client,
 	query MyInput,
-	queries []*UserQueryInput,
+	queries *[]*UserQueryInput,
 ) (*MyMultipleDirectivesResponse, error) {
 	req := &graphql.Request{
 		OpName: "MultipleDirectives",

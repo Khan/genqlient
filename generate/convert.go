@@ -241,6 +241,9 @@ func (g *generator) convertType(
 		// Type is a list.
 		elem, err := g.convertType(
 			namePrefix, typ.Elem, selectionSet, options, queryOptions)
+		if !typ.NonNull && (options.GetPointer() || g.Config.Optional == "pointer") {
+			return &goPointerType{&goSliceType{elem}}, err
+		}
 		return &goSliceType{elem}, err
 	}
 

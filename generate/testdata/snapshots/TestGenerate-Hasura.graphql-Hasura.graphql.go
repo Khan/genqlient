@@ -8,20 +8,20 @@ import (
 )
 
 type GetPokemonBoolExp struct {
-	And   []*GetPokemonBoolExp `json:"_and"`
-	Not   *GetPokemonBoolExp   `json:"_not"`
-	Or    []*GetPokemonBoolExp `json:"_or"`
-	Level *IntComparisonExp    `json:"level"`
+	And   *[]*GetPokemonBoolExp `json:"_and"`
+	Not   *GetPokemonBoolExp    `json:"_not"`
+	Or    *[]*GetPokemonBoolExp `json:"_or"`
+	Level *IntComparisonExp     `json:"level"`
 }
 
 // GetAnd returns GetPokemonBoolExp.And, and is useful for accessing the field via an interface.
-func (v *GetPokemonBoolExp) GetAnd() []*GetPokemonBoolExp { return v.And }
+func (v *GetPokemonBoolExp) GetAnd() *[]*GetPokemonBoolExp { return v.And }
 
 // GetNot returns GetPokemonBoolExp.Not, and is useful for accessing the field via an interface.
 func (v *GetPokemonBoolExp) GetNot() *GetPokemonBoolExp { return v.Not }
 
 // GetOr returns GetPokemonBoolExp.Or, and is useful for accessing the field via an interface.
-func (v *GetPokemonBoolExp) GetOr() []*GetPokemonBoolExp { return v.Or }
+func (v *GetPokemonBoolExp) GetOr() *[]*GetPokemonBoolExp { return v.Or }
 
 // GetLevel returns GetPokemonBoolExp.Level, and is useful for accessing the field via an interface.
 func (v *GetPokemonBoolExp) GetLevel() *IntComparisonExp { return v.Level }
@@ -35,15 +35,15 @@ type GetPokemonResponse struct {
 func (v *GetPokemonResponse) GetGetPokemon() []*testutil.Pokemon { return v.GetPokemon }
 
 type IntComparisonExp struct {
-	Eq     *int   `json:"_eq"`
-	Gt     *int   `json:"_gt"`
-	Gte    *int   `json:"_gte"`
-	In     []*int `json:"_in"`
-	IsNull *bool  `json:"_isNull"`
-	Lt     *int   `json:"_lt"`
-	Lte    *int   `json:"_lte"`
-	Neq    *int   `json:"_neq"`
-	Nin    []*int `json:"_nin"`
+	Eq     *int    `json:"_eq"`
+	Gt     *int    `json:"_gt"`
+	Gte    *int    `json:"_gte"`
+	In     *[]*int `json:"_in"`
+	IsNull *bool   `json:"_isNull"`
+	Lt     *int    `json:"_lt"`
+	Lte    *int    `json:"_lte"`
+	Neq    *int    `json:"_neq"`
+	Nin    *[]*int `json:"_nin"`
 }
 
 // GetEq returns IntComparisonExp.Eq, and is useful for accessing the field via an interface.
@@ -56,7 +56,7 @@ func (v *IntComparisonExp) GetGt() *int { return v.Gt }
 func (v *IntComparisonExp) GetGte() *int { return v.Gte }
 
 // GetIn returns IntComparisonExp.In, and is useful for accessing the field via an interface.
-func (v *IntComparisonExp) GetIn() []*int { return v.In }
+func (v *IntComparisonExp) GetIn() *[]*int { return v.In }
 
 // GetIsNull returns IntComparisonExp.IsNull, and is useful for accessing the field via an interface.
 func (v *IntComparisonExp) GetIsNull() *bool { return v.IsNull }
@@ -71,7 +71,7 @@ func (v *IntComparisonExp) GetLte() *int { return v.Lte }
 func (v *IntComparisonExp) GetNeq() *int { return v.Neq }
 
 // GetNin returns IntComparisonExp.Nin, and is useful for accessing the field via an interface.
-func (v *IntComparisonExp) GetNin() []*int { return v.Nin }
+func (v *IntComparisonExp) GetNin() *[]*int { return v.Nin }
 
 // __GetPokemonInput is used internally by genqlient
 type __GetPokemonInput struct {

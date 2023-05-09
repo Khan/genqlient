@@ -29,6 +29,8 @@ When releasing a new version:
 
 ### Bug fixes:
 
+- Fixed generated code of nullable lists when using pointers
+
 ## v0.6.0
 
 Version 0.6.0 includes some small features and bugfixes. Note that genqlient now requires Go 1.18 or higher, and is tested through Go 1.20.

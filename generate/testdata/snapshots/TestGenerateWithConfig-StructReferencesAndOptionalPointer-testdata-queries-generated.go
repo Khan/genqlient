@@ -111,7 +111,7 @@ type UserQueryInput struct {
 	// id looks the user up by ID.  It's a great way to look up users.
 	Id         *string       `json:"id"`
 	Role       *Role         `json:"role"`
-	Names      []*string     `json:"names"`
+	Names      *[]*string    `json:"names"`
 	HasPokemon *PokemonInput `json:"hasPokemon,omitempty"`
 	Birthdate  *time.Time    `json:"-"`
 }
@@ -129,7 +129,7 @@ func (v *UserQueryInput) GetId() *string { return v.Id }
 func (v *UserQueryInput) GetRole() *Role { return v.Role }
 
 // GetNames returns UserQueryInput.Names, and is useful for accessing the field via an interface.
-func (v *UserQueryInput) GetNames() []*string { return v.Names }
+func (v *UserQueryInput) GetNames() *[]*string { return v.Names }
 
 // GetHasPokemon returns UserQueryInput.HasPokemon, and is useful for accessing the field via an interface.
 func (v *UserQueryInput) GetHasPokemon() *PokemonInput { return v.HasPokemon }
@@ -180,7 +180,7 @@ type __premarshalUserQueryInput struct {
 
 	Role *Role `json:"role"`
 
-	Names []*string `json:"names"`
+	Names *[]*string `json:"names"`
 
 	HasPokemon *PokemonInput `json:"hasPokemon,omitempty"`
 

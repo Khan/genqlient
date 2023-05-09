@@ -58,7 +58,7 @@ type PointersQueryUser struct {
 	//
 	// It is stable, unique, and opaque, like all good IDs.
 	Id          *testutil.ID `json:"id"`
-	Roles       []*Role      `json:"roles"`
+	Roles       *[]*Role     `json:"roles"`
 	Name        *string      `json:"name"`
 	Emails      []*string    `json:"emails"`
 	EmailsNoPtr []string     `json:"emailsNoPtr"`
@@ -68,7 +68,7 @@ type PointersQueryUser struct {
 func (v *PointersQueryUser) GetId() *testutil.ID { return v.Id }
 
 // GetRoles returns PointersQueryUser.Roles, and is useful for accessing the field via an interface.
-func (v *PointersQueryUser) GetRoles() []*Role { return v.Roles }
+func (v *PointersQueryUser) GetRoles() *[]*Role { return v.Roles }
 
 // GetName returns PointersQueryUser.Name, and is useful for accessing the field via an interface.
 func (v *PointersQueryUser) GetName() *string { return v.Name }
@@ -104,7 +104,7 @@ type UserQueryInput struct {
 	// id looks the user up by ID.  It's a great way to look up users.
 	Id         testutil.ID       `json:"id"`
 	Role       *Role             `json:"role"`
-	Names      []*string         `json:"names"`
+	Names      *[]*string        `json:"names"`
 	HasPokemon *testutil.Pokemon `json:"hasPokemon"`
 	Birthdate  *time.Time        `json:"-"`
 }
@@ -122,7 +122,7 @@ func (v *UserQueryInput) GetId() testutil.ID { return v.Id }
 func (v *UserQueryInput) GetRole() *Role { return v.Role }
 
 // GetNames returns UserQueryInput.Names, and is useful for accessing the field via an interface.
-func (v *UserQueryInput) GetNames() []*string { return v.Names }
+func (v *UserQueryInput) GetNames() *[]*string { return v.Names }
 
 // GetHasPokemon returns UserQueryInput.HasPokemon, and is useful for accessing the field via an interface.
 func (v *UserQueryInput) GetHasPokemon() *testutil.Pokemon { return v.HasPokemon }
@@ -173,7 +173,7 @@ type __premarshalUserQueryInput struct {
 
 	Role *Role `json:"role"`
 
-	Names []*string `json:"names"`
+	Names *[]*string `json:"names"`
 
 	HasPokemon *testutil.Pokemon `json:"hasPokemon"`
 
