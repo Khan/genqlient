@@ -28,6 +28,7 @@ When releasing a new version:
 - For schemas with enum values that differ only in casing, it's now possible to disable smart-casing in genqlient.yaml; see the [documentation](genqlient.yaml) for `casing` for details.
 
 ### Bug fixes:
+- The presence of negative pointer directives, i.e., `# @genqlient(pointer: false)` are now respected even in the when `optional: pointer` is set in the configuration file.
 
 ## v0.6.0
 
