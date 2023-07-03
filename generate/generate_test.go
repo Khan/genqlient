@@ -218,7 +218,12 @@ func TestGenerateWithConfig(t *testing.T) {
 		{"OptionalValue", "", []string{"ListInput.graphql", "QueryWithSlices.graphql"}, &Config{
 			Optional: "value",
 		}},
-		{"OptionalPointer", "", []string{"ListInput.graphql", "QueryWithSlices.graphql"}, &Config{
+		{"OptionalPointer", "", []string{
+			"ListInput.graphql",
+			"QueryWithSlices.graphql",
+			"SimpleQueryWithPointerFalseOverride.graphql",
+			"SimpleQueryNoOverride.graphql",
+		}, &Config{
 			Optional: "pointer",
 		}},
 		{"OptionalGeneric", "", []string{"ListInput.graphql", "QueryWithSlices.graphql"}, &Config{

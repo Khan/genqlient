@@ -1,0 +1,9 @@
+{
+  "operations": [
+    {
+      "operationName": "SimpleQueryWithPointerFalseOverride",
+      "query": "\nquery SimpleQueryWithPointerFalseOverride {\n\tuser {\n\t\tid\n\t\tname\n\t}\n}\n",
+      "sourceLocation": "testdata/queries/SimpleQueryWithPointerFalseOverride.graphql"
+    }
+  ]
+}

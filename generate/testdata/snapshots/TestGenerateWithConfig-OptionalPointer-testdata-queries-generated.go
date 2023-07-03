@@ -69,6 +69,68 @@ func (v *QueryWithSlicesUser) GetEmailsWithNulls() []*string { return v.EmailsWi
 // GetEmailsWithNullsOrNull returns QueryWithSlicesUser.EmailsWithNullsOrNull, and is useful for accessing the field via an interface.
 func (v *QueryWithSlicesUser) GetEmailsWithNullsOrNull() []*string { return v.EmailsWithNullsOrNull }
 
+// SimpleQueryNoOverrideResponse is returned by SimpleQueryNoOverride on success.
+type SimpleQueryNoOverrideResponse struct {
+	// user looks up a user by some stuff.
+	//
+	// See UserQueryInput for what stuff is supported.
+	// If query is null, returns the current user.
+	User *SimpleQueryNoOverrideUser `json:"user"`
+}
+
+// GetUser returns SimpleQueryNoOverrideResponse.User, and is useful for accessing the field via an interface.
+func (v *SimpleQueryNoOverrideResponse) GetUser() *SimpleQueryNoOverrideUser { return v.User }
+
+// SimpleQueryNoOverrideUser includes the requested fields of the GraphQL type User.
+// The GraphQL type's documentation follows.
+//
+// A User is a user!
+type SimpleQueryNoOverrideUser struct {
+	// id is the user's ID.
+	//
+	// It is stable, unique, and opaque, like all good IDs.
+	Id   string  `json:"id"`
+	Name *string `json:"name"`
+}
+
+// GetId returns SimpleQueryNoOverrideUser.Id, and is useful for accessing the field via an interface.
+func (v *SimpleQueryNoOverrideUser) GetId() string { return v.Id }
+
+// GetName returns SimpleQueryNoOverrideUser.Name, and is useful for accessing the field via an interface.
+func (v *SimpleQueryNoOverrideUser) GetName() *string { return v.Name }
+
+// SimpleQueryWithPointerFalseOverrideResponse is returned by SimpleQueryWithPointerFalseOverride on success.
+type SimpleQueryWithPointerFalseOverrideResponse struct {
+	// user looks up a user by some stuff.
+	//
+	// See UserQueryInput for what stuff is supported.
+	// If query is null, returns the current user.
+	User *SimpleQueryWithPointerFalseOverrideUser `json:"user"`
+}
+
+// GetUser returns SimpleQueryWithPointerFalseOverrideResponse.User, and is useful for accessing the field via an interface.
+func (v *SimpleQueryWithPointerFalseOverrideResponse) GetUser() *SimpleQueryWithPointerFalseOverrideUser {
+	return v.User
+}
+
+// SimpleQueryWithPointerFalseOverrideUser includes the requested fields of the GraphQL type User.
+// The GraphQL type's documentation follows.
+//
+// A User is a user!
+type SimpleQueryWithPointerFalseOverrideUser struct {
+	// id is the user's ID.
+	//
+	// It is stable, unique, and opaque, like all good IDs.
+	Id   string `json:"id"`
+	Name string `json:"name"`
+}
+
+// GetId returns SimpleQueryWithPointerFalseOverrideUser.Id, and is useful for accessing the field via an interface.
+func (v *SimpleQueryWithPointerFalseOverrideUser) GetId() string { return v.Id }
+
+// GetName returns SimpleQueryWithPointerFalseOverrideUser.Name, and is useful for accessing the field via an interface.
+func (v *SimpleQueryWithPointerFalseOverrideUser) GetName() string { return v.Name }
+
 // __ListInputQueryInput is used internally by genqlient
 type __ListInputQueryInput struct {
 	Names []*string `json:"names"`
@@ -135,6 +197,70 @@ func QueryWithSlices(
 	var err error
 
 	var data QueryWithSlicesResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
+// The query or mutation executed by SimpleQueryNoOverride.
+const SimpleQueryNoOverride_Operation = `
+query SimpleQueryNoOverride {
+	user {
+		id
+		name
+	}
+}
+`
+
+func SimpleQueryNoOverride(
+	ctx context.Context,
+	client graphql.Client,
+) (*SimpleQueryNoOverrideResponse, error) {
+	req := &graphql.Request{
+		OpName: "SimpleQueryNoOverride",
+		Query:  SimpleQueryNoOverride_Operation,
+	}
+	var err error
+
+	var data SimpleQueryNoOverrideResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
+// The query or mutation executed by SimpleQueryWithPointerFalseOverride.
+const SimpleQueryWithPointerFalseOverride_Operation = `
+query SimpleQueryWithPointerFalseOverride {
+	user {
+		id
+		name
+	}
+}
+`
+
+func SimpleQueryWithPointerFalseOverride(
+	ctx context.Context,
+	client graphql.Client,
+) (*SimpleQueryWithPointerFalseOverrideResponse, error) {
+	req := &graphql.Request{
+		OpName: "SimpleQueryWithPointerFalseOverride",
+		Query:  SimpleQueryWithPointerFalseOverride_Operation,
+	}
+	var err error
+
+	var data SimpleQueryWithPointerFalseOverrideResponse
 	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
