@@ -3,6 +3,7 @@ package generate
 import (
 	"path/filepath"
 	"sort"
+	"strings"
 	"testing"
 
 	"github.com/vektah/gqlparser/v2/ast"
@@ -57,13 +58,26 @@ func TestParse(t *testing.T) {
 		t.Run(ext, func(t *testing.T) {
 			queries := getTestQueries(t, ext)
 
-			got, want := ast.Dump(graphqlQueries), ast.Dump(queries)
+			got, want := ast.Dump(graphqlQueries), removeComments(ast.Dump(queries))
+
 			if got != want {
 				// TODO: nice diffing
 				t.Errorf("got:\n%v\nwant:\n%v\n", got, want)
 			}
 		})
 	}
+}
+
+func removeComments(gotWithComments string) string {
+	var gots []string
+	for _, s := range strings.Split(gotWithComments, "\n") {
+		if strings.Contains(s, `Comment:`) {
+			continue
+		}
+		gots = append(gots, s)
+	}
+	got := strings.Join(gots, "\n")
+	return got
 }
 
 // TestParseErrors tests that query-extraction from different language source files

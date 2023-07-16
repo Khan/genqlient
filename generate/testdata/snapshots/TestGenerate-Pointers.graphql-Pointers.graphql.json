@@ -2,7 +2,7 @@
   "operations": [
     {
       "operationName": "PointersQuery",
-      "query": "\nquery PointersQuery ($query: UserQueryInput, $dt: DateTime, $tz: String) {\n\tuser(query: $query) {\n\t\tid\n\t\troles\n\t\tname\n\t\temails\n\t\temailsNoPtr: emails\n\t}\n\totherUser: user(query: $query) {\n\t\tid\n\t}\n\tmaybeConvert(dt: $dt, tz: $tz)\n}\n",
+      "query": "\n# @genqlient(pointer: true)\n# @genqlient(for: \"UserQueryInput.id\", pointer: false)\n# @genqlient(for: \"User.id\", pointer: false)\nquery PointersQuery ($query: UserQueryInput, # @genqlient(pointer: false)\n$dt: DateTime, $tz: String) {\n\tuser(query: $query) {\n\t\t# @genqlient(pointer: true)\n\t\tid\n\t\troles\n\t\tname\n\t\temails\n\t\t# @genqlient(pointer: false)\n\t\temailsNoPtr: emails\n\t}\n\totherUser: user(query: $query) {\n\t\tid\n\t}\n\tmaybeConvert(dt: $dt, tz: $tz)\n}\n",
       "sourceLocation": "testdata/queries/Pointers.graphql"
     }
   ]

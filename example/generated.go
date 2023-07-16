@@ -71,6 +71,7 @@ func (v *getViewerViewerUser) GetCreatedAt() time.Time { return v.CreatedAt }
 
 // The query or mutation executed by getUser.
 const getUser_Operation = `
+# getUser gets the given user's name from their username.
 query getUser ($Login: String!) {
 	user(login: $Login) {
 		theirName: name

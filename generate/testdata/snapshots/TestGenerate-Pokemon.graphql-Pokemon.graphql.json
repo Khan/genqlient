@@ -2,7 +2,7 @@
   "operations": [
     {
       "operationName": "GetPokemonSiblings",
-      "query": "\nquery GetPokemonSiblings ($input: PokemonInput!) {\n\tuser(query: {hasPokemon:$input}) {\n\t\tid\n\t\troles\n\t\tname\n\t\tpokemon {\n\t\t\tspecies\n\t\t\tlevel\n\t\t}\n\t\tgenqlientPokemon: pokemon {\n\t\t\tspecies\n\t\t\tlevel\n\t\t}\n\t}\n}\n",
+      "query": "\nquery GetPokemonSiblings ($input: PokemonInput!) {\n\tuser(query: {hasPokemon:$input}) {\n\t\t# this will override the default mapping to internal/testutil.ID:\n\t\t# @genqlient(bind: \"string\")\n\t\tid\n\t\t# this is normally an enum, but here we make it a (list of) string:\n\t\t# @genqlient(bind: \"[]string\")\n\t\troles\n\t\tname\n\t\t# this is mapped globally to internal/testutil.Pokemon:\n\t\t# note field ordering matters, but whitespace shouldn't.\n\t\tpokemon {\n\t\t\tspecies\n\t\t\tlevel\n\t\t}\n\t\t# this overrides said mapping:\n\t\t# @genqlient(bind: \"-\")\n\t\tgenqlientPokemon: pokemon {\n\t\t\tspecies\n\t\t\tlevel\n\t\t}\n\t}\n}\n",
       "sourceLocation": "testdata/queries/Pokemon.graphql"
     }
   ]

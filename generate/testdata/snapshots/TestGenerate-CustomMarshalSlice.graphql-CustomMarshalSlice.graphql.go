@@ -205,7 +205,8 @@ func (v *__CustomMarshalSliceInput) __premarshalJSON() (*__premarshal__CustomMar
 
 // The query or mutation executed by CustomMarshalSlice.
 const CustomMarshalSlice_Operation = `
-query CustomMarshalSlice ($datesss: [[[Date!]!]!]!, $datesssp: [[[Date!]!]!]!) {
+query CustomMarshalSlice ($datesss: [[[Date!]!]!]!, # @genqlient(pointer: true)
+$datesssp: [[[Date!]!]!]!) {
 	acceptsListOfListOfListsOfDates(datesss: $datesss)
 	withPointer: acceptsListOfListOfListsOfDates(datesss: $datesssp)
 }

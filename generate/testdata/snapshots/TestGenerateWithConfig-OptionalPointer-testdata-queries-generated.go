@@ -245,6 +245,7 @@ const SimpleQueryWithPointerFalseOverride_Operation = `
 query SimpleQueryWithPointerFalseOverride {
 	user {
 		id
+		# @genqlient(pointer: false)
 		name
 	}
 }

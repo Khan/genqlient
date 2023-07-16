@@ -266,16 +266,22 @@ func (v *User) GetName() string { return v.Name }
 
 // The query or mutation executed by TypeNames.
 const TypeNames_Operation = `
+# @genqlient(typename: "Resp")
 query TypeNames {
+	# @genqlient(typename: "User")
 	user {
 		id
 		name
 	}
+	# @genqlient(typename: "Item")
 	randomItem {
 		__typename
 		id
+		# @genqlient(typename: "NameType")
 		name
 	}
+	# (ok to reuse the name as long as they match)
+	# @genqlient(typename: "User")
 	users {
 		id
 		name

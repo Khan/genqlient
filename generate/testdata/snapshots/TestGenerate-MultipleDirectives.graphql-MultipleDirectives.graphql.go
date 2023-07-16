@@ -327,7 +327,12 @@ func (v *__MultipleDirectivesInput) GetQueries() []*UserQueryInput { return v.Qu
 
 // The query or mutation executed by MultipleDirectives.
 const MultipleDirectives_Operation = `
-query MultipleDirectives ($query: UserQueryInput, $queries: [UserQueryInput]) {
+# @genqlient(typename: "MyMultipleDirectivesResponse")
+# @genqlient(omitempty: true)
+# @genqlient(pointer: true)
+query MultipleDirectives (# @genqlient(pointer: false)
+# @genqlient(typename: "MyInput")
+$query: UserQueryInput, $queries: [UserQueryInput]) {
 	user(query: $query) {
 		id
 	}

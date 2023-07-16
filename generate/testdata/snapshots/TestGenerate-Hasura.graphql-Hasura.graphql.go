@@ -83,6 +83,7 @@ func (v *__GetPokemonInput) GetWhere() *GetPokemonBoolExp { return v.Where }
 
 // The query or mutation executed by GetPokemon.
 const GetPokemon_Operation = `
+# @genqlient(pointer: true)
 query GetPokemon ($where: getPokemonBoolExp!) {
 	getPokemon(where: $where) {
 		species

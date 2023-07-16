@@ -2,7 +2,7 @@
   "operations": [
     {
       "operationName": "OmitEmptyQuery",
-      "query": "\nquery OmitEmptyQuery ($query: UserQueryInput, $queries: [UserQueryInput], $dt: DateTime, $tz: String, $tzNoOmitEmpty: String) {\n\tuser(query: $query) {\n\t\tid\n\t}\n\tusers(query: $queries) {\n\t\tid\n\t}\n\tmaybeConvert(dt: $dt, tz: $tz)\n\tconvert2: maybeConvert(dt: $dt, tz: $tzNoOmitEmpty)\n}\n",
+      "query": "\n# @genqlient(omitempty: true)\n# @genqlient(for: \"UserQueryInput.id\", omitempty: false)\nquery OmitEmptyQuery ($query: UserQueryInput, $queries: [UserQueryInput], $dt: DateTime, $tz: String, # @genqlient(omitempty: false)\n$tzNoOmitEmpty: String) {\n\tuser(query: $query) {\n\t\tid\n\t}\n\tusers(query: $queries) {\n\t\tid\n\t}\n\tmaybeConvert(dt: $dt, tz: $tz)\n\tconvert2: maybeConvert(dt: $dt, tz: $tzNoOmitEmpty)\n}\n",
       "sourceLocation": "testdata/queries/Omitempty.graphql"
     }
   ]
