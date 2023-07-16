@@ -10,28 +10,33 @@ import (
 
 type Being interface {
 	IsBeing()
+	GetID() string
+	GetName() string
 }
 
 type Lucky interface {
 	IsLucky()
+	GetLuckyNumber() *int
 }
 
 type Animal struct {
 	ID      string      `json:"id"`
 	Name    string      `json:"name"`
 	Species Species     `json:"species"`
-	Owner   Being       `json:"owner"`
-	Hair    *BeingsHair `json:"hair"`
+	Owner   Being       `json:"owner,omitempty"`
+	Hair    *BeingsHair `json:"hair,omitempty"`
 }
 
-func (Animal) IsBeing() {}
+func (Animal) IsBeing()             {}
+func (this Animal) GetID() string   { return this.ID }
+func (this Animal) GetName() string { return this.Name }
 
 type BeingsHair struct {
 	HasHair bool `json:"hasHair"`
 }
 
 type Hair struct {
-	Color *string `json:"color"`
+	Color *string `json:"color,omitempty"`
 }
 
 type NewUser struct {
@@ -41,14 +46,18 @@ type NewUser struct {
 type User struct {
 	ID          string  `json:"id"`
 	Name        string  `json:"name"`
-	LuckyNumber *int    `json:"luckyNumber"`
-	Hair        *Hair   `json:"hair"`
-	Birthdate   *string `json:"birthdate"`
+	LuckyNumber *int    `json:"luckyNumber,omitempty"`
+	Hair        *Hair   `json:"hair,omitempty"`
+	Birthdate   *string `json:"birthdate,omitempty"`
 	Friends     []*User `json:"friends"`
 }
 
-func (User) IsBeing() {}
-func (User) IsLucky() {}
+func (User) IsBeing()             {}
+func (this User) GetID() string   { return this.ID }
+func (this User) GetName() string { return this.Name }
+
+func (User) IsLucky()                  {}
+func (this User) GetLuckyNumber() *int { return this.LuckyNumber }
 
 type Species string
 
