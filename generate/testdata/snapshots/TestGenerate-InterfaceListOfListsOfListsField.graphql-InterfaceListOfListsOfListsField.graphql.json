@@ -2,7 +2,7 @@
   "operations": [
     {
       "operationName": "InterfaceListOfListOfListsField",
-      "query": "\nquery InterfaceListOfListOfListsField {\n\tlistOfListsOfListsOfContent {\n\t\t__typename\n\t\tid\n\t\tname\n\t}\n\twithPointer: listOfListsOfListsOfContent {\n\t\t__typename\n\t\tid\n\t\tname\n\t}\n}\n",
+      "query": "\nquery InterfaceListOfListOfListsField {\n\tlistOfListsOfListsOfContent {\n\t\t__typename\n\t\tid\n\t\tname\n\t}\n\t# @genqlient(pointer: true)\n\twithPointer: listOfListsOfListsOfContent {\n\t\t__typename\n\t\tid\n\t\tname\n\t}\n}\n",
       "sourceLocation": "testdata/queries/InterfaceListOfListsOfListsField.graphql"
     }
   ]

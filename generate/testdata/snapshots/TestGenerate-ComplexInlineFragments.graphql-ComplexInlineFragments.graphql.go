@@ -1342,12 +1342,18 @@ func (v *ComplexInlineFragmentsRootTopic) GetName() string { return v.Name }
 
 // The query or mutation executed by ComplexInlineFragments.
 const ComplexInlineFragments_Operation = `
+# We test all the spread cases from docs/DESIGN.md, see there for more context
+# on each, as well as various other nonsense.  But for abstract-in-abstract
+# spreads, we can't test cases (4b) and (4c), where I implements J or vice
+# versa, because gqlparser doesn't support interfaces that implement other
+# interfaces yet.
 query ComplexInlineFragments {
 	root {
 		id
 		... on Topic {
 			schoolGrade
 		}
+		# (1) object spread in object scope
 		... on Content {
 			name
 		}
@@ -1358,9 +1364,11 @@ query ComplexInlineFragments {
 		... on Article {
 			text
 		}
+		# (2) object spread in abstract scope
 		... on Content {
 			name
 		}
+		# (4a) abstract spread in abstract scope, I == J
 		... on HasDuration {
 			duration
 		}
@@ -1387,6 +1395,16 @@ query ComplexInlineFragments {
 	}
 	conflictingStuff: randomItem {
 		__typename
+		# These two have different types!  Naming gets complicated.  Note GraphQL
+		# says [1] that you can only have such naming conflicts when the fields are
+		# both on object-typed spreads (reasonable, so they can never collide) and
+		# they are of "shapes that can be merged", e.g. both nullable objects,
+		# which seems very strange to me but is the most interesting case for us
+		# anyway (since where we could have trouble is naming the result types).
+		# [1] https://spec.graphql.org/draft/#SameResponseShape()
+		# TODO(benkraft): This actually generates the wrong thing right now (the
+		# two thumbnail types get the same name, and one clobbers the other).  Fix
+		# in a follow-up commit.
 		... on Article {
 			thumbnail {
 				id

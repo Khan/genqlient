@@ -2,7 +2,7 @@
   "operations": [
     {
       "operationName": "StructOption",
-      "query": "\nquery StructOption {\n\troot {\n\t\tid\n\t\tchildren {\n\t\t\t__typename\n\t\t\tid\n\t\t\tparent {\n\t\t\t\tid\n\t\t\t\tchildren {\n\t\t\t\t\t__typename\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t\tinterfaceChildren: children {\n\t\t\t\t\t__typename\n\t\t\t\t\tid\n\t\t\t\t\t... VideoFields\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n\tuser {\n\t\troles\n\t}\n}\nfragment VideoFields on Video {\n\tduration\n}\n",
+      "query": "\n# @genqlient(struct: true)\nquery StructOption {\n\troot {\n\t\tid\n\t\tchildren {\n\t\t\t__typename\n\t\t\tid\n\t\t\tparent {\n\t\t\t\tid\n\t\t\t\tchildren {\n\t\t\t\t\t__typename\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t\t# (it won't apply to this)\n\t\t\t\tinterfaceChildren: children {\n\t\t\t\t\t__typename\n\t\t\t\t\tid\n\t\t\t\t\t... VideoFields\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n\t# (nor this)\n\tuser {\n\t\troles\n\t}\n}\nfragment VideoFields on Video {\n\tduration\n}\n",
       "sourceLocation": "testdata/queries/StructOption.graphql"
     }
   ]

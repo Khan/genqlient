@@ -2,7 +2,7 @@
   "operations": [
     {
       "operationName": "ComplexNamedFragments",
-      "query": "\nquery ComplexNamedFragments {\n\t... QueryFragment\n}\nfragment QueryFragment on Query {\n\t... InnerQueryFragment\n}\nfragment InnerQueryFragment on Query {\n\trandomVideo {\n\t\t... VideoFields\n\t}\n\trandomItem {\n\t\t__typename\n\t\t... ContentFields\n\t}\n\totherVideo: randomVideo {\n\t\t... ContentFields\n\t}\n}\nfragment VideoFields on Video {\n\tid\n\tparent {\n\t\tvideoChildren {\n\t\t\t... ChildVideoFields\n\t\t}\n\t}\n}\nfragment ContentFields on Content {\n\tname\n\turl\n}\nfragment ChildVideoFields on Video {\n\tid\n\tname\n}\n",
+      "query": "\n# @genqlient(flatten: true)\nquery ComplexNamedFragments {\n\t... QueryFragment\n}\n# @genqlient(flatten: true)\nfragment QueryFragment on Query {\n\t... InnerQueryFragment\n}\nfragment InnerQueryFragment on Query {\n\t# @genqlient(flatten: true)\n\trandomVideo {\n\t\t... VideoFields\n\t}\n\t# @genqlient(flatten: true)\n\trandomItem {\n\t\t__typename\n\t\t... ContentFields\n\t}\n\t# @genqlient(flatten: true)\n\totherVideo: randomVideo {\n\t\t... ContentFields\n\t}\n}\nfragment VideoFields on Video {\n\tid\n\tparent {\n\t\t# @genqlient(flatten: true)\n\t\tvideoChildren {\n\t\t\t... ChildVideoFields\n\t\t}\n\t}\n}\nfragment ContentFields on Content {\n\tname\n\turl\n}\nfragment ChildVideoFields on Video {\n\tid\n\tname\n}\n",
       "sourceLocation": "testdata/queries/Flatten.graphql"
     }
   ]

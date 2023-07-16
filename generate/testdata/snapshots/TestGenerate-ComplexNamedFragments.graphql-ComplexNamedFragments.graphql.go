@@ -1786,12 +1786,14 @@ fragment ContentFields on Content {
 	name
 	url
 }
+# @genqlient(pointer: true)
 fragment MoreVideoFields on Video {
 	id
 	parent {
 		name
 		url
 		... ContentFields
+		# @genqlient(pointer: false)
 		children {
 			__typename
 			... VideoFields
