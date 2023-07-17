@@ -2,7 +2,7 @@
   "operations": [
     {
       "operationName": "TypeNames",
-      "query": "\n# @genqlient(typename: \"Resp\")\nquery TypeNames {\n\t# @genqlient(typename: \"User\")\n\tuser {\n\t\tid\n\t\tname\n\t}\n\t# @genqlient(typename: \"Item\")\n\trandomItem {\n\t\t__typename\n\t\tid\n\t\t# @genqlient(typename: \"NameType\")\n\t\tname\n\t}\n\t# (ok to reuse the name as long as they match)\n\t# @genqlient(typename: \"User\")\n\tusers {\n\t\tid\n\t\tname\n\t}\n}\n",
+      "query": "\nquery TypeNames {\n\tuser {\n\t\tid\n\t\tname\n\t}\n\trandomItem {\n\t\t__typename\n\t\tid\n\t\tname\n\t}\n\tusers {\n\t\tid\n\t\tname\n\t}\n}\n",
       "sourceLocation": "testdata/queries/TypeNames.graphql"
     }
   ]

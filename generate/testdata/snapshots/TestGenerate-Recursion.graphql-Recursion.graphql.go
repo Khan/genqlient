@@ -72,7 +72,6 @@ func (v *__RecursionInput) GetInput() RecursiveInput { return v.Input }
 const Recursion_Operation = `
 query Recursion ($input: RecursiveInput!) {
 	recur(input: $input) {
-		# (sadly, or happily, GraphQL doesn't let us recur infinitely here)
 		rec {
 			rec {
 				rec {

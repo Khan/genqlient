@@ -2,7 +2,7 @@
   "operations": [
     {
       "operationName": "Recursion",
-      "query": "\nquery Recursion ($input: RecursiveInput!) {\n\trecur(input: $input) {\n\t\t# (sadly, or happily, GraphQL doesn't let us recur infinitely here)\n\t\trec {\n\t\t\trec {\n\t\t\t\trec {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n}\n",
+      "query": "\nquery Recursion ($input: RecursiveInput!) {\n\trecur(input: $input) {\n\t\trec {\n\t\t\trec {\n\t\t\t\trec {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n}\n",
       "sourceLocation": "testdata/queries/Recursion.graphql"
     }
   ]

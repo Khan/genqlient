@@ -514,7 +514,6 @@ query InterfaceListOfListOfListsField {
 		id
 		name
 	}
-	# @genqlient(pointer: true)
 	withPointer: listOfListsOfListsOfContent {
 		__typename
 		id

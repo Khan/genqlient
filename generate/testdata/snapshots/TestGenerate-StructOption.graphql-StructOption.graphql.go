@@ -426,7 +426,6 @@ func (v *VideoFields) GetDuration() int { return v.Duration }
 
 // The query or mutation executed by StructOption.
 const StructOption_Operation = `
-# @genqlient(struct: true)
 query StructOption {
 	root {
 		id
@@ -439,7 +438,6 @@ query StructOption {
 					__typename
 					id
 				}
-				# (it won't apply to this)
 				interfaceChildren: children {
 					__typename
 					id
@@ -448,7 +446,6 @@ query StructOption {
 			}
 		}
 	}
-	# (nor this)
 	user {
 		roles
 	}
