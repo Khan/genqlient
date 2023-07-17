@@ -633,7 +633,6 @@ query InterfaceNoFragmentsQuery {
 		id
 		name
 	}
-	# (make sure sibling fields work)
 	randomItem {
 		__typename
 		id
@@ -644,7 +643,6 @@ query InterfaceNoFragmentsQuery {
 		id
 		name
 	}
-	# @genqlient(pointer: true)
 	withPointer: randomItem {
 		__typename
 		id

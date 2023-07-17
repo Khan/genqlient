@@ -75,21 +75,13 @@ func (v *__GetPokemonSiblingsInput) GetInput() testutil.Pokemon { return v.Input
 const GetPokemonSiblings_Operation = `
 query GetPokemonSiblings ($input: PokemonInput!) {
 	user(query: {hasPokemon:$input}) {
-		# this will override the default mapping to internal/testutil.ID:
-		# @genqlient(bind: "string")
 		id
-		# this is normally an enum, but here we make it a (list of) string:
-		# @genqlient(bind: "[]string")
 		roles
 		name
-		# this is mapped globally to internal/testutil.Pokemon:
-		# note field ordering matters, but whitespace shouldn't.
 		pokemon {
 			species
 			level
 		}
-		# this overrides said mapping:
-		# @genqlient(bind: "-")
 		genqlientPokemon: pokemon {
 			species
 			level

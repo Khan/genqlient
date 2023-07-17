@@ -221,10 +221,7 @@ func (v *__OmitEmptyQueryInput) GetTzNoOmitEmpty() string { return v.TzNoOmitEmp
 
 // The query or mutation executed by OmitEmptyQuery.
 const OmitEmptyQuery_Operation = `
-# @genqlient(omitempty: true)
-# @genqlient(for: "UserQueryInput.id", omitempty: false)
-query OmitEmptyQuery ($query: UserQueryInput, $queries: [UserQueryInput], $dt: DateTime, $tz: String, # @genqlient(omitempty: false)
-$tzNoOmitEmpty: String) {
+query OmitEmptyQuery ($query: UserQueryInput, $queries: [UserQueryInput], $dt: DateTime, $tz: String, $tzNoOmitEmpty: String) {
 	user(query: $query) {
 		id
 	}

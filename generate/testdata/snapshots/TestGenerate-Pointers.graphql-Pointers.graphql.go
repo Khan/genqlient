@@ -232,18 +232,12 @@ func (v *__PointersQueryInput) GetTz() *string { return v.Tz }
 
 // The query or mutation executed by PointersQuery.
 const PointersQuery_Operation = `
-# @genqlient(pointer: true)
-# @genqlient(for: "UserQueryInput.id", pointer: false)
-# @genqlient(for: "User.id", pointer: false)
-query PointersQuery ($query: UserQueryInput, # @genqlient(pointer: false)
-$dt: DateTime, $tz: String) {
+query PointersQuery ($query: UserQueryInput, $dt: DateTime, $tz: String) {
 	user(query: $query) {
-		# @genqlient(pointer: true)
 		id
 		roles
 		name
 		emails
-		# @genqlient(pointer: false)
 		emailsNoPtr: emails
 	}
 	otherUser: user(query: $query) {

@@ -532,7 +532,6 @@ query InterfaceListField {
 			name
 		}
 	}
-	# @genqlient(pointer: true)
 	withPointer: root {
 		id
 		name

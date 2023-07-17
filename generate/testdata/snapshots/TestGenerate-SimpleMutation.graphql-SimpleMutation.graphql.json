@@ -2,7 +2,7 @@
   "operations": [
     {
       "operationName": "SimpleMutation",
-      "query": "\n# @genqlient\n#\n# SimpleMutation creates a user.\n#\n# It has a long doc-comment, to test that we handle that correctly.\n# What a long comment indeed.\nmutation SimpleMutation ($name: String!) {\n\tcreateUser(name: $name) {\n\t\tid\n\t\tname\n\t}\n}\n",
+      "query": "\nmutation SimpleMutation ($name: String!) {\n\tcreateUser(name: $name) {\n\t\tid\n\t\tname\n\t}\n}\n",
       "sourceLocation": "testdata/queries/SimpleMutation.graphql"
     }
   ]

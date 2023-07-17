@@ -268,25 +268,20 @@ func (v *VideoFieldsParentTopic) GetVideoChildren() []ChildVideoFields { return 
 
 // The query or mutation executed by ComplexNamedFragments.
 const ComplexNamedFragments_Operation = `
-# @genqlient(flatten: true)
 query ComplexNamedFragments {
 	... QueryFragment
 }
-# @genqlient(flatten: true)
 fragment QueryFragment on Query {
 	... InnerQueryFragment
 }
 fragment InnerQueryFragment on Query {
-	# @genqlient(flatten: true)
 	randomVideo {
 		... VideoFields
 	}
-	# @genqlient(flatten: true)
 	randomItem {
 		__typename
 		... ContentFields
 	}
-	# @genqlient(flatten: true)
 	otherVideo: randomVideo {
 		... ContentFields
 	}
@@ -294,7 +289,6 @@ fragment InnerQueryFragment on Query {
 fragment VideoFields on Video {
 	id
 	parent {
-		# @genqlient(flatten: true)
 		videoChildren {
 			... ChildVideoFields
 		}

@@ -3080,7 +3080,6 @@ func (v *simpleQueryResponse) GetMe() simpleQueryMeUser { return v.Me }
 
 // The query or mutation executed by createUser.
 const createUser_Operation = `
-# @genqlient
 mutation createUser ($user: NewUser!) {
 	createUser(input: $user) {
 		id
@@ -3117,7 +3116,6 @@ func createUser(
 
 // The query or mutation executed by failingQuery.
 const failingQuery_Operation = `
-# @genqlient
 query failingQuery {
 	fail
 	me {
@@ -3150,7 +3148,6 @@ func failingQuery(
 
 // The query or mutation executed by queryWithCustomMarshal.
 const queryWithCustomMarshal_Operation = `
-# @genqlient
 query queryWithCustomMarshal ($date: Date!) {
 	usersBornOn(date: $date) {
 		id
@@ -3188,10 +3185,7 @@ func queryWithCustomMarshal(
 
 // The query or mutation executed by queryWithCustomMarshalOptional.
 const queryWithCustomMarshalOptional_Operation = `
-# @genqlient
-query queryWithCustomMarshalOptional (# @genqlient(pointer: true)
-$date: Date, # @genqlient(pointer: true)
-$id: ID) {
+query queryWithCustomMarshalOptional ($date: Date, $id: ID) {
 	userSearch(birthdate: $date, id: $id) {
 		id
 		name
@@ -3230,7 +3224,6 @@ func queryWithCustomMarshalOptional(
 
 // The query or mutation executed by queryWithCustomMarshalSlice.
 const queryWithCustomMarshalSlice_Operation = `
-# @genqlient
 query queryWithCustomMarshalSlice ($dates: [Date!]!) {
 	usersBornOnDates(dates: $dates) {
 		id
@@ -3268,7 +3261,6 @@ func queryWithCustomMarshalSlice(
 
 // The query or mutation executed by queryWithFlatten.
 const queryWithFlatten_Operation = `
-# @genqlient(flatten: true)
 query queryWithFlatten ($ids: [ID!]!) {
 	... QueryFragment
 }
@@ -3278,7 +3270,6 @@ fragment QueryFragment on Query {
 		id
 		... FlattenedUserFields
 		... on Animal {
-			# @genqlient(flatten: true)
 			owner {
 				__typename
 				... BeingFields
@@ -3286,16 +3277,12 @@ fragment QueryFragment on Query {
 		}
 	}
 }
-# @genqlient(flatten: true)
 fragment FlattenedUserFields on User {
 	... FlattenedLuckyFields
 }
-# @genqlient
-# @genqlient(flatten: true)
 fragment BeingFields on Being {
 	... InnerBeingFields
 }
-# @genqlient(flatten: true)
 fragment FlattenedLuckyFields on Lucky {
 	... InnerLuckyFields
 }
@@ -3303,7 +3290,6 @@ fragment InnerBeingFields on Being {
 	id
 	name
 	... on User {
-		# @genqlient(flatten: true)
 		friends {
 			... FriendsFields
 		}
@@ -3346,7 +3332,6 @@ func queryWithFlatten(
 
 // The query or mutation executed by queryWithFragments.
 const queryWithFragments_Operation = `
-# @genqlient
 query queryWithFragments ($ids: [ID!]!) {
 	beings(ids: $ids) {
 		__typename
@@ -3412,7 +3397,6 @@ func queryWithFragments(
 
 // The query or mutation executed by queryWithInterfaceListField.
 const queryWithInterfaceListField_Operation = `
-# @genqlient
 query queryWithInterfaceListField ($ids: [ID!]!) {
 	beings(ids: $ids) {
 		__typename
@@ -3450,9 +3434,7 @@ func queryWithInterfaceListField(
 
 // The query or mutation executed by queryWithInterfaceListPointerField.
 const queryWithInterfaceListPointerField_Operation = `
-# @genqlient
 query queryWithInterfaceListPointerField ($ids: [ID!]!) {
-	# @genqlient(pointer: true)
 	beings(ids: $ids) {
 		__typename
 		id
@@ -3489,7 +3471,6 @@ func queryWithInterfaceListPointerField(
 
 // The query or mutation executed by queryWithInterfaceNoFragments.
 const queryWithInterfaceNoFragments_Operation = `
-# @genqlient
 query queryWithInterfaceNoFragments ($id: ID!) {
 	being(id: $id) {
 		__typename
@@ -3539,7 +3520,6 @@ query queryWithNamedFragments ($ids: [ID!]!) {
 		... UserFields
 	}
 }
-# @genqlient
 fragment AnimalFields on Animal {
 	id
 	hair {
@@ -3597,7 +3577,6 @@ func queryWithNamedFragments(
 
 // The query or mutation executed by queryWithOmitempty.
 const queryWithOmitempty_Operation = `
-# @genqlient(omitempty: true)
 query queryWithOmitempty ($id: ID) {
 	user(id: $id) {
 		id
@@ -3635,7 +3614,6 @@ func queryWithOmitempty(
 
 // The query or mutation executed by queryWithVariables.
 const queryWithVariables_Operation = `
-# @genqlient
 query queryWithVariables ($id: ID!) {
 	user(id: $id) {
 		id
@@ -3673,7 +3651,6 @@ func queryWithVariables(
 
 // The query or mutation executed by simpleQuery.
 const simpleQuery_Operation = `
-# @genqlient
 query simpleQuery {
 	me {
 		id
@@ -3707,7 +3684,6 @@ func simpleQuery(
 
 // The query or mutation executed by simpleQueryExt.
 const simpleQueryExt_Operation = `
-# @genqlient
 query simpleQueryExt {
 	me {
 		id

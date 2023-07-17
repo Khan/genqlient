@@ -43,12 +43,6 @@ func (v *__SimpleMutationInput) GetName() string { return v.Name }
 
 // The query or mutation executed by SimpleMutation.
 const SimpleMutation_Operation = `
-# @genqlient
-#
-# SimpleMutation creates a user.
-#
-# It has a long doc-comment, to test that we handle that correctly.
-# What a long comment indeed.
 mutation SimpleMutation ($name: String!) {
 	createUser(name: $name) {
 		id
