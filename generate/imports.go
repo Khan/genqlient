@@ -99,15 +99,24 @@ func (g *generator) ref(fullyQualifiedName string) (qualifiedName string, err er
 
 	pkgPath := nameToImport[:i]
 	localName := nameToImport[i+1:]
-	alias, ok := g.imports[pkgPath]
-	if !ok {
-		if g.importsLocked {
-			return "", errorf(nil,
-				`genqlient internal error: imports locked but package "%v" has not been imported`, pkgPath)
+
+	var out strings.Builder
+	out.WriteString(prefix)
+
+	if pkgPath != g.Config.packagePath {
+		alias, ok := g.imports[pkgPath]
+		if !ok {
+			if g.importsLocked {
+				return "", errorf(nil,
+					`genqlient internal error: imports locked but package "%v" has not been imported`, pkgPath)
+			}
+			alias = g.addImportFor(pkgPath)
 		}
-		alias = g.addImportFor(pkgPath)
+		out.WriteString(alias + ".")
 	}
-	return prefix + alias + "." + localName, nil
+	out.WriteString(localName)
+
+	return out.String(), nil
 }
 
 // Returns the import-clause to use in the generated code.

@@ -21,24 +21,41 @@ const (
 // buildGoFile returns an error if the given Go code is not valid.
 //
 // namePrefix is used for the temp-file, and is just for debugging.
-func buildGoFile(namePrefix string, content []byte) error {
+func buildGoFile(namePrefix string, content []byte, extraFiles ...string) error {
 	// We need to put this within the current module, rather than in
 	// /tmp, so that it can access internal/testutil.
-	f, err := os.CreateTemp("./testdata/tmp", namePrefix+"_*.go")
+	d, err := os.MkdirTemp("./testdata/tmp", namePrefix+"_*")
 	if err != nil {
 		return err
 	}
+
+	f, err := os.Create(filepath.Join(d, "generated.go"))
+	if err != nil {
+		return err
+	}
+
 	defer func() {
 		f.Close()
-		os.Remove(f.Name())
+		os.RemoveAll(d)
 	}()
+
+	for _, extraFile := range extraFiles {
+		data, err := os.ReadFile(extraFile)
+		if err != nil {
+			return fmt.Errorf("reading file: %w", err)
+		}
+
+		if err := os.WriteFile(filepath.Join(d, filepath.Base(extraFile)), data, 0o644); err != nil {
+			return fmt.Errorf("writing file: %w", err)
+		}
+	}
 
 	_, err = f.Write(content)
 	if err != nil {
 		return err
 	}
 
-	cmd := exec.Command("go", "build", f.Name())
+	cmd := exec.Command("go", "build", d)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	err = cmd.Run()
@@ -151,27 +168,28 @@ func TestGenerateWithConfig(t *testing.T) {
 		baseDir    string   // relative to dataDir
 		operations []string // overrides the default set below
 		config     *Config  // omits Schema and Operations, set below.
+		extraFiles []string // extra files to pass to buildGoFile
 	}{
-		{"DefaultConfig", "", nil, getDefaultConfig(t)},
+		{"DefaultConfig", "", nil, getDefaultConfig(t), nil},
 		{"Subpackage", "", nil, &Config{
 			Generated: "mypkg/myfile.go",
-		}},
+		}, nil},
 		{"SubpackageConfig", "mypkg", nil, &Config{
 			Generated: "myfile.go", // (relative to genqlient.yaml)
-		}},
+		}, nil},
 		{"PackageName", "", nil, &Config{
 			Generated: "myfile.go",
 			Package:   "mypkg",
-		}},
+		}, nil},
 		{"ExportOperations", "", nil, &Config{
 			ExportOperations: "operations.json",
-		}},
+		}, nil},
 		{"CustomContext", "", nil, &Config{
 			ContextType: "github.com/Khan/genqlient/internal/testutil.MyContext",
-		}},
+		}, nil},
 		{"CustomContextWithAlias", "", nil, &Config{
 			ContextType: "github.com/Khan/genqlient/internal/testutil/junk---fun.name.MyContext",
-		}},
+		}, nil},
 		{"StructReferences", "", []string{"InputObject.graphql", "QueryWithStructs.graphql"}, &Config{
 			StructReferences: true,
 			Bindings: map[string]*TypeBinding{
@@ -181,7 +199,7 @@ func TestGenerateWithConfig(t *testing.T) {
 					Unmarshaler: "github.com/Khan/genqlient/internal/testutil.UnmarshalDate",
 				},
 			},
-		}},
+		}, nil},
 		{"StructReferencesAndOptionalPointer", "", []string{"InputObject.graphql", "QueryWithStructs.graphql"}, &Config{
 			StructReferences: true,
 			Optional:         "pointer",
@@ -192,32 +210,32 @@ func TestGenerateWithConfig(t *testing.T) {
 					Unmarshaler: "github.com/Khan/genqlient/internal/testutil.UnmarshalDate",
 				},
 			},
-		}},
+		}, nil},
 		{"PackageBindings", "", nil, &Config{
 			PackageBindings: []*PackageBinding{
 				{Package: "github.com/Khan/genqlient/internal/testutil"},
 			},
-		}},
+		}, nil},
 		{"NoContext", "", nil, &Config{
 			ContextType: "-",
-		}},
+		}, nil},
 		{"ClientGetter", "", nil, &Config{
 			ClientGetter: "github.com/Khan/genqlient/internal/testutil.GetClientFromContext",
-		}},
+		}, nil},
 		{"ClientGetterCustomContext", "", nil, &Config{
 			ClientGetter: "github.com/Khan/genqlient/internal/testutil.GetClientFromMyContext",
 			ContextType:  "github.com/Khan/genqlient/internal/testutil.MyContext",
-		}},
+		}, nil},
 		{"ClientGetterNoContext", "", nil, &Config{
 			ClientGetter: "github.com/Khan/genqlient/internal/testutil.GetClientFromNowhere",
 			ContextType:  "-",
-		}},
+		}, nil},
 		{"Extensions", "", nil, &Config{
 			Extensions: true,
-		}},
+		}, nil},
 		{"OptionalValue", "", []string{"ListInput.graphql", "QueryWithSlices.graphql"}, &Config{
 			Optional: "value",
-		}},
+		}, nil},
 		{"OptionalPointer", "", []string{
 			"ListInput.graphql",
 			"QueryWithSlices.graphql",
@@ -225,21 +243,47 @@ func TestGenerateWithConfig(t *testing.T) {
 			"SimpleQueryNoOverride.graphql",
 		}, &Config{
 			Optional: "pointer",
-		}},
+		}, nil},
 		{"OptionalGeneric", "", []string{"ListInput.graphql", "QueryWithSlices.graphql"}, &Config{
 			Optional:            "generic",
 			OptionalGenericType: "github.com/Khan/genqlient/internal/testutil.Option",
-		}},
+		}, nil},
 		{"EnumRawCasingAll", "", []string{"QueryWithEnums.graphql"}, &Config{
 			Casing: Casing{
 				AllEnums: CasingRaw,
 			},
-		}},
+		}, nil},
 		{"EnumRawCasingSpecific", "", []string{"QueryWithEnums.graphql"}, &Config{
 			Casing: Casing{
 				Enums: map[string]CasingAlgorithm{"Role": CasingRaw},
 			},
-		}},
+		}, nil},
+		{"PackageBindingsLocal", "mypkg", nil, &Config{
+			Generated: "myfile.go",
+			PackageBindings: []*PackageBinding{
+				{Package: "github.com/Khan/genqlient/generate/testdata/queries/mypkg"},
+			},
+		}, []string{"testdata/queries/mypkg/types.go"}},
+		{"TypeBindingsLocal", "mypkg", nil, &Config{
+			Generated: "myfile.go",
+			Bindings: map[string]*TypeBinding{
+				"ID": {
+					Type: "github.com/Khan/genqlient/generate/testdata/queries/mypkg.ID",
+				},
+			},
+		}, []string{"testdata/queries/mypkg/types.go"}},
+		{"PackageBindingsLocalShorthand", "mypkg", nil, &Config{
+			Generated: "myfile.go",
+			PackageBindings: []*PackageBinding{
+				{Package: "."},
+			},
+		}, []string{"testdata/queries/mypkg/types.go"}},
+		{"PackageBindingsLocalWithAlreadyGeneratedFiles", "mypkg", nil, &Config{
+			Generated: "generated.go",
+			PackageBindings: []*PackageBinding{
+				{Package: "."},
+			},
+		}, []string{"testdata/queries/mypkg/types.go", "testdata/queries/mypkg/generated.go"}},
 	}
 
 	sourceFilename := "SimpleQuery.graphql"
@@ -277,8 +321,7 @@ func TestGenerateWithConfig(t *testing.T) {
 					t.Skip("skipping build due to -short")
 				}
 
-				err := buildGoFile(sourceFilename,
-					generated[config.Generated])
+				err := buildGoFile(sourceFilename, generated[config.Generated], test.extraFiles...)
 				if err != nil {
 					t.Error(err)
 				}
@@ -330,7 +373,6 @@ func TestGenerateErrors(t *testing.T) {
 				Schema:      []string{filepath.Join(errorsDir, schemaFilename)},
 				Operations:  []string{filepath.Join(errorsDir, sourceFilename)},
 				Package:     "test",
-				Generated:   os.DevNull,
 				ContextType: "context.Context",
 				Bindings: map[string]*TypeBinding{
 					"ValidScalar":   {Type: "string"},

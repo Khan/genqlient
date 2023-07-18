@@ -17,5 +17,6 @@
   StructReferences: (bool) false,
   Extensions: (bool) false,
   AllowBrokenFeatures: (bool) false,
-  baseDir: (string) (len=21) "testdata/valid-config"
+  baseDir: (string) (len=21) "testdata/valid-config",
+  packagePath: (string) (len=1) "."
 })

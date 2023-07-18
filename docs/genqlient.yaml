@@ -224,6 +224,10 @@ bindings:
 # to the bindings map, above, for each exported type in the package.  Multiple
 # packages may be specified, and later ones take precedence over earlier ones.
 # Explicit entries in bindings take precedence over all package bindings.
+#
+# Using "." is a shorthand for the package containing the generated file.
+# Both allow the generated code to live in the same package as its types.
+# Note that generating code inside the bound package may cause naming conflicts.
 package_bindings:
 - package: github.com/you/yourpkg/models
 

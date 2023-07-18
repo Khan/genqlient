@@ -47,6 +47,9 @@ type Config struct {
 	// The directory of the config-file (relative to which all the other paths
 	// are resolved).  Set by ValidateAndFillDefaults.
 	baseDir string
+
+	// Fully qualified package being generated.
+	packagePath string
 }
 
 // A TypeBinding represents a Go type to which genqlient will bind a particular
@@ -153,6 +156,23 @@ func (c *Config) ValidateAndFillDefaults(baseDir string) error {
 		c.ExportOperations = pathJoin(baseDir, c.ExportOperations)
 	}
 
+	// Calculate the fully qualified package path
+	genPkgPath, err := filepath.Rel(c.baseDir, c.Generated)
+	if err != nil {
+		return fmt.Errorf("finding relative path to generated package: %w", err)
+	}
+	pkgs, err := packages.Load(&packages.Config{
+		Dir:  c.baseDir,
+		Mode: packages.NeedName | packages.NeedModule,
+	}, "./"+filepath.Dir(genPkgPath))
+	if err != nil {
+		return fmt.Errorf("loading generated package: %w", err)
+	}
+	if len(pkgs) > 1 {
+		return fmt.Errorf("ambiguous generated package")
+	}
+	c.packagePath = pkgs[0].ID
+
 	if c.ContextType == "" {
 		c.ContextType = "context.Context"
 	}
@@ -203,6 +223,7 @@ func (c *Config) ValidateAndFillDefaults(baseDir string) error {
 
 			mode := packages.NeedDeps | packages.NeedTypes
 			pkgs, err := packages.Load(&packages.Config{
+				Dir:  c.baseDir,
 				Mode: mode,
 			}, binding.Package)
 			if err != nil {
