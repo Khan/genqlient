@@ -14,6 +14,8 @@ When releasing a new version:
 
 ### Bug fixes:
 
+- Using `pointer: true` will generate `omitempty` tags to all pointer input types.
+
 -->
 
 ## next
