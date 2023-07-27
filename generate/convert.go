@@ -450,13 +450,20 @@ func (g *generator) convertDefinition(
 				return nil, err
 			}
 
+			// We always want to set omitempty if the field is a pointer, unless
+			// the user explicitly wants the value to be sent as null.
+			omitEmpty := fieldOptions.GetOmitempty()
+			if options.GetPointer() && (!field.Type.NonNull && g.Config.Optional == "pointer") && fieldOptions.Omitempty == nil {
+				omitEmpty = true
+			}
+
 			goType.Fields[i] = &goStructField{
 				GoName:      goName,
 				GoType:      fieldGoType,
 				JSONName:    field.Name,
 				GraphQLName: field.Name,
 				Description: field.Description,
-				Omitempty:   fieldOptions.GetOmitempty(),
+				Omitempty:   omitEmpty,
 			}
 		}
 		return goType, nil
