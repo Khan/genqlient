@@ -100,6 +100,11 @@ func (g *generator) ref(fullyQualifiedName string) (qualifiedName string, err er
 	pkgPath := nameToImport[:i]
 	localName := nameToImport[i+1:]
 	alias, ok := g.imports[pkgPath]
+
+	if pkgPath == g.Config.Package {
+		return localName, nil
+	}
+
 	if !ok {
 		if g.importsLocked {
 			return "", errorf(nil,
