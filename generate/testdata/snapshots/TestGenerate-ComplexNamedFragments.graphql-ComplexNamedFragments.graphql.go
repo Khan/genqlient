@@ -1809,8 +1809,8 @@ func ComplexNamedFragments(
 	}
 	var err error
 
-	var data ComplexNamedFragmentsResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ ComplexNamedFragmentsResponse
+	resp := &graphql.Response{Data: &data_}
 
 	err = client.MakeRequest(
 		nil,
@@ -1818,6 +1818,6 @@ func ComplexNamedFragments(
 		resp,
 	)
 
-	return &data, err
+	return &data_, err
 }
 

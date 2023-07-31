@@ -464,8 +464,8 @@ func StructOption(
 	}
 	var err error
 
-	var data StructOptionResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ StructOptionResponse
+	resp := &graphql.Response{Data: &data_}
 
 	err = client.MakeRequest(
 		nil,
@@ -473,6 +473,6 @@ func StructOption(
 		resp,
 	)
 
-	return &data, err
+	return &data_, err
 }
 

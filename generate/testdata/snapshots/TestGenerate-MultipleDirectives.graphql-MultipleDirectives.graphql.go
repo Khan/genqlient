@@ -352,8 +352,8 @@ func MultipleDirectives(
 	}
 	var err error
 
-	var data MyMultipleDirectivesResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ MyMultipleDirectivesResponse
+	resp := &graphql.Response{Data: &data_}
 
 	err = client.MakeRequest(
 		nil,
@@ -361,6 +361,6 @@ func MultipleDirectives(
 		resp,
 	)
 
-	return &data, err
+	return &data_, err
 }
 

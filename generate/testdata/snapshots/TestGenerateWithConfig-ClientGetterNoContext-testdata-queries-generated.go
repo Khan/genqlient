@@ -55,8 +55,8 @@ func SimpleQuery() (*SimpleQueryResponse, error) {
 		return nil, err
 	}
 
-	var data SimpleQueryResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ SimpleQueryResponse
+	resp := &graphql.Response{Data: &data_}
 
 	err = client.MakeRequest(
 		nil,
@@ -64,6 +64,6 @@ func SimpleQuery() (*SimpleQueryResponse, error) {
 		resp,
 	)
 
-	return &data, err
+	return &data_, err
 }
 

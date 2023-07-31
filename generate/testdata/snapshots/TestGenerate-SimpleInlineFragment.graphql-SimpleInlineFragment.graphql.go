@@ -265,8 +265,8 @@ func SimpleInlineFragment(
 	}
 	var err error
 
-	var data SimpleInlineFragmentResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ SimpleInlineFragmentResponse
+	resp := &graphql.Response{Data: &data_}
 
 	err = client.MakeRequest(
 		nil,
@@ -274,6 +274,6 @@ func SimpleInlineFragment(
 		resp,
 	)
 
-	return &data, err
+	return &data_, err
 }
 

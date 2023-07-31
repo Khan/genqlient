@@ -1,0 +1,9 @@
+{
+  "operations": [
+    {
+      "operationName": "QueryWithDataArg",
+      "query": "\nquery QueryWithDataArg ($data: UserQueryInput) {\n\tuser(data: $data) {\n\t\tid\n\t}\n}\n",
+      "sourceLocation": "testdata/queries/QueryArgCalledData.graphql"
+    }
+  ]
+}

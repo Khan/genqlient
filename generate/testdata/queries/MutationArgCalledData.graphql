@@ -1,0 +1,5 @@
+mutation MutationWithDataArg($data: String!) {
+  updateUser(data: $data) {
+    id
+  }
+}

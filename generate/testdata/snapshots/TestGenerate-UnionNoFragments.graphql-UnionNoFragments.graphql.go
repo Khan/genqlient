@@ -192,8 +192,8 @@ func UnionNoFragmentsQuery(
 	}
 	var err error
 
-	var data UnionNoFragmentsQueryResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ UnionNoFragmentsQueryResponse
+	resp := &graphql.Response{Data: &data_}
 
 	err = client.MakeRequest(
 		nil,
@@ -201,6 +201,6 @@ func UnionNoFragmentsQuery(
 		resp,
 	)
 
-	return &data, err
+	return &data_, err
 }
 

@@ -226,8 +226,8 @@ func CustomMarshalSlice(
 	}
 	var err error
 
-	var data CustomMarshalSliceResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ CustomMarshalSliceResponse
+	resp := &graphql.Response{Data: &data_}
 
 	err = client.MakeRequest(
 		nil,
@@ -235,6 +235,6 @@ func CustomMarshalSlice(
 		resp,
 	)
 
-	return &data, err
+	return &data_, err
 }
 

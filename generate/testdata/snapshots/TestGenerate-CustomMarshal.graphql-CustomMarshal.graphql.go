@@ -197,8 +197,8 @@ func CustomMarshal(
 	}
 	var err error
 
-	var data CustomMarshalResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ CustomMarshalResponse
+	resp := &graphql.Response{Data: &data_}
 
 	err = client.MakeRequest(
 		nil,
@@ -206,6 +206,6 @@ func CustomMarshal(
 		resp,
 	)
 
-	return &data, err
+	return &data_, err
 }
 

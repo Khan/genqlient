@@ -86,8 +86,8 @@ func QueryWithEnums(
 	}
 	var err error
 
-	var data QueryWithEnumsResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ QueryWithEnumsResponse
+	resp := &graphql.Response{Data: &data_}
 
 	err = client.MakeRequest(
 		ctx,
@@ -95,6 +95,6 @@ func QueryWithEnums(
 		resp,
 	)
 
-	return &data, err
+	return &data_, err
 }
 

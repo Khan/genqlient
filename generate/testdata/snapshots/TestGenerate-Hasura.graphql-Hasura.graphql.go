@@ -104,8 +104,8 @@ func GetPokemon(
 	}
 	var err error
 
-	var data GetPokemonResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ GetPokemonResponse
+	resp := &graphql.Response{Data: &data_}
 
 	err = client.MakeRequest(
 		nil,
@@ -113,6 +113,6 @@ func GetPokemon(
 		resp,
 	)
 
-	return &data, err
+	return &data_, err
 }
 

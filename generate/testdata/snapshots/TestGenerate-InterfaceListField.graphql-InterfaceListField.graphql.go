@@ -553,8 +553,8 @@ func InterfaceListField(
 	}
 	var err error
 
-	var data InterfaceListFieldResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ InterfaceListFieldResponse
+	resp := &graphql.Response{Data: &data_}
 
 	err = client.MakeRequest(
 		nil,
@@ -562,6 +562,6 @@ func InterfaceListField(
 		resp,
 	)
 
-	return &data, err
+	return &data_, err
 }
 

@@ -261,8 +261,8 @@ func PointersQuery(
 	}
 	var err error
 
-	var data PointersQueryResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ PointersQueryResponse
+	resp := &graphql.Response{Data: &data_}
 
 	err = client.MakeRequest(
 		nil,
@@ -270,6 +270,6 @@ func PointersQuery(
 		resp,
 	)
 
-	return &data, err
+	return &data_, err
 }
 

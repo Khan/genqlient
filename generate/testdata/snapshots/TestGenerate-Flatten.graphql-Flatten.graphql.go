@@ -313,8 +313,8 @@ func ComplexNamedFragments(
 	}
 	var err error
 
-	var data InnerQueryFragment
-	resp := &graphql.Response{Data: &data}
+	var data_ InnerQueryFragment
+	resp := &graphql.Response{Data: &data_}
 
 	err = client.MakeRequest(
 		nil,
@@ -322,6 +322,6 @@ func ComplexNamedFragments(
 		resp,
 	)
 
-	return &data, err
+	return &data_, err
 }
 

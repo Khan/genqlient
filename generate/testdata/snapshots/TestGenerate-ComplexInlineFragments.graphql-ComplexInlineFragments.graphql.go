@@ -1443,8 +1443,8 @@ func ComplexInlineFragments(
 	}
 	var err error
 
-	var data ComplexInlineFragmentsResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ ComplexInlineFragmentsResponse
+	resp := &graphql.Response{Data: &data_}
 
 	err = client.MakeRequest(
 		nil,
@@ -1452,6 +1452,6 @@ func ComplexInlineFragments(
 		resp,
 	)
 
-	return &data, err
+	return &data_, err
 }
 

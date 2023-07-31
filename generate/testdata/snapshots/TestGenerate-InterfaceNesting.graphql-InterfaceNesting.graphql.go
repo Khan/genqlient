@@ -533,8 +533,8 @@ func InterfaceNesting(
 	}
 	var err error
 
-	var data InterfaceNestingResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ InterfaceNestingResponse
+	resp := &graphql.Response{Data: &data_}
 
 	err = client.MakeRequest(
 		nil,
@@ -542,6 +542,6 @@ func InterfaceNesting(
 		resp,
 	)
 
-	return &data, err
+	return &data_, err
 }
 

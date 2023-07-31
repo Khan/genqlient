@@ -199,8 +199,8 @@ func InputObjectQuery(
 	}
 	var err error
 
-	var data InputObjectQueryResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ InputObjectQueryResponse
+	resp := &graphql.Response{Data: &data_}
 
 	err = client.MakeRequest(
 		nil,
@@ -208,6 +208,6 @@ func InputObjectQuery(
 		resp,
 	)
 
-	return &data, err
+	return &data_, err
 }
 

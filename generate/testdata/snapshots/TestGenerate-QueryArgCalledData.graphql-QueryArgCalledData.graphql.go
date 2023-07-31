@@ -11,6 +11,32 @@ import (
 	"github.com/Khan/genqlient/internal/testutil"
 )
 
+// QueryWithDataArgResponse is returned by QueryWithDataArg on success.
+type QueryWithDataArgResponse struct {
+	// user looks up a user by some stuff.
+	//
+	// See UserQueryInput for what stuff is supported.
+	// If query is null, returns the current user.
+	User QueryWithDataArgUser `json:"user"`
+}
+
+// GetUser returns QueryWithDataArgResponse.User, and is useful for accessing the field via an interface.
+func (v *QueryWithDataArgResponse) GetUser() QueryWithDataArgUser { return v.User }
+
+// QueryWithDataArgUser includes the requested fields of the GraphQL type User.
+// The GraphQL type's documentation follows.
+//
+// A User is a user!
+type QueryWithDataArgUser struct {
+	// id is the user's ID.
+	//
+	// It is stable, unique, and opaque, like all good IDs.
+	Id testutil.ID `json:"id"`
+}
+
+// GetId returns QueryWithDataArgUser.Id, and is useful for accessing the field via an interface.
+func (v *QueryWithDataArgUser) GetId() testutil.ID { return v.Id }
+
 // Role is a type a user may have.
 type Role string
 
@@ -143,63 +169,37 @@ func (v *UserQueryInput) __premarshalJSON() (*__premarshalUserQueryInput, error)
 	return &retval, nil
 }
 
-// __unexportedInput is used internally by genqlient
-type __unexportedInput struct {
-	Query UserQueryInput `json:"query"`
+// __QueryWithDataArgInput is used internally by genqlient
+type __QueryWithDataArgInput struct {
+	Data UserQueryInput `json:"data"`
 }
 
-// GetQuery returns __unexportedInput.Query, and is useful for accessing the field via an interface.
-func (v *__unexportedInput) GetQuery() UserQueryInput { return v.Query }
+// GetData returns __QueryWithDataArgInput.Data, and is useful for accessing the field via an interface.
+func (v *__QueryWithDataArgInput) GetData() UserQueryInput { return v.Data }
 
-// unexportedResponse is returned by unexported on success.
-type unexportedResponse struct {
-	// user looks up a user by some stuff.
-	//
-	// See UserQueryInput for what stuff is supported.
-	// If query is null, returns the current user.
-	User unexportedUser `json:"user"`
-}
-
-// GetUser returns unexportedResponse.User, and is useful for accessing the field via an interface.
-func (v *unexportedResponse) GetUser() unexportedUser { return v.User }
-
-// unexportedUser includes the requested fields of the GraphQL type User.
-// The GraphQL type's documentation follows.
-//
-// A User is a user!
-type unexportedUser struct {
-	// id is the user's ID.
-	//
-	// It is stable, unique, and opaque, like all good IDs.
-	Id testutil.ID `json:"id"`
-}
-
-// GetId returns unexportedUser.Id, and is useful for accessing the field via an interface.
-func (v *unexportedUser) GetId() testutil.ID { return v.Id }
-
-// The query or mutation executed by unexported.
-const unexported_Operation = `
-query unexported ($query: UserQueryInput) {
-	user(query: $query) {
+// The query or mutation executed by QueryWithDataArg.
+const QueryWithDataArg_Operation = `
+query QueryWithDataArg ($data: UserQueryInput) {
+	user(data: $data) {
 		id
 	}
 }
 `
 
-func unexported(
+func QueryWithDataArg(
 	client graphql.Client,
-	query UserQueryInput,
-) (*unexportedResponse, error) {
+	data UserQueryInput,
+) (*QueryWithDataArgResponse, error) {
 	req := &graphql.Request{
-		OpName: "unexported",
-		Query:  unexported_Operation,
-		Variables: &__unexportedInput{
-			Query: query,
+		OpName: "QueryWithDataArg",
+		Query:  QueryWithDataArg_Operation,
+		Variables: &__QueryWithDataArgInput{
+			Data: data,
 		},
 	}
 	var err error
 
-	var data_ unexportedResponse
+	var data_ QueryWithDataArgResponse
 	resp := &graphql.Response{Data: &data_}
 
 	err = client.MakeRequest(

@@ -580,8 +580,8 @@ func SimpleNamedFragment(
 	}
 	var err error
 
-	var data SimpleNamedFragmentResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ SimpleNamedFragmentResponse
+	resp := &graphql.Response{Data: &data_}
 
 	err = client.MakeRequest(
 		nil,
@@ -589,6 +589,6 @@ func SimpleNamedFragment(
 		resp,
 	)
 
-	return &data, err
+	return &data_, err
 }
 

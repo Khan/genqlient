@@ -56,8 +56,8 @@ func SimpleQueryNoOverride(
 	}
 	var err error
 
-	var data SimpleQueryNoOverrideResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ SimpleQueryNoOverrideResponse
+	resp := &graphql.Response{Data: &data_}
 
 	err = client.MakeRequest(
 		nil,
@@ -65,6 +65,6 @@ func SimpleQueryNoOverride(
 		resp,
 	)
 
-	return &data, err
+	return &data_, err
 }
 

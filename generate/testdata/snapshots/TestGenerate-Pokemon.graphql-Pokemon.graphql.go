@@ -103,8 +103,8 @@ func GetPokemonSiblings(
 	}
 	var err error
 
-	var data GetPokemonSiblingsResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ GetPokemonSiblingsResponse
+	resp := &graphql.Response{Data: &data_}
 
 	err = client.MakeRequest(
 		nil,
@@ -112,6 +112,6 @@ func GetPokemonSiblings(
 		resp,
 	)
 
-	return &data, err
+	return &data_, err
 }
 

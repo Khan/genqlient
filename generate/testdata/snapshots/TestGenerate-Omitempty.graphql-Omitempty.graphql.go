@@ -254,8 +254,8 @@ func OmitEmptyQuery(
 	}
 	var err error
 
-	var data OmitEmptyQueryResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ OmitEmptyQueryResponse
+	resp := &graphql.Response{Data: &data_}
 
 	err = client.MakeRequest(
 		nil,
@@ -263,6 +263,6 @@ func OmitEmptyQuery(
 		resp,
 	)
 
-	return &data, err
+	return &data_, err
 }
 

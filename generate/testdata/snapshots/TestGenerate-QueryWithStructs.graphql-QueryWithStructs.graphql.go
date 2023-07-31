@@ -64,8 +64,8 @@ func QueryWithStructs(
 	}
 	var err error
 
-	var data QueryWithStructsResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ QueryWithStructsResponse
+	resp := &graphql.Response{Data: &data_}
 
 	err = client.MakeRequest(
 		nil,
@@ -73,6 +73,6 @@ func QueryWithStructs(
 		resp,
 	)
 
-	return &data, err
+	return &data_, err
 }
 

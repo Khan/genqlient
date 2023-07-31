@@ -63,8 +63,8 @@ func ListInputQuery(
 	}
 	var err error
 
-	var data ListInputQueryResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ ListInputQueryResponse
+	resp := &graphql.Response{Data: &data_}
 
 	err = client.MakeRequest(
 		nil,
@@ -72,6 +72,6 @@ func ListInputQuery(
 		resp,
 	)
 
-	return &data, err
+	return &data_, err
 }
 

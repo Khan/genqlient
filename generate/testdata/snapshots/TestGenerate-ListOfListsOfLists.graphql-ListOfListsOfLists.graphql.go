@@ -32,8 +32,8 @@ func ListOfListsOfLists(
 	}
 	var err error
 
-	var data ListOfListsOfListsResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ ListOfListsOfListsResponse
+	resp := &graphql.Response{Data: &data_}
 
 	err = client.MakeRequest(
 		nil,
@@ -41,6 +41,6 @@ func ListOfListsOfLists(
 		resp,
 	)
 
-	return &data, err
+	return &data_, err
 }
 

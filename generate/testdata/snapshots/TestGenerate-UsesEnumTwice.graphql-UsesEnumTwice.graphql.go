@@ -83,8 +83,8 @@ func UsesEnumTwiceQuery(
 	}
 	var err error
 
-	var data UsesEnumTwiceQueryResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ UsesEnumTwiceQueryResponse
+	resp := &graphql.Response{Data: &data_}
 
 	err = client.MakeRequest(
 		nil,
@@ -92,6 +92,6 @@ func UsesEnumTwiceQuery(
 		resp,
 	)
 
-	return &data, err
+	return &data_, err
 }
 

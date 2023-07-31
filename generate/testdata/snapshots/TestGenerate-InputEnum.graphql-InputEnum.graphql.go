@@ -76,8 +76,8 @@ func InputEnumQuery(
 	}
 	var err error
 
-	var data InputEnumQueryResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ InputEnumQueryResponse
+	resp := &graphql.Response{Data: &data_}
 
 	err = client.MakeRequest(
 		nil,
@@ -85,6 +85,6 @@ func InputEnumQuery(
 		resp,
 	)
 
-	return &data, err
+	return &data_, err
 }
 

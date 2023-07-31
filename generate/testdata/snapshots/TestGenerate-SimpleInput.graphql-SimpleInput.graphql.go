@@ -63,8 +63,8 @@ func SimpleInputQuery(
 	}
 	var err error
 
-	var data SimpleInputQueryResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ SimpleInputQueryResponse
+	resp := &graphql.Response{Data: &data_}
 
 	err = client.MakeRequest(
 		nil,
@@ -72,6 +72,6 @@ func SimpleInputQuery(
 		resp,
 	)
 
-	return &data, err
+	return &data_, err
 }
 

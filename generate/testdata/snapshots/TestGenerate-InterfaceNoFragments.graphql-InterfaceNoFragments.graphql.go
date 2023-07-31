@@ -660,8 +660,8 @@ func InterfaceNoFragmentsQuery(
 	}
 	var err error
 
-	var data InterfaceNoFragmentsQueryResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ InterfaceNoFragmentsQueryResponse
+	resp := &graphql.Response{Data: &data_}
 
 	err = client.MakeRequest(
 		nil,
@@ -669,6 +669,6 @@ func InterfaceNoFragmentsQuery(
 		resp,
 	)
 
-	return &data, err
+	return &data_, err
 }
 

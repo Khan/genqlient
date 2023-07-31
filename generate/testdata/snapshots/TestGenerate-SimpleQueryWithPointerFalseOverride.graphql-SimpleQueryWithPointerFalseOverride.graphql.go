@@ -58,8 +58,8 @@ func SimpleQueryWithPointerFalseOverride(
 	}
 	var err error
 
-	var data SimpleQueryWithPointerFalseOverrideResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ SimpleQueryWithPointerFalseOverrideResponse
+	resp := &graphql.Response{Data: &data_}
 
 	err = client.MakeRequest(
 		nil,
@@ -67,6 +67,6 @@ func SimpleQueryWithPointerFalseOverride(
 		resp,
 	)
 
-	return &data, err
+	return &data_, err
 }
 

@@ -96,8 +96,8 @@ func Recursion(
 	}
 	var err error
 
-	var data RecursionResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ RecursionResponse
+	resp := &graphql.Response{Data: &data_}
 
 	err = client.MakeRequest(
 		nil,
@@ -105,6 +105,6 @@ func Recursion(
 		resp,
 	)
 
-	return &data, err
+	return &data_, err
 }
 

@@ -94,8 +94,8 @@ func getUser(
 	}
 	var err error
 
-	var data getUserResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ getUserResponse
+	resp := &graphql.Response{Data: &data_}
 
 	err = client.MakeRequest(
 		ctx,
@@ -103,7 +103,7 @@ func getUser(
 		resp,
 	)
 
-	return &data, err
+	return &data_, err
 }
 
 // The query or mutation executed by getViewer.
@@ -126,8 +126,8 @@ func getViewer(
 	}
 	var err error
 
-	var data getViewerResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ getViewerResponse
+	resp := &graphql.Response{Data: &data_}
 
 	err = client.MakeRequest(
 		ctx,
@@ -135,5 +135,5 @@ func getViewer(
 		resp,
 	)
 
-	return &data, err
+	return &data_, err
 }

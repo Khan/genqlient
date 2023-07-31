@@ -292,8 +292,8 @@ func TypeNames(
 	}
 	var err error
 
-	var data Resp
-	resp := &graphql.Response{Data: &data}
+	var data_ Resp
+	resp := &graphql.Response{Data: &data_}
 
 	err = client.MakeRequest(
 		nil,
@@ -301,6 +301,6 @@ func TypeNames(
 		resp,
 	)
 
-	return &data, err
+	return &data_, err
 }
 

@@ -68,8 +68,8 @@ func SimpleMutation(
 	}
 	var err error
 
-	var data SimpleMutationResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ SimpleMutationResponse
+	resp := &graphql.Response{Data: &data_}
 
 	err = client.MakeRequest(
 		nil,
@@ -77,6 +77,6 @@ func SimpleMutation(
 		resp,
 	)
 
-	return &data, err
+	return &data_, err
 }
 

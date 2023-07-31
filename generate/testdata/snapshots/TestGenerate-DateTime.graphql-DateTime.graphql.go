@@ -50,8 +50,8 @@ func convertTimezone(
 	}
 	var err error
 
-	var data convertTimezoneResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ convertTimezoneResponse
+	resp := &graphql.Response{Data: &data_}
 
 	err = client.MakeRequest(
 		nil,
@@ -59,6 +59,6 @@ func convertTimezone(
 		resp,
 	)
 
-	return &data, err
+	return &data_, err
 }
 

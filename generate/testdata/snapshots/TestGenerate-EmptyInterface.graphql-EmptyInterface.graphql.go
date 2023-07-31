@@ -37,8 +37,8 @@ func EmptyInterface(
 	}
 	var err error
 
-	var data EmptyInterfaceResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ EmptyInterfaceResponse
+	resp := &graphql.Response{Data: &data_}
 
 	err = client.MakeRequest(
 		nil,
@@ -46,6 +46,6 @@ func EmptyInterface(
 		resp,
 	)
 
-	return &data, err
+	return &data_, err
 }
 

@@ -2401,8 +2401,8 @@ func CovariantInterfaceImplementation(
 	}
 	var err error
 
-	var data CovariantInterfaceImplementationResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ CovariantInterfaceImplementationResponse
+	resp := &graphql.Response{Data: &data_}
 
 	err = client.MakeRequest(
 		nil,
@@ -2410,6 +2410,6 @@ func CovariantInterfaceImplementation(
 		resp,
 	)
 
-	return &data, err
+	return &data_, err
 }
 
