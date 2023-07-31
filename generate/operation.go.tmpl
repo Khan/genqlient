@@ -36,8 +36,8 @@ func {{.Name}}(
         return nil, {{if .Config.Extensions -}}nil,{{end -}} err
     }
     {{end}}
-    var data {{.ResponseName}}
-    resp := &graphql.Response{Data: &data}
+    var data_ {{.ResponseName}}
+    resp := &graphql.Response{Data: &data_}
 
     err = client.MakeRequest(
         {{if ne .Config.ContextType "-"}}ctx{{else}}nil{{end}},
@@ -45,5 +45,5 @@ func {{.Name}}(
         resp,
     )
 	
-    return &data, {{if .Config.Extensions -}}resp.Extensions,{{end -}} err
+    return &data_, {{if .Config.Extensions -}}resp.Extensions,{{end -}} err
 }
