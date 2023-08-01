@@ -77,7 +77,7 @@ query QueryWithEnums {
 `
 
 func QueryWithEnums(
-	ctx context.Context,
+	ctx_ context.Context,
 	client_ graphql.Client,
 ) (*QueryWithEnumsResponse, error) {
 	req_ := &graphql.Request{
@@ -90,7 +90,7 @@ func QueryWithEnums(
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
-		ctx,
+		ctx_,
 		req_,
 		resp_,
 	)

@@ -87,7 +87,7 @@ query ListInputQuery ($names: [String]) {
 `
 
 func ListInputQuery(
-	ctx context.Context,
+	ctx_ context.Context,
 	client_ graphql.Client,
 	names []string,
 ) (*ListInputQueryResponse, error) {
@@ -104,7 +104,7 @@ func ListInputQuery(
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
-		ctx,
+		ctx_,
 		req_,
 		resp_,
 	)
@@ -125,7 +125,7 @@ query QueryWithSlices {
 `
 
 func QueryWithSlices(
-	ctx context.Context,
+	ctx_ context.Context,
 	client_ graphql.Client,
 ) (*QueryWithSlicesResponse, error) {
 	req_ := &graphql.Request{
@@ -138,7 +138,7 @@ func QueryWithSlices(
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
-		ctx,
+		ctx_,
 		req_,
 		resp_,
 	)

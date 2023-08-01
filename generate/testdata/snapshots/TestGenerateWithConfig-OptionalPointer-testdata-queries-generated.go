@@ -149,7 +149,7 @@ query ListInputQuery ($names: [String]) {
 `
 
 func ListInputQuery(
-	ctx context.Context,
+	ctx_ context.Context,
 	client_ graphql.Client,
 	names []*string,
 ) (*ListInputQueryResponse, error) {
@@ -166,7 +166,7 @@ func ListInputQuery(
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
-		ctx,
+		ctx_,
 		req_,
 		resp_,
 	)
@@ -187,7 +187,7 @@ query QueryWithSlices {
 `
 
 func QueryWithSlices(
-	ctx context.Context,
+	ctx_ context.Context,
 	client_ graphql.Client,
 ) (*QueryWithSlicesResponse, error) {
 	req_ := &graphql.Request{
@@ -200,7 +200,7 @@ func QueryWithSlices(
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
-		ctx,
+		ctx_,
 		req_,
 		resp_,
 	)
@@ -219,7 +219,7 @@ query SimpleQueryNoOverride {
 `
 
 func SimpleQueryNoOverride(
-	ctx context.Context,
+	ctx_ context.Context,
 	client_ graphql.Client,
 ) (*SimpleQueryNoOverrideResponse, error) {
 	req_ := &graphql.Request{
@@ -232,7 +232,7 @@ func SimpleQueryNoOverride(
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
-		ctx,
+		ctx_,
 		req_,
 		resp_,
 	)
@@ -251,7 +251,7 @@ query SimpleQueryWithPointerFalseOverride {
 `
 
 func SimpleQueryWithPointerFalseOverride(
-	ctx context.Context,
+	ctx_ context.Context,
 	client_ graphql.Client,
 ) (*SimpleQueryWithPointerFalseOverrideResponse, error) {
 	req_ := &graphql.Request{
@@ -264,7 +264,7 @@ func SimpleQueryWithPointerFalseOverride(
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
-		ctx,
+		ctx_,
 		req_,
 		resp_,
 	)

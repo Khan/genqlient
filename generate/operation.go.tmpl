@@ -4,7 +4,7 @@ const {{.Name}}_Operation = `{{$.Body}}`
 {{.Doc}}
 func {{.Name}}(
     {{if ne .Config.ContextType "-" -}}
-    ctx {{ref .Config.ContextType}},
+    ctx_ {{ref .Config.ContextType}},
     {{end}}
     {{- if not .Config.ClientGetter -}}
     client_ {{ref "github.com/Khan/genqlient/graphql.Client"}},
@@ -31,7 +31,7 @@ func {{.Name}}(
     {{if .Config.ClientGetter -}}
     var client_ graphql.Client
 
-    client_, err_ = {{ref .Config.ClientGetter}}({{if ne .Config.ContextType "-"}}ctx{{else}}{{end}})
+    client_, err_ = {{ref .Config.ClientGetter}}({{if ne .Config.ContextType "-"}}ctx_{{else}}{{end}})
     if err_ != nil {
         return nil, {{if .Config.Extensions -}}nil,{{end -}} err_
     }
@@ -40,7 +40,7 @@ func {{.Name}}(
     resp_ := &graphql.Response{Data: &data_}
 
     err_ = client_.MakeRequest(
-        {{if ne .Config.ContextType "-"}}ctx{{else}}nil{{end}},
+        {{if ne .Config.ContextType "-"}}ctx_{{else}}nil{{end}},
         req_,
         resp_,
     )
