@@ -1435,21 +1435,21 @@ query ComplexInlineFragments {
 // versa, because gqlparser doesn't support interfaces that implement other
 // interfaces yet.
 func ComplexInlineFragments(
-	client graphql.Client,
+	client_ graphql.Client,
 ) (*ComplexInlineFragmentsResponse, error) {
-	req := &graphql.Request{
+	req_ := &graphql.Request{
 		OpName: "ComplexInlineFragments",
 		Query:  ComplexInlineFragments_Operation,
 	}
 	var err_ error
 
 	var data_ ComplexInlineFragmentsResponse
-	resp := &graphql.Response{Data: &data_}
+	resp_ := &graphql.Response{Data: &data_}
 
-	err_ = client.MakeRequest(
+	err_ = client_.MakeRequest(
 		nil,
-		req,
-		resp,
+		req_,
+		resp_,
 	)
 
 	return &data_, err_

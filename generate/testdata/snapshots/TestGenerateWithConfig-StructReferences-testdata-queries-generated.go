@@ -237,10 +237,10 @@ query InputObjectQuery ($query: UserQueryInput) {
 
 func InputObjectQuery(
 	ctx context.Context,
-	client graphql.Client,
+	client_ graphql.Client,
 	query *UserQueryInput,
 ) (*InputObjectQueryResponse, error) {
-	req := &graphql.Request{
+	req_ := &graphql.Request{
 		OpName: "InputObjectQuery",
 		Query:  InputObjectQuery_Operation,
 		Variables: &__InputObjectQueryInput{
@@ -250,12 +250,12 @@ func InputObjectQuery(
 	var err_ error
 
 	var data_ InputObjectQueryResponse
-	resp := &graphql.Response{Data: &data_}
+	resp_ := &graphql.Response{Data: &data_}
 
-	err_ = client.MakeRequest(
+	err_ = client_.MakeRequest(
 		ctx,
-		req,
-		resp,
+		req_,
+		resp_,
 	)
 
 	return &data_, err_
@@ -275,21 +275,21 @@ query QueryWithStructs {
 
 func QueryWithStructs(
 	ctx context.Context,
-	client graphql.Client,
+	client_ graphql.Client,
 ) (*QueryWithStructsResponse, error) {
-	req := &graphql.Request{
+	req_ := &graphql.Request{
 		OpName: "QueryWithStructs",
 		Query:  QueryWithStructs_Operation,
 	}
 	var err_ error
 
 	var data_ QueryWithStructsResponse
-	resp := &graphql.Response{Data: &data_}
+	resp_ := &graphql.Response{Data: &data_}
 
-	err_ = client.MakeRequest(
+	err_ = client_.MakeRequest(
 		ctx,
-		req,
-		resp,
+		req_,
+		resp_,
 	)
 
 	return &data_, err_

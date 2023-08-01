@@ -29,21 +29,21 @@ query EmptyInterface {
 `
 
 func EmptyInterface(
-	client graphql.Client,
+	client_ graphql.Client,
 ) (*EmptyInterfaceResponse, error) {
-	req := &graphql.Request{
+	req_ := &graphql.Request{
 		OpName: "EmptyInterface",
 		Query:  EmptyInterface_Operation,
 	}
 	var err_ error
 
 	var data_ EmptyInterfaceResponse
-	resp := &graphql.Response{Data: &data_}
+	resp_ := &graphql.Response{Data: &data_}
 
-	err_ = client.MakeRequest(
+	err_ = client_.MakeRequest(
 		nil,
-		req,
-		resp,
+		req_,
+		resp_,
 	)
 
 	return &data_, err_

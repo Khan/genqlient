@@ -234,14 +234,14 @@ query OmitEmptyQuery ($query: UserQueryInput, $queries: [UserQueryInput], $dt: D
 `
 
 func OmitEmptyQuery(
-	client graphql.Client,
+	client_ graphql.Client,
 	query UserQueryInput,
 	queries []UserQueryInput,
 	dt time.Time,
 	tz string,
 	tzNoOmitEmpty string,
 ) (*OmitEmptyQueryResponse, error) {
-	req := &graphql.Request{
+	req_ := &graphql.Request{
 		OpName: "OmitEmptyQuery",
 		Query:  OmitEmptyQuery_Operation,
 		Variables: &__OmitEmptyQueryInput{
@@ -255,12 +255,12 @@ func OmitEmptyQuery(
 	var err_ error
 
 	var data_ OmitEmptyQueryResponse
-	resp := &graphql.Response{Data: &data_}
+	resp_ := &graphql.Response{Data: &data_}
 
-	err_ = client.MakeRequest(
+	err_ = client_.MakeRequest(
 		nil,
-		req,
-		resp,
+		req_,
+		resp_,
 	)
 
 	return &data_, err_

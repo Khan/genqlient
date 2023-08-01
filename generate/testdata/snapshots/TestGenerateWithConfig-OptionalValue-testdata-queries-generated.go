@@ -88,10 +88,10 @@ query ListInputQuery ($names: [String]) {
 
 func ListInputQuery(
 	ctx context.Context,
-	client graphql.Client,
+	client_ graphql.Client,
 	names []string,
 ) (*ListInputQueryResponse, error) {
-	req := &graphql.Request{
+	req_ := &graphql.Request{
 		OpName: "ListInputQuery",
 		Query:  ListInputQuery_Operation,
 		Variables: &__ListInputQueryInput{
@@ -101,12 +101,12 @@ func ListInputQuery(
 	var err_ error
 
 	var data_ ListInputQueryResponse
-	resp := &graphql.Response{Data: &data_}
+	resp_ := &graphql.Response{Data: &data_}
 
-	err_ = client.MakeRequest(
+	err_ = client_.MakeRequest(
 		ctx,
-		req,
-		resp,
+		req_,
+		resp_,
 	)
 
 	return &data_, err_
@@ -126,21 +126,21 @@ query QueryWithSlices {
 
 func QueryWithSlices(
 	ctx context.Context,
-	client graphql.Client,
+	client_ graphql.Client,
 ) (*QueryWithSlicesResponse, error) {
-	req := &graphql.Request{
+	req_ := &graphql.Request{
 		OpName: "QueryWithSlices",
 		Query:  QueryWithSlices_Operation,
 	}
 	var err_ error
 
 	var data_ QueryWithSlicesResponse
-	resp := &graphql.Response{Data: &data_}
+	resp_ := &graphql.Response{Data: &data_}
 
-	err_ = client.MakeRequest(
+	err_ = client_.MakeRequest(
 		ctx,
-		req,
-		resp,
+		req_,
+		resp_,
 	)
 
 	return &data_, err_

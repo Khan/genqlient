@@ -1,0 +1,5 @@
+mutation MutationArgsWithCollidingNames($data: String!, $req: Int, $resp: Int, $client: String) {
+  updateUser(data: $data, req: $req, resp: $resp, client: $client) {
+    id
+  }
+}

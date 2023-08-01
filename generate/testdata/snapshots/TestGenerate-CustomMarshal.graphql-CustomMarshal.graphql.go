@@ -185,10 +185,10 @@ query CustomMarshal ($date: Date!) {
 `
 
 func CustomMarshal(
-	client graphql.Client,
+	client_ graphql.Client,
 	date time.Time,
 ) (*CustomMarshalResponse, error) {
-	req := &graphql.Request{
+	req_ := &graphql.Request{
 		OpName: "CustomMarshal",
 		Query:  CustomMarshal_Operation,
 		Variables: &__CustomMarshalInput{
@@ -198,12 +198,12 @@ func CustomMarshal(
 	var err_ error
 
 	var data_ CustomMarshalResponse
-	resp := &graphql.Response{Data: &data_}
+	resp_ := &graphql.Response{Data: &data_}
 
-	err_ = client.MakeRequest(
+	err_ = client_.MakeRequest(
 		nil,
-		req,
-		resp,
+		req_,
+		resp_,
 	)
 
 	return &data_, err_

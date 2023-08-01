@@ -185,7 +185,9 @@ type Query {
 
 type Mutation {
   createUser(name: String!, email: String): User
-  updateUser(data: String!): User
+  # The following query is non-sensical, but tests that argument names don't 
+  # collide with local var names in generated functions
+  updateUser(data: String!, req: Int, resp: Int, client: String): User
 }
 
 input getPokemonBoolExp {

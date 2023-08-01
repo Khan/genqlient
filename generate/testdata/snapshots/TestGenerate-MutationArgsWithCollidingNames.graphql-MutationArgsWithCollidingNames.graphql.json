@@ -1,0 +1,9 @@
+{
+  "operations": [
+    {
+      "operationName": "MutationArgsWithCollidingNames",
+      "query": "\nmutation MutationArgsWithCollidingNames ($data: String!, $req: Int, $resp: Int, $client: String) {\n\tupdateUser(data: $data, req: $req, resp: $resp, client: $client) {\n\t\tid\n\t}\n}\n",
+      "sourceLocation": "testdata/queries/MutationArgsWithCollidingNames.graphql"
+    }
+  ]
+}

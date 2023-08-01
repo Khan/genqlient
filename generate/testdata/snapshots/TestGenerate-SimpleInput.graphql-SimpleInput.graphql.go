@@ -51,10 +51,10 @@ query SimpleInputQuery ($name: String!) {
 `
 
 func SimpleInputQuery(
-	client graphql.Client,
+	client_ graphql.Client,
 	name string,
 ) (*SimpleInputQueryResponse, error) {
-	req := &graphql.Request{
+	req_ := &graphql.Request{
 		OpName: "SimpleInputQuery",
 		Query:  SimpleInputQuery_Operation,
 		Variables: &__SimpleInputQueryInput{
@@ -64,12 +64,12 @@ func SimpleInputQuery(
 	var err_ error
 
 	var data_ SimpleInputQueryResponse
-	resp := &graphql.Response{Data: &data_}
+	resp_ := &graphql.Response{Data: &data_}
 
-	err_ = client.MakeRequest(
+	err_ = client_.MakeRequest(
 		nil,
-		req,
-		resp,
+		req_,
+		resp_,
 	)
 
 	return &data_, err_

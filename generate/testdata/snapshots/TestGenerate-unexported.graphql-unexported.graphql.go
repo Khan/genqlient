@@ -187,10 +187,10 @@ query unexported ($query: UserQueryInput) {
 `
 
 func unexported(
-	client graphql.Client,
+	client_ graphql.Client,
 	query UserQueryInput,
 ) (*unexportedResponse, error) {
-	req := &graphql.Request{
+	req_ := &graphql.Request{
 		OpName: "unexported",
 		Query:  unexported_Operation,
 		Variables: &__unexportedInput{
@@ -200,12 +200,12 @@ func unexported(
 	var err_ error
 
 	var data_ unexportedResponse
-	resp := &graphql.Response{Data: &data_}
+	resp_ := &graphql.Response{Data: &data_}
 
-	err_ = client.MakeRequest(
+	err_ = client_.MakeRequest(
 		nil,
-		req,
-		resp,
+		req_,
+		resp_,
 	)
 
 	return &data_, err_

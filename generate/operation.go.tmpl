@@ -7,7 +7,7 @@ func {{.Name}}(
     ctx {{ref .Config.ContextType}},
     {{end}}
     {{- if not .Config.ClientGetter -}}
-    client {{ref "github.com/Khan/genqlient/graphql.Client"}},
+    client_ {{ref "github.com/Khan/genqlient/graphql.Client"}},
     {{end}}
     {{- if .Input -}}
     {{- range .Input.Fields -}}
@@ -16,7 +16,7 @@ func {{.Name}}(
     {{end -}}
     {{end -}}
 ) (*{{.ResponseName}}, {{if .Config.Extensions -}}map[string]interface{},{{end}} error) {
-    req := &graphql.Request{
+    req_ := &graphql.Request{
         OpName: "{{.Name}}",
         Query:  {{.Name}}_Operation,
     {{if .Input -}}
@@ -29,21 +29,21 @@ func {{.Name}}(
     }
     var err_ error
     {{if .Config.ClientGetter -}}
-    var client graphql.Client
+    var client_ graphql.Client
 
-    client, err_ = {{ref .Config.ClientGetter}}({{if ne .Config.ContextType "-"}}ctx{{else}}{{end}})
+    client_, err_ = {{ref .Config.ClientGetter}}({{if ne .Config.ContextType "-"}}ctx{{else}}{{end}})
     if err_ != nil {
         return nil, {{if .Config.Extensions -}}nil,{{end -}} err_
     }
     {{end}}
     var data_ {{.ResponseName}}
-    resp := &graphql.Response{Data: &data_}
+    resp_ := &graphql.Response{Data: &data_}
 
-    err_ = client.MakeRequest(
+    err_ = client_.MakeRequest(
         {{if ne .Config.ContextType "-"}}ctx{{else}}nil{{end}},
-        req,
-        resp,
+        req_,
+        resp_,
     )
 	
-    return &data_, {{if .Config.Extensions -}}resp.Extensions,{{end -}} err_
+    return &data_, {{if .Config.Extensions -}}resp_.Extensions,{{end -}} err_
 }

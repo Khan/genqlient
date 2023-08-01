@@ -212,11 +212,11 @@ query CustomMarshalSlice ($datesss: [[[Date!]!]!]!, $datesssp: [[[Date!]!]!]!) {
 `
 
 func CustomMarshalSlice(
-	client graphql.Client,
+	client_ graphql.Client,
 	datesss [][][]time.Time,
 	datesssp [][][]*time.Time,
 ) (*CustomMarshalSliceResponse, error) {
-	req := &graphql.Request{
+	req_ := &graphql.Request{
 		OpName: "CustomMarshalSlice",
 		Query:  CustomMarshalSlice_Operation,
 		Variables: &__CustomMarshalSliceInput{
@@ -227,12 +227,12 @@ func CustomMarshalSlice(
 	var err_ error
 
 	var data_ CustomMarshalSliceResponse
-	resp := &graphql.Response{Data: &data_}
+	resp_ := &graphql.Response{Data: &data_}
 
-	err_ = client.MakeRequest(
+	err_ = client_.MakeRequest(
 		nil,
-		req,
-		resp,
+		req_,
+		resp_,
 	)
 
 	return &data_, err_
