@@ -27,23 +27,23 @@ func {{.Name}}(
         },
     {{end -}}
     }
-    var err error
+    var err_ error
     {{if .Config.ClientGetter -}}
     var client graphql.Client
 
-    client, err = {{ref .Config.ClientGetter}}({{if ne .Config.ContextType "-"}}ctx{{else}}{{end}})
-    if err != nil {
-        return nil, {{if .Config.Extensions -}}nil,{{end -}} err
+    client, err_ = {{ref .Config.ClientGetter}}({{if ne .Config.ContextType "-"}}ctx{{else}}{{end}})
+    if err_ != nil {
+        return nil, {{if .Config.Extensions -}}nil,{{end -}} err_
     }
     {{end}}
     var data_ {{.ResponseName}}
     resp := &graphql.Response{Data: &data_}
 
-    err = client.MakeRequest(
+    err_ = client.MakeRequest(
         {{if ne .Config.ContextType "-"}}ctx{{else}}nil{{end}},
         req,
         resp,
     )
 	
-    return &data_, {{if .Config.Extensions -}}resp.Extensions,{{end -}} err
+    return &data_, {{if .Config.Extensions -}}resp.Extensions,{{end -}} err_
 }

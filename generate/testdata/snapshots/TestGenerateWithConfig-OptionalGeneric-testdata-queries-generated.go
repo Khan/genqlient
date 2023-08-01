@@ -103,18 +103,18 @@ func ListInputQuery(
 			Names: names,
 		},
 	}
-	var err error
+	var err_ error
 
 	var data_ ListInputQueryResponse
 	resp := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
+	err_ = client.MakeRequest(
 		ctx,
 		req,
 		resp,
 	)
 
-	return &data_, err
+	return &data_, err_
 }
 
 // The query or mutation executed by QueryWithSlices.
@@ -137,17 +137,17 @@ func QueryWithSlices(
 		OpName: "QueryWithSlices",
 		Query:  QueryWithSlices_Operation,
 	}
-	var err error
+	var err_ error
 
 	var data_ QueryWithSlicesResponse
 	resp := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
+	err_ = client.MakeRequest(
 		ctx,
 		req,
 		resp,
 	)
 
-	return &data_, err
+	return &data_, err_
 }
 

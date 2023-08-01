@@ -51,17 +51,17 @@ func SimpleQuery(
 		OpName: "SimpleQuery",
 		Query:  SimpleQuery_Operation,
 	}
-	var err error
+	var err_ error
 
 	var data_ SimpleQueryResponse
 	resp := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
+	err_ = client.MakeRequest(
 		ctx,
 		req,
 		resp,
 	)
 
-	return &data_, resp.Extensions, err
+	return &data_, resp.Extensions, err_
 }
 

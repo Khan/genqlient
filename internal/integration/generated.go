@@ -3100,18 +3100,18 @@ func createUser(
 			User: user,
 		},
 	}
-	var err error
+	var err_ error
 
 	var data_ createUserResponse
 	resp := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
+	err_ = client.MakeRequest(
 		ctx,
 		req,
 		resp,
 	)
 
-	return &data_, resp.Extensions, err
+	return &data_, resp.Extensions, err_
 }
 
 // The query or mutation executed by failingQuery.
@@ -3132,18 +3132,18 @@ func failingQuery(
 		OpName: "failingQuery",
 		Query:  failingQuery_Operation,
 	}
-	var err error
+	var err_ error
 
 	var data_ failingQueryResponse
 	resp := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
+	err_ = client.MakeRequest(
 		ctx,
 		req,
 		resp,
 	)
 
-	return &data_, resp.Extensions, err
+	return &data_, resp.Extensions, err_
 }
 
 // The query or mutation executed by queryWithCustomMarshal.
@@ -3169,18 +3169,18 @@ func queryWithCustomMarshal(
 			Date: date,
 		},
 	}
-	var err error
+	var err_ error
 
 	var data_ queryWithCustomMarshalResponse
 	resp := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
+	err_ = client.MakeRequest(
 		ctx,
 		req,
 		resp,
 	)
 
-	return &data_, resp.Extensions, err
+	return &data_, resp.Extensions, err_
 }
 
 // The query or mutation executed by queryWithCustomMarshalOptional.
@@ -3208,18 +3208,18 @@ func queryWithCustomMarshalOptional(
 			Id:   id,
 		},
 	}
-	var err error
+	var err_ error
 
 	var data_ queryWithCustomMarshalOptionalResponse
 	resp := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
+	err_ = client.MakeRequest(
 		ctx,
 		req,
 		resp,
 	)
 
-	return &data_, resp.Extensions, err
+	return &data_, resp.Extensions, err_
 }
 
 // The query or mutation executed by queryWithCustomMarshalSlice.
@@ -3245,18 +3245,18 @@ func queryWithCustomMarshalSlice(
 			Dates: dates,
 		},
 	}
-	var err error
+	var err_ error
 
 	var data_ queryWithCustomMarshalSliceResponse
 	resp := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
+	err_ = client.MakeRequest(
 		ctx,
 		req,
 		resp,
 	)
 
-	return &data_, resp.Extensions, err
+	return &data_, resp.Extensions, err_
 }
 
 // The query or mutation executed by queryWithFlatten.
@@ -3316,18 +3316,18 @@ func queryWithFlatten(
 			Ids: ids,
 		},
 	}
-	var err error
+	var err_ error
 
 	var data_ QueryFragment
 	resp := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
+	err_ = client.MakeRequest(
 		ctx,
 		req,
 		resp,
 	)
 
-	return &data_, resp.Extensions, err
+	return &data_, resp.Extensions, err_
 }
 
 // The query or mutation executed by queryWithFragments.
@@ -3381,18 +3381,18 @@ func queryWithFragments(
 			Ids: ids,
 		},
 	}
-	var err error
+	var err_ error
 
 	var data_ queryWithFragmentsResponse
 	resp := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
+	err_ = client.MakeRequest(
 		ctx,
 		req,
 		resp,
 	)
 
-	return &data_, resp.Extensions, err
+	return &data_, resp.Extensions, err_
 }
 
 // The query or mutation executed by queryWithInterfaceListField.
@@ -3418,18 +3418,18 @@ func queryWithInterfaceListField(
 			Ids: ids,
 		},
 	}
-	var err error
+	var err_ error
 
 	var data_ queryWithInterfaceListFieldResponse
 	resp := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
+	err_ = client.MakeRequest(
 		ctx,
 		req,
 		resp,
 	)
 
-	return &data_, resp.Extensions, err
+	return &data_, resp.Extensions, err_
 }
 
 // The query or mutation executed by queryWithInterfaceListPointerField.
@@ -3455,18 +3455,18 @@ func queryWithInterfaceListPointerField(
 			Ids: ids,
 		},
 	}
-	var err error
+	var err_ error
 
 	var data_ queryWithInterfaceListPointerFieldResponse
 	resp := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
+	err_ = client.MakeRequest(
 		ctx,
 		req,
 		resp,
 	)
 
-	return &data_, resp.Extensions, err
+	return &data_, resp.Extensions, err_
 }
 
 // The query or mutation executed by queryWithInterfaceNoFragments.
@@ -3496,18 +3496,18 @@ func queryWithInterfaceNoFragments(
 			Id: id,
 		},
 	}
-	var err error
+	var err_ error
 
 	var data_ queryWithInterfaceNoFragmentsResponse
 	resp := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
+	err_ = client.MakeRequest(
 		ctx,
 		req,
 		resp,
 	)
 
-	return &data_, resp.Extensions, err
+	return &data_, resp.Extensions, err_
 }
 
 // The query or mutation executed by queryWithNamedFragments.
@@ -3561,18 +3561,18 @@ func queryWithNamedFragments(
 			Ids: ids,
 		},
 	}
-	var err error
+	var err_ error
 
 	var data_ queryWithNamedFragmentsResponse
 	resp := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
+	err_ = client.MakeRequest(
 		ctx,
 		req,
 		resp,
 	)
 
-	return &data_, resp.Extensions, err
+	return &data_, resp.Extensions, err_
 }
 
 // The query or mutation executed by queryWithOmitempty.
@@ -3598,18 +3598,18 @@ func queryWithOmitempty(
 			Id: id,
 		},
 	}
-	var err error
+	var err_ error
 
 	var data_ queryWithOmitemptyResponse
 	resp := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
+	err_ = client.MakeRequest(
 		ctx,
 		req,
 		resp,
 	)
 
-	return &data_, resp.Extensions, err
+	return &data_, resp.Extensions, err_
 }
 
 // The query or mutation executed by queryWithVariables.
@@ -3635,18 +3635,18 @@ func queryWithVariables(
 			Id: id,
 		},
 	}
-	var err error
+	var err_ error
 
 	var data_ queryWithVariablesResponse
 	resp := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
+	err_ = client.MakeRequest(
 		ctx,
 		req,
 		resp,
 	)
 
-	return &data_, resp.Extensions, err
+	return &data_, resp.Extensions, err_
 }
 
 // The query or mutation executed by simpleQuery.
@@ -3668,18 +3668,18 @@ func simpleQuery(
 		OpName: "simpleQuery",
 		Query:  simpleQuery_Operation,
 	}
-	var err error
+	var err_ error
 
 	var data_ simpleQueryResponse
 	resp := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
+	err_ = client.MakeRequest(
 		ctx,
 		req,
 		resp,
 	)
 
-	return &data_, resp.Extensions, err
+	return &data_, resp.Extensions, err_
 }
 
 // The query or mutation executed by simpleQueryExt.
@@ -3701,16 +3701,16 @@ func simpleQueryExt(
 		OpName: "simpleQueryExt",
 		Query:  simpleQueryExt_Operation,
 	}
-	var err error
+	var err_ error
 
 	var data_ simpleQueryExtResponse
 	resp := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
+	err_ = client.MakeRequest(
 		ctx,
 		req,
 		resp,
 	)
 
-	return &data_, resp.Extensions, err
+	return &data_, resp.Extensions, err_
 }

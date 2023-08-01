@@ -658,17 +658,17 @@ func InterfaceNoFragmentsQuery(
 		OpName: "InterfaceNoFragmentsQuery",
 		Query:  InterfaceNoFragmentsQuery_Operation,
 	}
-	var err error
+	var err_ error
 
 	var data_ InterfaceNoFragmentsQueryResponse
 	resp := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
+	err_ = client.MakeRequest(
 		nil,
 		req,
 		resp,
 	)
 
-	return &data_, err
+	return &data_, err_
 }
 

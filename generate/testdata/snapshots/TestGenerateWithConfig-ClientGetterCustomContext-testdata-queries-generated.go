@@ -54,23 +54,23 @@ func SimpleQuery(
 		OpName: "SimpleQuery",
 		Query:  SimpleQuery_Operation,
 	}
-	var err error
+	var err_ error
 	var client graphql.Client
 
-	client, err = testutil.GetClientFromMyContext(ctx)
-	if err != nil {
-		return nil, err
+	client, err_ = testutil.GetClientFromMyContext(ctx)
+	if err_ != nil {
+		return nil, err_
 	}
 
 	var data_ SimpleQueryResponse
 	resp := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
+	err_ = client.MakeRequest(
 		ctx,
 		req,
 		resp,
 	)
 
-	return &data_, err
+	return &data_, err_
 }
 

@@ -250,18 +250,18 @@ func InputObjectQuery(
 			Query: query,
 		},
 	}
-	var err error
+	var err_ error
 
 	var data_ InputObjectQueryResponse
 	resp := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
+	err_ = client.MakeRequest(
 		ctx,
 		req,
 		resp,
 	)
 
-	return &data_, err
+	return &data_, err_
 }
 
 // The query or mutation executed by QueryWithStructs.
@@ -284,17 +284,17 @@ func QueryWithStructs(
 		OpName: "QueryWithStructs",
 		Query:  QueryWithStructs_Operation,
 	}
-	var err error
+	var err_ error
 
 	var data_ QueryWithStructsResponse
 	resp := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
+	err_ = client.MakeRequest(
 		ctx,
 		req,
 		resp,
 	)
 
-	return &data_, err
+	return &data_, err_
 }
 

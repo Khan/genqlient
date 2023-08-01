@@ -57,17 +57,17 @@ func QueryWithDoubleAlias(
 		OpName: "QueryWithDoubleAlias",
 		Query:  QueryWithDoubleAlias_Operation,
 	}
-	var err error
+	var err_ error
 
 	var data_ QueryWithDoubleAliasResponse
 	resp := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
+	err_ = client.MakeRequest(
 		nil,
 		req,
 		resp,
 	)
 
-	return &data_, err
+	return &data_, err_
 }
 
