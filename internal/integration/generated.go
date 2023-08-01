@@ -3089,29 +3089,29 @@ mutation createUser ($user: NewUser!) {
 `
 
 func createUser(
-	ctx context.Context,
-	client graphql.Client,
+	ctx_ context.Context,
+	client_ graphql.Client,
 	user NewUser,
 ) (*createUserResponse, map[string]interface{}, error) {
-	req := &graphql.Request{
+	req_ := &graphql.Request{
 		OpName: "createUser",
 		Query:  createUser_Operation,
 		Variables: &__createUserInput{
 			User: user,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data createUserResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ createUserResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, resp.Extensions, err
+	return &data_, resp_.Extensions, err_
 }
 
 // The query or mutation executed by failingQuery.
@@ -3125,25 +3125,25 @@ query failingQuery {
 `
 
 func failingQuery(
-	ctx context.Context,
-	client graphql.Client,
+	ctx_ context.Context,
+	client_ graphql.Client,
 ) (*failingQueryResponse, map[string]interface{}, error) {
-	req := &graphql.Request{
+	req_ := &graphql.Request{
 		OpName: "failingQuery",
 		Query:  failingQuery_Operation,
 	}
-	var err error
+	var err_ error
 
-	var data failingQueryResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ failingQueryResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, resp.Extensions, err
+	return &data_, resp_.Extensions, err_
 }
 
 // The query or mutation executed by queryWithCustomMarshal.
@@ -3158,29 +3158,29 @@ query queryWithCustomMarshal ($date: Date!) {
 `
 
 func queryWithCustomMarshal(
-	ctx context.Context,
-	client graphql.Client,
+	ctx_ context.Context,
+	client_ graphql.Client,
 	date time.Time,
 ) (*queryWithCustomMarshalResponse, map[string]interface{}, error) {
-	req := &graphql.Request{
+	req_ := &graphql.Request{
 		OpName: "queryWithCustomMarshal",
 		Query:  queryWithCustomMarshal_Operation,
 		Variables: &__queryWithCustomMarshalInput{
 			Date: date,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data queryWithCustomMarshalResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ queryWithCustomMarshalResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, resp.Extensions, err
+	return &data_, resp_.Extensions, err_
 }
 
 // The query or mutation executed by queryWithCustomMarshalOptional.
@@ -3195,12 +3195,12 @@ query queryWithCustomMarshalOptional ($date: Date, $id: ID) {
 `
 
 func queryWithCustomMarshalOptional(
-	ctx context.Context,
-	client graphql.Client,
+	ctx_ context.Context,
+	client_ graphql.Client,
 	date *time.Time,
 	id *string,
 ) (*queryWithCustomMarshalOptionalResponse, map[string]interface{}, error) {
-	req := &graphql.Request{
+	req_ := &graphql.Request{
 		OpName: "queryWithCustomMarshalOptional",
 		Query:  queryWithCustomMarshalOptional_Operation,
 		Variables: &__queryWithCustomMarshalOptionalInput{
@@ -3208,18 +3208,18 @@ func queryWithCustomMarshalOptional(
 			Id:   id,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data queryWithCustomMarshalOptionalResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ queryWithCustomMarshalOptionalResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, resp.Extensions, err
+	return &data_, resp_.Extensions, err_
 }
 
 // The query or mutation executed by queryWithCustomMarshalSlice.
@@ -3234,29 +3234,29 @@ query queryWithCustomMarshalSlice ($dates: [Date!]!) {
 `
 
 func queryWithCustomMarshalSlice(
-	ctx context.Context,
-	client graphql.Client,
+	ctx_ context.Context,
+	client_ graphql.Client,
 	dates []time.Time,
 ) (*queryWithCustomMarshalSliceResponse, map[string]interface{}, error) {
-	req := &graphql.Request{
+	req_ := &graphql.Request{
 		OpName: "queryWithCustomMarshalSlice",
 		Query:  queryWithCustomMarshalSlice_Operation,
 		Variables: &__queryWithCustomMarshalSliceInput{
 			Dates: dates,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data queryWithCustomMarshalSliceResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ queryWithCustomMarshalSliceResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, resp.Extensions, err
+	return &data_, resp_.Extensions, err_
 }
 
 // The query or mutation executed by queryWithFlatten.
@@ -3305,29 +3305,29 @@ fragment FriendsFields on User {
 `
 
 func queryWithFlatten(
-	ctx context.Context,
-	client graphql.Client,
+	ctx_ context.Context,
+	client_ graphql.Client,
 	ids []string,
 ) (*QueryFragment, map[string]interface{}, error) {
-	req := &graphql.Request{
+	req_ := &graphql.Request{
 		OpName: "queryWithFlatten",
 		Query:  queryWithFlatten_Operation,
 		Variables: &__queryWithFlattenInput{
 			Ids: ids,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data QueryFragment
-	resp := &graphql.Response{Data: &data}
+	var data_ QueryFragment
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, resp.Extensions, err
+	return &data_, resp_.Extensions, err_
 }
 
 // The query or mutation executed by queryWithFragments.
@@ -3370,29 +3370,29 @@ query queryWithFragments ($ids: [ID!]!) {
 `
 
 func queryWithFragments(
-	ctx context.Context,
-	client graphql.Client,
+	ctx_ context.Context,
+	client_ graphql.Client,
 	ids []string,
 ) (*queryWithFragmentsResponse, map[string]interface{}, error) {
-	req := &graphql.Request{
+	req_ := &graphql.Request{
 		OpName: "queryWithFragments",
 		Query:  queryWithFragments_Operation,
 		Variables: &__queryWithFragmentsInput{
 			Ids: ids,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data queryWithFragmentsResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ queryWithFragmentsResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, resp.Extensions, err
+	return &data_, resp_.Extensions, err_
 }
 
 // The query or mutation executed by queryWithInterfaceListField.
@@ -3407,29 +3407,29 @@ query queryWithInterfaceListField ($ids: [ID!]!) {
 `
 
 func queryWithInterfaceListField(
-	ctx context.Context,
-	client graphql.Client,
+	ctx_ context.Context,
+	client_ graphql.Client,
 	ids []string,
 ) (*queryWithInterfaceListFieldResponse, map[string]interface{}, error) {
-	req := &graphql.Request{
+	req_ := &graphql.Request{
 		OpName: "queryWithInterfaceListField",
 		Query:  queryWithInterfaceListField_Operation,
 		Variables: &__queryWithInterfaceListFieldInput{
 			Ids: ids,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data queryWithInterfaceListFieldResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ queryWithInterfaceListFieldResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, resp.Extensions, err
+	return &data_, resp_.Extensions, err_
 }
 
 // The query or mutation executed by queryWithInterfaceListPointerField.
@@ -3444,29 +3444,29 @@ query queryWithInterfaceListPointerField ($ids: [ID!]!) {
 `
 
 func queryWithInterfaceListPointerField(
-	ctx context.Context,
-	client graphql.Client,
+	ctx_ context.Context,
+	client_ graphql.Client,
 	ids []string,
 ) (*queryWithInterfaceListPointerFieldResponse, map[string]interface{}, error) {
-	req := &graphql.Request{
+	req_ := &graphql.Request{
 		OpName: "queryWithInterfaceListPointerField",
 		Query:  queryWithInterfaceListPointerField_Operation,
 		Variables: &__queryWithInterfaceListPointerFieldInput{
 			Ids: ids,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data queryWithInterfaceListPointerFieldResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ queryWithInterfaceListPointerFieldResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, resp.Extensions, err
+	return &data_, resp_.Extensions, err_
 }
 
 // The query or mutation executed by queryWithInterfaceNoFragments.
@@ -3485,29 +3485,29 @@ query queryWithInterfaceNoFragments ($id: ID!) {
 `
 
 func queryWithInterfaceNoFragments(
-	ctx context.Context,
-	client graphql.Client,
+	ctx_ context.Context,
+	client_ graphql.Client,
 	id string,
 ) (*queryWithInterfaceNoFragmentsResponse, map[string]interface{}, error) {
-	req := &graphql.Request{
+	req_ := &graphql.Request{
 		OpName: "queryWithInterfaceNoFragments",
 		Query:  queryWithInterfaceNoFragments_Operation,
 		Variables: &__queryWithInterfaceNoFragmentsInput{
 			Id: id,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data queryWithInterfaceNoFragmentsResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ queryWithInterfaceNoFragmentsResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, resp.Extensions, err
+	return &data_, resp_.Extensions, err_
 }
 
 // The query or mutation executed by queryWithNamedFragments.
@@ -3550,29 +3550,29 @@ fragment MoreUserFields on User {
 `
 
 func queryWithNamedFragments(
-	ctx context.Context,
-	client graphql.Client,
+	ctx_ context.Context,
+	client_ graphql.Client,
 	ids []string,
 ) (*queryWithNamedFragmentsResponse, map[string]interface{}, error) {
-	req := &graphql.Request{
+	req_ := &graphql.Request{
 		OpName: "queryWithNamedFragments",
 		Query:  queryWithNamedFragments_Operation,
 		Variables: &__queryWithNamedFragmentsInput{
 			Ids: ids,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data queryWithNamedFragmentsResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ queryWithNamedFragmentsResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, resp.Extensions, err
+	return &data_, resp_.Extensions, err_
 }
 
 // The query or mutation executed by queryWithOmitempty.
@@ -3587,29 +3587,29 @@ query queryWithOmitempty ($id: ID) {
 `
 
 func queryWithOmitempty(
-	ctx context.Context,
-	client graphql.Client,
+	ctx_ context.Context,
+	client_ graphql.Client,
 	id string,
 ) (*queryWithOmitemptyResponse, map[string]interface{}, error) {
-	req := &graphql.Request{
+	req_ := &graphql.Request{
 		OpName: "queryWithOmitempty",
 		Query:  queryWithOmitempty_Operation,
 		Variables: &__queryWithOmitemptyInput{
 			Id: id,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data queryWithOmitemptyResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ queryWithOmitemptyResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, resp.Extensions, err
+	return &data_, resp_.Extensions, err_
 }
 
 // The query or mutation executed by queryWithVariables.
@@ -3624,29 +3624,29 @@ query queryWithVariables ($id: ID!) {
 `
 
 func queryWithVariables(
-	ctx context.Context,
-	client graphql.Client,
+	ctx_ context.Context,
+	client_ graphql.Client,
 	id string,
 ) (*queryWithVariablesResponse, map[string]interface{}, error) {
-	req := &graphql.Request{
+	req_ := &graphql.Request{
 		OpName: "queryWithVariables",
 		Query:  queryWithVariables_Operation,
 		Variables: &__queryWithVariablesInput{
 			Id: id,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data queryWithVariablesResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ queryWithVariablesResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, resp.Extensions, err
+	return &data_, resp_.Extensions, err_
 }
 
 // The query or mutation executed by simpleQuery.
@@ -3661,25 +3661,25 @@ query simpleQuery {
 `
 
 func simpleQuery(
-	ctx context.Context,
-	client graphql.Client,
+	ctx_ context.Context,
+	client_ graphql.Client,
 ) (*simpleQueryResponse, map[string]interface{}, error) {
-	req := &graphql.Request{
+	req_ := &graphql.Request{
 		OpName: "simpleQuery",
 		Query:  simpleQuery_Operation,
 	}
-	var err error
+	var err_ error
 
-	var data simpleQueryResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ simpleQueryResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, resp.Extensions, err
+	return &data_, resp_.Extensions, err_
 }
 
 // The query or mutation executed by simpleQueryExt.
@@ -3694,23 +3694,23 @@ query simpleQueryExt {
 `
 
 func simpleQueryExt(
-	ctx context.Context,
-	client graphql.Client,
+	ctx_ context.Context,
+	client_ graphql.Client,
 ) (*simpleQueryExtResponse, map[string]interface{}, error) {
-	req := &graphql.Request{
+	req_ := &graphql.Request{
 		OpName: "simpleQueryExt",
 		Query:  simpleQueryExt_Operation,
 	}
-	var err error
+	var err_ error
 
-	var data simpleQueryExtResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ simpleQueryExtResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, resp.Extensions, err
+	return &data_, resp_.Extensions, err_
 }

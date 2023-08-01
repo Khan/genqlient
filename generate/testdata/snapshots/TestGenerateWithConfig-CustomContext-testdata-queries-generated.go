@@ -48,24 +48,24 @@ query SimpleQuery {
 `
 
 func SimpleQuery(
-	ctx testutil.MyContext,
-	client graphql.Client,
+	ctx_ testutil.MyContext,
+	client_ graphql.Client,
 ) (*SimpleQueryResponse, error) {
-	req := &graphql.Request{
+	req_ := &graphql.Request{
 		OpName: "SimpleQuery",
 		Query:  SimpleQuery_Operation,
 	}
-	var err error
+	var err_ error
 
-	var data SimpleQueryResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ SimpleQueryResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, err
+	return &data_, err_
 }
 

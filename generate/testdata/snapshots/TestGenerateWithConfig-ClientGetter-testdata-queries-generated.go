@@ -45,29 +45,29 @@ query SimpleQuery {
 `
 
 func SimpleQuery(
-	ctx context.Context,
+	ctx_ context.Context,
 ) (*SimpleQueryResponse, error) {
-	req := &graphql.Request{
+	req_ := &graphql.Request{
 		OpName: "SimpleQuery",
 		Query:  SimpleQuery_Operation,
 	}
-	var err error
-	var client graphql.Client
+	var err_ error
+	var client_ graphql.Client
 
-	client, err = testutil.GetClientFromContext(ctx)
-	if err != nil {
-		return nil, err
+	client_, err_ = testutil.GetClientFromContext(ctx_)
+	if err_ != nil {
+		return nil, err_
 	}
 
-	var data SimpleQueryResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ SimpleQueryResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, err
+	return &data_, err_
 }
 

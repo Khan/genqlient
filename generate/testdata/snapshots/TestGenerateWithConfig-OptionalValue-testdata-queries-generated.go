@@ -87,29 +87,29 @@ query ListInputQuery ($names: [String]) {
 `
 
 func ListInputQuery(
-	ctx context.Context,
-	client graphql.Client,
+	ctx_ context.Context,
+	client_ graphql.Client,
 	names []string,
 ) (*ListInputQueryResponse, error) {
-	req := &graphql.Request{
+	req_ := &graphql.Request{
 		OpName: "ListInputQuery",
 		Query:  ListInputQuery_Operation,
 		Variables: &__ListInputQueryInput{
 			Names: names,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data ListInputQueryResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ ListInputQueryResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, err
+	return &data_, err_
 }
 
 // The query or mutation executed by QueryWithSlices.
@@ -125,24 +125,24 @@ query QueryWithSlices {
 `
 
 func QueryWithSlices(
-	ctx context.Context,
-	client graphql.Client,
+	ctx_ context.Context,
+	client_ graphql.Client,
 ) (*QueryWithSlicesResponse, error) {
-	req := &graphql.Request{
+	req_ := &graphql.Request{
 		OpName: "QueryWithSlices",
 		Query:  QueryWithSlices_Operation,
 	}
-	var err error
+	var err_ error
 
-	var data QueryWithSlicesResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ QueryWithSlicesResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, err
+	return &data_, err_
 }
 

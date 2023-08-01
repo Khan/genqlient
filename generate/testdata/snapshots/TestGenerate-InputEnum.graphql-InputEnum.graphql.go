@@ -64,27 +64,27 @@ query InputEnumQuery ($role: Role!) {
 `
 
 func InputEnumQuery(
-	client graphql.Client,
+	client_ graphql.Client,
 	role Role,
 ) (*InputEnumQueryResponse, error) {
-	req := &graphql.Request{
+	req_ := &graphql.Request{
 		OpName: "InputEnumQuery",
 		Query:  InputEnumQuery_Operation,
 		Variables: &__InputEnumQueryInput{
 			Role: role,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data InputEnumQueryResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ InputEnumQueryResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
+	err_ = client_.MakeRequest(
 		nil,
-		req,
-		resp,
+		req_,
+		resp_,
 	)
 
-	return &data, err
+	return &data_, err_
 }
 

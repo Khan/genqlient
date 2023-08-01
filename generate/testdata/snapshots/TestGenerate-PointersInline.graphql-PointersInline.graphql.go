@@ -245,12 +245,12 @@ query PointersQuery ($query: UserQueryInput, $dt: DateTime, $tz: String) {
 `
 
 func PointersQuery(
-	client graphql.Client,
+	client_ graphql.Client,
 	query *UserQueryInput,
 	dt *time.Time,
 	tz string,
 ) (*PointersQueryResponse, error) {
-	req := &graphql.Request{
+	req_ := &graphql.Request{
 		OpName: "PointersQuery",
 		Query:  PointersQuery_Operation,
 		Variables: &__PointersQueryInput{
@@ -259,17 +259,17 @@ func PointersQuery(
 			Tz:    tz,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data PointersQueryResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ PointersQueryResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
+	err_ = client_.MakeRequest(
 		nil,
-		req,
-		resp,
+		req_,
+		resp_,
 	)
 
-	return &data, err
+	return &data_, err_
 }
 

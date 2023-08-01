@@ -36,11 +36,11 @@ query convertTimezone ($dt: DateTime!, $tz: String) {
 `
 
 func convertTimezone(
-	client graphql.Client,
+	client_ graphql.Client,
 	dt time.Time,
 	tz string,
 ) (*convertTimezoneResponse, error) {
-	req := &graphql.Request{
+	req_ := &graphql.Request{
 		OpName: "convertTimezone",
 		Query:  convertTimezone_Operation,
 		Variables: &__convertTimezoneInput{
@@ -48,17 +48,17 @@ func convertTimezone(
 			Tz: tz,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data convertTimezoneResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ convertTimezoneResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
+	err_ = client_.MakeRequest(
 		nil,
-		req,
-		resp,
+		req_,
+		resp_,
 	)
 
-	return &data, err
+	return &data_, err_
 }
 

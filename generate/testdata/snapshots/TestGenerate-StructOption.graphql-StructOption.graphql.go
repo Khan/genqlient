@@ -456,23 +456,23 @@ fragment VideoFields on Video {
 `
 
 func StructOption(
-	client graphql.Client,
+	client_ graphql.Client,
 ) (*StructOptionResponse, error) {
-	req := &graphql.Request{
+	req_ := &graphql.Request{
 		OpName: "StructOption",
 		Query:  StructOption_Operation,
 	}
-	var err error
+	var err_ error
 
-	var data StructOptionResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ StructOptionResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
+	err_ = client_.MakeRequest(
 		nil,
-		req,
-		resp,
+		req_,
+		resp_,
 	)
 
-	return &data, err
+	return &data_, err_
 }
 

@@ -29,6 +29,7 @@ When releasing a new version:
 
 ### Bug fixes:
 - The presence of negative pointer directives, i.e., `# @genqlient(pointer: false)` are now respected even in the when `optional: pointer` is set in the configuration file.
+- Made name collisions between query/mutation arguments and local function variables less likely.
 
 ## v0.6.0
 

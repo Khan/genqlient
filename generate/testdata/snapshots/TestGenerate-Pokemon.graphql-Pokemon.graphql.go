@@ -91,27 +91,27 @@ query GetPokemonSiblings ($input: PokemonInput!) {
 `
 
 func GetPokemonSiblings(
-	client graphql.Client,
+	client_ graphql.Client,
 	input testutil.Pokemon,
 ) (*GetPokemonSiblingsResponse, error) {
-	req := &graphql.Request{
+	req_ := &graphql.Request{
 		OpName: "GetPokemonSiblings",
 		Query:  GetPokemonSiblings_Operation,
 		Variables: &__GetPokemonSiblingsInput{
 			Input: input,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data GetPokemonSiblingsResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ GetPokemonSiblingsResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
+	err_ = client_.MakeRequest(
 		nil,
-		req,
-		resp,
+		req_,
+		resp_,
 	)
 
-	return &data, err
+	return &data_, err_
 }
 

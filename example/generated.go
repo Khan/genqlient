@@ -81,29 +81,29 @@ query getUser ($Login: String!) {
 
 // getUser gets the given user's name from their username.
 func getUser(
-	ctx context.Context,
-	client graphql.Client,
+	ctx_ context.Context,
+	client_ graphql.Client,
 	Login string,
 ) (*getUserResponse, error) {
-	req := &graphql.Request{
+	req_ := &graphql.Request{
 		OpName: "getUser",
 		Query:  getUser_Operation,
 		Variables: &__getUserInput{
 			Login: Login,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data getUserResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ getUserResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, err
+	return &data_, err_
 }
 
 // The query or mutation executed by getViewer.
@@ -117,23 +117,23 @@ query getViewer {
 `
 
 func getViewer(
-	ctx context.Context,
-	client graphql.Client,
+	ctx_ context.Context,
+	client_ graphql.Client,
 ) (*getViewerResponse, error) {
-	req := &graphql.Request{
+	req_ := &graphql.Request{
 		OpName: "getViewer",
 		Query:  getViewer_Operation,
 	}
-	var err error
+	var err_ error
 
-	var data getViewerResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ getViewerResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, err
+	return &data_, err_
 }
