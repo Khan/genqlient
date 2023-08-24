@@ -266,7 +266,7 @@ type VideoFieldsParentTopic struct {
 // GetVideoChildren returns VideoFieldsParentTopic.VideoChildren, and is useful for accessing the field via an interface.
 func (v *VideoFieldsParentTopic) GetVideoChildren() []ChildVideoFields { return v.VideoChildren }
 
-// The query or mutation executed by ComplexNamedFragments.
+// The query, mutation or subscription executed by ComplexNamedFragments.
 const ComplexNamedFragments_Operation = `
 query ComplexNamedFragments {
 	... QueryFragment

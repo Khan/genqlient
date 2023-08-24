@@ -506,7 +506,7 @@ func (v *InterfaceListOfListOfListsFieldWithPointerVideo) GetId() *testutil.ID {
 // GetName returns InterfaceListOfListOfListsFieldWithPointerVideo.Name, and is useful for accessing the field via an interface.
 func (v *InterfaceListOfListOfListsFieldWithPointerVideo) GetName() *string { return v.Name }
 
-// The query or mutation executed by InterfaceListOfListOfListsField.
+// The query, mutation or subscription executed by InterfaceListOfListOfListsField.
 const InterfaceListOfListOfListsField_Operation = `
 query InterfaceListOfListOfListsField {
 	listOfListsOfListsOfContent {

@@ -1,4 +1,4 @@
-// The query or mutation executed by {{.Name}}.
+// The query, mutation or subscription executed by {{.Name}}.
 const {{.Name}}_Operation = `{{$.Body}}`
 
 {{.Doc}}
@@ -15,7 +15,7 @@ func {{.Name}}(
     {{.GraphQLName}} {{.GoType.Reference}},
     {{end -}}
     {{end -}}
-) (*{{.ResponseName}}, {{if .Config.Extensions -}}map[string]interface{},{{end}} error) {
+) ({{if eq .Type "subscription"}}chan {{.Name}}WsResponse{{else}}*{{.ResponseName}}{{end}}, {{if eq .Type "subscription"}}chan struct{}, chan error, {{end}}{{if .Config.Extensions -}}map[string]interface{},{{end}} error) {
     req_ := &graphql.Request{
         OpName: "{{.Name}}",
         Query:  {{.Name}}_Operation,
@@ -38,12 +38,49 @@ func {{.Name}}(
     {{end}}
     var data_ {{.ResponseName}}
     resp_ := &graphql.Response{Data: &data_}
+    {{if eq .Type "subscription"}}
+    dataChan_ := make(chan {{.Name}}WsResponse, 1)
+    dataUpdated_ := make(chan bool, 1)
+
+    doneChan_, errChan_, err_ := client_.DialWebSocket(ctx_, req_, resp_, dataUpdated_)
+	if err_ != nil {
+		return nil, nil, nil, err_
+	}
+    go {{.Name}}ForwardData(dataChan_, resp_, dataUpdated_, errChan_)
+    {{else}}
 
     err_ = client_.MakeRequest(
         {{if ne .Config.ContextType "-"}}ctx_{{else}}nil{{end}},
         req_,
         resp_,
     )
+    {{end}}
 	
-    return &data_, {{if .Config.Extensions -}}resp_.Extensions,{{end -}} err_
+    return {{if eq .Type "subscription"}}dataChan_, doneChan_, errChan_{{else}}&data_{{end}}, {{if .Config.Extensions -}}resp_.Extensions,{{end -}} err_
 }
+
+{{if eq .Type "subscription"}}
+type {{.Name}}WsResponse struct {
+	Data       *{{.ResponseName}}
+	Extensions map[string]interface{}
+	Errors     error
+}
+
+func {{.Name}}ForwardData(dataChan_ chan {{.Name}}WsResponse, resp_ *graphql.Response, dataUpdated_ chan bool, errChan_ chan error) {
+    defer close(dataChan_)
+	for {
+		_, more_ := <-dataUpdated_
+		if !more_ {
+			return
+		}
+		data_ := {{.Name}}WsResponse{
+			Extensions: resp_.Extensions,
+			Errors: resp_.Errors,
+		}
+		if resp_.Data != nil {
+			data_.Data = resp_.Data.(*{{.ResponseName}})
+		}
+		dataChan_ <- data_
+	}
+}
+{{end}}

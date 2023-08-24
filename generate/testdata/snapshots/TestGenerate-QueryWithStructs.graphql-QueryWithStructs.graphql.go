@@ -43,7 +43,7 @@ func (v *QueryWithStructsUserAuthMethodsAuthMethod) GetProvider() string { retur
 // GetEmail returns QueryWithStructsUserAuthMethodsAuthMethod.Email, and is useful for accessing the field via an interface.
 func (v *QueryWithStructsUserAuthMethodsAuthMethod) GetEmail() string { return v.Email }
 
-// The query or mutation executed by QueryWithStructs.
+// The query, mutation or subscription executed by QueryWithStructs.
 const QueryWithStructs_Operation = `
 query QueryWithStructs {
 	user {

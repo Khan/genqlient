@@ -28,7 +28,7 @@ type convertTimezoneResponse struct {
 // GetConvert returns convertTimezoneResponse.Convert, and is useful for accessing the field via an interface.
 func (v *convertTimezoneResponse) GetConvert() time.Time { return v.Convert }
 
-// The query or mutation executed by convertTimezone.
+// The query, mutation or subscription executed by convertTimezone.
 const convertTimezone_Operation = `
 query convertTimezone ($dt: DateTime!, $tz: String) {
 	convert(dt: $dt, tz: $tz)

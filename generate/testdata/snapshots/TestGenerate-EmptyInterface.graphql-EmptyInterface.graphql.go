@@ -20,7 +20,7 @@ func (v *EmptyInterfaceResponse) GetGetComplexJunk() []map[string]*[]*map[string
 	return v.GetComplexJunk
 }
 
-// The query or mutation executed by EmptyInterface.
+// The query, mutation or subscription executed by EmptyInterface.
 const EmptyInterface_Operation = `
 query EmptyInterface {
 	getJunk

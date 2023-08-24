@@ -219,7 +219,7 @@ func (v *__OmitEmptyQueryInput) GetTz() string { return v.Tz }
 // GetTzNoOmitEmpty returns __OmitEmptyQueryInput.TzNoOmitEmpty, and is useful for accessing the field via an interface.
 func (v *__OmitEmptyQueryInput) GetTzNoOmitEmpty() string { return v.TzNoOmitEmpty }
 
-// The query or mutation executed by OmitEmptyQuery.
+// The query, mutation or subscription executed by OmitEmptyQuery.
 const OmitEmptyQuery_Operation = `
 query OmitEmptyQuery ($query: UserQueryInput, $queries: [UserQueryInput], $dt: DateTime, $tz: String, $tzNoOmitEmpty: String) {
 	user(query: $query) {

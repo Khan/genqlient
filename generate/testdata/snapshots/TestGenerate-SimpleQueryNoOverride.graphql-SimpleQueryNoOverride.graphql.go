@@ -37,7 +37,7 @@ func (v *SimpleQueryNoOverrideUser) GetId() testutil.ID { return v.Id }
 // GetName returns SimpleQueryNoOverrideUser.Name, and is useful for accessing the field via an interface.
 func (v *SimpleQueryNoOverrideUser) GetName() string { return v.Name }
 
-// The query or mutation executed by SimpleQueryNoOverride.
+// The query, mutation or subscription executed by SimpleQueryNoOverride.
 const SimpleQueryNoOverride_Operation = `
 query SimpleQueryNoOverride {
 	user {

@@ -71,7 +71,7 @@ type __GetPokemonSiblingsInput struct {
 // GetInput returns __GetPokemonSiblingsInput.Input, and is useful for accessing the field via an interface.
 func (v *__GetPokemonSiblingsInput) GetInput() testutil.Pokemon { return v.Input }
 
-// The query or mutation executed by GetPokemonSiblings.
+// The query, mutation or subscription executed by GetPokemonSiblings.
 const GetPokemonSiblings_Operation = `
 query GetPokemonSiblings ($input: PokemonInput!) {
 	user(query: {hasPokemon:$input}) {

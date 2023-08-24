@@ -2346,7 +2346,7 @@ type TopicFieldsRelatedTopic struct {
 // GetId returns TopicFieldsRelatedTopic.Id, and is useful for accessing the field via an interface.
 func (v *TopicFieldsRelatedTopic) GetId() testutil.ID { return v.Id }
 
-// The query or mutation executed by CovariantInterfaceImplementation.
+// The query, mutation or subscription executed by CovariantInterfaceImplementation.
 const CovariantInterfaceImplementation_Operation = `
 query CovariantInterfaceImplementation {
 	randomItem {

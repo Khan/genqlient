@@ -40,7 +40,7 @@ func (v *QueryWithAliasUser) GetID() testutil.ID { return v.ID }
 // GetOtherID returns QueryWithAliasUser.OtherID, and is useful for accessing the field via an interface.
 func (v *QueryWithAliasUser) GetOtherID() testutil.ID { return v.OtherID }
 
-// The query or mutation executed by QueryWithAlias.
+// The query, mutation or subscription executed by QueryWithAlias.
 const QueryWithAlias_Operation = `
 query QueryWithAlias {
 	User: user {

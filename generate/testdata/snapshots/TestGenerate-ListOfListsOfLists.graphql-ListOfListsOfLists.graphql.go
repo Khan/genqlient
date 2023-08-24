@@ -16,7 +16,7 @@ func (v *ListOfListsOfListsResponse) GetListOfListsOfLists() [][][]string {
 	return v.ListOfListsOfLists
 }
 
-// The query or mutation executed by ListOfListsOfLists.
+// The query, mutation or subscription executed by ListOfListsOfLists.
 const ListOfListsOfLists_Operation = `
 query ListOfListsOfLists {
 	listOfListsOfLists

@@ -1739,7 +1739,7 @@ type VideoFieldsThumbnail struct {
 // GetId returns VideoFieldsThumbnail.Id, and is useful for accessing the field via an interface.
 func (v *VideoFieldsThumbnail) GetId() testutil.ID { return v.Id }
 
-// The query or mutation executed by ComplexNamedFragments.
+// The query, mutation or subscription executed by ComplexNamedFragments.
 const ComplexNamedFragments_Operation = `
 query ComplexNamedFragments {
 	... on Query {

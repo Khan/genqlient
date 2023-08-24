@@ -174,7 +174,7 @@ func (v *__CustomMarshalInput) __premarshalJSON() (*__premarshal__CustomMarshalI
 	return &retval, nil
 }
 
-// The query or mutation executed by CustomMarshal.
+// The query, mutation or subscription executed by CustomMarshal.
 const CustomMarshal_Operation = `
 query CustomMarshal ($date: Date!) {
 	usersBornOn(date: $date) {

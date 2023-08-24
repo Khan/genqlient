@@ -230,7 +230,6 @@ func (g *generator) preprocessQueryDocument(doc *ast.QueryDocument) {
 func (g *generator) validateOperation(op *ast.OperationDefinition) error {
 	_, err := g.baseTypeForOperation(op.Operation)
 	if err != nil {
-		// (e.g. operation has subscriptions, which we don't support)
 		return err
 	}
 

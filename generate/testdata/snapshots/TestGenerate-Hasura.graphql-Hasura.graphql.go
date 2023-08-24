@@ -81,7 +81,7 @@ type __GetPokemonInput struct {
 // GetWhere returns __GetPokemonInput.Where, and is useful for accessing the field via an interface.
 func (v *__GetPokemonInput) GetWhere() *GetPokemonBoolExp { return v.Where }
 
-// The query or mutation executed by GetPokemon.
+// The query, mutation or subscription executed by GetPokemon.
 const GetPokemon_Operation = `
 query GetPokemon ($where: getPokemonBoolExp!) {
 	getPokemon(where: $where) {

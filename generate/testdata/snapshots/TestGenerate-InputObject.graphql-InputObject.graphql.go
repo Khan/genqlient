@@ -177,7 +177,7 @@ type __InputObjectQueryInput struct {
 // GetQuery returns __InputObjectQueryInput.Query, and is useful for accessing the field via an interface.
 func (v *__InputObjectQueryInput) GetQuery() UserQueryInput { return v.Query }
 
-// The query or mutation executed by InputObjectQuery.
+// The query, mutation or subscription executed by InputObjectQuery.
 const InputObjectQuery_Operation = `
 query InputObjectQuery ($query: UserQueryInput) {
 	user(query: $query) {

@@ -227,7 +227,7 @@ func (v *__PointersQueryInput) GetDt() *time.Time { return v.Dt }
 // GetTz returns __PointersQueryInput.Tz, and is useful for accessing the field via an interface.
 func (v *__PointersQueryInput) GetTz() string { return v.Tz }
 
-// The query or mutation executed by PointersQuery.
+// The query, mutation or subscription executed by PointersQuery.
 const PointersQuery_Operation = `
 query PointersQuery ($query: UserQueryInput, $dt: DateTime, $tz: String) {
 	user(query: $query) {

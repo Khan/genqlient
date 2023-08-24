@@ -11,6 +11,7 @@ import (
 	"net/url"
 	"strings"
 
+	"github.com/gorilla/websocket"
 	"github.com/vektah/gqlparser/v2/gqlerror"
 )
 
@@ -38,12 +39,25 @@ type Client interface {
 		req *Request,
 		resp *Response,
 	) error
+
+	DialWebSocket(
+		ctx context.Context,
+		req *Request,
+		resp *Response,
+		dataUpdated chan bool,
+	) (done chan struct{}, errChan chan error, err error)
+}
+
+type WebSocketClient struct {
+	Dialer Dialer
+	Header http.Header
 }
 
 type client struct {
-	httpClient Doer
-	endpoint   string
-	method     string
+	httpClient      Doer
+	webSocketClient WebSocketClient
+	endpoint        string
+	method          string
 }
 
 // NewClient returns a [Client] which makes requests to the given endpoint,
@@ -59,7 +73,7 @@ type client struct {
 //
 // [example/main.go]: https://github.com/Khan/genqlient/blob/main/example/main.go#L12-L20
 func NewClient(endpoint string, httpClient Doer) Client {
-	return newClient(endpoint, httpClient, http.MethodPost)
+	return newClient(endpoint, httpClient, http.MethodPost, WebSocketClient{})
 }
 
 // NewClientUsingGet returns a [Client] which makes GET requests to the given
@@ -80,14 +94,19 @@ func NewClient(endpoint string, httpClient Doer) Client {
 //
 // [example/main.go]: https://github.com/Khan/genqlient/blob/main/example/main.go#L12-L20
 func NewClientUsingGet(endpoint string, httpClient Doer) Client {
-	return newClient(endpoint, httpClient, http.MethodGet)
+	return newClient(endpoint, httpClient, http.MethodGet, WebSocketClient{})
 }
 
-func newClient(endpoint string, httpClient Doer, method string) Client {
+func NewClientUsingWebSocket(endpoint string, webSocketClient WebSocketClient) Client {
+	webSocketClient.Header.Add("Sec-WebSocket-Protocol", "graphql-transport-ws")
+	return newClient(endpoint, nil, "", webSocketClient)
+}
+
+func newClient(endpoint string, httpClient Doer, method string, webSocketClient WebSocketClient) Client {
 	if httpClient == nil || httpClient == (*http.Client)(nil) {
 		httpClient = http.DefaultClient
 	}
-	return &client{httpClient, endpoint, method}
+	return &client{httpClient, webSocketClient, endpoint, method}
 }
 
 // Doer encapsulates the methods from [*http.Client] needed by [Client].
@@ -95,6 +114,10 @@ func newClient(endpoint string, httpClient Doer, method string) Client {
 // (or mocks for the same).
 type Doer interface {
 	Do(*http.Request) (*http.Response, error)
+}
+
+type Dialer interface {
+	DialContext(ctx context.Context, urlStr string, requestHeader http.Header) (*websocket.Conn, *http.Response, error)
 }
 
 // Request contains all the values required to build queries executed by
@@ -175,6 +198,54 @@ func (c *client) MakeRequest(ctx context.Context, req *Request, resp *Response) 
 		return resp.Errors
 	}
 	return nil
+}
+
+func (c *client) DialWebSocket(ctx context.Context, req *Request, resp *Response, dataUpdated chan bool) (done chan struct{}, errChan chan error, err error) {
+	done = make(chan struct{}, 1)
+	errChan = make(chan error, 1)
+	startedWithError := make(chan error, 1)
+
+	go c.webSocketSubscriptionRoutine(
+		ctx,
+		req,
+		resp,
+		dataUpdated,
+		startedWithError,
+		errChan,
+		done,
+	)
+	err = <-startedWithError
+	close(startedWithError)
+
+	return done, errChan, err
+}
+
+func (c *client) webSocketSubscriptionRoutine(ctx context.Context, req *Request, resp *Response, dataUpdated chan bool, startedWithError chan error, errChan chan error, done chan struct{}) {
+	conn, res, err := c.webSocketClient.Dialer.DialContext(ctx, c.endpoint, c.webSocketClient.Header)
+	if err != nil {
+		startedWithError <- err
+		close(done)
+		return
+	}
+	defer res.Body.Close()
+	defer conn.Close()
+
+	go listenWebSocket(conn, resp, dataUpdated, errChan, done)
+
+	err = sendInit(conn)
+	if err != nil {
+		startedWithError <- err
+		return
+	}
+	err = sendSubscribe(conn, req)
+	if err != nil {
+		startedWithError <- err
+		return
+	}
+
+	startedWithError <- nil
+
+	waitToEndWebSocket(conn, errChan, done)
 }
 
 func (c *client) createPostRequest(req *Request) (*http.Request, error) {

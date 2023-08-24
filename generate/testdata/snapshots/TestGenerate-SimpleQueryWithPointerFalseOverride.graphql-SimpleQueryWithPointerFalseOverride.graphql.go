@@ -39,7 +39,7 @@ func (v *SimpleQueryWithPointerFalseOverrideUser) GetId() testutil.ID { return v
 // GetName returns SimpleQueryWithPointerFalseOverrideUser.Name, and is useful for accessing the field via an interface.
 func (v *SimpleQueryWithPointerFalseOverrideUser) GetName() string { return v.Name }
 
-// The query or mutation executed by SimpleQueryWithPointerFalseOverride.
+// The query, mutation or subscription executed by SimpleQueryWithPointerFalseOverride.
 const SimpleQueryWithPointerFalseOverride_Operation = `
 query SimpleQueryWithPointerFalseOverride {
 	user {
