@@ -1305,6 +1305,14 @@ type __queryWithVariablesInput struct {
 // GetId returns __queryWithVariablesInput.Id, and is useful for accessing the field via an interface.
 func (v *__queryWithVariablesInput) GetId() string { return v.Id }
 
+// countResponse is returned by count on success.
+type countResponse struct {
+	Count int `json:"count"`
+}
+
+// GetCount returns countResponse.Count, and is useful for accessing the field via an interface.
+func (v *countResponse) GetCount() int { return v.Count }
+
 // createUserCreateUser includes the requested fields of the GraphQL type User.
 type createUserCreateUser struct {
 	Id   string `json:"id"`
@@ -3077,6 +3085,62 @@ type simpleQueryResponse struct {
 
 // GetMe returns simpleQueryResponse.Me, and is useful for accessing the field via an interface.
 func (v *simpleQueryResponse) GetMe() simpleQueryMeUser { return v.Me }
+
+// The query, mutation or subscription executed by count.
+const count_Operation = `
+subscription count {
+	count
+}
+`
+
+func count(
+	ctx_ context.Context,
+	client_ graphql.Client,
+) (chan countWsResponse, chan struct{}, chan error, map[string]interface{}, error) {
+	req_ := &graphql.Request{
+		OpName: "count",
+		Query:  count_Operation,
+	}
+	var err_ error
+
+	var data_ countResponse
+	resp_ := &graphql.Response{Data: &data_}
+
+	dataChan_ := make(chan countWsResponse, 1)
+	dataUpdated_ := make(chan bool, 1)
+
+	doneChan_, errChan_, err_ := client_.DialWebSocket(ctx_, req_, resp_, dataUpdated_)
+	if err_ != nil {
+		return nil, nil, nil, nil, err_
+	}
+	go countForwardData(dataChan_, resp_, dataUpdated_, errChan_)
+
+	return dataChan_, doneChan_, errChan_, resp_.Extensions, err_
+}
+
+type countWsResponse struct {
+	Data       *countResponse
+	Extensions map[string]interface{}
+	Errors     error
+}
+
+func countForwardData(dataChan_ chan countWsResponse, resp_ *graphql.Response, dataUpdated_ chan bool, errChan_ chan error) {
+	defer close(dataChan_)
+	for {
+		_, more_ := <-dataUpdated_
+		if !more_ {
+			return
+		}
+		data_ := countWsResponse{
+			Extensions: resp_.Extensions,
+			Errors:     resp_.Errors,
+		}
+		if resp_.Data != nil {
+			data_.Data = resp_.Data.(*countResponse)
+		}
+		dataChan_ <- data_
+	}
+}
 
 // The query, mutation or subscription executed by createUser.
 const createUser_Operation = `

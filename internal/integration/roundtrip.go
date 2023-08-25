@@ -13,6 +13,7 @@ import (
 	"testing"
 
 	"github.com/Khan/genqlient/graphql"
+	"github.com/gorilla/websocket"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -104,7 +105,7 @@ func (c *roundtripClient) MakeRequest(ctx context.Context, req *graphql.Request,
 }
 
 func (c *roundtripClient) DialWebSocket(ctx context.Context, req *graphql.Request, resp *graphql.Response, dataUpdated chan bool) (done chan struct{}, errChan chan error, err error) {
-	return nil, nil, nil
+	return c.wrapped.DialWebSocket(ctx, req, resp, dataUpdated)
 }
 
 func newRoundtripClients(t *testing.T, endpoint string) []graphql.Client {
@@ -128,5 +129,14 @@ func newRoundtripGetClient(t *testing.T, endpoint string) graphql.Client {
 		wrapped:   graphql.NewClientUsingGet(endpoint, httpClient),
 		transport: transport,
 		t:         t,
+	}
+}
+
+func newRoundtripWebScoketClient(t *testing.T, endpoint string) graphql.Client {
+	dialer := websocket.DefaultDialer
+	webSocketClient := graphql.WebSocketClient{Dialer: dialer, Header: http.Header{}}
+	return &roundtripClient{
+		wrapped: graphql.NewClientUsingWebSocket(endpoint, webSocketClient),
+		t:       t,
 	}
 }

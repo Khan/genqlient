@@ -60,6 +60,8 @@ type client struct {
 	method          string
 }
 
+const constMethodWebSocket = "websocket"
+
 // NewClient returns a [Client] which makes requests to the given endpoint,
 // suitable for most users.
 //
@@ -99,7 +101,7 @@ func NewClientUsingGet(endpoint string, httpClient Doer) Client {
 
 func NewClientUsingWebSocket(endpoint string, webSocketClient WebSocketClient) Client {
 	webSocketClient.Header.Add("Sec-WebSocket-Protocol", "graphql-transport-ws")
-	return newClient(endpoint, nil, "", webSocketClient)
+	return newClient(endpoint, nil, constMethodWebSocket, webSocketClient)
 }
 
 func newClient(endpoint string, httpClient Doer, method string, webSocketClient WebSocketClient) Client {
@@ -201,6 +203,18 @@ func (c *client) MakeRequest(ctx context.Context, req *Request, resp *Response) 
 }
 
 func (c *client) DialWebSocket(ctx context.Context, req *Request, resp *Response, dataUpdated chan bool) (done chan struct{}, errChan chan error, err error) {
+	if c.method != constMethodWebSocket {
+		return nil, nil, errors.New("client does not support websocket")
+	}
+	if req.Query != "" {
+		if strings.HasPrefix(strings.TrimSpace(req.Query), "query") {
+			return nil, nil, errors.New("client does not support queries")
+		}
+		if strings.HasPrefix(strings.TrimSpace(req.Query), "mutation") {
+			return nil, nil, errors.New("client does not support mutations")
+		}
+	}
+
 	done = make(chan struct{}, 1)
 	errChan = make(chan error, 1)
 	startedWithError := make(chan error, 1)
@@ -249,6 +263,12 @@ func (c *client) webSocketSubscriptionRoutine(ctx context.Context, req *Request,
 }
 
 func (c *client) createPostRequest(req *Request) (*http.Request, error) {
+	if req.Query != "" {
+		if strings.HasPrefix(strings.TrimSpace(req.Query), "subscription") {
+			return nil, errors.New("client does not support subscriptions")
+		}
+	}
+
 	body, err := json.Marshal(req)
 	if err != nil {
 		return nil, err
@@ -277,6 +297,9 @@ func (c *client) createGetRequest(req *Request) (*http.Request, error) {
 	if req.Query != "" {
 		if strings.HasPrefix(strings.TrimSpace(req.Query), "mutation") {
 			return nil, errors.New("client does not support mutations")
+		}
+		if strings.HasPrefix(strings.TrimSpace(req.Query), "subscription") {
+			return nil, errors.New("client does not support subscriptions")
 		}
 		queryParams.Set("query", req.Query)
 		queryUpdated = true

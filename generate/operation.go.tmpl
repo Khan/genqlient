@@ -42,9 +42,9 @@ func {{.Name}}(
     dataChan_ := make(chan {{.Name}}WsResponse, 1)
     dataUpdated_ := make(chan bool, 1)
 
-    doneChan_, errChan_, err_ := client_.DialWebSocket(ctx_, req_, resp_, dataUpdated_)
+    doneChan_, errChan_, err_ := client_.DialWebSocket({{if ne .Config.ContextType "-" -}}ctx_{{else}}context.Background(){{end}}, req_, resp_, dataUpdated_)
 	if err_ != nil {
-		return nil, nil, nil, err_
+		return nil, nil, nil,{{if .Config.Extensions -}} nil,{{end}} err_
 	}
     go {{.Name}}ForwardData(dataChan_, resp_, dataUpdated_, errChan_)
     {{else}}
