@@ -2,6 +2,13 @@
 const {{.Name}}_Operation = `{{$.Body}}`
 
 {{.Doc}}
+{{if eq .Type "subscription"}}
+{{if eq .Doc ""}}
+// {{.Name}}
+{{end -}}
+//
+// To close the connection, use the doneChan_: `defer doneChan_ <- true`
+{{end -}}
 func {{.Name}}(
     {{if ne .Config.ContextType "-" -}}
     ctx_ {{ref .Config.ContextType}},
@@ -36,9 +43,7 @@ func {{.Name}}(
         return nil, {{if .Config.Extensions -}}nil,{{end -}} err_
     }
     {{end}}
-    {{if eq .Type "subscription"}}
-    var data_ *{{.ResponseName}}{{end}}
-    data_ = &{{.ResponseName}}{}
+    data_ {{if eq .Type "subscription"}}:{{end}}= &{{.ResponseName}}{}
     resp_ := &graphql.Response{Data: data_}
     {{if eq .Type "subscription"}}
     dataChan_ = make(chan {{.Name}}WsResponse, 1)

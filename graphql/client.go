@@ -39,6 +39,32 @@ type Client interface {
 		resp *Response,
 	) error
 
+	// DialWebSocket must open a webSocket connection and subscribe to an endpoint
+	// of the client's GraphQL API.
+	//
+	// ctx is the context that should be used to make this request.  If context
+	// is disabled in the genqlient settings, this will be set to
+	// context.Background().
+	//
+	// req contains the data to be sent to the GraphQL server. Will be marshalled
+	// into JSON bytes.
+	//
+	// resp is the Response object into which the server's response will be
+	// unmarshalled. Typically GraphQL APIs will return JSON which can be
+	// unmarshalled directly into resp.
+	// If the response contains an error, this must also be returned by
+	// DialWebSocket.  The field resp.Data will be prepopulated with a pointer
+	// to an empty struct of the correct generated type (e.g. MyQueryResponse).
+	//
+	// dataUpdated is a channel used to notify that new data has arrived via the
+	// webSocket connection.
+	//
+	// doneChan is a channel used to end the websocket connection.
+	//
+	// errChan is a channel on which are sent the errors of webSocket
+	// communication.
+	//
+	// err is any error that occurs when setting up the webSocket connection.
 	DialWebSocket(
 		ctx context.Context,
 		req *Request,
@@ -98,6 +124,11 @@ func NewClientUsingGet(endpoint string, httpClient Doer) Client {
 	return newClient(endpoint, httpClient, http.MethodGet, WebSocketClient{})
 }
 
+// NewClientUsingWebSocket returns a [Client] which makes subscription requests
+// to the given endpoint using webSocket.
+//
+// The client does not support queries nor mutations, and will return an error
+// if passed a request that attempts one.
 func NewClientUsingWebSocket(endpoint string, webSocketClient WebSocketClient) Client {
 	webSocketClient.Header.Add("Sec-WebSocket-Protocol", "graphql-transport-ws")
 	return newClient(endpoint, nil, constMethodWebSocket, webSocketClient)
@@ -117,10 +148,14 @@ type Doer interface {
 	Do(*http.Request) (*http.Response, error)
 }
 
+// Dialer encapsulates DialContext method and is similar to [github.com/gorilla/websocket]
+// [*websocket.Dialer] method
 type Dialer interface {
 	DialContext(ctx context.Context, urlStr string, requestHeader http.Header) (WSConn, *http.Response, error)
 }
 
+// WSConn encapsulates basic methods for a webSocket connection, taking model on
+// [github.com/gorilla/websocket] [*websocket.Conn]
 type WSConn interface {
 	Close() error
 	WriteMessage(messageType int, data []byte) error

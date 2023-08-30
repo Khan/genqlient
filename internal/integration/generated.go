@@ -3093,6 +3093,9 @@ subscription count {
 }
 `
 
+// count
+//
+// To close the connection, use the doneChan_: `defer doneChan_ <- true`
 func count(
 	ctx_ context.Context,
 	client_ graphql.Client,
@@ -3103,8 +3106,7 @@ func count(
 	}
 	var err_ error
 
-	var data_ *countResponse
-	data_ = &countResponse{}
+	data_ := &countResponse{}
 	resp_ := &graphql.Response{Data: data_}
 
 	dataChan_ = make(chan countWsResponse, 1)

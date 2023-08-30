@@ -23,6 +23,9 @@ subscription SimpleSubscription {
 }
 `
 
+// SimpleSubscription
+//
+// To close the connection, use the doneChan_: `defer doneChan_ <- true`
 func SimpleSubscription(
 	client_ graphql.Client,
 ) (dataChan_ chan SimpleSubscriptionWsResponse, doneChan_ chan bool, errChan_ chan error, err error) {
@@ -32,8 +35,7 @@ func SimpleSubscription(
 	}
 	var err_ error
 
-	var data_ *SimpleSubscriptionResponse
-	data_ = &SimpleSubscriptionResponse{}
+	data_ := &SimpleSubscriptionResponse{}
 	resp_ := &graphql.Response{Data: data_}
 
 	dataChan_ = make(chan SimpleSubscriptionWsResponse, 1)
