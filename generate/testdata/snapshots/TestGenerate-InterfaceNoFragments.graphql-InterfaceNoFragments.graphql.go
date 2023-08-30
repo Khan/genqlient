@@ -653,15 +653,15 @@ query InterfaceNoFragmentsQuery {
 
 func InterfaceNoFragmentsQuery(
 	client_ graphql.Client,
-) (*InterfaceNoFragmentsQueryResponse, error) {
+) (data_ *InterfaceNoFragmentsQueryResponse, err error) {
 	req_ := &graphql.Request{
 		OpName: "InterfaceNoFragmentsQuery",
 		Query:  InterfaceNoFragmentsQuery_Operation,
 	}
 	var err_ error
 
-	var data_ InterfaceNoFragmentsQueryResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &InterfaceNoFragmentsQueryResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		nil,
@@ -669,6 +669,6 @@ func InterfaceNoFragmentsQuery(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 

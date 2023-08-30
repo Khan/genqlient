@@ -524,15 +524,15 @@ query InterfaceListOfListOfListsField {
 
 func InterfaceListOfListOfListsField(
 	client_ graphql.Client,
-) (*InterfaceListOfListOfListsFieldResponse, error) {
+) (data_ *InterfaceListOfListOfListsFieldResponse, err error) {
 	req_ := &graphql.Request{
 		OpName: "InterfaceListOfListOfListsField",
 		Query:  InterfaceListOfListOfListsField_Operation,
 	}
 	var err_ error
 
-	var data_ InterfaceListOfListOfListsFieldResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &InterfaceListOfListOfListsFieldResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		nil,
@@ -540,6 +540,6 @@ func InterfaceListOfListOfListsField(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 

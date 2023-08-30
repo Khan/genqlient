@@ -258,15 +258,15 @@ query SimpleInlineFragment {
 
 func SimpleInlineFragment(
 	client_ graphql.Client,
-) (*SimpleInlineFragmentResponse, error) {
+) (data_ *SimpleInlineFragmentResponse, err error) {
 	req_ := &graphql.Request{
 		OpName: "SimpleInlineFragment",
 		Query:  SimpleInlineFragment_Operation,
 	}
 	var err_ error
 
-	var data_ SimpleInlineFragmentResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &SimpleInlineFragmentResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		nil,
@@ -274,6 +274,6 @@ func SimpleInlineFragment(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 

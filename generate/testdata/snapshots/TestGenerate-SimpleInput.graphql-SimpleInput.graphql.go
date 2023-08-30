@@ -53,7 +53,7 @@ query SimpleInputQuery ($name: String!) {
 func SimpleInputQuery(
 	client_ graphql.Client,
 	name string,
-) (*SimpleInputQueryResponse, error) {
+) (data_ *SimpleInputQueryResponse, err error) {
 	req_ := &graphql.Request{
 		OpName: "SimpleInputQuery",
 		Query:  SimpleInputQuery_Operation,
@@ -63,8 +63,8 @@ func SimpleInputQuery(
 	}
 	var err_ error
 
-	var data_ SimpleInputQueryResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &SimpleInputQueryResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		nil,
@@ -72,6 +72,6 @@ func SimpleInputQuery(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 

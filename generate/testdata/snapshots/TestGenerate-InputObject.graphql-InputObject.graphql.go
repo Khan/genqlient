@@ -189,7 +189,7 @@ query InputObjectQuery ($query: UserQueryInput) {
 func InputObjectQuery(
 	client_ graphql.Client,
 	query UserQueryInput,
-) (*InputObjectQueryResponse, error) {
+) (data_ *InputObjectQueryResponse, err error) {
 	req_ := &graphql.Request{
 		OpName: "InputObjectQuery",
 		Query:  InputObjectQuery_Operation,
@@ -199,8 +199,8 @@ func InputObjectQuery(
 	}
 	var err_ error
 
-	var data_ InputObjectQueryResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &InputObjectQueryResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		nil,
@@ -208,6 +208,6 @@ func InputObjectQuery(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 

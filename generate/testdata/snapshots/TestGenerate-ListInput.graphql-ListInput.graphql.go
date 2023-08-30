@@ -53,7 +53,7 @@ query ListInputQuery ($names: [String]) {
 func ListInputQuery(
 	client_ graphql.Client,
 	names []string,
-) (*ListInputQueryResponse, error) {
+) (data_ *ListInputQueryResponse, err error) {
 	req_ := &graphql.Request{
 		OpName: "ListInputQuery",
 		Query:  ListInputQuery_Operation,
@@ -63,8 +63,8 @@ func ListInputQuery(
 	}
 	var err_ error
 
-	var data_ ListInputQueryResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &ListInputQueryResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		nil,
@@ -72,6 +72,6 @@ func ListInputQuery(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 

@@ -76,15 +76,15 @@ query QueryWithEnums {
 
 func QueryWithEnums(
 	client_ graphql.Client,
-) (*QueryWithEnumsResponse, error) {
+) (data_ *QueryWithEnumsResponse, err error) {
 	req_ := &graphql.Request{
 		OpName: "QueryWithEnums",
 		Query:  QueryWithEnums_Operation,
 	}
 	var err_ error
 
-	var data_ QueryWithEnumsResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &QueryWithEnumsResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		nil,
@@ -92,6 +92,6 @@ func QueryWithEnums(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 

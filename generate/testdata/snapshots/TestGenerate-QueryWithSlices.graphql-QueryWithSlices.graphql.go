@@ -55,15 +55,15 @@ query QueryWithSlices {
 
 func QueryWithSlices(
 	client_ graphql.Client,
-) (*QueryWithSlicesResponse, error) {
+) (data_ *QueryWithSlicesResponse, err error) {
 	req_ := &graphql.Request{
 		OpName: "QueryWithSlices",
 		Query:  QueryWithSlices_Operation,
 	}
 	var err_ error
 
-	var data_ QueryWithSlicesResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &QueryWithSlicesResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		nil,
@@ -71,6 +71,6 @@ func QueryWithSlices(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 

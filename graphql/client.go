@@ -11,7 +11,6 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/gorilla/websocket"
 	"github.com/vektah/gqlparser/v2/gqlerror"
 )
 
@@ -45,7 +44,7 @@ type Client interface {
 		req *Request,
 		resp *Response,
 		dataUpdated chan bool,
-	) (done chan struct{}, errChan chan error, err error)
+	) (doneChan chan bool, errChan chan error, err error)
 }
 
 type WebSocketClient struct {
@@ -119,7 +118,13 @@ type Doer interface {
 }
 
 type Dialer interface {
-	DialContext(ctx context.Context, urlStr string, requestHeader http.Header) (*websocket.Conn, *http.Response, error)
+	DialContext(ctx context.Context, urlStr string, requestHeader http.Header) (WSConn, *http.Response, error)
+}
+
+type WSConn interface {
+	Close() error
+	WriteMessage(messageType int, data []byte) error
+	ReadMessage() (messageType int, p []byte, err error)
 }
 
 // Request contains all the values required to build queries executed by
@@ -202,7 +207,7 @@ func (c *client) MakeRequest(ctx context.Context, req *Request, resp *Response) 
 	return nil
 }
 
-func (c *client) DialWebSocket(ctx context.Context, req *Request, resp *Response, dataUpdated chan bool) (done chan struct{}, errChan chan error, err error) {
+func (c *client) DialWebSocket(ctx context.Context, req *Request, resp *Response, dataUpdated chan bool) (doneChan chan bool, errChan chan error, err error) {
 	if c.method != constMethodWebSocket {
 		return nil, nil, errors.New("client does not support websocket")
 	}
@@ -215,51 +220,51 @@ func (c *client) DialWebSocket(ctx context.Context, req *Request, resp *Response
 		}
 	}
 
-	done = make(chan struct{}, 1)
+	doneChan = make(chan bool, 1)
 	errChan = make(chan error, 1)
-	startedWithError := make(chan error, 1)
 
-	go c.webSocketSubscriptionRoutine(
+	err = c.subscribeAndListen(
 		ctx,
 		req,
 		resp,
 		dataUpdated,
-		startedWithError,
 		errChan,
-		done,
+		doneChan,
 	)
-	err = <-startedWithError
-	close(startedWithError)
 
-	return done, errChan, err
+	return doneChan, errChan, err
 }
 
-func (c *client) webSocketSubscriptionRoutine(ctx context.Context, req *Request, resp *Response, dataUpdated chan bool, startedWithError chan error, errChan chan error, done chan struct{}) {
+func (c *client) subscribeAndListen(ctx context.Context, req *Request, resp *Response, dataUpdated chan bool, errChan chan error, doneChan chan bool) error {
 	conn, res, err := c.webSocketClient.Dialer.DialContext(ctx, c.endpoint, c.webSocketClient.Header)
 	if err != nil {
-		startedWithError <- err
-		close(done)
-		return
+		close(doneChan)
+		return err
 	}
 	defer res.Body.Close()
-	defer conn.Close()
-
-	go listenWebSocket(conn, resp, dataUpdated, errChan, done)
 
 	err = sendInit(conn)
 	if err != nil {
-		startedWithError <- err
-		return
+		conn.Close()
+		return err
 	}
+	err = waitForConnAck(conn)
+	if err != nil {
+		conn.Close()
+		return err
+	}
+
+	go listenWebSocket(conn, resp, dataUpdated, errChan, doneChan)
+
 	err = sendSubscribe(conn, req)
 	if err != nil {
-		startedWithError <- err
-		return
+		conn.Close()
+		return err
 	}
 
-	startedWithError <- nil
+	go waitToEndWebSocket(conn, errChan, doneChan)
 
-	waitToEndWebSocket(conn, errChan, done)
+	return nil
 }
 
 func (c *client) createPostRequest(req *Request) (*http.Request, error) {

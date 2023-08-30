@@ -52,15 +52,15 @@ query QueryWithAlias {
 
 func QueryWithAlias(
 	client_ graphql.Client,
-) (*QueryWithAliasResponse, error) {
+) (data_ *QueryWithAliasResponse, err error) {
 	req_ := &graphql.Request{
 		OpName: "QueryWithAlias",
 		Query:  QueryWithAlias_Operation,
 	}
 	var err_ error
 
-	var data_ QueryWithAliasResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &QueryWithAliasResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		nil,
@@ -68,6 +68,6 @@ func QueryWithAlias(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 

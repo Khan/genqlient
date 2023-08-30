@@ -76,15 +76,15 @@ query UsesEnumTwiceQuery {
 
 func UsesEnumTwiceQuery(
 	client_ graphql.Client,
-) (*UsesEnumTwiceQueryResponse, error) {
+) (data_ *UsesEnumTwiceQueryResponse, err error) {
 	req_ := &graphql.Request{
 		OpName: "UsesEnumTwiceQuery",
 		Query:  UsesEnumTwiceQuery_Operation,
 	}
 	var err_ error
 
-	var data_ UsesEnumTwiceQueryResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &UsesEnumTwiceQueryResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		nil,
@@ -92,6 +92,6 @@ func UsesEnumTwiceQuery(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 

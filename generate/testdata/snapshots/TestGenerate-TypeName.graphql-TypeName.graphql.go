@@ -49,15 +49,15 @@ query TypeNameQuery {
 
 func TypeNameQuery(
 	client_ graphql.Client,
-) (*TypeNameQueryResponse, error) {
+) (data_ *TypeNameQueryResponse, err error) {
 	req_ := &graphql.Request{
 		OpName: "TypeNameQuery",
 		Query:  TypeNameQuery_Operation,
 	}
 	var err_ error
 
-	var data_ TypeNameQueryResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &TypeNameQueryResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		nil,
@@ -65,6 +65,6 @@ func TypeNameQuery(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 

@@ -66,7 +66,7 @@ func MutationArgsWithCollidingNames(
 	req int,
 	resp int,
 	client string,
-) (*MutationArgsWithCollidingNamesResponse, error) {
+) (data_ *MutationArgsWithCollidingNamesResponse, err error) {
 	req_ := &graphql.Request{
 		OpName: "MutationArgsWithCollidingNames",
 		Query:  MutationArgsWithCollidingNames_Operation,
@@ -79,8 +79,8 @@ func MutationArgsWithCollidingNames(
 	}
 	var err_ error
 
-	var data_ MutationArgsWithCollidingNamesResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &MutationArgsWithCollidingNamesResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		nil,
@@ -88,6 +88,6 @@ func MutationArgsWithCollidingNames(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 

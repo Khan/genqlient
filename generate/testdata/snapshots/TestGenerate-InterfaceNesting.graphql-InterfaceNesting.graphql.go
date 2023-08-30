@@ -526,15 +526,15 @@ query InterfaceNesting {
 
 func InterfaceNesting(
 	client_ graphql.Client,
-) (*InterfaceNestingResponse, error) {
+) (data_ *InterfaceNestingResponse, err error) {
 	req_ := &graphql.Request{
 		OpName: "InterfaceNesting",
 		Query:  InterfaceNesting_Operation,
 	}
 	var err_ error
 
-	var data_ InterfaceNestingResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &InterfaceNestingResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		nil,
@@ -542,6 +542,6 @@ func InterfaceNesting(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 

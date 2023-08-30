@@ -1436,15 +1436,15 @@ query ComplexInlineFragments {
 // interfaces yet.
 func ComplexInlineFragments(
 	client_ graphql.Client,
-) (*ComplexInlineFragmentsResponse, error) {
+) (data_ *ComplexInlineFragmentsResponse, err error) {
 	req_ := &graphql.Request{
 		OpName: "ComplexInlineFragments",
 		Query:  ComplexInlineFragments_Operation,
 	}
 	var err_ error
 
-	var data_ ComplexInlineFragmentsResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &ComplexInlineFragmentsResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		nil,
@@ -1452,6 +1452,6 @@ func ComplexInlineFragments(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 

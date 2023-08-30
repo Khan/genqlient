@@ -25,24 +25,25 @@ subscription SimpleSubscription {
 
 func SimpleSubscription(
 	client_ graphql.Client,
-) (chan SimpleSubscriptionWsResponse, chan struct{}, chan error, error) {
+) (dataChan_ chan SimpleSubscriptionWsResponse, doneChan_ chan bool, errChan_ chan error, err error) {
 	req_ := &graphql.Request{
 		OpName: "SimpleSubscription",
 		Query:  SimpleSubscription_Operation,
 	}
 	var err_ error
 
-	var data_ SimpleSubscriptionResponse
-	resp_ := &graphql.Response{Data: &data_}
+	var data_ *SimpleSubscriptionResponse
+	data_ = &SimpleSubscriptionResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
-	dataChan_ := make(chan SimpleSubscriptionWsResponse, 1)
+	dataChan_ = make(chan SimpleSubscriptionWsResponse, 1)
 	dataUpdated_ := make(chan bool, 1)
 
-	doneChan_, errChan_, err_ := client_.DialWebSocket(context.Background(), req_, resp_, dataUpdated_)
+	doneChan_, errChan_, err_ = client_.DialWebSocket(context.Background(), req_, resp_, dataUpdated_)
 	if err_ != nil {
 		return nil, nil, nil, err_
 	}
-	go SimpleSubscriptionForwardData(dataChan_, resp_, dataUpdated_, errChan_)
+	go SimpleSubscriptionForwardData(dataChan_, resp_, dataUpdated_)
 
 	return dataChan_, doneChan_, errChan_, err_
 }
@@ -53,7 +54,7 @@ type SimpleSubscriptionWsResponse struct {
 	Errors     error
 }
 
-func SimpleSubscriptionForwardData(dataChan_ chan SimpleSubscriptionWsResponse, resp_ *graphql.Response, dataUpdated_ chan bool, errChan_ chan error) {
+func SimpleSubscriptionForwardData(dataChan_ chan SimpleSubscriptionWsResponse, resp_ *graphql.Response, dataUpdated_ chan bool) {
 	defer close(dataChan_)
 	for {
 		_, more_ := <-dataUpdated_

@@ -9,7 +9,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"strings"
 	"testing"
 	"time"
 
@@ -48,7 +47,7 @@ func TestMutation(t *testing.T) {
 	defer server.Close()
 	postClient := newRoundtripClient(t, server.URL)
 	getClient := newRoundtripGetClient(t, server.URL)
-	websocketClient := newRoundtripWebScoketClient(t, "ws"+strings.TrimPrefix(server.URL, "http"))
+	websocketClient := newRoundtripWebScoketClient(t, server.URL)
 
 	resp, _, err := createUser(ctx, postClient, NewUser{Name: "Jack"})
 	require.NoError(t, err)
@@ -71,7 +70,7 @@ func TestSubscription(t *testing.T) {
 	defer server.Close()
 	postClient := newRoundtripClient(t, server.URL)
 	getClient := newRoundtripGetClient(t, server.URL)
-	websocketClient := newRoundtripWebScoketClient(t, "ws"+strings.TrimPrefix(server.URL, "http"))
+	websocketClient := newRoundtripWebScoketClient(t, server.URL)
 
 	_, _, _, _, err := count(ctx, getClient)
 	require.Errorf(t, err, "client does not support websocket")
@@ -82,7 +81,7 @@ func TestSubscription(t *testing.T) {
 	start := time.Now()
 	respChan, doneChan, errChan, _, err := count(ctx, websocketClient)
 	require.NoError(t, err)
-	defer func() { doneChan <- struct{}{} }()
+	defer func() { doneChan <- true }()
 	counter := 0
 	for loop := true; loop; {
 		select {

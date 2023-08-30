@@ -240,7 +240,7 @@ func OmitEmptyQuery(
 	dt time.Time,
 	tz string,
 	tzNoOmitEmpty string,
-) (*OmitEmptyQueryResponse, error) {
+) (data_ *OmitEmptyQueryResponse, err error) {
 	req_ := &graphql.Request{
 		OpName: "OmitEmptyQuery",
 		Query:  OmitEmptyQuery_Operation,
@@ -254,8 +254,8 @@ func OmitEmptyQuery(
 	}
 	var err_ error
 
-	var data_ OmitEmptyQueryResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &OmitEmptyQueryResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		nil,
@@ -263,6 +263,6 @@ func OmitEmptyQuery(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 

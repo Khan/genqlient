@@ -252,7 +252,7 @@ func PointersQuery(
 	query *UserQueryInput,
 	dt time.Time,
 	tz *string,
-) (*PointersQueryResponse, error) {
+) (data_ *PointersQueryResponse, err error) {
 	req_ := &graphql.Request{
 		OpName: "PointersQuery",
 		Query:  PointersQuery_Operation,
@@ -264,8 +264,8 @@ func PointersQuery(
 	}
 	var err_ error
 
-	var data_ PointersQueryResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &PointersQueryResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		nil,
@@ -273,6 +273,6 @@ func PointersQuery(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 

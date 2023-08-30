@@ -285,15 +285,15 @@ query TypeNames {
 
 func TypeNames(
 	client_ graphql.Client,
-) (*Resp, error) {
+) (data_ *Resp, err error) {
 	req_ := &graphql.Request{
 		OpName: "TypeNames",
 		Query:  TypeNames_Operation,
 	}
 	var err_ error
 
-	var data_ Resp
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &Resp{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		nil,
@@ -301,6 +301,6 @@ func TypeNames(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 

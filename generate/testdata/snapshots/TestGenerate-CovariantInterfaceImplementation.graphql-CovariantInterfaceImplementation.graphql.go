@@ -2394,15 +2394,15 @@ fragment TopicFields on Topic {
 
 func CovariantInterfaceImplementation(
 	client_ graphql.Client,
-) (*CovariantInterfaceImplementationResponse, error) {
+) (data_ *CovariantInterfaceImplementationResponse, err error) {
 	req_ := &graphql.Request{
 		OpName: "CovariantInterfaceImplementation",
 		Query:  CovariantInterfaceImplementation_Operation,
 	}
 	var err_ error
 
-	var data_ CovariantInterfaceImplementationResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &CovariantInterfaceImplementationResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		nil,
@@ -2410,6 +2410,6 @@ func CovariantInterfaceImplementation(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 

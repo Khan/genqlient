@@ -94,7 +94,7 @@ query GetPokemon ($where: getPokemonBoolExp!) {
 func GetPokemon(
 	client_ graphql.Client,
 	where *GetPokemonBoolExp,
-) (*GetPokemonResponse, error) {
+) (data_ *GetPokemonResponse, err error) {
 	req_ := &graphql.Request{
 		OpName: "GetPokemon",
 		Query:  GetPokemon_Operation,
@@ -104,8 +104,8 @@ func GetPokemon(
 	}
 	var err_ error
 
-	var data_ GetPokemonResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &GetPokemonResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		nil,
@@ -113,6 +113,6 @@ func GetPokemon(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 

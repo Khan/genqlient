@@ -49,15 +49,15 @@ query SimpleQueryNoOverride {
 
 func SimpleQueryNoOverride(
 	client_ graphql.Client,
-) (*SimpleQueryNoOverrideResponse, error) {
+) (data_ *SimpleQueryNoOverrideResponse, err error) {
 	req_ := &graphql.Request{
 		OpName: "SimpleQueryNoOverride",
 		Query:  SimpleQueryNoOverride_Operation,
 	}
 	var err_ error
 
-	var data_ SimpleQueryNoOverrideResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &SimpleQueryNoOverrideResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		nil,
@@ -65,6 +65,6 @@ func SimpleQueryNoOverride(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 

@@ -306,15 +306,15 @@ fragment ChildVideoFields on Video {
 
 func ComplexNamedFragments(
 	client_ graphql.Client,
-) (*InnerQueryFragment, error) {
+) (data_ *InnerQueryFragment, err error) {
 	req_ := &graphql.Request{
 		OpName: "ComplexNamedFragments",
 		Query:  ComplexNamedFragments_Operation,
 	}
 	var err_ error
 
-	var data_ InnerQueryFragment
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &InnerQueryFragment{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		nil,
@@ -322,6 +322,6 @@ func ComplexNamedFragments(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 

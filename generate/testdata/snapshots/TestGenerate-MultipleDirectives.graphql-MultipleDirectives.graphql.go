@@ -341,7 +341,7 @@ func MultipleDirectives(
 	client_ graphql.Client,
 	query MyInput,
 	queries []*UserQueryInput,
-) (*MyMultipleDirectivesResponse, error) {
+) (data_ *MyMultipleDirectivesResponse, err error) {
 	req_ := &graphql.Request{
 		OpName: "MultipleDirectives",
 		Query:  MultipleDirectives_Operation,
@@ -352,8 +352,8 @@ func MultipleDirectives(
 	}
 	var err_ error
 
-	var data_ MyMultipleDirectivesResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &MyMultipleDirectivesResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		nil,
@@ -361,6 +361,6 @@ func MultipleDirectives(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 

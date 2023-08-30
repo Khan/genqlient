@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strings"
 	"testing"
 
 	"github.com/Khan/genqlient/graphql"
@@ -104,7 +105,7 @@ func (c *roundtripClient) MakeRequest(ctx context.Context, req *graphql.Request,
 	return nil
 }
 
-func (c *roundtripClient) DialWebSocket(ctx context.Context, req *graphql.Request, resp *graphql.Response, dataUpdated chan bool) (done chan struct{}, errChan chan error, err error) {
+func (c *roundtripClient) DialWebSocket(ctx context.Context, req *graphql.Request, resp *graphql.Response, dataUpdated chan bool) (doneChan chan bool, errChan chan error, err error) {
 	return c.wrapped.DialWebSocket(ctx, req, resp, dataUpdated)
 }
 
@@ -132,9 +133,22 @@ func newRoundtripGetClient(t *testing.T, endpoint string) graphql.Client {
 	}
 }
 
+type MyDialer struct {
+	*websocket.Dialer
+}
+
+func (md *MyDialer) DialContext(ctx context.Context, urlStr string, requestHeader http.Header) (graphql.WSConn, *http.Response, error) {
+	conn, resp, err := md.Dialer.DialContext(ctx, urlStr, requestHeader)
+	return graphql.WSConn(conn), resp, err
+}
+
 func newRoundtripWebScoketClient(t *testing.T, endpoint string) graphql.Client {
 	dialer := websocket.DefaultDialer
-	webSocketClient := graphql.WebSocketClient{Dialer: dialer, Header: http.Header{}}
+	webSocketClient := graphql.WebSocketClient{Dialer: &MyDialer{Dialer: dialer}, Header: http.Header{}}
+	if !strings.HasPrefix(endpoint, "ws") {
+		_, address, _ := strings.Cut(endpoint, "://")
+		endpoint = "ws://" + address
+	}
 	return &roundtripClient{
 		wrapped: graphql.NewClientUsingWebSocket(endpoint, webSocketClient),
 		t:       t,

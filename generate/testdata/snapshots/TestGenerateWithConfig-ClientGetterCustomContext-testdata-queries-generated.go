@@ -49,7 +49,7 @@ query SimpleQuery {
 
 func SimpleQuery(
 	ctx_ testutil.MyContext,
-) (*SimpleQueryResponse, error) {
+) (data_ *SimpleQueryResponse, err error) {
 	req_ := &graphql.Request{
 		OpName: "SimpleQuery",
 		Query:  SimpleQuery_Operation,
@@ -62,8 +62,8 @@ func SimpleQuery(
 		return nil, err_
 	}
 
-	var data_ SimpleQueryResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &SimpleQueryResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		ctx_,
@@ -71,6 +71,6 @@ func SimpleQuery(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 
