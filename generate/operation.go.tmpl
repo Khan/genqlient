@@ -22,7 +22,7 @@ func {{.Name}}(
     {{.GraphQLName}} {{.GoType.Reference}},
     {{end -}}
     {{end -}}
-) ({{if eq .Type "subscription"}}dataChan_ chan {{.Name}}WsResponse, doneChan_ chan bool, errChan_ chan error{{else}}data_ *{{.ResponseName}}{{end}}, {{if .Config.Extensions -}}ext_ map[string]interface{},{{end}}err error) {
+) ({{if eq .Type "subscription"}}dataChan_ chan {{.Name}}WsResponse, doneChan_ chan bool, errChan_ chan error,{{else}}data_ *{{.ResponseName}}, {{if .Config.Extensions -}}ext_ map[string]interface{},{{end}}{{end}} err error) {
     req_ := &graphql.Request{
         OpName: "{{.Name}}",
         Query:  {{.Name}}_Operation,
@@ -43,18 +43,18 @@ func {{.Name}}(
         return nil, {{if .Config.Extensions -}}nil,{{end -}} err_
     }
     {{end}}
-    data_ {{if eq .Type "subscription"}}:{{end}}= &{{.ResponseName}}{}
-    resp_ := &graphql.Response{Data: data_}
     {{if eq .Type "subscription"}}
     dataChan_ = make(chan {{.Name}}WsResponse, 1)
-    dataUpdated_ := make(chan bool, 1)
+    respChan_ := make(chan json.RawMessage, 1)
 
-    doneChan_, errChan_, err_ = client_.DialWebSocket({{if ne .Config.ContextType "-" -}}ctx_{{else}}context.Background(){{end}}, req_, resp_, dataUpdated_)
+    doneChan_, errChan_, err_ = client_.DialWebSocket({{if ne .Config.ContextType "-" -}}ctx_{{else}}context.Background(){{end}}, req_, respChan_)
 	if err_ != nil {
-		return nil, nil, nil,{{if .Config.Extensions -}} nil,{{end}} err_
+		return nil, nil, nil, err_
 	}
-    go {{.Name}}ForwardData(dataChan_, resp_, dataUpdated_)
+    go {{.Name}}ForwardData(dataChan_, errChan_, respChan_)
     {{else}}
+    data_ = &{{.ResponseName}}{}
+    resp_ := &graphql.Response{Data: data_}
 
     err_ = client_.MakeRequest(
         {{if ne .Config.ContextType "-"}}ctx_{{else}}nil{{end}},
@@ -63,31 +63,40 @@ func {{.Name}}(
     )
     {{end}}
 	
-    return {{if eq .Type "subscription"}}dataChan_, doneChan_, errChan_{{else}}data_{{end}}, {{if .Config.Extensions -}}resp_.Extensions,{{end -}} err_
+    return {{if eq .Type "subscription"}}dataChan_, doneChan_, errChan_,{{else}}data_, {{if .Config.Extensions -}}resp_.Extensions,{{end -}}{{end}} err_
 }
 
 {{if eq .Type "subscription"}}
 type {{.Name}}WsResponse struct {
-	Data       *{{.ResponseName}}
-	Extensions map[string]interface{}
-	Errors     error
+	Data       *{{.ResponseName}}     `json:"data"`
+	Extensions map[string]interface{} `json:"extensions,omitempty"`
+	Errors     error                  `json:"errors"`
 }
 
-func {{.Name}}ForwardData(dataChan_ chan {{.Name}}WsResponse, resp_ *graphql.Response, dataUpdated_ chan bool) {
+func {{.Name}}ForwardData(dataChan_ chan {{.Name}}WsResponse, errChan_ chan error, respChan_ chan json.RawMessage) {
     defer close(dataChan_)
+    var gqlResp graphql.Response
+	var wsResp {{.Name}}WsResponse
 	for {
-		_, more_ := <-dataUpdated_
+		jsonRaw, more_ := <-respChan_
 		if !more_ {
 			return
 		}
-		data_ := {{.Name}}WsResponse{
-			Extensions: resp_.Extensions,
-			Errors: resp_.Errors,
+		err := json.Unmarshal(jsonRaw, &gqlResp)
+		if err != nil {
+			errChan_ <- err
+			return
 		}
-		if resp_.Data != nil {
-			data_.Data = resp_.Data.(*{{.ResponseName}})
+		if len(gqlResp.Errors) == 0 {
+			err = json.Unmarshal(jsonRaw, &wsResp)
+			if err != nil {
+				errChan_ <- err
+				return
+			}
+		} else {
+			wsResp.Errors = gqlResp.Errors
 		}
-		dataChan_ <- data_
+		dataChan_ <- wsResp
 	}
 }
 {{end}}

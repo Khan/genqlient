@@ -4,6 +4,7 @@ package test
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/Khan/genqlient/graphql"
 )
@@ -35,42 +36,48 @@ func SimpleSubscription(
 	}
 	var err_ error
 
-	data_ := &SimpleSubscriptionResponse{}
-	resp_ := &graphql.Response{Data: data_}
-
 	dataChan_ = make(chan SimpleSubscriptionWsResponse, 1)
-	dataUpdated_ := make(chan bool, 1)
+	respChan_ := make(chan json.RawMessage, 1)
 
-	doneChan_, errChan_, err_ = client_.DialWebSocket(context.Background(), req_, resp_, dataUpdated_)
+	doneChan_, errChan_, err_ = client_.DialWebSocket(context.Background(), req_, respChan_)
 	if err_ != nil {
 		return nil, nil, nil, err_
 	}
-	go SimpleSubscriptionForwardData(dataChan_, resp_, dataUpdated_)
+	go SimpleSubscriptionForwardData(dataChan_, errChan_, respChan_)
 
 	return dataChan_, doneChan_, errChan_, err_
 }
 
 type SimpleSubscriptionWsResponse struct {
-	Data       *SimpleSubscriptionResponse
-	Extensions map[string]interface{}
-	Errors     error
+	Data       *SimpleSubscriptionResponse `json:"data"`
+	Extensions map[string]interface{}      `json:"extensions,omitempty"`
+	Errors     error                       `json:"errors"`
 }
 
-func SimpleSubscriptionForwardData(dataChan_ chan SimpleSubscriptionWsResponse, resp_ *graphql.Response, dataUpdated_ chan bool) {
+func SimpleSubscriptionForwardData(dataChan_ chan SimpleSubscriptionWsResponse, errChan_ chan error, respChan_ chan json.RawMessage) {
 	defer close(dataChan_)
+	var gqlResp graphql.Response
+	var wsResp SimpleSubscriptionWsResponse
 	for {
-		_, more_ := <-dataUpdated_
+		jsonRaw, more_ := <-respChan_
 		if !more_ {
 			return
 		}
-		data_ := SimpleSubscriptionWsResponse{
-			Extensions: resp_.Extensions,
-			Errors:     resp_.Errors,
+		err := json.Unmarshal(jsonRaw, &gqlResp)
+		if err != nil {
+			errChan_ <- err
+			return
 		}
-		if resp_.Data != nil {
-			data_.Data = resp_.Data.(*SimpleSubscriptionResponse)
+		if len(gqlResp.Errors) == 0 {
+			err = json.Unmarshal(jsonRaw, &wsResp)
+			if err != nil {
+				errChan_ <- err
+				return
+			}
+		} else {
+			wsResp.Errors = gqlResp.Errors
 		}
-		dataChan_ <- data_
+		dataChan_ <- wsResp
 	}
 }
 

@@ -49,14 +49,7 @@ type Client interface {
 	// req contains the data to be sent to the GraphQL server. Will be marshalled
 	// into JSON bytes.
 	//
-	// resp is the Response object into which the server's response will be
-	// unmarshalled. Typically GraphQL APIs will return JSON which can be
-	// unmarshalled directly into resp.
-	// If the response contains an error, this must also be returned by
-	// DialWebSocket.  The field resp.Data will be prepopulated with a pointer
-	// to an empty struct of the correct generated type (e.g. MyQueryResponse).
-	//
-	// dataUpdated is a channel used to notify that new data has arrived via the
+	// respChan is a channel used to send the data that arrives via the
 	// webSocket connection.
 	//
 	// doneChan is a channel used to end the websocket connection.
@@ -68,8 +61,7 @@ type Client interface {
 	DialWebSocket(
 		ctx context.Context,
 		req *Request,
-		resp *Response,
-		dataUpdated chan bool,
+		respChan chan json.RawMessage,
 	) (doneChan chan bool, errChan chan error, err error)
 }
 
@@ -242,7 +234,7 @@ func (c *client) MakeRequest(ctx context.Context, req *Request, resp *Response) 
 	return nil
 }
 
-func (c *client) DialWebSocket(ctx context.Context, req *Request, resp *Response, dataUpdated chan bool) (doneChan chan bool, errChan chan error, err error) {
+func (c *client) DialWebSocket(ctx context.Context, req *Request, respChan chan json.RawMessage) (doneChan chan bool, errChan chan error, err error) {
 	if c.method != constMethodWebSocket {
 		return nil, nil, errors.New("client does not support websocket")
 	}
@@ -261,8 +253,7 @@ func (c *client) DialWebSocket(ctx context.Context, req *Request, resp *Response
 	err = c.subscribeAndListen(
 		ctx,
 		req,
-		resp,
-		dataUpdated,
+		respChan,
 		errChan,
 		doneChan,
 	)
@@ -270,7 +261,7 @@ func (c *client) DialWebSocket(ctx context.Context, req *Request, resp *Response
 	return doneChan, errChan, err
 }
 
-func (c *client) subscribeAndListen(ctx context.Context, req *Request, resp *Response, dataUpdated chan bool, errChan chan error, doneChan chan bool) error {
+func (c *client) subscribeAndListen(ctx context.Context, req *Request, respChan chan json.RawMessage, errChan chan error, doneChan chan bool) error {
 	conn, res, err := c.webSocketClient.Dialer.DialContext(ctx, c.endpoint, c.webSocketClient.Header)
 	if err != nil {
 		close(doneChan)
@@ -289,7 +280,7 @@ func (c *client) subscribeAndListen(ctx context.Context, req *Request, resp *Res
 		return err
 	}
 
-	go listenWebSocket(conn, resp, dataUpdated, errChan, doneChan)
+	go listenWebSocket(conn, respChan, errChan, doneChan)
 
 	err = sendSubscribe(conn, req)
 	if err != nil {

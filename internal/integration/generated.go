@@ -3099,49 +3099,55 @@ subscription count {
 func count(
 	ctx_ context.Context,
 	client_ graphql.Client,
-) (dataChan_ chan countWsResponse, doneChan_ chan bool, errChan_ chan error, ext_ map[string]interface{}, err error) {
+) (dataChan_ chan countWsResponse, doneChan_ chan bool, errChan_ chan error, err error) {
 	req_ := &graphql.Request{
 		OpName: "count",
 		Query:  count_Operation,
 	}
 	var err_ error
 
-	data_ := &countResponse{}
-	resp_ := &graphql.Response{Data: data_}
-
 	dataChan_ = make(chan countWsResponse, 1)
-	dataUpdated_ := make(chan bool, 1)
+	respChan_ := make(chan json.RawMessage, 1)
 
-	doneChan_, errChan_, err_ = client_.DialWebSocket(ctx_, req_, resp_, dataUpdated_)
+	doneChan_, errChan_, err_ = client_.DialWebSocket(ctx_, req_, respChan_)
 	if err_ != nil {
-		return nil, nil, nil, nil, err_
+		return nil, nil, nil, err_
 	}
-	go countForwardData(dataChan_, resp_, dataUpdated_)
+	go countForwardData(dataChan_, errChan_, respChan_)
 
-	return dataChan_, doneChan_, errChan_, resp_.Extensions, err_
+	return dataChan_, doneChan_, errChan_, err_
 }
 
 type countWsResponse struct {
-	Data       *countResponse
-	Extensions map[string]interface{}
-	Errors     error
+	Data       *countResponse         `json:"data"`
+	Extensions map[string]interface{} `json:"extensions,omitempty"`
+	Errors     error                  `json:"errors"`
 }
 
-func countForwardData(dataChan_ chan countWsResponse, resp_ *graphql.Response, dataUpdated_ chan bool) {
+func countForwardData(dataChan_ chan countWsResponse, errChan_ chan error, respChan_ chan json.RawMessage) {
 	defer close(dataChan_)
+	var gqlResp graphql.Response
+	var wsResp countWsResponse
 	for {
-		_, more_ := <-dataUpdated_
+		jsonRaw, more_ := <-respChan_
 		if !more_ {
 			return
 		}
-		data_ := countWsResponse{
-			Extensions: resp_.Extensions,
-			Errors:     resp_.Errors,
+		err := json.Unmarshal(jsonRaw, &gqlResp)
+		if err != nil {
+			errChan_ <- err
+			return
 		}
-		if resp_.Data != nil {
-			data_.Data = resp_.Data.(*countResponse)
+		if len(gqlResp.Errors) == 0 {
+			err = json.Unmarshal(jsonRaw, &wsResp)
+			if err != nil {
+				errChan_ <- err
+				return
+			}
+		} else {
+			wsResp.Errors = gqlResp.Errors
 		}
-		dataChan_ <- data_
+		dataChan_ <- wsResp
 	}
 }
 

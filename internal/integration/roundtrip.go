@@ -105,8 +105,8 @@ func (c *roundtripClient) MakeRequest(ctx context.Context, req *graphql.Request,
 	return nil
 }
 
-func (c *roundtripClient) DialWebSocket(ctx context.Context, req *graphql.Request, resp *graphql.Response, dataUpdated chan bool) (doneChan chan bool, errChan chan error, err error) {
-	return c.wrapped.DialWebSocket(ctx, req, resp, dataUpdated)
+func (c *roundtripClient) DialWebSocket(ctx context.Context, req *graphql.Request, respChan chan json.RawMessage) (doneChan chan bool, errChan chan error, err error) {
+	return c.wrapped.DialWebSocket(ctx, req, respChan)
 }
 
 func newRoundtripClients(t *testing.T, endpoint string) []graphql.Client {

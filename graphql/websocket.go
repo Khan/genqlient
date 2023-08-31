@@ -114,15 +114,15 @@ func waitForConnAck(conn WSConn) error {
 	return nil
 }
 
-func listenWebSocket(conn WSConn, resp *Response, dataUpdated chan bool, errChan chan error, doneChan chan bool) {
-	defer endListenWebSocket(dataUpdated, errChan, doneChan)
+func listenWebSocket(conn WSConn, respChan chan json.RawMessage, errChan chan error, doneChan chan bool) {
+	defer endListenWebSocket(respChan, errChan, doneChan)
 	for {
 		_, message, err := conn.ReadMessage()
 		if err != nil {
 			errChan <- err
 			return
 		}
-		err = forwardWebSocketData(resp, dataUpdated, message)
+		err = forwardWebSocketData(respChan, message)
 		if err != nil {
 			errChan <- err
 			return
@@ -130,8 +130,8 @@ func listenWebSocket(conn WSConn, resp *Response, dataUpdated chan bool, errChan
 	}
 }
 
-func endListenWebSocket(dataUpdated chan bool, errChan chan error, doneChan chan bool) {
-	close(dataUpdated)
+func endListenWebSocket(respChan chan json.RawMessage, errChan chan error, doneChan chan bool) {
+	close(respChan)
 	close(errChan)
 	close(doneChan)
 }
@@ -153,7 +153,7 @@ func checkConnectionAckReceived(message []byte) (bool, error) {
 	return wsMessage.Type == webSocketTypeConnAck, nil
 }
 
-func forwardWebSocketData(resp *Response, dataUpdated chan bool, message []byte) error {
+func forwardWebSocketData(respChan chan json.RawMessage, message []byte) error {
 	var wsMsg webSocketReceiveMessage
 	err := json.Unmarshal(message, &wsMsg)
 	if err != nil {
@@ -161,11 +161,7 @@ func forwardWebSocketData(resp *Response, dataUpdated chan bool, message []byte)
 	}
 	switch wsMsg.Type {
 	case webSocketTypeNext, webSocketTypeError:
-		err = json.Unmarshal(wsMsg.Payload, resp)
-		if err != nil {
-			return err
-		}
-		dataUpdated <- true
+		respChan <- wsMsg.Payload
 	default:
 	}
 	return nil

@@ -72,14 +72,14 @@ func TestSubscription(t *testing.T) {
 	getClient := newRoundtripGetClient(t, server.URL)
 	websocketClient := newRoundtripWebScoketClient(t, server.URL)
 
-	_, _, _, _, err := count(ctx, getClient)
+	_, _, _, err := count(ctx, getClient)
 	require.Errorf(t, err, "client does not support websocket")
 
-	_, _, _, _, err = count(ctx, postClient)
+	_, _, _, err = count(ctx, postClient)
 	require.Errorf(t, err, "client does not support websocket")
 
 	start := time.Now()
-	respChan, doneChan, errChan, _, err := count(ctx, websocketClient)
+	respChan, doneChan, errChan, err := count(ctx, websocketClient)
 	require.NoError(t, err)
 	defer func() { doneChan <- true }()
 	counter := 0
@@ -92,7 +92,7 @@ func TestSubscription(t *testing.T) {
 			}
 			require.NotNil(t, resp.Data)
 			assert.Equal(t, counter, resp.Data.Count)
-			require.Zero(t, resp.Errors.Error())
+			require.Nil(t, resp.Errors)
 			loop = time.Since(start) < time.Second*2
 			counter++
 		case err := <-errChan:
