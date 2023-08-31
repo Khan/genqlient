@@ -3095,11 +3095,11 @@ subscription count {
 
 // count
 //
-// To close the connection, use the doneChan_: `defer doneChan_ <- true`
+// To close the connection, use [graphql.WebSocketClient.CloseConnection()]
 func count(
 	ctx_ context.Context,
 	client_ graphql.Client,
-) (dataChan_ chan countWsResponse, doneChan_ chan bool, errChan_ chan error, err error) {
+) (dataChan_ chan countWsResponse, errChan_ chan error, err error) {
 	req_ := &graphql.Request{
 		OpName: "count",
 		Query:  count_Operation,
@@ -3109,13 +3109,13 @@ func count(
 	dataChan_ = make(chan countWsResponse, 1)
 	respChan_ := make(chan json.RawMessage, 1)
 
-	doneChan_, errChan_, err_ = client_.DialWebSocket(ctx_, req_, respChan_)
+	errChan_, err_ = client_.DialWebSocket(ctx_, req_, respChan_)
 	if err_ != nil {
-		return nil, nil, nil, err_
+		return nil, nil, err_
 	}
-	go countForwardData(dataChan_, errChan_, respChan_)
+	go countForwardData(dataChan_, respChan_, errChan_)
 
-	return dataChan_, doneChan_, errChan_, err_
+	return dataChan_, errChan_, err_
 }
 
 type countWsResponse struct {
@@ -3124,7 +3124,7 @@ type countWsResponse struct {
 	Errors     error                  `json:"errors"`
 }
 
-func countForwardData(dataChan_ chan countWsResponse, errChan_ chan error, respChan_ chan json.RawMessage) {
+func countForwardData(dataChan_ chan countWsResponse, respChan_ chan json.RawMessage, errChan_ chan error) {
 	defer close(dataChan_)
 	var gqlResp graphql.Response
 	var wsResp countWsResponse

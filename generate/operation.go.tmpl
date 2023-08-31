@@ -7,7 +7,7 @@ const {{.Name}}_Operation = `{{$.Body}}`
 // {{.Name}}
 {{end -}}
 //
-// To close the connection, use the doneChan_: `defer doneChan_ <- true`
+// To close the connection, use [graphql.WebSocketClient.CloseConnection()]
 {{end -}}
 func {{.Name}}(
     {{if ne .Config.ContextType "-" -}}
@@ -22,7 +22,7 @@ func {{.Name}}(
     {{.GraphQLName}} {{.GoType.Reference}},
     {{end -}}
     {{end -}}
-) ({{if eq .Type "subscription"}}dataChan_ chan {{.Name}}WsResponse, doneChan_ chan bool, errChan_ chan error,{{else}}data_ *{{.ResponseName}}, {{if .Config.Extensions -}}ext_ map[string]interface{},{{end}}{{end}} err error) {
+) ({{if eq .Type "subscription"}}dataChan_ chan {{.Name}}WsResponse, errChan_ chan error,{{else}}data_ *{{.ResponseName}}, {{if .Config.Extensions -}}ext_ map[string]interface{},{{end}}{{end}} err error) {
     req_ := &graphql.Request{
         OpName: "{{.Name}}",
         Query:  {{.Name}}_Operation,
@@ -47,11 +47,11 @@ func {{.Name}}(
     dataChan_ = make(chan {{.Name}}WsResponse, 1)
     respChan_ := make(chan json.RawMessage, 1)
 
-    doneChan_, errChan_, err_ = client_.DialWebSocket({{if ne .Config.ContextType "-" -}}ctx_{{else}}context.Background(){{end}}, req_, respChan_)
+    errChan_, err_ = client_.DialWebSocket({{if ne .Config.ContextType "-" -}}ctx_{{else}}context.Background(){{end}}, req_, respChan_)
 	if err_ != nil {
-		return nil, nil, nil, err_
+		return nil, nil, err_
 	}
-    go {{.Name}}ForwardData(dataChan_, errChan_, respChan_)
+    go {{.Name}}ForwardData(dataChan_, respChan_, errChan_)
     {{else}}
     data_ = &{{.ResponseName}}{}
     resp_ := &graphql.Response{Data: data_}
@@ -63,7 +63,7 @@ func {{.Name}}(
     )
     {{end}}
 	
-    return {{if eq .Type "subscription"}}dataChan_, doneChan_, errChan_,{{else}}data_, {{if .Config.Extensions -}}resp_.Extensions,{{end -}}{{end}} err_
+    return {{if eq .Type "subscription"}}dataChan_, errChan_,{{else}}data_, {{if .Config.Extensions -}}resp_.Extensions,{{end -}}{{end}} err_
 }
 
 {{if eq .Type "subscription"}}
@@ -73,7 +73,7 @@ type {{.Name}}WsResponse struct {
 	Errors     error                  `json:"errors"`
 }
 
-func {{.Name}}ForwardData(dataChan_ chan {{.Name}}WsResponse, errChan_ chan error, respChan_ chan json.RawMessage) {
+func {{.Name}}ForwardData(dataChan_ chan {{.Name}}WsResponse, respChan_ chan json.RawMessage, errChan_ chan error) {
     defer close(dataChan_)
     var gqlResp graphql.Response
 	var wsResp {{.Name}}WsResponse

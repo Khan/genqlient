@@ -26,10 +26,10 @@ subscription SimpleSubscription {
 
 // SimpleSubscription
 //
-// To close the connection, use the doneChan_: `defer doneChan_ <- true`
+// To close the connection, use [graphql.WebSocketClient.CloseConnection()]
 func SimpleSubscription(
 	client_ graphql.Client,
-) (dataChan_ chan SimpleSubscriptionWsResponse, doneChan_ chan bool, errChan_ chan error, err error) {
+) (dataChan_ chan SimpleSubscriptionWsResponse, errChan_ chan error, err error) {
 	req_ := &graphql.Request{
 		OpName: "SimpleSubscription",
 		Query:  SimpleSubscription_Operation,
@@ -39,13 +39,13 @@ func SimpleSubscription(
 	dataChan_ = make(chan SimpleSubscriptionWsResponse, 1)
 	respChan_ := make(chan json.RawMessage, 1)
 
-	doneChan_, errChan_, err_ = client_.DialWebSocket(context.Background(), req_, respChan_)
+	errChan_, err_ = client_.DialWebSocket(context.Background(), req_, respChan_)
 	if err_ != nil {
-		return nil, nil, nil, err_
+		return nil, nil, err_
 	}
-	go SimpleSubscriptionForwardData(dataChan_, errChan_, respChan_)
+	go SimpleSubscriptionForwardData(dataChan_, respChan_, errChan_)
 
-	return dataChan_, doneChan_, errChan_, err_
+	return dataChan_, errChan_, err_
 }
 
 type SimpleSubscriptionWsResponse struct {
@@ -54,7 +54,7 @@ type SimpleSubscriptionWsResponse struct {
 	Errors     error                       `json:"errors"`
 }
 
-func SimpleSubscriptionForwardData(dataChan_ chan SimpleSubscriptionWsResponse, errChan_ chan error, respChan_ chan json.RawMessage) {
+func SimpleSubscriptionForwardData(dataChan_ chan SimpleSubscriptionWsResponse, respChan_ chan json.RawMessage, errChan_ chan error) {
 	defer close(dataChan_)
 	var gqlResp graphql.Response
 	var wsResp SimpleSubscriptionWsResponse

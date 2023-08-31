@@ -4,6 +4,7 @@ import (
 	"encoding/binary"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"time"
 )
 
@@ -58,6 +59,14 @@ const (
 	PongMessage = 10
 )
 
+type WebSocketClient struct {
+	Dialer   Dialer
+	Header   http.Header
+	conn     WSConn
+	doneChan chan bool
+	errChan  chan error
+}
+
 type webSocketSendMessage struct {
 	Payload *Request `json:"payload"`
 	Type    string   `json:"type"`
@@ -68,42 +77,54 @@ type webSocketReceiveMessage struct {
 	Payload json.RawMessage `json:"payload"`
 }
 
-func sendInit(conn WSConn) error {
+func (w *WebSocketClient) CloseConnection() {
+	defer w.conn.Close()
+	err := w.sendComplete()
+	if err != nil {
+		w.errChan <- err
+	}
+	err = w.conn.WriteMessage(CloseMessage, formatCloseMessage(CloseNormalClosure, ""))
+	if err != nil {
+		w.errChan <- err
+	}
+}
+
+func (w *WebSocketClient) sendInit() error {
 	connInit := webSocketSendMessage{
 		Type: webSocketTypeConnInit,
 	}
-	return sendStructAsJSON(conn, connInit)
+	return w.sendStructAsJSON(connInit)
 }
 
-func sendSubscribe(conn WSConn, req *Request) error {
+func (w *WebSocketClient) sendSubscribe(req *Request) error {
 	subscription := webSocketSendMessage{
 		Type:    webSocketTypeSubscribe,
 		Payload: req,
 	}
-	return sendStructAsJSON(conn, subscription)
+	return w.sendStructAsJSON(subscription)
 }
 
-func sendComplete(conn WSConn) error {
+func (w *WebSocketClient) sendComplete() error {
 	complete := webSocketSendMessage{
 		Type: webSocketTypeComplete,
 	}
-	return sendStructAsJSON(conn, complete)
+	return w.sendStructAsJSON(complete)
 }
 
-func sendStructAsJSON(conn WSConn, object any) error {
+func (w *WebSocketClient) sendStructAsJSON(object any) error {
 	jsonBytes, err := json.Marshal(object)
 	if err != nil {
 		return err
 	}
-	return conn.WriteMessage(TextMessage, jsonBytes)
+	return w.conn.WriteMessage(TextMessage, jsonBytes)
 }
 
-func waitForConnAck(conn WSConn) error {
+func (w *WebSocketClient) waitForConnAck() error {
 	var connAckReceived bool
 	var err error
 	start := time.Now()
 	for !connAckReceived {
-		connAckReceived, err = receiveWebSocketConnAck(conn)
+		connAckReceived, err = w.receiveWebSocketConnAck()
 		if err != nil {
 			return err
 		}
@@ -114,30 +135,24 @@ func waitForConnAck(conn WSConn) error {
 	return nil
 }
 
-func listenWebSocket(conn WSConn, respChan chan json.RawMessage, errChan chan error, doneChan chan bool) {
-	defer endListenWebSocket(respChan, errChan, doneChan)
+func (w *WebSocketClient) listenWebSocket(respChan chan json.RawMessage) {
+	defer close(respChan)
 	for {
-		_, message, err := conn.ReadMessage()
+		_, message, err := w.conn.ReadMessage()
 		if err != nil {
-			errChan <- err
+			w.errChan <- err
 			return
 		}
 		err = forwardWebSocketData(respChan, message)
 		if err != nil {
-			errChan <- err
+			w.errChan <- err
 			return
 		}
 	}
 }
 
-func endListenWebSocket(respChan chan json.RawMessage, errChan chan error, doneChan chan bool) {
-	close(respChan)
-	close(errChan)
-	close(doneChan)
-}
-
-func receiveWebSocketConnAck(conn WSConn) (bool, error) {
-	_, message, err := conn.ReadMessage()
+func (w *WebSocketClient) receiveWebSocketConnAck() (bool, error) {
+	_, message, err := w.conn.ReadMessage()
 	if err != nil {
 		return false, err
 	}
@@ -165,20 +180,6 @@ func forwardWebSocketData(respChan chan json.RawMessage, message []byte) error {
 	default:
 	}
 	return nil
-}
-
-func waitToEndWebSocket(conn WSConn, errChan chan error, doneChan chan bool) {
-	defer conn.Close()
-	<-doneChan
-	err := sendComplete(conn)
-	if err != nil {
-		errChan <- err
-	}
-	err = conn.WriteMessage(CloseMessage, formatCloseMessage(CloseNormalClosure, ""))
-	if err != nil {
-		errChan <- err
-		return
-	}
 }
 
 // formatCloseMessage formats closeCode and text as a WebSocket close message.

@@ -52,8 +52,6 @@ type Client interface {
 	// respChan is a channel used to send the data that arrives via the
 	// webSocket connection.
 	//
-	// doneChan is a channel used to end the websocket connection.
-	//
 	// errChan is a channel on which are sent the errors of webSocket
 	// communication.
 	//
@@ -62,17 +60,12 @@ type Client interface {
 		ctx context.Context,
 		req *Request,
 		respChan chan json.RawMessage,
-	) (doneChan chan bool, errChan chan error, err error)
-}
-
-type WebSocketClient struct {
-	Dialer Dialer
-	Header http.Header
+	) (errChan chan error, err error)
 }
 
 type client struct {
 	httpClient      Doer
-	webSocketClient WebSocketClient
+	webSocketClient *WebSocketClient
 	endpoint        string
 	method          string
 }
@@ -92,7 +85,7 @@ const constMethodWebSocket = "websocket"
 //
 // [example/main.go]: https://github.com/Khan/genqlient/blob/main/example/main.go#L12-L20
 func NewClient(endpoint string, httpClient Doer) Client {
-	return newClient(endpoint, httpClient, http.MethodPost, WebSocketClient{})
+	return newClient(endpoint, httpClient, http.MethodPost, nil)
 }
 
 // NewClientUsingGet returns a [Client] which makes GET requests to the given
@@ -113,7 +106,7 @@ func NewClient(endpoint string, httpClient Doer) Client {
 //
 // [example/main.go]: https://github.com/Khan/genqlient/blob/main/example/main.go#L12-L20
 func NewClientUsingGet(endpoint string, httpClient Doer) Client {
-	return newClient(endpoint, httpClient, http.MethodGet, WebSocketClient{})
+	return newClient(endpoint, httpClient, http.MethodGet, nil)
 }
 
 // NewClientUsingWebSocket returns a [Client] which makes subscription requests
@@ -121,12 +114,14 @@ func NewClientUsingGet(endpoint string, httpClient Doer) Client {
 //
 // The client does not support queries nor mutations, and will return an error
 // if passed a request that attempts one.
-func NewClientUsingWebSocket(endpoint string, webSocketClient WebSocketClient) Client {
+func NewClientUsingWebSocket(endpoint string, webSocketClient *WebSocketClient) Client {
 	webSocketClient.Header.Add("Sec-WebSocket-Protocol", "graphql-transport-ws")
+	webSocketClient.doneChan = make(chan bool, 1)
+	webSocketClient.errChan = make(chan error, 1)
 	return newClient(endpoint, nil, constMethodWebSocket, webSocketClient)
 }
 
-func newClient(endpoint string, httpClient Doer, method string, webSocketClient WebSocketClient) Client {
+func newClient(endpoint string, httpClient Doer, method string, webSocketClient *WebSocketClient) Client {
 	if httpClient == nil || httpClient == (*http.Client)(nil) {
 		httpClient = http.DefaultClient
 	}
@@ -234,61 +229,56 @@ func (c *client) MakeRequest(ctx context.Context, req *Request, resp *Response) 
 	return nil
 }
 
-func (c *client) DialWebSocket(ctx context.Context, req *Request, respChan chan json.RawMessage) (doneChan chan bool, errChan chan error, err error) {
+func (c *client) DialWebSocket(ctx context.Context, req *Request, respChan chan json.RawMessage) (errChan chan error, err error) {
 	if c.method != constMethodWebSocket {
-		return nil, nil, errors.New("client does not support websocket")
+		return nil, errors.New("client does not support websocket")
 	}
 	if req.Query != "" {
 		if strings.HasPrefix(strings.TrimSpace(req.Query), "query") {
-			return nil, nil, errors.New("client does not support queries")
+			return nil, errors.New("client does not support queries")
 		}
 		if strings.HasPrefix(strings.TrimSpace(req.Query), "mutation") {
-			return nil, nil, errors.New("client does not support mutations")
+			return nil, errors.New("client does not support mutations")
 		}
 	}
-
-	doneChan = make(chan bool, 1)
-	errChan = make(chan error, 1)
 
 	err = c.subscribeAndListen(
 		ctx,
 		req,
 		respChan,
-		errChan,
-		doneChan,
 	)
 
-	return doneChan, errChan, err
+	return c.webSocketClient.errChan, err
 }
 
-func (c *client) subscribeAndListen(ctx context.Context, req *Request, respChan chan json.RawMessage, errChan chan error, doneChan chan bool) error {
-	conn, res, err := c.webSocketClient.Dialer.DialContext(ctx, c.endpoint, c.webSocketClient.Header)
+func (c *client) subscribeAndListen(ctx context.Context, req *Request, respChan chan json.RawMessage) error {
+	var res *http.Response
+	var err error
+	w := c.webSocketClient
+	w.conn, res, err = w.Dialer.DialContext(ctx, c.endpoint, w.Header)
 	if err != nil {
-		close(doneChan)
 		return err
 	}
 	defer res.Body.Close()
 
-	err = sendInit(conn)
+	err = w.sendInit()
 	if err != nil {
-		conn.Close()
+		w.conn.Close()
 		return err
 	}
-	err = waitForConnAck(conn)
+	err = w.waitForConnAck()
 	if err != nil {
-		conn.Close()
-		return err
-	}
-
-	go listenWebSocket(conn, respChan, errChan, doneChan)
-
-	err = sendSubscribe(conn, req)
-	if err != nil {
-		conn.Close()
+		w.conn.Close()
 		return err
 	}
 
-	go waitToEndWebSocket(conn, errChan, doneChan)
+	go w.listenWebSocket(respChan)
+
+	err = w.sendSubscribe(req)
+	if err != nil {
+		w.conn.Close()
+		return err
+	}
 
 	return nil
 }
