@@ -7,7 +7,7 @@ const {{.Name}}_Operation = `{{$.Body}}`
 // {{.Name}}
 {{end -}}
 //
-// To close the connection, use [graphql.WebSocketClient.CloseConnection()]
+// To close the connection, use [graphql.Client.CloseWebSocket()]
 {{end -}}
 func {{.Name}}(
     {{if ne .Config.ContextType "-" -}}
