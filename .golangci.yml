@@ -49,6 +49,7 @@ linters-settings:
       - golang.org/x/tools
       - gopkg.in/yaml.v2
       - github.com/alexflint/go-arg
+      - github.com/gorilla/websocket
 
   forbidigo:
     forbid:
@@ -91,7 +92,7 @@ issues:
     # Ok to use fmt.Print in the examples, and in the CLI entrypoint.
     - linters:
         - forbidigo
-      path: ^example/|^generate/main\.go$
+      path: ^example/|^exampleSubscription/|^generate/main\.go$
 
     - linters:
         - errcheck
@@ -108,5 +109,5 @@ issues:
     - linters:
         - govet
       # Only a big deal for runtime code.
-      path: ^generate/|^example/
+      path: ^generate/|^example/|^exampleSubscription/
       text: "^fieldalignment: struct with \\d+ pointer bytes could be \\d+$"

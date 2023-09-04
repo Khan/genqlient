@@ -424,7 +424,7 @@ type VideoFields struct {
 // GetDuration returns VideoFields.Duration, and is useful for accessing the field via an interface.
 func (v *VideoFields) GetDuration() int { return v.Duration }
 
-// The query or mutation executed by StructOption.
+// The query, mutation or subscription executed by StructOption.
 const StructOption_Operation = `
 query StructOption {
 	root {
@@ -457,15 +457,15 @@ fragment VideoFields on Video {
 
 func StructOption(
 	client_ graphql.Client,
-) (*StructOptionResponse, error) {
+) (data_ *StructOptionResponse, err error) {
 	req_ := &graphql.Request{
 		OpName: "StructOption",
 		Query:  StructOption_Operation,
 	}
 	var err_ error
 
-	var data_ StructOptionResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &StructOptionResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		nil,
@@ -473,6 +473,6 @@ func StructOption(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 

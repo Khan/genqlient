@@ -38,10 +38,38 @@ type Client interface {
 		req *Request,
 		resp *Response,
 	) error
+
+	// DialWebSocket must open a webSocket connection and subscribe to an endpoint
+	// of the client's GraphQL API.
+	//
+	// ctx is the context that should be used to make this request.  If context
+	// is disabled in the genqlient settings, this will be set to
+	// context.Background().
+	//
+	// req contains the data to be sent to the GraphQL server. Will be marshalled
+	// into JSON bytes.
+	//
+	// respChan is a channel used to send the data that arrives via the
+	// webSocket connection.
+	//
+	// errChan is a channel on which are sent the errors of webSocket
+	// communication.
+	//
+	// err is any error that occurs when setting up the webSocket connection.
+	DialWebSocket(
+		ctx context.Context,
+		req *Request,
+		respChan chan json.RawMessage,
+	) (errChan chan error, err error)
+
+	// CloseWebSocket must end the graphql subscription and close the webSocket
+	// connection.
+	CloseWebSocket()
 }
 
 type client struct {
 	httpClient Doer
+	wsClient   *webSocketClient
 	endpoint   string
 	method     string
 }
@@ -53,13 +81,16 @@ type client struct {
 // GraphQL HTTP-over-JSON transport.  It will use the given [http.Client], or
 // [http.DefaultClient] if a nil client is passed.
 //
+// The client does not support subscriptions, and will return an error if passed
+// a request that attempts one.
+//
 // The typical method of adding authentication headers is to wrap the client's
 // [http.Transport] to add those headers.  See [example/main.go] for an
 // example.
 //
 // [example/main.go]: https://github.com/Khan/genqlient/blob/main/example/main.go#L12-L20
 func NewClient(endpoint string, httpClient Doer) Client {
-	return newClient(endpoint, httpClient, http.MethodPost)
+	return newClient(endpoint, httpClient, http.MethodPost, nil)
 }
 
 // NewClientUsingGet returns a [Client] which makes GET requests to the given
@@ -71,8 +102,8 @@ func NewClient(endpoint string, httpClient Doer) Client {
 // parameters.  It will use the given [http.Client], or [http.DefaultClient] if
 // a nil client is passed.
 //
-// The client does not support mutations, and will return an error if passed a
-// request that attempts one.
+// The client does not support mutations nor subscriptions, and will return an
+// error if passed a request that attempts one.
 //
 // The typical method of adding authentication headers is to wrap the client's
 // [http.Transport] to add those headers.  See [example/main.go] for an
@@ -80,14 +111,32 @@ func NewClient(endpoint string, httpClient Doer) Client {
 //
 // [example/main.go]: https://github.com/Khan/genqlient/blob/main/example/main.go#L12-L20
 func NewClientUsingGet(endpoint string, httpClient Doer) Client {
-	return newClient(endpoint, httpClient, http.MethodGet)
+	return newClient(endpoint, httpClient, http.MethodGet, nil)
 }
 
-func newClient(endpoint string, httpClient Doer, method string) Client {
+// NewClientUsingWebSocket returns a [Client] which makes subscription requests
+// to the given endpoint using webSocket.
+//
+// The client does not support queries nor mutations, and will return an error
+// if passed a request that attempts one.
+func NewClientUsingWebSocket(endpoint string, wsDialer Dialer, headers http.Header) Client {
+	if headers == nil {
+		headers = http.Header{}
+	}
+	headers.Add("Sec-WebSocket-Protocol", "graphql-transport-ws")
+	wsClient := webSocketClient{
+		Dialer:  wsDialer,
+		Header:  headers,
+		errChan: make(chan error, 1),
+	}
+	return newClient(endpoint, nil, webSocketMethod, &wsClient)
+}
+
+func newClient(endpoint string, httpClient Doer, method string, wsClient *webSocketClient) Client {
 	if httpClient == nil || httpClient == (*http.Client)(nil) {
 		httpClient = http.DefaultClient
 	}
-	return &client{httpClient, endpoint, method}
+	return &client{httpClient, wsClient, endpoint, method}
 }
 
 // Doer encapsulates the methods from [*http.Client] needed by [Client].
@@ -95,6 +144,20 @@ func newClient(endpoint string, httpClient Doer, method string) Client {
 // (or mocks for the same).
 type Doer interface {
 	Do(*http.Request) (*http.Response, error)
+}
+
+// Dialer encapsulates DialContext method and is similar to [github.com/gorilla/websocket]
+// [*websocket.Dialer] method
+type Dialer interface {
+	DialContext(ctx context.Context, urlStr string, requestHeader http.Header) (WSConn, *http.Response, error)
+}
+
+// WSConn encapsulates basic methods for a webSocket connection, taking model on
+// [github.com/gorilla/websocket] [*websocket.Conn]
+type WSConn interface {
+	Close() error
+	WriteMessage(messageType int, data []byte) error
+	ReadMessage() (messageType int, p []byte, err error)
 }
 
 // Request contains all the values required to build queries executed by
@@ -177,7 +240,79 @@ func (c *client) MakeRequest(ctx context.Context, req *Request, resp *Response) 
 	return nil
 }
 
+func (c *client) DialWebSocket(ctx context.Context, req *Request, respChan chan json.RawMessage) (errChan chan error, err error) {
+	if c.method != webSocketMethod {
+		return nil, errors.New("client does not support websocket")
+	}
+	if req.Query != "" {
+		if strings.HasPrefix(strings.TrimSpace(req.Query), "query") {
+			return nil, errors.New("client does not support queries")
+		}
+		if strings.HasPrefix(strings.TrimSpace(req.Query), "mutation") {
+			return nil, errors.New("client does not support mutations")
+		}
+	}
+
+	err = c.subscribeAndListen(
+		ctx,
+		req,
+		respChan,
+	)
+
+	return c.wsClient.errChan, err
+}
+
+func (c *client) CloseWebSocket() {
+	defer c.wsClient.conn.Close()
+	err := c.wsClient.sendComplete()
+	if err != nil {
+		c.wsClient.errChan <- err
+	}
+	err = c.wsClient.conn.WriteMessage(CloseMessage, formatCloseMessage(CloseNormalClosure, ""))
+	if err != nil {
+		c.wsClient.errChan <- err
+	}
+}
+
+func (c *client) subscribeAndListen(ctx context.Context, req *Request, respChan chan json.RawMessage) error {
+	var res *http.Response
+	var err error
+	w := c.wsClient
+	w.conn, res, err = w.Dialer.DialContext(ctx, c.endpoint, w.Header)
+	if err != nil {
+		return err
+	}
+	defer res.Body.Close()
+
+	err = w.sendInit()
+	if err != nil {
+		w.conn.Close()
+		return err
+	}
+	err = w.waitForConnAck()
+	if err != nil {
+		w.conn.Close()
+		return err
+	}
+
+	go w.listenWebSocket(respChan)
+
+	err = w.sendSubscribe(req)
+	if err != nil {
+		w.conn.Close()
+		return err
+	}
+
+	return nil
+}
+
 func (c *client) createPostRequest(req *Request) (*http.Request, error) {
+	if req.Query != "" {
+		if strings.HasPrefix(strings.TrimSpace(req.Query), "subscription") {
+			return nil, errors.New("client does not support subscriptions")
+		}
+	}
+
 	body, err := json.Marshal(req)
 	if err != nil {
 		return nil, err
@@ -206,6 +341,9 @@ func (c *client) createGetRequest(req *Request) (*http.Request, error) {
 	if req.Query != "" {
 		if strings.HasPrefix(strings.TrimSpace(req.Query), "mutation") {
 			return nil, errors.New("client does not support mutations")
+		}
+		if strings.HasPrefix(strings.TrimSpace(req.Query), "subscription") {
+			return nil, errors.New("client does not support subscriptions")
 		}
 		queryParams.Set("query", req.Query)
 		queryUpdated = true

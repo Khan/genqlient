@@ -81,7 +81,7 @@ type __GetPokemonInput struct {
 // GetWhere returns __GetPokemonInput.Where, and is useful for accessing the field via an interface.
 func (v *__GetPokemonInput) GetWhere() *GetPokemonBoolExp { return v.Where }
 
-// The query or mutation executed by GetPokemon.
+// The query, mutation or subscription executed by GetPokemon.
 const GetPokemon_Operation = `
 query GetPokemon ($where: getPokemonBoolExp!) {
 	getPokemon(where: $where) {
@@ -94,7 +94,7 @@ query GetPokemon ($where: getPokemonBoolExp!) {
 func GetPokemon(
 	client_ graphql.Client,
 	where *GetPokemonBoolExp,
-) (*GetPokemonResponse, error) {
+) (data_ *GetPokemonResponse, err error) {
 	req_ := &graphql.Request{
 		OpName: "GetPokemon",
 		Query:  GetPokemon_Operation,
@@ -104,8 +104,8 @@ func GetPokemon(
 	}
 	var err_ error
 
-	var data_ GetPokemonResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &GetPokemonResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		nil,
@@ -113,6 +113,6 @@ func GetPokemon(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 

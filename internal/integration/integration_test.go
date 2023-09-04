@@ -7,6 +7,7 @@ package integration
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"testing"
 	"time"
@@ -46,6 +47,7 @@ func TestMutation(t *testing.T) {
 	defer server.Close()
 	postClient := newRoundtripClient(t, server.URL)
 	getClient := newRoundtripGetClient(t, server.URL)
+	wsClient := newRoundtripWebScoketClient(t, server.URL)
 
 	resp, _, err := createUser(ctx, postClient, NewUser{Name: "Jack"})
 	require.NoError(t, err)
@@ -54,6 +56,51 @@ func TestMutation(t *testing.T) {
 
 	_, _, err = createUser(ctx, getClient, NewUser{Name: "Jill"})
 	require.Errorf(t, err, "client does not support mutations")
+
+	_, _, err = createUser(ctx, wsClient, NewUser{Name: "Jill"})
+	require.Errorf(t, err, "client does not support mutations")
+}
+
+func TestSubscription(t *testing.T) {
+	_ = `# @genqlient
+	subscription count { count }`
+
+	ctx := context.Background()
+	server := server.RunServer()
+	defer server.Close()
+	postClient := newRoundtripClient(t, server.URL)
+	getClient := newRoundtripGetClient(t, server.URL)
+	wsClient := newRoundtripWebScoketClient(t, server.URL)
+
+	_, _, err := count(ctx, getClient)
+	require.Errorf(t, err, "client does not support websocket")
+
+	_, _, err = count(ctx, postClient)
+	require.Errorf(t, err, "client does not support websocket")
+
+	start := time.Now()
+	respChan, errChan, err := count(ctx, wsClient)
+	require.NoError(t, err)
+	defer wsClient.CloseWebSocket()
+	counter := 0
+	for loop := true; loop; {
+		select {
+		case resp, more := <-respChan:
+			if !more {
+				loop = false
+				break
+			}
+			require.NotNil(t, resp.Data)
+			assert.Equal(t, counter, resp.Data.Count)
+			require.Nil(t, resp.Errors)
+			loop = time.Since(start) < time.Second*2
+			counter++
+		case err := <-errChan:
+			require.NoError(t, err)
+		case <-time.After(time.Second * 5):
+			require.NoError(t, fmt.Errorf("subscription timed out"))
+		}
+	}
 }
 
 func TestServerError(t *testing.T) {

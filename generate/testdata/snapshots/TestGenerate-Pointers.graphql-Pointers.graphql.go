@@ -230,7 +230,7 @@ func (v *__PointersQueryInput) GetDt() time.Time { return v.Dt }
 // GetTz returns __PointersQueryInput.Tz, and is useful for accessing the field via an interface.
 func (v *__PointersQueryInput) GetTz() *string { return v.Tz }
 
-// The query or mutation executed by PointersQuery.
+// The query, mutation or subscription executed by PointersQuery.
 const PointersQuery_Operation = `
 query PointersQuery ($query: UserQueryInput, $dt: DateTime, $tz: String) {
 	user(query: $query) {
@@ -252,7 +252,7 @@ func PointersQuery(
 	query *UserQueryInput,
 	dt time.Time,
 	tz *string,
-) (*PointersQueryResponse, error) {
+) (data_ *PointersQueryResponse, err error) {
 	req_ := &graphql.Request{
 		OpName: "PointersQuery",
 		Query:  PointersQuery_Operation,
@@ -264,8 +264,8 @@ func PointersQuery(
 	}
 	var err_ error
 
-	var data_ PointersQueryResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &PointersQueryResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		nil,
@@ -273,6 +273,6 @@ func PointersQuery(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 

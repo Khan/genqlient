@@ -77,7 +77,7 @@ type __ListInputQueryInput struct {
 // GetNames returns __ListInputQueryInput.Names, and is useful for accessing the field via an interface.
 func (v *__ListInputQueryInput) GetNames() []string { return v.Names }
 
-// The query or mutation executed by ListInputQuery.
+// The query, mutation or subscription executed by ListInputQuery.
 const ListInputQuery_Operation = `
 query ListInputQuery ($names: [String]) {
 	user(query: {names:$names}) {
@@ -90,7 +90,7 @@ func ListInputQuery(
 	ctx_ context.Context,
 	client_ graphql.Client,
 	names []string,
-) (*ListInputQueryResponse, error) {
+) (data_ *ListInputQueryResponse, err error) {
 	req_ := &graphql.Request{
 		OpName: "ListInputQuery",
 		Query:  ListInputQuery_Operation,
@@ -100,8 +100,8 @@ func ListInputQuery(
 	}
 	var err_ error
 
-	var data_ ListInputQueryResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &ListInputQueryResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		ctx_,
@@ -109,10 +109,10 @@ func ListInputQuery(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 
-// The query or mutation executed by QueryWithSlices.
+// The query, mutation or subscription executed by QueryWithSlices.
 const QueryWithSlices_Operation = `
 query QueryWithSlices {
 	user {
@@ -127,15 +127,15 @@ query QueryWithSlices {
 func QueryWithSlices(
 	ctx_ context.Context,
 	client_ graphql.Client,
-) (*QueryWithSlicesResponse, error) {
+) (data_ *QueryWithSlicesResponse, err error) {
 	req_ := &graphql.Request{
 		OpName: "QueryWithSlices",
 		Query:  QueryWithSlices_Operation,
 	}
 	var err_ error
 
-	var data_ QueryWithSlicesResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &QueryWithSlicesResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		ctx_,
@@ -143,6 +143,6 @@ func QueryWithSlices(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 

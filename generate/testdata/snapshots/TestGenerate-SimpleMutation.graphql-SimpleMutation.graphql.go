@@ -41,7 +41,7 @@ type __SimpleMutationInput struct {
 // GetName returns __SimpleMutationInput.Name, and is useful for accessing the field via an interface.
 func (v *__SimpleMutationInput) GetName() string { return v.Name }
 
-// The query or mutation executed by SimpleMutation.
+// The query, mutation or subscription executed by SimpleMutation.
 const SimpleMutation_Operation = `
 mutation SimpleMutation ($name: String!) {
 	createUser(name: $name) {
@@ -58,7 +58,7 @@ mutation SimpleMutation ($name: String!) {
 func SimpleMutation(
 	client_ graphql.Client,
 	name string,
-) (*SimpleMutationResponse, error) {
+) (data_ *SimpleMutationResponse, err error) {
 	req_ := &graphql.Request{
 		OpName: "SimpleMutation",
 		Query:  SimpleMutation_Operation,
@@ -68,8 +68,8 @@ func SimpleMutation(
 	}
 	var err_ error
 
-	var data_ SimpleMutationResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &SimpleMutationResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		nil,
@@ -77,6 +77,6 @@ func SimpleMutation(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 

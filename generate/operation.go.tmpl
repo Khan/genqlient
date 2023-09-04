@@ -1,7 +1,14 @@
-// The query or mutation executed by {{.Name}}.
+// The query, mutation or subscription executed by {{.Name}}.
 const {{.Name}}_Operation = `{{$.Body}}`
 
 {{.Doc}}
+{{if eq .Type "subscription"}}
+{{if eq .Doc ""}}
+// {{.Name}}
+{{end -}}
+//
+// To close the connection, use [graphql.Client.CloseWebSocket()]
+{{end -}}
 func {{.Name}}(
     {{if ne .Config.ContextType "-" -}}
     ctx_ {{ref .Config.ContextType}},
@@ -15,7 +22,7 @@ func {{.Name}}(
     {{.GraphQLName}} {{.GoType.Reference}},
     {{end -}}
     {{end -}}
-) (*{{.ResponseName}}, {{if .Config.Extensions -}}map[string]interface{},{{end}} error) {
+) ({{if eq .Type "subscription"}}dataChan_ chan {{.Name}}WsResponse, errChan_ chan error,{{else}}data_ *{{.ResponseName}}, {{if .Config.Extensions -}}ext_ map[string]interface{},{{end}}{{end}} err error) {
     req_ := &graphql.Request{
         OpName: "{{.Name}}",
         Query:  {{.Name}}_Operation,
@@ -36,14 +43,60 @@ func {{.Name}}(
         return nil, {{if .Config.Extensions -}}nil,{{end -}} err_
     }
     {{end}}
-    var data_ {{.ResponseName}}
-    resp_ := &graphql.Response{Data: &data_}
+    {{if eq .Type "subscription"}}
+    dataChan_ = make(chan {{.Name}}WsResponse, 1)
+    respChan_ := make(chan json.RawMessage, 1)
+
+    errChan_, err_ = client_.DialWebSocket({{if ne .Config.ContextType "-" -}}ctx_{{else}}context.Background(){{end}}, req_, respChan_)
+	if err_ != nil {
+		return nil, nil, err_
+	}
+    go {{.Name}}ForwardData(dataChan_, respChan_, errChan_)
+    {{else}}
+    data_ = &{{.ResponseName}}{}
+    resp_ := &graphql.Response{Data: data_}
 
     err_ = client_.MakeRequest(
         {{if ne .Config.ContextType "-"}}ctx_{{else}}nil{{end}},
         req_,
         resp_,
     )
+    {{end}}
 	
-    return &data_, {{if .Config.Extensions -}}resp_.Extensions,{{end -}} err_
+    return {{if eq .Type "subscription"}}dataChan_, errChan_,{{else}}data_, {{if .Config.Extensions -}}resp_.Extensions,{{end -}}{{end}} err_
 }
+
+{{if eq .Type "subscription"}}
+type {{.Name}}WsResponse struct {
+	Data       *{{.ResponseName}}     `json:"data"`
+	Extensions map[string]interface{} `json:"extensions,omitempty"`
+	Errors     error                  `json:"errors"`
+}
+
+func {{.Name}}ForwardData(dataChan_ chan {{.Name}}WsResponse, respChan_ chan json.RawMessage, errChan_ chan error) {
+    defer close(dataChan_)
+    var gqlResp graphql.Response
+	var wsResp {{.Name}}WsResponse
+	for {
+		jsonRaw, more_ := <-respChan_
+		if !more_ {
+			return
+		}
+		err := json.Unmarshal(jsonRaw, &gqlResp)
+		if err != nil {
+			errChan_ <- err
+			return
+		}
+		if len(gqlResp.Errors) == 0 {
+			err = json.Unmarshal(jsonRaw, &wsResp)
+			if err != nil {
+				errChan_ <- err
+				return
+			}
+		} else {
+			wsResp.Errors = gqlResp.Errors
+		}
+		dataChan_ <- wsResp
+	}
+}
+{{end}}

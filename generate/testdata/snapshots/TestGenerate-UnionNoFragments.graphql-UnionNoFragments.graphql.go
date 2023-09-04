@@ -174,7 +174,7 @@ func (v *UnionNoFragmentsQueryResponse) __premarshalJSON() (*__premarshalUnionNo
 	return &retval, nil
 }
 
-// The query or mutation executed by UnionNoFragmentsQuery.
+// The query, mutation or subscription executed by UnionNoFragmentsQuery.
 const UnionNoFragmentsQuery_Operation = `
 query UnionNoFragmentsQuery {
 	randomLeaf {
@@ -185,15 +185,15 @@ query UnionNoFragmentsQuery {
 
 func UnionNoFragmentsQuery(
 	client_ graphql.Client,
-) (*UnionNoFragmentsQueryResponse, error) {
+) (data_ *UnionNoFragmentsQueryResponse, err error) {
 	req_ := &graphql.Request{
 		OpName: "UnionNoFragmentsQuery",
 		Query:  UnionNoFragmentsQuery_Operation,
 	}
 	var err_ error
 
-	var data_ UnionNoFragmentsQueryResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &UnionNoFragmentsQueryResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		nil,
@@ -201,6 +201,6 @@ func UnionNoFragmentsQuery(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 

@@ -174,7 +174,7 @@ func (v *__CustomMarshalInput) __premarshalJSON() (*__premarshal__CustomMarshalI
 	return &retval, nil
 }
 
-// The query or mutation executed by CustomMarshal.
+// The query, mutation or subscription executed by CustomMarshal.
 const CustomMarshal_Operation = `
 query CustomMarshal ($date: Date!) {
 	usersBornOn(date: $date) {
@@ -187,7 +187,7 @@ query CustomMarshal ($date: Date!) {
 func CustomMarshal(
 	client_ graphql.Client,
 	date time.Time,
-) (*CustomMarshalResponse, error) {
+) (data_ *CustomMarshalResponse, err error) {
 	req_ := &graphql.Request{
 		OpName: "CustomMarshal",
 		Query:  CustomMarshal_Operation,
@@ -197,8 +197,8 @@ func CustomMarshal(
 	}
 	var err_ error
 
-	var data_ CustomMarshalResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &CustomMarshalResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		nil,
@@ -206,6 +206,6 @@ func CustomMarshal(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 

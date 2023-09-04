@@ -208,3 +208,7 @@ input IntComparisonExp {
   _neq: Int
   _nin: [Int!]
 }
+
+type Subscription {
+  count: Int!
+}

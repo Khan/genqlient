@@ -16,6 +16,10 @@ type Mutation {
   createUser(input: NewUser!): User!
 }
 
+type Subscription {
+  count: Int!
+}
+
 type User implements Being & Lucky {
   id: ID!
   name: String!
