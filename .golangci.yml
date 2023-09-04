@@ -92,7 +92,7 @@ issues:
     # Ok to use fmt.Print in the examples, and in the CLI entrypoint.
     - linters:
         - forbidigo
-      path: ^example/|^exampleWebSocket/|^generate/main\.go$
+      path: ^example/|^exampleSubscription/|^generate/main\.go$
 
     - linters:
         - errcheck
@@ -109,5 +109,5 @@ issues:
     - linters:
         - govet
       # Only a big deal for runtime code.
-      path: ^generate/|^example/|^exampleWebSocket/
+      path: ^generate/|^example/|^exampleSubscription/
       text: "^fieldalignment: struct with \\d+ pointer bytes could be \\d+$"
