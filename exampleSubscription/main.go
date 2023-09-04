@@ -49,6 +49,7 @@ func main() {
 	if err != nil {
 		return
 	}
+	defer graphqlClient.CloseWebSocket()
 	for loop := true; loop; {
 		select {
 		case msg, more := <-respChan:
@@ -69,7 +70,6 @@ func main() {
 			loop = false
 		}
 	}
-	graphqlClient.CloseWebSocket()
 }
 
 //go:generate go run github.com/Khan/genqlient genqlient.yaml
