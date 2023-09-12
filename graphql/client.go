@@ -268,7 +268,7 @@ func (c *client) CloseWebSocket() {
 	if err != nil {
 		c.wsClient.errChan <- err
 	}
-	err = c.wsClient.conn.WriteMessage(CloseMessage, formatCloseMessage(CloseNormalClosure, ""))
+	err = c.wsClient.conn.WriteMessage(closeMessage, formatCloseMessage(closeNormalClosure, ""))
 	if err != nil {
 		c.wsClient.errChan <- err
 	}
