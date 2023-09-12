@@ -2,13 +2,6 @@
 const {{.Name}}_Operation = `{{$.Body}}`
 
 {{.Doc}}
-{{if eq .Type "subscription"}}
-{{if eq .Doc ""}}
-// {{.Name}}
-{{end -}}
-//
-// To close the connection, use [graphql.Client.CloseWebSocket()]
-{{end -}}
 func {{.Name}}(
     {{if ne .Config.ContextType "-" -}}
     ctx_ {{ref .Config.ContextType}},

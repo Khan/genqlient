@@ -281,6 +281,9 @@ func (g *generator) addOperation(op *ast.OperationDefinition) error {
 	if len(commentLines) > 0 {
 		docComment = "// " + strings.ReplaceAll(commentLines, "\n", "\n// ")
 	}
+	if op.Operation == ast.Subscription {
+		docComment += "\n// To close the connection, use [graphql.Client.CloseWebSocket()]"
+	}
 
 	// If the filename is a pseudo-filename filename.go:startline, just
 	// put the filename in the export; we don't figure out the line offset
