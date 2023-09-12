@@ -17,7 +17,7 @@ type countResponse struct {
 // GetCount returns countResponse.Count, and is useful for accessing the field via an interface.
 func (v *countResponse) GetCount() int { return v.Count }
 
-// The query, mutation or subscription executed by count.
+// The subscription executed by count.
 const count_Operation = `
 subscription count {
 	count
