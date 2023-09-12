@@ -62,7 +62,7 @@ func (v *UsesEnumTwiceQueryResponse) GetMe() UsesEnumTwiceQueryMeUser { return v
 // GetOtherUser returns UsesEnumTwiceQueryResponse.OtherUser, and is useful for accessing the field via an interface.
 func (v *UsesEnumTwiceQueryResponse) GetOtherUser() UsesEnumTwiceQueryOtherUser { return v.OtherUser }
 
-// The query, mutation or subscription executed by UsesEnumTwiceQuery.
+// The query executed by UsesEnumTwiceQuery.
 const UsesEnumTwiceQuery_Operation = `
 query UsesEnumTwiceQuery {
 	Me: user {
@@ -76,12 +76,11 @@ query UsesEnumTwiceQuery {
 
 func UsesEnumTwiceQuery(
 	client_ graphql.Client,
-) (data_ *UsesEnumTwiceQueryResponse, err error) {
+) (data_ *UsesEnumTwiceQueryResponse, err_ error) {
 	req_ := &graphql.Request{
 		OpName: "UsesEnumTwiceQuery",
 		Query:  UsesEnumTwiceQuery_Operation,
 	}
-	var err_ error
 
 	data_ = &UsesEnumTwiceQueryResponse{}
 	resp_ := &graphql.Response{Data: data_}

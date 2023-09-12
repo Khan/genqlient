@@ -239,7 +239,7 @@ func (v *SimpleInlineFragmentResponse) __premarshalJSON() (*__premarshalSimpleIn
 	return &retval, nil
 }
 
-// The query, mutation or subscription executed by SimpleInlineFragment.
+// The query executed by SimpleInlineFragment.
 const SimpleInlineFragment_Operation = `
 query SimpleInlineFragment {
 	randomItem {
@@ -258,12 +258,11 @@ query SimpleInlineFragment {
 
 func SimpleInlineFragment(
 	client_ graphql.Client,
-) (data_ *SimpleInlineFragmentResponse, err error) {
+) (data_ *SimpleInlineFragmentResponse, err_ error) {
 	req_ := &graphql.Request{
 		OpName: "SimpleInlineFragment",
 		Query:  SimpleInlineFragment_Operation,
 	}
-	var err_ error
 
 	data_ = &SimpleInlineFragmentResponse{}
 	resp_ := &graphql.Response{Data: data_}

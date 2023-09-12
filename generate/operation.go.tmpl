@@ -15,7 +15,7 @@ func {{.Name}}(
     {{.GraphQLName}} {{.GoType.Reference}},
     {{end -}}
     {{end -}}
-) ({{if eq .Type "subscription"}}dataChan_ chan {{.Name}}WsResponse, errChan_ chan error,{{else}}data_ *{{.ResponseName}}, {{if .Config.Extensions -}}ext_ map[string]interface{},{{end}}{{end}} err error) {
+) ({{if eq .Type "subscription"}}dataChan_ chan {{.Name}}WsResponse, errChan_ chan error,{{else}}data_ *{{.ResponseName}}, {{if .Config.Extensions -}}ext_ map[string]interface{},{{end}}{{end}} err_ error) {
     req_ := &graphql.Request{
         OpName: "{{.Name}}",
         Query:  {{.Name}}_Operation,
@@ -27,7 +27,6 @@ func {{.Name}}(
         },
     {{end -}}
     }
-    var err_ error
     {{if .Config.ClientGetter -}}
     var client_ graphql.Client
 

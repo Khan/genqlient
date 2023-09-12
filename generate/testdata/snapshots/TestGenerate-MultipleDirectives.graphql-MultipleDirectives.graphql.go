@@ -325,7 +325,7 @@ func (v *__MultipleDirectivesInput) GetQuery() MyInput { return v.Query }
 // GetQueries returns __MultipleDirectivesInput.Queries, and is useful for accessing the field via an interface.
 func (v *__MultipleDirectivesInput) GetQueries() []*UserQueryInput { return v.Queries }
 
-// The query, mutation or subscription executed by MultipleDirectives.
+// The query executed by MultipleDirectives.
 const MultipleDirectives_Operation = `
 query MultipleDirectives ($query: UserQueryInput, $queries: [UserQueryInput]) {
 	user(query: $query) {
@@ -341,7 +341,7 @@ func MultipleDirectives(
 	client_ graphql.Client,
 	query MyInput,
 	queries []*UserQueryInput,
-) (data_ *MyMultipleDirectivesResponse, err error) {
+) (data_ *MyMultipleDirectivesResponse, err_ error) {
 	req_ := &graphql.Request{
 		OpName: "MultipleDirectives",
 		Query:  MultipleDirectives_Operation,
@@ -350,7 +350,6 @@ func MultipleDirectives(
 			Queries: queries,
 		},
 	}
-	var err_ error
 
 	data_ = &MyMultipleDirectivesResponse{}
 	resp_ := &graphql.Response{Data: data_}

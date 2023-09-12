@@ -84,7 +84,7 @@ func getUser(
 	ctx_ context.Context,
 	client_ graphql.Client,
 	Login string,
-) (data_ *getUserResponse, err error) {
+) (data_ *getUserResponse, err_ error) {
 	req_ := &graphql.Request{
 		OpName: "getUser",
 		Query:  getUser_Operation,
@@ -92,7 +92,6 @@ func getUser(
 			Login: Login,
 		},
 	}
-	var err_ error
 
 	data_ = &getUserResponse{}
 	resp_ := &graphql.Response{Data: data_}
@@ -119,12 +118,11 @@ query getViewer {
 func getViewer(
 	ctx_ context.Context,
 	client_ graphql.Client,
-) (data_ *getViewerResponse, err error) {
+) (data_ *getViewerResponse, err_ error) {
 	req_ := &graphql.Request{
 		OpName: "getViewer",
 		Query:  getViewer_Operation,
 	}
-	var err_ error
 
 	data_ = &getViewerResponse{}
 	resp_ := &graphql.Response{Data: data_}

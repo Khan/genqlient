@@ -43,7 +43,7 @@ func (v *QueryWithStructsUserAuthMethodsAuthMethod) GetProvider() string { retur
 // GetEmail returns QueryWithStructsUserAuthMethodsAuthMethod.Email, and is useful for accessing the field via an interface.
 func (v *QueryWithStructsUserAuthMethodsAuthMethod) GetEmail() string { return v.Email }
 
-// The query, mutation or subscription executed by QueryWithStructs.
+// The query executed by QueryWithStructs.
 const QueryWithStructs_Operation = `
 query QueryWithStructs {
 	user {
@@ -57,12 +57,11 @@ query QueryWithStructs {
 
 func QueryWithStructs(
 	client_ graphql.Client,
-) (data_ *QueryWithStructsResponse, err error) {
+) (data_ *QueryWithStructsResponse, err_ error) {
 	req_ := &graphql.Request{
 		OpName: "QueryWithStructs",
 		Query:  QueryWithStructs_Operation,
 	}
-	var err_ error
 
 	data_ = &QueryWithStructsResponse{}
 	resp_ := &graphql.Response{Data: data_}

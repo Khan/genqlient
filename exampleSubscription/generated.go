@@ -28,12 +28,11 @@ subscription count {
 func count(
 	ctx_ context.Context,
 	client_ graphql.Client,
-) (dataChan_ chan countWsResponse, errChan_ chan error, err error) {
+) (dataChan_ chan countWsResponse, errChan_ chan error, err_ error) {
 	req_ := &graphql.Request{
 		OpName: "count",
 		Query:  count_Operation,
 	}
-	var err_ error
 
 	dataChan_ = make(chan countWsResponse, 1)
 	respChan_ := make(chan json.RawMessage, 1)
