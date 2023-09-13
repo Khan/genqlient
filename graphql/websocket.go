@@ -21,20 +21,8 @@ const (
 
 // Close codes defined in RFC 6455, section 11.7.
 const (
-	closeNormalClosure           = 1000
-	closeGoingAway               = 1001
-	closeProtocolError           = 1002
-	closeUnsupportedData         = 1003
-	closeNoStatusReceived        = 1005
-	closeAbnormalClosure         = 1006
-	closeInvalidFramePayloadData = 1007
-	closePolicyViolation         = 1008
-	closeMessageTooBig           = 1009
-	closeMandatoryExtension      = 1010
-	closeInternalServerErr       = 1011
-	closeServiceRestart          = 1012
-	closeTryAgainLater           = 1013
-	closeTLSHandshake            = 1015
+	closeNormalClosure    = 1000
+	closeNoStatusReceived = 1005
 )
 
 // The message types are defined in RFC 6455, section 11.8.
@@ -43,21 +31,10 @@ const (
 	// interpreted as UTF-8 encoded text data.
 	textMessage = 1
 
-	// binaryMessage denotes a binary data message.
-	binaryMessage = 2
-
 	// closeMessage denotes a close control message. The optional message
 	// payload contains a numeric code and text. Use the FormatCloseMessage
 	// function to format a close message payload.
 	closeMessage = 8
-
-	// pingMessage denotes a ping control message. The optional message payload
-	// is UTF-8 encoded text.
-	pingMessage = 9
-
-	// pongMessage denotes a pong control message. The optional message payload
-	// is UTF-8 encoded text.
-	pongMessage = 10
 )
 
 type webSocketClient struct {
