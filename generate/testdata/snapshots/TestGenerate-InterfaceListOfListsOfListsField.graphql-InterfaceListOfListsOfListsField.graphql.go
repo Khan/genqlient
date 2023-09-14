@@ -506,7 +506,7 @@ func (v *InterfaceListOfListOfListsFieldWithPointerVideo) GetId() *testutil.ID {
 // GetName returns InterfaceListOfListOfListsFieldWithPointerVideo.Name, and is useful for accessing the field via an interface.
 func (v *InterfaceListOfListOfListsFieldWithPointerVideo) GetName() *string { return v.Name }
 
-// The query, mutation or subscription executed by InterfaceListOfListOfListsField.
+// The query executed by InterfaceListOfListOfListsField.
 const InterfaceListOfListOfListsField_Operation = `
 query InterfaceListOfListOfListsField {
 	listOfListsOfListsOfContent {
@@ -524,12 +524,11 @@ query InterfaceListOfListOfListsField {
 
 func InterfaceListOfListOfListsField(
 	client_ graphql.Client,
-) (data_ *InterfaceListOfListOfListsFieldResponse, err error) {
+) (data_ *InterfaceListOfListOfListsFieldResponse, err_ error) {
 	req_ := &graphql.Request{
 		OpName: "InterfaceListOfListOfListsField",
 		Query:  InterfaceListOfListOfListsField_Operation,
 	}
-	var err_ error
 
 	data_ = &InterfaceListOfListOfListsFieldResponse{}
 	resp_ := &graphql.Response{Data: data_}

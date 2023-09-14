@@ -41,7 +41,7 @@ type __ListInputQueryInput struct {
 // GetNames returns __ListInputQueryInput.Names, and is useful for accessing the field via an interface.
 func (v *__ListInputQueryInput) GetNames() []string { return v.Names }
 
-// The query, mutation or subscription executed by ListInputQuery.
+// The query executed by ListInputQuery.
 const ListInputQuery_Operation = `
 query ListInputQuery ($names: [String]) {
 	user(query: {names:$names}) {
@@ -53,7 +53,7 @@ query ListInputQuery ($names: [String]) {
 func ListInputQuery(
 	client_ graphql.Client,
 	names []string,
-) (data_ *ListInputQueryResponse, err error) {
+) (data_ *ListInputQueryResponse, err_ error) {
 	req_ := &graphql.Request{
 		OpName: "ListInputQuery",
 		Query:  ListInputQuery_Operation,
@@ -61,7 +61,6 @@ func ListInputQuery(
 			Names: names,
 		},
 	}
-	var err_ error
 
 	data_ = &ListInputQueryResponse{}
 	resp_ := &graphql.Response{Data: data_}

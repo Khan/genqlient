@@ -35,7 +35,7 @@ type SimpleQueryUser struct {
 // GetId returns SimpleQueryUser.Id, and is useful for accessing the field via an interface.
 func (v *SimpleQueryUser) GetId() string { return v.Id }
 
-// The query, mutation or subscription executed by SimpleQuery.
+// The query executed by SimpleQuery.
 const SimpleQuery_Operation = `
 query SimpleQuery {
 	user {
@@ -46,12 +46,11 @@ query SimpleQuery {
 
 func SimpleQuery(
 	ctx_ context.Context,
-) (data_ *SimpleQueryResponse, err error) {
+) (data_ *SimpleQueryResponse, err_ error) {
 	req_ := &graphql.Request{
 		OpName: "SimpleQuery",
 		Query:  SimpleQuery_Operation,
 	}
-	var err_ error
 	var client_ graphql.Client
 
 	client_, err_ = testutil.GetClientFromContext(ctx_)

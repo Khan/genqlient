@@ -626,7 +626,7 @@ func (v *InterfaceNoFragmentsQueryWithPointerVideo) GetId() *testutil.ID { retur
 // GetName returns InterfaceNoFragmentsQueryWithPointerVideo.Name, and is useful for accessing the field via an interface.
 func (v *InterfaceNoFragmentsQueryWithPointerVideo) GetName() *string { return v.Name }
 
-// The query, mutation or subscription executed by InterfaceNoFragmentsQuery.
+// The query executed by InterfaceNoFragmentsQuery.
 const InterfaceNoFragmentsQuery_Operation = `
 query InterfaceNoFragmentsQuery {
 	root {
@@ -653,12 +653,11 @@ query InterfaceNoFragmentsQuery {
 
 func InterfaceNoFragmentsQuery(
 	client_ graphql.Client,
-) (data_ *InterfaceNoFragmentsQueryResponse, err error) {
+) (data_ *InterfaceNoFragmentsQueryResponse, err_ error) {
 	req_ := &graphql.Request{
 		OpName: "InterfaceNoFragmentsQuery",
 		Query:  InterfaceNoFragmentsQuery_Operation,
 	}
-	var err_ error
 
 	data_ = &InterfaceNoFragmentsQueryResponse{}
 	resp_ := &graphql.Response{Data: data_}

@@ -504,7 +504,7 @@ func (v *InterfaceNestingRootTopicChildrenVideo) GetParent() InterfaceNestingRoo
 	return v.Parent
 }
 
-// The query, mutation or subscription executed by InterfaceNesting.
+// The query executed by InterfaceNesting.
 const InterfaceNesting_Operation = `
 query InterfaceNesting {
 	root {
@@ -526,12 +526,11 @@ query InterfaceNesting {
 
 func InterfaceNesting(
 	client_ graphql.Client,
-) (data_ *InterfaceNestingResponse, err error) {
+) (data_ *InterfaceNestingResponse, err_ error) {
 	req_ := &graphql.Request{
 		OpName: "InterfaceNesting",
 		Query:  InterfaceNesting_Operation,
 	}
-	var err_ error
 
 	data_ = &InterfaceNestingResponse{}
 	resp_ := &graphql.Response{Data: data_}

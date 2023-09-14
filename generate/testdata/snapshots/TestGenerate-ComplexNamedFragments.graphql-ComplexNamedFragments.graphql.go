@@ -1739,7 +1739,7 @@ type VideoFieldsThumbnail struct {
 // GetId returns VideoFieldsThumbnail.Id, and is useful for accessing the field via an interface.
 func (v *VideoFieldsThumbnail) GetId() testutil.ID { return v.Id }
 
-// The query, mutation or subscription executed by ComplexNamedFragments.
+// The query executed by ComplexNamedFragments.
 const ComplexNamedFragments_Operation = `
 query ComplexNamedFragments {
 	... on Query {
@@ -1802,12 +1802,11 @@ fragment MoreVideoFields on Video {
 
 func ComplexNamedFragments(
 	client_ graphql.Client,
-) (data_ *ComplexNamedFragmentsResponse, err error) {
+) (data_ *ComplexNamedFragmentsResponse, err_ error) {
 	req_ := &graphql.Request{
 		OpName: "ComplexNamedFragments",
 		Query:  ComplexNamedFragments_Operation,
 	}
-	var err_ error
 
 	data_ = &ComplexNamedFragmentsResponse{}
 	resp_ := &graphql.Response{Data: data_}

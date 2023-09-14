@@ -37,7 +37,7 @@ func (v *SimpleQueryNoOverrideUser) GetId() testutil.ID { return v.Id }
 // GetName returns SimpleQueryNoOverrideUser.Name, and is useful for accessing the field via an interface.
 func (v *SimpleQueryNoOverrideUser) GetName() string { return v.Name }
 
-// The query, mutation or subscription executed by SimpleQueryNoOverride.
+// The query executed by SimpleQueryNoOverride.
 const SimpleQueryNoOverride_Operation = `
 query SimpleQueryNoOverride {
 	user {
@@ -49,12 +49,11 @@ query SimpleQueryNoOverride {
 
 func SimpleQueryNoOverride(
 	client_ graphql.Client,
-) (data_ *SimpleQueryNoOverrideResponse, err error) {
+) (data_ *SimpleQueryNoOverrideResponse, err_ error) {
 	req_ := &graphql.Request{
 		OpName: "SimpleQueryNoOverride",
 		Query:  SimpleQueryNoOverride_Operation,
 	}
-	var err_ error
 
 	data_ = &SimpleQueryNoOverrideResponse{}
 	resp_ := &graphql.Response{Data: data_}

@@ -39,7 +39,7 @@ func (v *SimpleQueryWithPointerFalseOverrideUser) GetId() testutil.ID { return v
 // GetName returns SimpleQueryWithPointerFalseOverrideUser.Name, and is useful for accessing the field via an interface.
 func (v *SimpleQueryWithPointerFalseOverrideUser) GetName() string { return v.Name }
 
-// The query, mutation or subscription executed by SimpleQueryWithPointerFalseOverride.
+// The query executed by SimpleQueryWithPointerFalseOverride.
 const SimpleQueryWithPointerFalseOverride_Operation = `
 query SimpleQueryWithPointerFalseOverride {
 	user {
@@ -51,12 +51,11 @@ query SimpleQueryWithPointerFalseOverride {
 
 func SimpleQueryWithPointerFalseOverride(
 	client_ graphql.Client,
-) (data_ *SimpleQueryWithPointerFalseOverrideResponse, err error) {
+) (data_ *SimpleQueryWithPointerFalseOverrideResponse, err_ error) {
 	req_ := &graphql.Request{
 		OpName: "SimpleQueryWithPointerFalseOverride",
 		Query:  SimpleQueryWithPointerFalseOverride_Operation,
 	}
-	var err_ error
 
 	data_ = &SimpleQueryWithPointerFalseOverrideResponse{}
 	resp_ := &graphql.Response{Data: data_}

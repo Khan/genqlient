@@ -4,7 +4,6 @@ import (
 	"encoding/binary"
 	"encoding/json"
 	"fmt"
-	"net/http"
 	"time"
 )
 
@@ -21,51 +20,21 @@ const (
 
 // Close codes defined in RFC 6455, section 11.7.
 const (
-	CloseNormalClosure           = 1000
-	CloseGoingAway               = 1001
-	CloseProtocolError           = 1002
-	CloseUnsupportedData         = 1003
-	CloseNoStatusReceived        = 1005
-	CloseAbnormalClosure         = 1006
-	CloseInvalidFramePayloadData = 1007
-	ClosePolicyViolation         = 1008
-	CloseMessageTooBig           = 1009
-	CloseMandatoryExtension      = 1010
-	CloseInternalServerErr       = 1011
-	CloseServiceRestart          = 1012
-	CloseTryAgainLater           = 1013
-	CloseTLSHandshake            = 1015
+	closeNormalClosure    = 1000
+	closeNoStatusReceived = 1005
 )
 
 // The message types are defined in RFC 6455, section 11.8.
 const (
-	// TextMessage denotes a text data message. The text message payload is
+	// textMessage denotes a text data message. The text message payload is
 	// interpreted as UTF-8 encoded text data.
-	TextMessage = 1
+	textMessage = 1
 
-	// BinaryMessage denotes a binary data message.
-	BinaryMessage = 2
-
-	// CloseMessage denotes a close control message. The optional message
+	// closeMessage denotes a close control message. The optional message
 	// payload contains a numeric code and text. Use the FormatCloseMessage
 	// function to format a close message payload.
-	CloseMessage = 8
-
-	// PingMessage denotes a ping control message. The optional message payload
-	// is UTF-8 encoded text.
-	PingMessage = 9
-
-	// PongMessage denotes a pong control message. The optional message payload
-	// is UTF-8 encoded text.
-	PongMessage = 10
+	closeMessage = 8
 )
-
-type webSocketClient struct {
-	Dialer  Dialer
-	Header  http.Header
-	conn    WSConn
-	errChan chan error
-}
 
 type webSocketSendMessage struct {
 	Payload *Request `json:"payload"`
@@ -104,7 +73,7 @@ func (w *webSocketClient) sendStructAsJSON(object any) error {
 	if err != nil {
 		return err
 	}
-	return w.conn.WriteMessage(TextMessage, jsonBytes)
+	return w.conn.WriteMessage(textMessage, jsonBytes)
 }
 
 func (w *webSocketClient) waitForConnAck() error {
@@ -173,7 +142,7 @@ func forwardWebSocketData(respChan chan json.RawMessage, message []byte) error {
 // formatCloseMessage formats closeCode and text as a WebSocket close message.
 // An empty message is returned for code CloseNoStatusReceived.
 func formatCloseMessage(closeCode int, text string) []byte {
-	if closeCode == CloseNoStatusReceived {
+	if closeCode == closeNoStatusReceived {
 		// Return empty message because it's illegal to send
 		// CloseNoStatusReceived. Return non-nil value in case application
 		// checks for nil.

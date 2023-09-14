@@ -2,19 +2,12 @@
 const {{.Name}}_Operation = `{{$.Body}}`
 
 {{.Doc}}
-{{if eq .Type "subscription"}}
-{{if eq .Doc ""}}
-// {{.Name}}
-{{end -}}
-//
-// To close the connection, use [graphql.Client.CloseWebSocket()]
-{{end -}}
 func {{.Name}}(
     {{if ne .Config.ContextType "-" -}}
     ctx_ {{ref .Config.ContextType}},
     {{end}}
     {{- if not .Config.ClientGetter -}}
-    client_ {{ref "github.com/Khan/genqlient/graphql.Client"}},
+    client_ {{if eq .Type "subscription"}}{{ref "github.com/Khan/genqlient/graphql.WebSocketClient"}}{{else}}{{ref "github.com/Khan/genqlient/graphql.Client"}}{{end}},
     {{end}}
     {{- if .Input -}}
     {{- range .Input.Fields -}}
@@ -22,7 +15,7 @@ func {{.Name}}(
     {{.GraphQLName}} {{.GoType.Reference}},
     {{end -}}
     {{end -}}
-) ({{if eq .Type "subscription"}}dataChan_ chan {{.Name}}WsResponse, errChan_ chan error,{{else}}data_ *{{.ResponseName}}, {{if .Config.Extensions -}}ext_ map[string]interface{},{{end}}{{end}} err error) {
+) ({{if eq .Type "subscription"}}dataChan_ chan {{.Name}}WsResponse, errChan_ chan error,{{else}}data_ *{{.ResponseName}}, {{if .Config.Extensions -}}ext_ map[string]interface{},{{end}}{{end}} err_ error) {
     req_ := &graphql.Request{
         OpName: "{{.Name}}",
         Query:  {{.Name}}_Operation,
@@ -34,7 +27,6 @@ func {{.Name}}(
         },
     {{end -}}
     }
-    var err_ error
     {{if .Config.ClientGetter -}}
     var client_ graphql.Client
 

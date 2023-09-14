@@ -520,7 +520,7 @@ func (v *InterfaceListFieldWithPointerTopicChildrenVideo) GetId() testutil.ID { 
 // GetName returns InterfaceListFieldWithPointerTopicChildrenVideo.Name, and is useful for accessing the field via an interface.
 func (v *InterfaceListFieldWithPointerTopicChildrenVideo) GetName() string { return v.Name }
 
-// The query, mutation or subscription executed by InterfaceListField.
+// The query executed by InterfaceListField.
 const InterfaceListField_Operation = `
 query InterfaceListField {
 	root {
@@ -546,12 +546,11 @@ query InterfaceListField {
 
 func InterfaceListField(
 	client_ graphql.Client,
-) (data_ *InterfaceListFieldResponse, err error) {
+) (data_ *InterfaceListFieldResponse, err_ error) {
 	req_ := &graphql.Request{
 		OpName: "InterfaceListField",
 		Query:  InterfaceListField_Operation,
 	}
-	var err_ error
 
 	data_ = &InterfaceListFieldResponse{}
 	resp_ := &graphql.Response{Data: data_}

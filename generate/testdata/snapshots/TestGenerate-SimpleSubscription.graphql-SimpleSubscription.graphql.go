@@ -17,24 +17,21 @@ type SimpleSubscriptionResponse struct {
 // GetCount returns SimpleSubscriptionResponse.Count, and is useful for accessing the field via an interface.
 func (v *SimpleSubscriptionResponse) GetCount() int { return v.Count }
 
-// The query, mutation or subscription executed by SimpleSubscription.
+// The subscription executed by SimpleSubscription.
 const SimpleSubscription_Operation = `
 subscription SimpleSubscription {
 	count
 }
 `
 
-// SimpleSubscription
-//
-// To close the connection, use [graphql.Client.CloseWebSocket()]
+// To close the connection, use [graphql.WebSocketClient.CloseWebSocket()]
 func SimpleSubscription(
-	client_ graphql.Client,
-) (dataChan_ chan SimpleSubscriptionWsResponse, errChan_ chan error, err error) {
+	client_ graphql.WebSocketClient,
+) (dataChan_ chan SimpleSubscriptionWsResponse, errChan_ chan error, err_ error) {
 	req_ := &graphql.Request{
 		OpName: "SimpleSubscription",
 		Query:  SimpleSubscription_Operation,
 	}
-	var err_ error
 
 	dataChan_ = make(chan SimpleSubscriptionWsResponse, 1)
 	respChan_ := make(chan json.RawMessage, 1)

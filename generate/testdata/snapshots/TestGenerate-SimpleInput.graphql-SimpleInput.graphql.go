@@ -41,7 +41,7 @@ type __SimpleInputQueryInput struct {
 // GetName returns __SimpleInputQueryInput.Name, and is useful for accessing the field via an interface.
 func (v *__SimpleInputQueryInput) GetName() string { return v.Name }
 
-// The query, mutation or subscription executed by SimpleInputQuery.
+// The query executed by SimpleInputQuery.
 const SimpleInputQuery_Operation = `
 query SimpleInputQuery ($name: String!) {
 	user(query: {name:$name}) {
@@ -53,7 +53,7 @@ query SimpleInputQuery ($name: String!) {
 func SimpleInputQuery(
 	client_ graphql.Client,
 	name string,
-) (data_ *SimpleInputQueryResponse, err error) {
+) (data_ *SimpleInputQueryResponse, err_ error) {
 	req_ := &graphql.Request{
 		OpName: "SimpleInputQuery",
 		Query:  SimpleInputQuery_Operation,
@@ -61,7 +61,6 @@ func SimpleInputQuery(
 			Name: name,
 		},
 	}
-	var err_ error
 
 	data_ = &SimpleInputQueryResponse{}
 	resp_ := &graphql.Response{Data: data_}

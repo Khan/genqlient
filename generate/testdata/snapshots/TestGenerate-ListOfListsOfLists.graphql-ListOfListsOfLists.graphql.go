@@ -16,7 +16,7 @@ func (v *ListOfListsOfListsResponse) GetListOfListsOfLists() [][][]string {
 	return v.ListOfListsOfLists
 }
 
-// The query, mutation or subscription executed by ListOfListsOfLists.
+// The query executed by ListOfListsOfLists.
 const ListOfListsOfLists_Operation = `
 query ListOfListsOfLists {
 	listOfListsOfLists
@@ -25,12 +25,11 @@ query ListOfListsOfLists {
 
 func ListOfListsOfLists(
 	client_ graphql.Client,
-) (data_ *ListOfListsOfListsResponse, err error) {
+) (data_ *ListOfListsOfListsResponse, err_ error) {
 	req_ := &graphql.Request{
 		OpName: "ListOfListsOfLists",
 		Query:  ListOfListsOfLists_Operation,
 	}
-	var err_ error
 
 	data_ = &ListOfListsOfListsResponse{}
 	resp_ := &graphql.Response{Data: data_}
