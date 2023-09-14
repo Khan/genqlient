@@ -3096,7 +3096,7 @@ subscription count {
 // To close the connection, use [graphql.Client.CloseWebSocket()]
 func count(
 	ctx_ context.Context,
-	client_ graphql.Client,
+	client_ graphql.WebSocketClient,
 ) (dataChan_ chan countWsResponse, errChan_ chan error, err_ error) {
 	req_ := &graphql.Request{
 		OpName: "count",

@@ -38,7 +38,9 @@ type Client interface {
 		req *Request,
 		resp *Response,
 	) error
+}
 
+type WebSocketClient interface {
 	// DialWebSocket must open a webSocket connection and subscribe to an endpoint
 	// of the client's GraphQL API.
 	//
@@ -69,9 +71,16 @@ type Client interface {
 
 type client struct {
 	httpClient Doer
-	wsClient   *webSocketClient
 	endpoint   string
 	method     string
+}
+
+type webSocketClient struct {
+	Dialer   Dialer
+	Header   http.Header
+	conn     WSConn
+	errChan  chan error
+	endpoint string
 }
 
 // NewClient returns a [Client] which makes requests to the given endpoint,
@@ -90,7 +99,7 @@ type client struct {
 //
 // [example/main.go]: https://github.com/Khan/genqlient/blob/main/example/main.go#L12-L20
 func NewClient(endpoint string, httpClient Doer) Client {
-	return newClient(endpoint, httpClient, http.MethodPost, nil)
+	return newClient(endpoint, httpClient, http.MethodPost)
 }
 
 // NewClientUsingGet returns a [Client] which makes GET requests to the given
@@ -111,32 +120,32 @@ func NewClient(endpoint string, httpClient Doer) Client {
 //
 // [example/main.go]: https://github.com/Khan/genqlient/blob/main/example/main.go#L12-L20
 func NewClientUsingGet(endpoint string, httpClient Doer) Client {
-	return newClient(endpoint, httpClient, http.MethodGet, nil)
+	return newClient(endpoint, httpClient, http.MethodGet)
 }
 
-// NewClientUsingWebSocket returns a [Client] which makes subscription requests
+// NewClientUsingWebSocket returns a [WebSocketClient] which makes subscription requests
 // to the given endpoint using webSocket.
 //
 // The client does not support queries nor mutations, and will return an error
 // if passed a request that attempts one.
-func NewClientUsingWebSocket(endpoint string, wsDialer Dialer, headers http.Header) Client {
+func NewClientUsingWebSocket(endpoint string, wsDialer Dialer, headers http.Header) WebSocketClient {
 	if headers == nil {
 		headers = http.Header{}
 	}
 	headers.Add("Sec-WebSocket-Protocol", "graphql-transport-ws")
-	wsClient := webSocketClient{
-		Dialer:  wsDialer,
-		Header:  headers,
-		errChan: make(chan error, 1),
+	return &webSocketClient{
+		Dialer:   wsDialer,
+		Header:   headers,
+		endpoint: endpoint,
+		errChan:  make(chan error, 1),
 	}
-	return newClient(endpoint, nil, webSocketMethod, &wsClient)
 }
 
-func newClient(endpoint string, httpClient Doer, method string, wsClient *webSocketClient) Client {
+func newClient(endpoint string, httpClient Doer, method string) Client {
 	if httpClient == nil || httpClient == (*http.Client)(nil) {
 		httpClient = http.DefaultClient
 	}
-	return &client{httpClient, wsClient, endpoint, method}
+	return &client{httpClient, endpoint, method}
 }
 
 // Doer encapsulates the methods from [*http.Client] needed by [Client].
@@ -240,10 +249,7 @@ func (c *client) MakeRequest(ctx context.Context, req *Request, resp *Response) 
 	return nil
 }
 
-func (c *client) DialWebSocket(ctx context.Context, req *Request, respChan chan json.RawMessage) (errChan chan error, err error) {
-	if c.method != webSocketMethod {
-		return nil, errors.New("client does not support websocket")
-	}
+func (w *webSocketClient) DialWebSocket(ctx context.Context, req *Request, respChan chan json.RawMessage) (errChan chan error, err error) {
 	if req.Query != "" {
 		if strings.HasPrefix(strings.TrimSpace(req.Query), "query") {
 			return nil, errors.New("client does not support queries")
@@ -253,31 +259,30 @@ func (c *client) DialWebSocket(ctx context.Context, req *Request, respChan chan 
 		}
 	}
 
-	err = c.subscribeAndListen(
+	err = w.subscribeAndListen(
 		ctx,
 		req,
 		respChan,
 	)
 
-	return c.wsClient.errChan, err
+	return w.errChan, err
 }
 
-func (c *client) CloseWebSocket() {
-	defer c.wsClient.conn.Close()
-	err := c.wsClient.sendComplete()
+func (w *webSocketClient) CloseWebSocket() {
+	defer w.conn.Close()
+	err := w.sendComplete()
 	if err != nil {
-		c.wsClient.errChan <- err
+		w.errChan <- err
 	}
-	err = c.wsClient.conn.WriteMessage(closeMessage, formatCloseMessage(closeNormalClosure, ""))
+	err = w.conn.WriteMessage(closeMessage, formatCloseMessage(closeNormalClosure, ""))
 	if err != nil {
-		c.wsClient.errChan <- err
+		w.errChan <- err
 	}
 }
 
-func (c *client) subscribeAndListen(ctx context.Context, req *Request, respChan chan json.RawMessage) error {
+func (w *webSocketClient) subscribeAndListen(ctx context.Context, req *Request, respChan chan json.RawMessage) error {
 	var err error
-	w := c.wsClient
-	w.conn, err = w.Dialer.DialContext(ctx, c.endpoint, w.Header)
+	w.conn, err = w.Dialer.DialContext(ctx, w.endpoint, w.Header)
 	if err != nil {
 		return err
 	}

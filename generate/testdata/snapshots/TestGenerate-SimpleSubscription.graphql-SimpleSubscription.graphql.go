@@ -26,7 +26,7 @@ subscription SimpleSubscription {
 
 // To close the connection, use [graphql.Client.CloseWebSocket()]
 func SimpleSubscription(
-	client_ graphql.Client,
+	client_ graphql.WebSocketClient,
 ) (dataChan_ chan SimpleSubscriptionWsResponse, errChan_ chan error, err_ error) {
 	req_ := &graphql.Request{
 		OpName: "SimpleSubscription",

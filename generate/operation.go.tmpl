@@ -7,7 +7,7 @@ func {{.Name}}(
     ctx_ {{ref .Config.ContextType}},
     {{end}}
     {{- if not .Config.ClientGetter -}}
-    client_ {{ref "github.com/Khan/genqlient/graphql.Client"}},
+    client_ {{if eq .Type "subscription"}}{{ref "github.com/Khan/genqlient/graphql.WebSocketClient"}}{{else}}{{ref "github.com/Khan/genqlient/graphql.Client"}}{{end}},
     {{end}}
     {{- if .Input -}}
     {{- range .Input.Fields -}}

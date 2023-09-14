@@ -47,7 +47,6 @@ func TestMutation(t *testing.T) {
 	defer server.Close()
 	postClient := newRoundtripClient(t, server.URL)
 	getClient := newRoundtripGetClient(t, server.URL)
-	wsClient := newRoundtripWebScoketClient(t, server.URL)
 
 	resp, _, err := createUser(ctx, postClient, NewUser{Name: "Jack"})
 	require.NoError(t, err)
@@ -55,9 +54,6 @@ func TestMutation(t *testing.T) {
 	assert.Equal(t, "Jack", resp.CreateUser.Name)
 
 	_, _, err = createUser(ctx, getClient, NewUser{Name: "Jill"})
-	require.Errorf(t, err, "client does not support mutations")
-
-	_, _, err = createUser(ctx, wsClient, NewUser{Name: "Jill"})
 	require.Errorf(t, err, "client does not support mutations")
 }
 
@@ -68,15 +64,7 @@ func TestSubscription(t *testing.T) {
 	ctx := context.Background()
 	server := server.RunServer()
 	defer server.Close()
-	postClient := newRoundtripClient(t, server.URL)
-	getClient := newRoundtripGetClient(t, server.URL)
 	wsClient := newRoundtripWebScoketClient(t, server.URL)
-
-	_, _, err := count(ctx, getClient)
-	require.Errorf(t, err, "client does not support websocket")
-
-	_, _, err = count(ctx, postClient)
-	require.Errorf(t, err, "client does not support websocket")
 
 	start := time.Now()
 	respChan, errChan, err := count(ctx, wsClient)

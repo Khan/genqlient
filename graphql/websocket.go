@@ -4,7 +4,6 @@ import (
 	"encoding/binary"
 	"encoding/json"
 	"fmt"
-	"net/http"
 	"time"
 )
 
@@ -36,13 +35,6 @@ const (
 	// function to format a close message payload.
 	closeMessage = 8
 )
-
-type webSocketClient struct {
-	Dialer  Dialer
-	Header  http.Header
-	conn    WSConn
-	errChan chan error
-}
 
 type webSocketSendMessage struct {
 	Payload *Request `json:"payload"`
