@@ -141,9 +141,10 @@ type MyDialer struct {
 	*websocket.Dialer
 }
 
-func (md *MyDialer) DialContext(ctx context.Context, urlStr string, requestHeader http.Header) (graphql.WSConn, *http.Response, error) {
+func (md *MyDialer) DialContext(ctx context.Context, urlStr string, requestHeader http.Header) (graphql.WSConn, error) {
 	conn, resp, err := md.Dialer.DialContext(ctx, urlStr, requestHeader)
-	return graphql.WSConn(conn), resp, err
+	resp.Body.Close()
+	return graphql.WSConn(conn), err
 }
 
 func newRoundtripWebScoketClient(t *testing.T, endpoint string) graphql.Client {

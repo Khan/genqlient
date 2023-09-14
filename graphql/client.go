@@ -149,7 +149,7 @@ type Doer interface {
 // Dialer encapsulates DialContext method and is similar to [github.com/gorilla/websocket]
 // [*websocket.Dialer] method
 type Dialer interface {
-	DialContext(ctx context.Context, urlStr string, requestHeader http.Header) (WSConn, *http.Response, error)
+	DialContext(ctx context.Context, urlStr string, requestHeader http.Header) (WSConn, error)
 }
 
 // WSConn encapsulates basic methods for a webSocket connection, taking model on
@@ -275,14 +275,12 @@ func (c *client) CloseWebSocket() {
 }
 
 func (c *client) subscribeAndListen(ctx context.Context, req *Request, respChan chan json.RawMessage) error {
-	var res *http.Response
 	var err error
 	w := c.wsClient
-	w.conn, res, err = w.Dialer.DialContext(ctx, c.endpoint, w.Header)
+	w.conn, err = w.Dialer.DialContext(ctx, c.endpoint, w.Header)
 	if err != nil {
 		return err
 	}
-	defer res.Body.Close()
 
 	err = w.sendInit()
 	if err != nil {
