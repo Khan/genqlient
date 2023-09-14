@@ -3093,7 +3093,7 @@ subscription count {
 }
 `
 
-// To close the connection, use [graphql.Client.CloseWebSocket()]
+// To close the connection, use [graphql.WebSocketClient.CloseWebSocket()]
 func count(
 	ctx_ context.Context,
 	client_ graphql.WebSocketClient,
