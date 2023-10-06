@@ -3126,8 +3126,8 @@ func countForwardData(dataChan_ chan countWsResponse, respChan_ chan json.RawMes
 	var gqlResp graphql.Response
 	var wsResp countWsResponse
 	for {
-		jsonRaw, more_ := <-respChan_
-		if !more_ {
+		jsonRaw, more := <-respChan_
+		if !more {
 			return
 		}
 		err := json.Unmarshal(jsonRaw, &gqlResp)

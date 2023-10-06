@@ -70,8 +70,8 @@ func {{.Name}}ForwardData(dataChan_ chan {{.Name}}WsResponse, respChan_ chan jso
     var gqlResp graphql.Response
 	var wsResp {{.Name}}WsResponse
 	for {
-		jsonRaw, more_ := <-respChan_
-		if !more_ {
+		jsonRaw, more := <-respChan_
+		if !more {
 			return
 		}
 		err := json.Unmarshal(jsonRaw, &gqlResp)

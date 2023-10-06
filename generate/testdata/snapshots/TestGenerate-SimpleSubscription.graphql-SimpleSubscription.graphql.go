@@ -56,8 +56,8 @@ func SimpleSubscriptionForwardData(dataChan_ chan SimpleSubscriptionWsResponse, 
 	var gqlResp graphql.Response
 	var wsResp SimpleSubscriptionWsResponse
 	for {
-		jsonRaw, more_ := <-respChan_
-		if !more_ {
+		jsonRaw, more := <-respChan_
+		if !more {
 			return
 		}
 		err := json.Unmarshal(jsonRaw, &gqlResp)
