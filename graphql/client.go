@@ -132,7 +132,9 @@ func NewClientUsingWebSocket(endpoint string, wsDialer Dialer, headers http.Head
 	if headers == nil {
 		headers = http.Header{}
 	}
-	headers.Add("Sec-WebSocket-Protocol", "graphql-transport-ws")
+	if headers.Get("Sec-WebSocket-Protocol") == "" {
+		headers.Add("Sec-WebSocket-Protocol", "graphql-transport-ws")
+	}
 	return &webSocketClient{
 		Dialer:   wsDialer,
 		Header:   headers,
