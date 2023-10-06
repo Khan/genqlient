@@ -65,12 +65,12 @@ type {{.Name}}WsResponse struct {
 	Errors     error                  `json:"errors"`
 }
 
-func {{.Name}}ForwardData(dataChan_ chan {{.Name}}WsResponse, respChan_ chan json.RawMessage, errChan_ chan error) {
+func {{.Name}}ForwardData(dataChan_ chan {{.Name}}WsResponse, respChan chan json.RawMessage, errChan_ chan error) {
     defer close(dataChan_)
     var gqlResp graphql.Response
 	var wsResp {{.Name}}WsResponse
 	for {
-		jsonRaw, more := <-respChan_
+		jsonRaw, more := <-respChan
 		if !more {
 			return
 		}

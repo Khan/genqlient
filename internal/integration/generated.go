@@ -3121,12 +3121,12 @@ type countWsResponse struct {
 	Errors     error                  `json:"errors"`
 }
 
-func countForwardData(dataChan_ chan countWsResponse, respChan_ chan json.RawMessage, errChan_ chan error) {
+func countForwardData(dataChan_ chan countWsResponse, respChan chan json.RawMessage, errChan_ chan error) {
 	defer close(dataChan_)
 	var gqlResp graphql.Response
 	var wsResp countWsResponse
 	for {
-		jsonRaw, more := <-respChan_
+		jsonRaw, more := <-respChan
 		if !more {
 			return
 		}

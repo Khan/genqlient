@@ -51,12 +51,12 @@ type SimpleSubscriptionWsResponse struct {
 	Errors     error                       `json:"errors"`
 }
 
-func SimpleSubscriptionForwardData(dataChan_ chan SimpleSubscriptionWsResponse, respChan_ chan json.RawMessage, errChan_ chan error) {
+func SimpleSubscriptionForwardData(dataChan_ chan SimpleSubscriptionWsResponse, respChan chan json.RawMessage, errChan_ chan error) {
 	defer close(dataChan_)
 	var gqlResp graphql.Response
 	var wsResp SimpleSubscriptionWsResponse
 	for {
-		jsonRaw, more := <-respChan_
+		jsonRaw, more := <-respChan
 		if !more {
 			return
 		}
