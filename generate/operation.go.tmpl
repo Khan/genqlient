@@ -43,7 +43,7 @@ func {{.Name}}(
 	if err_ != nil {
 		return nil, nil, err_
 	}
-    go {{.Name}}ForwardData(dataChan_, respChan_, errChan_)
+    go {{.Name}}ForwardData({{if ne .Config.ContextType "-" -}}ctx_, {{end}}dataChan_, respChan_, errChan_)
     {{else}}
     data_ = &{{.ResponseName}}{}
     resp_ := &graphql.Response{Data: data_}
@@ -65,30 +65,38 @@ type {{.Name}}WsResponse struct {
 	Errors     error                  `json:"errors"`
 }
 
-func {{.Name}}ForwardData(dataChan_ chan {{.Name}}WsResponse, respChan chan json.RawMessage, errChan_ chan error) {
+func {{.Name}}ForwardData({{if ne .Config.ContextType "-" -}}ctx_ {{ref .Config.ContextType}}, {{end}}dataChan_ chan {{.Name}}WsResponse, respChan chan json.RawMessage, errChan_ chan error) {
     defer close(dataChan_)
     var gqlResp graphql.Response
 	var wsResp {{.Name}}WsResponse
 	for {
-		jsonRaw, more := <-respChan
-		if !more {
-			return
-		}
-		err := json.Unmarshal(jsonRaw, &gqlResp)
-		if err != nil {
-			errChan_ <- err
-			return
-		}
-		if len(gqlResp.Errors) == 0 {
-			err = json.Unmarshal(jsonRaw, &wsResp)
-			if err != nil {
-				errChan_ <- err
-				return
-			}
-		} else {
-			wsResp.Errors = gqlResp.Errors
-		}
-		dataChan_ <- wsResp
+        {{if ne .Config.ContextType "-" -}}
+        select {
+		case <-ctx_.Done():
+            errChan_ <- errors.New("context was canceled")
+		    return
+		default:
+        {{end -}}
+            jsonRaw, more := <-respChan
+            if !more {
+                return
+            }
+            err := json.Unmarshal(jsonRaw, &gqlResp)
+            if err != nil {
+                errChan_ <- err
+                return
+            }
+            if len(gqlResp.Errors) == 0 {
+                err = json.Unmarshal(jsonRaw, &wsResp)
+                if err != nil {
+                    errChan_ <- err
+                    return
+                }
+            } else {
+                wsResp.Errors = gqlResp.Errors
+            }
+            dataChan_ <- wsResp
+        {{if ne .Config.ContextType "-" -}}}{{end -}}
 	}
 }
 {{end}}

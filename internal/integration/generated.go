@@ -5,6 +5,7 @@ package integration
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"time"
 
@@ -3110,7 +3111,7 @@ func count(
 	if err_ != nil {
 		return nil, nil, err_
 	}
-	go countForwardData(dataChan_, respChan_, errChan_)
+	go countForwardData(ctx_, dataChan_, respChan_, errChan_)
 
 	return dataChan_, errChan_, err_
 }
@@ -3121,30 +3122,36 @@ type countWsResponse struct {
 	Errors     error                  `json:"errors"`
 }
 
-func countForwardData(dataChan_ chan countWsResponse, respChan chan json.RawMessage, errChan_ chan error) {
+func countForwardData(ctx_ context.Context, dataChan_ chan countWsResponse, respChan chan json.RawMessage, errChan_ chan error) {
 	defer close(dataChan_)
 	var gqlResp graphql.Response
 	var wsResp countWsResponse
 	for {
-		jsonRaw, more := <-respChan
-		if !more {
+		select {
+		case <-ctx_.Done():
+			errChan_ <- errors.New("context was canceled")
 			return
-		}
-		err := json.Unmarshal(jsonRaw, &gqlResp)
-		if err != nil {
-			errChan_ <- err
-			return
-		}
-		if len(gqlResp.Errors) == 0 {
-			err = json.Unmarshal(jsonRaw, &wsResp)
+		default:
+			jsonRaw, more := <-respChan
+			if !more {
+				return
+			}
+			err := json.Unmarshal(jsonRaw, &gqlResp)
 			if err != nil {
 				errChan_ <- err
 				return
 			}
-		} else {
-			wsResp.Errors = gqlResp.Errors
+			if len(gqlResp.Errors) == 0 {
+				err = json.Unmarshal(jsonRaw, &wsResp)
+				if err != nil {
+					errChan_ <- err
+					return
+				}
+			} else {
+				wsResp.Errors = gqlResp.Errors
+			}
+			dataChan_ <- wsResp
 		}
-		dataChan_ <- wsResp
 	}
 }
 
