@@ -33,8 +33,8 @@ func SimpleSubscription(
 		Query:  SimpleSubscription_Operation,
 	}
 
-	dataChan_ = make(chan SimpleSubscriptionWsResponse, 1)
-	respChan_ := make(chan json.RawMessage, 1)
+	dataChan_ = make(chan SimpleSubscriptionWsResponse)
+	respChan_ := make(chan json.RawMessage)
 
 	errChan_, err_ = client_.DialWebSocket(context.Background(), req_, respChan_)
 	if err_ != nil {

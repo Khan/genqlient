@@ -3103,8 +3103,8 @@ func count(
 		Query:  count_Operation,
 	}
 
-	dataChan_ = make(chan countWsResponse, 1)
-	respChan_ := make(chan json.RawMessage, 1)
+	dataChan_ = make(chan countWsResponse)
+	respChan_ := make(chan json.RawMessage)
 
 	errChan_, err_ = client_.DialWebSocket(ctx_, req_, respChan_)
 	if err_ != nil {

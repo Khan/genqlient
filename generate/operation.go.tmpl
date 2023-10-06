@@ -36,8 +36,8 @@ func {{.Name}}(
     }
     {{end}}
     {{if eq .Type "subscription"}}
-    dataChan_ = make(chan {{.Name}}WsResponse, 1)
-    respChan_ := make(chan json.RawMessage, 1)
+    dataChan_ = make(chan {{.Name}}WsResponse)
+    respChan_ := make(chan json.RawMessage)
 
     errChan_, err_ = client_.DialWebSocket({{if ne .Config.ContextType "-" -}}ctx_{{else}}context.Background(){{end}}, req_, respChan_)
 	if err_ != nil {

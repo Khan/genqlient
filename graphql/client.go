@@ -139,7 +139,7 @@ func NewClientUsingWebSocket(endpoint string, wsDialer Dialer, headers http.Head
 		Dialer:   wsDialer,
 		Header:   headers,
 		endpoint: endpoint,
-		errChan:  make(chan error, 1),
+		errChan:  make(chan error),
 	}
 }
 
