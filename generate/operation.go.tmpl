@@ -15,7 +15,7 @@ func {{.Name}}(
     {{.GraphQLName}} {{.GoType.Reference}},
     {{end -}}
     {{end -}}
-) ({{if eq .Type "subscription"}}dataChan_ chan {{.Name}}WsResponse, errChan_ chan error,{{else}}data_ *{{.ResponseName}}, {{if .Config.Extensions -}}ext_ map[string]interface{},{{end}}{{end}} err_ error) {
+) ({{if eq .Type "subscription"}}dataChan_ chan {{.Name}}WsResponse, subscriptionID_ string,{{else}}data_ *{{.ResponseName}}, {{if .Config.Extensions -}}ext_ map[string]interface{},{{end}}{{end}} err_ error) {
     req_ := &graphql.Request{
         OpName: "{{.Name}}",
         Query:  {{.Name}}_Operation,
@@ -37,13 +37,7 @@ func {{.Name}}(
     {{end}}
     {{if eq .Type "subscription"}}
     dataChan_ = make(chan {{.Name}}WsResponse)
-    respChan_ := make(chan json.RawMessage)
-
-    errChan_, err_ = client_.DialWebSocket({{if ne .Config.ContextType "-" -}}ctx_{{else}}context.Background(){{end}}, req_, respChan_)
-	if err_ != nil {
-		return nil, nil, err_
-	}
-    go {{.Name}}ForwardData({{if ne .Config.ContextType "-" -}}ctx_, {{end}}dataChan_, respChan_, errChan_)
+    subscriptionID_, err_ = client_.Subscribe(req_, dataChan_, {{.Name}}ForwardData)
     {{else}}
     data_ = &{{.ResponseName}}{}
     resp_ := &graphql.Response{Data: data_}
@@ -55,7 +49,7 @@ func {{.Name}}(
     )
     {{end}}
 	
-    return {{if eq .Type "subscription"}}dataChan_, errChan_,{{else}}data_, {{if .Config.Extensions -}}resp_.Extensions,{{end -}}{{end}} err_
+    return {{if eq .Type "subscription"}}dataChan_, subscriptionID_,{{else}}data_, {{if .Config.Extensions -}}resp_.Extensions,{{end -}}{{end}} err_
 }
 
 {{if eq .Type "subscription"}}
@@ -65,38 +59,26 @@ type {{.Name}}WsResponse struct {
 	Errors     error                  `json:"errors"`
 }
 
-func {{.Name}}ForwardData({{if ne .Config.ContextType "-" -}}ctx_ {{ref .Config.ContextType}}, {{end}}dataChan_ chan {{.Name}}WsResponse, respChan chan json.RawMessage, errChan_ chan error) {
-    defer close(dataChan_)
+func {{.Name}}ForwardData(interfaceChan interface{}, jsonRawMsg json.RawMessage) error {
     var gqlResp graphql.Response
 	var wsResp {{.Name}}WsResponse
-	for {
-        {{if ne .Config.ContextType "-" -}}
-        select {
-		case <-ctx_.Done():
-            errChan_ <- errors.New("context was canceled")
-		    return
-		default:
-        {{end -}}
-            jsonRaw, more := <-respChan
-            if !more {
-                return
-            }
-            err := json.Unmarshal(jsonRaw, &gqlResp)
-            if err != nil {
-                errChan_ <- err
-                return
-            }
-            if len(gqlResp.Errors) == 0 {
-                err = json.Unmarshal(jsonRaw, &wsResp)
-                if err != nil {
-                    errChan_ <- err
-                    return
-                }
-            } else {
-                wsResp.Errors = gqlResp.Errors
-            }
-            dataChan_ <- wsResp
-        {{if ne .Config.ContextType "-" -}}}{{end -}}
+    err := json.Unmarshal(jsonRawMsg, &gqlResp)
+    if err != nil {
+        return err
+    }
+    if len(gqlResp.Errors) == 0 {
+        err = json.Unmarshal(jsonRawMsg, &wsResp)
+        if err != nil {
+            return err
+        }
+    } else {
+        wsResp.Errors = gqlResp.Errors
+    }
+    dataChan_, ok := interfaceChan.(chan {{.Name}}WsResponse)
+	if !ok {
+		return errors.New("failed to cast interface into 'chan {{.Name}}WsResponse'")
 	}
+	dataChan_ <- wsResp
+	return nil
 }
 {{end}}

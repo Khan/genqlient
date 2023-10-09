@@ -114,7 +114,12 @@ a loop for incoming messages and errors:
 		headers,
 	)
 
-	respChan, errChan, err := count(context.Background(), graphqlClient)
+	errChan, err := graphqlClient.StartWebSocket(ctx)
+	if err != nil {
+		return
+	}
+
+	dataChan, subscriptionID, err := count(ctx, graphqlClient)
 	if err != nil {
 		return
 	}
@@ -122,7 +127,7 @@ a loop for incoming messages and errors:
 	defer graphqlClient.CloseWebSocket()
 	for loop := true; loop; {
 		select {
-		case msg, more := <-respChan:
+		case msg, more := <-dataChan:
 			if !more {
 				loop = false
 				break
@@ -136,6 +141,9 @@ a loop for incoming messages and errors:
 			}
 		case err = <-errChan:
 			return
+    case <-time.After(time.Minute):
+      err = wsClient.Unsubscribe(subscriptionID)
+      loop = false
 		}
 	}
 ```

@@ -282,7 +282,7 @@ func (g *generator) addOperation(op *ast.OperationDefinition) error {
 		docComment = "// " + strings.ReplaceAll(commentLines, "\n", "\n// ")
 	}
 	if op.Operation == ast.Subscription {
-		docComment += "\n// To close the connection, use [graphql.WebSocketClient.CloseWebSocket()]"
+		docComment += "\n// To unsubscribe, use [graphql.WebSocketClient.Unsubscribe]"
 	}
 
 	// If the filename is a pseudo-filename filename.go:startline, just

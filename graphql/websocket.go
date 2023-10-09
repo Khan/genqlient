@@ -39,33 +39,20 @@ const (
 type webSocketSendMessage struct {
 	Payload *Request `json:"payload"`
 	Type    string   `json:"type"`
+	ID      string   `json:"id"`
 }
 
 type webSocketReceiveMessage struct {
 	Type    string          `json:"type"`
+	ID      string          `json:"id"`
 	Payload json.RawMessage `json:"payload"`
 }
 
 func (w *webSocketClient) sendInit() error {
-	connInit := webSocketSendMessage{
+	connInitMsg := webSocketSendMessage{
 		Type: webSocketTypeConnInit,
 	}
-	return w.sendStructAsJSON(connInit)
-}
-
-func (w *webSocketClient) sendSubscribe(req *Request) error {
-	subscription := webSocketSendMessage{
-		Type:    webSocketTypeSubscribe,
-		Payload: req,
-	}
-	return w.sendStructAsJSON(subscription)
-}
-
-func (w *webSocketClient) sendComplete() error {
-	complete := webSocketSendMessage{
-		Type: webSocketTypeComplete,
-	}
-	return w.sendStructAsJSON(complete)
+	return w.sendStructAsJSON(connInitMsg)
 }
 
 func (w *webSocketClient) sendStructAsJSON(object any) error {
@@ -92,20 +79,32 @@ func (w *webSocketClient) waitForConnAck() error {
 	return nil
 }
 
-func (w *webSocketClient) listenWebSocket(respChan chan json.RawMessage) {
-	defer close(respChan)
+func (w *webSocketClient) listenWebSocket() {
 	for {
 		_, message, err := w.conn.ReadMessage()
 		if err != nil {
 			w.errChan <- err
 			return
 		}
-		err = forwardWebSocketData(respChan, message)
+		err = w.forwardWebSocketData(message)
 		if err != nil {
 			w.errChan <- err
 			return
 		}
 	}
+}
+
+func (w *webSocketClient) forwardWebSocketData(message []byte) error {
+	var wsMsg webSocketReceiveMessage
+	err := json.Unmarshal(message, &wsMsg)
+	if err != nil {
+		return err
+	}
+	sub, ok := w.subscriptions.Read(wsMsg.ID)
+	if !ok {
+		return fmt.Errorf("received message for unknown subscription ID '%s'", wsMsg.ID)
+	}
+	return sub.forwardDataFunc(sub.interfaceChan, wsMsg.Payload)
 }
 
 func (w *webSocketClient) receiveWebSocketConnAck() (bool, error) {
@@ -123,20 +122,6 @@ func checkConnectionAckReceived(message []byte) (bool, error) {
 		return false, err
 	}
 	return wsMessage.Type == webSocketTypeConnAck, nil
-}
-
-func forwardWebSocketData(respChan chan json.RawMessage, message []byte) error {
-	var wsMsg webSocketReceiveMessage
-	err := json.Unmarshal(message, &wsMsg)
-	if err != nil {
-		return err
-	}
-	switch wsMsg.Type {
-	case webSocketTypeNext, webSocketTypeError:
-		respChan <- wsMsg.Payload
-	default:
-	}
-	return nil
 }
 
 // formatCloseMessage formats closeCode and text as a WebSocket close message.

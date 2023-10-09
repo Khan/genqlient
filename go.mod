@@ -6,6 +6,7 @@ require (
 	github.com/99designs/gqlgen v0.17.35
 	github.com/alexflint/go-arg v1.4.2
 	github.com/bradleyjkemp/cupaloy/v2 v2.6.0
+	github.com/google/uuid v1.3.1
 	github.com/gorilla/websocket v1.5.0
 	github.com/stretchr/testify v1.8.2
 	github.com/vektah/gqlparser/v2 v2.5.8
