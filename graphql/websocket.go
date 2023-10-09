@@ -1,6 +1,7 @@
 package graphql
 
 import (
+	"context"
 	"encoding/binary"
 	"encoding/json"
 	"fmt"
@@ -79,17 +80,23 @@ func (w *webSocketClient) waitForConnAck() error {
 	return nil
 }
 
-func (w *webSocketClient) listenWebSocket() {
+func (w *webSocketClient) listenWebSocket(ctx context.Context) {
 	for {
-		_, message, err := w.conn.ReadMessage()
-		if err != nil {
-			w.errChan <- err
+		select {
+		case <-ctx.Done():
+			w.errChan <- fmt.Errorf("context canceled")
 			return
-		}
-		err = w.forwardWebSocketData(message)
-		if err != nil {
-			w.errChan <- err
-			return
+		default:
+			_, message, err := w.conn.ReadMessage()
+			if err != nil {
+				w.errChan <- err
+				return
+			}
+			err = w.forwardWebSocketData(message)
+			if err != nil {
+				w.errChan <- err
+				return
+			}
 		}
 	}
 }

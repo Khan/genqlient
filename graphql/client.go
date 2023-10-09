@@ -349,7 +349,7 @@ func (w *webSocketClient) StartWebSocket(ctx context.Context) (errChan chan erro
 		w.conn.Close()
 		return nil, err
 	}
-	go w.listenWebSocket()
+	go w.listenWebSocket(ctx)
 	return w.errChan, err
 }
 
