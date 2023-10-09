@@ -66,14 +66,17 @@ func TestSubscription(t *testing.T) {
 	defer server.Close()
 	wsClient := newRoundtripWebScoketClient(t, server.URL)
 
-	start := time.Now()
-	respChan, errChan, err := count(ctx, wsClient)
+	errChan, err := wsClient.StartWebSocket(ctx)
+	require.NoError(t, err)
+
+	dataChan, subscriptionID, err := count(ctx, wsClient)
 	require.NoError(t, err)
 	defer wsClient.CloseWebSocket()
 	counter := 0
+	start := time.Now()
 	for loop := true; loop; {
 		select {
-		case resp, more := <-respChan:
+		case resp, more := <-dataChan:
 			if !more {
 				loop = false
 				break
@@ -81,11 +84,15 @@ func TestSubscription(t *testing.T) {
 			require.NotNil(t, resp.Data)
 			assert.Equal(t, counter, resp.Data.Count)
 			require.Nil(t, resp.Errors)
-			loop = time.Since(start) < time.Second*2
+			if time.Since(start) > time.Second*5 {
+				err = wsClient.Unsubscribe(subscriptionID)
+				require.NoError(t, err)
+				loop = false
+			}
 			counter++
 		case err := <-errChan:
 			require.NoError(t, err)
-		case <-time.After(time.Second * 5):
+		case <-time.After(time.Second * 10):
 			require.NoError(t, fmt.Errorf("subscription timed out"))
 		}
 	}

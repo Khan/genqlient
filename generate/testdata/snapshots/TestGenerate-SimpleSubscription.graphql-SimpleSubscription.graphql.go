@@ -3,8 +3,8 @@
 package test
 
 import (
-	"context"
 	"encoding/json"
+	"errors"
 
 	"github.com/Khan/genqlient/graphql"
 )
@@ -24,25 +24,19 @@ subscription SimpleSubscription {
 }
 `
 
-// To close the connection, use [graphql.WebSocketClient.CloseWebSocket()]
+// To unsubscribe, use [graphql.WebSocketClient.Unsubscribe]
 func SimpleSubscription(
 	client_ graphql.WebSocketClient,
-) (dataChan_ chan SimpleSubscriptionWsResponse, errChan_ chan error, err_ error) {
+) (dataChan_ chan SimpleSubscriptionWsResponse, subscriptionID_ string, err_ error) {
 	req_ := &graphql.Request{
 		OpName: "SimpleSubscription",
 		Query:  SimpleSubscription_Operation,
 	}
 
-	dataChan_ = make(chan SimpleSubscriptionWsResponse, 1)
-	respChan_ := make(chan json.RawMessage, 1)
+	dataChan_ = make(chan SimpleSubscriptionWsResponse)
+	subscriptionID_, err_ = client_.Subscribe(req_, dataChan_, SimpleSubscriptionForwardData)
 
-	errChan_, err_ = client_.DialWebSocket(context.Background(), req_, respChan_)
-	if err_ != nil {
-		return nil, nil, err_
-	}
-	go SimpleSubscriptionForwardData(dataChan_, respChan_, errChan_)
-
-	return dataChan_, errChan_, err_
+	return dataChan_, subscriptionID_, err_
 }
 
 type SimpleSubscriptionWsResponse struct {
@@ -51,30 +45,26 @@ type SimpleSubscriptionWsResponse struct {
 	Errors     error                       `json:"errors"`
 }
 
-func SimpleSubscriptionForwardData(dataChan_ chan SimpleSubscriptionWsResponse, respChan_ chan json.RawMessage, errChan_ chan error) {
-	defer close(dataChan_)
+func SimpleSubscriptionForwardData(interfaceChan interface{}, jsonRawMsg json.RawMessage) error {
 	var gqlResp graphql.Response
 	var wsResp SimpleSubscriptionWsResponse
-	for {
-		jsonRaw, more_ := <-respChan_
-		if !more_ {
-			return
-		}
-		err := json.Unmarshal(jsonRaw, &gqlResp)
-		if err != nil {
-			errChan_ <- err
-			return
-		}
-		if len(gqlResp.Errors) == 0 {
-			err = json.Unmarshal(jsonRaw, &wsResp)
-			if err != nil {
-				errChan_ <- err
-				return
-			}
-		} else {
-			wsResp.Errors = gqlResp.Errors
-		}
-		dataChan_ <- wsResp
+	err := json.Unmarshal(jsonRawMsg, &gqlResp)
+	if err != nil {
+		return err
 	}
+	if len(gqlResp.Errors) == 0 {
+		err = json.Unmarshal(jsonRawMsg, &wsResp)
+		if err != nil {
+			return err
+		}
+	} else {
+		wsResp.Errors = gqlResp.Errors
+	}
+	dataChan_, ok := interfaceChan.(chan SimpleSubscriptionWsResponse)
+	if !ok {
+		return errors.New("failed to cast interface into 'chan SimpleSubscriptionWsResponse'")
+	}
+	dataChan_ <- wsResp
+	return nil
 }
 

@@ -10,7 +10,9 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	"sync"
 
+	"github.com/google/uuid"
 	"github.com/vektah/gqlparser/v2/gqlerror"
 )
 
@@ -41,32 +43,38 @@ type Client interface {
 }
 
 type WebSocketClient interface {
-	// DialWebSocket must open a webSocket connection and subscribe to an endpoint
+	// StartWebSocket must open a webSocket connection and subscribe to an endpoint
 	// of the client's GraphQL API.
-	//
-	// ctx is the context that should be used to make this request.  If context
-	// is disabled in the genqlient settings, this will be set to
-	// context.Background().
-	//
-	// req contains the data to be sent to the GraphQL server. Will be marshalled
-	// into JSON bytes.
-	//
-	// respChan is a channel used to send the data that arrives via the
-	// webSocket connection.
 	//
 	// errChan is a channel on which are sent the errors of webSocket
 	// communication.
 	//
 	// err is any error that occurs when setting up the webSocket connection.
-	DialWebSocket(
-		ctx context.Context,
-		req *Request,
-		respChan chan json.RawMessage,
-	) (errChan chan error, err error)
+	StartWebSocket(ctx context.Context) (errChan chan error, err error)
 
-	// CloseWebSocket must end the graphql subscription and close the webSocket
-	// connection.
+	// CloseWebSocket must close the webSocket connection.
 	CloseWebSocket()
+
+	// Subscribe must subscribe to an endpoint of the client's GraphQL API.
+	//
+	// req contains the data to be sent to the GraphQL server. Will be marshalled
+	// into JSON bytes.
+	//
+	// interfaceChan is a channel used to send the data that arrives via the
+	// webSocket connection.
+	//
+	// forwardDataFunc is the function that will cast the received interface into
+	// the valid type for the subscription's response.
+	//
+	// returns a subscriptionID if successful, an error otherwise
+	Subscribe(
+		req *Request,
+		interfaceChan interface{},
+		forwardDataFunc ForwardDataFunction,
+	) (string, error)
+
+	// Unsubscribe must unsubscribe from an endpoint of the client's GraphQL API.
+	Unsubscribe(subscriptionID string) error
 }
 
 type client struct {
@@ -76,11 +84,13 @@ type client struct {
 }
 
 type webSocketClient struct {
-	Dialer   Dialer
-	Header   http.Header
-	conn     WSConn
-	errChan  chan error
-	endpoint string
+	Dialer        Dialer
+	Header        http.Header
+	conn          WSConn
+	errChan       chan error
+	endpoint      string
+	subscriptions subscriptionMap
+	sync.RWMutex
 }
 
 // NewClient returns a [Client] which makes requests to the given endpoint,
@@ -132,12 +142,15 @@ func NewClientUsingWebSocket(endpoint string, wsDialer Dialer, headers http.Head
 	if headers == nil {
 		headers = http.Header{}
 	}
-	headers.Add("Sec-WebSocket-Protocol", "graphql-transport-ws")
+	if headers.Get("Sec-WebSocket-Protocol") == "" {
+		headers.Add("Sec-WebSocket-Protocol", "graphql-transport-ws")
+	}
 	return &webSocketClient{
-		Dialer:   wsDialer,
-		Header:   headers,
-		endpoint: endpoint,
-		errChan:  make(chan error, 1),
+		Dialer:        wsDialer,
+		Header:        headers,
+		errChan:       make(chan error),
+		endpoint:      endpoint,
+		subscriptions: subscriptionMap{map_: make(map[string]subscription)},
 	}
 }
 
@@ -249,66 +262,6 @@ func (c *client) MakeRequest(ctx context.Context, req *Request, resp *Response) 
 	return nil
 }
 
-func (w *webSocketClient) DialWebSocket(ctx context.Context, req *Request, respChan chan json.RawMessage) (errChan chan error, err error) {
-	if req.Query != "" {
-		if strings.HasPrefix(strings.TrimSpace(req.Query), "query") {
-			return nil, errors.New("client does not support queries")
-		}
-		if strings.HasPrefix(strings.TrimSpace(req.Query), "mutation") {
-			return nil, errors.New("client does not support mutations")
-		}
-	}
-
-	err = w.subscribeAndListen(
-		ctx,
-		req,
-		respChan,
-	)
-
-	return w.errChan, err
-}
-
-func (w *webSocketClient) CloseWebSocket() {
-	defer w.conn.Close()
-	err := w.sendComplete()
-	if err != nil {
-		w.errChan <- err
-	}
-	err = w.conn.WriteMessage(closeMessage, formatCloseMessage(closeNormalClosure, ""))
-	if err != nil {
-		w.errChan <- err
-	}
-}
-
-func (w *webSocketClient) subscribeAndListen(ctx context.Context, req *Request, respChan chan json.RawMessage) error {
-	var err error
-	w.conn, err = w.Dialer.DialContext(ctx, w.endpoint, w.Header)
-	if err != nil {
-		return err
-	}
-
-	err = w.sendInit()
-	if err != nil {
-		w.conn.Close()
-		return err
-	}
-	err = w.waitForConnAck()
-	if err != nil {
-		w.conn.Close()
-		return err
-	}
-
-	go w.listenWebSocket(respChan)
-
-	err = w.sendSubscribe(req)
-	if err != nil {
-		w.conn.Close()
-		return err
-	}
-
-	return nil
-}
-
 func (c *client) createPostRequest(req *Request) (*http.Request, error) {
 	if req.Query != "" {
 		if strings.HasPrefix(strings.TrimSpace(req.Query), "subscription") {
@@ -379,4 +332,68 @@ func (c *client) createGetRequest(req *Request) (*http.Request, error) {
 	}
 
 	return httpReq, nil
+}
+
+func (w *webSocketClient) StartWebSocket(ctx context.Context) (errChan chan error, err error) {
+	w.conn, err = w.Dialer.DialContext(ctx, w.endpoint, w.Header)
+	if err != nil {
+		return nil, err
+	}
+	err = w.sendInit()
+	if err != nil {
+		w.conn.Close()
+		return nil, err
+	}
+	err = w.waitForConnAck()
+	if err != nil {
+		w.conn.Close()
+		return nil, err
+	}
+	go w.listenWebSocket(ctx)
+	return w.errChan, err
+}
+
+func (w *webSocketClient) CloseWebSocket() {
+	defer w.conn.Close()
+	err := w.conn.WriteMessage(closeMessage, formatCloseMessage(closeNormalClosure, ""))
+	if err != nil {
+		w.errChan <- err
+	}
+}
+
+func (w *webSocketClient) Subscribe(req *Request, interfaceChan interface{}, forwardDataFunc ForwardDataFunction) (string, error) {
+	if req.Query != "" {
+		if strings.HasPrefix(strings.TrimSpace(req.Query), "query") {
+			return "", errors.New("client does not support queries")
+		}
+		if strings.HasPrefix(strings.TrimSpace(req.Query), "mutation") {
+			return "", errors.New("client does not support mutations")
+		}
+	}
+
+	subscriptionID := uuid.NewString()
+	subscriptionMsg := webSocketSendMessage{
+		Type:    webSocketTypeSubscribe,
+		Payload: req,
+		ID:      subscriptionID,
+	}
+	err := w.sendStructAsJSON(subscriptionMsg)
+	if err != nil {
+		return "", err
+	}
+	w.subscriptions.Create(subscriptionID, interfaceChan, forwardDataFunc)
+	return subscriptionID, nil
+}
+
+func (w *webSocketClient) Unsubscribe(subscriptionID string) error {
+	completeMsg := webSocketSendMessage{
+		Type: webSocketTypeComplete,
+		ID:   subscriptionID,
+	}
+	err := w.sendStructAsJSON(completeMsg)
+	if err != nil {
+		return err
+	}
+	w.subscriptions.Delete(subscriptionID)
+	return nil
 }

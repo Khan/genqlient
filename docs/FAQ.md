@@ -108,13 +108,18 @@ Once your webSocket client matches the interfaces, you can get your `graphql.Web
 a loop for incoming messages and errors:
 
 ```go
-graphqlClient := graphql.NewClientUsingWebSocket(
+  graphqlClient := graphql.NewClientUsingWebSocket(
 		"ws://localhost:8080/query",
 		&MyDialer{Dialer: dialer},
 		headers,
 	)
 
-	respChan, errChan, err := count(context.Background(), graphqlClient)
+	errChan, err := graphqlClient.StartWebSocket(ctx)
+	if err != nil {
+		return
+	}
+
+	dataChan, subscriptionID, err := count(ctx, graphqlClient)
 	if err != nil {
 		return
 	}
@@ -122,7 +127,7 @@ graphqlClient := graphql.NewClientUsingWebSocket(
 	defer graphqlClient.CloseWebSocket()
 	for loop := true; loop; {
 		select {
-		case msg, more := <-respChan:
+		case msg, more := <-dataChan:
 			if !more {
 				loop = false
 				break
@@ -136,8 +141,15 @@ graphqlClient := graphql.NewClientUsingWebSocket(
 			}
 		case err = <-errChan:
 			return
+    case <-time.After(time.Minute):
+      err = wsClient.Unsubscribe(subscriptionID)
+      loop = false
 		}
 	}
+```
+To change the websocket protocol from its default value `graphql-transport-ws`, add the following header before calling `graphql.NewClientUsingWebSocket()`:
+```go
+  headers.Add("Sec-WebSocket-Protocol", "graphql-ws")
 ```
 
 ### … use an API that requires authentication?

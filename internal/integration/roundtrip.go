@@ -106,12 +106,20 @@ func (c *roundtripClient) MakeRequest(ctx context.Context, req *graphql.Request,
 	return nil
 }
 
-func (c *roundtripClient) DialWebSocket(ctx context.Context, req *graphql.Request, respChan chan json.RawMessage) (errChan chan error, err error) {
-	return c.wsWrapped.DialWebSocket(ctx, req, respChan)
+func (c *roundtripClient) StartWebSocket(ctx context.Context) (errChan chan error, err error) {
+	return c.wsWrapped.StartWebSocket(ctx)
 }
 
 func (c *roundtripClient) CloseWebSocket() {
 	c.wsWrapped.CloseWebSocket()
+}
+
+func (c *roundtripClient) Subscribe(req *graphql.Request, interfaceChan interface{}, forwardDataFunc graphql.ForwardDataFunction) (string, error) {
+	return c.wsWrapped.Subscribe(req, interfaceChan, forwardDataFunc)
+}
+
+func (c *roundtripClient) Unsubscribe(subscriptionID string) error {
+	return c.wsWrapped.Unsubscribe(subscriptionID)
 }
 
 func newRoundtripClients(t *testing.T, endpoint string) []graphql.Client {
