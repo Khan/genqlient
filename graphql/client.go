@@ -52,7 +52,8 @@ type WebSocketClient interface {
 	// err is any error that occurs when setting up the webSocket connection.
 	StartWebSocket(ctx context.Context) (errChan chan error, err error)
 
-	// CloseWebSocket must close the webSocket connection.
+	// CloseWebSocket must close the webSocket connection. If no connection was
+	// started, CloseWebSocket is a no-op
 	CloseWebSocket()
 
 	// Subscribe must subscribe to an endpoint of the client's GraphQL API.
@@ -354,6 +355,9 @@ func (w *webSocketClient) StartWebSocket(ctx context.Context) (errChan chan erro
 }
 
 func (w *webSocketClient) CloseWebSocket() {
+	if w.conn == nil {
+		return
+	}
 	defer w.conn.Close()
 	err := w.conn.WriteMessage(closeMessage, formatCloseMessage(closeNormalClosure, ""))
 	if err != nil {
