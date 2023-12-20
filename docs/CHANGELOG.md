@@ -24,6 +24,7 @@ When releasing a new version:
 
 ### New features:
 
+- The new `graphql.WithOperationNameParam` allows clients to be created that include `operationName` as a query parameter.
 - The new `optional: generic` allows using a generic type to represent optionality. See the [documentation](genqlient.yaml) for details.
 - For schemas with enum values that differ only in casing, it's now possible to disable smart-casing in genqlient.yaml; see the [documentation](genqlient.yaml) for `casing` for details.
 
