@@ -1,4 +1,4 @@
-module github.com/Khan/genqlient
+module github.com/infiotinc/genqlient
 
 go 1.18
 
@@ -13,6 +13,7 @@ require (
 )
 
 require (
+	github.com/aarondl/json v0.0.0-20221020222930-8b0db17ef1bf
 	github.com/agnivade/levenshtein v1.1.1 // indirect
 	github.com/alexflint/go-scalar v1.0.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect

@@ -2,7 +2,7 @@
 //
 // To run genqlient:
 //
-//	go run github.com/Khan/genqlient
+//	go run github.com/infiotinc/genqlient
 //
 // For programmatic access, see the "generate" package, below.  For
 // user documentation, see the project [GitHub].
@@ -11,7 +11,7 @@
 package main
 
 import (
-	"github.com/Khan/genqlient/generate"
+	"github.com/infiotinc/genqlient/generate"
 )
 
 func main() {

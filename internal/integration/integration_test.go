@@ -14,8 +14,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/Khan/genqlient/graphql"
-	"github.com/Khan/genqlient/internal/integration/server"
+	"github.com/infiotinc/genqlient/graphql"
+	"github.com/infiotinc/genqlient/internal/integration/server"
 )
 
 func TestSimpleQuery(t *testing.T) {

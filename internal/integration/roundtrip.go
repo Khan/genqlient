@@ -12,7 +12,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/Khan/genqlient/graphql"
+	"github.com/infiotinc/genqlient/graphql"
 	"github.com/stretchr/testify/assert"
 )
 

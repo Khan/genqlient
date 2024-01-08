@@ -6,5 +6,5 @@ use_extensions: true
 bindings:
   Date:
     type: time.Time
-    marshaler: "github.com/Khan/genqlient/internal/testutil.MarshalDate"
-    unmarshaler: "github.com/Khan/genqlient/internal/testutil.UnmarshalDate"
+    marshaler: "github.com/infiotinc/genqlient/internal/testutil.MarshalDate"
+    unmarshaler: "github.com/infiotinc/genqlient/internal/testutil.UnmarshalDate"

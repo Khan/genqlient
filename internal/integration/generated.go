@@ -8,8 +8,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/Khan/genqlient/graphql"
-	"github.com/Khan/genqlient/internal/testutil"
+	"github.com/infiotinc/genqlient/graphql"
+	"github.com/infiotinc/genqlient/internal/testutil"
 )
 
 // AnimalFields includes the GraphQL fields of Animal requested by the fragment AnimalFields.
