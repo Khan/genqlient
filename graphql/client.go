@@ -3,7 +3,7 @@ package graphql
 import (
 	"bytes"
 	"context"
-	"encoding/json"
+	"github.com/aarondl/json"
 	"errors"
 	"fmt"
 	"io"
