@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Khan/genqlient/internal/testutil"
+	"github.com/infiotinc/genqlient/internal/testutil"
 	"gopkg.in/yaml.v2"
 )
 

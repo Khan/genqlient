@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/Khan/genqlient/graphql"
+	"github.com/infiotinc/genqlient/graphql"
 )
 
 type authedTransport struct {
