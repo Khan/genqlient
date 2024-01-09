@@ -7,7 +7,7 @@
 // For programmatic access, see the "generate" package, below.  For
 // user documentation, see the project [GitHub].
 //
-// [GitHub]: https://github.com/Khan/genqlient
+// [GitHub]: https://github.com/infiotinc/genqlient
 package main
 
 import (

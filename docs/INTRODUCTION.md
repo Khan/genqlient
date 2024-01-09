@@ -19,7 +19,7 @@ query getUser($login: String!) {
 
 ## Step 3: Run genqlient
 
-Now, run `go run github.com/Khan/genqlient --init`.  This will create a configuration file, and then run genqlient to produce a file `generated.go` with your queries.
+Now, run `go run github.com/infiotinc/genqlient --init`.  This will create a configuration file, and then run genqlient to produce a file `generated.go` with your queries.
 
 ## Step 4: Use your queries
 
@@ -30,7 +30,7 @@ func getUser(ctx context.Context, client graphql.Client, login string) (*getUser
 
 As for the arguments:
 - for `ctx`, pass your local context (see [`go doc context`](https://pkg.go.dev/context)) or `context.Background()` if you don't need one
-- for `client`, call [`graphql.NewClient`](https://pkg.go.dev/github.com/Khan/genqlient/graphql), e.g. `graphql.NewClient("https://your.api.example/path", http.DefaultClient)`
+- for `client`, call [`graphql.NewClient`](https://pkg.go.dev/github.com/infiotinc/genqlient/graphql), e.g. `graphql.NewClient("https://your.api.example/path", http.DefaultClient)`
 - for `login`, pass your GitHub username (or whatever the arguments to your query are)
 
 The response object is a struct with fields corresponding to each GraphQL field; for the exact details check its GoDoc (perhaps via your IDE's autocomplete or hover).  For example, you might do:
@@ -45,7 +45,7 @@ Now run your code!
 
 ## Step 5: Repeat
 
-Over time, as you add or change queries, you'll just need to run `github.com/Khan/genqlient` to re-generate `generated.go`.  (Or add a line `//go:generate go run github.com/Khan/genqlient` in your source, and run [`go generate`](https://go.dev/blog/generate).)  If you're using an editor or IDE plugin backed by [gopls](https://github.com/golang/tools/blob/master/gopls/README.md) (which is most of them), keep `generated.go` open in the background, and reload it after each run, so your plugin knows about the automated changes.
+Over time, as you add or change queries, you'll just need to run `github.com/infiotinc/genqlient` to re-generate `generated.go`.  (Or add a line `//go:generate go run github.com/infiotinc/genqlient` in your source, and run [`go generate`](https://go.dev/blog/generate).)  If you're using an editor or IDE plugin backed by [gopls](https://github.com/golang/tools/blob/master/gopls/README.md) (which is most of them), keep `generated.go` open in the background, and reload it after each run, so your plugin knows about the automated changes.
 
 If you prefer, you can specify your queries as string-constants in your Go source, prefixed with `# @genqlient` -- at Khan we put them right next to the calling code, e.g.
 ```go

@@ -1,9 +1,9 @@
 <img width="100%" alt="generated graphql client ⇒ genqlient" src="docs/images/genqlient.svg">
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/Khan/genqlient.svg)](https://pkg.go.dev/github.com/Khan/genqlient)
-[![Test Status](https://github.com/Khan/genqlient/actions/workflows/go.yml/badge.svg)](https://github.com/Khan/genqlient/actions)
+[![Go Reference](https://pkg.go.dev/badge/github.com/infiotinc/genqlient.svg)](https://pkg.go.dev/github.com/infiotinc/genqlient)
+[![Test Status](https://github.com/infiotinc/genqlient/actions/workflows/go.yml/badge.svg)](https://github.com/infiotinc/genqlient/actions)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](docs/CODE_OF_CONDUCT.md)
-[![GoReportcard](https://goreportcard.com/badge/github.com/Khan/genqlient?status.svg)](https://goreportcard.com/report/github.com/Khan/genqlient)
+[![GoReportcard](https://goreportcard.com/badge/github.com/infiotinc/genqlient?status.svg)](https://goreportcard.com/report/github.com/infiotinc/genqlient)
 
 # genqlient: a truly type-safe Go GraphQL client
 
@@ -19,7 +19,7 @@ genqlient provides:
 
 ## How do I use genqlient?
 
-You can download and run genqlient the usual way: `go run github.com/Khan/genqlient`.  To set your project up to use genqlient, see the [getting started guide](docs/INTRODUCTION.md), or the [example](example).  For more complete documentation, see the [docs](docs).
+You can download and run genqlient the usual way: `go run github.com/infiotinc/genqlient`.  To set your project up to use genqlient, see the [getting started guide](docs/INTRODUCTION.md), or the [example](example).  For more complete documentation, see the [docs](docs).
 
 ## How can I help?
 

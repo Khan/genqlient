@@ -44,7 +44,7 @@ linters-settings:
   depguard:
     list-type: whitelist
     packages:
-      - github.com/Khan/genqlient
+      - github.com/infiotinc/genqlient
       - github.com/vektah/gqlparser/v2
       - golang.org/x/tools
       - gopkg.in/yaml.v2
