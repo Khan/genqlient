@@ -262,7 +262,10 @@ func (g *generator) convertType(
 		// options work, recursing here isn't as connvenient.)
 		// Note this does []*T or [][]*T, not e.g. *[][]T.  See #16.
 		goTyp = &goPointerType{goTyp}
-	} else if !typ.NonNull && g.Config.Optional == "generic" {
+	} else if g.Config.OptionalOmitEmpty {
+		oe := true
+		options.Omitempty = &oe
+	}  else if !typ.NonNull && g.Config.Optional == "generic" {
 		var genericRef string
 		genericRef, err = g.ref(g.Config.OptionalGenericType)
 		if err != nil {
@@ -281,8 +284,8 @@ func (g *generator) convertType(
 func (g *generator) getStructReference(
 	def *ast.Definition,
 ) bool {
-	return g.Config.OptionalOmitEmpty || (g.Config.StructReferences &&
-		(def.Kind == ast.Object || def.Kind == ast.InputObject))
+	return g.Config.StructReferences &&
+		(def.Kind == ast.Object || def.Kind == ast.InputObject)
 }
 
 // convertDefinition decides the Go type we will generate corresponding to a
