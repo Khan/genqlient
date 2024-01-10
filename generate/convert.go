@@ -281,8 +281,8 @@ func (g *generator) convertType(
 func (g *generator) getStructReference(
 	def *ast.Definition,
 ) bool {
-	return g.Config.StructReferences &&
-		(def.Kind == ast.Object || def.Kind == ast.InputObject)
+	return g.Config.OptionalOmitEmpty || (g.Config.StructReferences &&
+		(def.Kind == ast.Object || def.Kind == ast.InputObject))
 }
 
 // convertDefinition decides the Go type we will generate corresponding to a
