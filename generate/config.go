@@ -34,6 +34,7 @@ type Config struct {
 	Casing              Casing                  `yaml:"casing"`
 	Optional            string                  `yaml:"optional"`
 	OptionalGenericType string                  `yaml:"optional_generic_type"`
+	OptionalOmitEmpty   bool                    `yaml:"optional_omit_empty"`
 	StructReferences    bool                    `yaml:"use_struct_references"`
 	Extensions          bool                    `yaml:"use_extensions"`
 
