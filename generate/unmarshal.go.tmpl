@@ -45,7 +45,7 @@ func (v *{{.GoName}}) UnmarshalJSON(b []byte) error {
         *{{.GoName}}
         {{range .Fields -}}
         {{if and .NeedsMarshaling (not .IsEmbedded) -}}
-        {{.GoName}} {{repeat .GoType.SliceDepth "[]"}}{{ref "encoding/json.RawMessage"}} `json:"{{.JSONName}}"`
+        {{.GoName}} {{repeat .GoType.SliceDepth "[]"}}{{ref "github.com/aarondl/json.RawMessage"}} `json:"{{.JSONName}}"`
         {{end -}}
         {{end -}}
         {{/* TODO(benkraft): In principle you might have a field-name that
@@ -54,7 +54,7 @@ func (v *{{.GoName}}) UnmarshalJSON(b []byte) error {
     }
     firstPass.{{.GoName}} = v
 
-    err := {{ref "encoding/json.Unmarshal"}}(b, &firstPass)
+    err := {{ref "github.com/aarondl/json.Unmarshal"}}(b, &firstPass)
     if err != nil {
         return err
     }

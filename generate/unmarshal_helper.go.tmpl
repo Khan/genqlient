@@ -12,7 +12,7 @@ func __unmarshal{{.GoName}}(b []byte, v *{{.GoName}}) error {
     var tn struct {
         TypeName string `json:"__typename"`
     }
-    err := {{ref "encoding/json.Unmarshal"}}(b, &tn)
+    err := {{ref "github.com/aarondl/json.Unmarshal"}}(b, &tn)
     if err != nil {
         return err
     }
@@ -21,7 +21,7 @@ func __unmarshal{{.GoName}}(b []byte, v *{{.GoName}}) error {
     {{range .Implementations -}}
     case "{{.GraphQLName}}":
         *v = new({{.GoName}})
-        return {{ref "encoding/json.Unmarshal"}}(b, *v)
+        return {{ref "github.com/aarondl/json.Unmarshal"}}(b, *v)
     {{end -}}
     case "":
         {{/* Likely if we're making a request to a mock server and the author

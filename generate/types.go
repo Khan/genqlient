@@ -213,7 +213,7 @@ func (field *goStructField) unmarshaler() (qualifiedName string, needsImport boo
 	case *goInterfaceType:
 		return "__unmarshal" + typ.Reference(), false, true
 	}
-	return "encoding/json.Unmarshal", true, field.IsEmbedded()
+	return "github.com/aarondl/json.Unmarshal", true, field.IsEmbedded()
 }
 
 // Unmarshaler returns the Go name of the function to use to unmarshal this
@@ -239,7 +239,7 @@ func (field *goStructField) marshaler() (qualifiedName string, needsImport bool,
 	case *goInterfaceType:
 		return "__marshal" + typ.Reference(), false, true
 	}
-	return "encoding/json.Marshal", true, field.IsEmbedded()
+	return "github.com/aarondl/json.Marshal", true, field.IsEmbedded()
 }
 
 // Marshaler returns the Go name of the function to use to marshal this
@@ -460,6 +460,11 @@ func (typ *goStructType) WriteDefinition(w io.Writer, g *generator) error {
 			return err
 		}
 		err = g.render("marshal.go.tmpl", w, typ)
+		if err != nil {
+			return err
+		}
+	} else {
+		err = g.render("aarondl_json.go.tmpl", w, typ)
 		if err != nil {
 			return err
 		}
