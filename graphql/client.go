@@ -10,7 +10,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/aarondl/json"
+	"encoding/json"
 
 	"github.com/vektah/gqlparser/v2/gqlerror"
 )
