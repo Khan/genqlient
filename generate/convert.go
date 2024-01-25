@@ -249,6 +249,11 @@ func (g *generator) convertType(
 	goTyp, err := g.convertDefinition(
 		namePrefix, def, typ.Position, selectionSet, options, queryOptions)
 
+	if g.Config.OptionalOmitEmpty && !typ.NonNull {
+		oe := true
+		options.Omitempty = &oe
+	}
+
 	if g.getStructReference(def) {
 		if options.Pointer == nil || *options.Pointer {
 			goTyp = &goPointerType{goTyp}
