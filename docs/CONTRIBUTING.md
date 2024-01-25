@@ -1,16 +1,16 @@
 # Contributing to genqlient
 
-genqlient welcomes contributions from the community!  Our [help wanted](https://github.com/Khan/genqlient/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) label tags issues where community help is especially welcome, and [good first issue](https://github.com/Khan/genqlient/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) lists issues that are likely most approachable for new contributors.
+genqlient welcomes contributions from the community!  Our [help wanted](https://github.com/infiotinc/genqlient/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) label tags issues where community help is especially welcome, and [good first issue](https://github.com/infiotinc/genqlient/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) lists issues that are likely most approachable for new contributors.
 
-While we're on the subject, Khan Academy is a non-profit organization with a mission to provide a free, world-class education to anyone, anywhere. If you're looking for other ways to help us, you can help us in that mission by [donating](https://khanacademy.org/donate) or looking at [career opportunities](https://khanacademy.org/careers).
+While we're on the subject, infiotinc Academy is a non-profit organization with a mission to provide a free, world-class education to anyone, anywhere. If you're looking for other ways to help us, you can help us in that mission by [donating](https://infiotincacademy.org/donate) or looking at [career opportunities](https://infiotincacademy.org/careers).
 
 ## Formalities
 
-In order to contribute to genqlient, you must first sign the [Khan CLA](https://www.khanacademy.org/r/cla). genqlient is released under the [MIT License](../LICENSE). While contributing, you must abide by the [Code of Conduct](CODE_OF_CONDUCT.md).
+In order to contribute to genqlient, you must first sign the [infiotinc CLA](https://www.infiotincacademy.org/r/cla). genqlient is released under the [MIT License](../LICENSE). While contributing, you must abide by the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## Security issues
 
-Security issues should be reported to the [Khan Academy HackerOne program](https://hackerone.com/khanacademy).
+Security issues should be reported to the [infiotinc Academy HackerOne program](https://hackerone.com/infiotincacademy).
 
 ## Pull requests
 
@@ -28,7 +28,7 @@ Large changes should typically be discussed on the issue tracker first, and shou
 
 ## Style
 
-Go style should generally follow the conventions of [Effective Go](https://golang.org/doc/effective_go), and should have no lint errors (`make lint` to check). TODOs follow the [Khan Academy style](https://github.com/Khan/style-guides#todosmessage), i.e. `// TODO(yourusername): Simplify once we drop support for Go 1.23.` In general, try to make your code match the style of the surrounding code.
+Go style should generally follow the conventions of [Effective Go](https://golang.org/doc/effective_go), and should have no lint errors (`make lint` to check). TODOs follow the [infiotinc Academy style](https://github.com/infiotinc/style-guides#todosmessage), i.e. `// TODO(yourusername): Simplify once we drop support for Go 1.23.` In general, try to make your code match the style of the surrounding code.
 
 ## Tests
 
@@ -54,6 +54,6 @@ We try to cut releases periodically. To make a release:
 - Check if there are any regressions or major problems with new features we want to fix before cutting the release.
 - Decide the new version number. We do a minor version bump for anything with breaking changes or significant new features, otherwise it can be a patch version bump.
 - Add a new section to the changelog for the release (see comments in the changelog for instructions), and add a brief summary of the release at the top.
-- Make a PR with the above. (Example: [#208](https://github.com/Khan/genqlient/pull/208).)
+- Make a PR with the above. (Example: [#208](https://github.com/infiotinc/genqlient/pull/208).)
 - After it merges, tag it as the new release, e.g. `git checkout main && git pull && git tag v0.X.Y && git push origin v0.X.Y`.
-- Then, create a release in github, either [on the web](https://github.com/Khan/genqlient/releases/new) or with `export VERSION=v0.6.0; gh release create $VERSION --latest --verify-tag --generate-notes --title $VERSION`. (TODO(benkraft): Figure out how to pull in the changelog we've already written instead!)
+- Then, create a release in github, either [on the web](https://github.com/infiotinc/genqlient/releases/new) or with `export VERSION=v0.6.0; gh release create $VERSION --latest --verify-tag --generate-notes --title $VERSION`. (TODO(benkraft): Figure out how to pull in the changelog we've already written instead!)

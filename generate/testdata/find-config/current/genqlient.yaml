@@ -1,5 +1,5 @@
 # Default genqlient config; for full documentation see:
-# https://github.com/Khan/genqlient/blob/main/docs/genqlient.yaml
+# https://github.com/infiotinc/genqlient/blob/main/docs/genqlient.yaml
 schema: schema.graphql
 operations:
 # Also use this config to test absolute paths in config files.

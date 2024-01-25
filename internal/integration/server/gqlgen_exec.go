@@ -492,7 +492,7 @@ func (ec *executionContext) field_Mutation_createUser_args(ctx context.Context, 
 	var arg0 NewUser
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNNewUser2githubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐNewUser(ctx, tmp)
+		arg0, err = ec.unmarshalNNewUser2githubᚗcomᚋinfiotincᚋgenqlientᚋinternalᚋintegrationᚋserverᚐNewUser(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -784,7 +784,7 @@ func (ec *executionContext) _Animal_species(ctx context.Context, field graphql.C
 	}
 	res := resTmp.(Species)
 	fc.Result = res
-	return ec.marshalNSpecies2githubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐSpecies(ctx, field.Selections, res)
+	return ec.marshalNSpecies2githubᚗcomᚋinfiotincᚋgenqlientᚋinternalᚋintegrationᚋserverᚐSpecies(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Animal_species(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -825,7 +825,7 @@ func (ec *executionContext) _Animal_owner(ctx context.Context, field graphql.Col
 	}
 	res := resTmp.(Being)
 	fc.Result = res
-	return ec.marshalOBeing2githubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐBeing(ctx, field.Selections, res)
+	return ec.marshalOBeing2githubᚗcomᚋinfiotincᚋgenqlientᚋinternalᚋintegrationᚋserverᚐBeing(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Animal_owner(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -866,7 +866,7 @@ func (ec *executionContext) _Animal_hair(ctx context.Context, field graphql.Coll
 	}
 	res := resTmp.(*BeingsHair)
 	fc.Result = res
-	return ec.marshalOBeingsHair2ᚖgithubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐBeingsHair(ctx, field.Selections, res)
+	return ec.marshalOBeingsHair2ᚖgithubᚗcomᚋinfiotincᚋgenqlientᚋinternalᚋintegrationᚋserverᚐBeingsHair(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Animal_hair(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -999,7 +999,7 @@ func (ec *executionContext) _Mutation_createUser(ctx context.Context, field grap
 	}
 	res := resTmp.(*User)
 	fc.Result = res
-	return ec.marshalNUser2ᚖgithubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐUser(ctx, field.Selections, res)
+	return ec.marshalNUser2ᚖgithubᚗcomᚋinfiotincᚋgenqlientᚋinternalᚋintegrationᚋserverᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createUser(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1065,7 +1065,7 @@ func (ec *executionContext) _Query_me(ctx context.Context, field graphql.Collect
 	}
 	res := resTmp.(*User)
 	fc.Result = res
-	return ec.marshalOUser2ᚖgithubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐUser(ctx, field.Selections, res)
+	return ec.marshalOUser2ᚖgithubᚗcomᚋinfiotincᚋgenqlientᚋinternalᚋintegrationᚋserverᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_me(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1120,7 +1120,7 @@ func (ec *executionContext) _Query_user(ctx context.Context, field graphql.Colle
 	}
 	res := resTmp.(*User)
 	fc.Result = res
-	return ec.marshalOUser2ᚖgithubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐUser(ctx, field.Selections, res)
+	return ec.marshalOUser2ᚖgithubᚗcomᚋinfiotincᚋgenqlientᚋinternalᚋintegrationᚋserverᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_user(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1186,7 +1186,7 @@ func (ec *executionContext) _Query_being(ctx context.Context, field graphql.Coll
 	}
 	res := resTmp.(Being)
 	fc.Result = res
-	return ec.marshalOBeing2githubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐBeing(ctx, field.Selections, res)
+	return ec.marshalOBeing2githubᚗcomᚋinfiotincᚋgenqlientᚋinternalᚋintegrationᚋserverᚐBeing(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_being(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1241,7 +1241,7 @@ func (ec *executionContext) _Query_beings(ctx context.Context, field graphql.Col
 	}
 	res := resTmp.([]Being)
 	fc.Result = res
-	return ec.marshalNBeing2ᚕgithubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐBeing(ctx, field.Selections, res)
+	return ec.marshalNBeing2ᚕgithubᚗcomᚋinfiotincᚋgenqlientᚋinternalᚋintegrationᚋserverᚐBeing(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_beings(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1293,7 +1293,7 @@ func (ec *executionContext) _Query_lotteryWinner(ctx context.Context, field grap
 	}
 	res := resTmp.(Lucky)
 	fc.Result = res
-	return ec.marshalOLucky2githubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐLucky(ctx, field.Selections, res)
+	return ec.marshalOLucky2githubᚗcomᚋinfiotincᚋgenqlientᚋinternalᚋintegrationᚋserverᚐLucky(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_lotteryWinner(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1348,7 +1348,7 @@ func (ec *executionContext) _Query_usersBornOn(ctx context.Context, field graphq
 	}
 	res := resTmp.([]*User)
 	fc.Result = res
-	return ec.marshalNUser2ᚕᚖgithubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐUserᚄ(ctx, field.Selections, res)
+	return ec.marshalNUser2ᚕᚖgithubᚗcomᚋinfiotincᚋgenqlientᚋinternalᚋintegrationᚋserverᚐUserᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_usersBornOn(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1417,7 +1417,7 @@ func (ec *executionContext) _Query_usersBornOnDates(ctx context.Context, field g
 	}
 	res := resTmp.([]*User)
 	fc.Result = res
-	return ec.marshalNUser2ᚕᚖgithubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐUserᚄ(ctx, field.Selections, res)
+	return ec.marshalNUser2ᚕᚖgithubᚗcomᚋinfiotincᚋgenqlientᚋinternalᚋintegrationᚋserverᚐUserᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_usersBornOnDates(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1483,7 +1483,7 @@ func (ec *executionContext) _Query_userSearch(ctx context.Context, field graphql
 	}
 	res := resTmp.([]*User)
 	fc.Result = res
-	return ec.marshalOUser2ᚕᚖgithubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐUser(ctx, field.Selections, res)
+	return ec.marshalOUser2ᚕᚖgithubᚗcomᚋinfiotincᚋgenqlientᚋinternalᚋintegrationᚋserverᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_userSearch(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1848,7 +1848,7 @@ func (ec *executionContext) _User_hair(ctx context.Context, field graphql.Collec
 	}
 	res := resTmp.(*Hair)
 	fc.Result = res
-	return ec.marshalOHair2ᚖgithubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐHair(ctx, field.Selections, res)
+	return ec.marshalOHair2ᚖgithubᚗcomᚋinfiotincᚋgenqlientᚋinternalᚋintegrationᚋserverᚐHair(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_User_hair(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1937,7 +1937,7 @@ func (ec *executionContext) _User_friends(ctx context.Context, field graphql.Col
 	}
 	res := resTmp.([]*User)
 	fc.Result = res
-	return ec.marshalNUser2ᚕᚖgithubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐUserᚄ(ctx, field.Selections, res)
+	return ec.marshalNUser2ᚕᚖgithubᚗcomᚋinfiotincᚋgenqlientᚋinternalᚋintegrationᚋserverᚐUserᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_User_friends(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4604,7 +4604,7 @@ func (ec *executionContext) ___Type(ctx context.Context, sel ast.SelectionSet, o
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNBeing2ᚕgithubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐBeing(ctx context.Context, sel ast.SelectionSet, v []Being) graphql.Marshaler {
+func (ec *executionContext) marshalNBeing2ᚕgithubᚗcomᚋinfiotincᚋgenqlientᚋinternalᚋintegrationᚋserverᚐBeing(ctx context.Context, sel ast.SelectionSet, v []Being) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -4628,7 +4628,7 @@ func (ec *executionContext) marshalNBeing2ᚕgithubᚗcomᚋKhanᚋgenqlientᚋi
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOBeing2githubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐBeing(ctx, sel, v[i])
+			ret[i] = ec.marshalOBeing2githubᚗcomᚋinfiotincᚋgenqlientᚋinternalᚋintegrationᚋserverᚐBeing(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -4766,18 +4766,18 @@ func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.Selecti
 	return res
 }
 
-func (ec *executionContext) unmarshalNNewUser2githubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐNewUser(ctx context.Context, v interface{}) (NewUser, error) {
+func (ec *executionContext) unmarshalNNewUser2githubᚗcomᚋinfiotincᚋgenqlientᚋinternalᚋintegrationᚋserverᚐNewUser(ctx context.Context, v interface{}) (NewUser, error) {
 	res, err := ec.unmarshalInputNewUser(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNSpecies2githubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐSpecies(ctx context.Context, v interface{}) (Species, error) {
+func (ec *executionContext) unmarshalNSpecies2githubᚗcomᚋinfiotincᚋgenqlientᚋinternalᚋintegrationᚋserverᚐSpecies(ctx context.Context, v interface{}) (Species, error) {
 	var res Species
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNSpecies2githubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐSpecies(ctx context.Context, sel ast.SelectionSet, v Species) graphql.Marshaler {
+func (ec *executionContext) marshalNSpecies2githubᚗcomᚋinfiotincᚋgenqlientᚋinternalᚋintegrationᚋserverᚐSpecies(ctx context.Context, sel ast.SelectionSet, v Species) graphql.Marshaler {
 	return v
 }
 
@@ -4796,11 +4796,11 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 	return res
 }
 
-func (ec *executionContext) marshalNUser2githubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐUser(ctx context.Context, sel ast.SelectionSet, v User) graphql.Marshaler {
+func (ec *executionContext) marshalNUser2githubᚗcomᚋinfiotincᚋgenqlientᚋinternalᚋintegrationᚋserverᚐUser(ctx context.Context, sel ast.SelectionSet, v User) graphql.Marshaler {
 	return ec._User(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNUser2ᚕᚖgithubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐUserᚄ(ctx context.Context, sel ast.SelectionSet, v []*User) graphql.Marshaler {
+func (ec *executionContext) marshalNUser2ᚕᚖgithubᚗcomᚋinfiotincᚋgenqlientᚋinternalᚋintegrationᚋserverᚐUserᚄ(ctx context.Context, sel ast.SelectionSet, v []*User) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -4824,7 +4824,7 @@ func (ec *executionContext) marshalNUser2ᚕᚖgithubᚗcomᚋKhanᚋgenqlient�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNUser2ᚖgithubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐUser(ctx, sel, v[i])
+			ret[i] = ec.marshalNUser2ᚖgithubᚗcomᚋinfiotincᚋgenqlientᚋinternalᚋintegrationᚋserverᚐUser(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -4844,7 +4844,7 @@ func (ec *executionContext) marshalNUser2ᚕᚖgithubᚗcomᚋKhanᚋgenqlient�
 	return ret
 }
 
-func (ec *executionContext) marshalNUser2ᚖgithubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐUser(ctx context.Context, sel ast.SelectionSet, v *User) graphql.Marshaler {
+func (ec *executionContext) marshalNUser2ᚖgithubᚗcomᚋinfiotincᚋgenqlientᚋinternalᚋintegrationᚋserverᚐUser(ctx context.Context, sel ast.SelectionSet, v *User) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -5107,14 +5107,14 @@ func (ec *executionContext) marshalN__TypeKind2string(ctx context.Context, sel a
 	return res
 }
 
-func (ec *executionContext) marshalOBeing2githubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐBeing(ctx context.Context, sel ast.SelectionSet, v Being) graphql.Marshaler {
+func (ec *executionContext) marshalOBeing2githubᚗcomᚋinfiotincᚋgenqlientᚋinternalᚋintegrationᚋserverᚐBeing(ctx context.Context, sel ast.SelectionSet, v Being) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Being(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOBeingsHair2ᚖgithubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐBeingsHair(ctx context.Context, sel ast.SelectionSet, v *BeingsHair) graphql.Marshaler {
+func (ec *executionContext) marshalOBeingsHair2ᚖgithubᚗcomᚋinfiotincᚋgenqlientᚋinternalᚋintegrationᚋserverᚐBeingsHair(ctx context.Context, sel ast.SelectionSet, v *BeingsHair) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -5163,7 +5163,7 @@ func (ec *executionContext) marshalODate2ᚖstring(ctx context.Context, sel ast.
 	return res
 }
 
-func (ec *executionContext) marshalOHair2ᚖgithubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐHair(ctx context.Context, sel ast.SelectionSet, v *Hair) graphql.Marshaler {
+func (ec *executionContext) marshalOHair2ᚖgithubᚗcomᚋinfiotincᚋgenqlientᚋinternalᚋintegrationᚋserverᚐHair(ctx context.Context, sel ast.SelectionSet, v *Hair) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -5202,7 +5202,7 @@ func (ec *executionContext) marshalOInt2ᚖint(ctx context.Context, sel ast.Sele
 	return res
 }
 
-func (ec *executionContext) marshalOLucky2githubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐLucky(ctx context.Context, sel ast.SelectionSet, v Lucky) graphql.Marshaler {
+func (ec *executionContext) marshalOLucky2githubᚗcomᚋinfiotincᚋgenqlientᚋinternalᚋintegrationᚋserverᚐLucky(ctx context.Context, sel ast.SelectionSet, v Lucky) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -5225,7 +5225,7 @@ func (ec *executionContext) marshalOString2ᚖstring(ctx context.Context, sel as
 	return res
 }
 
-func (ec *executionContext) marshalOUser2ᚕᚖgithubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐUser(ctx context.Context, sel ast.SelectionSet, v []*User) graphql.Marshaler {
+func (ec *executionContext) marshalOUser2ᚕᚖgithubᚗcomᚋinfiotincᚋgenqlientᚋinternalᚋintegrationᚋserverᚐUser(ctx context.Context, sel ast.SelectionSet, v []*User) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -5252,7 +5252,7 @@ func (ec *executionContext) marshalOUser2ᚕᚖgithubᚗcomᚋKhanᚋgenqlient�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOUser2ᚖgithubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐUser(ctx, sel, v[i])
+			ret[i] = ec.marshalOUser2ᚖgithubᚗcomᚋinfiotincᚋgenqlientᚋinternalᚋintegrationᚋserverᚐUser(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -5266,7 +5266,7 @@ func (ec *executionContext) marshalOUser2ᚕᚖgithubᚗcomᚋKhanᚋgenqlient�
 	return ret
 }
 
-func (ec *executionContext) marshalOUser2ᚖgithubᚗcomᚋKhanᚋgenqlientᚋinternalᚋintegrationᚋserverᚐUser(ctx context.Context, sel ast.SelectionSet, v *User) graphql.Marshaler {
+func (ec *executionContext) marshalOUser2ᚖgithubᚗcomᚋinfiotincᚋgenqlientᚋinternalᚋintegrationᚋserverᚐUser(ctx context.Context, sel ast.SelectionSet, v *User) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
