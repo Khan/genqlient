@@ -237,11 +237,35 @@ func (g *generator) convertType(
 		return &goOpaqueType{GoRef: goRef, GraphQLName: typ.Name()}, err
 	}
 
+	if g.Config.OptionalOmitEmpty && !typ.NonNull {
+		oe := true
+		options.Omitempty = &oe
+	}
+
 	if typ.Elem != nil {
+
 		// Type is a list.
 		elem, err := g.convertType(
 			namePrefix, typ.Elem, selectionSet, options, queryOptions)
-		return &goSliceType{elem}, err
+		if err != nil {
+			return nil, err
+		}
+		var goTyp goType
+		goTyp = &goSliceType{elem}
+
+		if !typ.NonNull && g.Config.Optional == "generic" {
+			var genericRef string
+			genericRef, err = g.ref(g.Config.OptionalGenericType)
+			if err != nil {
+				return nil, err
+			}
+
+			goTyp = &goGenericType{
+				GoGenericRef: genericRef,
+				Elem:         goTyp,
+			}
+		}
+		return goTyp, err
 	}
 
 	// If this is a builtin type or custom scalar, just refer to it.
