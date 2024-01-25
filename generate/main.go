@@ -2,7 +2,7 @@
 // and documentation of its configuration options.  For general usage
 // documentation, see the project [GitHub].
 //
-// [GitHub]: https://github.com/Khan/genqlient
+// [GitHub]: https://github.com/infiotinc/genqlient
 package generate
 
 import (
@@ -59,13 +59,13 @@ type cliArgs struct {
 func (cliArgs) Description() string {
 	return strings.TrimSpace(`
 Generates GraphQL client code for a given schema and queries.
-See https://github.com/Khan/genqlient for full documentation.
+See https://github.com/infiotinc/genqlient for full documentation.
 `)
 }
 
 // Main is the command-line entrypoint to genqlient; it's equivalent to calling
 //
-//	go run github.com/Khan/genqlient
+//	go run github.com/infiotinc/genqlient
 //
 // For lower-level control over genqlient's operation, see [Generate].
 func Main() {

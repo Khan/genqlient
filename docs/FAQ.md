@@ -67,7 +67,7 @@ Testing code that uses genqlient typically involves passing in a special HTTP cl
 
 ### … test my GraphQL APIs?
 
-If you want, you can use genqlient to test your GraphQL APIs; as with mocking you can point genqlient at anything that exposes an ordinary HTTP endpoint or a custom `http.Client`.  However, at Khan Academy we've found that genqlient usually isn't the best client for testing; we prefer to use a lightweight (and weakly-typed) client for that, and may separately open-source ours in the future.
+If you want, you can use genqlient to test your GraphQL APIs; as with mocking you can point genqlient at anything that exposes an ordinary HTTP endpoint or a custom `http.Client`.  However, at infiotinc Academy we've found that genqlient usually isn't the best client for testing; we prefer to use a lightweight (and weakly-typed) client for that, and may separately open-source ours in the future.
 
 ### … handle GraphQL errors?
 
@@ -151,7 +151,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/Khan/genqlient/generate"
+	"github.com/infiotinc/genqlient/generate"
 	"github.com/suessflorian/gqlfetch"
 )
 
@@ -560,5 +560,5 @@ If genqlient fails with an error `missing go.sum entry for module providing pack
 
 package client
 
-import _ "github.com/Khan/genqlient"
+import _ "github.com/infiotinc/genqlient"
 ```

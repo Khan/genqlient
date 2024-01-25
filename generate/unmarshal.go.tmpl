@@ -50,7 +50,7 @@ func (v *{{.GoName}}) UnmarshalJSON(b []byte) error {
         {{end -}}
         {{/* TODO(benkraft): In principle you might have a field-name that
              conflicts with this one; avoid that. */ -}}
-        {{ref "github.com/Khan/genqlient/graphql.NoUnmarshalJSON"}}
+        {{ref "github.com/infiotinc/genqlient/graphql.NoUnmarshalJSON"}}
     }
     firstPass.{{.GoName}} = v
 

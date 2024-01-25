@@ -83,20 +83,20 @@ func TestGenerate(t *testing.T) {
 				ExportOperations: queriesFilename,
 				ContextType:      "-",
 				Bindings: map[string]*TypeBinding{
-					"ID":       {Type: "github.com/Khan/genqlient/internal/testutil.ID"},
+					"ID":       {Type: "github.com/infiotinc/genqlient/internal/testutil.ID"},
 					"DateTime": {Type: "time.Time"},
 					"Date": {
 						Type:        "time.Time",
-						Marshaler:   "github.com/Khan/genqlient/internal/testutil.MarshalDate",
-						Unmarshaler: "github.com/Khan/genqlient/internal/testutil.UnmarshalDate",
+						Marshaler:   "github.com/infiotinc/genqlient/internal/testutil.MarshalDate",
+						Unmarshaler: "github.com/infiotinc/genqlient/internal/testutil.UnmarshalDate",
 					},
 					"Junk":        {Type: "interface{}"},
 					"ComplexJunk": {Type: "[]map[string]*[]*map[string]interface{}"},
 					"Pokemon": {
-						Type:              "github.com/Khan/genqlient/internal/testutil.Pokemon",
+						Type:              "github.com/infiotinc/genqlient/internal/testutil.Pokemon",
 						ExpectExactFields: "{ species level }",
 					},
-					"PokemonInput": {Type: "github.com/Khan/genqlient/internal/testutil.Pokemon"},
+					"PokemonInput": {Type: "github.com/infiotinc/genqlient/internal/testutil.Pokemon"},
 				},
 				AllowBrokenFeatures: true,
 			})
@@ -167,18 +167,18 @@ func TestGenerateWithConfig(t *testing.T) {
 			ExportOperations: "operations.json",
 		}},
 		{"CustomContext", "", nil, &Config{
-			ContextType: "github.com/Khan/genqlient/internal/testutil.MyContext",
+			ContextType: "github.com/infiotinc/genqlient/internal/testutil.MyContext",
 		}},
 		{"CustomContextWithAlias", "", nil, &Config{
-			ContextType: "github.com/Khan/genqlient/internal/testutil/junk---fun.name.MyContext",
+			ContextType: "github.com/infiotinc/genqlient/internal/testutil/junk---fun.name.MyContext",
 		}},
 		{"StructReferences", "", []string{"InputObject.graphql", "QueryWithStructs.graphql"}, &Config{
 			StructReferences: true,
 			Bindings: map[string]*TypeBinding{
 				"Date": {
 					Type:        "time.Time",
-					Marshaler:   "github.com/Khan/genqlient/internal/testutil.MarshalDate",
-					Unmarshaler: "github.com/Khan/genqlient/internal/testutil.UnmarshalDate",
+					Marshaler:   "github.com/infiotinc/genqlient/internal/testutil.MarshalDate",
+					Unmarshaler: "github.com/infiotinc/genqlient/internal/testutil.UnmarshalDate",
 				},
 			},
 		}},
@@ -188,28 +188,28 @@ func TestGenerateWithConfig(t *testing.T) {
 			Bindings: map[string]*TypeBinding{
 				"Date": {
 					Type:        "time.Time",
-					Marshaler:   "github.com/Khan/genqlient/internal/testutil.MarshalDate",
-					Unmarshaler: "github.com/Khan/genqlient/internal/testutil.UnmarshalDate",
+					Marshaler:   "github.com/infiotinc/genqlient/internal/testutil.MarshalDate",
+					Unmarshaler: "github.com/infiotinc/genqlient/internal/testutil.UnmarshalDate",
 				},
 			},
 		}},
 		{"PackageBindings", "", nil, &Config{
 			PackageBindings: []*PackageBinding{
-				{Package: "github.com/Khan/genqlient/internal/testutil"},
+				{Package: "github.com/infiotinc/genqlient/internal/testutil"},
 			},
 		}},
 		{"NoContext", "", nil, &Config{
 			ContextType: "-",
 		}},
 		{"ClientGetter", "", nil, &Config{
-			ClientGetter: "github.com/Khan/genqlient/internal/testutil.GetClientFromContext",
+			ClientGetter: "github.com/infiotinc/genqlient/internal/testutil.GetClientFromContext",
 		}},
 		{"ClientGetterCustomContext", "", nil, &Config{
-			ClientGetter: "github.com/Khan/genqlient/internal/testutil.GetClientFromMyContext",
-			ContextType:  "github.com/Khan/genqlient/internal/testutil.MyContext",
+			ClientGetter: "github.com/infiotinc/genqlient/internal/testutil.GetClientFromMyContext",
+			ContextType:  "github.com/infiotinc/genqlient/internal/testutil.MyContext",
 		}},
 		{"ClientGetterNoContext", "", nil, &Config{
-			ClientGetter: "github.com/Khan/genqlient/internal/testutil.GetClientFromNowhere",
+			ClientGetter: "github.com/infiotinc/genqlient/internal/testutil.GetClientFromNowhere",
 			ContextType:  "-",
 		}},
 		{"Extensions", "", nil, &Config{
@@ -228,7 +228,7 @@ func TestGenerateWithConfig(t *testing.T) {
 		}},
 		{"OptionalGeneric", "", []string{"ListInput.graphql", "QueryWithSlices.graphql"}, &Config{
 			Optional:            "generic",
-			OptionalGenericType: "github.com/Khan/genqlient/internal/testutil.Option",
+			OptionalGenericType: "github.com/infiotinc/genqlient/internal/testutil.Option",
 		}},
 		{"EnumRawCasingAll", "", []string{"QueryWithEnums.graphql"}, &Config{
 			Casing: Casing{
@@ -336,7 +336,7 @@ func TestGenerateErrors(t *testing.T) {
 					"ValidScalar":   {Type: "string"},
 					"InvalidScalar": {Type: "bogus"},
 					"Pokemon": {
-						Type:              "github.com/Khan/genqlient/internal/testutil.Pokemon",
+						Type:              "github.com/infiotinc/genqlient/internal/testutil.Pokemon",
 						ExpectExactFields: "{ species level }",
 					},
 				},

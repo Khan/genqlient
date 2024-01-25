@@ -9,7 +9,7 @@ The main work of this library is in the return types it generates: these are the
 Luckily, there is plenty of prior art for generating types for GraphQL schemas, including:
 - Apollo's [codegen](https://github.com/apollographql/apollo-tooling#apollo-clientcodegen-output) tool generates Swift, Scala, Flow, and TypeScript types
 - [GraphQL Code Generator](https://www.graphql-code-generator.com/) generates types for TypeScript, C#, Java, and Flow
-- Khan Academy has an in-house tool used to generate Flow types for our mobile apps (Khan folks, it's at `react-native/tools/graphql-flow` in the mobile repo)
+- infiotinc Academy has an in-house tool used to generate Flow types for our mobile apps (infiotinc folks, it's at `react-native/tools/graphql-flow` in the mobile repo)
 - In Go, [gqlgen](https://github.com/99designs/gqlgen) generates similar types for the server side of things
 - In Go, [shurcooL/graphql](https://github.com/shurcooL/graphql/) doesn't generate types, but uses types in a similar fashion
 
@@ -21,7 +21,7 @@ GraphQL has optional and non-optional types: `String` may be null, but `String!`
 
 We could refuse to use pointers, which makes it hard for clients that do want to tell `""` from `nil` (we could allow a configurable default); or we could allow their use on an opt-in basis (which also requires a configuration knob); or we could use them whenever a type is optional (which in many schemas is quite often); or we could use another representation of optionality, like `MyField string; HasMyField bool` (or keep the non-optional field and add a method for presence, or whatever).
 
-This is an important problem because many GraphQL APIs, including Khan Academy's, have a lot of optional fields.  Some are in practice required, or are omitted only if you don't have permissions!  So we don't want to add too much overhead for fields just because the schema considers them optional.
+This is an important problem because many GraphQL APIs, including infiotinc Academy's, have a lot of optional fields.  Some are in practice required, or are omitted only if you don't have permissions!  So we don't want to add too much overhead for fields just because the schema considers them optional.
 
 A related issue is whether large structs (or all structs) should use pointers.  This can be a performance benefit for large structs, as non-pointers would need to be copied on return.  We don't strictly need that except at the toplevel response type (where there is no notion of optionality anyway), but using it might encourage people to avoid passing pointers.
 
@@ -32,7 +32,7 @@ In other libraries:
 
 Here we can also look at non-GraphQL libraries:
 - encoding/json, and the other stdlib encoding packages, allow pointers, but typically encourage other approaches like `omitempty` (as discussed in the above link).
-- Google Cloud Datastore basically follows encoding/json; at Khan Academy we mostly don't use pointers
+- Google Cloud Datastore basically follows encoding/json; at infiotinc Academy we mostly don't use pointers
 - protobuf uses pointers for all structs; proto2 uses pointers for all fields as well (although provides a non-pointer accessor function) whereas proto3 does not use pointers (and application is not supposed to be able to distinguish between zero and unset in any language).
 
 **Decision:** I do not want to use pointers by default, because I really think it's just terrible Go style.  I think we can actually get away with just not supporting this at all for v0, and then add config options for pointers (which you can use for distinguishing zero and null, or to pass around intermediate values) and possibly also for presence fields, or anything else you want.
@@ -94,7 +94,7 @@ Moreover, these types names should be as stable as possible: changing one part o
 In other tools:
 - Apollo mostly uses named types (except alternatives of an interface/fragment are inline in TypeScript, but not in Flow), and in the above example names them, respectively, `MyQuery_user_User` and `MyQuery_user_User_children_User`, or maybe in some versions `MyQuery_user` and `MyQuery_user_children` in Flow/TypeScript.  In Java and Scala in some cases they use nested types, e.g. `MyQuery.User.Children`.
 - GraphQL Code Generator generates mostly unnamed types in Flow/TypeScript, with named types for named fragments only (except really it generates server-style types and then generates a mess of unnamed `$Pick`s from those); and basically just generates server-style types for other languages
-- Khan's mobile autogen uses entirely unnamed types.
+- infiotinc's mobile autogen uses entirely unnamed types.
 - gqlgen doesn't have this problem, because on the server each GraphQL type maps to a unique Go type; and to the extent that different queries need different fields this is handled at the level of which fields are serialized or which resolvers are called.
 - shurcooL/graphql allows either way.
 
@@ -236,7 +236,7 @@ What type is `resp.A.F`?  It has to be both `string` and `int`.
 **In other libraries:**
 - Apollo does basically the interface approach, except with TypeScript/Flow's better support for sum types.
 - GraphQL Code Generator does basically the interface approach (except with sum types instead of interfaces), except with unnamed types.  It definitely generates some ugly types, even with TypeScript/Flow's better support for sum types!
-- Khan's mobile autogen basically does the interface approach (again with unnamed types, and sum types).
+- infiotinc's mobile autogen basically does the interface approach (again with unnamed types, and sum types).
 - gqlgen doesn't have this problem; on the server, fragments and interfaces are handled entirely in the framework and need not even be visible in user-land.
 - shurcooL/graphql uses fragment fields.
 - protobuf has a similar problem, and uses basically the interface approach in Go (even though in other languages it uses something more like flattening everything).
@@ -371,7 +371,7 @@ This doesn't work because the fragment F might itself embed other fragments of o
 
 - Makes for the simplest resulting types, by far; the fragment adds no further complexity to the types.
 - Especially a simplification when embedding abstract-typed fragments, since you don't have to go through an extra layer of interface when you already have a concrete type.
-- More efficient when multiple fragments spread into the same selection contain the same field: we need only store it once whereas embedding must copy it once for each fragment.  Also easier to use in the same case, since if you have both `val.FragmentOne.MyField` and `val.FragmentTwo.MyField`, you can't access either via `val.MyField`.  (Empirically in the Khan Academy codebase this appears to be quite rare.)
+- More efficient when multiple fragments spread into the same selection contain the same field: we need only store it once whereas embedding must copy it once for each fragment.  Also easier to use in the same case, since if you have both `val.FragmentOne.MyField` and `val.FragmentTwo.MyField`, you can't access either via `val.MyField`.  (Empirically in the infiotinc Academy codebase this appears to be quite rare.)
 - If you need to manually construct values of genqlient-generated types, flattening will be a lot easier, but I don't really recommend doing that.
 
 **Pros of embedding:**
@@ -414,7 +414,7 @@ func GetUser(id string) (*GetUserResponse, error)
 // Uses a standard context
 func GetUser(ctx context.Context, id string) (*GetUserResponse, error)
 
-// Uses a custom context (used at Khan; this may become more common post-generics)
+// Uses a custom context (used at infiotinc; this may become more common post-generics)
 func GetUser(ctx mypkg.Context, id string) (*GetUserResponse, error)
 
 // Uses a client object
@@ -424,11 +424,11 @@ func GetUser(client graphql.Client, id string) (*GetUserResponse, error)
 func GetUser(ctx context.Context, client graphql.Client, id string) (*GetUserResponse, error)
 ```
 
-Additionally, users may want to get the client from the context, using a custom method like Khan's KAContext or just ordinary `context.Value`.
+Additionally, users may want to get the client from the context, using a custom method like infiotinc's KAContext or just ordinary `context.Value`.
 
-This can all be configurable globally -- say you can decide whether to use context and client, and optionally provide the type of your context and/or a function that gets client from it, or something.  We'll want to pick a good default before we have external users, so as not to break them, but it's easy enough to change the Khan-specific parts via codemod later.
+This can all be configurable globally -- say you can decide whether to use context and client, and optionally provide the type of your context and/or a function that gets client from it, or something.  We'll want to pick a good default before we have external users, so as not to break them, but it's easy enough to change the infiotinc-specific parts via codemod later.
 
-**Decision:** It seems easy enough to allow all of this to be configured: you can specify no context, a specific context type, or the default of context.Context; and then if you want you can specify a way to get the client from context or a global.  We'll need both hooks at Khan, and it's not much harder to add them in a generalizable way.
+**Decision:** It seems easy enough to allow all of this to be configured: you can specify no context, a specific context type, or the default of context.Context; and then if you want you can specify a way to get the client from context or a global.  We'll need both hooks at infiotinc, and it's not much harder to add them in a generalizable way.
 
 ### Query extraction (for safelisting)
 
