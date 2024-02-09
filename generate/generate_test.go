@@ -243,14 +243,18 @@ func TestGenerateWithConfig(t *testing.T) {
 		}},
 		{"OptionalPointerOmitEmpty", "", []string{
 			"InputObject.graphql",
+			"Pointers.graphql",
+			"Omitempty.graphql",
 			"ListInput.graphql",
-			"QueryWithSlices.graphql",
-			"SimpleQueryWithPointerFalseOverride.graphql",
-			"SimpleQueryNoOverride.graphql",
 		}, &Config{
 			Optional: "pointer_omitempty",
 			Bindings: map[string]*TypeBinding{
 				"Date": {
+					Type:        "time.Time",
+					Marshaler:   "github.com/Khan/genqlient/internal/testutil.MarshalDate",
+					Unmarshaler: "github.com/Khan/genqlient/internal/testutil.UnmarshalDate",
+				},
+				"DateTime": {
 					Type:        "time.Time",
 					Marshaler:   "github.com/Khan/genqlient/internal/testutil.MarshalDate",
 					Unmarshaler: "github.com/Khan/genqlient/internal/testutil.UnmarshalDate",

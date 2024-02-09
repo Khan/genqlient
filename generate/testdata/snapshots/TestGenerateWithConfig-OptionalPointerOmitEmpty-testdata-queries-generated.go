@@ -64,6 +64,301 @@ type ListInputQueryUser struct {
 // GetId returns ListInputQueryUser.Id, and is useful for accessing the field via an interface.
 func (v *ListInputQueryUser) GetId() string { return v.Id }
 
+// OmitEmptyQueryResponse is returned by OmitEmptyQuery on success.
+type OmitEmptyQueryResponse struct {
+	// user looks up a user by some stuff.
+	//
+	// See UserQueryInput for what stuff is supported.
+	// If query is null, returns the current user.
+	User         *OmitEmptyQueryUser        `json:"user"`
+	Users        []*OmitEmptyQueryUsersUser `json:"users"`
+	MaybeConvert *time.Time                 `json:"-"`
+	Convert2     *time.Time                 `json:"-"`
+}
+
+// GetUser returns OmitEmptyQueryResponse.User, and is useful for accessing the field via an interface.
+func (v *OmitEmptyQueryResponse) GetUser() *OmitEmptyQueryUser { return v.User }
+
+// GetUsers returns OmitEmptyQueryResponse.Users, and is useful for accessing the field via an interface.
+func (v *OmitEmptyQueryResponse) GetUsers() []*OmitEmptyQueryUsersUser { return v.Users }
+
+// GetMaybeConvert returns OmitEmptyQueryResponse.MaybeConvert, and is useful for accessing the field via an interface.
+func (v *OmitEmptyQueryResponse) GetMaybeConvert() *time.Time { return v.MaybeConvert }
+
+// GetConvert2 returns OmitEmptyQueryResponse.Convert2, and is useful for accessing the field via an interface.
+func (v *OmitEmptyQueryResponse) GetConvert2() *time.Time { return v.Convert2 }
+
+func (v *OmitEmptyQueryResponse) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*OmitEmptyQueryResponse
+		MaybeConvert json.RawMessage `json:"maybeConvert"`
+		Convert2     json.RawMessage `json:"convert2"`
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.OmitEmptyQueryResponse = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	{
+		dst := &v.MaybeConvert
+		src := firstPass.MaybeConvert
+		if len(src) != 0 && string(src) != "null" {
+			*dst = new(time.Time)
+			err = testutil.UnmarshalDate(
+				src, *dst)
+			if err != nil {
+				return fmt.Errorf(
+					"unable to unmarshal OmitEmptyQueryResponse.MaybeConvert: %w", err)
+			}
+		}
+	}
+
+	{
+		dst := &v.Convert2
+		src := firstPass.Convert2
+		if len(src) != 0 && string(src) != "null" {
+			*dst = new(time.Time)
+			err = testutil.UnmarshalDate(
+				src, *dst)
+			if err != nil {
+				return fmt.Errorf(
+					"unable to unmarshal OmitEmptyQueryResponse.Convert2: %w", err)
+			}
+		}
+	}
+	return nil
+}
+
+type __premarshalOmitEmptyQueryResponse struct {
+	User *OmitEmptyQueryUser `json:"user"`
+
+	Users []*OmitEmptyQueryUsersUser `json:"users"`
+
+	MaybeConvert json.RawMessage `json:"maybeConvert"`
+
+	Convert2 json.RawMessage `json:"convert2"`
+}
+
+func (v *OmitEmptyQueryResponse) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *OmitEmptyQueryResponse) __premarshalJSON() (*__premarshalOmitEmptyQueryResponse, error) {
+	var retval __premarshalOmitEmptyQueryResponse
+
+	retval.User = v.User
+	retval.Users = v.Users
+	{
+
+		dst := &retval.MaybeConvert
+		src := v.MaybeConvert
+		if src != nil {
+			var err error
+			*dst, err = testutil.MarshalDate(
+				src)
+			if err != nil {
+				return nil, fmt.Errorf(
+					"unable to marshal OmitEmptyQueryResponse.MaybeConvert: %w", err)
+			}
+		}
+	}
+	{
+
+		dst := &retval.Convert2
+		src := v.Convert2
+		if src != nil {
+			var err error
+			*dst, err = testutil.MarshalDate(
+				src)
+			if err != nil {
+				return nil, fmt.Errorf(
+					"unable to marshal OmitEmptyQueryResponse.Convert2: %w", err)
+			}
+		}
+	}
+	return &retval, nil
+}
+
+// OmitEmptyQueryUser includes the requested fields of the GraphQL type User.
+// The GraphQL type's documentation follows.
+//
+// A User is a user!
+type OmitEmptyQueryUser struct {
+	// id is the user's ID.
+	//
+	// It is stable, unique, and opaque, like all good IDs.
+	Id string `json:"id"`
+}
+
+// GetId returns OmitEmptyQueryUser.Id, and is useful for accessing the field via an interface.
+func (v *OmitEmptyQueryUser) GetId() string { return v.Id }
+
+// OmitEmptyQueryUsersUser includes the requested fields of the GraphQL type User.
+// The GraphQL type's documentation follows.
+//
+// A User is a user!
+type OmitEmptyQueryUsersUser struct {
+	// id is the user's ID.
+	//
+	// It is stable, unique, and opaque, like all good IDs.
+	Id string `json:"id"`
+}
+
+// GetId returns OmitEmptyQueryUsersUser.Id, and is useful for accessing the field via an interface.
+func (v *OmitEmptyQueryUsersUser) GetId() string { return v.Id }
+
+// PointersQueryOtherUser includes the requested fields of the GraphQL type User.
+// The GraphQL type's documentation follows.
+//
+// A User is a user!
+type PointersQueryOtherUser struct {
+	// id is the user's ID.
+	//
+	// It is stable, unique, and opaque, like all good IDs.
+	Id string `json:"id"`
+}
+
+// GetId returns PointersQueryOtherUser.Id, and is useful for accessing the field via an interface.
+func (v *PointersQueryOtherUser) GetId() string { return v.Id }
+
+// PointersQueryResponse is returned by PointersQuery on success.
+type PointersQueryResponse struct {
+	// user looks up a user by some stuff.
+	//
+	// See UserQueryInput for what stuff is supported.
+	// If query is null, returns the current user.
+	User *PointersQueryUser `json:"user"`
+	// user looks up a user by some stuff.
+	//
+	// See UserQueryInput for what stuff is supported.
+	// If query is null, returns the current user.
+	OtherUser    *PointersQueryOtherUser `json:"otherUser"`
+	MaybeConvert *time.Time              `json:"-"`
+}
+
+// GetUser returns PointersQueryResponse.User, and is useful for accessing the field via an interface.
+func (v *PointersQueryResponse) GetUser() *PointersQueryUser { return v.User }
+
+// GetOtherUser returns PointersQueryResponse.OtherUser, and is useful for accessing the field via an interface.
+func (v *PointersQueryResponse) GetOtherUser() *PointersQueryOtherUser { return v.OtherUser }
+
+// GetMaybeConvert returns PointersQueryResponse.MaybeConvert, and is useful for accessing the field via an interface.
+func (v *PointersQueryResponse) GetMaybeConvert() *time.Time { return v.MaybeConvert }
+
+func (v *PointersQueryResponse) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*PointersQueryResponse
+		MaybeConvert json.RawMessage `json:"maybeConvert"`
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.PointersQueryResponse = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	{
+		dst := &v.MaybeConvert
+		src := firstPass.MaybeConvert
+		if len(src) != 0 && string(src) != "null" {
+			*dst = new(time.Time)
+			err = testutil.UnmarshalDate(
+				src, *dst)
+			if err != nil {
+				return fmt.Errorf(
+					"unable to unmarshal PointersQueryResponse.MaybeConvert: %w", err)
+			}
+		}
+	}
+	return nil
+}
+
+type __premarshalPointersQueryResponse struct {
+	User *PointersQueryUser `json:"user"`
+
+	OtherUser *PointersQueryOtherUser `json:"otherUser"`
+
+	MaybeConvert json.RawMessage `json:"maybeConvert"`
+}
+
+func (v *PointersQueryResponse) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *PointersQueryResponse) __premarshalJSON() (*__premarshalPointersQueryResponse, error) {
+	var retval __premarshalPointersQueryResponse
+
+	retval.User = v.User
+	retval.OtherUser = v.OtherUser
+	{
+
+		dst := &retval.MaybeConvert
+		src := v.MaybeConvert
+		if src != nil {
+			var err error
+			*dst, err = testutil.MarshalDate(
+				src)
+			if err != nil {
+				return nil, fmt.Errorf(
+					"unable to marshal PointersQueryResponse.MaybeConvert: %w", err)
+			}
+		}
+	}
+	return &retval, nil
+}
+
+// PointersQueryUser includes the requested fields of the GraphQL type User.
+// The GraphQL type's documentation follows.
+//
+// A User is a user!
+type PointersQueryUser struct {
+	// id is the user's ID.
+	//
+	// It is stable, unique, and opaque, like all good IDs.
+	Id          *string   `json:"id"`
+	Roles       []*Role   `json:"roles"`
+	Name        *string   `json:"name"`
+	Emails      []*string `json:"emails"`
+	EmailsNoPtr []string  `json:"emailsNoPtr"`
+}
+
+// GetId returns PointersQueryUser.Id, and is useful for accessing the field via an interface.
+func (v *PointersQueryUser) GetId() *string { return v.Id }
+
+// GetRoles returns PointersQueryUser.Roles, and is useful for accessing the field via an interface.
+func (v *PointersQueryUser) GetRoles() []*Role { return v.Roles }
+
+// GetName returns PointersQueryUser.Name, and is useful for accessing the field via an interface.
+func (v *PointersQueryUser) GetName() *string { return v.Name }
+
+// GetEmails returns PointersQueryUser.Emails, and is useful for accessing the field via an interface.
+func (v *PointersQueryUser) GetEmails() []*string { return v.Emails }
+
+// GetEmailsNoPtr returns PointersQueryUser.EmailsNoPtr, and is useful for accessing the field via an interface.
+func (v *PointersQueryUser) GetEmailsNoPtr() []string { return v.EmailsNoPtr }
+
 type PokemonInput struct {
 	Species string `json:"species"`
 	Level   int    `json:"level"`
@@ -74,41 +369,6 @@ func (v *PokemonInput) GetSpecies() string { return v.Species }
 
 // GetLevel returns PokemonInput.Level, and is useful for accessing the field via an interface.
 func (v *PokemonInput) GetLevel() int { return v.Level }
-
-// QueryWithSlicesResponse is returned by QueryWithSlices on success.
-type QueryWithSlicesResponse struct {
-	// user looks up a user by some stuff.
-	//
-	// See UserQueryInput for what stuff is supported.
-	// If query is null, returns the current user.
-	User *QueryWithSlicesUser `json:"user"`
-}
-
-// GetUser returns QueryWithSlicesResponse.User, and is useful for accessing the field via an interface.
-func (v *QueryWithSlicesResponse) GetUser() *QueryWithSlicesUser { return v.User }
-
-// QueryWithSlicesUser includes the requested fields of the GraphQL type User.
-// The GraphQL type's documentation follows.
-//
-// A User is a user!
-type QueryWithSlicesUser struct {
-	Emails                []string  `json:"emails"`
-	EmailsOrNull          []string  `json:"emailsOrNull"`
-	EmailsWithNulls       []*string `json:"emailsWithNulls"`
-	EmailsWithNullsOrNull []*string `json:"emailsWithNullsOrNull"`
-}
-
-// GetEmails returns QueryWithSlicesUser.Emails, and is useful for accessing the field via an interface.
-func (v *QueryWithSlicesUser) GetEmails() []string { return v.Emails }
-
-// GetEmailsOrNull returns QueryWithSlicesUser.EmailsOrNull, and is useful for accessing the field via an interface.
-func (v *QueryWithSlicesUser) GetEmailsOrNull() []string { return v.EmailsOrNull }
-
-// GetEmailsWithNulls returns QueryWithSlicesUser.EmailsWithNulls, and is useful for accessing the field via an interface.
-func (v *QueryWithSlicesUser) GetEmailsWithNulls() []*string { return v.EmailsWithNulls }
-
-// GetEmailsWithNullsOrNull returns QueryWithSlicesUser.EmailsWithNullsOrNull, and is useful for accessing the field via an interface.
-func (v *QueryWithSlicesUser) GetEmailsWithNullsOrNull() []*string { return v.EmailsWithNullsOrNull }
 
 // Role is a type a user may have.
 type Role string
@@ -123,68 +383,6 @@ const (
 	// Teacher is a teacher, who teaches the students.
 	RoleTeacher Role = "TEACHER"
 )
-
-// SimpleQueryNoOverrideResponse is returned by SimpleQueryNoOverride on success.
-type SimpleQueryNoOverrideResponse struct {
-	// user looks up a user by some stuff.
-	//
-	// See UserQueryInput for what stuff is supported.
-	// If query is null, returns the current user.
-	User *SimpleQueryNoOverrideUser `json:"user"`
-}
-
-// GetUser returns SimpleQueryNoOverrideResponse.User, and is useful for accessing the field via an interface.
-func (v *SimpleQueryNoOverrideResponse) GetUser() *SimpleQueryNoOverrideUser { return v.User }
-
-// SimpleQueryNoOverrideUser includes the requested fields of the GraphQL type User.
-// The GraphQL type's documentation follows.
-//
-// A User is a user!
-type SimpleQueryNoOverrideUser struct {
-	// id is the user's ID.
-	//
-	// It is stable, unique, and opaque, like all good IDs.
-	Id   string  `json:"id"`
-	Name *string `json:"name"`
-}
-
-// GetId returns SimpleQueryNoOverrideUser.Id, and is useful for accessing the field via an interface.
-func (v *SimpleQueryNoOverrideUser) GetId() string { return v.Id }
-
-// GetName returns SimpleQueryNoOverrideUser.Name, and is useful for accessing the field via an interface.
-func (v *SimpleQueryNoOverrideUser) GetName() *string { return v.Name }
-
-// SimpleQueryWithPointerFalseOverrideResponse is returned by SimpleQueryWithPointerFalseOverride on success.
-type SimpleQueryWithPointerFalseOverrideResponse struct {
-	// user looks up a user by some stuff.
-	//
-	// See UserQueryInput for what stuff is supported.
-	// If query is null, returns the current user.
-	User *SimpleQueryWithPointerFalseOverrideUser `json:"user"`
-}
-
-// GetUser returns SimpleQueryWithPointerFalseOverrideResponse.User, and is useful for accessing the field via an interface.
-func (v *SimpleQueryWithPointerFalseOverrideResponse) GetUser() *SimpleQueryWithPointerFalseOverrideUser {
-	return v.User
-}
-
-// SimpleQueryWithPointerFalseOverrideUser includes the requested fields of the GraphQL type User.
-// The GraphQL type's documentation follows.
-//
-// A User is a user!
-type SimpleQueryWithPointerFalseOverrideUser struct {
-	// id is the user's ID.
-	//
-	// It is stable, unique, and opaque, like all good IDs.
-	Id   string `json:"id"`
-	Name string `json:"name"`
-}
-
-// GetId returns SimpleQueryWithPointerFalseOverrideUser.Id, and is useful for accessing the field via an interface.
-func (v *SimpleQueryWithPointerFalseOverrideUser) GetId() string { return v.Id }
-
-// GetName returns SimpleQueryWithPointerFalseOverrideUser.Name, and is useful for accessing the field via an interface.
-func (v *SimpleQueryWithPointerFalseOverrideUser) GetName() string { return v.Name }
 
 // UserQueryInput is the argument to Query.users.
 //
@@ -323,6 +521,193 @@ type __ListInputQueryInput struct {
 // GetNames returns __ListInputQueryInput.Names, and is useful for accessing the field via an interface.
 func (v *__ListInputQueryInput) GetNames() []*string { return v.Names }
 
+// __OmitEmptyQueryInput is used internally by genqlient
+type __OmitEmptyQueryInput struct {
+	Query         *UserQueryInput   `json:"query,omitempty"`
+	Queries       []*UserQueryInput `json:"queries,omitempty"`
+	Dt            *time.Time        `json:"-"`
+	Tz            *string           `json:"tz,omitempty"`
+	TzNoOmitEmpty *string           `json:"tzNoOmitEmpty"`
+}
+
+// GetQuery returns __OmitEmptyQueryInput.Query, and is useful for accessing the field via an interface.
+func (v *__OmitEmptyQueryInput) GetQuery() *UserQueryInput { return v.Query }
+
+// GetQueries returns __OmitEmptyQueryInput.Queries, and is useful for accessing the field via an interface.
+func (v *__OmitEmptyQueryInput) GetQueries() []*UserQueryInput { return v.Queries }
+
+// GetDt returns __OmitEmptyQueryInput.Dt, and is useful for accessing the field via an interface.
+func (v *__OmitEmptyQueryInput) GetDt() *time.Time { return v.Dt }
+
+// GetTz returns __OmitEmptyQueryInput.Tz, and is useful for accessing the field via an interface.
+func (v *__OmitEmptyQueryInput) GetTz() *string { return v.Tz }
+
+// GetTzNoOmitEmpty returns __OmitEmptyQueryInput.TzNoOmitEmpty, and is useful for accessing the field via an interface.
+func (v *__OmitEmptyQueryInput) GetTzNoOmitEmpty() *string { return v.TzNoOmitEmpty }
+
+func (v *__OmitEmptyQueryInput) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*__OmitEmptyQueryInput
+		Dt json.RawMessage `json:"dt"`
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.__OmitEmptyQueryInput = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	{
+		dst := &v.Dt
+		src := firstPass.Dt
+		if len(src) != 0 && string(src) != "null" {
+			*dst = new(time.Time)
+			err = testutil.UnmarshalDate(
+				src, *dst)
+			if err != nil {
+				return fmt.Errorf(
+					"unable to unmarshal __OmitEmptyQueryInput.Dt: %w", err)
+			}
+		}
+	}
+	return nil
+}
+
+type __premarshal__OmitEmptyQueryInput struct {
+	Query *UserQueryInput `json:"query,omitempty"`
+
+	Queries []*UserQueryInput `json:"queries,omitempty"`
+
+	Dt json.RawMessage `json:"dt,omitempty"`
+
+	Tz *string `json:"tz,omitempty"`
+
+	TzNoOmitEmpty *string `json:"tzNoOmitEmpty"`
+}
+
+func (v *__OmitEmptyQueryInput) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *__OmitEmptyQueryInput) __premarshalJSON() (*__premarshal__OmitEmptyQueryInput, error) {
+	var retval __premarshal__OmitEmptyQueryInput
+
+	retval.Query = v.Query
+	retval.Queries = v.Queries
+	{
+
+		dst := &retval.Dt
+		src := v.Dt
+		if src != nil {
+			var err error
+			*dst, err = testutil.MarshalDate(
+				src)
+			if err != nil {
+				return nil, fmt.Errorf(
+					"unable to marshal __OmitEmptyQueryInput.Dt: %w", err)
+			}
+		}
+	}
+	retval.Tz = v.Tz
+	retval.TzNoOmitEmpty = v.TzNoOmitEmpty
+	return &retval, nil
+}
+
+// __PointersQueryInput is used internally by genqlient
+type __PointersQueryInput struct {
+	Query *UserQueryInput `json:"query"`
+	Dt    time.Time       `json:"-"`
+	Tz    *string         `json:"tz"`
+}
+
+// GetQuery returns __PointersQueryInput.Query, and is useful for accessing the field via an interface.
+func (v *__PointersQueryInput) GetQuery() *UserQueryInput { return v.Query }
+
+// GetDt returns __PointersQueryInput.Dt, and is useful for accessing the field via an interface.
+func (v *__PointersQueryInput) GetDt() time.Time { return v.Dt }
+
+// GetTz returns __PointersQueryInput.Tz, and is useful for accessing the field via an interface.
+func (v *__PointersQueryInput) GetTz() *string { return v.Tz }
+
+func (v *__PointersQueryInput) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*__PointersQueryInput
+		Dt json.RawMessage `json:"dt"`
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.__PointersQueryInput = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	{
+		dst := &v.Dt
+		src := firstPass.Dt
+		if len(src) != 0 && string(src) != "null" {
+			err = testutil.UnmarshalDate(
+				src, dst)
+			if err != nil {
+				return fmt.Errorf(
+					"unable to unmarshal __PointersQueryInput.Dt: %w", err)
+			}
+		}
+	}
+	return nil
+}
+
+type __premarshal__PointersQueryInput struct {
+	Query *UserQueryInput `json:"query"`
+
+	Dt json.RawMessage `json:"dt"`
+
+	Tz *string `json:"tz"`
+}
+
+func (v *__PointersQueryInput) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *__PointersQueryInput) __premarshalJSON() (*__premarshal__PointersQueryInput, error) {
+	var retval __premarshal__PointersQueryInput
+
+	retval.Query = v.Query
+	{
+
+		dst := &retval.Dt
+		src := v.Dt
+		var err error
+		*dst, err = testutil.MarshalDate(
+			&src)
+		if err != nil {
+			return nil, fmt.Errorf(
+				"unable to marshal __PointersQueryInput.Dt: %w", err)
+		}
+	}
+	retval.Tz = v.Tz
+	return &retval, nil
+}
+
 // The query or mutation executed by InputObjectQuery.
 const InputObjectQuery_Operation = `
 query InputObjectQuery ($query: UserQueryInput) {
@@ -393,93 +778,90 @@ func ListInputQuery(
 	return &data_, err_
 }
 
-// The query or mutation executed by QueryWithSlices.
-const QueryWithSlices_Operation = `
-query QueryWithSlices {
-	user {
+// The query or mutation executed by OmitEmptyQuery.
+const OmitEmptyQuery_Operation = `
+query OmitEmptyQuery ($query: UserQueryInput, $queries: [UserQueryInput], $dt: DateTime, $tz: String, $tzNoOmitEmpty: String) {
+	user(query: $query) {
+		id
+	}
+	users(query: $queries) {
+		id
+	}
+	maybeConvert(dt: $dt, tz: $tz)
+	convert2: maybeConvert(dt: $dt, tz: $tzNoOmitEmpty)
+}
+`
+
+func OmitEmptyQuery(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	query *UserQueryInput,
+	queries []*UserQueryInput,
+	dt *time.Time,
+	tz *string,
+	tzNoOmitEmpty *string,
+) (*OmitEmptyQueryResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "OmitEmptyQuery",
+		Query:  OmitEmptyQuery_Operation,
+		Variables: &__OmitEmptyQueryInput{
+			Query:         query,
+			Queries:       queries,
+			Dt:            dt,
+			Tz:            tz,
+			TzNoOmitEmpty: tzNoOmitEmpty,
+		},
+	}
+	var err_ error
+
+	var data_ OmitEmptyQueryResponse
+	resp_ := &graphql.Response{Data: &data_}
+
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
+	)
+
+	return &data_, err_
+}
+
+// The query or mutation executed by PointersQuery.
+const PointersQuery_Operation = `
+query PointersQuery ($query: UserQueryInput, $dt: DateTime, $tz: String) {
+	user(query: $query) {
+		id
+		roles
+		name
 		emails
-		emailsOrNull
-		emailsWithNulls
-		emailsWithNullsOrNull
+		emailsNoPtr: emails
 	}
-}
-`
-
-func QueryWithSlices(
-	ctx_ context.Context,
-	client_ graphql.Client,
-) (*QueryWithSlicesResponse, error) {
-	req_ := &graphql.Request{
-		OpName: "QueryWithSlices",
-		Query:  QueryWithSlices_Operation,
-	}
-	var err_ error
-
-	var data_ QueryWithSlicesResponse
-	resp_ := &graphql.Response{Data: &data_}
-
-	err_ = client_.MakeRequest(
-		ctx_,
-		req_,
-		resp_,
-	)
-
-	return &data_, err_
-}
-
-// The query or mutation executed by SimpleQueryNoOverride.
-const SimpleQueryNoOverride_Operation = `
-query SimpleQueryNoOverride {
-	user {
+	otherUser: user(query: $query) {
 		id
-		name
 	}
+	maybeConvert(dt: $dt, tz: $tz)
 }
 `
 
-func SimpleQueryNoOverride(
+func PointersQuery(
 	ctx_ context.Context,
 	client_ graphql.Client,
-) (*SimpleQueryNoOverrideResponse, error) {
+	query *UserQueryInput,
+	dt time.Time,
+	tz *string,
+) (*PointersQueryResponse, error) {
 	req_ := &graphql.Request{
-		OpName: "SimpleQueryNoOverride",
-		Query:  SimpleQueryNoOverride_Operation,
+		OpName: "PointersQuery",
+		Query:  PointersQuery_Operation,
+		Variables: &__PointersQueryInput{
+			Query: query,
+			Dt:    dt,
+			Tz:    tz,
+		},
 	}
 	var err_ error
 
-	var data_ SimpleQueryNoOverrideResponse
-	resp_ := &graphql.Response{Data: &data_}
-
-	err_ = client_.MakeRequest(
-		ctx_,
-		req_,
-		resp_,
-	)
-
-	return &data_, err_
-}
-
-// The query or mutation executed by SimpleQueryWithPointerFalseOverride.
-const SimpleQueryWithPointerFalseOverride_Operation = `
-query SimpleQueryWithPointerFalseOverride {
-	user {
-		id
-		name
-	}
-}
-`
-
-func SimpleQueryWithPointerFalseOverride(
-	ctx_ context.Context,
-	client_ graphql.Client,
-) (*SimpleQueryWithPointerFalseOverrideResponse, error) {
-	req_ := &graphql.Request{
-		OpName: "SimpleQueryWithPointerFalseOverride",
-		Query:  SimpleQueryWithPointerFalseOverride_Operation,
-	}
-	var err_ error
-
-	var data_ SimpleQueryWithPointerFalseOverrideResponse
+	var data_ PointersQueryResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
