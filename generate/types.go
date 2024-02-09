@@ -80,8 +80,7 @@ type (
 	// goSliceType represents the Go type *Elem, used when requested by the
 	// user (perhaps to handle nulls explicitly, or to avoid copying large
 	// structures).
-	goPointerType          struct{ Elem goType }
-	goPointerOmitEmptyType struct{ goPointerType }
+	goPointerType struct{ Elem goType }
 	// goGenericType represent the Go type GoGenericRef[Elem], used when requested by the
 	// user to box nullable data without using pointers or sentinel values
 	goGenericType struct {

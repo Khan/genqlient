@@ -9,8 +9,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Khan/genqlient/internal/testutil"
 	"gopkg.in/yaml.v2"
+
+	"github.com/Khan/genqlient/internal/testutil"
 )
 
 const (
@@ -241,12 +242,20 @@ func TestGenerateWithConfig(t *testing.T) {
 			},
 		}},
 		{"OptionalPointerOmitEmpty", "", []string{
+			"InputObject.graphql",
 			"ListInput.graphql",
 			"QueryWithSlices.graphql",
 			"SimpleQueryWithPointerFalseOverride.graphql",
 			"SimpleQueryNoOverride.graphql",
 		}, &Config{
-			Optional:       "pointer_omitempty",
+			Optional: "pointer_omitempty",
+			Bindings: map[string]*TypeBinding{
+				"Date": {
+					Type:        "time.Time",
+					Marshaler:   "github.com/Khan/genqlient/internal/testutil.MarshalDate",
+					Unmarshaler: "github.com/Khan/genqlient/internal/testutil.UnmarshalDate",
+				},
+			},
 		}},
 	}
 
