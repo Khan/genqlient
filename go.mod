@@ -1,12 +1,9 @@
-module github.com/raito-io/genqlient
+module github.com/Khan/genqlient
 
 go 1.18
 
-replace github.com/Khan/genqlient => ./
-
 require (
 	github.com/99designs/gqlgen v0.17.35
-	github.com/Khan/genqlient v0.0.6
 	github.com/alexflint/go-arg v1.4.2
 	github.com/bradleyjkemp/cupaloy/v2 v2.6.0
 	github.com/stretchr/testify v1.8.2
