@@ -157,8 +157,8 @@ func (c *Config) ValidateAndFillDefaults(baseDir string) error {
 		c.ContextType = "context.Context"
 	}
 
-	if c.Optional != "" && c.Optional != "value" && c.Optional != "pointer" && c.Optional != "generic" {
-		return errorf(nil, "optional must be one of: 'value' (default), 'pointer', or 'generic'")
+	if c.Optional != "" && c.Optional != "value" && c.Optional != "pointer" && c.Optional != "pointer_omitempty" && c.Optional != "generic" {
+		return errorf(nil, "optional must be one of: 'value' (default), 'pointer', 'pointer_omitempty' or 'generic'")
 	}
 
 	if c.Optional == "generic" && c.OptionalGenericType == "" {

@@ -240,6 +240,14 @@ func TestGenerateWithConfig(t *testing.T) {
 				Enums: map[string]CasingAlgorithm{"Role": CasingRaw},
 			},
 		}},
+		{"OptionalPointerOmitEmpty", "", []string{
+			"ListInput.graphql",
+			"QueryWithSlices.graphql",
+			"SimpleQueryWithPointerFalseOverride.graphql",
+			"SimpleQueryNoOverride.graphql",
+		}, &Config{
+			Optional:       "pointer_omitempty",
+		}},
 	}
 
 	sourceFilename := "SimpleQuery.graphql"
