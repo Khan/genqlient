@@ -1,4 +1,4 @@
-module github.com/raito-io/genqlient
+module github.com/Khan/genqlient
 
 go 1.18
 
