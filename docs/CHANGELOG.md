@@ -18,7 +18,7 @@ When releasing a new version:
 
 ## next
 
-<!-- Add new changes in this section! -->
+- Support .graphqls and .gql file extensions
 
 ### Breaking changes:
 
