@@ -526,12 +526,11 @@ func (typ *goInterfaceType) WriteDefinition(w io.Writer, g *generator) error {
 		// implement nested interface union type
 		for _, sharedField := range typ.SharedFields {
 			if sharedField.IsAbstract() {
-				name := sharedField.GoName
-				if name == "" {
-					name = sharedField.GoType.Reference()
+				// embedded type
+				if sharedField.GoName == "" {
+					fmt.Fprintf(w, "func (v *%s) %s() {}\n",
+						impl.Reference(), fmt.Sprintf("implementsGraphQLInterface%s", sharedField.GoType.Reference()))
 				}
-				fmt.Fprintf(w, "func (v *%s) %s() {}\n",
-					impl.Reference(), fmt.Sprintf("implementsGraphQLInterface%s", name))
 			}
 		}
 	}

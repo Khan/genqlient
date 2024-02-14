@@ -28,14 +28,8 @@ type ContentFields interface {
 }
 
 func (v *ContentFieldsArticle) implementsGraphQLInterfaceContentFields() {}
-func (v *ContentFieldsArticle) implementsGraphQLInterfaceNext()          {}
-func (v *ContentFieldsArticle) implementsGraphQLInterfaceRelated()       {}
 func (v *ContentFieldsTopic) implementsGraphQLInterfaceContentFields()   {}
-func (v *ContentFieldsTopic) implementsGraphQLInterfaceNext()            {}
-func (v *ContentFieldsTopic) implementsGraphQLInterfaceRelated()         {}
 func (v *ContentFieldsVideo) implementsGraphQLInterfaceContentFields()   {}
-func (v *ContentFieldsVideo) implementsGraphQLInterfaceNext()            {}
-func (v *ContentFieldsVideo) implementsGraphQLInterfaceRelated()         {}
 
 func __unmarshalContentFields(b []byte, v *ContentFields) error {
 	if string(b) == "null" {
@@ -893,16 +887,10 @@ type CovariantInterfaceImplementationRandomItemContent interface {
 
 func (v *CovariantInterfaceImplementationRandomItemArticle) implementsGraphQLInterfaceCovariantInterfaceImplementationRandomItemContent() {
 }
-func (v *CovariantInterfaceImplementationRandomItemArticle) implementsGraphQLInterfaceNext()    {}
-func (v *CovariantInterfaceImplementationRandomItemArticle) implementsGraphQLInterfaceRelated() {}
 func (v *CovariantInterfaceImplementationRandomItemTopic) implementsGraphQLInterfaceCovariantInterfaceImplementationRandomItemContent() {
 }
-func (v *CovariantInterfaceImplementationRandomItemTopic) implementsGraphQLInterfaceNext()    {}
-func (v *CovariantInterfaceImplementationRandomItemTopic) implementsGraphQLInterfaceRelated() {}
 func (v *CovariantInterfaceImplementationRandomItemVideo) implementsGraphQLInterfaceCovariantInterfaceImplementationRandomItemContent() {
 }
-func (v *CovariantInterfaceImplementationRandomItemVideo) implementsGraphQLInterfaceNext()    {}
-func (v *CovariantInterfaceImplementationRandomItemVideo) implementsGraphQLInterfaceRelated() {}
 
 func __unmarshalCovariantInterfaceImplementationRandomItemContent(b []byte, v *CovariantInterfaceImplementationRandomItemContent) error {
 	if string(b) == "null" {
