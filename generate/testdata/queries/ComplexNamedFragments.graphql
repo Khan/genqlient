@@ -48,7 +48,7 @@ query ComplexNamedFragments {
   ... on Query { ...QueryFragment }
 }
 
-## two fragments of different but with fields containing the same type that is inline spread to a named fragment on a union
+## two fragments of different types with fields containing the same inline named fragment of a union
 fragment SimpleLeafContent on LeafContent {
   ... on Article {
     id
