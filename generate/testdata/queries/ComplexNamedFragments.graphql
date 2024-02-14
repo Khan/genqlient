@@ -47,3 +47,34 @@ fragment ContentFields on Content {
 query ComplexNamedFragments {
   ... on Query { ...QueryFragment }
 }
+
+## two fragments of different but with fields containing the same type that is inline spread to a named fragment on a union
+fragment SimpleLeafContent on LeafContent {
+  ... on Article {
+    id
+  }
+  ... on Video {
+    id
+  }
+}
+
+fragment UserLastContent on User {
+  lastContent {
+    ... SimpleLeafContent
+  }
+}
+
+fragment TopicNewestContent on Topic {
+  newestContent {
+    ... SimpleLeafContent
+  }
+}
+
+query ComplexNamedFragmentsWithInlineUnion {
+  user {
+    ...UserLastContent
+  }
+  root {
+    ...TopicNewestContent
+  }
+}
