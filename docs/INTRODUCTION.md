@@ -8,7 +8,7 @@ You want the schema in GraphQL [Schema Definition Language (SDL)](https://graphq
 
 ## Step 2: Write your queries
 
-Next, write your GraphQL query.  This is often easiest to do in an interactive explorer like [GraphiQL](https://github.com/graphql/graphiql/tree/main/packages/graphiql#readme); the syntax is just standard [GraphQL syntax](https://graphql.org/learn/queries/) and supports both queries and mutations.  Put it in `genqlient.graphql`:
+Next, write your GraphQL query.  This is often easiest to do in an interactive explorer like [GraphiQL](https://github.com/graphql/graphiql/tree/main/packages/graphiql#readme); the syntax is just standard [GraphQL syntax](https://graphql.org/learn/queries/) and supports queries, mutations and subscriptions.  Put it in `genqlient.graphql`:
 ```graphql
 query getUser($login: String!) {
   user(login: $login) {

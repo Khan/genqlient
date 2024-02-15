@@ -177,7 +177,7 @@ type unexportedUser struct {
 // GetId returns unexportedUser.Id, and is useful for accessing the field via an interface.
 func (v *unexportedUser) GetId() testutil.ID { return v.Id }
 
-// The query or mutation executed by unexported.
+// The query executed by unexported.
 const unexported_Operation = `
 query unexported ($query: UserQueryInput) {
 	user(query: $query) {
@@ -189,7 +189,7 @@ query unexported ($query: UserQueryInput) {
 func unexported(
 	client_ graphql.Client,
 	query UserQueryInput,
-) (*unexportedResponse, error) {
+) (data_ *unexportedResponse, err_ error) {
 	req_ := &graphql.Request{
 		OpName: "unexported",
 		Query:  unexported_Operation,
@@ -197,10 +197,9 @@ func unexported(
 			Query: query,
 		},
 	}
-	var err_ error
 
-	var data_ unexportedResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &unexportedResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		nil,
@@ -208,6 +207,6 @@ func unexported(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 

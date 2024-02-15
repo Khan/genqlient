@@ -69,7 +69,7 @@ func (v *getViewerViewerUser) GetMyName() string { return v.MyName }
 // GetCreatedAt returns getViewerViewerUser.CreatedAt, and is useful for accessing the field via an interface.
 func (v *getViewerViewerUser) GetCreatedAt() time.Time { return v.CreatedAt }
 
-// The query or mutation executed by getUser.
+// The query executed by getUser.
 const getUser_Operation = `
 query getUser ($Login: String!) {
 	user(login: $Login) {
@@ -84,7 +84,7 @@ func getUser(
 	ctx_ context.Context,
 	client_ graphql.Client,
 	Login string,
-) (*getUserResponse, error) {
+) (data_ *getUserResponse, err_ error) {
 	req_ := &graphql.Request{
 		OpName: "getUser",
 		Query:  getUser_Operation,
@@ -92,10 +92,9 @@ func getUser(
 			Login: Login,
 		},
 	}
-	var err_ error
 
-	var data_ getUserResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &getUserResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		ctx_,
@@ -103,10 +102,10 @@ func getUser(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 
-// The query or mutation executed by getViewer.
+// The query executed by getViewer.
 const getViewer_Operation = `
 query getViewer {
 	viewer {
@@ -119,15 +118,14 @@ query getViewer {
 func getViewer(
 	ctx_ context.Context,
 	client_ graphql.Client,
-) (*getViewerResponse, error) {
+) (data_ *getViewerResponse, err_ error) {
 	req_ := &graphql.Request{
 		OpName: "getViewer",
 		Query:  getViewer_Operation,
 	}
-	var err_ error
 
-	var data_ getViewerResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &getViewerResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		ctx_,
@@ -135,5 +133,5 @@ func getViewer(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }

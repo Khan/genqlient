@@ -1,0 +1,9 @@
+{
+  "operations": [
+    {
+      "operationName": "SimpleSubscription",
+      "query": "\nsubscription SimpleSubscription {\n\tcount\n}\n",
+      "sourceLocation": "testdata/queries/SimpleSubscription.graphql"
+    }
+  ]
+}
