@@ -625,9 +625,9 @@ func (v *__OmitEmptyQueryInput) __premarshalJSON() (*__premarshal__OmitEmptyQuer
 
 // __PointersQueryInput is used internally by genqlient
 type __PointersQueryInput struct {
-	Query *UserQueryInput `json:"query"`
+	Query *UserQueryInput `json:"query,omitempty"`
 	Dt    time.Time       `json:"-"`
-	Tz    *string         `json:"tz"`
+	Tz    *string         `json:"tz,omitempty"`
 }
 
 // GetQuery returns __PointersQueryInput.Query, and is useful for accessing the field via an interface.
@@ -673,11 +673,11 @@ func (v *__PointersQueryInput) UnmarshalJSON(b []byte) error {
 }
 
 type __premarshal__PointersQueryInput struct {
-	Query *UserQueryInput `json:"query"`
+	Query *UserQueryInput `json:"query,omitempty"`
 
 	Dt json.RawMessage `json:"dt"`
 
-	Tz *string `json:"tz"`
+	Tz *string `json:"tz,omitempty"`
 }
 
 func (v *__PointersQueryInput) MarshalJSON() ([]byte, error) {
