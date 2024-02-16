@@ -12,11 +12,11 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        go: [ '1.18', '1.19', '1.20' ]
+        go: [ '1.18', '1.19', '1.20', '1.21' ]
 
     steps:
     - name: Set up Go
-      uses: actions/setup-go@v1
+      uses: actions/setup-go@v4
       with:
         go-version: ${{ matrix.go }}
       id: go
@@ -36,10 +36,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.22'
+      id: go
+
     - name: Git checkout
       uses: actions/checkout@v2
 
     - name: Run lint
-      uses: golangci/golangci-lint-action@v2
+      uses: golangci/golangci-lint-action@v3
       with:
-        version: v1.52.2   # should match internal/lint/go.mod
+        version: v1.56.1   # should match internal/lint/go.mod
