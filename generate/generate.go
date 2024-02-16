@@ -279,7 +279,7 @@ func (g *generator) addOperation(op *ast.OperationDefinition) error {
 	}
 
 	var docComment string
-	if len(commentLines) > 0 {
+	if commentLines != "" {
 		docComment = "// " + strings.ReplaceAll(commentLines, "\n", "\n// ")
 	}
 
