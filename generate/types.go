@@ -522,17 +522,6 @@ func (typ *goInterfaceType) WriteDefinition(w io.Writer, g *generator) error {
 	for _, impl := range typ.Implementations {
 		fmt.Fprintf(w, "func (v *%s) %s() {}\n",
 			impl.Reference(), implementsMethodName)
-
-		// implement nested interface union type
-		for _, sharedField := range typ.SharedFields {
-			if sharedField.IsAbstract() {
-				// embedded type
-				if sharedField.GoName == "" {
-					fmt.Fprintf(w, "func (v *%s) %s() {}\n",
-						impl.Reference(), fmt.Sprintf("implementsGraphQLInterface%s", sharedField.GoType.Reference()))
-				}
-			}
-		}
 	}
 
 	// Finally, write the marshal- and unmarshal-helpers, which

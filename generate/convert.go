@@ -701,6 +701,17 @@ func fragmentMatches(containingTypedef, fragmentTypedef *ast.Definition) bool {
 			return true
 		}
 	}
+
+	// Handle the special case where the fragment is on a union, then the
+	// fragment can match any of the types in the union.
+	if fragmentTypedef.Kind == ast.Union {
+		for _, typeName := range fragmentTypedef.Types {
+			if typeName == containingTypedef.Name {
+				return true
+			}
+		}
+	}
+
 	return false
 }
 

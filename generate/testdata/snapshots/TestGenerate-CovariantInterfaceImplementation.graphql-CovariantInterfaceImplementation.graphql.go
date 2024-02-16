@@ -1089,15 +1089,9 @@ type CovariantInterfaceImplementationRandomItemContentNextContent interface {
 
 func (v *CovariantInterfaceImplementationRandomItemContentNextArticle) implementsGraphQLInterfaceCovariantInterfaceImplementationRandomItemContentNextContent() {
 }
-func (v *CovariantInterfaceImplementationRandomItemContentNextArticle) implementsGraphQLInterfaceContentFields() {
-}
 func (v *CovariantInterfaceImplementationRandomItemContentNextTopic) implementsGraphQLInterfaceCovariantInterfaceImplementationRandomItemContentNextContent() {
 }
-func (v *CovariantInterfaceImplementationRandomItemContentNextTopic) implementsGraphQLInterfaceContentFields() {
-}
 func (v *CovariantInterfaceImplementationRandomItemContentNextVideo) implementsGraphQLInterfaceCovariantInterfaceImplementationRandomItemContentNextContent() {
-}
-func (v *CovariantInterfaceImplementationRandomItemContentNextVideo) implementsGraphQLInterfaceContentFields() {
 }
 
 func __unmarshalCovariantInterfaceImplementationRandomItemContentNextContent(b []byte, v *CovariantInterfaceImplementationRandomItemContentNextContent) error {
@@ -1495,15 +1489,9 @@ type CovariantInterfaceImplementationRandomItemContentRelatedContent interface {
 
 func (v *CovariantInterfaceImplementationRandomItemContentRelatedArticle) implementsGraphQLInterfaceCovariantInterfaceImplementationRandomItemContentRelatedContent() {
 }
-func (v *CovariantInterfaceImplementationRandomItemContentRelatedArticle) implementsGraphQLInterfaceContentFields() {
-}
 func (v *CovariantInterfaceImplementationRandomItemContentRelatedTopic) implementsGraphQLInterfaceCovariantInterfaceImplementationRandomItemContentRelatedContent() {
 }
-func (v *CovariantInterfaceImplementationRandomItemContentRelatedTopic) implementsGraphQLInterfaceContentFields() {
-}
 func (v *CovariantInterfaceImplementationRandomItemContentRelatedVideo) implementsGraphQLInterfaceCovariantInterfaceImplementationRandomItemContentRelatedContent() {
-}
-func (v *CovariantInterfaceImplementationRandomItemContentRelatedVideo) implementsGraphQLInterfaceContentFields() {
 }
 
 func __unmarshalCovariantInterfaceImplementationRandomItemContentRelatedContent(b []byte, v *CovariantInterfaceImplementationRandomItemContentRelatedContent) error {
