@@ -220,19 +220,21 @@ func (c *Config) ValidateAndFillDefaults(baseDir string) error {
 		if c.Package == pkgName || c.Package == "" {
 			c.Package = pkgName
 		} else {
-			fmt.Printf("warning: package setting in genqlient.yaml '%v' looks wrong "+
+			warn(errorf(nil, "warning: package setting in genqlient.yaml '%v' looks wrong "+
 				"('%v' is in package '%v') but proceeding with '%v' anyway\n",
-				c.Package, c.Generated, pkgName, c.Package)
+				c.Package, c.Generated, pkgName, c.Package))
 		}
 	} else if c.Package != "" {
 		// If you specified a valid package, at least try to use that.
 		// But we can't set pkgPath, which means you'll run into trouble
 		// binding against the generated package, so at least warn.
-		fmt.Printf("warning: unable to identify current package-path (using 'package' config '%v'): %v\n", c.Package, err)
+		warn(errorf(nil, "warning: unable to identify current package-path "+
+			"(using 'package' config '%v'): %v\n", c.Package, err))
 	} else if pkgName != "" {
 		// If the directory-name is valid, use that. This is useful if you
 		// somehow can't build, and especially for tests.
-		fmt.Printf("warning: unable to identify current package-path (using directory name '%v': %v\n", pkgName, err)
+		warn(errorf(nil, "warning: unable to identify current package-path "+
+			"(using directory name '%v': %v\n", pkgName, err))
 		c.Package = pkgName
 	} else {
 		return errorf(nil, "unable to guess package-name: %v"+

@@ -14,6 +14,11 @@ import (
 	"github.com/alexflint/go-arg"
 )
 
+// TODO(benkraft): Make this mockable for tests?
+func warn(err error) {
+	fmt.Println(err)
+}
+
 func readConfigGenerateAndWrite(configFilename string) error {
 	var config *Config
 	var err error
