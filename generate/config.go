@@ -47,6 +47,8 @@ type Config struct {
 	// The directory of the config-file (relative to which all the other paths
 	// are resolved).  Set by ValidateAndFillDefaults.
 	baseDir string
+	// The package-path into which we are generating.
+	pkgPath string
 }
 
 // A TypeBinding represents a Go type to which genqlient will bind a particular
@@ -132,6 +134,46 @@ func pathJoin(a, b string) string {
 	return filepath.Join(a, b)
 }
 
+func (c *Config) getPackageNameAndPath() (pkgName, pkgPath string, err error) {
+	abs, err := filepath.Abs(c.Generated)
+	if err != nil {
+		return "", "", err
+	}
+
+	dir := filepath.Dir(abs)
+	pkgNameGuess := filepath.Base(dir)
+	if !token.IsIdentifier(pkgNameGuess) {
+		pkgNameGuess = ""
+	}
+
+	pkgs, err := packages.Load(&packages.Config{Mode: packages.NeedName}, dir)
+	if err != nil {
+		return pkgNameGuess, "", err
+	} else if len(pkgs) != 1 {
+		return pkgNameGuess, "", fmt.Errorf("found %v packages in %v, expected 1", len(pkgs), dir)
+	}
+
+	pkg := pkgs[0]
+	// TODO(benkraft): Can PkgPath ever be empty without error? If so, we could
+	// warn.
+	if pkg.Name != "" {
+		return pkg.Name, pkg.PkgPath, nil
+	}
+
+	// e.g. empty package yet to be created, see if we can just guess a
+	// reasonable name.
+	pathSuffix := filepath.Base(pkg.PkgPath)
+	if token.IsIdentifier(pathSuffix) {
+		pkgNameGuess = pathSuffix
+	}
+
+	if pkgNameGuess != "" {
+		return pkgNameGuess, pkg.PkgPath, nil
+	} else {
+		return "", "", fmt.Errorf("no package found in %v", dir)
+	}
+}
+
 // ValidateAndFillDefaults ensures that the configuration is valid, and fills
 // in any options that were unspecified.
 //
@@ -167,29 +209,40 @@ func (c *Config) ValidateAndFillDefaults(baseDir string) error {
 			"\nExample: \"github.com/Org/Repo/optional.Value\"")
 	}
 
-	if c.Package != "" {
-		if !token.IsIdentifier(c.Package) {
-			// No need for link here -- if you're already setting the package
-			// you know where to set the package.
-			return errorf(nil, "invalid package in genqlient.yaml: '%v' is not a valid identifier", c.Package)
-		}
-	} else {
-		abs, err := filepath.Abs(c.Generated)
-		if err != nil {
-			return errorf(nil, "unable to guess package-name: %v"+
-				"\nSet package name in genqlient.yaml"+
-				"\nExample: https://github.com/Khan/genqlient/blob/main/example/genqlient.yaml#L6", err)
-		}
-
-		base := filepath.Base(filepath.Dir(abs))
-		if !token.IsIdentifier(base) {
-			return errorf(nil, "unable to guess package-name: '%v' is not a valid identifier"+
-				"\nSet package name in genqlient.yaml"+
-				"\nExample: https://github.com/Khan/genqlient/blob/main/example/genqlient.yaml#L6", base)
-		}
-
-		c.Package = base
+	if c.Package != "" && !token.IsIdentifier(c.Package) {
+		// No need for link here -- if you're already setting the package
+		// you know where to set the package.
+		return errorf(nil, "invalid package in genqlient.yaml: '%v' is not a valid identifier", c.Package)
 	}
+
+	pkgName, pkgPath, err := c.getPackageNameAndPath()
+	if err == nil {
+		if c.Package == pkgName || c.Package == "" {
+			c.Package = pkgName
+		} else {
+			fmt.Printf("warning: package setting in genqlient.yaml '%v' looks wrong "+
+				"('%v' is in package '%v') but proceeding with '%v' anyway\n",
+				c.Package, c.Generated, pkgName, c.Package)
+		}
+	} else if c.Package != "" {
+		// If you specified a valid package, at least try to use that.
+		// But we can't set pkgPath, which means you'll run into trouble
+		// binding against the generated package, so at least warn.
+		fmt.Printf("warning: unable to identify current package-path (using 'package' config '%v'): %v\n", c.Package, err)
+	} else if pkgName != "" {
+		// If the directory-name is valid, use that. This is useful if you
+		// somehow can't build, and especially for tests.
+		fmt.Printf("warning: unable to identify current package-path (using directory name '%v': %v\n", pkgName, err)
+		c.Package = pkgName
+	} else {
+		return errorf(nil, "unable to guess package-name: %v"+
+			"\nSet package name in genqlient.yaml"+
+			"\nExample: https://github.com/Khan/genqlient/blob/main/example/genqlient.yaml#L6", err)
+	}
+	// This is not likely to work if we got an error, especially if we did the
+	// c.Package fallback. But it's more likely to work than nothing, so we may
+	// as well.
+	c.pkgPath = pkgPath
 
 	if len(c.PackageBindings) > 0 {
 		for _, binding := range c.PackageBindings {

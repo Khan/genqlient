@@ -29,8 +29,12 @@ operations:
 # genqlient.yaml. Default: generated.go.
 generated: generated/genqlient.go
 
-# The package name for the output code; defaults to the directory name of
-# the generated-code file.
+# The package name for the output code; defaults to the package-name
+# corresponding to the setting of `generated`, above.
+#
+# This is rarely needed: only if you want the package-name to differ from the
+# suffix of the package-path, and there are no other Go files in the package
+# already.
 package: mygenerated
 
 # If set, a file at this path (relative to genqlient.yaml) will be generated

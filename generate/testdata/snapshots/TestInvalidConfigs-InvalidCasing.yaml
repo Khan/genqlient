@@ -1,1 +1,1 @@
-invalid config file testdata/invalid-config/InvalidCasing.yaml: unknown casing algorithm: bogus
+invalid config file testdata/invalidConfig/InvalidCasing.yaml: unknown casing algorithm: bogus
