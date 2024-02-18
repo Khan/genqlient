@@ -256,6 +256,11 @@ func (c *Config) ValidateAndFillDefaults(baseDir string) error {
 					binding.Package)
 			}
 
+			if binding.Package == c.pkgPath {
+				warn(errorf(nil, "warning: binding to the same package as your generated "+
+					"code ('%v'); this will probably cause circularity issues", c.pkgPath))
+			}
+
 			mode := packages.NeedDeps | packages.NeedTypes
 			pkgs, err := packages.Load(&packages.Config{
 				Mode: mode,

@@ -143,6 +143,9 @@ optional_generic_type: github.com/organisation/repository/example.Type
 # guarantees that the fields requested in the query match those present in
 # the Go type.
 #
+# Note: if binding to types in the same package as the generated code, make
+# sure you don't bind to generated types! Otherwise, things get very circular.
+#
 # To get equivalent behavior in just one query, use @genqlient(bind: ...);
 # see genqlient_directive.graphql for more details.
 bindings:
@@ -228,6 +231,9 @@ bindings:
 # to the bindings map, above, for each exported type in the package.  Multiple
 # packages may be specified, and later ones take precedence over earlier ones.
 # Explicit entries in bindings take precedence over all package bindings.
+#
+# Note: make sure this isn't the package with your generated code, or things
+# will get circular very fast.
 package_bindings:
 - package: github.com/you/yourpkg/models
 
