@@ -20,9 +20,11 @@ When releasing a new version:
 
 <!-- Add new changes in this section! -->
 
-Note that genqlient is now tested through Go 1.22.
+Note that genqlient is now tested from Go 1.20 through Go 1.22.
 
 ### Breaking changes:
+
+- genqlient now requires Go 1.20 or higher. It may still work with earlier versions, but we aren't explicitly keeping dependency modules to Go 1.18 and lower.
 
 ### New features:
 
