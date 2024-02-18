@@ -20,6 +20,8 @@ When releasing a new version:
 
 <!-- Add new changes in this section! -->
 
+Note that genqlient is now tested through Go 1.22.
+
 ### Breaking changes:
 
 ### New features:
