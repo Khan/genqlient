@@ -1454,3 +1454,4 @@ func ComplexInlineFragments(
 
 	return &data_, err_
 }
+
