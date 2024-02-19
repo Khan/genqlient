@@ -134,34 +134,40 @@ func pathJoin(a, b string) string {
 	return filepath.Join(a, b)
 }
 
-func (c *Config) getPackageNameAndPath() (pkgName, pkgPath string, err error) {
-	abs, err := filepath.Abs(c.Generated)
-	if err != nil {
+// Try to figure out the package-name and package-path of the given .go file.
+//
+// Returns a best-guess pkgName if possible, even on error.
+func getPackageNameAndPath(filename string) (pkgName, pkgPath string, err error) {
+	abs, err := filepath.Abs(filename)
+	if err != nil { // path is totally bogus
 		return "", "", err
 	}
 
 	dir := filepath.Dir(abs)
+	// If we don't get a clean answer from go/packages, we'll use the
+	// directory-name as a backup guess, as long as it's a valid identifier.
 	pkgNameGuess := filepath.Base(dir)
 	if !token.IsIdentifier(pkgNameGuess) {
 		pkgNameGuess = ""
 	}
 
 	pkgs, err := packages.Load(&packages.Config{Mode: packages.NeedName}, dir)
-	if err != nil {
+	if err != nil { // e.g. not in a Go module
 		return pkgNameGuess, "", err
-	} else if len(pkgs) != 1 {
+	} else if len(pkgs) != 1 { // probably never happens?
 		return pkgNameGuess, "", fmt.Errorf("found %v packages in %v, expected 1", len(pkgs), dir)
 	}
 
 	pkg := pkgs[0]
-	// TODO(benkraft): Can PkgPath ever be empty without error? If so, we could
-	// warn.
-	if pkg.Name != "" {
+	// TODO(benkraft): Can PkgPath ever be empty while in a module? If so, we
+	// could warn.
+	if pkg.Name != "" { // found a good package!
 		return pkg.Name, pkg.PkgPath, nil
 	}
 
-	// e.g. empty package yet to be created, see if we can just guess a
-	// reasonable name.
+	// Package path is valid, but name is empty: probably an empty package
+	// (within a valid module). If the package-path-suffix is a valid
+	// identifier, that's a better guess than the directory-suffix, so use it.
 	pathSuffix := filepath.Base(pkg.PkgPath)
 	if token.IsIdentifier(pathSuffix) {
 		pkgNameGuess = pathSuffix
@@ -215,8 +221,24 @@ func (c *Config) ValidateAndFillDefaults(baseDir string) error {
 		return errorf(nil, "invalid package in genqlient.yaml: '%v' is not a valid identifier", c.Package)
 	}
 
-	pkgName, pkgPath, err := c.getPackageNameAndPath()
-	if err == nil {
+	pkgName, pkgPath, err := getPackageNameAndPath(c.Generated)
+	if err != nil {
+		// Try to guess a name anyway (or use one you specified) -- pkgPath
+		// isn't always needed. (But you'll run into trouble binding against
+		// the generated package, so at least warn.)
+		if c.Package != "" {
+			warn(errorf(nil, "warning: unable to identify current package-path "+
+				"(using 'package' config '%v'): %v\n", c.Package, err))
+		} else if pkgName != "" {
+			warn(errorf(nil, "warning: unable to identify current package-path "+
+				"(using directory name '%v': %v\n", pkgName, err))
+			c.Package = pkgName
+		} else {
+			return errorf(nil, "unable to guess package-name: %v"+
+				"\nSet package name in genqlient.yaml"+
+				"\nExample: https://github.com/Khan/genqlient/blob/main/example/genqlient.yaml#L6", err)
+		}
+	} else { // err == nil
 		if c.Package == pkgName || c.Package == "" {
 			c.Package = pkgName
 		} else {
@@ -224,26 +246,8 @@ func (c *Config) ValidateAndFillDefaults(baseDir string) error {
 				"('%v' is in package '%v') but proceeding with '%v' anyway\n",
 				c.Package, c.Generated, pkgName, c.Package))
 		}
-	} else if c.Package != "" {
-		// If you specified a valid package, at least try to use that.
-		// But we can't set pkgPath, which means you'll run into trouble
-		// binding against the generated package, so at least warn.
-		warn(errorf(nil, "warning: unable to identify current package-path "+
-			"(using 'package' config '%v'): %v\n", c.Package, err))
-	} else if pkgName != "" {
-		// If the directory-name is valid, use that. This is useful if you
-		// somehow can't build, and especially for tests.
-		warn(errorf(nil, "warning: unable to identify current package-path "+
-			"(using directory name '%v': %v\n", pkgName, err))
-		c.Package = pkgName
-	} else {
-		return errorf(nil, "unable to guess package-name: %v"+
-			"\nSet package name in genqlient.yaml"+
-			"\nExample: https://github.com/Khan/genqlient/blob/main/example/genqlient.yaml#L6", err)
 	}
-	// This is not likely to work if we got an error, especially if we did the
-	// c.Package fallback. But it's more likely to work than nothing, so we may
-	// as well.
+	// This is a no-op in some of the error cases, but it still doesn't hurt.
 	c.pkgPath = pkgPath
 
 	if len(c.PackageBindings) > 0 {
@@ -258,7 +262,7 @@ func (c *Config) ValidateAndFillDefaults(baseDir string) error {
 
 			if binding.Package == c.pkgPath {
 				warn(errorf(nil, "warning: package_bindings set to the same package as your generated "+
-					"code ('%v'); this will probably cause circularity issues", c.pkgPath))
+					"code ('%v'); this may cause nondeterministic output due to circularity", c.pkgPath))
 			}
 
 			mode := packages.NeedDeps | packages.NeedTypes
