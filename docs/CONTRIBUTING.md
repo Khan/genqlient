@@ -22,9 +22,9 @@ Pull requests should have:
 - documentation, for new features
 - changelog entries
 
-Pull requests will be squash-merged, so subsequent commit messages may be brief (e.g. "review comments").
+The PR description template will remind you of these. Pull requests will be squash-merged, so subsequent commit messages may be brief (e.g. "review comments").
 
-Large changes should typically be discussed on the issue tracker first, and should ideally be broken up into separate PRs, or failing that, several commits, for ease of reviewing.
+Large changes should typically be discussed on the issue tracker first, and should ideally be broken up into separate PRs, or failing that, several commits, for ease of reviewing. This is especially true of breaking changes; see the [versioning policy](versioning.md) for what we consider breaking.
 
 ## Style
 
@@ -44,11 +44,11 @@ If you update any code-generation logic or templates, even if no new tests are n
 
 ## Finding your way around
 
-If you're new to genqlient, start out by reading the source of `generate.Generate`, whose comments describe most of the high-level operation of genqlient.  In general, the code is documented inline, often with an introductory comment at the top of the file.  See [DESIGN.md](DESIGN.md) for documentation of major design decisions, which is a good way to get a sense of why genqlient is structured the way it is.
+If you're new to genqlient, start out by reading the source of `generate.Generate`, whose comments describe most of the high-level operation of genqlient.  In general, the code is documented inline, often with an introductory comment at the top of the file.  See the [design note](design.md) for documentation of major design decisions, which is a good way to get a sense of why genqlient is structured the way it is.
 
 ## Making a release
 
-We try to cut releases periodically. To make a release:
+See the [versioning strategy](versioning.md) for when to make a release. To make a release:
 
 - Scan PRs since the last release to check we didn't miss anything in the changelog.
 - Check if there are any regressions or major problems with new features we want to fix before cutting the release.
