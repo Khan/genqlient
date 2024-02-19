@@ -1,1 +1,1 @@
-invalid config file testdata/invalid-config/InvalidOptional.yaml: optional must be one of: 'value' (default), 'pointer', or 'generic'
+invalid config file testdata/invalidConfig/InvalidOptional.yaml: optional must be one of: 'value' (default), 'pointer', or 'generic'

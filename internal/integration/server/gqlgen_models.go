@@ -50,6 +50,7 @@ type User struct {
 	Hair        *Hair   `json:"hair,omitempty"`
 	Birthdate   *string `json:"birthdate,omitempty"`
 	Friends     []*User `json:"friends"`
+	GreatScalar *string `json:"greatScalar,omitempty"`
 }
 
 func (User) IsBeing()             {}

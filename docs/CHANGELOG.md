@@ -31,11 +31,13 @@ Note that genqlient is now tested from Go 1.20 through Go 1.22.
 - The new `optional: generic` allows using a generic type to represent optionality. See the [documentation](genqlient.yaml) for details.
 - For schemas with enum values that differ only in casing, it's now possible to disable smart-casing in genqlient.yaml; see the [documentation](genqlient.yaml) for `casing` for details.
 - Support .graphqls and .gql file extensions
+- More accurately guess the package name for generated code (and warn if the config option -- now almost never needed -- looks wrong).
 
 ### Bug fixes:
 - The presence of negative pointer directives, i.e., `# @genqlient(pointer: false)` are now respected even in the when `optional: pointer` is set in the configuration file.
 - Made name collisions between query/mutation arguments and local function variables less likely.
 - Fix generation issue related to golang type implementation of complex graphql union fragments
+- Bind correctly to types in the same package as the generated code.
 
 ## v0.6.0
 

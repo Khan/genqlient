@@ -3056,9 +3056,10 @@ func (v *simpleQueryExtResponse) GetMe() simpleQueryExtMeUser { return v.Me }
 
 // simpleQueryMeUser includes the requested fields of the GraphQL type User.
 type simpleQueryMeUser struct {
-	Id          string `json:"id"`
-	Name        string `json:"name"`
-	LuckyNumber int    `json:"luckyNumber"`
+	Id          string        `json:"id"`
+	Name        string        `json:"name"`
+	LuckyNumber int           `json:"luckyNumber"`
+	GreatScalar MyGreatScalar `json:"greatScalar"`
 }
 
 // GetId returns simpleQueryMeUser.Id, and is useful for accessing the field via an interface.
@@ -3069,6 +3070,9 @@ func (v *simpleQueryMeUser) GetName() string { return v.Name }
 
 // GetLuckyNumber returns simpleQueryMeUser.LuckyNumber, and is useful for accessing the field via an interface.
 func (v *simpleQueryMeUser) GetLuckyNumber() int { return v.LuckyNumber }
+
+// GetGreatScalar returns simpleQueryMeUser.GreatScalar, and is useful for accessing the field via an interface.
+func (v *simpleQueryMeUser) GetGreatScalar() MyGreatScalar { return v.GreatScalar }
 
 // simpleQueryResponse is returned by simpleQuery on success.
 type simpleQueryResponse struct {
@@ -3656,6 +3660,7 @@ query simpleQuery {
 		id
 		name
 		luckyNumber
+		greatScalar
 	}
 }
 `

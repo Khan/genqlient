@@ -20,7 +20,7 @@ import (
 
 func TestSimpleQuery(t *testing.T) {
 	_ = `# @genqlient
-	query simpleQuery { me { id name luckyNumber } }`
+	query simpleQuery { me { id name luckyNumber greatScalar } }`
 
 	ctx := context.Background()
 	server := server.RunServer()
