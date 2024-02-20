@@ -107,6 +107,7 @@ func TestVariables(t *testing.T) {
 	// worry about it.
 	clients := []graphql.Client{
 		graphql.NewClient(server.URL, http.DefaultClient),
+		graphql.NewClient(server.URL, http.DefaultClient, graphql.WithOperationNameParam),
 		graphql.NewClientUsingGet(server.URL, http.DefaultClient),
 	}
 

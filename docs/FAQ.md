@@ -36,6 +36,19 @@ The URL requested will be:
 
 The client does not support mutations, and will return an error if passed a request that attempts one.
 
+###  … include operationName as a query parameter?
+
+`graphql.NewClient` support the option `graphql.WithOperationNameParam`, which will add `?operationName=...` to the request's query parameters.
+
+```go
+ctx := context.Background()
+client := graphql.NewClient("https://api.github.com/graphql", http.DefaultClient, graphql.WithOperationNameParam)
+resp, err := getUser(ctx, client, "benjaminjkraft")
+fmt.Println(resp.User.Name, err)
+```
+
+
+
 ### … use an API that requires authentication?
 
 When you call `graphql.NewClient`, pass in an HTTP client that adds whatever authentication headers you need (typically by wrapping the client's `Transport`).  For example:

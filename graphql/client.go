@@ -41,9 +41,15 @@ type Client interface {
 }
 
 type client struct {
-	httpClient Doer
-	endpoint   string
-	method     string
+	httpClient             Doer
+	endpoint               string
+	method                 string
+	withOperationNameParam bool
+}
+
+// WithOperationNameParam allows operationName to be included as a query parameter.
+func WithOperationNameParam(c *client) {
+	c.withOperationNameParam = true
 }
 
 // NewClient returns a [Client] which makes requests to the given endpoint,
@@ -58,8 +64,8 @@ type client struct {
 // example.
 //
 // [example/main.go]: https://github.com/Khan/genqlient/blob/main/example/main.go#L12-L20
-func NewClient(endpoint string, httpClient Doer) Client {
-	return newClient(endpoint, httpClient, http.MethodPost)
+func NewClient(endpoint string, httpClient Doer, options ...func(*client)) Client {
+	return newClient(endpoint, httpClient, http.MethodPost, options...)
 }
 
 // NewClientUsingGet returns a [Client] which makes GET requests to the given
@@ -83,11 +89,19 @@ func NewClientUsingGet(endpoint string, httpClient Doer) Client {
 	return newClient(endpoint, httpClient, http.MethodGet)
 }
 
-func newClient(endpoint string, httpClient Doer, method string) Client {
+func newClient(endpoint string, httpClient Doer, method string, options ...func(*client)) Client {
 	if httpClient == nil || httpClient == (*http.Client)(nil) {
 		httpClient = http.DefaultClient
 	}
-	return &client{httpClient, endpoint, method}
+	c := &client{
+		httpClient: httpClient,
+		endpoint:   endpoint,
+		method:     method,
+	}
+	for _, opt := range options {
+		opt(c)
+	}
+	return c
 }
 
 // Doer encapsulates the methods from [*http.Client] needed by [Client].
@@ -178,6 +192,23 @@ func (c *client) MakeRequest(ctx context.Context, req *Request, resp *Response) 
 }
 
 func (c *client) createPostRequest(req *Request) (*http.Request, error) {
+	parsedURL, err := url.Parse(c.endpoint)
+	if err != nil {
+		return nil, err
+	}
+
+	queryParams := parsedURL.Query()
+	queryUpdated := false
+
+	if c.withOperationNameParam && req.OpName != "" {
+		queryParams.Set("operationName", req.OpName)
+		queryUpdated = true
+	}
+
+	if queryUpdated {
+		parsedURL.RawQuery = queryParams.Encode()
+	}
+
 	body, err := json.Marshal(req)
 	if err != nil {
 		return nil, err
@@ -185,7 +216,7 @@ func (c *client) createPostRequest(req *Request) (*http.Request, error) {
 
 	httpReq, err := http.NewRequest(
 		c.method,
-		c.endpoint,
+		parsedURL.String(),
 		bytes.NewReader(body))
 	if err != nil {
 		return nil, err
