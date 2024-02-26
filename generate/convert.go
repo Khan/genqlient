@@ -841,6 +841,8 @@ func (g *generator) convertNamedFragment(fragment *ast.FragmentDefinition) (goTy
 		return goType, nil
 	case ast.Interface, ast.Union:
 		implementationTypes := g.schema.GetPossibleTypes(typ)
+		// Make sure we generate stable output by sorting the types by name when we get them
+		sort.Slice(implementationTypes, func(i, j int) bool { return implementationTypes[i].Name < implementationTypes[j].Name })
 		goType := &goInterfaceType{
 			GoName:          fragment.Name,
 			SharedFields:    fields,

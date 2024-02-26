@@ -36,8 +36,9 @@ Note that genqlient is now tested from Go 1.20 through Go 1.22.
 ### Bug fixes:
 - The presence of negative pointer directives, i.e., `# @genqlient(pointer: false)` are now respected even in the when `optional: pointer` is set in the configuration file.
 - Made name collisions between query/mutation arguments and local function variables less likely.
-- Fix generation issue related to golang type implementation of complex graphql union fragments
+- Fix generation issue related to golang type implementation of complex graphql union fragments.
 - Bind correctly to types in the same package as the generated code.
+- Fix non-deterministic generated code when querying graphql interfaces via named fragments.
 
 ## v0.6.0
 

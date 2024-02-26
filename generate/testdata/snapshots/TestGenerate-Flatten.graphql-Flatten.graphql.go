@@ -30,8 +30,8 @@ func (v *ChildVideoFields) GetName() string { return v.Name }
 //
 // ContentFields is implemented by the following types:
 // ContentFieldsArticle
-// ContentFieldsVideo
 // ContentFieldsTopic
+// ContentFieldsVideo
 type ContentFields interface {
 	implementsGraphQLInterfaceContentFields()
 	// GetName returns the interface-field "name" from its implementation.
@@ -41,8 +41,8 @@ type ContentFields interface {
 }
 
 func (v *ContentFieldsArticle) implementsGraphQLInterfaceContentFields() {}
-func (v *ContentFieldsVideo) implementsGraphQLInterfaceContentFields()   {}
 func (v *ContentFieldsTopic) implementsGraphQLInterfaceContentFields()   {}
+func (v *ContentFieldsVideo) implementsGraphQLInterfaceContentFields()   {}
 
 func __unmarshalContentFields(b []byte, v *ContentFields) error {
 	if string(b) == "null" {
@@ -61,11 +61,11 @@ func __unmarshalContentFields(b []byte, v *ContentFields) error {
 	case "Article":
 		*v = new(ContentFieldsArticle)
 		return json.Unmarshal(b, *v)
-	case "Video":
-		*v = new(ContentFieldsVideo)
-		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(ContentFieldsTopic)
+		return json.Unmarshal(b, *v)
+	case "Video":
+		*v = new(ContentFieldsVideo)
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
@@ -88,20 +88,20 @@ func __marshalContentFields(v *ContentFields) ([]byte, error) {
 			*ContentFieldsArticle
 		}{typename, v}
 		return json.Marshal(result)
-	case *ContentFieldsVideo:
-		typename = "Video"
-
-		result := struct {
-			TypeName string `json:"__typename"`
-			*ContentFieldsVideo
-		}{typename, v}
-		return json.Marshal(result)
 	case *ContentFieldsTopic:
 		typename = "Topic"
 
 		result := struct {
 			TypeName string `json:"__typename"`
 			*ContentFieldsTopic
+		}{typename, v}
+		return json.Marshal(result)
+	case *ContentFieldsVideo:
+		typename = "Video"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*ContentFieldsVideo
 		}{typename, v}
 		return json.Marshal(result)
 	case nil:
