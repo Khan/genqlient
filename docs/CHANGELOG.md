@@ -20,21 +20,25 @@ When releasing a new version:
 
 <!-- Add new changes in this section! -->
 
-Note that genqlient is now tested from Go 1.20 through Go 1.22.
-
 ### Breaking changes:
 
-- genqlient now requires Go 1.20 or higher. It may still work with earlier versions, but we aren't explicitly keeping dependency modules to Go 1.18 and lower.
+### New features:
+
+### Bug fixes:
+
+## v0.7.0
+
+In addition to several new features and bugfixes, along with this release comes reorganized [documentation](.) for genqlient. Note that genqlient now requires Go 1.20 or higher, and is tested through Go 1.22.
 
 ### New features:
 
 - The new `optional: generic` allows using a generic type to represent optionality. See the [documentation](genqlient.yaml) for details.
 - For schemas with enum values that differ only in casing, it's now possible to disable smart-casing in genqlient.yaml; see the [documentation](genqlient.yaml) for `casing` for details.
-- Support .graphqls and .gql file extensions
+- genqlient now supports .graphqls and .gql file extensions for schemas and queries.
 - More accurately guess the package name for generated code (and warn if the config option -- now almost never needed -- looks wrong).
 
 ### Bug fixes:
-- The presence of negative pointer directives, i.e., `# @genqlient(pointer: false)` are now respected even in the when `optional: pointer` is set in the configuration file.
+- Negative pointer directives, i.e., `# @genqlient(pointer: false)` are now respected even in the when `optional: pointer` is set in the configuration file.
 - Made name collisions between query/mutation arguments and local function variables less likely.
 - Fix generation issue related to golang type implementation of complex graphql union fragments.
 - Bind correctly to types in the same package as the generated code.
@@ -43,10 +47,6 @@ Note that genqlient is now tested from Go 1.20 through Go 1.22.
 ## v0.6.0
 
 Version 0.6.0 includes some small features and bugfixes. Note that genqlient now requires Go 1.18 or higher, and is tested through Go 1.20.
-
-### Breaking changes:
-
-- genqlient now requires Go 1.18 or higher.
 
 ### New features:
 
@@ -66,7 +66,6 @@ Version 0.5.0 adds several new configuration options and convenience features. N
 
 ### Breaking changes:
 
-- genqlient now requires Go 1.16 or higher.
 - The [`graphql.Client`](https://pkg.go.dev/github.com/Khan/genqlient/graphql#Client) interface now accepts two structs for the request and response, to allow future expansion, rather than several individual arguments.  Clients implementing the interface themselves will need to change the signature; clients who simply call `graphql.NewClient` are unaffected.
 
 ### New features:
