@@ -1,6 +1,6 @@
 # Getting started with genqlient
 
-This document describes how to set up genqlient and use it for simple queries.  See also the full worked [example](../example), the [FAQ](FAQ.md), and the reference for [project-wide](genqlient.yaml) and [query-specific](genqlient_directive.graphql) configuration options.
+This document describes how to set up genqlient and use it for simple queries.  See also the full worked [example](../example), the [FAQ](faq.md), and the rest of the [documentation](docs).
 
 ## Step 1: Download your schema
 
@@ -61,6 +61,4 @@ resp, err := getUser(...)
 ```
 (You don't need to do anything with the constant, just keep it somewhere in the source as documentation and for the next time you run genqlient.)  In this case you'll need to update `genqlient.yaml` to tell it to look at your Go code.
 
-All the filenames above, and many other aspects of genqlient, are configurable; see [genqlient.yaml](genqlient.yaml) for the full range of options.  You can also configure how genqlient converts specific parts of your query with the [`@genqlient` directive](genqlient_directive.graphql).  See the [FAQ](FAQ.md) for common options.
-
-If you want to know even more, and help contribute to genqlient, see [DESIGN.md](DESIGN.md) and [CONTRIBUTING.md](CONTRIBUTING.md).  Happy querying!
+All the filenames above, and many other aspects of genqlient, are configurable; see the [full documentation](.) for usage guides, reference information, and documentation on how to contribute to genqlient.

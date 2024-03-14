@@ -222,7 +222,7 @@ directive genqlient(
   # request the exact same fields).  They must even have the fields in the
   # same order.  They should also have matching @genqlient directives, although
   # this is not currently validated (see issue #123).  Fragments are often
-  # easier to use (see the discussion of code-sharing in FAQ.md, and the
+  # easier to use (see the discussion of code-sharing in operations.md, and the
   # "flatten" option above).
   #
   # Note that unlike most directives, if applied to the entire operation,

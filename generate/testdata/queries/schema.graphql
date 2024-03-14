@@ -69,6 +69,8 @@ type User {
   pokemon: [Pokemon!]
   greeting: Clip
   birthdate: Date
+
+  lastContent: LeafContent
 }
 
 """An audio clip, such as of a user saying hello."""
@@ -141,6 +143,8 @@ type Topic implements Content {
   schoolGrade: String
   next: Topic
   related: [Topic!]
+
+  newestContent: LeafContent
 }
 
 input RecursiveInput {

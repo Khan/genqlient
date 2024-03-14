@@ -62,3 +62,9 @@ func RunGenerateTest(t *testing.T, relConfigFilename string) {
 		}
 	}
 }
+
+// Used for a binding in genqlient.yaml.
+//
+// This is here rather than in testutil to test the case where the generated
+// code and the bound type are in the same package.
+type MyGreatScalar string

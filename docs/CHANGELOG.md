@@ -24,21 +24,30 @@ When releasing a new version:
 
 ### New features:
 
+### Bug fixes:
+
+## v0.7.0
+
+In addition to several new features and bugfixes, along with this release comes reorganized [documentation](.) for genqlient. Note that genqlient now requires Go 1.20 or higher, and is tested through Go 1.22.
+
+### New features:
+
 - The new `optional: generic` allows using a generic type to represent optionality. See the [documentation](genqlient.yaml) for details.
 - The new `optional: pointer_omitempty` allows using a pointer that is also annotated with `omitempty`. See the [documentation](genqlient.yaml) for details.
 - For schemas with enum values that differ only in casing, it's now possible to disable smart-casing in genqlient.yaml; see the [documentation](genqlient.yaml) for `casing` for details.
+- genqlient now supports .graphqls and .gql file extensions for schemas and queries.
+- More accurately guess the package name for generated code (and warn if the config option -- now almost never needed -- looks wrong).
 
 ### Bug fixes:
-- The presence of negative pointer directives, i.e., `# @genqlient(pointer: false)` are now respected even in the when `optional: pointer` is set in the configuration file.
+- Negative pointer directives, i.e., `# @genqlient(pointer: false)` are now respected even in the when `optional: pointer` is set in the configuration file.
 - Made name collisions between query/mutation arguments and local function variables less likely.
+- Fix generation issue related to golang type implementation of complex graphql union fragments.
+- Bind correctly to types in the same package as the generated code.
+- Fix non-deterministic generated code when querying graphql interfaces via named fragments.
 
 ## v0.6.0
 
 Version 0.6.0 includes some small features and bugfixes. Note that genqlient now requires Go 1.18 or higher, and is tested through Go 1.20.
-
-### Breaking changes:
-
-- genqlient now requires Go 1.18 or higher.
 
 ### New features:
 
@@ -58,7 +67,6 @@ Version 0.5.0 adds several new configuration options and convenience features. N
 
 ### Breaking changes:
 
-- genqlient now requires Go 1.16 or higher.
 - The [`graphql.Client`](https://pkg.go.dev/github.com/Khan/genqlient/graphql#Client) interface now accepts two structs for the request and response, to allow future expansion, rather than several individual arguments.  Clients implementing the interface themselves will need to change the signature; clients who simply call `graphql.NewClient` are unaffected.
 
 ### New features:
@@ -106,9 +114,9 @@ Version 0.3.0 adds several new configuration options, allowing simplification of
 
 ### New features:
 
-- genqlient's types are now safe to JSON-marshal, which can be useful for putting them in a cache, for example.  See the [docs](FAQ.md#-let-me-json-marshal-my-response-objects) for details.
-- The new `flatten` option in the `# @genqlient` directive allows for a simpler form of type-sharing using fragment spreads.  See the [docs](FAQ.md#-shared-types-between-different-parts-of-the-query) for details.
-- The new `for` option in the `# @genqlient` directive allows applying options to a particular field anywhere it appears in the query.  This is especially useful for fields of input types, for which there is otherwise no way to specify options; see the [documentation on handling nullable fields](FAQ.md#-nullable-fields) for an example, and the [`# @genqlient` directive reference](genqlient_directive.graphql) for the full details.
+- genqlient's types are now safe to JSON-marshal, which can be useful for putting them in a cache, for example.  See the [docs](client_config.md#marshaling) for details.
+- The new `flatten` option in the `# @genqlient` directive allows for a simpler form of type-sharing using fragment spreads.  See the [docs](operations.md#sharing-types) for details.
+- The new `for` option in the `# @genqlient` directive allows applying options to a particular field anywhere it appears in the query.  This is especially useful for fields of input types, for which there is otherwise no way to specify options; see the [documentation on handling nullable fields](operations.md#nullable-fields) for an example, and the [`# @genqlient` directive reference](genqlient_directive.graphql) for the full details.
 
 ### Bug fixes:
 
