@@ -22,6 +22,10 @@ func getSchema(globs StringList) (*ast.Schema, error) {
 		return nil, err
 	}
 
+	if len(filenames) == 0 {
+		return nil, errorf(nil, "no schema files found in: %v", globs)
+	}
+
 	sources := make([]*ast.Source, len(filenames))
 	for i, filename := range filenames {
 		text, err := os.ReadFile(filename)
@@ -92,7 +96,7 @@ func expandFilenames(globs []string) ([]string, error) {
 			return nil, errorf(nil, "can't expand file-glob %v: %v", glob, err)
 		}
 		if len(matches) == 0 {
-			return nil, errorf(nil, "%v did not match any files", glob)
+			warn(errorf(nil, "%v did not match any files", glob))
 		}
 		for _, match := range matches {
 			uniqFilenames[match] = true
@@ -121,6 +125,10 @@ func getQueries(basedir string, globs StringList) (*ast.QueryDocument, error) {
 	filenames, err := expandFilenames(globs)
 	if err != nil {
 		return nil, err
+	}
+
+	if len(filenames) == 0 {
+		return nil, errorf(nil, "no query files found in: %v", globs)
 	}
 
 	for _, filename := range filenames {
