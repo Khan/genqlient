@@ -24,6 +24,8 @@ When releasing a new version:
 
 ### New features:
 
+- genqlient now supports double-star globs for schema and query files; see [`genqlient.yaml` docs](genqlient.yaml) for more.
+
 ### Bug fixes:
 
 ## v0.7.0

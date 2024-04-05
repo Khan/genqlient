@@ -6,11 +6,15 @@
 
 # The filename with the GraphQL schema (in SDL format), relative to
 # genqlient.yaml.
-# This can also be a list of filenames, such as:
+# This can also be a glob-pattern, or a list of filenames or globs, such as:
 #  schema:
 #  - user.graphql
 #  - ./schema/*.graphql
-#  - ./another_directory/*/*.graphql
+#  - ./*/*.graphql          # matches ./a/b.graphql, but not ./a/b/c.graphql
+#  - ./**/*.graphql         # matches ./a.graphql, ./a/b/c.graphql, etc.
+# The glob-pattern "**" is interpreted by github.com/bmatcuk/doublestar/v4, and
+# matches zero or more path components (so you want **/*.graphql, not
+# **.graphql). Each pattern must match at least one file, to avoid mistakes.
 schema: schema.graphql
 
 # Filename(s) or globs with the operations for which to generate code, relative
@@ -20,7 +24,7 @@ schema: schema.graphql
 # Go files, in which case any string-literal starting with (optional
 # whitespace and) the string "# @genqlient" will be extracted as a query.
 #
-# Like schema, this may be a single file or a list.
+# Like schema, this may be a single filename or glob, or a list of those.
 operations:
 - genqlient.graphql
 - "pkg/*.go"
