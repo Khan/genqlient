@@ -1,0 +1,7 @@
+# very similar to DefaultInputsWithForDirective.graphql - same expected behaviour, but takes a different code path(?)
+# @genqlient(omitempty: true)
+query DefaultInputs(
+  $input: InputWithDefaults!
+) {
+  default(input: $input)
+}

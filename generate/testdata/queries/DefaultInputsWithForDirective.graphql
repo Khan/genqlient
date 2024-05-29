@@ -1,0 +1,7 @@
+# @genqlient(for: "InputWithDefaults.field", omitempty: true)
+# @genqlient(for: "InputWithDefaults.nullableField", omitempty: true)
+query DefaultInputs(
+  $input: InputWithDefaults!
+) {
+  default(input: $input)
+}
