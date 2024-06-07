@@ -1,0 +1,9 @@
+{
+  "operations": [
+    {
+      "operationName": "OmitemptyFalse",
+      "query": "\nquery OmitemptyFalse ($input: OmitemptyInput) {\n\tomitempty(input: $input)\n}\n",
+      "sourceLocation": "testdata/queries/OmitemptyFalse.graphql"
+    }
+  ]
+}

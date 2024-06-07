@@ -1,0 +1,7 @@
+# Without any extra directives or configuration, the defaults are never considered,
+# as the client sends at least zero-value (struct with empty string).
+query DefaultInputs(
+  $input: InputWithDefaults!
+) {
+  default(input: $input)
+}

@@ -22,11 +22,18 @@ When releasing a new version:
 
 ### Breaking changes:
 
+- omitempty validation:
+  - forbid `omitempty: false` (including implicit behaviour) when using pointer on non-null, no-default input field
+
 ### New features:
 
 - genqlient now supports double-star globs for schema and query files; see [`genqlient.yaml` docs](genqlient.yaml) for more.
 
 ### Bug fixes:
+
+- omitempty validation:
+  - allow `omitempty` on non-nullable input field, if the field has a default
+  - allow `omitempty: false` on an input field, even when it is non-nullable
 
 ## v0.7.0
 

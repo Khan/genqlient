@@ -450,6 +450,19 @@ func (g *generator) convertDefinition(
 				return nil, err
 			}
 
+			// Try to protect against generating field type that has possibility to send `null` to non-nullable graphQL
+			// type. This does not protect against lists/slices, as Go zero-slices are already serialized as `null`
+			// (which can therefore currently send invalid graphQL value - e.g. `null` for [String!]!)
+			// And does not protect against custom MarshalJSON.
+			_, isPointer := fieldGoType.(*goPointerType)
+			if field.Type.NonNull && isPointer && !fieldOptions.GetOmitempty() {
+				return nil, errorf(pos, "pointer on non-null input field can only be used together with omitempty: %s.%s", name, field.Name)
+			}
+
+			if fieldOptions.GetOmitempty() && field.Type.NonNull && field.DefaultValue == nil {
+				return nil, errorf(pos, "omitempty may only be used on optional arguments: %s.%s", name, field.Name)
+			}
+
 			goType.Fields[i] = &goStructField{
 				GoName:      goName,
 				GoType:      fieldGoType,
