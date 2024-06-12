@@ -5,9 +5,10 @@ go 1.20
 require (
 	github.com/99designs/gqlgen v0.17.44
 	github.com/alexflint/go-arg v1.4.2
+	github.com/bmatcuk/doublestar/v4 v4.6.1
 	github.com/bradleyjkemp/cupaloy/v2 v2.6.0
-	github.com/stretchr/testify v1.8.4
-	github.com/vektah/gqlparser/v2 v2.5.11
+	github.com/stretchr/testify v1.9.0
+	github.com/vektah/gqlparser/v2 v2.5.14
 	golang.org/x/tools v0.18.0
 	gopkg.in/yaml.v2 v2.4.0
 )
@@ -15,7 +16,6 @@ require (
 require (
 	github.com/agnivade/levenshtein v1.1.1 // indirect
 	github.com/alexflint/go-scalar v1.0.0 // indirect
-	github.com/bmatcuk/doublestar/v4 v4.6.1 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/gorilla/websocket v1.5.0 // indirect
