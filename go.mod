@@ -8,7 +8,7 @@ require (
 	github.com/bmatcuk/doublestar/v4 v4.6.1
 	github.com/bradleyjkemp/cupaloy/v2 v2.6.0
 	github.com/stretchr/testify v1.9.0
-	github.com/vektah/gqlparser/v2 v2.5.14
+	github.com/vektah/gqlparser/v2 v2.5.16
 	golang.org/x/tools v0.18.0
 	gopkg.in/yaml.v2 v2.4.0
 )
