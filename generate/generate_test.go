@@ -9,8 +9,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Khan/genqlient/internal/testutil"
 	"gopkg.in/yaml.v2"
+
+	"github.com/Khan/genqlient/internal/testutil"
 )
 
 const (
@@ -238,6 +239,26 @@ func TestGenerateWithConfig(t *testing.T) {
 		{"EnumRawCasingSpecific", "", []string{"QueryWithEnums.graphql"}, &Config{
 			Casing: Casing{
 				Enums: map[string]CasingAlgorithm{"Role": CasingRaw},
+			},
+		}},
+		{"OptionalPointerOmitEmpty", "", []string{
+			"InputObject.graphql",
+			"Pointers.graphql",
+			"Omitempty.graphql",
+			"ListInput.graphql",
+		}, &Config{
+			Optional: "pointer_omitempty",
+			Bindings: map[string]*TypeBinding{
+				"Date": {
+					Type:        "time.Time",
+					Marshaler:   "github.com/Khan/genqlient/internal/testutil.MarshalDate",
+					Unmarshaler: "github.com/Khan/genqlient/internal/testutil.UnmarshalDate",
+				},
+				"DateTime": {
+					Type:        "time.Time",
+					Marshaler:   "github.com/Khan/genqlient/internal/testutil.MarshalDate",
+					Unmarshaler: "github.com/Khan/genqlient/internal/testutil.UnmarshalDate",
+				},
 			},
 		}},
 	}
