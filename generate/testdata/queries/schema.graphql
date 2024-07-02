@@ -235,4 +235,5 @@ input StructInput {
 input UseStructReferencesInput {
   struct: StructInput!
   nullableStruct: StructInput
+  list: [StructInput!]!
 }

@@ -24,8 +24,9 @@ func (v *UseStructReferenceResponse) GetUseStructReferencesInput() bool {
 }
 
 type UseStructReferencesInput struct {
-	Struct         StructInput `json:"struct"`
-	NullableStruct StructInput `json:"nullableStruct"`
+	Struct         StructInput   `json:"struct"`
+	NullableStruct StructInput   `json:"nullableStruct"`
+	List           []StructInput `json:"list"`
 }
 
 // GetStruct returns UseStructReferencesInput.Struct, and is useful for accessing the field via an interface.
@@ -33,6 +34,9 @@ func (v *UseStructReferencesInput) GetStruct() StructInput { return v.Struct }
 
 // GetNullableStruct returns UseStructReferencesInput.NullableStruct, and is useful for accessing the field via an interface.
 func (v *UseStructReferencesInput) GetNullableStruct() StructInput { return v.NullableStruct }
+
+// GetList returns UseStructReferencesInput.List, and is useful for accessing the field via an interface.
+func (v *UseStructReferencesInput) GetList() []StructInput { return v.List }
 
 // __UseStructReferenceInput is used internally by genqlient
 type __UseStructReferenceInput struct {

@@ -258,7 +258,10 @@ func (g *generator) convertType(
 	if g.getStructReference(def, typ, rootType, options, defaultValue, isInput) {
 		t := true
 		options.Pointer = &t
-		options.Omitempty = &t
+		if rootType.Elem == nil {
+			// adding omitempty to the field makes sense only if the struct for StructReferences was itself the root type.
+			options.Omitempty = &t
+		}
 	}
 
 	if options.Pointer == nil && !typ.NonNull && g.Config.Optional == "pointer" {
