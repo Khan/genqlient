@@ -1,0 +1,9 @@
+{
+  "operations": [
+    {
+      "operationName": "UseStructReference",
+      "query": "\nquery UseStructReference ($input: UseStructReferencesInput!) {\n\tuseStructReferencesInput(input: $input)\n}\n",
+      "sourceLocation": "testdata/queries/UseStructReference.graphql"
+    }
+  ]
+}

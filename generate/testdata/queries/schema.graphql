@@ -189,6 +189,7 @@ type Query {
   # But it is here for completeness - maybe it will be used in future or cause some other unexpected issues.
   default(input: InputWithDefaults! = {field: "input omitted"}): Boolean
   omitempty(input: OmitemptyInput): Boolean
+  useStructReferencesInput(input: UseStructReferencesInput!): Boolean
 }
 
 type Mutation {
@@ -225,4 +226,16 @@ input InputWithDefaults {
 input OmitemptyInput {
   field: String!
   nullableField: String
+}
+
+input StructInput {
+  field: String
+}
+
+input UseStructReferencesInput {
+  struct: StructInput!
+  nullableStruct: StructInput
+  list: [StructInput!]!
+  listOfNullable: [StructInput]!
+  nullableList: [StructInput!]
 }

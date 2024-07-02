@@ -179,7 +179,7 @@ func (g *generator) convertArguments(
 		// names.go) and the selection-set (we use all the input type's fields,
 		// and so on recursively).  See also the `case ast.InputObject` in
 		// convertDefinition, below.
-		goTyp, err := g.convertType(nil, arg.Type, nil, options, queryOptions)
+		goTyp, err := g.convertType(nil, arg.Type, arg.Type, nil, options, queryOptions, nil)
 		if err != nil {
 			return nil, err
 		}
@@ -223,8 +223,10 @@ func (g *generator) convertArguments(
 func (g *generator) convertType(
 	namePrefix *prefixList,
 	typ *ast.Type,
+	rootType *ast.Type,
 	selectionSet ast.SelectionSet,
 	options, queryOptions *genqlientDirective,
+	defaultValue *ast.Value,
 ) (goType, error) {
 	// We check for local bindings here, so that you can bind, say, a
 	// `[String!]` to a struct instead of a slice.  Global bindings can only
@@ -240,7 +242,7 @@ func (g *generator) convertType(
 	if typ.Elem != nil {
 		// Type is a list.
 		elem, err := g.convertType(
-			namePrefix, typ.Elem, selectionSet, options, queryOptions)
+			namePrefix, typ.Elem, rootType, selectionSet, options, queryOptions, defaultValue)
 		return &goSliceType{elem}, err
 	}
 
@@ -248,16 +250,28 @@ func (g *generator) convertType(
 	def := g.schema.Types[typ.Name()]
 	goTyp, err := g.convertDefinition(
 		namePrefix, def, typ.Position, selectionSet, options, queryOptions)
+	if err != nil {
+		return nil, err
+	}
 
-	if g.getStructReference(def) {
-		if options.Pointer == nil || *options.Pointer {
-			goTyp = &goPointerType{goTyp}
+	if g.getStructReference(def, typ, rootType, defaultValue) {
+		t := true
+		if options.Pointer == nil {
+			options.Pointer = &t
 		}
-		if options.Omitempty == nil || *options.Omitempty {
-			oe := true
-			options.Omitempty = &oe
+		if options.Omitempty == nil {
+			if rootType.Elem == nil {
+				options.Omitempty = &t
+			}
 		}
-	} else if !options.PointerIsFalse() && (options.GetPointer() || (!typ.NonNull && g.Config.Optional == "pointer")) {
+	}
+
+	if options.Pointer == nil && !typ.NonNull && g.Config.Optional == "pointer" {
+		t := true
+		options.Pointer = &t
+	}
+
+	if options.GetPointer() {
 		// Whatever we get, wrap it in a pointer.  (Because of the way the
 		// options work, recursing here isn't as connvenient.)
 		// Note this does []*T or [][]*T, not e.g. *[][]T.  See #16.
@@ -274,15 +288,38 @@ func (g *generator) convertType(
 			Elem:         goTyp,
 		}
 	}
-	return goTyp, err
+
+	return goTyp, nil
 }
 
-// getStructReference decides if a field should be of pointer type and have the omitempty flag set.
+// getStructReference decides if a field should be of pointer type and, if appropriate, have the omitempty flag set.
 func (g *generator) getStructReference(
 	def *ast.Definition,
+	typ *ast.Type,
+	rootType *ast.Type,
+	defaultValue *ast.Value,
 ) bool {
-	return g.Config.StructReferences &&
-		(def.Kind == ast.Object || def.Kind == ast.InputObject)
+	if !g.Config.StructReferences {
+		return false
+	}
+	if def.Kind == ast.Object {
+		return true
+	}
+	if def.Kind != ast.InputObject {
+		return false
+	}
+	if typ.NonNull {
+		// If input struct is non-null, it can be a pointer only if it is root type and has default.
+		// Because it is root type, it will also cause omitempty to be set, making zero-value valid, as it will be omitted, using the default.
+		if rootType.Elem == nil && defaultValue != nil {
+			return true
+		}
+		return false
+	}
+	// If graphql type is nullable, pointer is valid - both with and without omitempty.
+	// With omitempty (and not nested in list), nil pointer will send nothing.
+	// Without omitempty, nil pointer will send explicit null.
+	return true
 }
 
 // convertDefinition decides the Go type we will generate corresponding to a
@@ -445,7 +482,7 @@ func (g *generator) convertDefinition(
 			// will be ignored?  We know field.Type is a scalar, enum, or input
 			// type.  But plumbing that is a bit tricky in practice.
 			fieldGoType, err := g.convertType(
-				namePrefix, field.Type, nil, fieldOptions, queryOptions)
+				namePrefix, field.Type, field.Type, nil, fieldOptions, queryOptions, field.DefaultValue)
 			if err != nil {
 				return nil, err
 			}
@@ -915,8 +952,8 @@ func (g *generator) convertField(
 	namePrefix = nextPrefix(namePrefix, field)
 
 	fieldGoType, err := g.convertType(
-		namePrefix, field.Definition.Type, field.SelectionSet,
-		fieldOptions, queryOptions)
+		namePrefix, field.Definition.Type, field.Definition.Type, field.SelectionSet,
+		fieldOptions, queryOptions, nil)
 	if err != nil {
 		return nil, err
 	}

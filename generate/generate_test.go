@@ -240,6 +240,11 @@ func TestGenerateWithConfig(t *testing.T) {
 				Enums: map[string]CasingAlgorithm{"Role": CasingRaw},
 			},
 		}},
+		{
+			"UseStructReference", "", []string{"UseStructReference.graphql"}, &Config{
+				StructReferences: true,
+			},
+		},
 	}
 
 	sourceFilename := "SimpleQuery.graphql"
