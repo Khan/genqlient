@@ -1,0 +1,6 @@
+#https://github.com/Khan/genqlient/issues/342
+query UseStructReference(
+  $input: UseStructReferencesInput!
+) {
+  useStructReferencesInput(input: $input)
+}

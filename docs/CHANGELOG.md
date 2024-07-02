@@ -23,7 +23,9 @@ When releasing a new version:
 ### Breaking changes:
 
 - omitempty validation:
-  - forbid `omitempty: false` (including implicit behaviour) when using pointer on non-null, no-default input field
+  - forbid `omitempty: false` (including implicit behaviour) when using pointer on non-null input field
+- change `use_struct_reference` to not generate types that would fail validation.
+  Instead, structs for non-null, no-default input field generate go type as if using `omitempty: false, pointer: false`. 
 
 ### New features:
 
