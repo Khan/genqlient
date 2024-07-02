@@ -236,4 +236,6 @@ input UseStructReferencesInput {
   struct: StructInput!
   nullableStruct: StructInput
   list: [StructInput!]!
+  listOfNullable: [StructInput]!
+  nullableList: [StructInput!]
 }
