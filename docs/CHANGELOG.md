@@ -23,7 +23,7 @@ When releasing a new version:
 ### Breaking changes:
 
 - omitempty validation:
-  - forbid `omitempty: false` (including implicit behaviour) when using pointer on non-null, no-default input field
+  - forbid `omitempty: false` (including implicit behaviour) when using pointer on non-null input field
 
 ### New features:
 
@@ -34,6 +34,7 @@ When releasing a new version:
 - omitempty validation:
   - allow `omitempty` on non-nullable input field, if the field has a default
   - allow `omitempty: false` on an input field, even when it is non-nullable
+- don't do `omitempty` and `pointer` input types validation when `use_struct_reference` is used, as the generated type is often not compatible with validation logic.
 
 ## v0.7.0
 
