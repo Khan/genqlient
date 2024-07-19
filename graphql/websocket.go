@@ -5,7 +5,12 @@ import (
 	"encoding/binary"
 	"encoding/json"
 	"fmt"
+	"net/http"
+	"strings"
+	"sync"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 const (
@@ -36,6 +41,17 @@ const (
 	// function to format a close message payload.
 	closeMessage = 8
 )
+
+type webSocketClient struct {
+	Dialer        Dialer
+	Header        http.Header
+	conn          WSConn
+	isClosing     bool
+	errChan       chan error
+	endpoint      string
+	subscriptions subscriptionMap
+	sync.Mutex
+}
 
 type webSocketSendMessage struct {
 	Payload *Request `json:"payload"`
@@ -80,23 +96,28 @@ func (w *webSocketClient) waitForConnAck() error {
 	return nil
 }
 
-func (w *webSocketClient) listenWebSocket(ctx context.Context) {
+func (w *webSocketClient) listenWebSocket() {
 	for {
-		select {
-		case <-ctx.Done():
-			w.errChan <- fmt.Errorf("context canceled")
+		if w.isClosing {
 			return
-		default:
-			_, message, err := w.conn.ReadMessage()
-			if err != nil {
+		}
+		_, message, err := w.conn.ReadMessage()
+		if err != nil {
+			w.Lock()
+			defer w.Unlock()
+			if !w.isClosing {
 				w.errChan <- err
-				return
 			}
-			err = w.forwardWebSocketData(message)
-			if err != nil {
+			return
+		}
+		err = w.forwardWebSocketData(message)
+		if err != nil {
+			w.Lock()
+			defer w.Unlock()
+			if !w.isClosing {
 				w.errChan <- err
-				return
 			}
+			return
 		}
 	}
 }
@@ -110,6 +131,9 @@ func (w *webSocketClient) forwardWebSocketData(message []byte) error {
 	sub, ok := w.subscriptions.Read(wsMsg.ID)
 	if !ok {
 		return fmt.Errorf("received message for unknown subscription ID '%s'", wsMsg.ID)
+	}
+	if sub.hasBeenUnsubscribed {
+		return nil
 	}
 	return sub.forwardDataFunc(sub.interfaceChan, wsMsg.Payload)
 }
@@ -129,6 +153,93 @@ func checkConnectionAckReceived(message []byte) (bool, error) {
 		return false, err
 	}
 	return wsMessage.Type == webSocketTypeConnAck, nil
+}
+
+func (w *webSocketClient) Start(ctx context.Context) (errChan chan error, err error) {
+	w.conn, err = w.Dialer.DialContext(ctx, w.endpoint, w.Header)
+	if err != nil {
+		return nil, err
+	}
+	err = w.sendInit()
+	if err != nil {
+		w.conn.Close()
+		return nil, err
+	}
+	err = w.waitForConnAck()
+	if err != nil {
+		w.conn.Close()
+		return nil, err
+	}
+	go w.listenWebSocket()
+	return w.errChan, err
+}
+
+func (w *webSocketClient) Close() error {
+	if w.conn == nil {
+		return nil
+	}
+	err := w.conn.WriteMessage(closeMessage, formatCloseMessage(closeNormalClosure, ""))
+	if err != nil {
+		return fmt.Errorf("failed to send closure message: %w", err)
+	}
+	w.UnsubscribeAll()
+	w.Lock()
+	defer w.Unlock()
+	w.isClosing = true
+	close(w.errChan)
+	return w.conn.Close()
+}
+
+func (w *webSocketClient) Subscribe(req *Request, interfaceChan interface{}, forwardDataFunc ForwardDataFunction) (string, error) {
+	if req.Query != "" {
+		if strings.HasPrefix(strings.TrimSpace(req.Query), "query") {
+			return "", fmt.Errorf("client does not support queries")
+		}
+		if strings.HasPrefix(strings.TrimSpace(req.Query), "mutation") {
+			return "", fmt.Errorf("client does not support mutations")
+		}
+	}
+
+	subscriptionID := uuid.NewString()
+	w.subscriptions.Create(subscriptionID, interfaceChan, forwardDataFunc)
+	subscriptionMsg := webSocketSendMessage{
+		Type:    webSocketTypeSubscribe,
+		Payload: req,
+		ID:      subscriptionID,
+	}
+	err := w.sendStructAsJSON(subscriptionMsg)
+	if err != nil {
+		w.subscriptions.Delete(subscriptionID)
+		return "", err
+	}
+	return subscriptionID, nil
+}
+
+func (w *webSocketClient) Unsubscribe(subscriptionID string) error {
+	completeMsg := webSocketSendMessage{
+		Type: webSocketTypeComplete,
+		ID:   subscriptionID,
+	}
+	err := w.sendStructAsJSON(completeMsg)
+	if err != nil {
+		return err
+	}
+	err = w.subscriptions.Unsubscribe(subscriptionID)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (w *webSocketClient) UnsubscribeAll() error {
+	subscriptionIDs := w.subscriptions.GetAllIDs()
+	for _, subscriptionID := range subscriptionIDs {
+		err := w.Unsubscribe(subscriptionID)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 // formatCloseMessage formats closeCode and text as a WebSocket close message.
