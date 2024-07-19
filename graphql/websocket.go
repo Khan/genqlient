@@ -46,10 +46,11 @@ type webSocketClient struct {
 	Dialer        Dialer
 	Header        http.Header
 	conn          WSConn
+	isClosing     bool
 	errChan       chan error
 	endpoint      string
 	subscriptions subscriptionMap
-	sync.RWMutex
+	sync.Mutex
 }
 
 type webSocketSendMessage struct {
@@ -95,23 +96,28 @@ func (w *webSocketClient) waitForConnAck() error {
 	return nil
 }
 
-func (w *webSocketClient) listenWebSocket(ctx context.Context) {
+func (w *webSocketClient) listenWebSocket() {
 	for {
-		select {
-		case <-ctx.Done():
-			w.errChan <- fmt.Errorf("context canceled")
+		if w.isClosing {
 			return
-		default:
-			_, message, err := w.conn.ReadMessage()
-			if err != nil {
+		}
+		_, message, err := w.conn.ReadMessage()
+		if err != nil {
+			w.Lock()
+			defer w.Unlock()
+			if !w.isClosing {
 				w.errChan <- err
-				return
 			}
-			err = w.forwardWebSocketData(message)
-			if err != nil {
+			return
+		}
+		err = w.forwardWebSocketData(message)
+		if err != nil {
+			w.Lock()
+			defer w.Unlock()
+			if !w.isClosing {
 				w.errChan <- err
-				return
 			}
+			return
 		}
 	}
 }
@@ -164,7 +170,7 @@ func (w *webSocketClient) Start(ctx context.Context) (errChan chan error, err er
 		w.conn.Close()
 		return nil, err
 	}
-	go w.listenWebSocket(ctx)
+	go w.listenWebSocket()
 	return w.errChan, err
 }
 
@@ -176,8 +182,11 @@ func (w *webSocketClient) Close() error {
 	if err != nil {
 		return fmt.Errorf("failed to send closure message: %w", err)
 	}
-	defer close(w.errChan)
 	w.UnsubscribeAll()
+	w.Lock()
+	defer w.Unlock()
+	w.isClosing = true
+	close(w.errChan)
 	return w.conn.Close()
 }
 
