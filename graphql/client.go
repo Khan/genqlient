@@ -10,9 +10,7 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
-	"sync"
 
-	"github.com/google/uuid"
 	"github.com/vektah/gqlparser/v2/gqlerror"
 )
 
@@ -43,18 +41,18 @@ type Client interface {
 }
 
 type WebSocketClient interface {
-	// StartWebSocket must open a webSocket connection and subscribe to an endpoint
+	// Start must open a webSocket connection and subscribe to an endpoint
 	// of the client's GraphQL API.
 	//
 	// errChan is a channel on which are sent the errors of webSocket
-	// communication.
+	// communication. It will be closed when calling the `Close()` method.
 	//
 	// err is any error that occurs when setting up the webSocket connection.
-	StartWebSocket(ctx context.Context) (errChan chan error, err error)
+	Start(ctx context.Context) (errChan chan error, err error)
 
-	// CloseWebSocket must close the webSocket connection. If no connection was
-	// started, CloseWebSocket is a no-op
-	CloseWebSocket()
+	// Close must close the webSocket connection and close the error channel.
+	// If no connection was started, Close is a no-op
+	Close() error
 
 	// Subscribe must subscribe to an endpoint of the client's GraphQL API.
 	//
@@ -62,7 +60,7 @@ type WebSocketClient interface {
 	// into JSON bytes.
 	//
 	// interfaceChan is a channel used to send the data that arrives via the
-	// webSocket connection.
+	// webSocket connection (it is the channel that is passed to `forwardDataFunc`).
 	//
 	// forwardDataFunc is the function that will cast the received interface into
 	// the valid type for the subscription's response.
@@ -82,16 +80,6 @@ type client struct {
 	httpClient Doer
 	endpoint   string
 	method     string
-}
-
-type webSocketClient struct {
-	Dialer        Dialer
-	Header        http.Header
-	conn          WSConn
-	errChan       chan error
-	endpoint      string
-	subscriptions subscriptionMap
-	sync.RWMutex
 }
 
 // NewClient returns a [Client] which makes requests to the given endpoint,
@@ -333,71 +321,4 @@ func (c *client) createGetRequest(req *Request) (*http.Request, error) {
 	}
 
 	return httpReq, nil
-}
-
-func (w *webSocketClient) StartWebSocket(ctx context.Context) (errChan chan error, err error) {
-	w.conn, err = w.Dialer.DialContext(ctx, w.endpoint, w.Header)
-	if err != nil {
-		return nil, err
-	}
-	err = w.sendInit()
-	if err != nil {
-		w.conn.Close()
-		return nil, err
-	}
-	err = w.waitForConnAck()
-	if err != nil {
-		w.conn.Close()
-		return nil, err
-	}
-	go w.listenWebSocket(ctx)
-	return w.errChan, err
-}
-
-func (w *webSocketClient) CloseWebSocket() {
-	if w.conn == nil {
-		return
-	}
-	defer w.conn.Close()
-	err := w.conn.WriteMessage(closeMessage, formatCloseMessage(closeNormalClosure, ""))
-	if err != nil {
-		w.errChan <- err
-	}
-}
-
-func (w *webSocketClient) Subscribe(req *Request, interfaceChan interface{}, forwardDataFunc ForwardDataFunction) (string, error) {
-	if req.Query != "" {
-		if strings.HasPrefix(strings.TrimSpace(req.Query), "query") {
-			return "", errors.New("client does not support queries")
-		}
-		if strings.HasPrefix(strings.TrimSpace(req.Query), "mutation") {
-			return "", errors.New("client does not support mutations")
-		}
-	}
-
-	subscriptionID := uuid.NewString()
-	subscriptionMsg := webSocketSendMessage{
-		Type:    webSocketTypeSubscribe,
-		Payload: req,
-		ID:      subscriptionID,
-	}
-	err := w.sendStructAsJSON(subscriptionMsg)
-	if err != nil {
-		return "", err
-	}
-	w.subscriptions.Create(subscriptionID, interfaceChan, forwardDataFunc)
-	return subscriptionID, nil
-}
-
-func (w *webSocketClient) Unsubscribe(subscriptionID string) error {
-	completeMsg := webSocketSendMessage{
-		Type: webSocketTypeComplete,
-		ID:   subscriptionID,
-	}
-	err := w.sendStructAsJSON(completeMsg)
-	if err != nil {
-		return err
-	}
-	w.subscriptions.Delete(subscriptionID)
-	return nil
 }

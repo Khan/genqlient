@@ -66,12 +66,12 @@ func TestSubscription(t *testing.T) {
 	defer server.Close()
 	wsClient := newRoundtripWebScoketClient(t, server.URL)
 
-	errChan, err := wsClient.StartWebSocket(ctx)
+	errChan, err := wsClient.Start(ctx)
 	require.NoError(t, err)
 
 	dataChan, subscriptionID, err := count(ctx, wsClient)
 	require.NoError(t, err)
-	defer wsClient.CloseWebSocket()
+	defer wsClient.Close()
 	counter := 0
 	start := time.Now()
 	for loop := true; loop; {

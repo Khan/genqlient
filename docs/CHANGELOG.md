@@ -24,10 +24,10 @@ When releasing a new version:
 
 ### New features:
 
-- The new `optional: generic` allows using a generic type to represent optionality. See the [documentation](genqlient.yaml) for details.
-- For schemas with enum values that differ only in casing, it's now possible to disable smart-casing in genqlient.yaml; see the [documentation](genqlient.yaml) for `casing` for details.
 - genqlient now supports subscriptions; the websocket protocol is by default `graphql-transport-ws` but can be set to another value.  
   See the [documentation](FAQ.md) for how to `subscribe to an API 'subscription' endpoint`.
+- The new `optional: generic` allows using a generic type to represent optionality. See the [documentation](genqlient.yaml) for details.
+- For schemas with enum values that differ only in casing, it's now possible to disable smart-casing in genqlient.yaml; see the [documentation](genqlient.yaml) for `casing` for details.
 
 ### Bug fixes:
 - The presence of negative pointer directives, i.e., `# @genqlient(pointer: false)` are now respected even in the when `optional: pointer` is set in the configuration file.
