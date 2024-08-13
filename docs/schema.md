@@ -46,7 +46,7 @@ This can now be invoked upon `go generate` via `//go:generate yourpkg/generate`.
 GraphQL [defines][spec#scalar] five standard scalar types, which genqlient automatically maps to the following Go types:
 
 | GraphQL type | Go type   |
-----------------------------
+|--------------|-----------|
 | `Int`        | `int`     |
 | `Float`      | `float64` |
 | `String`     | `string`  |
