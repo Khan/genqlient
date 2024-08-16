@@ -33,7 +33,7 @@ type __OmitemptyFalseInput struct {
 // GetInput returns __OmitemptyFalseInput.Input, and is useful for accessing the field via an interface.
 func (v *__OmitemptyFalseInput) GetInput() OmitemptyInput { return v.Input }
 
-// The query or mutation executed by OmitemptyFalse.
+// The query executed by OmitemptyFalse.
 const OmitemptyFalse_Operation = `
 query OmitemptyFalse ($input: OmitemptyInput) {
 	omitempty(input: $input)
@@ -43,7 +43,7 @@ query OmitemptyFalse ($input: OmitemptyInput) {
 func OmitemptyFalse(
 	client_ graphql.Client,
 	input OmitemptyInput,
-) (*OmitemptyFalseResponse, error) {
+) (data_ *OmitemptyFalseResponse, err_ error) {
 	req_ := &graphql.Request{
 		OpName: "OmitemptyFalse",
 		Query:  OmitemptyFalse_Operation,
@@ -51,10 +51,9 @@ func OmitemptyFalse(
 			Input: input,
 		},
 	}
-	var err_ error
 
-	var data_ OmitemptyFalseResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &OmitemptyFalseResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		nil,
@@ -62,6 +61,6 @@ func OmitemptyFalse(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 

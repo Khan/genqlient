@@ -2619,7 +2619,7 @@ func ComplexNamedFragments(
 	return data_, err_
 }
 
-// The query or mutation executed by ComplexNamedFragmentsWithInlineUnion.
+// The query executed by ComplexNamedFragmentsWithInlineUnion.
 const ComplexNamedFragmentsWithInlineUnion_Operation = `
 query ComplexNamedFragmentsWithInlineUnion {
 	user {
@@ -2653,15 +2653,14 @@ fragment SimpleLeafContent on LeafContent {
 
 func ComplexNamedFragmentsWithInlineUnion(
 	client_ graphql.Client,
-) (*ComplexNamedFragmentsWithInlineUnionResponse, error) {
+) (data_ *ComplexNamedFragmentsWithInlineUnionResponse, err_ error) {
 	req_ := &graphql.Request{
 		OpName: "ComplexNamedFragmentsWithInlineUnion",
 		Query:  ComplexNamedFragmentsWithInlineUnion_Operation,
 	}
-	var err_ error
 
-	var data_ ComplexNamedFragmentsWithInlineUnionResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &ComplexNamedFragmentsWithInlineUnionResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		nil,
@@ -2669,6 +2668,6 @@ func ComplexNamedFragmentsWithInlineUnion(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 
