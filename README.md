@@ -19,7 +19,7 @@ genqlient provides:
 
 ## How do I use genqlient?
 
-You can download and run genqlient the usual way: `go run github.com/Khan/genqlient`.  To set your project up to use genqlient, see the [getting started guide](docs/INTRODUCTION.md), or the [example](example).  For more complete documentation, see the [docs](docs).
+You can download and run genqlient the usual way: `go run github.com/Khan/genqlient`.  To set your project up to use genqlient, see the [getting started guide](docs/introduction.md), or the [example](example).  For more complete documentation, see the [docs](docs).
 
 ## How can I help?
 
@@ -47,6 +47,6 @@ This code works, but it has a few problems:
 - The GraphQL variables aren't type-safe at all; you could have passed `{"id": true}` and again you won't know until runtime!
 - You have to write everything twice, or hide the query in complicated struct tags, or give up what type safety you do have and resort to `interface{}`.
 
-These problems aren't a big deal in a small application, but for serious production-grade tools they're not ideal.  And they should be entirely avoidable: GraphQL and Go are both typed languages; and GraphQL servers expose their schema in a standard, machine-readable format.  We should be able to simply write a query and have that automatically validated against the schema and turned into a Go struct which we can use in our code.  In fact, there's already good prior art to do this sort of thing: [99designs/gqlgen](https://github.com/99designs/gqlgen) is a popular server library that generates types, and Apollo has a [codegen tool](https://www.apollographql.com/docs/devtools/cli/#supported-commands) to generate similar client-types for several other languages.  (See [docs/DESIGN.md](docs/DESIGN.md) for more prior art.)
+These problems aren't a big deal in a small application, but for serious production-grade tools they're not ideal.  And they should be entirely avoidable: GraphQL and Go are both typed languages; and GraphQL servers expose their schema in a standard, machine-readable format.  We should be able to simply write a query and have that automatically validated against the schema and turned into a Go struct which we can use in our code.  In fact, there's already good prior art to do this sort of thing: [99designs/gqlgen](https://github.com/99designs/gqlgen) is a popular server library that generates types, and Apollo has a [codegen tool](https://www.apollographql.com/docs/devtools/cli/#supported-commands) to generate similar client-types for several other languages.  (See the [design note](docs/design.md) for more prior art.)
 
 genqlient fills that gap: you just specify the query, and it generates type-safe helpers, validated against the schema, that make the query.

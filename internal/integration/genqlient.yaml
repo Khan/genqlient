@@ -8,3 +8,5 @@ bindings:
     type: time.Time
     marshaler: "github.com/Khan/genqlient/internal/testutil.MarshalDate"
     unmarshaler: "github.com/Khan/genqlient/internal/testutil.UnmarshalDate"
+  MyGreatScalar:
+    type: github.com/Khan/genqlient/internal/integration.MyGreatScalar

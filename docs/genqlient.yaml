@@ -6,11 +6,15 @@
 
 # The filename with the GraphQL schema (in SDL format), relative to
 # genqlient.yaml.
-# This can also be a list of filenames, such as:
+# This can also be a glob-pattern, or a list of filenames or globs, such as:
 #  schema:
 #  - user.graphql
 #  - ./schema/*.graphql
-#  - ./another_directory/*/*.graphql
+#  - ./*/*.graphql          # matches ./a/b.graphql, but not ./a/b/c.graphql
+#  - ./**/*.graphql         # matches ./a.graphql, ./a/b/c.graphql, etc.
+# The glob-pattern "**" is interpreted by github.com/bmatcuk/doublestar/v4, and
+# matches zero or more path components (so you want **/*.graphql, not
+# **.graphql). Each pattern must match at least one file, to avoid mistakes.
 schema: schema.graphql
 
 # Filename(s) or globs with the operations for which to generate code, relative
@@ -20,7 +24,7 @@ schema: schema.graphql
 # Go files, in which case any string-literal starting with (optional
 # whitespace and) the string "# @genqlient" will be extracted as a query.
 #
-# Like schema, this may be a single file or a list.
+# Like schema, this may be a single filename or glob, or a list of those.
 operations:
 - genqlient.graphql
 - "pkg/*.go"
@@ -29,8 +33,12 @@ operations:
 # genqlient.yaml. Default: generated.go.
 generated: generated/genqlient.go
 
-# The package name for the output code; defaults to the directory name of
-# the generated-code file.
+# The package name for the output code; defaults to the package-name
+# corresponding to the setting of `generated`, above.
+#
+# This is rarely needed: only if you want the package-name to differ from the
+# suffix of the package-path, and there are no other Go files in the package
+# already.
 package: mygenerated
 
 # If set, a file at this path (relative to genqlient.yaml) will be generated
@@ -139,6 +147,9 @@ optional_generic_type: github.com/organisation/repository/example.Type
 # guarantees that the fields requested in the query match those present in
 # the Go type.
 #
+# Note: if binding to types in the same package as the generated code, make
+# sure you don't bind to generated types! Otherwise, things get very circular.
+#
 # To get equivalent behavior in just one query, use @genqlient(bind: ...);
 # see genqlient_directive.graphql for more details.
 bindings:
@@ -224,6 +235,9 @@ bindings:
 # to the bindings map, above, for each exported type in the package.  Multiple
 # packages may be specified, and later ones take precedence over earlier ones.
 # Explicit entries in bindings take precedence over all package bindings.
+#
+# Note: make sure this isn't the package with your generated code, or things
+# will get circular very fast.
 package_bindings:
 - package: github.com/you/yourpkg/models
 

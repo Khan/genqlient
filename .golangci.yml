@@ -42,14 +42,19 @@ linters-settings:
 
   # We have a ton of test-only packages; but make sure we keep prod deps small.
   depguard:
-    list-type: whitelist
-    packages:
-      - github.com/Khan/genqlient
-      - github.com/vektah/gqlparser/v2
-      - golang.org/x/tools
-      - gopkg.in/yaml.v2
-      - github.com/alexflint/go-arg
-      - github.com/google/uuid
+    rules:
+      main:
+        list-mode: strict
+        files: $all
+        allow:
+          - $gostd
+          - github.com/Khan/genqlient
+          - github.com/vektah/gqlparser/v2
+          - golang.org/x/tools
+          - gopkg.in/yaml.v2
+          - github.com/alexflint/go-arg
+          - github.com/bmatcuk/doublestar/v4
+          - github.com/google/uuid
 
   forbidigo:
     forbid:

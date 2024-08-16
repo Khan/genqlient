@@ -18,10 +18,11 @@ func intptr(v int) *int       { return &v }
 var users = []*User{
 	{
 		ID: "1", Name: "Yours Truly", LuckyNumber: intptr(17),
-		Birthdate: strptr("2025-01-01"),
-		Hair:      &Hair{Color: strptr("Black")},
+		Birthdate:   strptr("2025-01-01"),
+		Hair:        &Hair{Color: strptr("Black")},
+		GreatScalar: strptr("cool value"),
 	},
-	{ID: "2", Name: "Raven", LuckyNumber: intptr(-1), Hair: nil},
+	{ID: "2", Name: "Raven", LuckyNumber: intptr(-1), Hair: nil, GreatScalar: strptr("cool value")},
 }
 
 func init() {
@@ -197,4 +198,4 @@ func (r *resolver) Subscription() SubscriptionResolver {
 	return &subscriptionResolver{}
 }
 
-//go:generate go run github.com/99designs/gqlgen
+//go:generate go run github.com/99designs/gqlgen@v0.17.35

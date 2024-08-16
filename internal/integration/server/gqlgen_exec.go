@@ -84,6 +84,7 @@ type ComplexityRoot struct {
 	User struct {
 		Birthdate   func(childComplexity int) int
 		Friends     func(childComplexity int) int
+		GreatScalar func(childComplexity int) int
 		Hair        func(childComplexity int) int
 		ID          func(childComplexity int) int
 		LuckyNumber func(childComplexity int) int
@@ -304,6 +305,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.User.Friends(childComplexity), true
 
+	case "User.greatScalar":
+		if e.complexity.User.GreatScalar == nil {
+			break
+		}
+
+		return e.complexity.User.GreatScalar(childComplexity), true
+
 	case "User.hair":
 		if e.complexity.User.Hair == nil {
 			break
@@ -456,6 +464,7 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 
 var sources = []*ast.Source{
 	{Name: "../schema.graphql", Input: `scalar Date
+scalar MyGreatScalar
 
 type Query {
   me: User
@@ -484,6 +493,7 @@ type User implements Being & Lucky {
   hair: Hair
   birthdate: Date
   friends: [User!]!
+  greatScalar: MyGreatScalar
 }
 
 input NewUser {
@@ -1059,6 +1069,8 @@ func (ec *executionContext) fieldContext_Mutation_createUser(ctx context.Context
 				return ec.fieldContext_User_birthdate(ctx, field)
 			case "friends":
 				return ec.fieldContext_User_friends(ctx, field)
+			case "greatScalar":
+				return ec.fieldContext_User_greatScalar(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
 		},
@@ -1125,6 +1137,8 @@ func (ec *executionContext) fieldContext_Query_me(ctx context.Context, field gra
 				return ec.fieldContext_User_birthdate(ctx, field)
 			case "friends":
 				return ec.fieldContext_User_friends(ctx, field)
+			case "greatScalar":
+				return ec.fieldContext_User_greatScalar(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
 		},
@@ -1180,6 +1194,8 @@ func (ec *executionContext) fieldContext_Query_user(ctx context.Context, field g
 				return ec.fieldContext_User_birthdate(ctx, field)
 			case "friends":
 				return ec.fieldContext_User_friends(ctx, field)
+			case "greatScalar":
+				return ec.fieldContext_User_greatScalar(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
 		},
@@ -1408,6 +1424,8 @@ func (ec *executionContext) fieldContext_Query_usersBornOn(ctx context.Context, 
 				return ec.fieldContext_User_birthdate(ctx, field)
 			case "friends":
 				return ec.fieldContext_User_friends(ctx, field)
+			case "greatScalar":
+				return ec.fieldContext_User_greatScalar(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
 		},
@@ -1477,6 +1495,8 @@ func (ec *executionContext) fieldContext_Query_usersBornOnDates(ctx context.Cont
 				return ec.fieldContext_User_birthdate(ctx, field)
 			case "friends":
 				return ec.fieldContext_User_friends(ctx, field)
+			case "greatScalar":
+				return ec.fieldContext_User_greatScalar(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
 		},
@@ -1543,6 +1563,8 @@ func (ec *executionContext) fieldContext_Query_userSearch(ctx context.Context, f
 				return ec.fieldContext_User_birthdate(ctx, field)
 			case "friends":
 				return ec.fieldContext_User_friends(ctx, field)
+			case "greatScalar":
+				return ec.fieldContext_User_greatScalar(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
 		},
@@ -2055,8 +2077,51 @@ func (ec *executionContext) fieldContext_User_friends(ctx context.Context, field
 				return ec.fieldContext_User_birthdate(ctx, field)
 			case "friends":
 				return ec.fieldContext_User_friends(ctx, field)
+			case "greatScalar":
+				return ec.fieldContext_User_greatScalar(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _User_greatScalar(ctx context.Context, field graphql.CollectedField, obj *User) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_User_greatScalar(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.GreatScalar, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOMyGreatScalar2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_User_greatScalar(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "User",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type MyGreatScalar does not have child fields")
 		},
 	}
 	return fc, nil
@@ -4370,6 +4435,8 @@ func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "greatScalar":
+			out.Values[i] = ec._User_greatScalar(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -5322,6 +5389,22 @@ func (ec *executionContext) marshalOLucky2githubᚗcomᚋKhanᚋgenqlientᚋinte
 		return graphql.Null
 	}
 	return ec._Lucky(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOMyGreatScalar2ᚖstring(ctx context.Context, v interface{}) (*string, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalString(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOMyGreatScalar2ᚖstring(ctx context.Context, sel ast.SelectionSet, v *string) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	res := graphql.MarshalString(*v)
+	return res
 }
 
 func (ec *executionContext) unmarshalOString2ᚖstring(ctx context.Context, v interface{}) (*string, error) {

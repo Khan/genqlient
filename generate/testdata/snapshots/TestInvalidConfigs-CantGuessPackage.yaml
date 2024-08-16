@@ -1,3 +1,0 @@
-invalid config file testdata/invalid-config/CantGuessPackage.yaml: unable to guess package-name: 'invalid-config' is not a valid identifier
-Set package name in genqlient.yaml
-Example: https://github.com/Khan/genqlient/blob/main/example/genqlient.yaml#L6

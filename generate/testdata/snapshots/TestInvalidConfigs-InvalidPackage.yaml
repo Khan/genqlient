@@ -1,1 +1,1 @@
-invalid config file testdata/invalid-config/InvalidPackage.yaml: invalid package in genqlient.yaml: 'bogus-package-name' is not a valid identifier
+invalid config file testdata/invalidConfig/InvalidPackage.yaml: invalid package in genqlient.yaml: 'bogus-package-name' is not a valid identifier

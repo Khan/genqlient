@@ -1,13 +1,13 @@
 (*generate.Config)({
   Schema: (generate.StringList) (len=2) {
-    (string) (len=42) "testdata/valid-config/first_schema.graphql",
-    (string) (len=43) "testdata/valid-config/second_schema.graphql"
+    (string) (len=41) "testdata/validConfig/first_schema.graphql",
+    (string) (len=42) "testdata/validConfig/second_schema.graphql"
   },
   Operations: (generate.StringList) (len=2) {
-    (string) (len=46) "testdata/valid-config/first_operations.graphql",
-    (string) (len=47) "testdata/valid-config/second_operations.graphql"
+    (string) (len=45) "testdata/validConfig/first_operations.graphql",
+    (string) (len=46) "testdata/validConfig/second_operations.graphql"
   },
-  Generated: (string) (len=34) "testdata/valid-config/generated.go",
+  Generated: (string) (len=33) "testdata/validConfig/generated.go",
   Package: (string) (len=11) "validConfig",
   ExportOperations: (string) "",
   ContextType: (string) (len=15) "context.Context",
@@ -23,5 +23,6 @@
   StructReferences: (bool) false,
   Extensions: (bool) false,
   AllowBrokenFeatures: (bool) false,
-  baseDir: (string) (len=21) "testdata/valid-config"
+  baseDir: (string) (len=20) "testdata/validConfig",
+  pkgPath: (string) (len=55) "github.com/Khan/genqlient/generate/testdata/validConfig"
 })

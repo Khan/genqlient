@@ -5,5 +5,3 @@ schema:
 operations:
 - first_operations.graphql
 - second_operations.graphql
-
-package: validConfig

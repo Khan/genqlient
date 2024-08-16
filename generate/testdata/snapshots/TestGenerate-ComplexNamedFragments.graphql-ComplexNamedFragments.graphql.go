@@ -113,6 +113,159 @@ func (v *ComplexNamedFragmentsResponse) __premarshalJSON() (*__premarshalComplex
 	return &retval, nil
 }
 
+// ComplexNamedFragmentsWithInlineUnionResponse is returned by ComplexNamedFragmentsWithInlineUnion on success.
+type ComplexNamedFragmentsWithInlineUnionResponse struct {
+	// user looks up a user by some stuff.
+	//
+	// See UserQueryInput for what stuff is supported.
+	// If query is null, returns the current user.
+	User ComplexNamedFragmentsWithInlineUnionUser      `json:"user"`
+	Root ComplexNamedFragmentsWithInlineUnionRootTopic `json:"root"`
+}
+
+// GetUser returns ComplexNamedFragmentsWithInlineUnionResponse.User, and is useful for accessing the field via an interface.
+func (v *ComplexNamedFragmentsWithInlineUnionResponse) GetUser() ComplexNamedFragmentsWithInlineUnionUser {
+	return v.User
+}
+
+// GetRoot returns ComplexNamedFragmentsWithInlineUnionResponse.Root, and is useful for accessing the field via an interface.
+func (v *ComplexNamedFragmentsWithInlineUnionResponse) GetRoot() ComplexNamedFragmentsWithInlineUnionRootTopic {
+	return v.Root
+}
+
+// ComplexNamedFragmentsWithInlineUnionRootTopic includes the requested fields of the GraphQL type Topic.
+type ComplexNamedFragmentsWithInlineUnionRootTopic struct {
+	TopicNewestContent `json:"-"`
+}
+
+// GetNewestContent returns ComplexNamedFragmentsWithInlineUnionRootTopic.NewestContent, and is useful for accessing the field via an interface.
+func (v *ComplexNamedFragmentsWithInlineUnionRootTopic) GetNewestContent() TopicNewestContentNewestContentLeafContent {
+	return v.TopicNewestContent.NewestContent
+}
+
+func (v *ComplexNamedFragmentsWithInlineUnionRootTopic) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*ComplexNamedFragmentsWithInlineUnionRootTopic
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.ComplexNamedFragmentsWithInlineUnionRootTopic = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.TopicNewestContent)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+type __premarshalComplexNamedFragmentsWithInlineUnionRootTopic struct {
+	NewestContent json.RawMessage `json:"newestContent"`
+}
+
+func (v *ComplexNamedFragmentsWithInlineUnionRootTopic) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *ComplexNamedFragmentsWithInlineUnionRootTopic) __premarshalJSON() (*__premarshalComplexNamedFragmentsWithInlineUnionRootTopic, error) {
+	var retval __premarshalComplexNamedFragmentsWithInlineUnionRootTopic
+
+	{
+
+		dst := &retval.NewestContent
+		src := v.TopicNewestContent.NewestContent
+		var err error
+		*dst, err = __marshalTopicNewestContentNewestContentLeafContent(
+			&src)
+		if err != nil {
+			return nil, fmt.Errorf(
+				"unable to marshal ComplexNamedFragmentsWithInlineUnionRootTopic.TopicNewestContent.NewestContent: %w", err)
+		}
+	}
+	return &retval, nil
+}
+
+// ComplexNamedFragmentsWithInlineUnionUser includes the requested fields of the GraphQL type User.
+// The GraphQL type's documentation follows.
+//
+// A User is a user!
+type ComplexNamedFragmentsWithInlineUnionUser struct {
+	UserLastContent `json:"-"`
+}
+
+// GetLastContent returns ComplexNamedFragmentsWithInlineUnionUser.LastContent, and is useful for accessing the field via an interface.
+func (v *ComplexNamedFragmentsWithInlineUnionUser) GetLastContent() UserLastContentLastContentLeafContent {
+	return v.UserLastContent.LastContent
+}
+
+func (v *ComplexNamedFragmentsWithInlineUnionUser) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*ComplexNamedFragmentsWithInlineUnionUser
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.ComplexNamedFragmentsWithInlineUnionUser = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.UserLastContent)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+type __premarshalComplexNamedFragmentsWithInlineUnionUser struct {
+	LastContent json.RawMessage `json:"lastContent"`
+}
+
+func (v *ComplexNamedFragmentsWithInlineUnionUser) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *ComplexNamedFragmentsWithInlineUnionUser) __premarshalJSON() (*__premarshalComplexNamedFragmentsWithInlineUnionUser, error) {
+	var retval __premarshalComplexNamedFragmentsWithInlineUnionUser
+
+	{
+
+		dst := &retval.LastContent
+		src := v.UserLastContent.LastContent
+		var err error
+		*dst, err = __marshalUserLastContentLastContentLeafContent(
+			&src)
+		if err != nil {
+			return nil, fmt.Errorf(
+				"unable to marshal ComplexNamedFragmentsWithInlineUnionUser.UserLastContent.LastContent: %w", err)
+		}
+	}
+	return &retval, nil
+}
+
 // ContentFields includes the GraphQL fields of Content requested by the fragment ContentFields.
 // The GraphQL type's documentation follows.
 //
@@ -120,8 +273,8 @@ func (v *ComplexNamedFragmentsResponse) __premarshalJSON() (*__premarshalComplex
 //
 // ContentFields is implemented by the following types:
 // ContentFieldsArticle
-// ContentFieldsVideo
 // ContentFieldsTopic
+// ContentFieldsVideo
 type ContentFields interface {
 	implementsGraphQLInterfaceContentFields()
 	// GetName returns the interface-field "name" from its implementation.
@@ -131,8 +284,8 @@ type ContentFields interface {
 }
 
 func (v *ContentFieldsArticle) implementsGraphQLInterfaceContentFields() {}
-func (v *ContentFieldsVideo) implementsGraphQLInterfaceContentFields()   {}
 func (v *ContentFieldsTopic) implementsGraphQLInterfaceContentFields()   {}
+func (v *ContentFieldsVideo) implementsGraphQLInterfaceContentFields()   {}
 
 func __unmarshalContentFields(b []byte, v *ContentFields) error {
 	if string(b) == "null" {
@@ -151,11 +304,11 @@ func __unmarshalContentFields(b []byte, v *ContentFields) error {
 	case "Article":
 		*v = new(ContentFieldsArticle)
 		return json.Unmarshal(b, *v)
-	case "Video":
-		*v = new(ContentFieldsVideo)
-		return json.Unmarshal(b, *v)
 	case "Topic":
 		*v = new(ContentFieldsTopic)
+		return json.Unmarshal(b, *v)
+	case "Video":
+		*v = new(ContentFieldsVideo)
 		return json.Unmarshal(b, *v)
 	case "":
 		return fmt.Errorf(
@@ -178,20 +331,20 @@ func __marshalContentFields(v *ContentFields) ([]byte, error) {
 			*ContentFieldsArticle
 		}{typename, v}
 		return json.Marshal(result)
-	case *ContentFieldsVideo:
-		typename = "Video"
-
-		result := struct {
-			TypeName string `json:"__typename"`
-			*ContentFieldsVideo
-		}{typename, v}
-		return json.Marshal(result)
 	case *ContentFieldsTopic:
 		typename = "Topic"
 
 		result := struct {
 			TypeName string `json:"__typename"`
 			*ContentFieldsTopic
+		}{typename, v}
+		return json.Marshal(result)
+	case *ContentFieldsVideo:
+		typename = "Video"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*ContentFieldsVideo
 		}{typename, v}
 		return json.Marshal(result)
 	case nil:
@@ -1649,6 +1802,652 @@ func (v *QueryFragment) __premarshalJSON() (*__premarshalQueryFragment, error) {
 	return &retval, nil
 }
 
+// # two fragments of different types with fields containing the same inline named fragment of a union
+//
+// SimpleLeafContent is implemented by the following types:
+// SimpleLeafContentArticle
+// SimpleLeafContentVideo
+type SimpleLeafContent interface {
+	implementsGraphQLInterfaceSimpleLeafContent()
+}
+
+func (v *SimpleLeafContentArticle) implementsGraphQLInterfaceSimpleLeafContent() {}
+func (v *SimpleLeafContentVideo) implementsGraphQLInterfaceSimpleLeafContent()   {}
+
+func __unmarshalSimpleLeafContent(b []byte, v *SimpleLeafContent) error {
+	if string(b) == "null" {
+		return nil
+	}
+
+	var tn struct {
+		TypeName string `json:"__typename"`
+	}
+	err := json.Unmarshal(b, &tn)
+	if err != nil {
+		return err
+	}
+
+	switch tn.TypeName {
+	case "Article":
+		*v = new(SimpleLeafContentArticle)
+		return json.Unmarshal(b, *v)
+	case "Video":
+		*v = new(SimpleLeafContentVideo)
+		return json.Unmarshal(b, *v)
+	case "":
+		return fmt.Errorf(
+			"response was missing LeafContent.__typename")
+	default:
+		return fmt.Errorf(
+			`unexpected concrete type for SimpleLeafContent: "%v"`, tn.TypeName)
+	}
+}
+
+func __marshalSimpleLeafContent(v *SimpleLeafContent) ([]byte, error) {
+
+	var typename string
+	switch v := (*v).(type) {
+	case *SimpleLeafContentArticle:
+		typename = "Article"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*SimpleLeafContentArticle
+		}{typename, v}
+		return json.Marshal(result)
+	case *SimpleLeafContentVideo:
+		typename = "Video"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*SimpleLeafContentVideo
+		}{typename, v}
+		return json.Marshal(result)
+	case nil:
+		return []byte("null"), nil
+	default:
+		return nil, fmt.Errorf(
+			`unexpected concrete type for SimpleLeafContent: "%T"`, v)
+	}
+}
+
+// # two fragments of different types with fields containing the same inline named fragment of a union
+type SimpleLeafContentArticle struct {
+	// ID is documented in the Content interface.
+	Id testutil.ID `json:"id"`
+}
+
+// GetId returns SimpleLeafContentArticle.Id, and is useful for accessing the field via an interface.
+func (v *SimpleLeafContentArticle) GetId() testutil.ID { return v.Id }
+
+// # two fragments of different types with fields containing the same inline named fragment of a union
+type SimpleLeafContentVideo struct {
+	// ID is documented in the Content interface.
+	Id testutil.ID `json:"id"`
+}
+
+// GetId returns SimpleLeafContentVideo.Id, and is useful for accessing the field via an interface.
+func (v *SimpleLeafContentVideo) GetId() testutil.ID { return v.Id }
+
+// TopicNewestContent includes the GraphQL fields of Topic requested by the fragment TopicNewestContent.
+type TopicNewestContent struct {
+	NewestContent TopicNewestContentNewestContentLeafContent `json:"-"`
+}
+
+// GetNewestContent returns TopicNewestContent.NewestContent, and is useful for accessing the field via an interface.
+func (v *TopicNewestContent) GetNewestContent() TopicNewestContentNewestContentLeafContent {
+	return v.NewestContent
+}
+
+func (v *TopicNewestContent) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*TopicNewestContent
+		NewestContent json.RawMessage `json:"newestContent"`
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.TopicNewestContent = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	{
+		dst := &v.NewestContent
+		src := firstPass.NewestContent
+		if len(src) != 0 && string(src) != "null" {
+			err = __unmarshalTopicNewestContentNewestContentLeafContent(
+				src, dst)
+			if err != nil {
+				return fmt.Errorf(
+					"unable to unmarshal TopicNewestContent.NewestContent: %w", err)
+			}
+		}
+	}
+	return nil
+}
+
+type __premarshalTopicNewestContent struct {
+	NewestContent json.RawMessage `json:"newestContent"`
+}
+
+func (v *TopicNewestContent) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *TopicNewestContent) __premarshalJSON() (*__premarshalTopicNewestContent, error) {
+	var retval __premarshalTopicNewestContent
+
+	{
+
+		dst := &retval.NewestContent
+		src := v.NewestContent
+		var err error
+		*dst, err = __marshalTopicNewestContentNewestContentLeafContent(
+			&src)
+		if err != nil {
+			return nil, fmt.Errorf(
+				"unable to marshal TopicNewestContent.NewestContent: %w", err)
+		}
+	}
+	return &retval, nil
+}
+
+// TopicNewestContentNewestContentArticle includes the requested fields of the GraphQL type Article.
+type TopicNewestContentNewestContentArticle struct {
+	Typename                 string `json:"__typename"`
+	SimpleLeafContentArticle `json:"-"`
+}
+
+// GetTypename returns TopicNewestContentNewestContentArticle.Typename, and is useful for accessing the field via an interface.
+func (v *TopicNewestContentNewestContentArticle) GetTypename() string { return v.Typename }
+
+// GetId returns TopicNewestContentNewestContentArticle.Id, and is useful for accessing the field via an interface.
+func (v *TopicNewestContentNewestContentArticle) GetId() testutil.ID {
+	return v.SimpleLeafContentArticle.Id
+}
+
+func (v *TopicNewestContentNewestContentArticle) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*TopicNewestContentNewestContentArticle
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.TopicNewestContentNewestContentArticle = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.SimpleLeafContentArticle)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+type __premarshalTopicNewestContentNewestContentArticle struct {
+	Typename string `json:"__typename"`
+
+	Id testutil.ID `json:"id"`
+}
+
+func (v *TopicNewestContentNewestContentArticle) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *TopicNewestContentNewestContentArticle) __premarshalJSON() (*__premarshalTopicNewestContentNewestContentArticle, error) {
+	var retval __premarshalTopicNewestContentNewestContentArticle
+
+	retval.Typename = v.Typename
+	retval.Id = v.SimpleLeafContentArticle.Id
+	return &retval, nil
+}
+
+// TopicNewestContentNewestContentLeafContent includes the requested fields of the GraphQL interface LeafContent.
+//
+// TopicNewestContentNewestContentLeafContent is implemented by the following types:
+// TopicNewestContentNewestContentArticle
+// TopicNewestContentNewestContentVideo
+// The GraphQL type's documentation follows.
+//
+// LeafContent represents content items that can't have child-nodes.
+type TopicNewestContentNewestContentLeafContent interface {
+	implementsGraphQLInterfaceTopicNewestContentNewestContentLeafContent()
+	// GetTypename returns the receiver's concrete GraphQL type-name (see interface doc for possible values).
+	GetTypename() string
+	SimpleLeafContent
+}
+
+func (v *TopicNewestContentNewestContentArticle) implementsGraphQLInterfaceTopicNewestContentNewestContentLeafContent() {
+}
+func (v *TopicNewestContentNewestContentVideo) implementsGraphQLInterfaceTopicNewestContentNewestContentLeafContent() {
+}
+
+func __unmarshalTopicNewestContentNewestContentLeafContent(b []byte, v *TopicNewestContentNewestContentLeafContent) error {
+	if string(b) == "null" {
+		return nil
+	}
+
+	var tn struct {
+		TypeName string `json:"__typename"`
+	}
+	err := json.Unmarshal(b, &tn)
+	if err != nil {
+		return err
+	}
+
+	switch tn.TypeName {
+	case "Article":
+		*v = new(TopicNewestContentNewestContentArticle)
+		return json.Unmarshal(b, *v)
+	case "Video":
+		*v = new(TopicNewestContentNewestContentVideo)
+		return json.Unmarshal(b, *v)
+	case "":
+		return fmt.Errorf(
+			"response was missing LeafContent.__typename")
+	default:
+		return fmt.Errorf(
+			`unexpected concrete type for TopicNewestContentNewestContentLeafContent: "%v"`, tn.TypeName)
+	}
+}
+
+func __marshalTopicNewestContentNewestContentLeafContent(v *TopicNewestContentNewestContentLeafContent) ([]byte, error) {
+
+	var typename string
+	switch v := (*v).(type) {
+	case *TopicNewestContentNewestContentArticle:
+		typename = "Article"
+
+		premarshaled, err := v.__premarshalJSON()
+		if err != nil {
+			return nil, err
+		}
+		result := struct {
+			TypeName string `json:"__typename"`
+			*__premarshalTopicNewestContentNewestContentArticle
+		}{typename, premarshaled}
+		return json.Marshal(result)
+	case *TopicNewestContentNewestContentVideo:
+		typename = "Video"
+
+		premarshaled, err := v.__premarshalJSON()
+		if err != nil {
+			return nil, err
+		}
+		result := struct {
+			TypeName string `json:"__typename"`
+			*__premarshalTopicNewestContentNewestContentVideo
+		}{typename, premarshaled}
+		return json.Marshal(result)
+	case nil:
+		return []byte("null"), nil
+	default:
+		return nil, fmt.Errorf(
+			`unexpected concrete type for TopicNewestContentNewestContentLeafContent: "%T"`, v)
+	}
+}
+
+// TopicNewestContentNewestContentVideo includes the requested fields of the GraphQL type Video.
+type TopicNewestContentNewestContentVideo struct {
+	Typename               string `json:"__typename"`
+	SimpleLeafContentVideo `json:"-"`
+}
+
+// GetTypename returns TopicNewestContentNewestContentVideo.Typename, and is useful for accessing the field via an interface.
+func (v *TopicNewestContentNewestContentVideo) GetTypename() string { return v.Typename }
+
+// GetId returns TopicNewestContentNewestContentVideo.Id, and is useful for accessing the field via an interface.
+func (v *TopicNewestContentNewestContentVideo) GetId() testutil.ID {
+	return v.SimpleLeafContentVideo.Id
+}
+
+func (v *TopicNewestContentNewestContentVideo) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*TopicNewestContentNewestContentVideo
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.TopicNewestContentNewestContentVideo = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.SimpleLeafContentVideo)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+type __premarshalTopicNewestContentNewestContentVideo struct {
+	Typename string `json:"__typename"`
+
+	Id testutil.ID `json:"id"`
+}
+
+func (v *TopicNewestContentNewestContentVideo) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *TopicNewestContentNewestContentVideo) __premarshalJSON() (*__premarshalTopicNewestContentNewestContentVideo, error) {
+	var retval __premarshalTopicNewestContentNewestContentVideo
+
+	retval.Typename = v.Typename
+	retval.Id = v.SimpleLeafContentVideo.Id
+	return &retval, nil
+}
+
+// UserLastContent includes the GraphQL fields of User requested by the fragment UserLastContent.
+// The GraphQL type's documentation follows.
+//
+// A User is a user!
+type UserLastContent struct {
+	LastContent UserLastContentLastContentLeafContent `json:"-"`
+}
+
+// GetLastContent returns UserLastContent.LastContent, and is useful for accessing the field via an interface.
+func (v *UserLastContent) GetLastContent() UserLastContentLastContentLeafContent {
+	return v.LastContent
+}
+
+func (v *UserLastContent) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*UserLastContent
+		LastContent json.RawMessage `json:"lastContent"`
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.UserLastContent = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	{
+		dst := &v.LastContent
+		src := firstPass.LastContent
+		if len(src) != 0 && string(src) != "null" {
+			err = __unmarshalUserLastContentLastContentLeafContent(
+				src, dst)
+			if err != nil {
+				return fmt.Errorf(
+					"unable to unmarshal UserLastContent.LastContent: %w", err)
+			}
+		}
+	}
+	return nil
+}
+
+type __premarshalUserLastContent struct {
+	LastContent json.RawMessage `json:"lastContent"`
+}
+
+func (v *UserLastContent) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *UserLastContent) __premarshalJSON() (*__premarshalUserLastContent, error) {
+	var retval __premarshalUserLastContent
+
+	{
+
+		dst := &retval.LastContent
+		src := v.LastContent
+		var err error
+		*dst, err = __marshalUserLastContentLastContentLeafContent(
+			&src)
+		if err != nil {
+			return nil, fmt.Errorf(
+				"unable to marshal UserLastContent.LastContent: %w", err)
+		}
+	}
+	return &retval, nil
+}
+
+// UserLastContentLastContentArticle includes the requested fields of the GraphQL type Article.
+type UserLastContentLastContentArticle struct {
+	Typename                 string `json:"__typename"`
+	SimpleLeafContentArticle `json:"-"`
+}
+
+// GetTypename returns UserLastContentLastContentArticle.Typename, and is useful for accessing the field via an interface.
+func (v *UserLastContentLastContentArticle) GetTypename() string { return v.Typename }
+
+// GetId returns UserLastContentLastContentArticle.Id, and is useful for accessing the field via an interface.
+func (v *UserLastContentLastContentArticle) GetId() testutil.ID { return v.SimpleLeafContentArticle.Id }
+
+func (v *UserLastContentLastContentArticle) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*UserLastContentLastContentArticle
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.UserLastContentLastContentArticle = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.SimpleLeafContentArticle)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+type __premarshalUserLastContentLastContentArticle struct {
+	Typename string `json:"__typename"`
+
+	Id testutil.ID `json:"id"`
+}
+
+func (v *UserLastContentLastContentArticle) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *UserLastContentLastContentArticle) __premarshalJSON() (*__premarshalUserLastContentLastContentArticle, error) {
+	var retval __premarshalUserLastContentLastContentArticle
+
+	retval.Typename = v.Typename
+	retval.Id = v.SimpleLeafContentArticle.Id
+	return &retval, nil
+}
+
+// UserLastContentLastContentLeafContent includes the requested fields of the GraphQL interface LeafContent.
+//
+// UserLastContentLastContentLeafContent is implemented by the following types:
+// UserLastContentLastContentArticle
+// UserLastContentLastContentVideo
+// The GraphQL type's documentation follows.
+//
+// LeafContent represents content items that can't have child-nodes.
+type UserLastContentLastContentLeafContent interface {
+	implementsGraphQLInterfaceUserLastContentLastContentLeafContent()
+	// GetTypename returns the receiver's concrete GraphQL type-name (see interface doc for possible values).
+	GetTypename() string
+	SimpleLeafContent
+}
+
+func (v *UserLastContentLastContentArticle) implementsGraphQLInterfaceUserLastContentLastContentLeafContent() {
+}
+func (v *UserLastContentLastContentVideo) implementsGraphQLInterfaceUserLastContentLastContentLeafContent() {
+}
+
+func __unmarshalUserLastContentLastContentLeafContent(b []byte, v *UserLastContentLastContentLeafContent) error {
+	if string(b) == "null" {
+		return nil
+	}
+
+	var tn struct {
+		TypeName string `json:"__typename"`
+	}
+	err := json.Unmarshal(b, &tn)
+	if err != nil {
+		return err
+	}
+
+	switch tn.TypeName {
+	case "Article":
+		*v = new(UserLastContentLastContentArticle)
+		return json.Unmarshal(b, *v)
+	case "Video":
+		*v = new(UserLastContentLastContentVideo)
+		return json.Unmarshal(b, *v)
+	case "":
+		return fmt.Errorf(
+			"response was missing LeafContent.__typename")
+	default:
+		return fmt.Errorf(
+			`unexpected concrete type for UserLastContentLastContentLeafContent: "%v"`, tn.TypeName)
+	}
+}
+
+func __marshalUserLastContentLastContentLeafContent(v *UserLastContentLastContentLeafContent) ([]byte, error) {
+
+	var typename string
+	switch v := (*v).(type) {
+	case *UserLastContentLastContentArticle:
+		typename = "Article"
+
+		premarshaled, err := v.__premarshalJSON()
+		if err != nil {
+			return nil, err
+		}
+		result := struct {
+			TypeName string `json:"__typename"`
+			*__premarshalUserLastContentLastContentArticle
+		}{typename, premarshaled}
+		return json.Marshal(result)
+	case *UserLastContentLastContentVideo:
+		typename = "Video"
+
+		premarshaled, err := v.__premarshalJSON()
+		if err != nil {
+			return nil, err
+		}
+		result := struct {
+			TypeName string `json:"__typename"`
+			*__premarshalUserLastContentLastContentVideo
+		}{typename, premarshaled}
+		return json.Marshal(result)
+	case nil:
+		return []byte("null"), nil
+	default:
+		return nil, fmt.Errorf(
+			`unexpected concrete type for UserLastContentLastContentLeafContent: "%T"`, v)
+	}
+}
+
+// UserLastContentLastContentVideo includes the requested fields of the GraphQL type Video.
+type UserLastContentLastContentVideo struct {
+	Typename               string `json:"__typename"`
+	SimpleLeafContentVideo `json:"-"`
+}
+
+// GetTypename returns UserLastContentLastContentVideo.Typename, and is useful for accessing the field via an interface.
+func (v *UserLastContentLastContentVideo) GetTypename() string { return v.Typename }
+
+// GetId returns UserLastContentLastContentVideo.Id, and is useful for accessing the field via an interface.
+func (v *UserLastContentLastContentVideo) GetId() testutil.ID { return v.SimpleLeafContentVideo.Id }
+
+func (v *UserLastContentLastContentVideo) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*UserLastContentLastContentVideo
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.UserLastContentLastContentVideo = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.SimpleLeafContentVideo)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+type __premarshalUserLastContentLastContentVideo struct {
+	Typename string `json:"__typename"`
+
+	Id testutil.ID `json:"id"`
+}
+
+func (v *UserLastContentLastContentVideo) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *UserLastContentLastContentVideo) __premarshalJSON() (*__premarshalUserLastContentLastContentVideo, error) {
+	var retval __premarshalUserLastContentLastContentVideo
+
+	retval.Typename = v.Typename
+	retval.Id = v.SimpleLeafContentVideo.Id
+	return &retval, nil
+}
+
 // VideoFields includes the GraphQL fields of Video requested by the fragment VideoFields.
 type VideoFields struct {
 	// ID is documented in the Content interface.
@@ -1818,5 +2617,58 @@ func ComplexNamedFragments(
 	)
 
 	return data_, err_
+}
+
+// The query or mutation executed by ComplexNamedFragmentsWithInlineUnion.
+const ComplexNamedFragmentsWithInlineUnion_Operation = `
+query ComplexNamedFragmentsWithInlineUnion {
+	user {
+		... UserLastContent
+	}
+	root {
+		... TopicNewestContent
+	}
+}
+fragment UserLastContent on User {
+	lastContent {
+		__typename
+		... SimpleLeafContent
+	}
+}
+fragment TopicNewestContent on Topic {
+	newestContent {
+		__typename
+		... SimpleLeafContent
+	}
+}
+fragment SimpleLeafContent on LeafContent {
+	... on Article {
+		id
+	}
+	... on Video {
+		id
+	}
+}
+`
+
+func ComplexNamedFragmentsWithInlineUnion(
+	client_ graphql.Client,
+) (*ComplexNamedFragmentsWithInlineUnionResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "ComplexNamedFragmentsWithInlineUnion",
+		Query:  ComplexNamedFragmentsWithInlineUnion_Operation,
+	}
+	var err_ error
+
+	var data_ ComplexNamedFragmentsWithInlineUnionResponse
+	resp_ := &graphql.Response{Data: &data_}
+
+	err_ = client_.MakeRequest(
+		nil,
+		req_,
+		resp_,
+	)
+
+	return &data_, err_
 }
 

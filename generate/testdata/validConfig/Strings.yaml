@@ -1,3 +1,2 @@
 schema: schema.graphql
 operations: operations.graphql
-package: validConfig

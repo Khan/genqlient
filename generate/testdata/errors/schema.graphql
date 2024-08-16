@@ -1,6 +1,10 @@
 type Query {
   f: String
   user: User
+  # The top-level default is currently not used - there is no query that would not specify the input argument.
+  # But it is here for completeness - maybe it will be used in future or cause some other unexpected issues.
+  default(input: InputWithDefaults! = {field: "input omitted"}): Boolean
+  omitempty(input: OmitemptyInput): Boolean
 }
 
 type User {
@@ -9,3 +13,13 @@ type User {
 }
 
 scalar ValidScalar
+
+input InputWithDefaults {
+  field: String! = "input field omitted"
+  nullableField: String = "nullable input field omitted"
+}
+
+input OmitemptyInput {
+  field: String!
+  nullableField: String
+}

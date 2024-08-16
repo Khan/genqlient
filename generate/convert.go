@@ -245,6 +245,9 @@ func (g *generator) convertType(
 	def := g.schema.Types[typ.Name()]
 	goTyp, err := g.convertDefinition(
 		namePrefix, def, typ.Position, selectionSet, options, queryOptions)
+	if err != nil {
+		return nil, err
+	}
 
 	if g.getStructReference(def) {
 		if options.Pointer == nil || *options.Pointer {
@@ -271,7 +274,8 @@ func (g *generator) convertType(
 			Elem:         goTyp,
 		}
 	}
-	return goTyp, err
+
+	return goTyp, nil
 }
 
 // getStructReference decides if a field should be of pointer type and have the omitempty flag set.
@@ -445,6 +449,24 @@ func (g *generator) convertDefinition(
 				namePrefix, field.Type, nil, fieldOptions, queryOptions)
 			if err != nil {
 				return nil, err
+			}
+
+			if !g.Config.StructReferences {
+				// Only do these validation when StructReferences are not used, as that can generate types that would not
+				// pass these validations. See https://github.com/Khan/genqlient/issues/342
+
+				// Try to protect against generating field type that has possibility to send `null` to non-nullable graphQL
+				// type. This does not protect against lists/slices, as Go zero-slices are already serialized as `null`
+				// (which can therefore currently send invalid graphQL value - e.g. `null` for [String!]!).
+				// And does not protect against custom MarshalJSON.
+				_, isPointer := fieldGoType.(*goPointerType)
+				if field.Type.NonNull && isPointer && !fieldOptions.GetOmitempty() {
+					return nil, errorf(pos, "pointer on non-null input field can only be used together with omitempty: %s.%s", name, field.Name)
+				}
+
+				if fieldOptions.GetOmitempty() && field.Type.NonNull && field.DefaultValue == nil {
+					return nil, errorf(pos, "omitempty may only be used on optional arguments: %s.%s", name, field.Name)
+				}
 			}
 
 			goType.Fields[i] = &goStructField{
@@ -675,7 +697,7 @@ func (g *generator) convertSelectionSet(
 // the fragment's type.  This is distinct from the rules for when a fragment
 // spread is legal, which is true when the fragment would be active for *any*
 // of the concrete types the spread-context could have (see the [GraphQL spec]
-// or docs/DESIGN.md).
+// or docs/design.md).
 //
 // containingTypedef is as described in convertInlineFragment, below.
 // fragmentTypedef is the definition of the fragment's type-condition, i.e. the
@@ -698,6 +720,17 @@ func fragmentMatches(containingTypedef, fragmentTypedef *ast.Definition) bool {
 			return true
 		}
 	}
+
+	// Handle the special case where the fragment is on a union, then the
+	// fragment can match any of the types in the union.
+	if fragmentTypedef.Kind == ast.Union {
+		for _, typeName := range fragmentTypedef.Types {
+			if typeName == containingTypedef.Name {
+				return true
+			}
+		}
+	}
+
 	return false
 }
 
@@ -712,7 +745,7 @@ func fragmentMatches(containingTypedef, fragmentTypedef *ast.Definition) bool {
 //
 // In general, we treat such fragments' fields as if they were fields of the
 // parent selection-set (except of course they are only included in types the
-// fragment matches); see docs/DESIGN.md for more.
+// fragment matches); see docs/design.md for more.
 func (g *generator) convertInlineFragment(
 	namePrefix *prefixList,
 	fragment *ast.InlineFragment,
@@ -827,6 +860,8 @@ func (g *generator) convertNamedFragment(fragment *ast.FragmentDefinition) (goTy
 		return goType, nil
 	case ast.Interface, ast.Union:
 		implementationTypes := g.schema.GetPossibleTypes(typ)
+		// Make sure we generate stable output by sorting the types by name when we get them
+		sort.Slice(implementationTypes, func(i, j int) bool { return implementationTypes[i].Name < implementationTypes[j].Name })
 		goType := &goInterfaceType{
 			GoName:          fragment.Name,
 			SharedFields:    fields,

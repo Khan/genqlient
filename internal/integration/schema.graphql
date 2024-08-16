@@ -1,4 +1,5 @@
 scalar Date
+scalar MyGreatScalar
 
 type Query {
   me: User
@@ -27,6 +28,7 @@ type User implements Being & Lucky {
   hair: Hair
   birthdate: Date
   friends: [User!]!
+  greatScalar: MyGreatScalar
 }
 
 input NewUser {

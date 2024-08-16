@@ -11,9 +11,9 @@ import (
 )
 
 const (
-	findConfigDir    = "testdata/find-config"
-	validConfigDir   = "testdata/valid-config"
-	invalidConfigDir = "testdata/invalid-config"
+	findConfigDir    = "testdata/findConfig"
+	validConfigDir   = "testdata/validConfig"
+	invalidConfigDir = "testdata/invalidConfig"
 )
 
 func TestFindCfg(t *testing.T) {
