@@ -1,7 +1,6 @@
 package graphql
 
 import (
-	"encoding/json"
 	"fmt"
 	"reflect"
 	"sync"
@@ -19,8 +18,6 @@ type subscription struct {
 	id                  string
 	hasBeenUnsubscribed bool
 }
-
-type ForwardDataFunction func(interfaceChan interface{}, jsonRawMsg json.RawMessage) error
 
 func (s *subscriptionMap) Create(subscriptionID string, interfaceChan interface{}, forwardDataFunc ForwardDataFunction) {
 	s.Lock()

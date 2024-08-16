@@ -65,7 +65,7 @@ type WebSocketClient interface {
 	// forwardDataFunc is the function that will cast the received interface into
 	// the valid type for the subscription's response.
 	//
-	// returns a subscriptionID if successful, an error otherwise
+	// Returns a subscriptionID if successful, an error otherwise.
 	Subscribe(
 		req *Request,
 		interfaceChan interface{},
@@ -75,6 +75,10 @@ type WebSocketClient interface {
 	// Unsubscribe must unsubscribe from an endpoint of the client's GraphQL API.
 	Unsubscribe(subscriptionID string) error
 }
+
+// ForwardDataFunction is a part of the WebSocketClient interface, see
+// [WebSocketClient.Subscribe] for details.
+type ForwardDataFunction func(interfaceChan interface{}, jsonRawMsg json.RawMessage) error
 
 type client struct {
 	httpClient Doer

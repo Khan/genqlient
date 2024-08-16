@@ -4,7 +4,7 @@ This document describes how to use genqlient to make GraphQL subscriptions. It a
 
 ## Client setup
 
-You will need to use a different client calling `graphql.NewClientUsingWebSocket`, passing as parameter your own websocket client.
+You will need to use a different client calling `graphql.NewClientUsingWebSocket`, passing as a parameter your own websocket client.
 
 Here is how to configure your webSocket client to match the interfaces:
 
@@ -72,11 +72,11 @@ func (md *MyDialer) DialContext(ctx context.Context, urlStr string, requestHeade
 
 ## Making subscriptions
 
-Once your webSocket client matches the interfaces, you can get your `graphql.WebSocketClient` and listen in
+Once your websocket client matches the interfaces, you can get your `graphql.WebSocketClient` and listen in
 a loop for incoming messages and errors:
 
 ```go
-  graphqlClient := graphql.NewClientUsingWebSocket(
+	graphqlClient := graphql.NewClientUsingWebSocket(
 		"ws://localhost:8080/query",
 		&MyDialer{Dialer: dialer},
 		headers,
@@ -109,13 +109,14 @@ a loop for incoming messages and errors:
 			}
 		case err = <-errChan:
 			return
-    case <-time.After(time.Minute):
-      err = wsClient.Unsubscribe(subscriptionID)
-      loop = false
+		case <-time.After(time.Minute):
+			err = wsClient.Unsubscribe(subscriptionID)
+			loop = false
 		}
 	}
 ```
+
 To change the websocket protocol from its default value `graphql-transport-ws`, add the following header before calling `graphql.NewClientUsingWebSocket()`:
 ```go
-  headers.Add("Sec-WebSocket-Protocol", "graphql-ws")
+	headers.Add("Sec-WebSocket-Protocol", "graphql-ws")
 ```
