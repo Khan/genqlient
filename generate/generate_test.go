@@ -98,7 +98,6 @@ func TestGenerate(t *testing.T) {
 					},
 					"PokemonInput": {Type: "github.com/Khan/genqlient/internal/testutil.Pokemon"},
 				},
-				AllowBrokenFeatures: true,
 			})
 			if err != nil {
 				t.Fatal(err)
@@ -345,7 +344,6 @@ func TestGenerateErrors(t *testing.T) {
 						ExpectExactFields: "{ species level }",
 					},
 				},
-				AllowBrokenFeatures: true,
 			})
 			if err == nil {
 				t.Fatal("expected an error")

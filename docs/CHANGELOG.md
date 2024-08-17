@@ -35,6 +35,7 @@ When releasing a new version:
   - allow `omitempty` on non-nullable input field, if the field has a default
   - allow `omitempty: false` on an input field, even when it is non-nullable
 - don't do `omitempty` and `pointer` input types validation when `use_struct_reference` is used, as the generated type is often not compatible with validation logic.
+- the `allow_broken_features` option, which no longer did anything, has been removed
 
 ## v0.7.0
 
