@@ -54,7 +54,7 @@ type __UseStructReferenceInput struct {
 // GetInput returns __UseStructReferenceInput.Input, and is useful for accessing the field via an interface.
 func (v *__UseStructReferenceInput) GetInput() UseStructReferencesInput { return v.Input }
 
-// The query or mutation executed by UseStructReference.
+// The query executed by UseStructReference.
 const UseStructReference_Operation = `
 query UseStructReference ($input: UseStructReferencesInput!) {
 	useStructReferencesInput(input: $input)
@@ -65,7 +65,7 @@ query UseStructReference ($input: UseStructReferencesInput!) {
 func UseStructReference(
 	client_ graphql.Client,
 	input UseStructReferencesInput,
-) (*UseStructReferenceResponse, error) {
+) (data_ *UseStructReferenceResponse, err_ error) {
 	req_ := &graphql.Request{
 		OpName: "UseStructReference",
 		Query:  UseStructReference_Operation,
@@ -73,10 +73,9 @@ func UseStructReference(
 			Input: input,
 		},
 	}
-	var err_ error
 
-	var data_ UseStructReferenceResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &UseStructReferenceResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		nil,
@@ -84,6 +83,6 @@ func UseStructReference(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 

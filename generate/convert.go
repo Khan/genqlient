@@ -80,9 +80,6 @@ func (g *generator) baseTypeForOperation(operation ast.Operation) (*ast.Definiti
 	case ast.Mutation:
 		return g.schema.Mutation, nil
 	case ast.Subscription:
-		if !g.Config.AllowBrokenFeatures {
-			return nil, errorf(nil, "genqlient does not yet support subscriptions")
-		}
 		return g.schema.Subscription, nil
 	default:
 		return nil, errorf(nil, "unexpected operation: %v", operation)

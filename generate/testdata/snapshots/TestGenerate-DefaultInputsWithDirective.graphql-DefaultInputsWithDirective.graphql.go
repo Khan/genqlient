@@ -33,7 +33,7 @@ type __DefaultInputsInput struct {
 // GetInput returns __DefaultInputsInput.Input, and is useful for accessing the field via an interface.
 func (v *__DefaultInputsInput) GetInput() InputWithDefaults { return v.Input }
 
-// The query or mutation executed by DefaultInputs.
+// The query executed by DefaultInputs.
 const DefaultInputs_Operation = `
 query DefaultInputs ($input: InputWithDefaults!) {
 	default(input: $input)
@@ -44,7 +44,7 @@ query DefaultInputs ($input: InputWithDefaults!) {
 func DefaultInputs(
 	client_ graphql.Client,
 	input InputWithDefaults,
-) (*DefaultInputsResponse, error) {
+) (data_ *DefaultInputsResponse, err_ error) {
 	req_ := &graphql.Request{
 		OpName: "DefaultInputs",
 		Query:  DefaultInputs_Operation,
@@ -52,10 +52,9 @@ func DefaultInputs(
 			Input: input,
 		},
 	}
-	var err_ error
 
-	var data_ DefaultInputsResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &DefaultInputsResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		nil,
@@ -63,6 +62,6 @@ func DefaultInputs(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 

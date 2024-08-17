@@ -51,7 +51,7 @@ func (v *__MutationArgsWithCollidingNamesInput) GetResp() int { return v.Resp }
 // GetClient returns __MutationArgsWithCollidingNamesInput.Client, and is useful for accessing the field via an interface.
 func (v *__MutationArgsWithCollidingNamesInput) GetClient() string { return v.Client }
 
-// The query or mutation executed by MutationArgsWithCollidingNames.
+// The mutation executed by MutationArgsWithCollidingNames.
 const MutationArgsWithCollidingNames_Operation = `
 mutation MutationArgsWithCollidingNames ($data: String!, $req: Int, $resp: Int, $client: String) {
 	updateUser(data: $data, req: $req, resp: $resp, client: $client) {
@@ -66,7 +66,7 @@ func MutationArgsWithCollidingNames(
 	req int,
 	resp int,
 	client string,
-) (*MutationArgsWithCollidingNamesResponse, error) {
+) (data_ *MutationArgsWithCollidingNamesResponse, err_ error) {
 	req_ := &graphql.Request{
 		OpName: "MutationArgsWithCollidingNames",
 		Query:  MutationArgsWithCollidingNames_Operation,
@@ -77,10 +77,9 @@ func MutationArgsWithCollidingNames(
 			Client: client,
 		},
 	}
-	var err_ error
 
-	var data_ MutationArgsWithCollidingNamesResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &MutationArgsWithCollidingNamesResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		nil,
@@ -88,6 +87,6 @@ func MutationArgsWithCollidingNames(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 

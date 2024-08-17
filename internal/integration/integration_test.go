@@ -7,6 +7,7 @@ package integration
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"testing"
 	"time"
@@ -54,6 +55,47 @@ func TestMutation(t *testing.T) {
 
 	_, _, err = createUser(ctx, getClient, NewUser{Name: "Jill"})
 	require.Errorf(t, err, "client does not support mutations")
+}
+
+func TestSubscription(t *testing.T) {
+	_ = `# @genqlient
+	subscription count { count }`
+
+	ctx := context.Background()
+	server := server.RunServer()
+	defer server.Close()
+	wsClient := newRoundtripWebScoketClient(t, server.URL)
+
+	errChan, err := wsClient.Start(ctx)
+	require.NoError(t, err)
+
+	dataChan, subscriptionID, err := count(ctx, wsClient)
+	require.NoError(t, err)
+	defer wsClient.Close()
+	counter := 0
+	start := time.Now()
+	for loop := true; loop; {
+		select {
+		case resp, more := <-dataChan:
+			if !more {
+				loop = false
+				break
+			}
+			require.NotNil(t, resp.Data)
+			assert.Equal(t, counter, resp.Data.Count)
+			require.Nil(t, resp.Errors)
+			if time.Since(start) > time.Second*5 {
+				err = wsClient.Unsubscribe(subscriptionID)
+				require.NoError(t, err)
+				loop = false
+			}
+			counter++
+		case err := <-errChan:
+			require.NoError(t, err)
+		case <-time.After(time.Second * 10):
+			require.NoError(t, fmt.Errorf("subscription timed out"))
+		}
+	}
 }
 
 func TestServerError(t *testing.T) {

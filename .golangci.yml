@@ -54,6 +54,7 @@ linters-settings:
           - gopkg.in/yaml.v2
           - github.com/alexflint/go-arg
           - github.com/bmatcuk/doublestar/v4
+          - github.com/google/uuid
 
   forbidigo:
     forbid:

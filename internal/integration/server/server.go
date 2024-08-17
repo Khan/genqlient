@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http/httptest"
 	"strconv"
+	"time"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
@@ -155,10 +156,24 @@ func (m mutationResolver) CreateUser(ctx context.Context, input NewUser) (*User,
 	return &newUser, nil
 }
 
+func (s *subscriptionResolver) Count(ctx context.Context) (<-chan int, error) {
+	respChan := make(chan int, 1)
+	go func(respChan chan int) {
+		counter := 0
+		for {
+			respChan <- counter
+			counter++
+			time.Sleep(time.Second)
+		}
+	}(respChan)
+	return respChan, nil
+}
+
 func RunServer() *httptest.Server {
 	gqlgenServer := handler.New(NewExecutableSchema(Config{Resolvers: &resolver{}}))
 	gqlgenServer.AddTransport(transport.POST{})
 	gqlgenServer.AddTransport(transport.GET{})
+	gqlgenServer.AddTransport(transport.Websocket{})
 	gqlgenServer.AroundResponses(func(ctx context.Context, next graphql.ResponseHandler) *graphql.Response {
 		graphql.RegisterExtension(ctx, "foobar", "test")
 		return next(ctx)
@@ -167,9 +182,10 @@ func RunServer() *httptest.Server {
 }
 
 type (
-	resolver         struct{}
-	queryResolver    struct{}
-	mutationResolver struct{}
+	resolver             struct{}
+	queryResolver        struct{}
+	mutationResolver     struct{}
+	subscriptionResolver struct{}
 )
 
 func (r *resolver) Mutation() MutationResolver {
@@ -177,5 +193,9 @@ func (r *resolver) Mutation() MutationResolver {
 }
 
 func (r *resolver) Query() QueryResolver { return &queryResolver{} }
+
+func (r *resolver) Subscription() SubscriptionResolver {
+	return &subscriptionResolver{}
+}
 
 //go:generate go run github.com/99designs/gqlgen@v0.17.35

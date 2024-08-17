@@ -218,6 +218,10 @@ input IntComparisonExp {
   _nin: [Int!]
 }
 
+type Subscription {
+  count: Int!
+}
+
 input InputWithDefaults {
   field: String! = "input field omitted"
   nullableField: String = "nullable input field omitted"
