@@ -30,6 +30,7 @@ When releasing a new version:
 - genqlient now supports subscriptions; the websocket protocol is by default `graphql-transport-ws` but can be set to another value.  
   See the [documentation](FAQ.md) for how to `subscribe to an API 'subscription' endpoint`.
 - genqlient now supports double-star globs for schema and query files; see [`genqlient.yaml` docs](genqlient.yaml) for more.
+- genqlient now generates slices containing all enum values for each enum type.
 
 ### Bug fixes:
 

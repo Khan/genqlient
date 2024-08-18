@@ -928,6 +928,11 @@ const (
 	SpeciesCoelacanth Species = "COELACANTH"
 )
 
+var AllSpecies = []Species{
+	SpeciesDog,
+	SpeciesCoelacanth,
+}
+
 // UserFields includes the GraphQL fields of User requested by the fragment UserFields.
 type UserFields struct {
 	Id              string `json:"id"`

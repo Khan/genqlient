@@ -20,6 +20,11 @@ const (
 	RoleTeacher Role = "TEACHER"
 )
 
+var AllRole = []Role{
+	RoleStudent,
+	RoleTeacher,
+}
+
 // UsesEnumTwiceQueryMeUser includes the requested fields of the GraphQL type User.
 // The GraphQL type's documentation follows.
 //
