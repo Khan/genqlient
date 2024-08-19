@@ -64,6 +64,11 @@ const (
 	Role_TEACHER Role = "TEACHER"
 )
 
+var AllRole = []Role{
+	Role_STUDENT,
+	Role_TEACHER,
+}
+
 // The query executed by QueryWithEnums.
 const QueryWithEnums_Operation = `
 query QueryWithEnums {

@@ -147,6 +147,13 @@ func (typ *goEnumType) WriteDefinition(w io.Writer, g *generator) error {
 			val.GoName, typ.GoName, val.GraphQLName)
 	}
 	fmt.Fprintf(w, ")\n")
+
+	// Add slice with all enums.
+	fmt.Fprintf(w, "var All%s = []%s{\n", typ.GoName, typ.GoName)
+	for _, val := range typ.Values {
+		fmt.Fprintf(w, "%s,\n", val.GoName)
+	}
+	fmt.Fprintf(w, "}\n")
 	return nil
 }
 

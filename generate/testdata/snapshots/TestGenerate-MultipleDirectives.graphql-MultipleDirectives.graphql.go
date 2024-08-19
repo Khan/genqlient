@@ -192,6 +192,11 @@ const (
 	RoleTeacher Role = "TEACHER"
 )
 
+var AllRole = []Role{
+	RoleStudent,
+	RoleTeacher,
+}
+
 // UserQueryInput is the argument to Query.users.
 //
 // Ideally this would support anything and everything!

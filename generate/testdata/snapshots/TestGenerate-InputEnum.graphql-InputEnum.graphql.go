@@ -46,6 +46,11 @@ const (
 	RoleTeacher Role = "TEACHER"
 )
 
+var AllRole = []Role{
+	RoleStudent,
+	RoleTeacher,
+}
+
 // __InputEnumQueryInput is used internally by genqlient
 type __InputEnumQueryInput struct {
 	Role Role `json:"role"`

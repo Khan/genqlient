@@ -24,6 +24,11 @@ const (
 	RoleTeacher Role = "TEACHER"
 )
 
+var AllRole = []Role{
+	RoleStudent,
+	RoleTeacher,
+}
+
 // StructOptionResponse is returned by StructOption on success.
 type StructOptionResponse struct {
 	Root StructOptionRootTopic `json:"root"`
