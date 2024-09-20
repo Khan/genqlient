@@ -4,8 +4,8 @@ import "fmt"
 
 // HTTPError represents an HTTP error with status code and response body.
 type HTTPError struct {
-	StatusCode int
 	Body       string
+	StatusCode int
 }
 
 // Error implements the error interface for HTTPError.

@@ -7,6 +7,7 @@ package integration
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"testing"
@@ -113,9 +114,10 @@ func TestServerError(t *testing.T) {
 		// response -- and indeed in this case it should even have another field
 		// (which didn't err) set.
 		assert.Error(t, err)
-		httpErr, ok := err.(*graphql.HTTPError)
-		assert.True(t, ok, "Error should be of type *HTTPError")
-		assert.Equal(t, http.StatusInternalServerError, httpErr.StatusCode)
+		var httpErr *graphql.HTTPError
+		if assert.True(t, errors.As(err, &httpErr), "Error should be of type *HTTPError") {
+			assert.Equal(t, http.StatusInternalServerError, httpErr.StatusCode)
+		}
 		assert.NotNil(t, resp)
 		assert.Equal(t, "1", resp.Me.Id)
 	}
@@ -133,8 +135,8 @@ func TestNetworkError(t *testing.T) {
 		//	return resp.Me.Id, err
 		// without a bunch of extra ceremony.
 		assert.Error(t, err)
-		_, ok := err.(*graphql.HTTPError)
-		assert.False(t, ok, "Error should not be of type *HTTPError for network errors")
+		var httpErr *graphql.HTTPError
+		assert.False(t, errors.As(err, &httpErr), "Error should not be of type *HTTPError for network errors")
 		assert.NotNil(t, resp)
 		assert.Equal(t, new(failingQueryResponse), resp)
 	}

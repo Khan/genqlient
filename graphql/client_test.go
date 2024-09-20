@@ -3,6 +3,7 @@ package graphql
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -13,31 +14,31 @@ import (
 func TestMakeRequest_HTTPError(t *testing.T) {
 	testCases := []struct {
 		name               string
-		serverResponseCode int
 		serverResponseBody string
-		expectedStatusCode int
 		expectedErrorBody  string
+		serverResponseCode int
+		expectedStatusCode int
 	}{
 		{
 			name:               "400 Bad Request",
-			serverResponseCode: http.StatusBadRequest,
 			serverResponseBody: "Bad Request",
-			expectedStatusCode: http.StatusBadRequest,
 			expectedErrorBody:  "Bad Request",
+			serverResponseCode: http.StatusBadRequest,
+			expectedStatusCode: http.StatusBadRequest,
 		},
 		{
 			name:               "429 Too Many Requests",
-			serverResponseCode: http.StatusTooManyRequests,
 			serverResponseBody: "Rate limit exceeded",
-			expectedStatusCode: http.StatusTooManyRequests,
 			expectedErrorBody:  "Rate limit exceeded",
+			serverResponseCode: http.StatusTooManyRequests,
+			expectedStatusCode: http.StatusTooManyRequests,
 		},
 		{
 			name:               "500 Internal Server Error",
-			serverResponseCode: http.StatusInternalServerError,
 			serverResponseBody: "Internal Server Error",
-			expectedStatusCode: http.StatusInternalServerError,
 			expectedErrorBody:  "Internal Server Error",
+			serverResponseCode: http.StatusInternalServerError,
+			expectedStatusCode: http.StatusInternalServerError,
 		},
 	}
 
@@ -45,7 +46,10 @@ func TestMakeRequest_HTTPError(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				w.WriteHeader(tc.serverResponseCode)
-				w.Write([]byte(tc.serverResponseBody))
+				_, err := w.Write([]byte(tc.serverResponseBody))
+				if err != nil {
+					t.Fatalf("Failed to write response: %v", err)
+				}
 			}))
 			defer server.Close()
 
@@ -58,8 +62,8 @@ func TestMakeRequest_HTTPError(t *testing.T) {
 			err := client.MakeRequest(context.Background(), req, resp)
 
 			assert.Error(t, err)
-			httpErr, ok := err.(*HTTPError)
-			assert.True(t, ok, "Error should be of type *HTTPError")
+			var httpErr *HTTPError
+			assert.True(t, errors.As(err, &httpErr), "Error should be of type *HTTPError")
 			assert.Equal(t, tc.expectedStatusCode, httpErr.StatusCode)
 			assert.Equal(t, tc.expectedErrorBody, httpErr.Body)
 		})
@@ -69,11 +73,14 @@ func TestMakeRequest_HTTPError(t *testing.T) {
 func TestMakeRequest_Success(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
-		json.NewEncoder(w).Encode(map[string]interface{}{
+		err := json.NewEncoder(w).Encode(map[string]interface{}{
 			"data": map[string]string{
 				"test": "success",
 			},
 		})
+		if err != nil {
+			t.Fatalf("Failed to encode response: %v", err)
+		}
 	}))
 	defer server.Close()
 
