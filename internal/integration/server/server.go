@@ -159,15 +159,15 @@ func (m mutationResolver) CreateUser(ctx context.Context, input NewUser) (*User,
 func (s *subscriptionResolver) Count(ctx context.Context) (<-chan int, error) {
 	respChan := make(chan int, 1)
 	go func(respChan chan int) {
+		defer close(respChan)
 		counter := 0
 		for {
 			if counter == 3 {
-				close(respChan)
 				return
 			}
 			respChan <- counter
 			counter++
-			time.Sleep(time.Second)
+			time.Sleep(10 * time.Millisecond)
 		}
 	}(respChan)
 	return respChan, nil
