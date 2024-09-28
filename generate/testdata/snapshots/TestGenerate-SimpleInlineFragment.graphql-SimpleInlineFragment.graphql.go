@@ -256,7 +256,7 @@ query SimpleInlineFragment {
 }
 `
 
-func SimpleInlineFragment[T any](
+func SimpleInlineFragment(
 	client_ graphql.Client,
 ) (data_ *SimpleInlineFragmentResponse, err_ error) {
 	req_ := &graphql.Request{

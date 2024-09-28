@@ -60,7 +60,7 @@ mutation MutationArgsWithCollidingNames ($data: String!, $req: Int, $resp: Int, 
 }
 `
 
-func MutationArgsWithCollidingNames[T any](
+func MutationArgsWithCollidingNames(
 	client_ graphql.Client,
 	data string,
 	req int,

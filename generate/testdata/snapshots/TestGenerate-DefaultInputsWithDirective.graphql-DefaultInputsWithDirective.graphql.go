@@ -41,7 +41,7 @@ query DefaultInputs ($input: InputWithDefaults!) {
 `
 
 // very similar to DefaultInputsWithForDirective.graphql - same expected behaviour, but takes a different code path(?)
-func DefaultInputs[T any](
+func DefaultInputs(
 	client_ graphql.Client,
 	input InputWithDefaults,
 ) (data_ *DefaultInputsResponse, err_ error) {

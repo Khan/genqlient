@@ -238,7 +238,7 @@ query OmitEmptyQuery ($query: UserQueryInput, $queries: [UserQueryInput], $dt: D
 }
 `
 
-func OmitEmptyQuery[T any](
+func OmitEmptyQuery(
 	client_ graphql.Client,
 	query UserQueryInput,
 	queries []UserQueryInput,

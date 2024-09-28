@@ -40,7 +40,7 @@ query OmitemptyFalse ($input: OmitemptyInput) {
 }
 `
 
-func OmitemptyFalse[T any](
+func OmitemptyFalse(
 	client_ graphql.Client,
 	input OmitemptyInput,
 ) (data_ *OmitemptyFalseResponse, err_ error) {

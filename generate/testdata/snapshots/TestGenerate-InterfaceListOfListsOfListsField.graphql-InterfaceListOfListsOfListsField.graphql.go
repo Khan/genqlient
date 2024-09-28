@@ -522,7 +522,7 @@ query InterfaceListOfListOfListsField {
 }
 `
 
-func InterfaceListOfListOfListsField[T any](
+func InterfaceListOfListOfListsField(
 	client_ graphql.Client,
 ) (data_ *InterfaceListOfListOfListsFieldResponse, err_ error) {
 	req_ := &graphql.Request{

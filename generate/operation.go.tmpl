@@ -2,7 +2,7 @@
 const {{.Name}}_Operation = `{{$.Body}}`
 
 {{.Doc}}
-func {{.Name}}[T any](
+func {{.Name}}{{if eq .Type "subscription"}}[T any]{{end}}(
     {{if ne .Config.ContextType "-" -}}
     ctx_ {{ref .Config.ContextType}},
     {{end}}

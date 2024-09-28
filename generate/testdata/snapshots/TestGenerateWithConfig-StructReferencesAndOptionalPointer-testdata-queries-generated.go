@@ -243,7 +243,7 @@ query InputObjectQuery ($query: UserQueryInput) {
 }
 `
 
-func InputObjectQuery[T any](
+func InputObjectQuery(
 	ctx_ context.Context,
 	client_ graphql.Client,
 	query *UserQueryInput,
@@ -280,7 +280,7 @@ query QueryWithStructs {
 }
 `
 
-func QueryWithStructs[T any](
+func QueryWithStructs(
 	ctx_ context.Context,
 	client_ graphql.Client,
 ) (data_ *QueryWithStructsResponse, err_ error) {

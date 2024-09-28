@@ -651,7 +651,7 @@ query InterfaceNoFragmentsQuery {
 }
 `
 
-func InterfaceNoFragmentsQuery[T any](
+func InterfaceNoFragmentsQuery(
 	client_ graphql.Client,
 ) (data_ *InterfaceNoFragmentsQueryResponse, err_ error) {
 	req_ := &graphql.Request{

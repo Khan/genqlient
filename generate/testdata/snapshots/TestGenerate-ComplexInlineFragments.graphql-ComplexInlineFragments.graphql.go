@@ -1434,7 +1434,7 @@ query ComplexInlineFragments {
 // spreads, we can't test cases (4b) and (4c), where I implements J or vice
 // versa, because gqlparser doesn't support interfaces that implement other
 // interfaces yet.
-func ComplexInlineFragments[T any](
+func ComplexInlineFragments(
 	client_ graphql.Client,
 ) (data_ *ComplexInlineFragmentsResponse, err_ error) {
 	req_ := &graphql.Request{

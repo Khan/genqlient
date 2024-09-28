@@ -50,7 +50,7 @@ query ListInputQuery ($names: [String]) {
 }
 `
 
-func ListInputQuery[T any](
+func ListInputQuery(
 	client_ graphql.Client,
 	names []string,
 ) (data_ *ListInputQueryResponse, err_ error) {

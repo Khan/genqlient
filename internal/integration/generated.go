@@ -3128,7 +3128,7 @@ mutation createUser ($user: NewUser!) {
 }
 `
 
-func createUser[T any](
+func createUser(
 	ctx_ context.Context,
 	client_ graphql.Client,
 	user NewUser,
@@ -3163,7 +3163,7 @@ query failingQuery {
 }
 `
 
-func failingQuery[T any](
+func failingQuery(
 	ctx_ context.Context,
 	client_ graphql.Client,
 ) (data_ *failingQueryResponse, ext_ map[string]interface{}, err_ error) {
@@ -3195,7 +3195,7 @@ query queryWithCustomMarshal ($date: Date!) {
 }
 `
 
-func queryWithCustomMarshal[T any](
+func queryWithCustomMarshal(
 	ctx_ context.Context,
 	client_ graphql.Client,
 	date time.Time,
@@ -3231,7 +3231,7 @@ query queryWithCustomMarshalOptional ($date: Date, $id: ID) {
 }
 `
 
-func queryWithCustomMarshalOptional[T any](
+func queryWithCustomMarshalOptional(
 	ctx_ context.Context,
 	client_ graphql.Client,
 	date *time.Time,
@@ -3269,7 +3269,7 @@ query queryWithCustomMarshalSlice ($dates: [Date!]!) {
 }
 `
 
-func queryWithCustomMarshalSlice[T any](
+func queryWithCustomMarshalSlice(
 	ctx_ context.Context,
 	client_ graphql.Client,
 	dates []time.Time,
@@ -3339,7 +3339,7 @@ fragment FriendsFields on User {
 }
 `
 
-func queryWithFlatten[T any](
+func queryWithFlatten(
 	ctx_ context.Context,
 	client_ graphql.Client,
 	ids []string,
@@ -3403,7 +3403,7 @@ query queryWithFragments ($ids: [ID!]!) {
 }
 `
 
-func queryWithFragments[T any](
+func queryWithFragments(
 	ctx_ context.Context,
 	client_ graphql.Client,
 	ids []string,
@@ -3439,7 +3439,7 @@ query queryWithInterfaceListField ($ids: [ID!]!) {
 }
 `
 
-func queryWithInterfaceListField[T any](
+func queryWithInterfaceListField(
 	ctx_ context.Context,
 	client_ graphql.Client,
 	ids []string,
@@ -3475,7 +3475,7 @@ query queryWithInterfaceListPointerField ($ids: [ID!]!) {
 }
 `
 
-func queryWithInterfaceListPointerField[T any](
+func queryWithInterfaceListPointerField(
 	ctx_ context.Context,
 	client_ graphql.Client,
 	ids []string,
@@ -3515,7 +3515,7 @@ query queryWithInterfaceNoFragments ($id: ID!) {
 }
 `
 
-func queryWithInterfaceNoFragments[T any](
+func queryWithInterfaceNoFragments(
 	ctx_ context.Context,
 	client_ graphql.Client,
 	id string,
@@ -3579,7 +3579,7 @@ fragment MoreUserFields on User {
 }
 `
 
-func queryWithNamedFragments[T any](
+func queryWithNamedFragments(
 	ctx_ context.Context,
 	client_ graphql.Client,
 	ids []string,
@@ -3615,7 +3615,7 @@ query queryWithOmitempty ($id: ID) {
 }
 `
 
-func queryWithOmitempty[T any](
+func queryWithOmitempty(
 	ctx_ context.Context,
 	client_ graphql.Client,
 	id string,
@@ -3651,7 +3651,7 @@ query queryWithVariables ($id: ID!) {
 }
 `
 
-func queryWithVariables[T any](
+func queryWithVariables(
 	ctx_ context.Context,
 	client_ graphql.Client,
 	id string,
@@ -3688,7 +3688,7 @@ query simpleQuery {
 }
 `
 
-func simpleQuery[T any](
+func simpleQuery(
 	ctx_ context.Context,
 	client_ graphql.Client,
 ) (data_ *simpleQueryResponse, ext_ map[string]interface{}, err_ error) {
@@ -3720,7 +3720,7 @@ query simpleQueryExt {
 }
 `
 
-func simpleQueryExt[T any](
+func simpleQueryExt(
 	ctx_ context.Context,
 	client_ graphql.Client,
 ) (data_ *simpleQueryExtResponse, ext_ map[string]interface{}, err_ error) {

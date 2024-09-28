@@ -90,7 +90,7 @@ query GetPokemonSiblings ($input: PokemonInput!) {
 }
 `
 
-func GetPokemonSiblings[T any](
+func GetPokemonSiblings(
 	client_ graphql.Client,
 	input testutil.Pokemon,
 ) (data_ *GetPokemonSiblingsResponse, err_ error) {
