@@ -40,7 +40,7 @@ type Client interface {
 	) error
 }
 
-type WebSocketClient interface {
+type WebSocketClient[T any] interface {
 	// Start must open a webSocket connection and subscribe to an endpoint
 	// of the client's GraphQL API.
 	//
@@ -68,8 +68,8 @@ type WebSocketClient interface {
 	// Returns a subscriptionID if successful, an error otherwise.
 	Subscribe(
 		req *Request,
-		interfaceChan interface{},
-		forwardDataFunc ForwardDataFunction,
+		interfaceChan chan WsResponse[T],
+		forwardDataFunc ForwardDataFunctionGeneric[T],
 	) (string, error)
 
 	// Unsubscribe must unsubscribe from an endpoint of the client's GraphQL API.
@@ -79,6 +79,14 @@ type WebSocketClient interface {
 // ForwardDataFunction is a part of the WebSocketClient interface, see
 // [WebSocketClient.Subscribe] for details.
 type ForwardDataFunction func(interfaceChan interface{}, jsonRawMsg json.RawMessage) error
+
+type WsResponse[T any] struct {
+	Data       *T                     `json:"data"`
+	Extensions map[string]interface{} `json:"extensions,omitempty"`
+	Errors     error                  `json:"errors"`
+}
+
+type ForwardDataFunctionGeneric[T any] func(dataChan chan WsResponse[T], jsonRawMsg json.RawMessage) error
 
 type client struct {
 	httpClient Doer
@@ -131,19 +139,19 @@ func NewClientUsingGet(endpoint string, httpClient Doer) Client {
 //
 // The client does not support queries nor mutations, and will return an error
 // if passed a request that attempts one.
-func NewClientUsingWebSocket(endpoint string, wsDialer Dialer, headers http.Header) WebSocketClient {
+func NewClientUsingWebSocket[T any](endpoint string, wsDialer Dialer, headers http.Header) WebSocketClient[T] {
 	if headers == nil {
 		headers = http.Header{}
 	}
 	if headers.Get("Sec-WebSocket-Protocol") == "" {
 		headers.Add("Sec-WebSocket-Protocol", "graphql-transport-ws")
 	}
-	return &webSocketClient{
+	return &webSocketClient[T]{
 		Dialer:        wsDialer,
 		Header:        headers,
 		errChan:       make(chan error),
 		endpoint:      endpoint,
-		subscriptions: subscriptionMap{map_: make(map[string]subscription)},
+		subscriptions: subscriptionMap[T]{map_: make(map[string]subscription[T])},
 	}
 }
 

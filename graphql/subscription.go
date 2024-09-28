@@ -7,37 +7,37 @@ import (
 )
 
 // map of subscription ID to subscription
-type subscriptionMap struct {
-	map_ map[string]subscription
+type subscriptionMap[T any] struct {
+	map_ map[string]subscription[T]
 	sync.RWMutex
 }
 
-type subscription struct {
-	interfaceChan       interface{}
-	forwardDataFunc     ForwardDataFunction
+type subscription[T any] struct {
+	interfaceChan       chan WsResponse[T] // TODO: Rename to dataChan
+	forwardDataFunc     ForwardDataFunctionGeneric[T]
 	id                  string
 	hasBeenUnsubscribed bool
 }
 
-func (s *subscriptionMap) Create(subscriptionID string, interfaceChan interface{}, forwardDataFunc ForwardDataFunction) {
+func (s *subscriptionMap[T]) Create(subscriptionID string, dataChan chan WsResponse[T], forwardDataFunc ForwardDataFunctionGeneric[T]) {
 	s.Lock()
 	defer s.Unlock()
-	s.map_[subscriptionID] = subscription{
+	s.map_[subscriptionID] = subscription[T]{
 		id:                  subscriptionID,
-		interfaceChan:       interfaceChan,
+		interfaceChan:       dataChan,
 		forwardDataFunc:     forwardDataFunc,
 		hasBeenUnsubscribed: false,
 	}
 }
 
-func (s *subscriptionMap) Read(subscriptionID string) (sub subscription, success bool) {
+func (s *subscriptionMap[T]) Read(subscriptionID string) (sub subscription[T], success bool) {
 	s.RLock()
 	defer s.RUnlock()
 	sub, success = s.map_[subscriptionID]
 	return sub, success
 }
 
-func (s *subscriptionMap) Unsubscribe(subscriptionID string) error {
+func (s *subscriptionMap[T]) Unsubscribe(subscriptionID string) error {
 	s.Lock()
 	defer s.Unlock()
 	unsub, success := s.map_[subscriptionID]
@@ -50,7 +50,7 @@ func (s *subscriptionMap) Unsubscribe(subscriptionID string) error {
 	return nil
 }
 
-func (s *subscriptionMap) GetAllIDs() (subscriptionIDs []string) {
+func (s *subscriptionMap[T]) GetAllIDs() (subscriptionIDs []string) {
 	s.RLock()
 	defer s.RUnlock()
 	for subID := range s.map_ {
@@ -59,7 +59,7 @@ func (s *subscriptionMap) GetAllIDs() (subscriptionIDs []string) {
 	return subscriptionIDs
 }
 
-func (s *subscriptionMap) Delete(subscriptionID string) {
+func (s *subscriptionMap[T]) Delete(subscriptionID string) {
 	s.Lock()
 	defer s.Unlock()
 	delete(s.map_, subscriptionID)

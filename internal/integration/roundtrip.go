@@ -46,15 +46,15 @@ func (t *lastResponseTransport) RoundTrip(req *http.Request) (*http.Response, er
 //	unmarshal(marshal(req)) == req && marshal(unmarshal(resp)) == resp
 //
 // for each request it processes.
-type roundtripClient struct {
+type roundtripClient[T any] struct {
 	wrapped   graphql.Client
-	wsWrapped graphql.WebSocketClient
+	wsWrapped graphql.WebSocketClient[T]
 	transport *lastResponseTransport
 	t         *testing.T
 }
 
 // Put JSON in a stable and human-readable format.
-func (c *roundtripClient) formatJSON(b []byte) []byte {
+func (c *roundtripClient[T]) formatJSON(b []byte) []byte {
 	// We don't care about key ordering, so do another roundtrip through
 	// interface{} to drop that.
 	var parsed interface{}
@@ -71,7 +71,7 @@ func (c *roundtripClient) formatJSON(b []byte) []byte {
 	return b
 }
 
-func (c *roundtripClient) roundtripResponse(resp interface{}) {
+func (c *roundtripClient[T]) roundtripResponse(resp interface{}) {
 	var graphqlResponse struct {
 		Data json.RawMessage `json:"data"`
 	}
@@ -93,7 +93,7 @@ func (c *roundtripClient) roundtripResponse(resp interface{}) {
 	assert.Equal(c.t, string(body), string(bodyAgain))
 }
 
-func (c *roundtripClient) MakeRequest(ctx context.Context, req *graphql.Request, resp *graphql.Response) error {
+func (c *roundtripClient[T]) MakeRequest(ctx context.Context, req *graphql.Request, resp *graphql.Response) error {
 	// TODO(benkraft): Also check the variables round-trip.  This is a bit less
 	// important since most of the code is the same (and input types are
 	// strictly simpler), and a bit hard to do because when asserting about
@@ -106,40 +106,40 @@ func (c *roundtripClient) MakeRequest(ctx context.Context, req *graphql.Request,
 	return nil
 }
 
-func (c *roundtripClient) Start(ctx context.Context) (errChan chan error, err error) {
+func (c *roundtripClient[T]) Start(ctx context.Context) (errChan chan error, err error) {
 	return c.wsWrapped.Start(ctx)
 }
 
-func (c *roundtripClient) Close() error {
+func (c *roundtripClient[T]) Close() error {
 	return c.wsWrapped.Close()
 }
 
-func (c *roundtripClient) Subscribe(req *graphql.Request, interfaceChan interface{}, forwardDataFunc graphql.ForwardDataFunction) (string, error) {
+func (c *roundtripClient[T]) Subscribe(req *graphql.Request, interfaceChan chan graphql.WsResponse[T], forwardDataFunc graphql.ForwardDataFunctionGeneric[T]) (string, error) {
 	return c.wsWrapped.Subscribe(req, interfaceChan, forwardDataFunc)
 }
 
-func (c *roundtripClient) Unsubscribe(subscriptionID string) error {
+func (c *roundtripClient[T]) Unsubscribe(subscriptionID string) error {
 	return c.wsWrapped.Unsubscribe(subscriptionID)
 }
 
-func newRoundtripClients(t *testing.T, endpoint string) []graphql.Client {
-	return []graphql.Client{newRoundtripClient(t, endpoint), newRoundtripGetClient(t, endpoint)}
+func newRoundtripClients[T any](t *testing.T, endpoint string) []graphql.Client {
+	return []graphql.Client{newRoundtripClient[T](t, endpoint), newRoundtripGetClient[T](t, endpoint)}
 }
 
-func newRoundtripClient(t *testing.T, endpoint string) graphql.Client {
+func newRoundtripClient[T any](t *testing.T, endpoint string) graphql.Client {
 	transport := &lastResponseTransport{wrapped: http.DefaultTransport}
 	httpClient := &http.Client{Transport: transport}
-	return &roundtripClient{
+	return &roundtripClient[T]{
 		wrapped:   graphql.NewClient(endpoint, httpClient),
 		transport: transport,
 		t:         t,
 	}
 }
 
-func newRoundtripGetClient(t *testing.T, endpoint string) graphql.Client {
+func newRoundtripGetClient[T any](t *testing.T, endpoint string) graphql.Client {
 	transport := &lastResponseTransport{wrapped: http.DefaultTransport}
 	httpClient := &http.Client{Transport: transport}
-	return &roundtripClient{
+	return &roundtripClient[T]{
 		wrapped:   graphql.NewClientUsingGet(endpoint, httpClient),
 		transport: transport,
 		t:         t,
@@ -156,14 +156,14 @@ func (md *MyDialer) DialContext(ctx context.Context, urlStr string, requestHeade
 	return graphql.WSConn(conn), err
 }
 
-func newRoundtripWebScoketClient(t *testing.T, endpoint string) graphql.WebSocketClient {
+func newRoundtripWebScoketClient[T any](t *testing.T, endpoint string) graphql.WebSocketClient[T] {
 	dialer := websocket.DefaultDialer
 	if !strings.HasPrefix(endpoint, "ws") {
 		_, address, _ := strings.Cut(endpoint, "://")
 		endpoint = "ws://" + address
 	}
-	return &roundtripClient{
-		wsWrapped: graphql.NewClientUsingWebSocket(endpoint, &MyDialer{Dialer: dialer}, nil),
+	return &roundtripClient[T]{
+		wsWrapped: graphql.NewClientUsingWebSocket[T](endpoint, &MyDialer{Dialer: dialer}, nil),
 		t:         t,
 	}
 }
