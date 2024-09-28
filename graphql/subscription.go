@@ -36,7 +36,7 @@ func (s *subscriptionMap[T]) Read(subscriptionID string) (sub subscription[T], s
 	return sub, success
 }
 
-func (s *subscriptionMap[T]) Unsubscribe(subscriptionID string) error {
+func (s *subscriptionMap[_]) Unsubscribe(subscriptionID string) error {
 	s.Lock()
 	defer s.Unlock()
 	unsub, success := s.map_[subscriptionID]
@@ -49,7 +49,7 @@ func (s *subscriptionMap[T]) Unsubscribe(subscriptionID string) error {
 	return nil
 }
 
-func (s *subscriptionMap[T]) GetAllIDs() (subscriptionIDs []string) {
+func (s *subscriptionMap[_]) GetAllIDs() (subscriptionIDs []string) {
 	s.RLock()
 	defer s.RUnlock()
 	for subID := range s.map_ {
@@ -58,7 +58,7 @@ func (s *subscriptionMap[T]) GetAllIDs() (subscriptionIDs []string) {
 	return subscriptionIDs
 }
 
-func (s *subscriptionMap[T]) Delete(subscriptionID string) {
+func (s *subscriptionMap[_]) Delete(subscriptionID string) {
 	s.Lock()
 	defer s.Unlock()
 	delete(s.map_, subscriptionID)

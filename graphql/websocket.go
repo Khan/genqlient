@@ -65,14 +65,14 @@ type webSocketReceiveMessage struct {
 	Payload json.RawMessage `json:"payload"`
 }
 
-func (w *webSocketClient[T]) sendInit() error {
+func (w *webSocketClient[_]) sendInit() error {
 	connInitMsg := webSocketSendMessage{
 		Type: webSocketTypeConnInit,
 	}
 	return w.sendStructAsJSON(connInitMsg)
 }
 
-func (w *webSocketClient[T]) sendStructAsJSON(object any) error {
+func (w *webSocketClient[_]) sendStructAsJSON(object any) error {
 	jsonBytes, err := json.Marshal(object)
 	if err != nil {
 		return err
@@ -80,7 +80,7 @@ func (w *webSocketClient[T]) sendStructAsJSON(object any) error {
 	return w.conn.WriteMessage(textMessage, jsonBytes)
 }
 
-func (w *webSocketClient[T]) waitForConnAck() error {
+func (w *webSocketClient[_]) waitForConnAck() error {
 	var connAckReceived bool
 	var err error
 	start := time.Now()
@@ -96,7 +96,7 @@ func (w *webSocketClient[T]) waitForConnAck() error {
 	return nil
 }
 
-func (w *webSocketClient[T]) handleErr(err error) {
+func (w *webSocketClient[_]) handleErr(err error) {
 	w.Lock()
 	defer w.Unlock()
 	if !w.isClosing {
@@ -104,7 +104,7 @@ func (w *webSocketClient[T]) handleErr(err error) {
 	}
 }
 
-func (w *webSocketClient[T]) listenWebSocket() {
+func (w *webSocketClient[_]) listenWebSocket() {
 	for {
 		if w.isClosing {
 			return
@@ -122,7 +122,7 @@ func (w *webSocketClient[T]) listenWebSocket() {
 	}
 }
 
-func (w *webSocketClient[T]) forwardWebSocketData(message []byte) error {
+func (w *webSocketClient[_]) forwardWebSocketData(message []byte) error {
 	var wsMsg webSocketReceiveMessage
 	err := json.Unmarshal(message, &wsMsg)
 	if err != nil {
@@ -138,7 +138,7 @@ func (w *webSocketClient[T]) forwardWebSocketData(message []byte) error {
 	return sub.forwardDataFunc(sub.dataChan, wsMsg.Payload)
 }
 
-func (w *webSocketClient[T]) receiveWebSocketConnAck() (bool, error) {
+func (w *webSocketClient[_]) receiveWebSocketConnAck() (bool, error) {
 	_, message, err := w.conn.ReadMessage()
 	if err != nil {
 		return false, err
@@ -155,7 +155,7 @@ func checkConnectionAckReceived(message []byte) (bool, error) {
 	return wsMessage.Type == webSocketTypeConnAck, nil
 }
 
-func (w *webSocketClient[T]) Start(ctx context.Context) (errChan chan error, err error) {
+func (w *webSocketClient[_]) Start(ctx context.Context) (errChan chan error, err error) {
 	w.conn, err = w.Dialer.DialContext(ctx, w.endpoint, w.Header)
 	if err != nil {
 		return nil, err
@@ -174,7 +174,7 @@ func (w *webSocketClient[T]) Start(ctx context.Context) (errChan chan error, err
 	return w.errChan, err
 }
 
-func (w *webSocketClient[T]) Close() error {
+func (w *webSocketClient[_]) Close() error {
 	if w.conn == nil {
 		return nil
 	}
@@ -218,7 +218,7 @@ func (w *webSocketClient[T]) Subscribe(req *Request, dataChan chan WsResponse[T]
 	return subscriptionID, nil
 }
 
-func (w *webSocketClient[T]) Unsubscribe(subscriptionID string) error {
+func (w *webSocketClient[_]) Unsubscribe(subscriptionID string) error {
 	completeMsg := webSocketSendMessage{
 		Type: webSocketTypeComplete,
 		ID:   subscriptionID,
@@ -234,7 +234,7 @@ func (w *webSocketClient[T]) Unsubscribe(subscriptionID string) error {
 	return nil
 }
 
-func (w *webSocketClient[T]) UnsubscribeAll() error {
+func (w *webSocketClient[_]) UnsubscribeAll() error {
 	subscriptionIDs := w.subscriptions.GetAllIDs()
 	for _, subscriptionID := range subscriptionIDs {
 		err := w.Unsubscribe(subscriptionID)

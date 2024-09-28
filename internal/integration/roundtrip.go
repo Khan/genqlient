@@ -54,7 +54,7 @@ type roundtripClient[T any] struct {
 }
 
 // Put JSON in a stable and human-readable format.
-func (c *roundtripClient[T]) formatJSON(b []byte) []byte {
+func (c *roundtripClient[_]) formatJSON(b []byte) []byte {
 	// We don't care about key ordering, so do another roundtrip through
 	// interface{} to drop that.
 	var parsed interface{}
@@ -71,7 +71,7 @@ func (c *roundtripClient[T]) formatJSON(b []byte) []byte {
 	return b
 }
 
-func (c *roundtripClient[T]) roundtripResponse(resp interface{}) {
+func (c *roundtripClient[_]) roundtripResponse(resp interface{}) {
 	var graphqlResponse struct {
 		Data json.RawMessage `json:"data"`
 	}
@@ -106,11 +106,11 @@ func (c *roundtripClient[T]) MakeRequest(ctx context.Context, req *graphql.Reque
 	return nil
 }
 
-func (c *roundtripClient[T]) Start(ctx context.Context) (errChan chan error, err error) {
+func (c *roundtripClient[_]) Start(ctx context.Context) (errChan chan error, err error) {
 	return c.wsWrapped.Start(ctx)
 }
 
-func (c *roundtripClient[T]) Close() error {
+func (c *roundtripClient[_]) Close() error {
 	return c.wsWrapped.Close()
 }
 
@@ -118,7 +118,7 @@ func (c *roundtripClient[T]) Subscribe(req *graphql.Request, dataChan chan graph
 	return c.wsWrapped.Subscribe(req, dataChan, forwardDataFunc)
 }
 
-func (c *roundtripClient[T]) Unsubscribe(subscriptionID string) error {
+func (c *roundtripClient[_]) Unsubscribe(subscriptionID string) error {
 	return c.wsWrapped.Unsubscribe(subscriptionID)
 }
 
