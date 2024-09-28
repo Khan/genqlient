@@ -39,11 +39,7 @@ func SimpleSubscription(
 	return dataChan_, subscriptionID_, err_
 }
 
-type SimpleSubscriptionWsResponse struct {
-	Data       *SimpleSubscriptionResponse `json:"data"`
-	Extensions map[string]interface{}      `json:"extensions,omitempty"`
-	Errors     error                       `json:"errors"`
-}
+type SimpleSubscriptionWsResponse graphql.BaseResponse[*SimpleSubscriptionResponse]
 
 func SimpleSubscriptionForwardData(interfaceChan interface{}, jsonRawMsg json.RawMessage) error {
 	var gqlResp graphql.Response

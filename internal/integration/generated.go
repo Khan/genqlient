@@ -3119,11 +3119,7 @@ func count(
 	return dataChan_, subscriptionID_, err_
 }
 
-type countWsResponse struct {
-	Data       *countResponse         `json:"data"`
-	Extensions map[string]interface{} `json:"extensions,omitempty"`
-	Errors     error                  `json:"errors"`
-}
+type countWsResponse graphql.BaseResponse[*countResponse]
 
 func countForwardData(interfaceChan interface{}, jsonRawMsg json.RawMessage) error {
 	var gqlResp graphql.Response

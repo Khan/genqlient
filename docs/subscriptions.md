@@ -1,6 +1,6 @@
 # Using genqlient with GraphQL subscriptions
 
-This document describes how to use genqlient to make GraphQL subscriptions. It assumes you already have the basic [client](./client_config.md) set up. Subscription support is fairly new; please report any bugs or missing features! 
+This document describes how to use genqlient to make GraphQL subscriptions. It assumes you already have the basic [client](./client_config.md) set up. Subscription support is fairly new; please report any bugs or missing features!
 
 ## Client setup
 
