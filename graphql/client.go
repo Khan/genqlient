@@ -78,7 +78,26 @@ type WebSocketClient[T any] interface {
 
 // ForwardDataFunction is a part of the WebSocketClient interface, see
 // [WebSocketClient.Subscribe] for details.
-type ForwardDataFunction func(interfaceChan interface{}, jsonRawMsg json.RawMessage) error
+type ForwardDataFunction func(interfaceChan interface{}, jsonRawMsg json.RawMessage) error // TODO: Remove?
+
+func ForwardData[T any](dataChan_ chan WsResponse[T], jsonRawMsg json.RawMessage) error {
+	var gqlResp Response
+	var wsResp WsResponse[T]
+	err := json.Unmarshal(jsonRawMsg, &gqlResp)
+	if err != nil {
+		return err
+	}
+	if len(gqlResp.Errors) == 0 {
+		err = json.Unmarshal(jsonRawMsg, &wsResp)
+		if err != nil {
+			return err
+		}
+	} else {
+		wsResp.Errors = gqlResp.Errors
+	}
+	dataChan_ <- wsResp
+	return nil
+}
 
 type WsResponse[T any] struct {
 	Data       *T                     `json:"data"`

@@ -3113,7 +3113,7 @@ func count[T any](
 	}
 
 	dataChan_ = make(chan graphql.WsResponse[T])
-	subscriptionID_, err_ = client_.Subscribe(req_, dataChan_, forwardData[T])
+	subscriptionID_, err_ = client_.Subscribe(req_, dataChan_, graphql.ForwardData[T])
 
 	return dataChan_, subscriptionID_, err_
 }

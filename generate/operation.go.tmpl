@@ -37,7 +37,7 @@ func {{.Name}}[T any](
     {{end}}
     {{if eq .Type "subscription"}}
     dataChan_ = make(chan graphql.WsResponse[T])
-    subscriptionID_, err_ = client_.Subscribe(req_, dataChan_, forwardData[T])
+    subscriptionID_, err_ = client_.Subscribe(req_, dataChan_, graphql.ForwardData[T])
     {{else}}
     data_ = &{{.ResponseName}}{}
     resp_ := &graphql.Response{Data: data_}

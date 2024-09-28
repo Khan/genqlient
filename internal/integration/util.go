@@ -2,7 +2,6 @@ package integration
 
 import (
 	"bytes"
-	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -10,7 +9,6 @@ import (
 	"testing"
 
 	"github.com/Khan/genqlient/generate"
-	"github.com/Khan/genqlient/graphql"
 )
 
 // RepoRoot returns the root of the genqlient repository,
@@ -70,22 +68,3 @@ func RunGenerateTest(t *testing.T, relConfigFilename string) {
 // This is here rather than in testutil to test the case where the generated
 // code and the bound type are in the same package.
 type MyGreatScalar string
-
-func forwardData[T any](dataChan_ chan graphql.WsResponse[T], jsonRawMsg json.RawMessage) error {
-	var gqlResp graphql.Response
-	var wsResp graphql.WsResponse[T]
-	err := json.Unmarshal(jsonRawMsg, &gqlResp)
-	if err != nil {
-		return err
-	}
-	if len(gqlResp.Errors) == 0 {
-		err = json.Unmarshal(jsonRawMsg, &wsResp)
-		if err != nil {
-			return err
-		}
-	} else {
-		wsResp.Errors = gqlResp.Errors
-	}
-	dataChan_ <- wsResp
-	return nil
-}
