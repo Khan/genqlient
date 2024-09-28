@@ -26,7 +26,7 @@ func TestSimpleQuery(t *testing.T) {
 	ctx := context.Background()
 	server := server.RunServer()
 	defer server.Close()
-	clients := newRoundtripClients[string](t, server.URL)
+	clients := newRoundtripClients(t, server.URL)
 
 	for _, client := range clients {
 		resp, _, err := simpleQuery(ctx, client)
@@ -45,8 +45,8 @@ func TestMutation(t *testing.T) {
 	ctx := context.Background()
 	server := server.RunServer()
 	defer server.Close()
-	postClient := newRoundtripClient[string](t, server.URL)
-	getClient := newRoundtripGetClient[string](t, server.URL)
+	postClient := newRoundtripClient(t, server.URL)
+	getClient := newRoundtripGetClient(t, server.URL)
 
 	resp, _, err := createUser(ctx, postClient, NewUser{Name: "Jack"})
 	require.NoError(t, err)
@@ -105,7 +105,7 @@ func TestServerError(t *testing.T) {
 	ctx := context.Background()
 	server := server.RunServer()
 	defer server.Close()
-	clients := newRoundtripClients[string](t, server.URL)
+	clients := newRoundtripClients(t, server.URL)
 
 	for _, client := range clients {
 		resp, _, err := failingQuery(ctx, client)
@@ -120,7 +120,7 @@ func TestServerError(t *testing.T) {
 
 func TestNetworkError(t *testing.T) {
 	ctx := context.Background()
-	clients := newRoundtripClients[string](t, "https://nothing.invalid/graphql")
+	clients := newRoundtripClients(t, "https://nothing.invalid/graphql")
 
 	for _, client := range clients {
 		resp, _, err := failingQuery(ctx, client)
@@ -174,7 +174,7 @@ func TestExtensions(t *testing.T) {
 	ctx := context.Background()
 	server := server.RunServer()
 	defer server.Close()
-	clients := newRoundtripClients[string](t, server.URL)
+	clients := newRoundtripClients(t, server.URL)
 
 	for _, client := range clients {
 		_, extensions, err := simpleQueryExt(ctx, client)
@@ -193,7 +193,7 @@ func TestOmitempty(t *testing.T) {
 	ctx := context.Background()
 	server := server.RunServer()
 	defer server.Close()
-	clients := newRoundtripClients[string](t, server.URL)
+	clients := newRoundtripClients(t, server.URL)
 
 	for _, client := range clients {
 		resp, _, err := queryWithOmitempty(ctx, client, "2")
@@ -222,7 +222,7 @@ func TestCustomMarshal(t *testing.T) {
 	ctx := context.Background()
 	server := server.RunServer()
 	defer server.Close()
-	clients := newRoundtripClients[string](t, server.URL)
+	clients := newRoundtripClients(t, server.URL)
 
 	for _, client := range clients {
 		resp, _, err := queryWithCustomMarshal(ctx, client,
@@ -253,7 +253,7 @@ func TestCustomMarshalSlice(t *testing.T) {
 	ctx := context.Background()
 	server := server.RunServer()
 	defer server.Close()
-	clients := newRoundtripClients[string](t, server.URL)
+	clients := newRoundtripClients(t, server.URL)
 
 	for _, client := range clients {
 		resp, _, err := queryWithCustomMarshalSlice(ctx, client,
@@ -289,7 +289,7 @@ func TestCustomMarshalOptional(t *testing.T) {
 	ctx := context.Background()
 	server := server.RunServer()
 	defer server.Close()
-	clients := newRoundtripClients[string](t, server.URL)
+	clients := newRoundtripClients(t, server.URL)
 
 	for _, client := range clients {
 		date := time.Date(2025, time.January, 1, 12, 34, 56, 789, time.UTC)
@@ -325,7 +325,7 @@ func TestInterfaceNoFragments(t *testing.T) {
 	ctx := context.Background()
 	server := server.RunServer()
 	defer server.Close()
-	clients := newRoundtripClients[string](t, server.URL)
+	clients := newRoundtripClients(t, server.URL)
 
 	for _, client := range clients {
 		resp, _, err := queryWithInterfaceNoFragments(ctx, client, "1")
@@ -390,7 +390,7 @@ func TestInterfaceListField(t *testing.T) {
 	ctx := context.Background()
 	server := server.RunServer()
 	defer server.Close()
-	clients := newRoundtripClients[string](t, server.URL)
+	clients := newRoundtripClients(t, server.URL)
 
 	for _, client := range clients {
 		resp, _, err := queryWithInterfaceListField(ctx, client,
@@ -439,7 +439,7 @@ func TestInterfaceListPointerField(t *testing.T) {
 	ctx := context.Background()
 	server := server.RunServer()
 	defer server.Close()
-	clients := newRoundtripClients[string](t, server.URL)
+	clients := newRoundtripClients(t, server.URL)
 
 	for _, client := range clients {
 		resp, _, err := queryWithInterfaceListPointerField(ctx, client,
@@ -495,7 +495,7 @@ func TestFragments(t *testing.T) {
 	ctx := context.Background()
 	server := server.RunServer()
 	defer server.Close()
-	clients := newRoundtripClients[string](t, server.URL)
+	clients := newRoundtripClients(t, server.URL)
 
 	for _, client := range clients {
 		resp, _, err := queryWithFragments(ctx, client, []string{"1", "3", "12847394823"})
@@ -590,7 +590,7 @@ func TestNamedFragments(t *testing.T) {
 	ctx := context.Background()
 	server := server.RunServer()
 	defer server.Close()
-	clients := newRoundtripClients[string](t, server.URL)
+	clients := newRoundtripClients(t, server.URL)
 
 	for _, client := range clients {
 		resp, _, err := queryWithNamedFragments(ctx, client, []string{"1", "3", "12847394823"})
@@ -721,7 +721,7 @@ func TestFlatten(t *testing.T) {
 	ctx := context.Background()
 	server := server.RunServer()
 	defer server.Close()
-	clients := newRoundtripClients[string](t, server.URL)
+	clients := newRoundtripClients(t, server.URL)
 
 	for _, client := range clients {
 		resp, _, err := queryWithFlatten(ctx, client, []string{"1", "3", "12847394823"})

@@ -93,7 +93,7 @@ func (c *roundtripClient[_]) roundtripResponse(resp interface{}) {
 	assert.Equal(c.t, string(body), string(bodyAgain))
 }
 
-func (c *roundtripClient[T]) MakeRequest(ctx context.Context, req *graphql.Request, resp *graphql.Response) error {
+func (c *roundtripClient[_]) MakeRequest(ctx context.Context, req *graphql.Request, resp *graphql.Response) error {
 	// TODO(benkraft): Also check the variables round-trip.  This is a bit less
 	// important since most of the code is the same (and input types are
 	// strictly simpler), and a bit hard to do because when asserting about
@@ -122,24 +122,24 @@ func (c *roundtripClient[_]) Unsubscribe(subscriptionID string) error {
 	return c.wsWrapped.Unsubscribe(subscriptionID)
 }
 
-func newRoundtripClients[T any](t *testing.T, endpoint string) []graphql.Client {
-	return []graphql.Client{newRoundtripClient[T](t, endpoint), newRoundtripGetClient[T](t, endpoint)}
+func newRoundtripClients(t *testing.T, endpoint string) []graphql.Client {
+	return []graphql.Client{newRoundtripClient(t, endpoint), newRoundtripGetClient(t, endpoint)}
 }
 
-func newRoundtripClient[T any](t *testing.T, endpoint string) graphql.Client {
+func newRoundtripClient(t *testing.T, endpoint string) graphql.Client {
 	transport := &lastResponseTransport{wrapped: http.DefaultTransport}
 	httpClient := &http.Client{Transport: transport}
-	return &roundtripClient[T]{
+	return &roundtripClient[string]{
 		wrapped:   graphql.NewClient(endpoint, httpClient),
 		transport: transport,
 		t:         t,
 	}
 }
 
-func newRoundtripGetClient[T any](t *testing.T, endpoint string) graphql.Client {
+func newRoundtripGetClient(t *testing.T, endpoint string) graphql.Client {
 	transport := &lastResponseTransport{wrapped: http.DefaultTransport}
 	httpClient := &http.Client{Transport: transport}
-	return &roundtripClient[T]{
+	return &roundtripClient[string]{
 		wrapped:   graphql.NewClientUsingGet(endpoint, httpClient),
 		transport: transport,
 		t:         t,
