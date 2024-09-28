@@ -64,7 +64,7 @@ func TestSubscription(t *testing.T) {
 	ctx := context.Background()
 	server := server.RunServer()
 	defer server.Close()
-	wsClient := newRoundtripWebScoketClient[countResponse](t, server.URL)
+	wsClient := newRoundtripWebSocketClient[countResponse](t, server.URL)
 
 	errChan, err := wsClient.Start(ctx)
 	require.NoError(t, err)

@@ -76,7 +76,7 @@ Once your websocket client matches the interfaces, you can get your `graphql.Web
 a loop for incoming messages and errors:
 
 ```go
-	graphqlClient := graphql.NewClientUsingWebSocket(
+	graphqlClient := graphql.NewClientUsingWebSocket[countResponse](
 		"ws://localhost:8080/query",
 		&MyDialer{Dialer: dialer},
 		headers,
