@@ -64,7 +64,7 @@ query UseStructReference ($input: UseStructReferencesInput!) {
 `
 
 // https://github.com/Khan/genqlient/issues/342
-func UseStructReference(
+func UseStructReference[T any](
 	ctx_ context.Context,
 	client_ graphql.Client,
 	input *UseStructReferencesInput,

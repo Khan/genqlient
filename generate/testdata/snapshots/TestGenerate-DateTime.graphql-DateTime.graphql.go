@@ -35,7 +35,7 @@ query convertTimezone ($dt: DateTime!, $tz: String) {
 }
 `
 
-func convertTimezone(
+func convertTimezone[T any](
 	client_ graphql.Client,
 	dt time.Time,
 	tz string,

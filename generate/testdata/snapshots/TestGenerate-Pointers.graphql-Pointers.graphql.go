@@ -252,7 +252,7 @@ query PointersQuery ($query: UserQueryInput, $dt: DateTime, $tz: String) {
 }
 `
 
-func PointersQuery(
+func PointersQuery[T any](
 	client_ graphql.Client,
 	query *UserQueryInput,
 	dt time.Time,

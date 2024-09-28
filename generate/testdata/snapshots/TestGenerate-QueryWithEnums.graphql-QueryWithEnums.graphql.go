@@ -79,7 +79,7 @@ query QueryWithEnums {
 }
 `
 
-func QueryWithEnums(
+func QueryWithEnums[T any](
 	client_ graphql.Client,
 ) (data_ *QueryWithEnumsResponse, err_ error) {
 	req_ := &graphql.Request{

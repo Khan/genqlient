@@ -79,7 +79,7 @@ query UsesEnumTwiceQuery {
 }
 `
 
-func UsesEnumTwiceQuery(
+func UsesEnumTwiceQuery[T any](
 	client_ graphql.Client,
 ) (data_ *UsesEnumTwiceQueryResponse, err_ error) {
 	req_ := &graphql.Request{

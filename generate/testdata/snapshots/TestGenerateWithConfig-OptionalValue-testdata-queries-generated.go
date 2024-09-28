@@ -86,7 +86,7 @@ query ListInputQuery ($names: [String]) {
 }
 `
 
-func ListInputQuery(
+func ListInputQuery[T any](
 	ctx_ context.Context,
 	client_ graphql.Client,
 	names []string,
@@ -123,7 +123,7 @@ query QueryWithSlices {
 }
 `
 
-func QueryWithSlices(
+func QueryWithSlices[T any](
 	ctx_ context.Context,
 	client_ graphql.Client,
 ) (data_ *QueryWithSlicesResponse, err_ error) {

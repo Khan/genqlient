@@ -50,7 +50,7 @@ query SimpleInputQuery ($name: String!) {
 }
 `
 
-func SimpleInputQuery(
+func SimpleInputQuery[T any](
 	client_ graphql.Client,
 	name string,
 ) (data_ *SimpleInputQueryResponse, err_ error) {

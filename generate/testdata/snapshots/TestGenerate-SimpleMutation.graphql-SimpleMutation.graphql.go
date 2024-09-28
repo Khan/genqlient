@@ -55,7 +55,7 @@ mutation SimpleMutation ($name: String!) {
 //
 // It has a long doc-comment, to test that we handle that correctly.
 // What a long comment indeed.
-func SimpleMutation(
+func SimpleMutation[T any](
 	client_ graphql.Client,
 	name string,
 ) (data_ *SimpleMutationResponse, err_ error) {

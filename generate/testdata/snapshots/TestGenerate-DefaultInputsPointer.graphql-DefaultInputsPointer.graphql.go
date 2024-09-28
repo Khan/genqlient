@@ -43,7 +43,7 @@ query DefaultInputs ($input: InputWithDefaults!) {
 // The `InputWithDefaults.field` cannot be `pointer: true`, together with implicit `omitempty: false`, as `null` is
 // not a valid value there. However, nullableField should still be ok
 // (this will send null, overwriting the server's default)
-func DefaultInputs(
+func DefaultInputs[T any](
 	client_ graphql.Client,
 	input InputWithDefaults,
 ) (data_ *DefaultInputsResponse, err_ error) {

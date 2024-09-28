@@ -3118,44 +3118,6 @@ func count[T any](
 	return dataChan_, subscriptionID_, err_
 }
 
-func forwardData[T any](dataChan_ chan graphql.WsResponse[T], jsonRawMsg json.RawMessage) error {
-	var gqlResp graphql.Response
-	var wsResp graphql.WsResponse[T]
-	err := json.Unmarshal(jsonRawMsg, &gqlResp)
-	if err != nil {
-		return err
-	}
-	if len(gqlResp.Errors) == 0 {
-		err = json.Unmarshal(jsonRawMsg, &wsResp)
-		if err != nil {
-			return err
-		}
-	} else {
-		wsResp.Errors = gqlResp.Errors
-	}
-	dataChan_ <- wsResp
-	return nil
-}
-
-func countForwardData[T any](dataChan_ chan graphql.WsResponse[T], jsonRawMsg json.RawMessage) error {
-	var gqlResp graphql.Response
-	var wsResp graphql.WsResponse[T]
-	err := json.Unmarshal(jsonRawMsg, &gqlResp)
-	if err != nil {
-		return err
-	}
-	if len(gqlResp.Errors) == 0 {
-		err = json.Unmarshal(jsonRawMsg, &wsResp)
-		if err != nil {
-			return err
-		}
-	} else {
-		wsResp.Errors = gqlResp.Errors
-	}
-	dataChan_ <- wsResp
-	return nil
-}
-
 // The mutation executed by createUser.
 const createUser_Operation = `
 mutation createUser ($user: NewUser!) {
@@ -3166,7 +3128,7 @@ mutation createUser ($user: NewUser!) {
 }
 `
 
-func createUser(
+func createUser[T any](
 	ctx_ context.Context,
 	client_ graphql.Client,
 	user NewUser,
@@ -3201,7 +3163,7 @@ query failingQuery {
 }
 `
 
-func failingQuery(
+func failingQuery[T any](
 	ctx_ context.Context,
 	client_ graphql.Client,
 ) (data_ *failingQueryResponse, ext_ map[string]interface{}, err_ error) {
@@ -3233,7 +3195,7 @@ query queryWithCustomMarshal ($date: Date!) {
 }
 `
 
-func queryWithCustomMarshal(
+func queryWithCustomMarshal[T any](
 	ctx_ context.Context,
 	client_ graphql.Client,
 	date time.Time,
@@ -3269,7 +3231,7 @@ query queryWithCustomMarshalOptional ($date: Date, $id: ID) {
 }
 `
 
-func queryWithCustomMarshalOptional(
+func queryWithCustomMarshalOptional[T any](
 	ctx_ context.Context,
 	client_ graphql.Client,
 	date *time.Time,
@@ -3307,7 +3269,7 @@ query queryWithCustomMarshalSlice ($dates: [Date!]!) {
 }
 `
 
-func queryWithCustomMarshalSlice(
+func queryWithCustomMarshalSlice[T any](
 	ctx_ context.Context,
 	client_ graphql.Client,
 	dates []time.Time,
@@ -3377,7 +3339,7 @@ fragment FriendsFields on User {
 }
 `
 
-func queryWithFlatten(
+func queryWithFlatten[T any](
 	ctx_ context.Context,
 	client_ graphql.Client,
 	ids []string,
@@ -3441,7 +3403,7 @@ query queryWithFragments ($ids: [ID!]!) {
 }
 `
 
-func queryWithFragments(
+func queryWithFragments[T any](
 	ctx_ context.Context,
 	client_ graphql.Client,
 	ids []string,
@@ -3477,7 +3439,7 @@ query queryWithInterfaceListField ($ids: [ID!]!) {
 }
 `
 
-func queryWithInterfaceListField(
+func queryWithInterfaceListField[T any](
 	ctx_ context.Context,
 	client_ graphql.Client,
 	ids []string,
@@ -3513,7 +3475,7 @@ query queryWithInterfaceListPointerField ($ids: [ID!]!) {
 }
 `
 
-func queryWithInterfaceListPointerField(
+func queryWithInterfaceListPointerField[T any](
 	ctx_ context.Context,
 	client_ graphql.Client,
 	ids []string,
@@ -3553,7 +3515,7 @@ query queryWithInterfaceNoFragments ($id: ID!) {
 }
 `
 
-func queryWithInterfaceNoFragments(
+func queryWithInterfaceNoFragments[T any](
 	ctx_ context.Context,
 	client_ graphql.Client,
 	id string,
@@ -3617,7 +3579,7 @@ fragment MoreUserFields on User {
 }
 `
 
-func queryWithNamedFragments(
+func queryWithNamedFragments[T any](
 	ctx_ context.Context,
 	client_ graphql.Client,
 	ids []string,
@@ -3653,7 +3615,7 @@ query queryWithOmitempty ($id: ID) {
 }
 `
 
-func queryWithOmitempty(
+func queryWithOmitempty[T any](
 	ctx_ context.Context,
 	client_ graphql.Client,
 	id string,
@@ -3689,7 +3651,7 @@ query queryWithVariables ($id: ID!) {
 }
 `
 
-func queryWithVariables(
+func queryWithVariables[T any](
 	ctx_ context.Context,
 	client_ graphql.Client,
 	id string,
@@ -3726,7 +3688,7 @@ query simpleQuery {
 }
 `
 
-func simpleQuery(
+func simpleQuery[T any](
 	ctx_ context.Context,
 	client_ graphql.Client,
 ) (data_ *simpleQueryResponse, ext_ map[string]interface{}, err_ error) {
@@ -3758,7 +3720,7 @@ query simpleQueryExt {
 }
 `
 
-func simpleQueryExt(
+func simpleQueryExt[T any](
 	ctx_ context.Context,
 	client_ graphql.Client,
 ) (data_ *simpleQueryExtResponse, ext_ map[string]interface{}, err_ error) {

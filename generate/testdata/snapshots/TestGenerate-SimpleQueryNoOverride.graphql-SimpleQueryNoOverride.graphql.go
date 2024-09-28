@@ -47,7 +47,7 @@ query SimpleQueryNoOverride {
 }
 `
 
-func SimpleQueryNoOverride(
+func SimpleQueryNoOverride[T any](
 	client_ graphql.Client,
 ) (data_ *SimpleQueryNoOverrideResponse, err_ error) {
 	req_ := &graphql.Request{

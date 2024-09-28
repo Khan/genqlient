@@ -183,7 +183,7 @@ query UnionNoFragmentsQuery {
 }
 `
 
-func UnionNoFragmentsQuery(
+func UnionNoFragmentsQuery[T any](
 	client_ graphql.Client,
 ) (data_ *UnionNoFragmentsQueryResponse, err_ error) {
 	req_ := &graphql.Request{

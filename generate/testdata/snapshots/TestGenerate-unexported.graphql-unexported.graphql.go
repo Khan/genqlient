@@ -191,7 +191,7 @@ query unexported ($query: UserQueryInput) {
 }
 `
 
-func unexported(
+func unexported[T any](
 	client_ graphql.Client,
 	query UserQueryInput,
 ) (data_ *unexportedResponse, err_ error) {

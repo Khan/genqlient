@@ -80,7 +80,7 @@ query getUser ($Login: String!) {
 `
 
 // getUser gets the given user's name from their username.
-func getUser(
+func getUser[T any](
 	ctx_ context.Context,
 	client_ graphql.Client,
 	Login string,
@@ -115,7 +115,7 @@ query getViewer {
 }
 `
 
-func getViewer(
+func getViewer[T any](
 	ctx_ context.Context,
 	client_ graphql.Client,
 ) (data_ *getViewerResponse, err_ error) {

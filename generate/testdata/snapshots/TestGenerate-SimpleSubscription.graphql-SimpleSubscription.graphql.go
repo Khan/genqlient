@@ -3,9 +3,6 @@
 package test
 
 import (
-	"encoding/json"
-	"errors"
-
 	"github.com/Khan/genqlient/graphql"
 )
 
@@ -25,46 +22,17 @@ subscription SimpleSubscription {
 `
 
 // To unsubscribe, use [graphql.WebSocketClient.Unsubscribe]
-func SimpleSubscription(
-	client_ graphql.WebSocketClient,
-) (dataChan_ chan SimpleSubscriptionWsResponse, subscriptionID_ string, err_ error) {
+func SimpleSubscription[T any](
+	client_ graphql.WebSocketClient[T],
+) (dataChan_ chan graphql.WsResponse[T], subscriptionID_ string, err_ error) {
 	req_ := &graphql.Request{
 		OpName: "SimpleSubscription",
 		Query:  SimpleSubscription_Operation,
 	}
 
-	dataChan_ = make(chan SimpleSubscriptionWsResponse)
-	subscriptionID_, err_ = client_.Subscribe(req_, dataChan_, SimpleSubscriptionForwardData)
+	dataChan_ = make(chan graphql.WsResponse[T])
+	subscriptionID_, err_ = client_.Subscribe(req_, dataChan_, forwardData[T])
 
 	return dataChan_, subscriptionID_, err_
-}
-
-type SimpleSubscriptionWsResponse struct {
-	Data       *SimpleSubscriptionResponse `json:"data"`
-	Extensions map[string]interface{}      `json:"extensions,omitempty"`
-	Errors     error                       `json:"errors"`
-}
-
-func SimpleSubscriptionForwardData(interfaceChan interface{}, jsonRawMsg json.RawMessage) error {
-	var gqlResp graphql.Response
-	var wsResp SimpleSubscriptionWsResponse
-	err := json.Unmarshal(jsonRawMsg, &gqlResp)
-	if err != nil {
-		return err
-	}
-	if len(gqlResp.Errors) == 0 {
-		err = json.Unmarshal(jsonRawMsg, &wsResp)
-		if err != nil {
-			return err
-		}
-	} else {
-		wsResp.Errors = gqlResp.Errors
-	}
-	dataChan_, ok := interfaceChan.(chan SimpleSubscriptionWsResponse)
-	if !ok {
-		return errors.New("failed to cast interface into 'chan SimpleSubscriptionWsResponse'")
-	}
-	dataChan_ <- wsResp
-	return nil
 }
 

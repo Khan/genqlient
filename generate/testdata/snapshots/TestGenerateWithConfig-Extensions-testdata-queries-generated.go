@@ -43,7 +43,7 @@ query SimpleQuery {
 }
 `
 
-func SimpleQuery(
+func SimpleQuery[T any](
 	ctx_ context.Context,
 	client_ graphql.Client,
 ) (data_ *SimpleQueryResponse, ext_ map[string]interface{}, err_ error) {

@@ -148,7 +148,7 @@ query ListInputQuery ($names: [String]) {
 }
 `
 
-func ListInputQuery(
+func ListInputQuery[T any](
 	ctx_ context.Context,
 	client_ graphql.Client,
 	names []*string,
@@ -185,7 +185,7 @@ query QueryWithSlices {
 }
 `
 
-func QueryWithSlices(
+func QueryWithSlices[T any](
 	ctx_ context.Context,
 	client_ graphql.Client,
 ) (data_ *QueryWithSlicesResponse, err_ error) {
@@ -216,7 +216,7 @@ query SimpleQueryNoOverride {
 }
 `
 
-func SimpleQueryNoOverride(
+func SimpleQueryNoOverride[T any](
 	ctx_ context.Context,
 	client_ graphql.Client,
 ) (data_ *SimpleQueryNoOverrideResponse, err_ error) {
@@ -247,7 +247,7 @@ query SimpleQueryWithPointerFalseOverride {
 }
 `
 
-func SimpleQueryWithPointerFalseOverride(
+func SimpleQueryWithPointerFalseOverride[T any](
 	ctx_ context.Context,
 	client_ graphql.Client,
 ) (data_ *SimpleQueryWithPointerFalseOverrideResponse, err_ error) {

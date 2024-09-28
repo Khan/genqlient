@@ -191,7 +191,7 @@ query InputObjectQuery ($query: UserQueryInput) {
 }
 `
 
-func InputObjectQuery(
+func InputObjectQuery[T any](
 	client_ graphql.Client,
 	query UserQueryInput,
 ) (data_ *InputObjectQueryResponse, err_ error) {

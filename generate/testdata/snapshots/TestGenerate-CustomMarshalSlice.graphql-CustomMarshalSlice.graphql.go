@@ -211,7 +211,7 @@ query CustomMarshalSlice ($datesss: [[[Date!]!]!]!, $datesssp: [[[Date!]!]!]!) {
 }
 `
 
-func CustomMarshalSlice(
+func CustomMarshalSlice[T any](
 	client_ graphql.Client,
 	datesss [][][]time.Time,
 	datesssp [][][]*time.Time,

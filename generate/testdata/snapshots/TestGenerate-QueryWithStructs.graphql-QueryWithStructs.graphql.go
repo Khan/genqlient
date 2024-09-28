@@ -55,7 +55,7 @@ query QueryWithStructs {
 }
 `
 
-func QueryWithStructs(
+func QueryWithStructs[T any](
 	client_ graphql.Client,
 ) (data_ *QueryWithStructsResponse, err_ error) {
 	req_ := &graphql.Request{

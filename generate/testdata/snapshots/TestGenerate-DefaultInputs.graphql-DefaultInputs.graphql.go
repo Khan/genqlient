@@ -42,7 +42,7 @@ query DefaultInputs ($input: InputWithDefaults!) {
 
 // Without any extra directives or configuration, the defaults are never considered,
 // as the client sends at least zero-value (struct with empty string).
-func DefaultInputs(
+func DefaultInputs[T any](
 	client_ graphql.Client,
 	input InputWithDefaults,
 ) (data_ *DefaultInputsResponse, err_ error) {

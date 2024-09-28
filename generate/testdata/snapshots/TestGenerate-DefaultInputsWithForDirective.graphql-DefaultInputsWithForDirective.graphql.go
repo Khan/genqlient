@@ -40,7 +40,7 @@ query DefaultInputs ($input: InputWithDefaults!) {
 }
 `
 
-func DefaultInputs(
+func DefaultInputs[T any](
 	client_ graphql.Client,
 	input InputWithDefaults,
 ) (data_ *DefaultInputsResponse, err_ error) {

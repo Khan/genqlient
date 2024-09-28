@@ -47,7 +47,7 @@ query TypeNameQuery {
 }
 `
 
-func TypeNameQuery(
+func TypeNameQuery[T any](
 	client_ graphql.Client,
 ) (data_ *TypeNameQueryResponse, err_ error) {
 	req_ := &graphql.Request{

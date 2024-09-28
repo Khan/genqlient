@@ -47,7 +47,7 @@ query SimpleQuery {
 }
 `
 
-func SimpleQuery(
+func SimpleQuery[T any](
 	ctx_ testutil.MyContext,
 ) (data_ *SimpleQueryResponse, err_ error) {
 	req_ := &graphql.Request{
