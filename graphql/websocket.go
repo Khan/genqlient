@@ -135,7 +135,7 @@ func (w *webSocketClient[T]) forwardWebSocketData(message []byte) error {
 	if sub.hasBeenUnsubscribed {
 		return nil
 	}
-	return sub.forwardDataFunc(sub.interfaceChan, wsMsg.Payload)
+	return sub.forwardDataFunc(sub.dataChan, wsMsg.Payload)
 }
 
 func (w *webSocketClient[T]) receiveWebSocketConnAck() (bool, error) {
@@ -193,7 +193,7 @@ func (w *webSocketClient[T]) Close() error {
 	return w.conn.Close()
 }
 
-func (w *webSocketClient[T]) Subscribe(req *Request, interfaceChan chan WsResponse[T], forwardDataFunc ForwardDataFunctionGeneric[T]) (string, error) {
+func (w *webSocketClient[T]) Subscribe(req *Request, dataChan chan WsResponse[T], forwardDataFunc ForwardDataFunction[T]) (string, error) {
 	if req.Query != "" {
 		if strings.HasPrefix(strings.TrimSpace(req.Query), "query") {
 			return "", fmt.Errorf("client does not support queries")
@@ -204,7 +204,7 @@ func (w *webSocketClient[T]) Subscribe(req *Request, interfaceChan chan WsRespon
 	}
 
 	subscriptionID := uuid.NewString()
-	w.subscriptions.Create(subscriptionID, interfaceChan, forwardDataFunc)
+	w.subscriptions.Create(subscriptionID, dataChan, forwardDataFunc)
 	subscriptionMsg := webSocketSendMessage{
 		Type:    webSocketTypeSubscribe,
 		Payload: req,

@@ -2,7 +2,6 @@ package graphql
 
 import (
 	"fmt"
-	"reflect"
 	"sync"
 )
 
@@ -13,18 +12,18 @@ type subscriptionMap[T any] struct {
 }
 
 type subscription[T any] struct {
-	interfaceChan       chan WsResponse[T] // TODO: Rename to dataChan
-	forwardDataFunc     ForwardDataFunctionGeneric[T]
+	dataChan            chan WsResponse[T]
+	forwardDataFunc     ForwardDataFunction[T]
 	id                  string
 	hasBeenUnsubscribed bool
 }
 
-func (s *subscriptionMap[T]) Create(subscriptionID string, dataChan chan WsResponse[T], forwardDataFunc ForwardDataFunctionGeneric[T]) {
+func (s *subscriptionMap[T]) Create(subscriptionID string, dataChan chan WsResponse[T], forwardDataFunc ForwardDataFunction[T]) {
 	s.Lock()
 	defer s.Unlock()
 	s.map_[subscriptionID] = subscription[T]{
 		id:                  subscriptionID,
-		interfaceChan:       dataChan,
+		dataChan:            dataChan,
 		forwardDataFunc:     forwardDataFunc,
 		hasBeenUnsubscribed: false,
 	}
@@ -46,7 +45,7 @@ func (s *subscriptionMap[T]) Unsubscribe(subscriptionID string) error {
 	}
 	unsub.hasBeenUnsubscribed = true
 	s.map_[subscriptionID] = unsub
-	reflect.ValueOf(s.map_[subscriptionID].interfaceChan).Close()
+	close(s.map_[subscriptionID].dataChan)
 	return nil
 }
 

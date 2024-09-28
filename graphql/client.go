@@ -59,7 +59,7 @@ type WebSocketClient[T any] interface {
 	// req contains the data to be sent to the GraphQL server. Will be marshalled
 	// into JSON bytes.
 	//
-	// interfaceChan is a channel used to send the data that arrives via the
+	// dataChan is a channel used to send the data that arrives via the
 	// webSocket connection (it is the channel that is passed to `forwardDataFunc`).
 	//
 	// forwardDataFunc is the function that will cast the received interface into
@@ -68,8 +68,8 @@ type WebSocketClient[T any] interface {
 	// Returns a subscriptionID if successful, an error otherwise.
 	Subscribe(
 		req *Request,
-		interfaceChan chan WsResponse[T],
-		forwardDataFunc ForwardDataFunctionGeneric[T],
+		dataChan chan WsResponse[T],
+		forwardDataFunc ForwardDataFunction[T],
 	) (string, error)
 
 	// Unsubscribe must unsubscribe from an endpoint of the client's GraphQL API.
@@ -78,7 +78,7 @@ type WebSocketClient[T any] interface {
 
 // ForwardDataFunction is a part of the WebSocketClient interface, see
 // [WebSocketClient.Subscribe] for details.
-type ForwardDataFunction func(interfaceChan interface{}, jsonRawMsg json.RawMessage) error // TODO: Remove?
+type ForwardDataFunction[T any] func(dataChan chan WsResponse[T], jsonRawMsg json.RawMessage) error
 
 func ForwardData[T any](dataChan_ chan WsResponse[T], jsonRawMsg json.RawMessage) error {
 	var gqlResp Response
@@ -104,8 +104,6 @@ type WsResponse[T any] struct {
 	Extensions map[string]interface{} `json:"extensions,omitempty"`
 	Errors     error                  `json:"errors"`
 }
-
-type ForwardDataFunctionGeneric[T any] func(dataChan chan WsResponse[T], jsonRawMsg json.RawMessage) error
 
 type client struct {
 	httpClient Doer

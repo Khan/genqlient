@@ -114,8 +114,8 @@ func (c *roundtripClient[T]) Close() error {
 	return c.wsWrapped.Close()
 }
 
-func (c *roundtripClient[T]) Subscribe(req *graphql.Request, interfaceChan chan graphql.WsResponse[T], forwardDataFunc graphql.ForwardDataFunctionGeneric[T]) (string, error) {
-	return c.wsWrapped.Subscribe(req, interfaceChan, forwardDataFunc)
+func (c *roundtripClient[T]) Subscribe(req *graphql.Request, dataChan chan graphql.WsResponse[T], forwardDataFunc graphql.ForwardDataFunction[T]) (string, error) {
+	return c.wsWrapped.Subscribe(req, dataChan, forwardDataFunc)
 }
 
 func (c *roundtripClient[T]) Unsubscribe(subscriptionID string) error {
