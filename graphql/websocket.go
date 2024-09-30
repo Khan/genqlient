@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"reflect"
 	"strings"
 	"sync"
 	"time"
@@ -135,6 +136,11 @@ func (w *webSocketClient) forwardWebSocketData(message []byte) error {
 	if sub.hasBeenUnsubscribed {
 		return nil
 	}
+	if wsMsg.Type == webSocketTypeComplete {
+		reflect.ValueOf(sub.interfaceChan).Close()
+		return nil
+	}
+
 	return sub.forwardDataFunc(sub.interfaceChan, wsMsg.Payload)
 }
 

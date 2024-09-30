@@ -57,6 +57,11 @@ func TestMutation(t *testing.T) {
 	require.Errorf(t, err, "client does not support mutations")
 }
 
+type subscriptionResult struct {
+	clientUnsubscribed  bool
+	serverChannelClosed bool
+}
+
 func TestSubscription(t *testing.T) {
 	_ = `# @genqlient
 	subscription count { count }`
@@ -64,37 +69,78 @@ func TestSubscription(t *testing.T) {
 	ctx := context.Background()
 	server := server.RunServer()
 	defer server.Close()
-	wsClient := newRoundtripWebScoketClient(t, server.URL)
 
-	errChan, err := wsClient.Start(ctx)
-	require.NoError(t, err)
+	cases := []struct {
+		name           string
+		unsubThreshold time.Duration
+		expected       subscriptionResult
+	}{
+		{
+			name:           "server_closed_channel",
+			unsubThreshold: 5 * time.Second,
+			expected: subscriptionResult{
+				clientUnsubscribed:  false,
+				serverChannelClosed: true,
+			},
+		},
+		{
+			name:           "client_unsubscribed",
+			unsubThreshold: 300 * time.Millisecond,
+			expected: subscriptionResult{
+				clientUnsubscribed:  true,
+				serverChannelClosed: false,
+			},
+		},
+	}
 
-	dataChan, subscriptionID, err := count(ctx, wsClient)
-	require.NoError(t, err)
-	defer wsClient.Close()
-	counter := 0
-	start := time.Now()
-	for loop := true; loop; {
-		select {
-		case resp, more := <-dataChan:
-			if !more {
-				loop = false
-				break
-			}
-			require.NotNil(t, resp.Data)
-			assert.Equal(t, counter, resp.Data.Count)
-			require.Nil(t, resp.Errors)
-			if time.Since(start) > time.Second*5 {
-				err = wsClient.Unsubscribe(subscriptionID)
-				require.NoError(t, err)
-				loop = false
-			}
-			counter++
-		case err := <-errChan:
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			wsClient := newRoundtripWebSocketClient(t, server.URL)
+			errChan, err := wsClient.Start(ctx)
 			require.NoError(t, err)
-		case <-time.After(time.Second * 10):
-			require.NoError(t, fmt.Errorf("subscription timed out"))
-		}
+
+			dataChan, subscriptionID, err := count(ctx, wsClient)
+			require.NoError(t, err)
+			defer wsClient.Close()
+
+			var (
+				counter = 0
+				start   = time.Now()
+				result  = subscriptionResult{}
+			)
+
+			for loop := true; loop; {
+				select {
+				case resp, more := <-dataChan:
+					if !more {
+						result.serverChannelClosed = true
+						loop = false
+						break
+					}
+
+					require.NotNil(t, resp.Data)
+					assert.Equal(t, counter, resp.Data.Count)
+					require.Nil(t, resp.Errors)
+
+					if time.Since(start) > tc.unsubThreshold {
+						err := wsClient.Unsubscribe(subscriptionID)
+						require.NoError(t, err)
+						result.clientUnsubscribed = true
+						loop = false
+					}
+
+					counter++
+
+				case err := <-errChan:
+					require.NoError(t, err)
+
+				case <-time.After(10 * time.Second):
+					require.NoError(t, fmt.Errorf("subscription timed out"))
+				}
+			}
+
+			assert.Equal(t, tc.expected, result)
+		})
 	}
 }
 
