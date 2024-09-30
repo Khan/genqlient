@@ -242,7 +242,10 @@ func (c *client) MakeRequest(ctx context.Context, req *Request, resp *Response) 
 		if err != nil {
 			respBody = []byte(fmt.Sprintf("<unreadable: %v>", err))
 		}
-		return fmt.Errorf("returned error %v: %s", httpResp.Status, respBody)
+		return &HTTPError{
+			StatusCode: httpResp.StatusCode,
+			Body:       string(respBody),
+		}
 	}
 
 	err = json.NewDecoder(httpResp.Body).Decode(resp)
