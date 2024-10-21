@@ -16,7 +16,12 @@ type QueryWithStructsResponse struct {
 }
 
 // GetUser returns QueryWithStructsResponse.User, and is useful for accessing the field via an interface.
-func (v *QueryWithStructsResponse) GetUser() QueryWithStructsUser { return v.User }
+func (v *QueryWithStructsResponse) GetUser() (val QueryWithStructsUser) {
+	if v == nil {
+		return
+	}
+	return v.User
+}
 
 // QueryWithStructsUser includes the requested fields of the GraphQL type User.
 // The GraphQL type's documentation follows.
@@ -27,7 +32,10 @@ type QueryWithStructsUser struct {
 }
 
 // GetAuthMethods returns QueryWithStructsUser.AuthMethods, and is useful for accessing the field via an interface.
-func (v *QueryWithStructsUser) GetAuthMethods() []QueryWithStructsUserAuthMethodsAuthMethod {
+func (v *QueryWithStructsUser) GetAuthMethods() (val []QueryWithStructsUserAuthMethodsAuthMethod) {
+	if v == nil {
+		return
+	}
 	return v.AuthMethods
 }
 
@@ -38,10 +46,20 @@ type QueryWithStructsUserAuthMethodsAuthMethod struct {
 }
 
 // GetProvider returns QueryWithStructsUserAuthMethodsAuthMethod.Provider, and is useful for accessing the field via an interface.
-func (v *QueryWithStructsUserAuthMethodsAuthMethod) GetProvider() string { return v.Provider }
+func (v *QueryWithStructsUserAuthMethodsAuthMethod) GetProvider() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Provider
+}
 
 // GetEmail returns QueryWithStructsUserAuthMethodsAuthMethod.Email, and is useful for accessing the field via an interface.
-func (v *QueryWithStructsUserAuthMethodsAuthMethod) GetEmail() string { return v.Email }
+func (v *QueryWithStructsUserAuthMethodsAuthMethod) GetEmail() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Email
+}
 
 // The query executed by QueryWithStructs.
 const QueryWithStructs_Operation = `

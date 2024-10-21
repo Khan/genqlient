@@ -15,10 +15,20 @@ type __convertTimezoneInput struct {
 }
 
 // GetDt returns __convertTimezoneInput.Dt, and is useful for accessing the field via an interface.
-func (v *__convertTimezoneInput) GetDt() time.Time { return v.Dt }
+func (v *__convertTimezoneInput) GetDt() (val time.Time) {
+	if v == nil {
+		return
+	}
+	return v.Dt
+}
 
 // GetTz returns __convertTimezoneInput.Tz, and is useful for accessing the field via an interface.
-func (v *__convertTimezoneInput) GetTz() string { return v.Tz }
+func (v *__convertTimezoneInput) GetTz() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Tz
+}
 
 // convertTimezoneResponse is returned by convertTimezone on success.
 type convertTimezoneResponse struct {
@@ -26,7 +36,12 @@ type convertTimezoneResponse struct {
 }
 
 // GetConvert returns convertTimezoneResponse.Convert, and is useful for accessing the field via an interface.
-func (v *convertTimezoneResponse) GetConvert() time.Time { return v.Convert }
+func (v *convertTimezoneResponse) GetConvert() (val time.Time) {
+	if v == nil {
+		return
+	}
+	return v.Convert
+}
 
 // The query executed by convertTimezone.
 const convertTimezone_Operation = `

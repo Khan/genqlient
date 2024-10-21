@@ -17,7 +17,12 @@ type SimpleInputQueryResponse struct {
 }
 
 // GetUser returns SimpleInputQueryResponse.User, and is useful for accessing the field via an interface.
-func (v *SimpleInputQueryResponse) GetUser() SimpleInputQueryUser { return v.User }
+func (v *SimpleInputQueryResponse) GetUser() (val SimpleInputQueryUser) {
+	if v == nil {
+		return
+	}
+	return v.User
+}
 
 // SimpleInputQueryUser includes the requested fields of the GraphQL type User.
 // The GraphQL type's documentation follows.
@@ -31,7 +36,12 @@ type SimpleInputQueryUser struct {
 }
 
 // GetId returns SimpleInputQueryUser.Id, and is useful for accessing the field via an interface.
-func (v *SimpleInputQueryUser) GetId() testutil.ID { return v.Id }
+func (v *SimpleInputQueryUser) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // __SimpleInputQueryInput is used internally by genqlient
 type __SimpleInputQueryInput struct {
@@ -39,7 +49,12 @@ type __SimpleInputQueryInput struct {
 }
 
 // GetName returns __SimpleInputQueryInput.Name, and is useful for accessing the field via an interface.
-func (v *__SimpleInputQueryInput) GetName() string { return v.Name }
+func (v *__SimpleInputQueryInput) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // The query executed by SimpleInputQuery.
 const SimpleInputQuery_Operation = `

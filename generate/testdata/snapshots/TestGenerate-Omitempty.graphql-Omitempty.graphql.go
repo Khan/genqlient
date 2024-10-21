@@ -24,16 +24,36 @@ type OmitEmptyQueryResponse struct {
 }
 
 // GetUser returns OmitEmptyQueryResponse.User, and is useful for accessing the field via an interface.
-func (v *OmitEmptyQueryResponse) GetUser() OmitEmptyQueryUser { return v.User }
+func (v *OmitEmptyQueryResponse) GetUser() (val OmitEmptyQueryUser) {
+	if v == nil {
+		return
+	}
+	return v.User
+}
 
 // GetUsers returns OmitEmptyQueryResponse.Users, and is useful for accessing the field via an interface.
-func (v *OmitEmptyQueryResponse) GetUsers() []OmitEmptyQueryUsersUser { return v.Users }
+func (v *OmitEmptyQueryResponse) GetUsers() (val []OmitEmptyQueryUsersUser) {
+	if v == nil {
+		return
+	}
+	return v.Users
+}
 
 // GetMaybeConvert returns OmitEmptyQueryResponse.MaybeConvert, and is useful for accessing the field via an interface.
-func (v *OmitEmptyQueryResponse) GetMaybeConvert() time.Time { return v.MaybeConvert }
+func (v *OmitEmptyQueryResponse) GetMaybeConvert() (val time.Time) {
+	if v == nil {
+		return
+	}
+	return v.MaybeConvert
+}
 
 // GetConvert2 returns OmitEmptyQueryResponse.Convert2, and is useful for accessing the field via an interface.
-func (v *OmitEmptyQueryResponse) GetConvert2() time.Time { return v.Convert2 }
+func (v *OmitEmptyQueryResponse) GetConvert2() (val time.Time) {
+	if v == nil {
+		return
+	}
+	return v.Convert2
+}
 
 // OmitEmptyQueryUser includes the requested fields of the GraphQL type User.
 // The GraphQL type's documentation follows.
@@ -47,7 +67,12 @@ type OmitEmptyQueryUser struct {
 }
 
 // GetId returns OmitEmptyQueryUser.Id, and is useful for accessing the field via an interface.
-func (v *OmitEmptyQueryUser) GetId() testutil.ID { return v.Id }
+func (v *OmitEmptyQueryUser) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // OmitEmptyQueryUsersUser includes the requested fields of the GraphQL type User.
 // The GraphQL type's documentation follows.
@@ -61,7 +86,12 @@ type OmitEmptyQueryUsersUser struct {
 }
 
 // GetId returns OmitEmptyQueryUsersUser.Id, and is useful for accessing the field via an interface.
-func (v *OmitEmptyQueryUsersUser) GetId() testutil.ID { return v.Id }
+func (v *OmitEmptyQueryUsersUser) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // Role is a type a user may have.
 type Role string
@@ -99,25 +129,60 @@ type UserQueryInput struct {
 }
 
 // GetEmail returns UserQueryInput.Email, and is useful for accessing the field via an interface.
-func (v *UserQueryInput) GetEmail() string { return v.Email }
+func (v *UserQueryInput) GetEmail() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Email
+}
 
 // GetName returns UserQueryInput.Name, and is useful for accessing the field via an interface.
-func (v *UserQueryInput) GetName() string { return v.Name }
+func (v *UserQueryInput) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // GetId returns UserQueryInput.Id, and is useful for accessing the field via an interface.
-func (v *UserQueryInput) GetId() testutil.ID { return v.Id }
+func (v *UserQueryInput) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetRole returns UserQueryInput.Role, and is useful for accessing the field via an interface.
-func (v *UserQueryInput) GetRole() Role { return v.Role }
+func (v *UserQueryInput) GetRole() (val Role) {
+	if v == nil {
+		return
+	}
+	return v.Role
+}
 
 // GetNames returns UserQueryInput.Names, and is useful for accessing the field via an interface.
-func (v *UserQueryInput) GetNames() []string { return v.Names }
+func (v *UserQueryInput) GetNames() (val []string) {
+	if v == nil {
+		return
+	}
+	return v.Names
+}
 
 // GetHasPokemon returns UserQueryInput.HasPokemon, and is useful for accessing the field via an interface.
-func (v *UserQueryInput) GetHasPokemon() testutil.Pokemon { return v.HasPokemon }
+func (v *UserQueryInput) GetHasPokemon() (val testutil.Pokemon) {
+	if v == nil {
+		return
+	}
+	return v.HasPokemon
+}
 
 // GetBirthdate returns UserQueryInput.Birthdate, and is useful for accessing the field via an interface.
-func (v *UserQueryInput) GetBirthdate() time.Time { return v.Birthdate }
+func (v *UserQueryInput) GetBirthdate() (val time.Time) {
+	if v == nil {
+		return
+	}
+	return v.Birthdate
+}
 
 func (v *UserQueryInput) UnmarshalJSON(b []byte) error {
 
@@ -210,19 +275,44 @@ type __OmitEmptyQueryInput struct {
 }
 
 // GetQuery returns __OmitEmptyQueryInput.Query, and is useful for accessing the field via an interface.
-func (v *__OmitEmptyQueryInput) GetQuery() UserQueryInput { return v.Query }
+func (v *__OmitEmptyQueryInput) GetQuery() (val UserQueryInput) {
+	if v == nil {
+		return
+	}
+	return v.Query
+}
 
 // GetQueries returns __OmitEmptyQueryInput.Queries, and is useful for accessing the field via an interface.
-func (v *__OmitEmptyQueryInput) GetQueries() []UserQueryInput { return v.Queries }
+func (v *__OmitEmptyQueryInput) GetQueries() (val []UserQueryInput) {
+	if v == nil {
+		return
+	}
+	return v.Queries
+}
 
 // GetDt returns __OmitEmptyQueryInput.Dt, and is useful for accessing the field via an interface.
-func (v *__OmitEmptyQueryInput) GetDt() time.Time { return v.Dt }
+func (v *__OmitEmptyQueryInput) GetDt() (val time.Time) {
+	if v == nil {
+		return
+	}
+	return v.Dt
+}
 
 // GetTz returns __OmitEmptyQueryInput.Tz, and is useful for accessing the field via an interface.
-func (v *__OmitEmptyQueryInput) GetTz() string { return v.Tz }
+func (v *__OmitEmptyQueryInput) GetTz() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Tz
+}
 
 // GetTzNoOmitEmpty returns __OmitEmptyQueryInput.TzNoOmitEmpty, and is useful for accessing the field via an interface.
-func (v *__OmitEmptyQueryInput) GetTzNoOmitEmpty() string { return v.TzNoOmitEmpty }
+func (v *__OmitEmptyQueryInput) GetTzNoOmitEmpty() (val string) {
+	if v == nil {
+		return
+	}
+	return v.TzNoOmitEmpty
+}
 
 // The query executed by OmitEmptyQuery.
 const OmitEmptyQuery_Operation = `

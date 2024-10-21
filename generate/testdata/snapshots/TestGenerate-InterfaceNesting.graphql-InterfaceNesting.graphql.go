@@ -16,7 +16,12 @@ type InterfaceNestingResponse struct {
 }
 
 // GetRoot returns InterfaceNestingResponse.Root, and is useful for accessing the field via an interface.
-func (v *InterfaceNestingResponse) GetRoot() InterfaceNestingRootTopic { return v.Root }
+func (v *InterfaceNestingResponse) GetRoot() (val InterfaceNestingRootTopic) {
+	if v == nil {
+		return
+	}
+	return v.Root
+}
 
 // InterfaceNestingRootTopic includes the requested fields of the GraphQL type Topic.
 type InterfaceNestingRootTopic struct {
@@ -26,10 +31,18 @@ type InterfaceNestingRootTopic struct {
 }
 
 // GetId returns InterfaceNestingRootTopic.Id, and is useful for accessing the field via an interface.
-func (v *InterfaceNestingRootTopic) GetId() testutil.ID { return v.Id }
+func (v *InterfaceNestingRootTopic) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetChildren returns InterfaceNestingRootTopic.Children, and is useful for accessing the field via an interface.
-func (v *InterfaceNestingRootTopic) GetChildren() []InterfaceNestingRootTopicChildrenContent {
+func (v *InterfaceNestingRootTopic) GetChildren() (val []InterfaceNestingRootTopicChildrenContent) {
+	if v == nil {
+		return
+	}
 	return v.Children
 }
 
@@ -120,13 +133,26 @@ type InterfaceNestingRootTopicChildrenArticle struct {
 }
 
 // GetTypename returns InterfaceNestingRootTopicChildrenArticle.Typename, and is useful for accessing the field via an interface.
-func (v *InterfaceNestingRootTopicChildrenArticle) GetTypename() string { return v.Typename }
+func (v *InterfaceNestingRootTopicChildrenArticle) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns InterfaceNestingRootTopicChildrenArticle.Id, and is useful for accessing the field via an interface.
-func (v *InterfaceNestingRootTopicChildrenArticle) GetId() testutil.ID { return v.Id }
+func (v *InterfaceNestingRootTopicChildrenArticle) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetParent returns InterfaceNestingRootTopicChildrenArticle.Parent, and is useful for accessing the field via an interface.
-func (v *InterfaceNestingRootTopicChildrenArticle) GetParent() InterfaceNestingRootTopicChildrenContentParentTopic {
+func (v *InterfaceNestingRootTopicChildrenArticle) GetParent() (val InterfaceNestingRootTopicChildrenContentParentTopic) {
+	if v == nil {
+		return
+	}
 	return v.Parent
 }
 
@@ -235,10 +261,18 @@ type InterfaceNestingRootTopicChildrenContentParentTopic struct {
 }
 
 // GetId returns InterfaceNestingRootTopicChildrenContentParentTopic.Id, and is useful for accessing the field via an interface.
-func (v *InterfaceNestingRootTopicChildrenContentParentTopic) GetId() testutil.ID { return v.Id }
+func (v *InterfaceNestingRootTopicChildrenContentParentTopic) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetChildren returns InterfaceNestingRootTopicChildrenContentParentTopic.Children, and is useful for accessing the field via an interface.
-func (v *InterfaceNestingRootTopicChildrenContentParentTopic) GetChildren() []InterfaceNestingRootTopicChildrenContentParentTopicChildrenContent {
+func (v *InterfaceNestingRootTopicChildrenContentParentTopic) GetChildren() (val []InterfaceNestingRootTopicChildrenContentParentTopicChildrenContent) {
+	if v == nil {
+		return
+	}
 	return v.Children
 }
 
@@ -328,12 +362,18 @@ type InterfaceNestingRootTopicChildrenContentParentTopicChildrenArticle struct {
 }
 
 // GetTypename returns InterfaceNestingRootTopicChildrenContentParentTopicChildrenArticle.Typename, and is useful for accessing the field via an interface.
-func (v *InterfaceNestingRootTopicChildrenContentParentTopicChildrenArticle) GetTypename() string {
+func (v *InterfaceNestingRootTopicChildrenContentParentTopicChildrenArticle) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
 	return v.Typename
 }
 
 // GetId returns InterfaceNestingRootTopicChildrenContentParentTopicChildrenArticle.Id, and is useful for accessing the field via an interface.
-func (v *InterfaceNestingRootTopicChildrenContentParentTopicChildrenArticle) GetId() testutil.ID {
+func (v *InterfaceNestingRootTopicChildrenContentParentTopicChildrenArticle) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
 	return v.Id
 }
 
@@ -440,12 +480,18 @@ type InterfaceNestingRootTopicChildrenContentParentTopicChildrenTopic struct {
 }
 
 // GetTypename returns InterfaceNestingRootTopicChildrenContentParentTopicChildrenTopic.Typename, and is useful for accessing the field via an interface.
-func (v *InterfaceNestingRootTopicChildrenContentParentTopicChildrenTopic) GetTypename() string {
+func (v *InterfaceNestingRootTopicChildrenContentParentTopicChildrenTopic) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
 	return v.Typename
 }
 
 // GetId returns InterfaceNestingRootTopicChildrenContentParentTopicChildrenTopic.Id, and is useful for accessing the field via an interface.
-func (v *InterfaceNestingRootTopicChildrenContentParentTopicChildrenTopic) GetId() testutil.ID {
+func (v *InterfaceNestingRootTopicChildrenContentParentTopicChildrenTopic) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
 	return v.Id
 }
 
@@ -457,12 +503,18 @@ type InterfaceNestingRootTopicChildrenContentParentTopicChildrenVideo struct {
 }
 
 // GetTypename returns InterfaceNestingRootTopicChildrenContentParentTopicChildrenVideo.Typename, and is useful for accessing the field via an interface.
-func (v *InterfaceNestingRootTopicChildrenContentParentTopicChildrenVideo) GetTypename() string {
+func (v *InterfaceNestingRootTopicChildrenContentParentTopicChildrenVideo) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
 	return v.Typename
 }
 
 // GetId returns InterfaceNestingRootTopicChildrenContentParentTopicChildrenVideo.Id, and is useful for accessing the field via an interface.
-func (v *InterfaceNestingRootTopicChildrenContentParentTopicChildrenVideo) GetId() testutil.ID {
+func (v *InterfaceNestingRootTopicChildrenContentParentTopicChildrenVideo) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
 	return v.Id
 }
 
@@ -475,13 +527,26 @@ type InterfaceNestingRootTopicChildrenTopic struct {
 }
 
 // GetTypename returns InterfaceNestingRootTopicChildrenTopic.Typename, and is useful for accessing the field via an interface.
-func (v *InterfaceNestingRootTopicChildrenTopic) GetTypename() string { return v.Typename }
+func (v *InterfaceNestingRootTopicChildrenTopic) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns InterfaceNestingRootTopicChildrenTopic.Id, and is useful for accessing the field via an interface.
-func (v *InterfaceNestingRootTopicChildrenTopic) GetId() testutil.ID { return v.Id }
+func (v *InterfaceNestingRootTopicChildrenTopic) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetParent returns InterfaceNestingRootTopicChildrenTopic.Parent, and is useful for accessing the field via an interface.
-func (v *InterfaceNestingRootTopicChildrenTopic) GetParent() InterfaceNestingRootTopicChildrenContentParentTopic {
+func (v *InterfaceNestingRootTopicChildrenTopic) GetParent() (val InterfaceNestingRootTopicChildrenContentParentTopic) {
+	if v == nil {
+		return
+	}
 	return v.Parent
 }
 
@@ -494,13 +559,26 @@ type InterfaceNestingRootTopicChildrenVideo struct {
 }
 
 // GetTypename returns InterfaceNestingRootTopicChildrenVideo.Typename, and is useful for accessing the field via an interface.
-func (v *InterfaceNestingRootTopicChildrenVideo) GetTypename() string { return v.Typename }
+func (v *InterfaceNestingRootTopicChildrenVideo) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns InterfaceNestingRootTopicChildrenVideo.Id, and is useful for accessing the field via an interface.
-func (v *InterfaceNestingRootTopicChildrenVideo) GetId() testutil.ID { return v.Id }
+func (v *InterfaceNestingRootTopicChildrenVideo) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetParent returns InterfaceNestingRootTopicChildrenVideo.Parent, and is useful for accessing the field via an interface.
-func (v *InterfaceNestingRootTopicChildrenVideo) GetParent() InterfaceNestingRootTopicChildrenContentParentTopic {
+func (v *InterfaceNestingRootTopicChildrenVideo) GetParent() (val InterfaceNestingRootTopicChildrenContentParentTopic) {
+	if v == nil {
+		return
+	}
 	return v.Parent
 }
 

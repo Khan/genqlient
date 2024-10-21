@@ -116,17 +116,26 @@ type InterfaceListOfListOfListsFieldListOfListsOfListsOfContentArticle struct {
 }
 
 // GetTypename returns InterfaceListOfListOfListsFieldListOfListsOfListsOfContentArticle.Typename, and is useful for accessing the field via an interface.
-func (v *InterfaceListOfListOfListsFieldListOfListsOfListsOfContentArticle) GetTypename() string {
+func (v *InterfaceListOfListOfListsFieldListOfListsOfListsOfContentArticle) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
 	return v.Typename
 }
 
 // GetId returns InterfaceListOfListOfListsFieldListOfListsOfListsOfContentArticle.Id, and is useful for accessing the field via an interface.
-func (v *InterfaceListOfListOfListsFieldListOfListsOfListsOfContentArticle) GetId() testutil.ID {
+func (v *InterfaceListOfListOfListsFieldListOfListsOfListsOfContentArticle) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
 	return v.Id
 }
 
 // GetName returns InterfaceListOfListOfListsFieldListOfListsOfListsOfContentArticle.Name, and is useful for accessing the field via an interface.
-func (v *InterfaceListOfListOfListsFieldListOfListsOfListsOfContentArticle) GetName() string {
+func (v *InterfaceListOfListOfListsFieldListOfListsOfListsOfContentArticle) GetName() (val string) {
+	if v == nil {
+		return
+	}
 	return v.Name
 }
 
@@ -139,17 +148,26 @@ type InterfaceListOfListOfListsFieldListOfListsOfListsOfContentTopic struct {
 }
 
 // GetTypename returns InterfaceListOfListOfListsFieldListOfListsOfListsOfContentTopic.Typename, and is useful for accessing the field via an interface.
-func (v *InterfaceListOfListOfListsFieldListOfListsOfListsOfContentTopic) GetTypename() string {
+func (v *InterfaceListOfListOfListsFieldListOfListsOfListsOfContentTopic) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
 	return v.Typename
 }
 
 // GetId returns InterfaceListOfListOfListsFieldListOfListsOfListsOfContentTopic.Id, and is useful for accessing the field via an interface.
-func (v *InterfaceListOfListOfListsFieldListOfListsOfListsOfContentTopic) GetId() testutil.ID {
+func (v *InterfaceListOfListOfListsFieldListOfListsOfListsOfContentTopic) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
 	return v.Id
 }
 
 // GetName returns InterfaceListOfListOfListsFieldListOfListsOfListsOfContentTopic.Name, and is useful for accessing the field via an interface.
-func (v *InterfaceListOfListOfListsFieldListOfListsOfListsOfContentTopic) GetName() string {
+func (v *InterfaceListOfListOfListsFieldListOfListsOfListsOfContentTopic) GetName() (val string) {
+	if v == nil {
+		return
+	}
 	return v.Name
 }
 
@@ -162,17 +180,26 @@ type InterfaceListOfListOfListsFieldListOfListsOfListsOfContentVideo struct {
 }
 
 // GetTypename returns InterfaceListOfListOfListsFieldListOfListsOfListsOfContentVideo.Typename, and is useful for accessing the field via an interface.
-func (v *InterfaceListOfListOfListsFieldListOfListsOfListsOfContentVideo) GetTypename() string {
+func (v *InterfaceListOfListOfListsFieldListOfListsOfListsOfContentVideo) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
 	return v.Typename
 }
 
 // GetId returns InterfaceListOfListOfListsFieldListOfListsOfListsOfContentVideo.Id, and is useful for accessing the field via an interface.
-func (v *InterfaceListOfListOfListsFieldListOfListsOfListsOfContentVideo) GetId() testutil.ID {
+func (v *InterfaceListOfListOfListsFieldListOfListsOfListsOfContentVideo) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
 	return v.Id
 }
 
 // GetName returns InterfaceListOfListOfListsFieldListOfListsOfListsOfContentVideo.Name, and is useful for accessing the field via an interface.
-func (v *InterfaceListOfListOfListsFieldListOfListsOfListsOfContentVideo) GetName() string {
+func (v *InterfaceListOfListOfListsFieldListOfListsOfListsOfContentVideo) GetName() (val string) {
+	if v == nil {
+		return
+	}
 	return v.Name
 }
 
@@ -183,12 +210,18 @@ type InterfaceListOfListOfListsFieldResponse struct {
 }
 
 // GetListOfListsOfListsOfContent returns InterfaceListOfListOfListsFieldResponse.ListOfListsOfListsOfContent, and is useful for accessing the field via an interface.
-func (v *InterfaceListOfListOfListsFieldResponse) GetListOfListsOfListsOfContent() [][][]InterfaceListOfListOfListsFieldListOfListsOfListsOfContent {
+func (v *InterfaceListOfListOfListsFieldResponse) GetListOfListsOfListsOfContent() (val [][][]InterfaceListOfListOfListsFieldListOfListsOfListsOfContent) {
+	if v == nil {
+		return
+	}
 	return v.ListOfListsOfListsOfContent
 }
 
 // GetWithPointer returns InterfaceListOfListOfListsFieldResponse.WithPointer, and is useful for accessing the field via an interface.
-func (v *InterfaceListOfListOfListsFieldResponse) GetWithPointer() [][][]*InterfaceListOfListOfListsFieldWithPointerContent {
+func (v *InterfaceListOfListOfListsFieldResponse) GetWithPointer() (val [][][]*InterfaceListOfListOfListsFieldWithPointerContent) {
+	if v == nil {
+		return
+	}
 	return v.WithPointer
 }
 
@@ -367,13 +400,28 @@ type InterfaceListOfListOfListsFieldWithPointerArticle struct {
 }
 
 // GetTypename returns InterfaceListOfListOfListsFieldWithPointerArticle.Typename, and is useful for accessing the field via an interface.
-func (v *InterfaceListOfListOfListsFieldWithPointerArticle) GetTypename() string { return v.Typename }
+func (v *InterfaceListOfListOfListsFieldWithPointerArticle) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns InterfaceListOfListOfListsFieldWithPointerArticle.Id, and is useful for accessing the field via an interface.
-func (v *InterfaceListOfListOfListsFieldWithPointerArticle) GetId() *testutil.ID { return v.Id }
+func (v *InterfaceListOfListOfListsFieldWithPointerArticle) GetId() (val *testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns InterfaceListOfListOfListsFieldWithPointerArticle.Name, and is useful for accessing the field via an interface.
-func (v *InterfaceListOfListOfListsFieldWithPointerArticle) GetName() *string { return v.Name }
+func (v *InterfaceListOfListOfListsFieldWithPointerArticle) GetName() (val *string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // InterfaceListOfListOfListsFieldWithPointerContent includes the requested fields of the GraphQL interface Content.
 //
@@ -481,13 +529,28 @@ type InterfaceListOfListOfListsFieldWithPointerTopic struct {
 }
 
 // GetTypename returns InterfaceListOfListOfListsFieldWithPointerTopic.Typename, and is useful for accessing the field via an interface.
-func (v *InterfaceListOfListOfListsFieldWithPointerTopic) GetTypename() string { return v.Typename }
+func (v *InterfaceListOfListOfListsFieldWithPointerTopic) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns InterfaceListOfListOfListsFieldWithPointerTopic.Id, and is useful for accessing the field via an interface.
-func (v *InterfaceListOfListOfListsFieldWithPointerTopic) GetId() *testutil.ID { return v.Id }
+func (v *InterfaceListOfListOfListsFieldWithPointerTopic) GetId() (val *testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns InterfaceListOfListOfListsFieldWithPointerTopic.Name, and is useful for accessing the field via an interface.
-func (v *InterfaceListOfListOfListsFieldWithPointerTopic) GetName() *string { return v.Name }
+func (v *InterfaceListOfListOfListsFieldWithPointerTopic) GetName() (val *string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // InterfaceListOfListOfListsFieldWithPointerVideo includes the requested fields of the GraphQL type Video.
 type InterfaceListOfListOfListsFieldWithPointerVideo struct {
@@ -498,13 +561,28 @@ type InterfaceListOfListOfListsFieldWithPointerVideo struct {
 }
 
 // GetTypename returns InterfaceListOfListOfListsFieldWithPointerVideo.Typename, and is useful for accessing the field via an interface.
-func (v *InterfaceListOfListOfListsFieldWithPointerVideo) GetTypename() string { return v.Typename }
+func (v *InterfaceListOfListOfListsFieldWithPointerVideo) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns InterfaceListOfListOfListsFieldWithPointerVideo.Id, and is useful for accessing the field via an interface.
-func (v *InterfaceListOfListOfListsFieldWithPointerVideo) GetId() *testutil.ID { return v.Id }
+func (v *InterfaceListOfListOfListsFieldWithPointerVideo) GetId() (val *testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns InterfaceListOfListOfListsFieldWithPointerVideo.Name, and is useful for accessing the field via an interface.
-func (v *InterfaceListOfListOfListsFieldWithPointerVideo) GetName() *string { return v.Name }
+func (v *InterfaceListOfListOfListsFieldWithPointerVideo) GetName() (val *string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // The query executed by InterfaceListOfListOfListsField.
 const InterfaceListOfListOfListsField_Operation = `

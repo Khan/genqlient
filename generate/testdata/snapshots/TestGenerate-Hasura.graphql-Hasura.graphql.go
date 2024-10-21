@@ -15,16 +15,36 @@ type GetPokemonBoolExp struct {
 }
 
 // GetAnd returns GetPokemonBoolExp.And, and is useful for accessing the field via an interface.
-func (v *GetPokemonBoolExp) GetAnd() []*GetPokemonBoolExp { return v.And }
+func (v *GetPokemonBoolExp) GetAnd() (val []*GetPokemonBoolExp) {
+	if v == nil {
+		return
+	}
+	return v.And
+}
 
 // GetNot returns GetPokemonBoolExp.Not, and is useful for accessing the field via an interface.
-func (v *GetPokemonBoolExp) GetNot() *GetPokemonBoolExp { return v.Not }
+func (v *GetPokemonBoolExp) GetNot() (val *GetPokemonBoolExp) {
+	if v == nil {
+		return
+	}
+	return v.Not
+}
 
 // GetOr returns GetPokemonBoolExp.Or, and is useful for accessing the field via an interface.
-func (v *GetPokemonBoolExp) GetOr() []*GetPokemonBoolExp { return v.Or }
+func (v *GetPokemonBoolExp) GetOr() (val []*GetPokemonBoolExp) {
+	if v == nil {
+		return
+	}
+	return v.Or
+}
 
 // GetLevel returns GetPokemonBoolExp.Level, and is useful for accessing the field via an interface.
-func (v *GetPokemonBoolExp) GetLevel() *IntComparisonExp { return v.Level }
+func (v *GetPokemonBoolExp) GetLevel() (val *IntComparisonExp) {
+	if v == nil {
+		return
+	}
+	return v.Level
+}
 
 // GetPokemonResponse is returned by GetPokemon on success.
 type GetPokemonResponse struct {
@@ -32,7 +52,12 @@ type GetPokemonResponse struct {
 }
 
 // GetGetPokemon returns GetPokemonResponse.GetPokemon, and is useful for accessing the field via an interface.
-func (v *GetPokemonResponse) GetGetPokemon() []*testutil.Pokemon { return v.GetPokemon }
+func (v *GetPokemonResponse) GetGetPokemon() (val []*testutil.Pokemon) {
+	if v == nil {
+		return
+	}
+	return v.GetPokemon
+}
 
 type IntComparisonExp struct {
 	Eq     *int   `json:"_eq"`
@@ -47,31 +72,76 @@ type IntComparisonExp struct {
 }
 
 // GetEq returns IntComparisonExp.Eq, and is useful for accessing the field via an interface.
-func (v *IntComparisonExp) GetEq() *int { return v.Eq }
+func (v *IntComparisonExp) GetEq() (val *int) {
+	if v == nil {
+		return
+	}
+	return v.Eq
+}
 
 // GetGt returns IntComparisonExp.Gt, and is useful for accessing the field via an interface.
-func (v *IntComparisonExp) GetGt() *int { return v.Gt }
+func (v *IntComparisonExp) GetGt() (val *int) {
+	if v == nil {
+		return
+	}
+	return v.Gt
+}
 
 // GetGte returns IntComparisonExp.Gte, and is useful for accessing the field via an interface.
-func (v *IntComparisonExp) GetGte() *int { return v.Gte }
+func (v *IntComparisonExp) GetGte() (val *int) {
+	if v == nil {
+		return
+	}
+	return v.Gte
+}
 
 // GetIn returns IntComparisonExp.In, and is useful for accessing the field via an interface.
-func (v *IntComparisonExp) GetIn() []*int { return v.In }
+func (v *IntComparisonExp) GetIn() (val []*int) {
+	if v == nil {
+		return
+	}
+	return v.In
+}
 
 // GetIsNull returns IntComparisonExp.IsNull, and is useful for accessing the field via an interface.
-func (v *IntComparisonExp) GetIsNull() *bool { return v.IsNull }
+func (v *IntComparisonExp) GetIsNull() (val *bool) {
+	if v == nil {
+		return
+	}
+	return v.IsNull
+}
 
 // GetLt returns IntComparisonExp.Lt, and is useful for accessing the field via an interface.
-func (v *IntComparisonExp) GetLt() *int { return v.Lt }
+func (v *IntComparisonExp) GetLt() (val *int) {
+	if v == nil {
+		return
+	}
+	return v.Lt
+}
 
 // GetLte returns IntComparisonExp.Lte, and is useful for accessing the field via an interface.
-func (v *IntComparisonExp) GetLte() *int { return v.Lte }
+func (v *IntComparisonExp) GetLte() (val *int) {
+	if v == nil {
+		return
+	}
+	return v.Lte
+}
 
 // GetNeq returns IntComparisonExp.Neq, and is useful for accessing the field via an interface.
-func (v *IntComparisonExp) GetNeq() *int { return v.Neq }
+func (v *IntComparisonExp) GetNeq() (val *int) {
+	if v == nil {
+		return
+	}
+	return v.Neq
+}
 
 // GetNin returns IntComparisonExp.Nin, and is useful for accessing the field via an interface.
-func (v *IntComparisonExp) GetNin() []*int { return v.Nin }
+func (v *IntComparisonExp) GetNin() (val []*int) {
+	if v == nil {
+		return
+	}
+	return v.Nin
+}
 
 // __GetPokemonInput is used internally by genqlient
 type __GetPokemonInput struct {
@@ -79,7 +149,12 @@ type __GetPokemonInput struct {
 }
 
 // GetWhere returns __GetPokemonInput.Where, and is useful for accessing the field via an interface.
-func (v *__GetPokemonInput) GetWhere() *GetPokemonBoolExp { return v.Where }
+func (v *__GetPokemonInput) GetWhere() (val *GetPokemonBoolExp) {
+	if v == nil {
+		return
+	}
+	return v.Where
+}
 
 // The query executed by GetPokemon.
 const GetPokemon_Operation = `

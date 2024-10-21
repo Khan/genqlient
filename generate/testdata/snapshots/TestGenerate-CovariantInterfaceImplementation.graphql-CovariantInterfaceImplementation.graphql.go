@@ -121,10 +121,20 @@ type ContentFieldsArticle struct {
 }
 
 // GetNext returns ContentFieldsArticle.Next, and is useful for accessing the field via an interface.
-func (v *ContentFieldsArticle) GetNext() ContentFieldsNextContent { return v.Next }
+func (v *ContentFieldsArticle) GetNext() (val ContentFieldsNextContent) {
+	if v == nil {
+		return
+	}
+	return v.Next
+}
 
 // GetRelated returns ContentFieldsArticle.Related, and is useful for accessing the field via an interface.
-func (v *ContentFieldsArticle) GetRelated() []ContentFieldsRelatedContent { return v.Related }
+func (v *ContentFieldsArticle) GetRelated() (val []ContentFieldsRelatedContent) {
+	if v == nil {
+		return
+	}
+	return v.Related
+}
 
 func (v *ContentFieldsArticle) UnmarshalJSON(b []byte) error {
 
@@ -237,10 +247,20 @@ type ContentFieldsNextArticle struct {
 }
 
 // GetTypename returns ContentFieldsNextArticle.Typename, and is useful for accessing the field via an interface.
-func (v *ContentFieldsNextArticle) GetTypename() string { return v.Typename }
+func (v *ContentFieldsNextArticle) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns ContentFieldsNextArticle.Id, and is useful for accessing the field via an interface.
-func (v *ContentFieldsNextArticle) GetId() testutil.ID { return v.Id }
+func (v *ContentFieldsNextArticle) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // ContentFieldsNextContent includes the requested fields of the GraphQL interface Content.
 //
@@ -342,10 +362,20 @@ type ContentFieldsNextTopic struct {
 }
 
 // GetTypename returns ContentFieldsNextTopic.Typename, and is useful for accessing the field via an interface.
-func (v *ContentFieldsNextTopic) GetTypename() string { return v.Typename }
+func (v *ContentFieldsNextTopic) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns ContentFieldsNextTopic.Id, and is useful for accessing the field via an interface.
-func (v *ContentFieldsNextTopic) GetId() testutil.ID { return v.Id }
+func (v *ContentFieldsNextTopic) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // ContentFieldsNextVideo includes the requested fields of the GraphQL type Video.
 type ContentFieldsNextVideo struct {
@@ -355,10 +385,20 @@ type ContentFieldsNextVideo struct {
 }
 
 // GetTypename returns ContentFieldsNextVideo.Typename, and is useful for accessing the field via an interface.
-func (v *ContentFieldsNextVideo) GetTypename() string { return v.Typename }
+func (v *ContentFieldsNextVideo) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns ContentFieldsNextVideo.Id, and is useful for accessing the field via an interface.
-func (v *ContentFieldsNextVideo) GetId() testutil.ID { return v.Id }
+func (v *ContentFieldsNextVideo) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // ContentFieldsRelatedArticle includes the requested fields of the GraphQL type Article.
 type ContentFieldsRelatedArticle struct {
@@ -368,10 +408,20 @@ type ContentFieldsRelatedArticle struct {
 }
 
 // GetTypename returns ContentFieldsRelatedArticle.Typename, and is useful for accessing the field via an interface.
-func (v *ContentFieldsRelatedArticle) GetTypename() string { return v.Typename }
+func (v *ContentFieldsRelatedArticle) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns ContentFieldsRelatedArticle.Id, and is useful for accessing the field via an interface.
-func (v *ContentFieldsRelatedArticle) GetId() testutil.ID { return v.Id }
+func (v *ContentFieldsRelatedArticle) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // ContentFieldsRelatedContent includes the requested fields of the GraphQL interface Content.
 //
@@ -473,10 +523,20 @@ type ContentFieldsRelatedTopic struct {
 }
 
 // GetTypename returns ContentFieldsRelatedTopic.Typename, and is useful for accessing the field via an interface.
-func (v *ContentFieldsRelatedTopic) GetTypename() string { return v.Typename }
+func (v *ContentFieldsRelatedTopic) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns ContentFieldsRelatedTopic.Id, and is useful for accessing the field via an interface.
-func (v *ContentFieldsRelatedTopic) GetId() testutil.ID { return v.Id }
+func (v *ContentFieldsRelatedTopic) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // ContentFieldsRelatedVideo includes the requested fields of the GraphQL type Video.
 type ContentFieldsRelatedVideo struct {
@@ -486,10 +546,20 @@ type ContentFieldsRelatedVideo struct {
 }
 
 // GetTypename returns ContentFieldsRelatedVideo.Typename, and is useful for accessing the field via an interface.
-func (v *ContentFieldsRelatedVideo) GetTypename() string { return v.Typename }
+func (v *ContentFieldsRelatedVideo) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns ContentFieldsRelatedVideo.Id, and is useful for accessing the field via an interface.
-func (v *ContentFieldsRelatedVideo) GetId() testutil.ID { return v.Id }
+func (v *ContentFieldsRelatedVideo) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // ContentFields includes the GraphQL fields of Topic requested by the fragment ContentFields.
 // The GraphQL type's documentation follows.
@@ -501,10 +571,20 @@ type ContentFieldsTopic struct {
 }
 
 // GetNext returns ContentFieldsTopic.Next, and is useful for accessing the field via an interface.
-func (v *ContentFieldsTopic) GetNext() ContentFieldsNextContent { return v.Next }
+func (v *ContentFieldsTopic) GetNext() (val ContentFieldsNextContent) {
+	if v == nil {
+		return
+	}
+	return v.Next
+}
 
 // GetRelated returns ContentFieldsTopic.Related, and is useful for accessing the field via an interface.
-func (v *ContentFieldsTopic) GetRelated() []ContentFieldsRelatedContent { return v.Related }
+func (v *ContentFieldsTopic) GetRelated() (val []ContentFieldsRelatedContent) {
+	if v == nil {
+		return
+	}
+	return v.Related
+}
 
 func (v *ContentFieldsTopic) UnmarshalJSON(b []byte) error {
 
@@ -619,10 +699,20 @@ type ContentFieldsVideo struct {
 }
 
 // GetNext returns ContentFieldsVideo.Next, and is useful for accessing the field via an interface.
-func (v *ContentFieldsVideo) GetNext() ContentFieldsNextContent { return v.Next }
+func (v *ContentFieldsVideo) GetNext() (val ContentFieldsNextContent) {
+	if v == nil {
+		return
+	}
+	return v.Next
+}
 
 // GetRelated returns ContentFieldsVideo.Related, and is useful for accessing the field via an interface.
-func (v *ContentFieldsVideo) GetRelated() []ContentFieldsRelatedContent { return v.Related }
+func (v *ContentFieldsVideo) GetRelated() (val []ContentFieldsRelatedContent) {
+	if v == nil {
+		return
+	}
+	return v.Related
+}
 
 func (v *ContentFieldsVideo) UnmarshalJSON(b []byte) error {
 
@@ -737,18 +827,34 @@ type CovariantInterfaceImplementationRandomItemArticle struct {
 }
 
 // GetTypename returns CovariantInterfaceImplementationRandomItemArticle.Typename, and is useful for accessing the field via an interface.
-func (v *CovariantInterfaceImplementationRandomItemArticle) GetTypename() string { return v.Typename }
+func (v *CovariantInterfaceImplementationRandomItemArticle) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns CovariantInterfaceImplementationRandomItemArticle.Id, and is useful for accessing the field via an interface.
-func (v *CovariantInterfaceImplementationRandomItemArticle) GetId() testutil.ID { return v.Id }
+func (v *CovariantInterfaceImplementationRandomItemArticle) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetNext returns CovariantInterfaceImplementationRandomItemArticle.Next, and is useful for accessing the field via an interface.
-func (v *CovariantInterfaceImplementationRandomItemArticle) GetNext() CovariantInterfaceImplementationRandomItemContentNextContent {
+func (v *CovariantInterfaceImplementationRandomItemArticle) GetNext() (val CovariantInterfaceImplementationRandomItemContentNextContent) {
+	if v == nil {
+		return
+	}
 	return v.Next
 }
 
 // GetRelated returns CovariantInterfaceImplementationRandomItemArticle.Related, and is useful for accessing the field via an interface.
-func (v *CovariantInterfaceImplementationRandomItemArticle) GetRelated() []CovariantInterfaceImplementationRandomItemContentRelatedContent {
+func (v *CovariantInterfaceImplementationRandomItemArticle) GetRelated() (val []CovariantInterfaceImplementationRandomItemContentRelatedContent) {
+	if v == nil {
+		return
+	}
 	return v.Related
 }
 
@@ -979,17 +1085,26 @@ type CovariantInterfaceImplementationRandomItemContentNextArticle struct {
 }
 
 // GetTypename returns CovariantInterfaceImplementationRandomItemContentNextArticle.Typename, and is useful for accessing the field via an interface.
-func (v *CovariantInterfaceImplementationRandomItemContentNextArticle) GetTypename() string {
+func (v *CovariantInterfaceImplementationRandomItemContentNextArticle) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
 	return v.Typename
 }
 
 // GetNext returns CovariantInterfaceImplementationRandomItemContentNextArticle.Next, and is useful for accessing the field via an interface.
-func (v *CovariantInterfaceImplementationRandomItemContentNextArticle) GetNext() ContentFieldsNextContent {
+func (v *CovariantInterfaceImplementationRandomItemContentNextArticle) GetNext() (val ContentFieldsNextContent) {
+	if v == nil {
+		return
+	}
 	return v.ContentFieldsArticle.Next
 }
 
 // GetRelated returns CovariantInterfaceImplementationRandomItemContentNextArticle.Related, and is useful for accessing the field via an interface.
-func (v *CovariantInterfaceImplementationRandomItemContentNextArticle) GetRelated() []ContentFieldsRelatedContent {
+func (v *CovariantInterfaceImplementationRandomItemContentNextArticle) GetRelated() (val []ContentFieldsRelatedContent) {
+	if v == nil {
+		return
+	}
 	return v.ContentFieldsArticle.Related
 }
 
@@ -1181,17 +1296,26 @@ type CovariantInterfaceImplementationRandomItemContentNextTopic struct {
 }
 
 // GetTypename returns CovariantInterfaceImplementationRandomItemContentNextTopic.Typename, and is useful for accessing the field via an interface.
-func (v *CovariantInterfaceImplementationRandomItemContentNextTopic) GetTypename() string {
+func (v *CovariantInterfaceImplementationRandomItemContentNextTopic) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
 	return v.Typename
 }
 
 // GetNext returns CovariantInterfaceImplementationRandomItemContentNextTopic.Next, and is useful for accessing the field via an interface.
-func (v *CovariantInterfaceImplementationRandomItemContentNextTopic) GetNext() ContentFieldsNextContent {
+func (v *CovariantInterfaceImplementationRandomItemContentNextTopic) GetNext() (val ContentFieldsNextContent) {
+	if v == nil {
+		return
+	}
 	return v.ContentFieldsTopic.Next
 }
 
 // GetRelated returns CovariantInterfaceImplementationRandomItemContentNextTopic.Related, and is useful for accessing the field via an interface.
-func (v *CovariantInterfaceImplementationRandomItemContentNextTopic) GetRelated() []ContentFieldsRelatedContent {
+func (v *CovariantInterfaceImplementationRandomItemContentNextTopic) GetRelated() (val []ContentFieldsRelatedContent) {
+	if v == nil {
+		return
+	}
 	return v.ContentFieldsTopic.Related
 }
 
@@ -1280,17 +1404,26 @@ type CovariantInterfaceImplementationRandomItemContentNextVideo struct {
 }
 
 // GetTypename returns CovariantInterfaceImplementationRandomItemContentNextVideo.Typename, and is useful for accessing the field via an interface.
-func (v *CovariantInterfaceImplementationRandomItemContentNextVideo) GetTypename() string {
+func (v *CovariantInterfaceImplementationRandomItemContentNextVideo) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
 	return v.Typename
 }
 
 // GetNext returns CovariantInterfaceImplementationRandomItemContentNextVideo.Next, and is useful for accessing the field via an interface.
-func (v *CovariantInterfaceImplementationRandomItemContentNextVideo) GetNext() ContentFieldsNextContent {
+func (v *CovariantInterfaceImplementationRandomItemContentNextVideo) GetNext() (val ContentFieldsNextContent) {
+	if v == nil {
+		return
+	}
 	return v.ContentFieldsVideo.Next
 }
 
 // GetRelated returns CovariantInterfaceImplementationRandomItemContentNextVideo.Related, and is useful for accessing the field via an interface.
-func (v *CovariantInterfaceImplementationRandomItemContentNextVideo) GetRelated() []ContentFieldsRelatedContent {
+func (v *CovariantInterfaceImplementationRandomItemContentNextVideo) GetRelated() (val []ContentFieldsRelatedContent) {
+	if v == nil {
+		return
+	}
 	return v.ContentFieldsVideo.Related
 }
 
@@ -1379,17 +1512,26 @@ type CovariantInterfaceImplementationRandomItemContentRelatedArticle struct {
 }
 
 // GetTypename returns CovariantInterfaceImplementationRandomItemContentRelatedArticle.Typename, and is useful for accessing the field via an interface.
-func (v *CovariantInterfaceImplementationRandomItemContentRelatedArticle) GetTypename() string {
+func (v *CovariantInterfaceImplementationRandomItemContentRelatedArticle) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
 	return v.Typename
 }
 
 // GetNext returns CovariantInterfaceImplementationRandomItemContentRelatedArticle.Next, and is useful for accessing the field via an interface.
-func (v *CovariantInterfaceImplementationRandomItemContentRelatedArticle) GetNext() ContentFieldsNextContent {
+func (v *CovariantInterfaceImplementationRandomItemContentRelatedArticle) GetNext() (val ContentFieldsNextContent) {
+	if v == nil {
+		return
+	}
 	return v.ContentFieldsArticle.Next
 }
 
 // GetRelated returns CovariantInterfaceImplementationRandomItemContentRelatedArticle.Related, and is useful for accessing the field via an interface.
-func (v *CovariantInterfaceImplementationRandomItemContentRelatedArticle) GetRelated() []ContentFieldsRelatedContent {
+func (v *CovariantInterfaceImplementationRandomItemContentRelatedArticle) GetRelated() (val []ContentFieldsRelatedContent) {
+	if v == nil {
+		return
+	}
 	return v.ContentFieldsArticle.Related
 }
 
@@ -1581,17 +1723,26 @@ type CovariantInterfaceImplementationRandomItemContentRelatedTopic struct {
 }
 
 // GetTypename returns CovariantInterfaceImplementationRandomItemContentRelatedTopic.Typename, and is useful for accessing the field via an interface.
-func (v *CovariantInterfaceImplementationRandomItemContentRelatedTopic) GetTypename() string {
+func (v *CovariantInterfaceImplementationRandomItemContentRelatedTopic) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
 	return v.Typename
 }
 
 // GetNext returns CovariantInterfaceImplementationRandomItemContentRelatedTopic.Next, and is useful for accessing the field via an interface.
-func (v *CovariantInterfaceImplementationRandomItemContentRelatedTopic) GetNext() ContentFieldsNextContent {
+func (v *CovariantInterfaceImplementationRandomItemContentRelatedTopic) GetNext() (val ContentFieldsNextContent) {
+	if v == nil {
+		return
+	}
 	return v.ContentFieldsTopic.Next
 }
 
 // GetRelated returns CovariantInterfaceImplementationRandomItemContentRelatedTopic.Related, and is useful for accessing the field via an interface.
-func (v *CovariantInterfaceImplementationRandomItemContentRelatedTopic) GetRelated() []ContentFieldsRelatedContent {
+func (v *CovariantInterfaceImplementationRandomItemContentRelatedTopic) GetRelated() (val []ContentFieldsRelatedContent) {
+	if v == nil {
+		return
+	}
 	return v.ContentFieldsTopic.Related
 }
 
@@ -1680,17 +1831,26 @@ type CovariantInterfaceImplementationRandomItemContentRelatedVideo struct {
 }
 
 // GetTypename returns CovariantInterfaceImplementationRandomItemContentRelatedVideo.Typename, and is useful for accessing the field via an interface.
-func (v *CovariantInterfaceImplementationRandomItemContentRelatedVideo) GetTypename() string {
+func (v *CovariantInterfaceImplementationRandomItemContentRelatedVideo) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
 	return v.Typename
 }
 
 // GetNext returns CovariantInterfaceImplementationRandomItemContentRelatedVideo.Next, and is useful for accessing the field via an interface.
-func (v *CovariantInterfaceImplementationRandomItemContentRelatedVideo) GetNext() ContentFieldsNextContent {
+func (v *CovariantInterfaceImplementationRandomItemContentRelatedVideo) GetNext() (val ContentFieldsNextContent) {
+	if v == nil {
+		return
+	}
 	return v.ContentFieldsVideo.Next
 }
 
 // GetRelated returns CovariantInterfaceImplementationRandomItemContentRelatedVideo.Related, and is useful for accessing the field via an interface.
-func (v *CovariantInterfaceImplementationRandomItemContentRelatedVideo) GetRelated() []ContentFieldsRelatedContent {
+func (v *CovariantInterfaceImplementationRandomItemContentRelatedVideo) GetRelated() (val []ContentFieldsRelatedContent) {
+	if v == nil {
+		return
+	}
 	return v.ContentFieldsVideo.Related
 }
 
@@ -1782,18 +1942,34 @@ type CovariantInterfaceImplementationRandomItemTopic struct {
 }
 
 // GetTypename returns CovariantInterfaceImplementationRandomItemTopic.Typename, and is useful for accessing the field via an interface.
-func (v *CovariantInterfaceImplementationRandomItemTopic) GetTypename() string { return v.Typename }
+func (v *CovariantInterfaceImplementationRandomItemTopic) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns CovariantInterfaceImplementationRandomItemTopic.Id, and is useful for accessing the field via an interface.
-func (v *CovariantInterfaceImplementationRandomItemTopic) GetId() testutil.ID { return v.Id }
+func (v *CovariantInterfaceImplementationRandomItemTopic) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetNext returns CovariantInterfaceImplementationRandomItemTopic.Next, and is useful for accessing the field via an interface.
-func (v *CovariantInterfaceImplementationRandomItemTopic) GetNext() CovariantInterfaceImplementationRandomItemContentNextContent {
+func (v *CovariantInterfaceImplementationRandomItemTopic) GetNext() (val CovariantInterfaceImplementationRandomItemContentNextContent) {
+	if v == nil {
+		return
+	}
 	return v.Next
 }
 
 // GetRelated returns CovariantInterfaceImplementationRandomItemTopic.Related, and is useful for accessing the field via an interface.
-func (v *CovariantInterfaceImplementationRandomItemTopic) GetRelated() []CovariantInterfaceImplementationRandomItemContentRelatedContent {
+func (v *CovariantInterfaceImplementationRandomItemTopic) GetRelated() (val []CovariantInterfaceImplementationRandomItemContentRelatedContent) {
+	if v == nil {
+		return
+	}
 	return v.Related
 }
 
@@ -1916,18 +2092,34 @@ type CovariantInterfaceImplementationRandomItemVideo struct {
 }
 
 // GetTypename returns CovariantInterfaceImplementationRandomItemVideo.Typename, and is useful for accessing the field via an interface.
-func (v *CovariantInterfaceImplementationRandomItemVideo) GetTypename() string { return v.Typename }
+func (v *CovariantInterfaceImplementationRandomItemVideo) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns CovariantInterfaceImplementationRandomItemVideo.Id, and is useful for accessing the field via an interface.
-func (v *CovariantInterfaceImplementationRandomItemVideo) GetId() testutil.ID { return v.Id }
+func (v *CovariantInterfaceImplementationRandomItemVideo) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetNext returns CovariantInterfaceImplementationRandomItemVideo.Next, and is useful for accessing the field via an interface.
-func (v *CovariantInterfaceImplementationRandomItemVideo) GetNext() CovariantInterfaceImplementationRandomItemContentNextContent {
+func (v *CovariantInterfaceImplementationRandomItemVideo) GetNext() (val CovariantInterfaceImplementationRandomItemContentNextContent) {
+	if v == nil {
+		return
+	}
 	return v.Next
 }
 
 // GetRelated returns CovariantInterfaceImplementationRandomItemVideo.Related, and is useful for accessing the field via an interface.
-func (v *CovariantInterfaceImplementationRandomItemVideo) GetRelated() []CovariantInterfaceImplementationRandomItemContentRelatedContent {
+func (v *CovariantInterfaceImplementationRandomItemVideo) GetRelated() (val []CovariantInterfaceImplementationRandomItemContentRelatedContent) {
+	if v == nil {
+		return
+	}
 	return v.Related
 }
 
@@ -2047,12 +2239,18 @@ type CovariantInterfaceImplementationResponse struct {
 }
 
 // GetRandomItem returns CovariantInterfaceImplementationResponse.RandomItem, and is useful for accessing the field via an interface.
-func (v *CovariantInterfaceImplementationResponse) GetRandomItem() CovariantInterfaceImplementationRandomItemContent {
+func (v *CovariantInterfaceImplementationResponse) GetRandomItem() (val CovariantInterfaceImplementationRandomItemContent) {
+	if v == nil {
+		return
+	}
 	return v.RandomItem
 }
 
 // GetRoot returns CovariantInterfaceImplementationResponse.Root, and is useful for accessing the field via an interface.
-func (v *CovariantInterfaceImplementationResponse) GetRoot() CovariantInterfaceImplementationRootTopic {
+func (v *CovariantInterfaceImplementationResponse) GetRoot() (val CovariantInterfaceImplementationRootTopic) {
+	if v == nil {
+		return
+	}
 	return v.Root
 }
 
@@ -2131,12 +2329,18 @@ type CovariantInterfaceImplementationRootTopic struct {
 }
 
 // GetNext returns CovariantInterfaceImplementationRootTopic.Next, and is useful for accessing the field via an interface.
-func (v *CovariantInterfaceImplementationRootTopic) GetNext() CovariantInterfaceImplementationRootTopicNextTopic {
+func (v *CovariantInterfaceImplementationRootTopic) GetNext() (val CovariantInterfaceImplementationRootTopicNextTopic) {
+	if v == nil {
+		return
+	}
 	return v.Next
 }
 
 // GetRelated returns CovariantInterfaceImplementationRootTopic.Related, and is useful for accessing the field via an interface.
-func (v *CovariantInterfaceImplementationRootTopic) GetRelated() []CovariantInterfaceImplementationRootTopicRelatedTopic {
+func (v *CovariantInterfaceImplementationRootTopic) GetRelated() (val []CovariantInterfaceImplementationRootTopicRelatedTopic) {
+	if v == nil {
+		return
+	}
 	return v.Related
 }
 
@@ -2198,12 +2402,18 @@ type CovariantInterfaceImplementationRootTopicNextTopic struct {
 }
 
 // GetNext returns CovariantInterfaceImplementationRootTopicNextTopic.Next, and is useful for accessing the field via an interface.
-func (v *CovariantInterfaceImplementationRootTopicNextTopic) GetNext() TopicFieldsNextTopic {
+func (v *CovariantInterfaceImplementationRootTopicNextTopic) GetNext() (val TopicFieldsNextTopic) {
+	if v == nil {
+		return
+	}
 	return v.TopicFields.Next
 }
 
 // GetRelated returns CovariantInterfaceImplementationRootTopicNextTopic.Related, and is useful for accessing the field via an interface.
-func (v *CovariantInterfaceImplementationRootTopicNextTopic) GetRelated() []TopicFieldsRelatedTopic {
+func (v *CovariantInterfaceImplementationRootTopicNextTopic) GetRelated() (val []TopicFieldsRelatedTopic) {
+	if v == nil {
+		return
+	}
 	return v.TopicFields.Related
 }
 
@@ -2260,12 +2470,18 @@ type CovariantInterfaceImplementationRootTopicRelatedTopic struct {
 }
 
 // GetNext returns CovariantInterfaceImplementationRootTopicRelatedTopic.Next, and is useful for accessing the field via an interface.
-func (v *CovariantInterfaceImplementationRootTopicRelatedTopic) GetNext() TopicFieldsNextTopic {
+func (v *CovariantInterfaceImplementationRootTopicRelatedTopic) GetNext() (val TopicFieldsNextTopic) {
+	if v == nil {
+		return
+	}
 	return v.TopicFields.Next
 }
 
 // GetRelated returns CovariantInterfaceImplementationRootTopicRelatedTopic.Related, and is useful for accessing the field via an interface.
-func (v *CovariantInterfaceImplementationRootTopicRelatedTopic) GetRelated() []TopicFieldsRelatedTopic {
+func (v *CovariantInterfaceImplementationRootTopicRelatedTopic) GetRelated() (val []TopicFieldsRelatedTopic) {
+	if v == nil {
+		return
+	}
 	return v.TopicFields.Related
 }
 
@@ -2323,10 +2539,20 @@ type TopicFields struct {
 }
 
 // GetNext returns TopicFields.Next, and is useful for accessing the field via an interface.
-func (v *TopicFields) GetNext() TopicFieldsNextTopic { return v.Next }
+func (v *TopicFields) GetNext() (val TopicFieldsNextTopic) {
+	if v == nil {
+		return
+	}
+	return v.Next
+}
 
 // GetRelated returns TopicFields.Related, and is useful for accessing the field via an interface.
-func (v *TopicFields) GetRelated() []TopicFieldsRelatedTopic { return v.Related }
+func (v *TopicFields) GetRelated() (val []TopicFieldsRelatedTopic) {
+	if v == nil {
+		return
+	}
+	return v.Related
+}
 
 // TopicFieldsNextTopic includes the requested fields of the GraphQL type Topic.
 type TopicFieldsNextTopic struct {
@@ -2335,7 +2561,12 @@ type TopicFieldsNextTopic struct {
 }
 
 // GetId returns TopicFieldsNextTopic.Id, and is useful for accessing the field via an interface.
-func (v *TopicFieldsNextTopic) GetId() testutil.ID { return v.Id }
+func (v *TopicFieldsNextTopic) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // TopicFieldsRelatedTopic includes the requested fields of the GraphQL type Topic.
 type TopicFieldsRelatedTopic struct {
@@ -2344,7 +2575,12 @@ type TopicFieldsRelatedTopic struct {
 }
 
 // GetId returns TopicFieldsRelatedTopic.Id, and is useful for accessing the field via an interface.
-func (v *TopicFieldsRelatedTopic) GetId() testutil.ID { return v.Id }
+func (v *TopicFieldsRelatedTopic) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // The query executed by CovariantInterfaceImplementation.
 const CovariantInterfaceImplementation_Operation = `

@@ -22,7 +22,12 @@ type SimpleQueryResponse struct {
 }
 
 // GetUser returns SimpleQueryResponse.User, and is useful for accessing the field via an interface.
-func (v *SimpleQueryResponse) GetUser() SimpleQueryUser { return v.User }
+func (v *SimpleQueryResponse) GetUser() (val SimpleQueryUser) {
+	if v == nil {
+		return
+	}
+	return v.User
+}
 
 // SimpleQueryUser includes the requested fields of the GraphQL type User.
 // The GraphQL type's documentation follows.
@@ -36,7 +41,12 @@ type SimpleQueryUser struct {
 }
 
 // GetId returns SimpleQueryUser.Id, and is useful for accessing the field via an interface.
-func (v *SimpleQueryUser) GetId() string { return v.Id }
+func (v *SimpleQueryUser) GetId() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // The query executed by SimpleQuery.
 const SimpleQuery_Operation = `

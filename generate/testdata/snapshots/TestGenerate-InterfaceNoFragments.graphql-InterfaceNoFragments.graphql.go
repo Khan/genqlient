@@ -19,13 +19,28 @@ type InterfaceNoFragmentsQueryRandomItemArticle struct {
 }
 
 // GetTypename returns InterfaceNoFragmentsQueryRandomItemArticle.Typename, and is useful for accessing the field via an interface.
-func (v *InterfaceNoFragmentsQueryRandomItemArticle) GetTypename() string { return v.Typename }
+func (v *InterfaceNoFragmentsQueryRandomItemArticle) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns InterfaceNoFragmentsQueryRandomItemArticle.Id, and is useful for accessing the field via an interface.
-func (v *InterfaceNoFragmentsQueryRandomItemArticle) GetId() testutil.ID { return v.Id }
+func (v *InterfaceNoFragmentsQueryRandomItemArticle) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns InterfaceNoFragmentsQueryRandomItemArticle.Name, and is useful for accessing the field via an interface.
-func (v *InterfaceNoFragmentsQueryRandomItemArticle) GetName() string { return v.Name }
+func (v *InterfaceNoFragmentsQueryRandomItemArticle) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // InterfaceNoFragmentsQueryRandomItemContent includes the requested fields of the GraphQL interface Content.
 //
@@ -133,13 +148,28 @@ type InterfaceNoFragmentsQueryRandomItemTopic struct {
 }
 
 // GetTypename returns InterfaceNoFragmentsQueryRandomItemTopic.Typename, and is useful for accessing the field via an interface.
-func (v *InterfaceNoFragmentsQueryRandomItemTopic) GetTypename() string { return v.Typename }
+func (v *InterfaceNoFragmentsQueryRandomItemTopic) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns InterfaceNoFragmentsQueryRandomItemTopic.Id, and is useful for accessing the field via an interface.
-func (v *InterfaceNoFragmentsQueryRandomItemTopic) GetId() testutil.ID { return v.Id }
+func (v *InterfaceNoFragmentsQueryRandomItemTopic) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns InterfaceNoFragmentsQueryRandomItemTopic.Name, and is useful for accessing the field via an interface.
-func (v *InterfaceNoFragmentsQueryRandomItemTopic) GetName() string { return v.Name }
+func (v *InterfaceNoFragmentsQueryRandomItemTopic) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // InterfaceNoFragmentsQueryRandomItemVideo includes the requested fields of the GraphQL type Video.
 type InterfaceNoFragmentsQueryRandomItemVideo struct {
@@ -150,13 +180,28 @@ type InterfaceNoFragmentsQueryRandomItemVideo struct {
 }
 
 // GetTypename returns InterfaceNoFragmentsQueryRandomItemVideo.Typename, and is useful for accessing the field via an interface.
-func (v *InterfaceNoFragmentsQueryRandomItemVideo) GetTypename() string { return v.Typename }
+func (v *InterfaceNoFragmentsQueryRandomItemVideo) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns InterfaceNoFragmentsQueryRandomItemVideo.Id, and is useful for accessing the field via an interface.
-func (v *InterfaceNoFragmentsQueryRandomItemVideo) GetId() testutil.ID { return v.Id }
+func (v *InterfaceNoFragmentsQueryRandomItemVideo) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns InterfaceNoFragmentsQueryRandomItemVideo.Name, and is useful for accessing the field via an interface.
-func (v *InterfaceNoFragmentsQueryRandomItemVideo) GetName() string { return v.Name }
+func (v *InterfaceNoFragmentsQueryRandomItemVideo) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // InterfaceNoFragmentsQueryRandomItemWithTypeNameArticle includes the requested fields of the GraphQL type Article.
 type InterfaceNoFragmentsQueryRandomItemWithTypeNameArticle struct {
@@ -167,15 +212,28 @@ type InterfaceNoFragmentsQueryRandomItemWithTypeNameArticle struct {
 }
 
 // GetTypename returns InterfaceNoFragmentsQueryRandomItemWithTypeNameArticle.Typename, and is useful for accessing the field via an interface.
-func (v *InterfaceNoFragmentsQueryRandomItemWithTypeNameArticle) GetTypename() string {
+func (v *InterfaceNoFragmentsQueryRandomItemWithTypeNameArticle) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
 	return v.Typename
 }
 
 // GetId returns InterfaceNoFragmentsQueryRandomItemWithTypeNameArticle.Id, and is useful for accessing the field via an interface.
-func (v *InterfaceNoFragmentsQueryRandomItemWithTypeNameArticle) GetId() testutil.ID { return v.Id }
+func (v *InterfaceNoFragmentsQueryRandomItemWithTypeNameArticle) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns InterfaceNoFragmentsQueryRandomItemWithTypeNameArticle.Name, and is useful for accessing the field via an interface.
-func (v *InterfaceNoFragmentsQueryRandomItemWithTypeNameArticle) GetName() string { return v.Name }
+func (v *InterfaceNoFragmentsQueryRandomItemWithTypeNameArticle) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // InterfaceNoFragmentsQueryRandomItemWithTypeNameContent includes the requested fields of the GraphQL interface Content.
 //
@@ -283,15 +341,28 @@ type InterfaceNoFragmentsQueryRandomItemWithTypeNameTopic struct {
 }
 
 // GetTypename returns InterfaceNoFragmentsQueryRandomItemWithTypeNameTopic.Typename, and is useful for accessing the field via an interface.
-func (v *InterfaceNoFragmentsQueryRandomItemWithTypeNameTopic) GetTypename() string {
+func (v *InterfaceNoFragmentsQueryRandomItemWithTypeNameTopic) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
 	return v.Typename
 }
 
 // GetId returns InterfaceNoFragmentsQueryRandomItemWithTypeNameTopic.Id, and is useful for accessing the field via an interface.
-func (v *InterfaceNoFragmentsQueryRandomItemWithTypeNameTopic) GetId() testutil.ID { return v.Id }
+func (v *InterfaceNoFragmentsQueryRandomItemWithTypeNameTopic) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns InterfaceNoFragmentsQueryRandomItemWithTypeNameTopic.Name, and is useful for accessing the field via an interface.
-func (v *InterfaceNoFragmentsQueryRandomItemWithTypeNameTopic) GetName() string { return v.Name }
+func (v *InterfaceNoFragmentsQueryRandomItemWithTypeNameTopic) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // InterfaceNoFragmentsQueryRandomItemWithTypeNameVideo includes the requested fields of the GraphQL type Video.
 type InterfaceNoFragmentsQueryRandomItemWithTypeNameVideo struct {
@@ -302,15 +373,28 @@ type InterfaceNoFragmentsQueryRandomItemWithTypeNameVideo struct {
 }
 
 // GetTypename returns InterfaceNoFragmentsQueryRandomItemWithTypeNameVideo.Typename, and is useful for accessing the field via an interface.
-func (v *InterfaceNoFragmentsQueryRandomItemWithTypeNameVideo) GetTypename() string {
+func (v *InterfaceNoFragmentsQueryRandomItemWithTypeNameVideo) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
 	return v.Typename
 }
 
 // GetId returns InterfaceNoFragmentsQueryRandomItemWithTypeNameVideo.Id, and is useful for accessing the field via an interface.
-func (v *InterfaceNoFragmentsQueryRandomItemWithTypeNameVideo) GetId() testutil.ID { return v.Id }
+func (v *InterfaceNoFragmentsQueryRandomItemWithTypeNameVideo) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns InterfaceNoFragmentsQueryRandomItemWithTypeNameVideo.Name, and is useful for accessing the field via an interface.
-func (v *InterfaceNoFragmentsQueryRandomItemWithTypeNameVideo) GetName() string { return v.Name }
+func (v *InterfaceNoFragmentsQueryRandomItemWithTypeNameVideo) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // InterfaceNoFragmentsQueryResponse is returned by InterfaceNoFragmentsQuery on success.
 type InterfaceNoFragmentsQueryResponse struct {
@@ -321,22 +405,34 @@ type InterfaceNoFragmentsQueryResponse struct {
 }
 
 // GetRoot returns InterfaceNoFragmentsQueryResponse.Root, and is useful for accessing the field via an interface.
-func (v *InterfaceNoFragmentsQueryResponse) GetRoot() InterfaceNoFragmentsQueryRootTopic {
+func (v *InterfaceNoFragmentsQueryResponse) GetRoot() (val InterfaceNoFragmentsQueryRootTopic) {
+	if v == nil {
+		return
+	}
 	return v.Root
 }
 
 // GetRandomItem returns InterfaceNoFragmentsQueryResponse.RandomItem, and is useful for accessing the field via an interface.
-func (v *InterfaceNoFragmentsQueryResponse) GetRandomItem() InterfaceNoFragmentsQueryRandomItemContent {
+func (v *InterfaceNoFragmentsQueryResponse) GetRandomItem() (val InterfaceNoFragmentsQueryRandomItemContent) {
+	if v == nil {
+		return
+	}
 	return v.RandomItem
 }
 
 // GetRandomItemWithTypeName returns InterfaceNoFragmentsQueryResponse.RandomItemWithTypeName, and is useful for accessing the field via an interface.
-func (v *InterfaceNoFragmentsQueryResponse) GetRandomItemWithTypeName() InterfaceNoFragmentsQueryRandomItemWithTypeNameContent {
+func (v *InterfaceNoFragmentsQueryResponse) GetRandomItemWithTypeName() (val InterfaceNoFragmentsQueryRandomItemWithTypeNameContent) {
+	if v == nil {
+		return
+	}
 	return v.RandomItemWithTypeName
 }
 
 // GetWithPointer returns InterfaceNoFragmentsQueryResponse.WithPointer, and is useful for accessing the field via an interface.
-func (v *InterfaceNoFragmentsQueryResponse) GetWithPointer() *InterfaceNoFragmentsQueryWithPointerContent {
+func (v *InterfaceNoFragmentsQueryResponse) GetWithPointer() (val *InterfaceNoFragmentsQueryWithPointerContent) {
+	if v == nil {
+		return
+	}
 	return v.WithPointer
 }
 
@@ -473,10 +569,20 @@ type InterfaceNoFragmentsQueryRootTopic struct {
 }
 
 // GetId returns InterfaceNoFragmentsQueryRootTopic.Id, and is useful for accessing the field via an interface.
-func (v *InterfaceNoFragmentsQueryRootTopic) GetId() testutil.ID { return v.Id }
+func (v *InterfaceNoFragmentsQueryRootTopic) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns InterfaceNoFragmentsQueryRootTopic.Name, and is useful for accessing the field via an interface.
-func (v *InterfaceNoFragmentsQueryRootTopic) GetName() string { return v.Name }
+func (v *InterfaceNoFragmentsQueryRootTopic) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // InterfaceNoFragmentsQueryWithPointerArticle includes the requested fields of the GraphQL type Article.
 type InterfaceNoFragmentsQueryWithPointerArticle struct {
@@ -487,13 +593,28 @@ type InterfaceNoFragmentsQueryWithPointerArticle struct {
 }
 
 // GetTypename returns InterfaceNoFragmentsQueryWithPointerArticle.Typename, and is useful for accessing the field via an interface.
-func (v *InterfaceNoFragmentsQueryWithPointerArticle) GetTypename() string { return v.Typename }
+func (v *InterfaceNoFragmentsQueryWithPointerArticle) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns InterfaceNoFragmentsQueryWithPointerArticle.Id, and is useful for accessing the field via an interface.
-func (v *InterfaceNoFragmentsQueryWithPointerArticle) GetId() *testutil.ID { return v.Id }
+func (v *InterfaceNoFragmentsQueryWithPointerArticle) GetId() (val *testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns InterfaceNoFragmentsQueryWithPointerArticle.Name, and is useful for accessing the field via an interface.
-func (v *InterfaceNoFragmentsQueryWithPointerArticle) GetName() *string { return v.Name }
+func (v *InterfaceNoFragmentsQueryWithPointerArticle) GetName() (val *string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // InterfaceNoFragmentsQueryWithPointerContent includes the requested fields of the GraphQL interface Content.
 //
@@ -601,13 +722,28 @@ type InterfaceNoFragmentsQueryWithPointerTopic struct {
 }
 
 // GetTypename returns InterfaceNoFragmentsQueryWithPointerTopic.Typename, and is useful for accessing the field via an interface.
-func (v *InterfaceNoFragmentsQueryWithPointerTopic) GetTypename() string { return v.Typename }
+func (v *InterfaceNoFragmentsQueryWithPointerTopic) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns InterfaceNoFragmentsQueryWithPointerTopic.Id, and is useful for accessing the field via an interface.
-func (v *InterfaceNoFragmentsQueryWithPointerTopic) GetId() *testutil.ID { return v.Id }
+func (v *InterfaceNoFragmentsQueryWithPointerTopic) GetId() (val *testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns InterfaceNoFragmentsQueryWithPointerTopic.Name, and is useful for accessing the field via an interface.
-func (v *InterfaceNoFragmentsQueryWithPointerTopic) GetName() *string { return v.Name }
+func (v *InterfaceNoFragmentsQueryWithPointerTopic) GetName() (val *string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // InterfaceNoFragmentsQueryWithPointerVideo includes the requested fields of the GraphQL type Video.
 type InterfaceNoFragmentsQueryWithPointerVideo struct {
@@ -618,13 +754,28 @@ type InterfaceNoFragmentsQueryWithPointerVideo struct {
 }
 
 // GetTypename returns InterfaceNoFragmentsQueryWithPointerVideo.Typename, and is useful for accessing the field via an interface.
-func (v *InterfaceNoFragmentsQueryWithPointerVideo) GetTypename() string { return v.Typename }
+func (v *InterfaceNoFragmentsQueryWithPointerVideo) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns InterfaceNoFragmentsQueryWithPointerVideo.Id, and is useful for accessing the field via an interface.
-func (v *InterfaceNoFragmentsQueryWithPointerVideo) GetId() *testutil.ID { return v.Id }
+func (v *InterfaceNoFragmentsQueryWithPointerVideo) GetId() (val *testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns InterfaceNoFragmentsQueryWithPointerVideo.Name, and is useful for accessing the field via an interface.
-func (v *InterfaceNoFragmentsQueryWithPointerVideo) GetName() *string { return v.Name }
+func (v *InterfaceNoFragmentsQueryWithPointerVideo) GetName() (val *string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // The query executed by InterfaceNoFragmentsQuery.
 const InterfaceNoFragmentsQuery_Operation = `

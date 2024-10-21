@@ -19,13 +19,28 @@ type SimpleNamedFragmentRandomItemArticle struct {
 }
 
 // GetTypename returns SimpleNamedFragmentRandomItemArticle.Typename, and is useful for accessing the field via an interface.
-func (v *SimpleNamedFragmentRandomItemArticle) GetTypename() string { return v.Typename }
+func (v *SimpleNamedFragmentRandomItemArticle) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns SimpleNamedFragmentRandomItemArticle.Id, and is useful for accessing the field via an interface.
-func (v *SimpleNamedFragmentRandomItemArticle) GetId() testutil.ID { return v.Id }
+func (v *SimpleNamedFragmentRandomItemArticle) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns SimpleNamedFragmentRandomItemArticle.Name, and is useful for accessing the field via an interface.
-func (v *SimpleNamedFragmentRandomItemArticle) GetName() string { return v.Name }
+func (v *SimpleNamedFragmentRandomItemArticle) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // SimpleNamedFragmentRandomItemContent includes the requested fields of the GraphQL interface Content.
 //
@@ -137,13 +152,28 @@ type SimpleNamedFragmentRandomItemTopic struct {
 }
 
 // GetTypename returns SimpleNamedFragmentRandomItemTopic.Typename, and is useful for accessing the field via an interface.
-func (v *SimpleNamedFragmentRandomItemTopic) GetTypename() string { return v.Typename }
+func (v *SimpleNamedFragmentRandomItemTopic) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns SimpleNamedFragmentRandomItemTopic.Id, and is useful for accessing the field via an interface.
-func (v *SimpleNamedFragmentRandomItemTopic) GetId() testutil.ID { return v.Id }
+func (v *SimpleNamedFragmentRandomItemTopic) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns SimpleNamedFragmentRandomItemTopic.Name, and is useful for accessing the field via an interface.
-func (v *SimpleNamedFragmentRandomItemTopic) GetName() string { return v.Name }
+func (v *SimpleNamedFragmentRandomItemTopic) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // SimpleNamedFragmentRandomItemVideo includes the requested fields of the GraphQL type Video.
 type SimpleNamedFragmentRandomItemVideo struct {
@@ -155,22 +185,50 @@ type SimpleNamedFragmentRandomItemVideo struct {
 }
 
 // GetTypename returns SimpleNamedFragmentRandomItemVideo.Typename, and is useful for accessing the field via an interface.
-func (v *SimpleNamedFragmentRandomItemVideo) GetTypename() string { return v.Typename }
+func (v *SimpleNamedFragmentRandomItemVideo) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns SimpleNamedFragmentRandomItemVideo.Id, and is useful for accessing the field via an interface.
-func (v *SimpleNamedFragmentRandomItemVideo) GetId() testutil.ID { return v.Id }
+func (v *SimpleNamedFragmentRandomItemVideo) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns SimpleNamedFragmentRandomItemVideo.Name, and is useful for accessing the field via an interface.
-func (v *SimpleNamedFragmentRandomItemVideo) GetName() string { return v.Name }
+func (v *SimpleNamedFragmentRandomItemVideo) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // GetUrl returns SimpleNamedFragmentRandomItemVideo.Url, and is useful for accessing the field via an interface.
-func (v *SimpleNamedFragmentRandomItemVideo) GetUrl() string { return v.VideoFields.Url }
+func (v *SimpleNamedFragmentRandomItemVideo) GetUrl() (val string) {
+	if v == nil {
+		return
+	}
+	return v.VideoFields.Url
+}
 
 // GetDuration returns SimpleNamedFragmentRandomItemVideo.Duration, and is useful for accessing the field via an interface.
-func (v *SimpleNamedFragmentRandomItemVideo) GetDuration() int { return v.VideoFields.Duration }
+func (v *SimpleNamedFragmentRandomItemVideo) GetDuration() (val int) {
+	if v == nil {
+		return
+	}
+	return v.VideoFields.Duration
+}
 
 // GetThumbnail returns SimpleNamedFragmentRandomItemVideo.Thumbnail, and is useful for accessing the field via an interface.
-func (v *SimpleNamedFragmentRandomItemVideo) GetThumbnail() VideoFieldsThumbnail {
+func (v *SimpleNamedFragmentRandomItemVideo) GetThumbnail() (val VideoFieldsThumbnail) {
+	if v == nil {
+		return
+	}
 	return v.VideoFields.Thumbnail
 }
 
@@ -239,7 +297,12 @@ type SimpleNamedFragmentRandomLeafArticle struct {
 }
 
 // GetTypename returns SimpleNamedFragmentRandomLeafArticle.Typename, and is useful for accessing the field via an interface.
-func (v *SimpleNamedFragmentRandomLeafArticle) GetTypename() string { return v.Typename }
+func (v *SimpleNamedFragmentRandomLeafArticle) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // SimpleNamedFragmentRandomLeafLeafContent includes the requested fields of the GraphQL interface LeafContent.
 //
@@ -328,22 +391,50 @@ type SimpleNamedFragmentRandomLeafVideo struct {
 }
 
 // GetTypename returns SimpleNamedFragmentRandomLeafVideo.Typename, and is useful for accessing the field via an interface.
-func (v *SimpleNamedFragmentRandomLeafVideo) GetTypename() string { return v.Typename }
+func (v *SimpleNamedFragmentRandomLeafVideo) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns SimpleNamedFragmentRandomLeafVideo.Id, and is useful for accessing the field via an interface.
-func (v *SimpleNamedFragmentRandomLeafVideo) GetId() testutil.ID { return v.VideoFields.Id }
+func (v *SimpleNamedFragmentRandomLeafVideo) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.VideoFields.Id
+}
 
 // GetName returns SimpleNamedFragmentRandomLeafVideo.Name, and is useful for accessing the field via an interface.
-func (v *SimpleNamedFragmentRandomLeafVideo) GetName() string { return v.VideoFields.Name }
+func (v *SimpleNamedFragmentRandomLeafVideo) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.VideoFields.Name
+}
 
 // GetUrl returns SimpleNamedFragmentRandomLeafVideo.Url, and is useful for accessing the field via an interface.
-func (v *SimpleNamedFragmentRandomLeafVideo) GetUrl() string { return v.VideoFields.Url }
+func (v *SimpleNamedFragmentRandomLeafVideo) GetUrl() (val string) {
+	if v == nil {
+		return
+	}
+	return v.VideoFields.Url
+}
 
 // GetDuration returns SimpleNamedFragmentRandomLeafVideo.Duration, and is useful for accessing the field via an interface.
-func (v *SimpleNamedFragmentRandomLeafVideo) GetDuration() int { return v.VideoFields.Duration }
+func (v *SimpleNamedFragmentRandomLeafVideo) GetDuration() (val int) {
+	if v == nil {
+		return
+	}
+	return v.VideoFields.Duration
+}
 
 // GetThumbnail returns SimpleNamedFragmentRandomLeafVideo.Thumbnail, and is useful for accessing the field via an interface.
-func (v *SimpleNamedFragmentRandomLeafVideo) GetThumbnail() VideoFieldsThumbnail {
+func (v *SimpleNamedFragmentRandomLeafVideo) GetThumbnail() (val VideoFieldsThumbnail) {
+	if v == nil {
+		return
+	}
 	return v.VideoFields.Thumbnail
 }
 
@@ -413,12 +504,18 @@ type SimpleNamedFragmentResponse struct {
 }
 
 // GetRandomItem returns SimpleNamedFragmentResponse.RandomItem, and is useful for accessing the field via an interface.
-func (v *SimpleNamedFragmentResponse) GetRandomItem() SimpleNamedFragmentRandomItemContent {
+func (v *SimpleNamedFragmentResponse) GetRandomItem() (val SimpleNamedFragmentRandomItemContent) {
+	if v == nil {
+		return
+	}
 	return v.RandomItem
 }
 
 // GetRandomLeaf returns SimpleNamedFragmentResponse.RandomLeaf, and is useful for accessing the field via an interface.
-func (v *SimpleNamedFragmentResponse) GetRandomLeaf() SimpleNamedFragmentRandomLeafLeafContent {
+func (v *SimpleNamedFragmentResponse) GetRandomLeaf() (val SimpleNamedFragmentRandomLeafLeafContent) {
+	if v == nil {
+		return
+	}
 	return v.RandomLeaf
 }
 
@@ -524,19 +621,44 @@ type VideoFields struct {
 }
 
 // GetId returns VideoFields.Id, and is useful for accessing the field via an interface.
-func (v *VideoFields) GetId() testutil.ID { return v.Id }
+func (v *VideoFields) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns VideoFields.Name, and is useful for accessing the field via an interface.
-func (v *VideoFields) GetName() string { return v.Name }
+func (v *VideoFields) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // GetUrl returns VideoFields.Url, and is useful for accessing the field via an interface.
-func (v *VideoFields) GetUrl() string { return v.Url }
+func (v *VideoFields) GetUrl() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Url
+}
 
 // GetDuration returns VideoFields.Duration, and is useful for accessing the field via an interface.
-func (v *VideoFields) GetDuration() int { return v.Duration }
+func (v *VideoFields) GetDuration() (val int) {
+	if v == nil {
+		return
+	}
+	return v.Duration
+}
 
 // GetThumbnail returns VideoFields.Thumbnail, and is useful for accessing the field via an interface.
-func (v *VideoFields) GetThumbnail() VideoFieldsThumbnail { return v.Thumbnail }
+func (v *VideoFields) GetThumbnail() (val VideoFieldsThumbnail) {
+	if v == nil {
+		return
+	}
+	return v.Thumbnail
+}
 
 // VideoFieldsThumbnail includes the requested fields of the GraphQL type Thumbnail.
 type VideoFieldsThumbnail struct {
@@ -544,7 +666,12 @@ type VideoFieldsThumbnail struct {
 }
 
 // GetId returns VideoFieldsThumbnail.Id, and is useful for accessing the field via an interface.
-func (v *VideoFieldsThumbnail) GetId() testutil.ID { return v.Id }
+func (v *VideoFieldsThumbnail) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // The query executed by SimpleNamedFragment.
 const SimpleNamedFragment_Operation = `

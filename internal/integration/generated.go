@@ -21,13 +21,28 @@ type AnimalFields struct {
 }
 
 // GetId returns AnimalFields.Id, and is useful for accessing the field via an interface.
-func (v *AnimalFields) GetId() string { return v.Id }
+func (v *AnimalFields) GetId() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetHair returns AnimalFields.Hair, and is useful for accessing the field via an interface.
-func (v *AnimalFields) GetHair() AnimalFieldsHairBeingsHair { return v.Hair }
+func (v *AnimalFields) GetHair() (val AnimalFieldsHairBeingsHair) {
+	if v == nil {
+		return
+	}
+	return v.Hair
+}
 
 // GetOwner returns AnimalFields.Owner, and is useful for accessing the field via an interface.
-func (v *AnimalFields) GetOwner() AnimalFieldsOwnerBeing { return v.Owner }
+func (v *AnimalFields) GetOwner() (val AnimalFieldsOwnerBeing) {
+	if v == nil {
+		return
+	}
+	return v.Owner
+}
 
 func (v *AnimalFields) UnmarshalJSON(b []byte) error {
 
@@ -104,7 +119,12 @@ type AnimalFieldsHairBeingsHair struct {
 }
 
 // GetHasHair returns AnimalFieldsHairBeingsHair.HasHair, and is useful for accessing the field via an interface.
-func (v *AnimalFieldsHairBeingsHair) GetHasHair() bool { return v.HasHair }
+func (v *AnimalFieldsHairBeingsHair) GetHasHair() (val bool) {
+	if v == nil {
+		return
+	}
+	return v.HasHair
+}
 
 // AnimalFieldsOwnerAnimal includes the requested fields of the GraphQL type Animal.
 type AnimalFieldsOwnerAnimal struct {
@@ -113,10 +133,20 @@ type AnimalFieldsOwnerAnimal struct {
 }
 
 // GetTypename returns AnimalFieldsOwnerAnimal.Typename, and is useful for accessing the field via an interface.
-func (v *AnimalFieldsOwnerAnimal) GetTypename() string { return v.Typename }
+func (v *AnimalFieldsOwnerAnimal) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns AnimalFieldsOwnerAnimal.Id, and is useful for accessing the field via an interface.
-func (v *AnimalFieldsOwnerAnimal) GetId() string { return v.Id }
+func (v *AnimalFieldsOwnerAnimal) GetId() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // AnimalFieldsOwnerBeing includes the requested fields of the GraphQL interface Being.
 //
@@ -204,16 +234,36 @@ type AnimalFieldsOwnerUser struct {
 }
 
 // GetTypename returns AnimalFieldsOwnerUser.Typename, and is useful for accessing the field via an interface.
-func (v *AnimalFieldsOwnerUser) GetTypename() string { return v.Typename }
+func (v *AnimalFieldsOwnerUser) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns AnimalFieldsOwnerUser.Id, and is useful for accessing the field via an interface.
-func (v *AnimalFieldsOwnerUser) GetId() string { return v.Id }
+func (v *AnimalFieldsOwnerUser) GetId() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetLuckyNumber returns AnimalFieldsOwnerUser.LuckyNumber, and is useful for accessing the field via an interface.
-func (v *AnimalFieldsOwnerUser) GetLuckyNumber() int { return v.LuckyFieldsUser.LuckyNumber }
+func (v *AnimalFieldsOwnerUser) GetLuckyNumber() (val int) {
+	if v == nil {
+		return
+	}
+	return v.LuckyFieldsUser.LuckyNumber
+}
 
 // GetHair returns AnimalFieldsOwnerUser.Hair, and is useful for accessing the field via an interface.
-func (v *AnimalFieldsOwnerUser) GetHair() MoreUserFieldsHair { return v.UserFields.MoreUserFields.Hair }
+func (v *AnimalFieldsOwnerUser) GetHair() (val MoreUserFieldsHair) {
+	if v == nil {
+		return
+	}
+	return v.UserFields.MoreUserFields.Hair
+}
 
 func (v *AnimalFieldsOwnerUser) UnmarshalJSON(b []byte) error {
 
@@ -280,10 +330,20 @@ type FriendsFields struct {
 }
 
 // GetId returns FriendsFields.Id, and is useful for accessing the field via an interface.
-func (v *FriendsFields) GetId() string { return v.Id }
+func (v *FriendsFields) GetId() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns FriendsFields.Name, and is useful for accessing the field via an interface.
-func (v *FriendsFields) GetName() string { return v.Name }
+func (v *FriendsFields) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // InnerBeingFields includes the GraphQL fields of Being requested by the fragment InnerBeingFields.
 //
@@ -365,10 +425,20 @@ type InnerBeingFieldsAnimal struct {
 }
 
 // GetId returns InnerBeingFieldsAnimal.Id, and is useful for accessing the field via an interface.
-func (v *InnerBeingFieldsAnimal) GetId() string { return v.Id }
+func (v *InnerBeingFieldsAnimal) GetId() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns InnerBeingFieldsAnimal.Name, and is useful for accessing the field via an interface.
-func (v *InnerBeingFieldsAnimal) GetName() string { return v.Name }
+func (v *InnerBeingFieldsAnimal) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // InnerBeingFields includes the GraphQL fields of User requested by the fragment InnerBeingFields.
 type InnerBeingFieldsUser struct {
@@ -378,13 +448,28 @@ type InnerBeingFieldsUser struct {
 }
 
 // GetId returns InnerBeingFieldsUser.Id, and is useful for accessing the field via an interface.
-func (v *InnerBeingFieldsUser) GetId() string { return v.Id }
+func (v *InnerBeingFieldsUser) GetId() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns InnerBeingFieldsUser.Name, and is useful for accessing the field via an interface.
-func (v *InnerBeingFieldsUser) GetName() string { return v.Name }
+func (v *InnerBeingFieldsUser) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // GetFriends returns InnerBeingFieldsUser.Friends, and is useful for accessing the field via an interface.
-func (v *InnerBeingFieldsUser) GetFriends() []FriendsFields { return v.Friends }
+func (v *InnerBeingFieldsUser) GetFriends() (val []FriendsFields) {
+	if v == nil {
+		return
+	}
+	return v.Friends
+}
 
 // InnerLuckyFields includes the GraphQL fields of Lucky requested by the fragment InnerLuckyFields.
 //
@@ -450,7 +535,12 @@ type InnerLuckyFieldsUser struct {
 }
 
 // GetLuckyNumber returns InnerLuckyFieldsUser.LuckyNumber, and is useful for accessing the field via an interface.
-func (v *InnerLuckyFieldsUser) GetLuckyNumber() int { return v.LuckyNumber }
+func (v *InnerLuckyFieldsUser) GetLuckyNumber() (val int) {
+	if v == nil {
+		return
+	}
+	return v.LuckyNumber
+}
 
 // LuckyFields includes the GraphQL fields of Lucky requested by the fragment LuckyFields.
 //
@@ -521,13 +611,28 @@ type LuckyFieldsUser struct {
 }
 
 // GetLuckyNumber returns LuckyFieldsUser.LuckyNumber, and is useful for accessing the field via an interface.
-func (v *LuckyFieldsUser) GetLuckyNumber() int { return v.LuckyNumber }
+func (v *LuckyFieldsUser) GetLuckyNumber() (val int) {
+	if v == nil {
+		return
+	}
+	return v.LuckyNumber
+}
 
 // GetId returns LuckyFieldsUser.Id, and is useful for accessing the field via an interface.
-func (v *LuckyFieldsUser) GetId() string { return v.MoreUserFields.Id }
+func (v *LuckyFieldsUser) GetId() (val string) {
+	if v == nil {
+		return
+	}
+	return v.MoreUserFields.Id
+}
 
 // GetHair returns LuckyFieldsUser.Hair, and is useful for accessing the field via an interface.
-func (v *LuckyFieldsUser) GetHair() MoreUserFieldsHair { return v.MoreUserFields.Hair }
+func (v *LuckyFieldsUser) GetHair() (val MoreUserFieldsHair) {
+	if v == nil {
+		return
+	}
+	return v.MoreUserFields.Hair
+}
 
 func (v *LuckyFieldsUser) UnmarshalJSON(b []byte) error {
 
@@ -586,10 +691,20 @@ type MoreUserFields struct {
 }
 
 // GetId returns MoreUserFields.Id, and is useful for accessing the field via an interface.
-func (v *MoreUserFields) GetId() string { return v.Id }
+func (v *MoreUserFields) GetId() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetHair returns MoreUserFields.Hair, and is useful for accessing the field via an interface.
-func (v *MoreUserFields) GetHair() MoreUserFieldsHair { return v.Hair }
+func (v *MoreUserFields) GetHair() (val MoreUserFieldsHair) {
+	if v == nil {
+		return
+	}
+	return v.Hair
+}
 
 // MoreUserFieldsHair includes the requested fields of the GraphQL type Hair.
 type MoreUserFieldsHair struct {
@@ -597,14 +712,24 @@ type MoreUserFieldsHair struct {
 }
 
 // GetColor returns MoreUserFieldsHair.Color, and is useful for accessing the field via an interface.
-func (v *MoreUserFieldsHair) GetColor() string { return v.Color }
+func (v *MoreUserFieldsHair) GetColor() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Color
+}
 
 type NewUser struct {
 	Name string `json:"name"`
 }
 
 // GetName returns NewUser.Name, and is useful for accessing the field via an interface.
-func (v *NewUser) GetName() string { return v.Name }
+func (v *NewUser) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // QueryFragment includes the GraphQL fields of Query requested by the fragment QueryFragment.
 type QueryFragment struct {
@@ -612,7 +737,12 @@ type QueryFragment struct {
 }
 
 // GetBeings returns QueryFragment.Beings, and is useful for accessing the field via an interface.
-func (v *QueryFragment) GetBeings() []QueryFragmentBeingsBeing { return v.Beings }
+func (v *QueryFragment) GetBeings() (val []QueryFragmentBeingsBeing) {
+	if v == nil {
+		return
+	}
+	return v.Beings
+}
 
 func (v *QueryFragment) UnmarshalJSON(b []byte) error {
 
@@ -697,13 +827,28 @@ type QueryFragmentBeingsAnimal struct {
 }
 
 // GetTypename returns QueryFragmentBeingsAnimal.Typename, and is useful for accessing the field via an interface.
-func (v *QueryFragmentBeingsAnimal) GetTypename() string { return v.Typename }
+func (v *QueryFragmentBeingsAnimal) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns QueryFragmentBeingsAnimal.Id, and is useful for accessing the field via an interface.
-func (v *QueryFragmentBeingsAnimal) GetId() string { return v.Id }
+func (v *QueryFragmentBeingsAnimal) GetId() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetOwner returns QueryFragmentBeingsAnimal.Owner, and is useful for accessing the field via an interface.
-func (v *QueryFragmentBeingsAnimal) GetOwner() InnerBeingFields { return v.Owner }
+func (v *QueryFragmentBeingsAnimal) GetOwner() (val InnerBeingFields) {
+	if v == nil {
+		return
+	}
+	return v.Owner
+}
 
 func (v *QueryFragmentBeingsAnimal) UnmarshalJSON(b []byte) error {
 
@@ -863,13 +1008,28 @@ type QueryFragmentBeingsUser struct {
 }
 
 // GetTypename returns QueryFragmentBeingsUser.Typename, and is useful for accessing the field via an interface.
-func (v *QueryFragmentBeingsUser) GetTypename() string { return v.Typename }
+func (v *QueryFragmentBeingsUser) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns QueryFragmentBeingsUser.Id, and is useful for accessing the field via an interface.
-func (v *QueryFragmentBeingsUser) GetId() string { return v.Id }
+func (v *QueryFragmentBeingsUser) GetId() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetLuckyNumber returns QueryFragmentBeingsUser.LuckyNumber, and is useful for accessing the field via an interface.
-func (v *QueryFragmentBeingsUser) GetLuckyNumber() int { return v.InnerLuckyFieldsUser.LuckyNumber }
+func (v *QueryFragmentBeingsUser) GetLuckyNumber() (val int) {
+	if v == nil {
+		return
+	}
+	return v.InnerLuckyFieldsUser.LuckyNumber
+}
 
 func (v *QueryFragmentBeingsUser) UnmarshalJSON(b []byte) error {
 
@@ -941,13 +1101,28 @@ type UserFields struct {
 }
 
 // GetId returns UserFields.Id, and is useful for accessing the field via an interface.
-func (v *UserFields) GetId() string { return v.Id }
+func (v *UserFields) GetId() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetLuckyNumber returns UserFields.LuckyNumber, and is useful for accessing the field via an interface.
-func (v *UserFields) GetLuckyNumber() int { return v.LuckyFieldsUser.LuckyNumber }
+func (v *UserFields) GetLuckyNumber() (val int) {
+	if v == nil {
+		return
+	}
+	return v.LuckyFieldsUser.LuckyNumber
+}
 
 // GetHair returns UserFields.Hair, and is useful for accessing the field via an interface.
-func (v *UserFields) GetHair() MoreUserFieldsHair { return v.MoreUserFields.Hair }
+func (v *UserFields) GetHair() (val MoreUserFieldsHair) {
+	if v == nil {
+		return
+	}
+	return v.MoreUserFields.Hair
+}
 
 func (v *UserFields) UnmarshalJSON(b []byte) error {
 
@@ -1010,7 +1185,12 @@ type __createUserInput struct {
 }
 
 // GetUser returns __createUserInput.User, and is useful for accessing the field via an interface.
-func (v *__createUserInput) GetUser() NewUser { return v.User }
+func (v *__createUserInput) GetUser() (val NewUser) {
+	if v == nil {
+		return
+	}
+	return v.User
+}
 
 // __queryWithCustomMarshalInput is used internally by genqlient
 type __queryWithCustomMarshalInput struct {
@@ -1018,7 +1198,12 @@ type __queryWithCustomMarshalInput struct {
 }
 
 // GetDate returns __queryWithCustomMarshalInput.Date, and is useful for accessing the field via an interface.
-func (v *__queryWithCustomMarshalInput) GetDate() time.Time { return v.Date }
+func (v *__queryWithCustomMarshalInput) GetDate() (val time.Time) {
+	if v == nil {
+		return
+	}
+	return v.Date
+}
 
 func (v *__queryWithCustomMarshalInput) UnmarshalJSON(b []byte) error {
 
@@ -1090,10 +1275,20 @@ type __queryWithCustomMarshalOptionalInput struct {
 }
 
 // GetDate returns __queryWithCustomMarshalOptionalInput.Date, and is useful for accessing the field via an interface.
-func (v *__queryWithCustomMarshalOptionalInput) GetDate() *time.Time { return v.Date }
+func (v *__queryWithCustomMarshalOptionalInput) GetDate() (val *time.Time) {
+	if v == nil {
+		return
+	}
+	return v.Date
+}
 
 // GetId returns __queryWithCustomMarshalOptionalInput.Id, and is useful for accessing the field via an interface.
-func (v *__queryWithCustomMarshalOptionalInput) GetId() *string { return v.Id }
+func (v *__queryWithCustomMarshalOptionalInput) GetId() (val *string) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 func (v *__queryWithCustomMarshalOptionalInput) UnmarshalJSON(b []byte) error {
 
@@ -1170,7 +1365,12 @@ type __queryWithCustomMarshalSliceInput struct {
 }
 
 // GetDates returns __queryWithCustomMarshalSliceInput.Dates, and is useful for accessing the field via an interface.
-func (v *__queryWithCustomMarshalSliceInput) GetDates() []time.Time { return v.Dates }
+func (v *__queryWithCustomMarshalSliceInput) GetDates() (val []time.Time) {
+	if v == nil {
+		return
+	}
+	return v.Dates
+}
 
 func (v *__queryWithCustomMarshalSliceInput) UnmarshalJSON(b []byte) error {
 
@@ -1253,7 +1453,12 @@ type __queryWithFlattenInput struct {
 }
 
 // GetIds returns __queryWithFlattenInput.Ids, and is useful for accessing the field via an interface.
-func (v *__queryWithFlattenInput) GetIds() []string { return v.Ids }
+func (v *__queryWithFlattenInput) GetIds() (val []string) {
+	if v == nil {
+		return
+	}
+	return v.Ids
+}
 
 // __queryWithFragmentsInput is used internally by genqlient
 type __queryWithFragmentsInput struct {
@@ -1261,7 +1466,12 @@ type __queryWithFragmentsInput struct {
 }
 
 // GetIds returns __queryWithFragmentsInput.Ids, and is useful for accessing the field via an interface.
-func (v *__queryWithFragmentsInput) GetIds() []string { return v.Ids }
+func (v *__queryWithFragmentsInput) GetIds() (val []string) {
+	if v == nil {
+		return
+	}
+	return v.Ids
+}
 
 // __queryWithInterfaceListFieldInput is used internally by genqlient
 type __queryWithInterfaceListFieldInput struct {
@@ -1269,7 +1479,12 @@ type __queryWithInterfaceListFieldInput struct {
 }
 
 // GetIds returns __queryWithInterfaceListFieldInput.Ids, and is useful for accessing the field via an interface.
-func (v *__queryWithInterfaceListFieldInput) GetIds() []string { return v.Ids }
+func (v *__queryWithInterfaceListFieldInput) GetIds() (val []string) {
+	if v == nil {
+		return
+	}
+	return v.Ids
+}
 
 // __queryWithInterfaceListPointerFieldInput is used internally by genqlient
 type __queryWithInterfaceListPointerFieldInput struct {
@@ -1277,7 +1492,12 @@ type __queryWithInterfaceListPointerFieldInput struct {
 }
 
 // GetIds returns __queryWithInterfaceListPointerFieldInput.Ids, and is useful for accessing the field via an interface.
-func (v *__queryWithInterfaceListPointerFieldInput) GetIds() []string { return v.Ids }
+func (v *__queryWithInterfaceListPointerFieldInput) GetIds() (val []string) {
+	if v == nil {
+		return
+	}
+	return v.Ids
+}
 
 // __queryWithInterfaceNoFragmentsInput is used internally by genqlient
 type __queryWithInterfaceNoFragmentsInput struct {
@@ -1285,7 +1505,12 @@ type __queryWithInterfaceNoFragmentsInput struct {
 }
 
 // GetId returns __queryWithInterfaceNoFragmentsInput.Id, and is useful for accessing the field via an interface.
-func (v *__queryWithInterfaceNoFragmentsInput) GetId() string { return v.Id }
+func (v *__queryWithInterfaceNoFragmentsInput) GetId() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // __queryWithNamedFragmentsInput is used internally by genqlient
 type __queryWithNamedFragmentsInput struct {
@@ -1293,7 +1518,12 @@ type __queryWithNamedFragmentsInput struct {
 }
 
 // GetIds returns __queryWithNamedFragmentsInput.Ids, and is useful for accessing the field via an interface.
-func (v *__queryWithNamedFragmentsInput) GetIds() []string { return v.Ids }
+func (v *__queryWithNamedFragmentsInput) GetIds() (val []string) {
+	if v == nil {
+		return
+	}
+	return v.Ids
+}
 
 // __queryWithOmitemptyInput is used internally by genqlient
 type __queryWithOmitemptyInput struct {
@@ -1301,7 +1531,12 @@ type __queryWithOmitemptyInput struct {
 }
 
 // GetId returns __queryWithOmitemptyInput.Id, and is useful for accessing the field via an interface.
-func (v *__queryWithOmitemptyInput) GetId() string { return v.Id }
+func (v *__queryWithOmitemptyInput) GetId() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // __queryWithVariablesInput is used internally by genqlient
 type __queryWithVariablesInput struct {
@@ -1309,7 +1544,12 @@ type __queryWithVariablesInput struct {
 }
 
 // GetId returns __queryWithVariablesInput.Id, and is useful for accessing the field via an interface.
-func (v *__queryWithVariablesInput) GetId() string { return v.Id }
+func (v *__queryWithVariablesInput) GetId() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // countResponse is returned by count on success.
 type countResponse struct {
@@ -1317,7 +1557,12 @@ type countResponse struct {
 }
 
 // GetCount returns countResponse.Count, and is useful for accessing the field via an interface.
-func (v *countResponse) GetCount() int { return v.Count }
+func (v *countResponse) GetCount() (val int) {
+	if v == nil {
+		return
+	}
+	return v.Count
+}
 
 // createUserCreateUser includes the requested fields of the GraphQL type User.
 type createUserCreateUser struct {
@@ -1326,10 +1571,20 @@ type createUserCreateUser struct {
 }
 
 // GetId returns createUserCreateUser.Id, and is useful for accessing the field via an interface.
-func (v *createUserCreateUser) GetId() string { return v.Id }
+func (v *createUserCreateUser) GetId() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns createUserCreateUser.Name, and is useful for accessing the field via an interface.
-func (v *createUserCreateUser) GetName() string { return v.Name }
+func (v *createUserCreateUser) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // createUserResponse is returned by createUser on success.
 type createUserResponse struct {
@@ -1337,7 +1592,12 @@ type createUserResponse struct {
 }
 
 // GetCreateUser returns createUserResponse.CreateUser, and is useful for accessing the field via an interface.
-func (v *createUserResponse) GetCreateUser() createUserCreateUser { return v.CreateUser }
+func (v *createUserResponse) GetCreateUser() (val createUserCreateUser) {
+	if v == nil {
+		return
+	}
+	return v.CreateUser
+}
 
 // failingQueryMeUser includes the requested fields of the GraphQL type User.
 type failingQueryMeUser struct {
@@ -1345,7 +1605,12 @@ type failingQueryMeUser struct {
 }
 
 // GetId returns failingQueryMeUser.Id, and is useful for accessing the field via an interface.
-func (v *failingQueryMeUser) GetId() string { return v.Id }
+func (v *failingQueryMeUser) GetId() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // failingQueryResponse is returned by failingQuery on success.
 type failingQueryResponse struct {
@@ -1354,10 +1619,20 @@ type failingQueryResponse struct {
 }
 
 // GetFail returns failingQueryResponse.Fail, and is useful for accessing the field via an interface.
-func (v *failingQueryResponse) GetFail() bool { return v.Fail }
+func (v *failingQueryResponse) GetFail() (val bool) {
+	if v == nil {
+		return
+	}
+	return v.Fail
+}
 
 // GetMe returns failingQueryResponse.Me, and is useful for accessing the field via an interface.
-func (v *failingQueryResponse) GetMe() failingQueryMeUser { return v.Me }
+func (v *failingQueryResponse) GetMe() (val failingQueryMeUser) {
+	if v == nil {
+		return
+	}
+	return v.Me
+}
 
 // queryWithCustomMarshalOptionalResponse is returned by queryWithCustomMarshalOptional on success.
 type queryWithCustomMarshalOptionalResponse struct {
@@ -1365,7 +1640,10 @@ type queryWithCustomMarshalOptionalResponse struct {
 }
 
 // GetUserSearch returns queryWithCustomMarshalOptionalResponse.UserSearch, and is useful for accessing the field via an interface.
-func (v *queryWithCustomMarshalOptionalResponse) GetUserSearch() []queryWithCustomMarshalOptionalUserSearchUser {
+func (v *queryWithCustomMarshalOptionalResponse) GetUserSearch() (val []queryWithCustomMarshalOptionalUserSearchUser) {
+	if v == nil {
+		return
+	}
 	return v.UserSearch
 }
 
@@ -1377,13 +1655,28 @@ type queryWithCustomMarshalOptionalUserSearchUser struct {
 }
 
 // GetId returns queryWithCustomMarshalOptionalUserSearchUser.Id, and is useful for accessing the field via an interface.
-func (v *queryWithCustomMarshalOptionalUserSearchUser) GetId() string { return v.Id }
+func (v *queryWithCustomMarshalOptionalUserSearchUser) GetId() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns queryWithCustomMarshalOptionalUserSearchUser.Name, and is useful for accessing the field via an interface.
-func (v *queryWithCustomMarshalOptionalUserSearchUser) GetName() string { return v.Name }
+func (v *queryWithCustomMarshalOptionalUserSearchUser) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // GetBirthdate returns queryWithCustomMarshalOptionalUserSearchUser.Birthdate, and is useful for accessing the field via an interface.
-func (v *queryWithCustomMarshalOptionalUserSearchUser) GetBirthdate() time.Time { return v.Birthdate }
+func (v *queryWithCustomMarshalOptionalUserSearchUser) GetBirthdate() (val time.Time) {
+	if v == nil {
+		return
+	}
+	return v.Birthdate
+}
 
 func (v *queryWithCustomMarshalOptionalUserSearchUser) UnmarshalJSON(b []byte) error {
 
@@ -1460,7 +1753,10 @@ type queryWithCustomMarshalResponse struct {
 }
 
 // GetUsersBornOn returns queryWithCustomMarshalResponse.UsersBornOn, and is useful for accessing the field via an interface.
-func (v *queryWithCustomMarshalResponse) GetUsersBornOn() []queryWithCustomMarshalUsersBornOnUser {
+func (v *queryWithCustomMarshalResponse) GetUsersBornOn() (val []queryWithCustomMarshalUsersBornOnUser) {
+	if v == nil {
+		return
+	}
 	return v.UsersBornOn
 }
 
@@ -1470,7 +1766,10 @@ type queryWithCustomMarshalSliceResponse struct {
 }
 
 // GetUsersBornOnDates returns queryWithCustomMarshalSliceResponse.UsersBornOnDates, and is useful for accessing the field via an interface.
-func (v *queryWithCustomMarshalSliceResponse) GetUsersBornOnDates() []queryWithCustomMarshalSliceUsersBornOnDatesUser {
+func (v *queryWithCustomMarshalSliceResponse) GetUsersBornOnDates() (val []queryWithCustomMarshalSliceUsersBornOnDatesUser) {
+	if v == nil {
+		return
+	}
 	return v.UsersBornOnDates
 }
 
@@ -1482,13 +1781,26 @@ type queryWithCustomMarshalSliceUsersBornOnDatesUser struct {
 }
 
 // GetId returns queryWithCustomMarshalSliceUsersBornOnDatesUser.Id, and is useful for accessing the field via an interface.
-func (v *queryWithCustomMarshalSliceUsersBornOnDatesUser) GetId() string { return v.Id }
+func (v *queryWithCustomMarshalSliceUsersBornOnDatesUser) GetId() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns queryWithCustomMarshalSliceUsersBornOnDatesUser.Name, and is useful for accessing the field via an interface.
-func (v *queryWithCustomMarshalSliceUsersBornOnDatesUser) GetName() string { return v.Name }
+func (v *queryWithCustomMarshalSliceUsersBornOnDatesUser) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // GetBirthdate returns queryWithCustomMarshalSliceUsersBornOnDatesUser.Birthdate, and is useful for accessing the field via an interface.
-func (v *queryWithCustomMarshalSliceUsersBornOnDatesUser) GetBirthdate() time.Time {
+func (v *queryWithCustomMarshalSliceUsersBornOnDatesUser) GetBirthdate() (val time.Time) {
+	if v == nil {
+		return
+	}
 	return v.Birthdate
 }
 
@@ -1569,13 +1881,28 @@ type queryWithCustomMarshalUsersBornOnUser struct {
 }
 
 // GetId returns queryWithCustomMarshalUsersBornOnUser.Id, and is useful for accessing the field via an interface.
-func (v *queryWithCustomMarshalUsersBornOnUser) GetId() string { return v.Id }
+func (v *queryWithCustomMarshalUsersBornOnUser) GetId() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns queryWithCustomMarshalUsersBornOnUser.Name, and is useful for accessing the field via an interface.
-func (v *queryWithCustomMarshalUsersBornOnUser) GetName() string { return v.Name }
+func (v *queryWithCustomMarshalUsersBornOnUser) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // GetBirthdate returns queryWithCustomMarshalUsersBornOnUser.Birthdate, and is useful for accessing the field via an interface.
-func (v *queryWithCustomMarshalUsersBornOnUser) GetBirthdate() time.Time { return v.Birthdate }
+func (v *queryWithCustomMarshalUsersBornOnUser) GetBirthdate() (val time.Time) {
+	if v == nil {
+		return
+	}
+	return v.Birthdate
+}
 
 func (v *queryWithCustomMarshalUsersBornOnUser) UnmarshalJSON(b []byte) error {
 
@@ -1657,24 +1984,50 @@ type queryWithFragmentsBeingsAnimal struct {
 }
 
 // GetTypename returns queryWithFragmentsBeingsAnimal.Typename, and is useful for accessing the field via an interface.
-func (v *queryWithFragmentsBeingsAnimal) GetTypename() string { return v.Typename }
+func (v *queryWithFragmentsBeingsAnimal) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns queryWithFragmentsBeingsAnimal.Id, and is useful for accessing the field via an interface.
-func (v *queryWithFragmentsBeingsAnimal) GetId() string { return v.Id }
+func (v *queryWithFragmentsBeingsAnimal) GetId() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns queryWithFragmentsBeingsAnimal.Name, and is useful for accessing the field via an interface.
-func (v *queryWithFragmentsBeingsAnimal) GetName() string { return v.Name }
+func (v *queryWithFragmentsBeingsAnimal) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // GetHair returns queryWithFragmentsBeingsAnimal.Hair, and is useful for accessing the field via an interface.
-func (v *queryWithFragmentsBeingsAnimal) GetHair() queryWithFragmentsBeingsAnimalHairBeingsHair {
+func (v *queryWithFragmentsBeingsAnimal) GetHair() (val queryWithFragmentsBeingsAnimalHairBeingsHair) {
+	if v == nil {
+		return
+	}
 	return v.Hair
 }
 
 // GetSpecies returns queryWithFragmentsBeingsAnimal.Species, and is useful for accessing the field via an interface.
-func (v *queryWithFragmentsBeingsAnimal) GetSpecies() Species { return v.Species }
+func (v *queryWithFragmentsBeingsAnimal) GetSpecies() (val Species) {
+	if v == nil {
+		return
+	}
+	return v.Species
+}
 
 // GetOwner returns queryWithFragmentsBeingsAnimal.Owner, and is useful for accessing the field via an interface.
-func (v *queryWithFragmentsBeingsAnimal) GetOwner() queryWithFragmentsBeingsAnimalOwnerBeing {
+func (v *queryWithFragmentsBeingsAnimal) GetOwner() (val queryWithFragmentsBeingsAnimalOwnerBeing) {
+	if v == nil {
+		return
+	}
 	return v.Owner
 }
 
@@ -1762,7 +2115,12 @@ type queryWithFragmentsBeingsAnimalHairBeingsHair struct {
 }
 
 // GetHasHair returns queryWithFragmentsBeingsAnimalHairBeingsHair.HasHair, and is useful for accessing the field via an interface.
-func (v *queryWithFragmentsBeingsAnimalHairBeingsHair) GetHasHair() bool { return v.HasHair }
+func (v *queryWithFragmentsBeingsAnimalHairBeingsHair) GetHasHair() (val bool) {
+	if v == nil {
+		return
+	}
+	return v.HasHair
+}
 
 // queryWithFragmentsBeingsAnimalOwnerAnimal includes the requested fields of the GraphQL type Animal.
 type queryWithFragmentsBeingsAnimalOwnerAnimal struct {
@@ -1772,13 +2130,28 @@ type queryWithFragmentsBeingsAnimalOwnerAnimal struct {
 }
 
 // GetTypename returns queryWithFragmentsBeingsAnimalOwnerAnimal.Typename, and is useful for accessing the field via an interface.
-func (v *queryWithFragmentsBeingsAnimalOwnerAnimal) GetTypename() string { return v.Typename }
+func (v *queryWithFragmentsBeingsAnimalOwnerAnimal) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns queryWithFragmentsBeingsAnimalOwnerAnimal.Id, and is useful for accessing the field via an interface.
-func (v *queryWithFragmentsBeingsAnimalOwnerAnimal) GetId() string { return v.Id }
+func (v *queryWithFragmentsBeingsAnimalOwnerAnimal) GetId() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns queryWithFragmentsBeingsAnimalOwnerAnimal.Name, and is useful for accessing the field via an interface.
-func (v *queryWithFragmentsBeingsAnimalOwnerAnimal) GetName() string { return v.Name }
+func (v *queryWithFragmentsBeingsAnimalOwnerAnimal) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // queryWithFragmentsBeingsAnimalOwnerBeing includes the requested fields of the GraphQL interface Being.
 //
@@ -1866,16 +2239,36 @@ type queryWithFragmentsBeingsAnimalOwnerUser struct {
 }
 
 // GetTypename returns queryWithFragmentsBeingsAnimalOwnerUser.Typename, and is useful for accessing the field via an interface.
-func (v *queryWithFragmentsBeingsAnimalOwnerUser) GetTypename() string { return v.Typename }
+func (v *queryWithFragmentsBeingsAnimalOwnerUser) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns queryWithFragmentsBeingsAnimalOwnerUser.Id, and is useful for accessing the field via an interface.
-func (v *queryWithFragmentsBeingsAnimalOwnerUser) GetId() string { return v.Id }
+func (v *queryWithFragmentsBeingsAnimalOwnerUser) GetId() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns queryWithFragmentsBeingsAnimalOwnerUser.Name, and is useful for accessing the field via an interface.
-func (v *queryWithFragmentsBeingsAnimalOwnerUser) GetName() string { return v.Name }
+func (v *queryWithFragmentsBeingsAnimalOwnerUser) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // GetLuckyNumber returns queryWithFragmentsBeingsAnimalOwnerUser.LuckyNumber, and is useful for accessing the field via an interface.
-func (v *queryWithFragmentsBeingsAnimalOwnerUser) GetLuckyNumber() int { return v.LuckyNumber }
+func (v *queryWithFragmentsBeingsAnimalOwnerUser) GetLuckyNumber() (val int) {
+	if v == nil {
+		return
+	}
+	return v.LuckyNumber
+}
 
 // queryWithFragmentsBeingsBeing includes the requested fields of the GraphQL interface Being.
 //
@@ -1966,19 +2359,44 @@ type queryWithFragmentsBeingsUser struct {
 }
 
 // GetTypename returns queryWithFragmentsBeingsUser.Typename, and is useful for accessing the field via an interface.
-func (v *queryWithFragmentsBeingsUser) GetTypename() string { return v.Typename }
+func (v *queryWithFragmentsBeingsUser) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns queryWithFragmentsBeingsUser.Id, and is useful for accessing the field via an interface.
-func (v *queryWithFragmentsBeingsUser) GetId() string { return v.Id }
+func (v *queryWithFragmentsBeingsUser) GetId() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns queryWithFragmentsBeingsUser.Name, and is useful for accessing the field via an interface.
-func (v *queryWithFragmentsBeingsUser) GetName() string { return v.Name }
+func (v *queryWithFragmentsBeingsUser) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // GetLuckyNumber returns queryWithFragmentsBeingsUser.LuckyNumber, and is useful for accessing the field via an interface.
-func (v *queryWithFragmentsBeingsUser) GetLuckyNumber() int { return v.LuckyNumber }
+func (v *queryWithFragmentsBeingsUser) GetLuckyNumber() (val int) {
+	if v == nil {
+		return
+	}
+	return v.LuckyNumber
+}
 
 // GetHair returns queryWithFragmentsBeingsUser.Hair, and is useful for accessing the field via an interface.
-func (v *queryWithFragmentsBeingsUser) GetHair() queryWithFragmentsBeingsUserHair { return v.Hair }
+func (v *queryWithFragmentsBeingsUser) GetHair() (val queryWithFragmentsBeingsUserHair) {
+	if v == nil {
+		return
+	}
+	return v.Hair
+}
 
 // queryWithFragmentsBeingsUserHair includes the requested fields of the GraphQL type Hair.
 type queryWithFragmentsBeingsUserHair struct {
@@ -1986,7 +2404,12 @@ type queryWithFragmentsBeingsUserHair struct {
 }
 
 // GetColor returns queryWithFragmentsBeingsUserHair.Color, and is useful for accessing the field via an interface.
-func (v *queryWithFragmentsBeingsUserHair) GetColor() string { return v.Color }
+func (v *queryWithFragmentsBeingsUserHair) GetColor() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Color
+}
 
 // queryWithFragmentsResponse is returned by queryWithFragments on success.
 type queryWithFragmentsResponse struct {
@@ -1994,7 +2417,12 @@ type queryWithFragmentsResponse struct {
 }
 
 // GetBeings returns queryWithFragmentsResponse.Beings, and is useful for accessing the field via an interface.
-func (v *queryWithFragmentsResponse) GetBeings() []queryWithFragmentsBeingsBeing { return v.Beings }
+func (v *queryWithFragmentsResponse) GetBeings() (val []queryWithFragmentsBeingsBeing) {
+	if v == nil {
+		return
+	}
+	return v.Beings
+}
 
 func (v *queryWithFragmentsResponse) UnmarshalJSON(b []byte) error {
 
@@ -2079,13 +2507,28 @@ type queryWithInterfaceListFieldBeingsAnimal struct {
 }
 
 // GetTypename returns queryWithInterfaceListFieldBeingsAnimal.Typename, and is useful for accessing the field via an interface.
-func (v *queryWithInterfaceListFieldBeingsAnimal) GetTypename() string { return v.Typename }
+func (v *queryWithInterfaceListFieldBeingsAnimal) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns queryWithInterfaceListFieldBeingsAnimal.Id, and is useful for accessing the field via an interface.
-func (v *queryWithInterfaceListFieldBeingsAnimal) GetId() string { return v.Id }
+func (v *queryWithInterfaceListFieldBeingsAnimal) GetId() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns queryWithInterfaceListFieldBeingsAnimal.Name, and is useful for accessing the field via an interface.
-func (v *queryWithInterfaceListFieldBeingsAnimal) GetName() string { return v.Name }
+func (v *queryWithInterfaceListFieldBeingsAnimal) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // queryWithInterfaceListFieldBeingsBeing includes the requested fields of the GraphQL interface Being.
 //
@@ -2172,13 +2615,28 @@ type queryWithInterfaceListFieldBeingsUser struct {
 }
 
 // GetTypename returns queryWithInterfaceListFieldBeingsUser.Typename, and is useful for accessing the field via an interface.
-func (v *queryWithInterfaceListFieldBeingsUser) GetTypename() string { return v.Typename }
+func (v *queryWithInterfaceListFieldBeingsUser) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns queryWithInterfaceListFieldBeingsUser.Id, and is useful for accessing the field via an interface.
-func (v *queryWithInterfaceListFieldBeingsUser) GetId() string { return v.Id }
+func (v *queryWithInterfaceListFieldBeingsUser) GetId() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns queryWithInterfaceListFieldBeingsUser.Name, and is useful for accessing the field via an interface.
-func (v *queryWithInterfaceListFieldBeingsUser) GetName() string { return v.Name }
+func (v *queryWithInterfaceListFieldBeingsUser) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // queryWithInterfaceListFieldResponse is returned by queryWithInterfaceListField on success.
 type queryWithInterfaceListFieldResponse struct {
@@ -2186,7 +2644,10 @@ type queryWithInterfaceListFieldResponse struct {
 }
 
 // GetBeings returns queryWithInterfaceListFieldResponse.Beings, and is useful for accessing the field via an interface.
-func (v *queryWithInterfaceListFieldResponse) GetBeings() []queryWithInterfaceListFieldBeingsBeing {
+func (v *queryWithInterfaceListFieldResponse) GetBeings() (val []queryWithInterfaceListFieldBeingsBeing) {
+	if v == nil {
+		return
+	}
 	return v.Beings
 }
 
@@ -2273,13 +2734,28 @@ type queryWithInterfaceListPointerFieldBeingsAnimal struct {
 }
 
 // GetTypename returns queryWithInterfaceListPointerFieldBeingsAnimal.Typename, and is useful for accessing the field via an interface.
-func (v *queryWithInterfaceListPointerFieldBeingsAnimal) GetTypename() string { return v.Typename }
+func (v *queryWithInterfaceListPointerFieldBeingsAnimal) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns queryWithInterfaceListPointerFieldBeingsAnimal.Id, and is useful for accessing the field via an interface.
-func (v *queryWithInterfaceListPointerFieldBeingsAnimal) GetId() string { return v.Id }
+func (v *queryWithInterfaceListPointerFieldBeingsAnimal) GetId() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns queryWithInterfaceListPointerFieldBeingsAnimal.Name, and is useful for accessing the field via an interface.
-func (v *queryWithInterfaceListPointerFieldBeingsAnimal) GetName() string { return v.Name }
+func (v *queryWithInterfaceListPointerFieldBeingsAnimal) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // queryWithInterfaceListPointerFieldBeingsBeing includes the requested fields of the GraphQL interface Being.
 //
@@ -2366,13 +2842,28 @@ type queryWithInterfaceListPointerFieldBeingsUser struct {
 }
 
 // GetTypename returns queryWithInterfaceListPointerFieldBeingsUser.Typename, and is useful for accessing the field via an interface.
-func (v *queryWithInterfaceListPointerFieldBeingsUser) GetTypename() string { return v.Typename }
+func (v *queryWithInterfaceListPointerFieldBeingsUser) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns queryWithInterfaceListPointerFieldBeingsUser.Id, and is useful for accessing the field via an interface.
-func (v *queryWithInterfaceListPointerFieldBeingsUser) GetId() string { return v.Id }
+func (v *queryWithInterfaceListPointerFieldBeingsUser) GetId() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns queryWithInterfaceListPointerFieldBeingsUser.Name, and is useful for accessing the field via an interface.
-func (v *queryWithInterfaceListPointerFieldBeingsUser) GetName() string { return v.Name }
+func (v *queryWithInterfaceListPointerFieldBeingsUser) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // queryWithInterfaceListPointerFieldResponse is returned by queryWithInterfaceListPointerField on success.
 type queryWithInterfaceListPointerFieldResponse struct {
@@ -2380,7 +2871,10 @@ type queryWithInterfaceListPointerFieldResponse struct {
 }
 
 // GetBeings returns queryWithInterfaceListPointerFieldResponse.Beings, and is useful for accessing the field via an interface.
-func (v *queryWithInterfaceListPointerFieldResponse) GetBeings() []*queryWithInterfaceListPointerFieldBeingsBeing {
+func (v *queryWithInterfaceListPointerFieldResponse) GetBeings() (val []*queryWithInterfaceListPointerFieldBeingsBeing) {
+	if v == nil {
+		return
+	}
 	return v.Beings
 }
 
@@ -2547,13 +3041,28 @@ type queryWithInterfaceNoFragmentsBeingAnimal struct {
 }
 
 // GetTypename returns queryWithInterfaceNoFragmentsBeingAnimal.Typename, and is useful for accessing the field via an interface.
-func (v *queryWithInterfaceNoFragmentsBeingAnimal) GetTypename() string { return v.Typename }
+func (v *queryWithInterfaceNoFragmentsBeingAnimal) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns queryWithInterfaceNoFragmentsBeingAnimal.Id, and is useful for accessing the field via an interface.
-func (v *queryWithInterfaceNoFragmentsBeingAnimal) GetId() string { return v.Id }
+func (v *queryWithInterfaceNoFragmentsBeingAnimal) GetId() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns queryWithInterfaceNoFragmentsBeingAnimal.Name, and is useful for accessing the field via an interface.
-func (v *queryWithInterfaceNoFragmentsBeingAnimal) GetName() string { return v.Name }
+func (v *queryWithInterfaceNoFragmentsBeingAnimal) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // queryWithInterfaceNoFragmentsBeingUser includes the requested fields of the GraphQL type User.
 type queryWithInterfaceNoFragmentsBeingUser struct {
@@ -2563,13 +3072,28 @@ type queryWithInterfaceNoFragmentsBeingUser struct {
 }
 
 // GetTypename returns queryWithInterfaceNoFragmentsBeingUser.Typename, and is useful for accessing the field via an interface.
-func (v *queryWithInterfaceNoFragmentsBeingUser) GetTypename() string { return v.Typename }
+func (v *queryWithInterfaceNoFragmentsBeingUser) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns queryWithInterfaceNoFragmentsBeingUser.Id, and is useful for accessing the field via an interface.
-func (v *queryWithInterfaceNoFragmentsBeingUser) GetId() string { return v.Id }
+func (v *queryWithInterfaceNoFragmentsBeingUser) GetId() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns queryWithInterfaceNoFragmentsBeingUser.Name, and is useful for accessing the field via an interface.
-func (v *queryWithInterfaceNoFragmentsBeingUser) GetName() string { return v.Name }
+func (v *queryWithInterfaceNoFragmentsBeingUser) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // queryWithInterfaceNoFragmentsMeUser includes the requested fields of the GraphQL type User.
 type queryWithInterfaceNoFragmentsMeUser struct {
@@ -2578,10 +3102,20 @@ type queryWithInterfaceNoFragmentsMeUser struct {
 }
 
 // GetId returns queryWithInterfaceNoFragmentsMeUser.Id, and is useful for accessing the field via an interface.
-func (v *queryWithInterfaceNoFragmentsMeUser) GetId() string { return v.Id }
+func (v *queryWithInterfaceNoFragmentsMeUser) GetId() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns queryWithInterfaceNoFragmentsMeUser.Name, and is useful for accessing the field via an interface.
-func (v *queryWithInterfaceNoFragmentsMeUser) GetName() string { return v.Name }
+func (v *queryWithInterfaceNoFragmentsMeUser) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // queryWithInterfaceNoFragmentsResponse is returned by queryWithInterfaceNoFragments on success.
 type queryWithInterfaceNoFragmentsResponse struct {
@@ -2590,12 +3124,18 @@ type queryWithInterfaceNoFragmentsResponse struct {
 }
 
 // GetBeing returns queryWithInterfaceNoFragmentsResponse.Being, and is useful for accessing the field via an interface.
-func (v *queryWithInterfaceNoFragmentsResponse) GetBeing() queryWithInterfaceNoFragmentsBeing {
+func (v *queryWithInterfaceNoFragmentsResponse) GetBeing() (val queryWithInterfaceNoFragmentsBeing) {
+	if v == nil {
+		return
+	}
 	return v.Being
 }
 
 // GetMe returns queryWithInterfaceNoFragmentsResponse.Me, and is useful for accessing the field via an interface.
-func (v *queryWithInterfaceNoFragmentsResponse) GetMe() queryWithInterfaceNoFragmentsMeUser {
+func (v *queryWithInterfaceNoFragmentsResponse) GetMe() (val queryWithInterfaceNoFragmentsMeUser) {
+	if v == nil {
+		return
+	}
 	return v.Me
 }
 
@@ -2673,18 +3213,34 @@ type queryWithNamedFragmentsBeingsAnimal struct {
 }
 
 // GetTypename returns queryWithNamedFragmentsBeingsAnimal.Typename, and is useful for accessing the field via an interface.
-func (v *queryWithNamedFragmentsBeingsAnimal) GetTypename() string { return v.Typename }
+func (v *queryWithNamedFragmentsBeingsAnimal) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns queryWithNamedFragmentsBeingsAnimal.Id, and is useful for accessing the field via an interface.
-func (v *queryWithNamedFragmentsBeingsAnimal) GetId() string { return v.Id }
+func (v *queryWithNamedFragmentsBeingsAnimal) GetId() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetHair returns queryWithNamedFragmentsBeingsAnimal.Hair, and is useful for accessing the field via an interface.
-func (v *queryWithNamedFragmentsBeingsAnimal) GetHair() AnimalFieldsHairBeingsHair {
+func (v *queryWithNamedFragmentsBeingsAnimal) GetHair() (val AnimalFieldsHairBeingsHair) {
+	if v == nil {
+		return
+	}
 	return v.AnimalFields.Hair
 }
 
 // GetOwner returns queryWithNamedFragmentsBeingsAnimal.Owner, and is useful for accessing the field via an interface.
-func (v *queryWithNamedFragmentsBeingsAnimal) GetOwner() AnimalFieldsOwnerBeing {
+func (v *queryWithNamedFragmentsBeingsAnimal) GetOwner() (val AnimalFieldsOwnerBeing) {
+	if v == nil {
+		return
+	}
 	return v.AnimalFields.Owner
 }
 
@@ -2843,18 +3399,34 @@ type queryWithNamedFragmentsBeingsUser struct {
 }
 
 // GetTypename returns queryWithNamedFragmentsBeingsUser.Typename, and is useful for accessing the field via an interface.
-func (v *queryWithNamedFragmentsBeingsUser) GetTypename() string { return v.Typename }
+func (v *queryWithNamedFragmentsBeingsUser) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns queryWithNamedFragmentsBeingsUser.Id, and is useful for accessing the field via an interface.
-func (v *queryWithNamedFragmentsBeingsUser) GetId() string { return v.Id }
+func (v *queryWithNamedFragmentsBeingsUser) GetId() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetLuckyNumber returns queryWithNamedFragmentsBeingsUser.LuckyNumber, and is useful for accessing the field via an interface.
-func (v *queryWithNamedFragmentsBeingsUser) GetLuckyNumber() int {
+func (v *queryWithNamedFragmentsBeingsUser) GetLuckyNumber() (val int) {
+	if v == nil {
+		return
+	}
 	return v.UserFields.LuckyFieldsUser.LuckyNumber
 }
 
 // GetHair returns queryWithNamedFragmentsBeingsUser.Hair, and is useful for accessing the field via an interface.
-func (v *queryWithNamedFragmentsBeingsUser) GetHair() MoreUserFieldsHair {
+func (v *queryWithNamedFragmentsBeingsUser) GetHair() (val MoreUserFieldsHair) {
+	if v == nil {
+		return
+	}
 	return v.UserFields.MoreUserFields.Hair
 }
 
@@ -2917,7 +3489,10 @@ type queryWithNamedFragmentsResponse struct {
 }
 
 // GetBeings returns queryWithNamedFragmentsResponse.Beings, and is useful for accessing the field via an interface.
-func (v *queryWithNamedFragmentsResponse) GetBeings() []queryWithNamedFragmentsBeingsBeing {
+func (v *queryWithNamedFragmentsResponse) GetBeings() (val []queryWithNamedFragmentsBeingsBeing) {
+	if v == nil {
+		return
+	}
 	return v.Beings
 }
 
@@ -3002,7 +3577,12 @@ type queryWithOmitemptyResponse struct {
 }
 
 // GetUser returns queryWithOmitemptyResponse.User, and is useful for accessing the field via an interface.
-func (v *queryWithOmitemptyResponse) GetUser() queryWithOmitemptyUser { return v.User }
+func (v *queryWithOmitemptyResponse) GetUser() (val queryWithOmitemptyUser) {
+	if v == nil {
+		return
+	}
+	return v.User
+}
 
 // queryWithOmitemptyUser includes the requested fields of the GraphQL type User.
 type queryWithOmitemptyUser struct {
@@ -3012,13 +3592,28 @@ type queryWithOmitemptyUser struct {
 }
 
 // GetId returns queryWithOmitemptyUser.Id, and is useful for accessing the field via an interface.
-func (v *queryWithOmitemptyUser) GetId() string { return v.Id }
+func (v *queryWithOmitemptyUser) GetId() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns queryWithOmitemptyUser.Name, and is useful for accessing the field via an interface.
-func (v *queryWithOmitemptyUser) GetName() string { return v.Name }
+func (v *queryWithOmitemptyUser) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // GetLuckyNumber returns queryWithOmitemptyUser.LuckyNumber, and is useful for accessing the field via an interface.
-func (v *queryWithOmitemptyUser) GetLuckyNumber() int { return v.LuckyNumber }
+func (v *queryWithOmitemptyUser) GetLuckyNumber() (val int) {
+	if v == nil {
+		return
+	}
+	return v.LuckyNumber
+}
 
 // queryWithVariablesResponse is returned by queryWithVariables on success.
 type queryWithVariablesResponse struct {
@@ -3026,7 +3621,12 @@ type queryWithVariablesResponse struct {
 }
 
 // GetUser returns queryWithVariablesResponse.User, and is useful for accessing the field via an interface.
-func (v *queryWithVariablesResponse) GetUser() queryWithVariablesUser { return v.User }
+func (v *queryWithVariablesResponse) GetUser() (val queryWithVariablesUser) {
+	if v == nil {
+		return
+	}
+	return v.User
+}
 
 // queryWithVariablesUser includes the requested fields of the GraphQL type User.
 type queryWithVariablesUser struct {
@@ -3036,13 +3636,28 @@ type queryWithVariablesUser struct {
 }
 
 // GetId returns queryWithVariablesUser.Id, and is useful for accessing the field via an interface.
-func (v *queryWithVariablesUser) GetId() string { return v.Id }
+func (v *queryWithVariablesUser) GetId() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns queryWithVariablesUser.Name, and is useful for accessing the field via an interface.
-func (v *queryWithVariablesUser) GetName() string { return v.Name }
+func (v *queryWithVariablesUser) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // GetLuckyNumber returns queryWithVariablesUser.LuckyNumber, and is useful for accessing the field via an interface.
-func (v *queryWithVariablesUser) GetLuckyNumber() int { return v.LuckyNumber }
+func (v *queryWithVariablesUser) GetLuckyNumber() (val int) {
+	if v == nil {
+		return
+	}
+	return v.LuckyNumber
+}
 
 // simpleQueryExtMeUser includes the requested fields of the GraphQL type User.
 type simpleQueryExtMeUser struct {
@@ -3052,13 +3667,28 @@ type simpleQueryExtMeUser struct {
 }
 
 // GetId returns simpleQueryExtMeUser.Id, and is useful for accessing the field via an interface.
-func (v *simpleQueryExtMeUser) GetId() string { return v.Id }
+func (v *simpleQueryExtMeUser) GetId() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns simpleQueryExtMeUser.Name, and is useful for accessing the field via an interface.
-func (v *simpleQueryExtMeUser) GetName() string { return v.Name }
+func (v *simpleQueryExtMeUser) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // GetLuckyNumber returns simpleQueryExtMeUser.LuckyNumber, and is useful for accessing the field via an interface.
-func (v *simpleQueryExtMeUser) GetLuckyNumber() int { return v.LuckyNumber }
+func (v *simpleQueryExtMeUser) GetLuckyNumber() (val int) {
+	if v == nil {
+		return
+	}
+	return v.LuckyNumber
+}
 
 // simpleQueryExtResponse is returned by simpleQueryExt on success.
 type simpleQueryExtResponse struct {
@@ -3066,7 +3696,12 @@ type simpleQueryExtResponse struct {
 }
 
 // GetMe returns simpleQueryExtResponse.Me, and is useful for accessing the field via an interface.
-func (v *simpleQueryExtResponse) GetMe() simpleQueryExtMeUser { return v.Me }
+func (v *simpleQueryExtResponse) GetMe() (val simpleQueryExtMeUser) {
+	if v == nil {
+		return
+	}
+	return v.Me
+}
 
 // simpleQueryMeUser includes the requested fields of the GraphQL type User.
 type simpleQueryMeUser struct {
@@ -3077,16 +3712,36 @@ type simpleQueryMeUser struct {
 }
 
 // GetId returns simpleQueryMeUser.Id, and is useful for accessing the field via an interface.
-func (v *simpleQueryMeUser) GetId() string { return v.Id }
+func (v *simpleQueryMeUser) GetId() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns simpleQueryMeUser.Name, and is useful for accessing the field via an interface.
-func (v *simpleQueryMeUser) GetName() string { return v.Name }
+func (v *simpleQueryMeUser) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // GetLuckyNumber returns simpleQueryMeUser.LuckyNumber, and is useful for accessing the field via an interface.
-func (v *simpleQueryMeUser) GetLuckyNumber() int { return v.LuckyNumber }
+func (v *simpleQueryMeUser) GetLuckyNumber() (val int) {
+	if v == nil {
+		return
+	}
+	return v.LuckyNumber
+}
 
 // GetGreatScalar returns simpleQueryMeUser.GreatScalar, and is useful for accessing the field via an interface.
-func (v *simpleQueryMeUser) GetGreatScalar() MyGreatScalar { return v.GreatScalar }
+func (v *simpleQueryMeUser) GetGreatScalar() (val MyGreatScalar) {
+	if v == nil {
+		return
+	}
+	return v.GreatScalar
+}
 
 // simpleQueryResponse is returned by simpleQuery on success.
 type simpleQueryResponse struct {
@@ -3094,7 +3749,12 @@ type simpleQueryResponse struct {
 }
 
 // GetMe returns simpleQueryResponse.Me, and is useful for accessing the field via an interface.
-func (v *simpleQueryResponse) GetMe() simpleQueryMeUser { return v.Me }
+func (v *simpleQueryResponse) GetMe() (val simpleQueryMeUser) {
+	if v == nil {
+		return
+	}
+	return v.Me
+}
 
 // The subscription executed by count.
 const count_Operation = `
