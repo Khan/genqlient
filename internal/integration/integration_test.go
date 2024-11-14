@@ -95,7 +95,8 @@ func TestSubscription(t *testing.T) {
 
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
-			wsClient := newRoundtripWebSocketClient(t, server.URL)
+			wsClient := newRoundtripWebSocketClient(t, server.URL, nil)
+
 			errChan, err := wsClient.Start(ctx)
 			require.NoError(t, err)
 
@@ -140,6 +141,86 @@ func TestSubscription(t *testing.T) {
 			}
 
 			assert.Equal(t, tc.expected, result)
+		})
+	}
+}
+
+func TestSubscriptionConnectionParams(t *testing.T) {
+	_ = `# @genqlient
+	subscription countAuthorized { countAuthorized }`
+
+	authKey := server.AuthKey
+
+	ctx := context.Background()
+	server := server.RunServer()
+	defer server.Close()
+
+	cases := []struct {
+		connParams    map[string]interface{}
+		name          string
+		expectedError string
+	}{
+		{
+			name: "authorized_user_gets_counter",
+			connParams: map[string]interface{}{
+				authKey: "authorized-user-token",
+			},
+		},
+		{
+			name:          "unauthorized_user_gets_error",
+			expectedError: "input: countAuthorized unauthorized\n",
+		},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			wsClient := newRoundtripWebSocketClient(t, server.URL, tc.connParams)
+
+			errChan, err := wsClient.Start(ctx)
+			require.NoError(t, err)
+
+			dataChan, subscriptionID, err := countAuthorized(ctx, wsClient)
+			require.NoError(t, err)
+			defer wsClient.Close()
+
+			var (
+				counter = 0
+				start   = time.Now()
+			)
+
+			for loop := true; loop; {
+				select {
+				case resp, more := <-dataChan:
+					if !more {
+						loop = false
+						break
+					}
+
+					if tc.expectedError != "" {
+						require.Error(t, resp.Errors)
+						assert.Equal(t, tc.expectedError, resp.Errors.Error())
+						continue
+					}
+
+					require.NotNil(t, resp.Data)
+					assert.Equal(t, counter, resp.Data.CountAuthorized)
+					require.Nil(t, resp.Errors)
+
+					if time.Since(start) > 5*time.Second {
+						err := wsClient.Unsubscribe(subscriptionID)
+						require.NoError(t, err)
+						loop = false
+					}
+
+					counter++
+
+				case err := <-errChan:
+					require.NoError(t, err)
+
+				case <-time.After(10 * time.Second):
+					require.NoError(t, fmt.Errorf("subscription timed out"))
+				}
+			}
 		})
 	}
 }

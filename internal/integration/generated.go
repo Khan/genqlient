@@ -1311,6 +1311,14 @@ type __queryWithVariablesInput struct {
 // GetId returns __queryWithVariablesInput.Id, and is useful for accessing the field via an interface.
 func (v *__queryWithVariablesInput) GetId() string { return v.Id }
 
+// countAuthorizedResponse is returned by countAuthorized on success.
+type countAuthorizedResponse struct {
+	CountAuthorized int `json:"countAuthorized"`
+}
+
+// GetCountAuthorized returns countAuthorizedResponse.CountAuthorized, and is useful for accessing the field via an interface.
+func (v *countAuthorizedResponse) GetCountAuthorized() int { return v.CountAuthorized }
+
 // countResponse is returned by count on success.
 type countResponse struct {
 	Count int `json:"count"`
@@ -3143,6 +3151,58 @@ func countForwardData(interfaceChan interface{}, jsonRawMsg json.RawMessage) err
 	dataChan_, ok := interfaceChan.(chan countWsResponse)
 	if !ok {
 		return errors.New("failed to cast interface into 'chan countWsResponse'")
+	}
+	dataChan_ <- wsResp
+	return nil
+}
+
+// The subscription executed by countAuthorized.
+const countAuthorized_Operation = `
+subscription countAuthorized {
+	countAuthorized
+}
+`
+
+// To unsubscribe, use [graphql.WebSocketClient.Unsubscribe]
+func countAuthorized(
+	ctx_ context.Context,
+	client_ graphql.WebSocketClient,
+) (dataChan_ chan countAuthorizedWsResponse, subscriptionID_ string, err_ error) {
+	req_ := &graphql.Request{
+		OpName: "countAuthorized",
+		Query:  countAuthorized_Operation,
+	}
+
+	dataChan_ = make(chan countAuthorizedWsResponse)
+	subscriptionID_, err_ = client_.Subscribe(req_, dataChan_, countAuthorizedForwardData)
+
+	return dataChan_, subscriptionID_, err_
+}
+
+type countAuthorizedWsResponse struct {
+	Data       *countAuthorizedResponse `json:"data"`
+	Extensions map[string]interface{}   `json:"extensions,omitempty"`
+	Errors     error                    `json:"errors"`
+}
+
+func countAuthorizedForwardData(interfaceChan interface{}, jsonRawMsg json.RawMessage) error {
+	var gqlResp graphql.Response
+	var wsResp countAuthorizedWsResponse
+	err := json.Unmarshal(jsonRawMsg, &gqlResp)
+	if err != nil {
+		return err
+	}
+	if len(gqlResp.Errors) == 0 {
+		err = json.Unmarshal(jsonRawMsg, &wsResp)
+		if err != nil {
+			return err
+		}
+	} else {
+		wsResp.Errors = gqlResp.Errors
+	}
+	dataChan_, ok := interfaceChan.(chan countAuthorizedWsResponse)
+	if !ok {
+		return errors.New("failed to cast interface into 'chan countAuthorizedWsResponse'")
 	}
 	dataChan_ <- wsResp
 	return nil
