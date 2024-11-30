@@ -119,7 +119,18 @@ For more on accessing response objects for interfaces and fragments, see the [op
 
 ### Handling errors
 
-In addition to the response-struct, each genqlient-generated helper function returns an error.  The response-struct will always be initialized (never nil), even on error.  If the request returns a valid GraphQL response containing errors, the returned error will be [`As`-able](https://pkg.go.dev/errors#As) as [`gqlerror.List`](https://pkg.go.dev/github.com/vektah/gqlparser/v2/gqlerror#List), and the struct may be partly-populated (if one field failed but another was computed successfully).  If the request fails entirely, the error will be another error (e.g. a [`*url.Error`](https://pkg.go.dev/net/url#Error)), and the response will be blank (but still non-nil).
+In addition to the response-struct, each genqlient-generated helper function returns an error. The error may be [`As`-able][As] to one of the following:
+
+- [`gqlerror.List`][gqlerror], if the request returns a valid GraphQL response containing errors; in this case the struct may be partly-populated 
+- [`graphql.HTTPError`][HTTPError], if there was a valid but non-200 HTTP response
+- another error (e.g. a [`*url.Error`][urlError])
+
+In case of a GraphQL error, the response-struct may be partly-populated (if one field failed but another was computed successfully). In other cases it will be blank, but it will always be initialized (never nil), even on error.
+
+[As]: https://pkg.go.dev/errors#As
+[gqlerror]: https://pkg.go.dev/github.com/vektah/gqlparser/v2/gqlerror#List
+[HTTPError]: https://pkg.go.dev/github.com/Khan/genqlient/graphql#HTTPError
+[urlError]: https://pkg.go.dev/net/url#Error
 
 For example, you might do one of the following:
 ```go
