@@ -7,6 +7,7 @@ package integration
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"testing"
@@ -14,6 +15,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/vektah/gqlparser/v2/gqlerror"
 
 	"github.com/Khan/genqlient/graphql"
 	"github.com/Khan/genqlient/internal/integration/server"
@@ -159,6 +161,15 @@ func TestServerError(t *testing.T) {
 		// response -- and indeed in this case it should even have another field
 		// (which didn't err) set.
 		assert.Error(t, err)
+		t.Logf("Full error: %+v", err)
+		var gqlErrors gqlerror.List
+		if !assert.True(t, errors.As(err, &gqlErrors), "Error should be of type gqlerror.List") {
+			t.Logf("Actual error type: %T", err)
+			t.Logf("Error message: %v", err)
+		} else {
+			assert.Len(t, gqlErrors, 1, "Expected one GraphQL error")
+			assert.Equal(t, "oh no", gqlErrors[0].Message)
+		}
 		assert.NotNil(t, resp)
 		assert.Equal(t, "1", resp.Me.Id)
 	}
@@ -176,6 +187,8 @@ func TestNetworkError(t *testing.T) {
 		//	return resp.Me.Id, err
 		// without a bunch of extra ceremony.
 		assert.Error(t, err)
+		var gqlErrors gqlerror.List
+		assert.False(t, errors.As(err, &gqlErrors), "Error should not be of type gqlerror.List for network errors")
 		assert.NotNil(t, resp)
 		assert.Equal(t, new(failingQueryResponse), resp)
 	}

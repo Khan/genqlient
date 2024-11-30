@@ -33,6 +33,7 @@ Note that genqlient now requires Go 1.22.5 or higher, and is tested through Go 1
   See the [documentation](FAQ.md) for how to `subscribe to an API 'subscription' endpoint`.
 - genqlient now supports double-star globs for schema and query files; see [`genqlient.yaml` docs](genqlient.yaml) for more.
 - genqlient now generates slices containing all enum values for each enum type.
+- genqlient now returns `Is`/`As`-able errors when the HTTP request returns a non-200 status.
 
 ### Bug fixes:
 
