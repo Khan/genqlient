@@ -20,6 +20,8 @@ When releasing a new version:
 
 <!-- Add new changes in this section! -->
 
+Note that genqlient now requires Go 1.22.5 or higher, and is tested through Go 1.23.3.
+
 ### Breaking changes:
 
 - omitempty validation:

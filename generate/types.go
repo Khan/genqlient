@@ -351,7 +351,7 @@ func (typ *goStructType) FlattenedFields() ([]*selector, error) {
 		field := queue[0]
 		queue = queue[1:]
 		if field.IsEmbedded() {
-			typ, ok := field.GoType.(*goStructType)
+			structField, ok := field.GoType.(*goStructType)
 			if !ok {
 				// Should never happen: embeds correspond to named fragments,
 				// and even if the fragment is of interface type in GraphQL,
@@ -365,7 +365,7 @@ func (typ *goStructType) FlattenedFields() ([]*selector, error) {
 			}
 
 			// Enqueue the embedded fields for our BFS.
-			for _, subField := range typ.Fields {
+			for _, subField := range structField.Fields {
 				queue = append(queue,
 					&selector{subField, field.Selector + "." + subField.Selector()})
 			}
