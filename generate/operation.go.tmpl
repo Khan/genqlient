@@ -48,20 +48,16 @@ func {{.Name}}(
         resp_,
     )
     {{end}}
-	
+
     return {{if eq .Type "subscription"}}dataChan_, subscriptionID_,{{else}}data_, {{if .Config.Extensions -}}resp_.Extensions,{{end -}}{{end}} err_
 }
 
 {{if eq .Type "subscription"}}
-type {{.Name}}WsResponse struct {
-	Data       *{{.ResponseName}}     `json:"data"`
-	Extensions map[string]interface{} `json:"extensions,omitempty"`
-	Errors     error                  `json:"errors"`
-}
+type {{.Name}}WsResponse graphql.BaseResponse[*{{.ResponseName}}]
 
 func {{.Name}}ForwardData(interfaceChan interface{}, jsonRawMsg json.RawMessage) error {
     var gqlResp graphql.Response
-	var wsResp {{.Name}}WsResponse
+    var wsResp {{.Name}}WsResponse
     err := json.Unmarshal(jsonRawMsg, &gqlResp)
     if err != nil {
         return err
