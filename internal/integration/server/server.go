@@ -173,11 +173,45 @@ func (s *subscriptionResolver) Count(ctx context.Context) (<-chan int, error) {
 	return respChan, nil
 }
 
+func (s *subscriptionResolver) CountAuthorized(ctx context.Context) (<-chan int, error) {
+	if getAuthToken(ctx) != "authorized-user-token" {
+		return nil, fmt.Errorf("unauthorized")
+	}
+
+	return s.Count(ctx)
+}
+
+const AuthKey = "authToken"
+
+type (
+	authTokenCtxKey struct{}
+)
+
+func withAuthToken(ctx context.Context, token string) context.Context {
+	return context.WithValue(ctx, authTokenCtxKey{}, token)
+}
+
+func getAuthToken(ctx context.Context) string {
+	if tkn, ok := ctx.Value(authTokenCtxKey{}).(string); ok {
+		return tkn
+	}
+	return ""
+}
+
 func RunServer() *httptest.Server {
 	gqlgenServer := handler.New(NewExecutableSchema(Config{Resolvers: &resolver{}}))
 	gqlgenServer.AddTransport(transport.POST{})
 	gqlgenServer.AddTransport(transport.GET{})
-	gqlgenServer.AddTransport(transport.Websocket{})
+
+	gqlgenServer.AddTransport(transport.Websocket{
+		InitFunc: func(ctx context.Context, initPayload transport.InitPayload) (context.Context, *transport.InitPayload, error) {
+			if authToken, ok := initPayload[AuthKey].(string); ok && authToken != "" {
+				ctx = withAuthToken(ctx, authToken)
+			}
+			return ctx, &initPayload, nil
+		},
+	})
+
 	gqlgenServer.AroundResponses(func(ctx context.Context, next graphql.ResponseHandler) *graphql.Response {
 		graphql.RegisterExtension(ctx, "foobar", "test")
 		return next(ctx)

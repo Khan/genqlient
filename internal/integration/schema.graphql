@@ -19,6 +19,7 @@ type Mutation {
 
 type Subscription {
   count: Int!
+  countAuthorized: Int!
 }
 
 type User implements Being & Lucky {
