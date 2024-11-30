@@ -156,18 +156,19 @@ func (md *MyDialer) DialContext(ctx context.Context, urlStr string, requestHeade
 	return graphql.WSConn(conn), err
 }
 
-func newRoundtripWebSocketClient(t *testing.T, endpoint string, connectionParams map[string]interface{}) graphql.WebSocketClient {
+func newRoundtripWebSocketClient(t *testing.T, endpoint string, opts ...graphql.WebSocketOption) graphql.WebSocketClient {
 	dialer := websocket.DefaultDialer
 	if !strings.HasPrefix(endpoint, "ws") {
 		_, address, _ := strings.Cut(endpoint, "://")
 		endpoint = "ws://" + address
 	}
+
 	return &roundtripClient{
-		wsWrapped: graphql.NewClientUsingWebSocketWithConnectionParams(
+		wsWrapped: graphql.NewClientUsingWebSocket(
 			endpoint,
 			&MyDialer{Dialer: dialer},
 			nil,
-			connectionParams,
+			opts...,
 		),
 		t: t,
 	}

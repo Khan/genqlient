@@ -95,7 +95,7 @@ func TestSubscription(t *testing.T) {
 
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
-			wsClient := newRoundtripWebSocketClient(t, server.URL, nil)
+			wsClient := newRoundtripWebSocketClient(t, server.URL)
 
 			errChan, err := wsClient.Start(ctx)
 			require.NoError(t, err)
@@ -159,11 +159,14 @@ func TestSubscriptionConnectionParams(t *testing.T) {
 		connParams    map[string]interface{}
 		name          string
 		expectedError string
+		opts          []graphql.WebSocketOption
 	}{
 		{
 			name: "authorized_user_gets_counter",
-			connParams: map[string]interface{}{
-				authKey: "authorized-user-token",
+			opts: []graphql.WebSocketOption{
+				graphql.WithConnectionParams(map[string]interface{}{
+					authKey: "authorized-user-token",
+				}),
 			},
 		},
 		{
@@ -174,7 +177,11 @@ func TestSubscriptionConnectionParams(t *testing.T) {
 
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
-			wsClient := newRoundtripWebSocketClient(t, server.URL, tc.connParams)
+			wsClient := newRoundtripWebSocketClient(
+				t,
+				server.URL,
+				tc.opts...,
+			)
 
 			errChan, err := wsClient.Start(ctx)
 			require.NoError(t, err)
