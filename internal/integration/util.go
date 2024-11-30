@@ -28,6 +28,9 @@ func RepoRoot(t *testing.T) string {
 // RunGenerateTest checks that running genqlient with the given
 // repo-root-relative config file would not produce any changes to the
 // checked-in files.
+//
+// Note these are also checked, along with gqlgen codegen in a separate check
+// in CI. But this is more convenient locally.
 func RunGenerateTest(t *testing.T, relConfigFilename string) {
 	configFilename := filepath.Join(RepoRoot(t), relConfigFilename)
 	config, err := generate.ReadAndValidateConfig(configFilename)

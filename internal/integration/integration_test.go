@@ -921,9 +921,6 @@ func TestFlatten(t *testing.T) {
 }
 
 func TestGeneratedCode(t *testing.T) {
-	// TODO(benkraft): Check that gqlgen is up to date too.  In practice that's
-	// less likely to be a problem, since it should only change if you update
-	// the schema, likely too add something new, in which case you'll notice.
 	RunGenerateTest(t, "internal/integration/genqlient.yaml")
 }
 
