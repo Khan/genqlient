@@ -2077,7 +2077,7 @@ func (ec *executionContext) _Subscription_countAuthorized(ctx context.Context, f
 	}
 }
 
-func (ec *executionContext) fieldContext_Subscription_countAuthorized(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Subscription_countAuthorized(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Subscription",
 		Field:      field,
