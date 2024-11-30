@@ -3175,11 +3175,7 @@ func countAuthorized(
 	return dataChan_, subscriptionID_, err_
 }
 
-type countAuthorizedWsResponse struct {
-	Data       *countAuthorizedResponse `json:"data"`
-	Extensions map[string]interface{}   `json:"extensions,omitempty"`
-	Errors     error                    `json:"errors"`
-}
+type countAuthorizedWsResponse graphql.BaseResponse[*countAuthorizedResponse]
 
 func countAuthorizedForwardData(interfaceChan interface{}, jsonRawMsg json.RawMessage) error {
 	var gqlResp graphql.Response
