@@ -297,6 +297,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		if e.complexity.Subscription.CountAuthorized == nil {
 			break
 		}
+
 		return e.complexity.Subscription.CountAuthorized(childComplexity), true
 
 	case "User.birthdate":
