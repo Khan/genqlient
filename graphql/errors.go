@@ -10,5 +10,5 @@ type HTTPError struct {
 
 // Error implements the error interface for HTTPError.
 func (e *HTTPError) Error() string {
-	return fmt.Sprintf("returned error %v: %s", e.StatusCode, e.Body)
+	return fmt.Sprintf("returned error %v: '%s'", e.StatusCode, e.Body)
 }

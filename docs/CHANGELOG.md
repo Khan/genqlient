@@ -24,6 +24,7 @@ When releasing a new version:
 
 - omitempty validation:
   - forbid `omitempty: false` (including implicit behaviour) when using pointer on non-null input field
+- The error text for HTTP errors has changed slightly. If you were parsing it, switch to [`As`-ing to `graphql.HTTPError`](client_config.md#handling-errors)_.
 
 ### New features:
 
