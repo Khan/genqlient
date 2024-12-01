@@ -26,6 +26,7 @@ Note that genqlient now requires Go 1.22.5 or higher, and is tested through Go 1
 
 - omitempty validation:
   - forbid `omitempty: false` (including implicit behaviour) when using pointer on non-null input field
+- The error text for HTTP errors has changed slightly. If you were parsing it, switch to [`As`-ing to `graphql.HTTPError`](client_config.md#handling-errors)_.
 
 ### New features:
 
