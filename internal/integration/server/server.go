@@ -216,6 +216,7 @@ func RunServer() *httptest.Server {
 		graphql.RegisterExtension(ctx, "foobar", "test")
 		return next(ctx)
 	})
+
 	return httptest.NewServer(gqlgenServer)
 }
 

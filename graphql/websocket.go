@@ -45,7 +45,7 @@ const (
 
 type webSocketClient struct {
 	Dialer        Dialer
-	Header        http.Header
+	header        http.Header
 	endpoint      string
 	conn          WSConn
 	connParams    map[string]interface{}
@@ -169,7 +169,7 @@ func checkConnectionAckReceived(message []byte) (bool, error) {
 }
 
 func (w *webSocketClient) Start(ctx context.Context) (errChan chan error, err error) {
-	w.conn, err = w.Dialer.DialContext(ctx, w.endpoint, w.Header)
+	w.conn, err = w.Dialer.DialContext(ctx, w.endpoint, w.header)
 	if err != nil {
 		return nil, err
 	}

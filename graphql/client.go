@@ -133,16 +133,10 @@ type WebSocketOption func(*webSocketClient)
 //
 // The client does not support queries nor mutations, and will return an error
 // if passed a request that attempts one.
-func NewClientUsingWebSocket(endpoint string, wsDialer Dialer, headers http.Header, opts ...WebSocketOption) WebSocketClient {
-	if headers == nil {
-		headers = http.Header{}
-	}
-	if headers.Get("Sec-WebSocket-Protocol") == "" {
-		headers.Add("Sec-WebSocket-Protocol", "graphql-transport-ws")
-	}
+func NewClientUsingWebSocket(endpoint string, wsDialer Dialer, opts ...WebSocketOption) WebSocketClient {
 	client := &webSocketClient{
 		Dialer:        wsDialer,
-		Header:        headers,
+		header:        http.Header{},
 		errChan:       make(chan error),
 		endpoint:      endpoint,
 		subscriptions: subscriptionMap{map_: make(map[string]subscription)},
@@ -150,6 +144,10 @@ func NewClientUsingWebSocket(endpoint string, wsDialer Dialer, headers http.Head
 
 	for _, opt := range opts {
 		opt(client)
+	}
+
+	if client.header.Get("Sec-WebSocket-Protocol") == "" {
+		client.header.Add("Sec-WebSocket-Protocol", "graphql-transport-ws")
 	}
 
 	return client
@@ -160,6 +158,13 @@ func NewClientUsingWebSocket(endpoint string, wsDialer Dialer, headers http.Head
 func WithConnectionParams(connParams map[string]interface{}) WebSocketOption {
 	return func(ws *webSocketClient) {
 		ws.connParams = connParams
+	}
+}
+
+// WithWebsocketHeader sets a header to be sent to the server.
+func WithWebsocketHeader(header http.Header) WebSocketOption {
+	return func(ws *webSocketClient) {
+		ws.header = header
 	}
 }
 
