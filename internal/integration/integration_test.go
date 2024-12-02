@@ -164,10 +164,18 @@ func TestSubscriptionConnectionParams(t *testing.T) {
 		opts          []graphql.WebSocketOption
 	}{
 		{
-			name: "authorized_user_gets_counter",
+			name: "connection_params_authorized_user_gets_counter",
 			opts: []graphql.WebSocketOption{
 				graphql.WithConnectionParams(map[string]interface{}{
 					authKey: "authorized-user-token",
+				}),
+			},
+		},
+		{
+			name: "http_header_authorized_user_gets_counter",
+			opts: []graphql.WebSocketOption{
+				graphql.WithWebsocketHeader(http.Header{
+					authKey: []string{"authorized-user-token"},
 				}),
 			},
 		},

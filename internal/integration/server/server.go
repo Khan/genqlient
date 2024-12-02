@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"fmt"
+	"net/http"
 	"net/http/httptest"
 	"strconv"
 	"time"
@@ -198,6 +199,20 @@ func getAuthToken(ctx context.Context) string {
 	return ""
 }
 
+func authHeaderMiddleware(handler http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ctx := r.Context()
+
+		token := r.Header.Get(AuthKey)
+		if token != "" {
+			ctx = withAuthToken(ctx, token)
+		}
+
+		r = r.WithContext(ctx)
+		handler.ServeHTTP(w, r)
+	})
+}
+
 func RunServer() *httptest.Server {
 	gqlgenServer := handler.New(NewExecutableSchema(Config{Resolvers: &resolver{}}))
 	gqlgenServer.AddTransport(transport.POST{})
@@ -216,7 +231,10 @@ func RunServer() *httptest.Server {
 		graphql.RegisterExtension(ctx, "foobar", "test")
 		return next(ctx)
 	})
-	return httptest.NewServer(gqlgenServer)
+
+	server := authHeaderMiddleware(gqlgenServer)
+
+	return httptest.NewServer(server)
 }
 
 type (

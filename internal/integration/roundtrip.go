@@ -167,7 +167,6 @@ func newRoundtripWebSocketClient(t *testing.T, endpoint string, opts ...graphql.
 		wsWrapped: graphql.NewClientUsingWebSocket(
 			endpoint,
 			&MyDialer{Dialer: dialer},
-			nil,
 			opts...,
 		),
 		t: t,
