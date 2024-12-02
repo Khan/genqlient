@@ -1,14 +1,22 @@
 package graphql
 
-import "fmt"
+import (
+	"encoding/json"
+	"fmt"
+)
 
 // HTTPError represents an HTTP error with status code and response body.
 type HTTPError struct {
-	Body       string
+	Body       Response
 	StatusCode int
 }
 
 // Error implements the error interface for HTTPError.
 func (e *HTTPError) Error() string {
-	return fmt.Sprintf("returned error %v: '%s'", e.StatusCode, e.Body)
+	jsonBody, err := json.Marshal(e.Body)
+	if err != nil {
+		return fmt.Sprintf("returned error %v: '%s'", e.StatusCode, e.Body)
+	}
+
+	return fmt.Sprintf("returned error %v: %s", e.StatusCode, jsonBody)
 }

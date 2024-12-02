@@ -265,9 +265,20 @@ func (c *client) MakeRequest(ctx context.Context, req *Request, resp *Response) 
 		if err != nil {
 			respBody = []byte(fmt.Sprintf("<unreadable: %v>", err))
 		}
+
+		var gqlResp Response
+		if err = json.Unmarshal(respBody, &gqlResp); err != nil {
+			return &HTTPError{
+				StatusCode: httpResp.StatusCode,
+				Body: Response{
+					Errors: gqlerror.List{&gqlerror.Error{Message: string(respBody)}},
+				},
+			}
+		}
+
 		return &HTTPError{
 			StatusCode: httpResp.StatusCode,
-			Body:       string(respBody),
+			Body:       gqlResp,
 		}
 	}
 
