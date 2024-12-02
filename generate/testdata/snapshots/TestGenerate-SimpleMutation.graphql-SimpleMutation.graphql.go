@@ -20,10 +20,20 @@ type SimpleMutationCreateUser struct {
 }
 
 // GetId returns SimpleMutationCreateUser.Id, and is useful for accessing the field via an interface.
-func (v *SimpleMutationCreateUser) GetId() testutil.ID { return v.Id }
+func (v *SimpleMutationCreateUser) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns SimpleMutationCreateUser.Name, and is useful for accessing the field via an interface.
-func (v *SimpleMutationCreateUser) GetName() string { return v.Name }
+func (v *SimpleMutationCreateUser) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // SimpleMutationResponse is returned by SimpleMutation on success.
 type SimpleMutationResponse struct {
@@ -31,7 +41,12 @@ type SimpleMutationResponse struct {
 }
 
 // GetCreateUser returns SimpleMutationResponse.CreateUser, and is useful for accessing the field via an interface.
-func (v *SimpleMutationResponse) GetCreateUser() SimpleMutationCreateUser { return v.CreateUser }
+func (v *SimpleMutationResponse) GetCreateUser() (val SimpleMutationCreateUser) {
+	if v == nil {
+		return
+	}
+	return v.CreateUser
+}
 
 // __SimpleMutationInput is used internally by genqlient
 type __SimpleMutationInput struct {
@@ -39,7 +54,12 @@ type __SimpleMutationInput struct {
 }
 
 // GetName returns __SimpleMutationInput.Name, and is useful for accessing the field via an interface.
-func (v *__SimpleMutationInput) GetName() string { return v.Name }
+func (v *__SimpleMutationInput) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // The mutation executed by SimpleMutation.
 const SimpleMutation_Operation = `

@@ -40,10 +40,20 @@ type StructOptionResponse struct {
 }
 
 // GetRoot returns StructOptionResponse.Root, and is useful for accessing the field via an interface.
-func (v *StructOptionResponse) GetRoot() StructOptionRootTopic { return v.Root }
+func (v *StructOptionResponse) GetRoot() (val StructOptionRootTopic) {
+	if v == nil {
+		return
+	}
+	return v.Root
+}
 
 // GetUser returns StructOptionResponse.User, and is useful for accessing the field via an interface.
-func (v *StructOptionResponse) GetUser() StructOptionUser { return v.User }
+func (v *StructOptionResponse) GetUser() (val StructOptionUser) {
+	if v == nil {
+		return
+	}
+	return v.User
+}
 
 // StructOptionRootTopic includes the requested fields of the GraphQL type Topic.
 type StructOptionRootTopic struct {
@@ -53,10 +63,18 @@ type StructOptionRootTopic struct {
 }
 
 // GetId returns StructOptionRootTopic.Id, and is useful for accessing the field via an interface.
-func (v *StructOptionRootTopic) GetId() testutil.ID { return v.Id }
+func (v *StructOptionRootTopic) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetChildren returns StructOptionRootTopic.Children, and is useful for accessing the field via an interface.
-func (v *StructOptionRootTopic) GetChildren() []StructOptionRootTopicChildrenContent {
+func (v *StructOptionRootTopic) GetChildren() (val []StructOptionRootTopicChildrenContent) {
+	if v == nil {
+		return
+	}
 	return v.Children
 }
 
@@ -72,13 +90,26 @@ type StructOptionRootTopicChildrenContent struct {
 }
 
 // GetTypename returns StructOptionRootTopicChildrenContent.Typename, and is useful for accessing the field via an interface.
-func (v *StructOptionRootTopicChildrenContent) GetTypename() string { return v.Typename }
+func (v *StructOptionRootTopicChildrenContent) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns StructOptionRootTopicChildrenContent.Id, and is useful for accessing the field via an interface.
-func (v *StructOptionRootTopicChildrenContent) GetId() testutil.ID { return v.Id }
+func (v *StructOptionRootTopicChildrenContent) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetParent returns StructOptionRootTopicChildrenContent.Parent, and is useful for accessing the field via an interface.
-func (v *StructOptionRootTopicChildrenContent) GetParent() StructOptionRootTopicChildrenContentParentTopic {
+func (v *StructOptionRootTopicChildrenContent) GetParent() (val StructOptionRootTopicChildrenContentParentTopic) {
+	if v == nil {
+		return
+	}
 	return v.Parent
 }
 
@@ -91,15 +122,26 @@ type StructOptionRootTopicChildrenContentParentTopic struct {
 }
 
 // GetId returns StructOptionRootTopicChildrenContentParentTopic.Id, and is useful for accessing the field via an interface.
-func (v *StructOptionRootTopicChildrenContentParentTopic) GetId() testutil.ID { return v.Id }
+func (v *StructOptionRootTopicChildrenContentParentTopic) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetChildren returns StructOptionRootTopicChildrenContentParentTopic.Children, and is useful for accessing the field via an interface.
-func (v *StructOptionRootTopicChildrenContentParentTopic) GetChildren() []StructOptionRootTopicChildrenContentParentTopicChildrenContent {
+func (v *StructOptionRootTopicChildrenContentParentTopic) GetChildren() (val []StructOptionRootTopicChildrenContentParentTopicChildrenContent) {
+	if v == nil {
+		return
+	}
 	return v.Children
 }
 
 // GetInterfaceChildren returns StructOptionRootTopicChildrenContentParentTopic.InterfaceChildren, and is useful for accessing the field via an interface.
-func (v *StructOptionRootTopicChildrenContentParentTopic) GetInterfaceChildren() []StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenContent {
+func (v *StructOptionRootTopicChildrenContentParentTopic) GetInterfaceChildren() (val []StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenContent) {
+	if v == nil {
+		return
+	}
 	return v.InterfaceChildren
 }
 
@@ -195,12 +237,18 @@ type StructOptionRootTopicChildrenContentParentTopicChildrenContent struct {
 }
 
 // GetTypename returns StructOptionRootTopicChildrenContentParentTopicChildrenContent.Typename, and is useful for accessing the field via an interface.
-func (v *StructOptionRootTopicChildrenContentParentTopicChildrenContent) GetTypename() string {
+func (v *StructOptionRootTopicChildrenContentParentTopicChildrenContent) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
 	return v.Typename
 }
 
 // GetId returns StructOptionRootTopicChildrenContentParentTopicChildrenContent.Id, and is useful for accessing the field via an interface.
-func (v *StructOptionRootTopicChildrenContentParentTopicChildrenContent) GetId() testutil.ID {
+func (v *StructOptionRootTopicChildrenContentParentTopicChildrenContent) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
 	return v.Id
 }
 
@@ -212,12 +260,18 @@ type StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenArticle str
 }
 
 // GetTypename returns StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenArticle.Typename, and is useful for accessing the field via an interface.
-func (v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenArticle) GetTypename() string {
+func (v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenArticle) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
 	return v.Typename
 }
 
 // GetId returns StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenArticle.Id, and is useful for accessing the field via an interface.
-func (v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenArticle) GetId() testutil.ID {
+func (v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenArticle) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
 	return v.Id
 }
 
@@ -328,12 +382,18 @@ type StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenTopic struc
 }
 
 // GetTypename returns StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenTopic.Typename, and is useful for accessing the field via an interface.
-func (v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenTopic) GetTypename() string {
+func (v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenTopic) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
 	return v.Typename
 }
 
 // GetId returns StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenTopic.Id, and is useful for accessing the field via an interface.
-func (v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenTopic) GetId() testutil.ID {
+func (v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenTopic) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
 	return v.Id
 }
 
@@ -346,17 +406,26 @@ type StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo struc
 }
 
 // GetTypename returns StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo.Typename, and is useful for accessing the field via an interface.
-func (v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo) GetTypename() string {
+func (v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
 	return v.Typename
 }
 
 // GetId returns StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo.Id, and is useful for accessing the field via an interface.
-func (v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo) GetId() testutil.ID {
+func (v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
 	return v.Id
 }
 
 // GetDuration returns StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo.Duration, and is useful for accessing the field via an interface.
-func (v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo) GetDuration() int {
+func (v *StructOptionRootTopicChildrenContentParentTopicInterfaceChildrenVideo) GetDuration() (val int) {
+	if v == nil {
+		return
+	}
 	return v.VideoFields.Duration
 }
 
@@ -419,7 +488,12 @@ type StructOptionUser struct {
 }
 
 // GetRoles returns StructOptionUser.Roles, and is useful for accessing the field via an interface.
-func (v *StructOptionUser) GetRoles() []Role { return v.Roles }
+func (v *StructOptionUser) GetRoles() (val []Role) {
+	if v == nil {
+		return
+	}
+	return v.Roles
+}
 
 // VideoFields includes the GraphQL fields of Video requested by the fragment VideoFields.
 type VideoFields struct {
@@ -427,7 +501,12 @@ type VideoFields struct {
 }
 
 // GetDuration returns VideoFields.Duration, and is useful for accessing the field via an interface.
-func (v *VideoFields) GetDuration() int { return v.Duration }
+func (v *VideoFields) GetDuration() (val int) {
+	if v == nil {
+		return
+	}
+	return v.Duration
+}
 
 // The query executed by StructOption.
 const StructOption_Operation = `

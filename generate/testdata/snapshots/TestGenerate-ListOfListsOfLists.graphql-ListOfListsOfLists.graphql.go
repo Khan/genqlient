@@ -12,7 +12,10 @@ type ListOfListsOfListsResponse struct {
 }
 
 // GetListOfListsOfLists returns ListOfListsOfListsResponse.ListOfListsOfLists, and is useful for accessing the field via an interface.
-func (v *ListOfListsOfListsResponse) GetListOfListsOfLists() [][][]string {
+func (v *ListOfListsOfListsResponse) GetListOfListsOfLists() (val [][][]string) {
+	if v == nil {
+		return
+	}
 	return v.ListOfListsOfLists
 }
 

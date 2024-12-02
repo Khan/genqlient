@@ -17,7 +17,12 @@ type CustomMarshalResponse struct {
 }
 
 // GetUsersBornOn returns CustomMarshalResponse.UsersBornOn, and is useful for accessing the field via an interface.
-func (v *CustomMarshalResponse) GetUsersBornOn() []CustomMarshalUsersBornOnUser { return v.UsersBornOn }
+func (v *CustomMarshalResponse) GetUsersBornOn() (val []CustomMarshalUsersBornOnUser) {
+	if v == nil {
+		return
+	}
+	return v.UsersBornOn
+}
 
 // CustomMarshalUsersBornOnUser includes the requested fields of the GraphQL type User.
 // The GraphQL type's documentation follows.
@@ -32,10 +37,20 @@ type CustomMarshalUsersBornOnUser struct {
 }
 
 // GetId returns CustomMarshalUsersBornOnUser.Id, and is useful for accessing the field via an interface.
-func (v *CustomMarshalUsersBornOnUser) GetId() testutil.ID { return v.Id }
+func (v *CustomMarshalUsersBornOnUser) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetBirthdate returns CustomMarshalUsersBornOnUser.Birthdate, and is useful for accessing the field via an interface.
-func (v *CustomMarshalUsersBornOnUser) GetBirthdate() time.Time { return v.Birthdate }
+func (v *CustomMarshalUsersBornOnUser) GetBirthdate() (val time.Time) {
+	if v == nil {
+		return
+	}
+	return v.Birthdate
+}
 
 func (v *CustomMarshalUsersBornOnUser) UnmarshalJSON(b []byte) error {
 
@@ -109,7 +124,12 @@ type __CustomMarshalInput struct {
 }
 
 // GetDate returns __CustomMarshalInput.Date, and is useful for accessing the field via an interface.
-func (v *__CustomMarshalInput) GetDate() time.Time { return v.Date }
+func (v *__CustomMarshalInput) GetDate() (val time.Time) {
+	if v == nil {
+		return
+	}
+	return v.Date
+}
 
 func (v *__CustomMarshalInput) UnmarshalJSON(b []byte) error {
 

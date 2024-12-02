@@ -23,7 +23,12 @@ type PointersQueryOtherUser struct {
 }
 
 // GetId returns PointersQueryOtherUser.Id, and is useful for accessing the field via an interface.
-func (v *PointersQueryOtherUser) GetId() testutil.ID { return v.Id }
+func (v *PointersQueryOtherUser) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // PointersQueryResponse is returned by PointersQuery on success.
 type PointersQueryResponse struct {
@@ -41,13 +46,28 @@ type PointersQueryResponse struct {
 }
 
 // GetUser returns PointersQueryResponse.User, and is useful for accessing the field via an interface.
-func (v *PointersQueryResponse) GetUser() *PointersQueryUser { return v.User }
+func (v *PointersQueryResponse) GetUser() (val *PointersQueryUser) {
+	if v == nil {
+		return
+	}
+	return v.User
+}
 
 // GetOtherUser returns PointersQueryResponse.OtherUser, and is useful for accessing the field via an interface.
-func (v *PointersQueryResponse) GetOtherUser() *PointersQueryOtherUser { return v.OtherUser }
+func (v *PointersQueryResponse) GetOtherUser() (val *PointersQueryOtherUser) {
+	if v == nil {
+		return
+	}
+	return v.OtherUser
+}
 
 // GetMaybeConvert returns PointersQueryResponse.MaybeConvert, and is useful for accessing the field via an interface.
-func (v *PointersQueryResponse) GetMaybeConvert() *time.Time { return v.MaybeConvert }
+func (v *PointersQueryResponse) GetMaybeConvert() (val *time.Time) {
+	if v == nil {
+		return
+	}
+	return v.MaybeConvert
+}
 
 // PointersQueryUser includes the requested fields of the GraphQL type User.
 // The GraphQL type's documentation follows.
@@ -65,19 +85,44 @@ type PointersQueryUser struct {
 }
 
 // GetId returns PointersQueryUser.Id, and is useful for accessing the field via an interface.
-func (v *PointersQueryUser) GetId() *testutil.ID { return v.Id }
+func (v *PointersQueryUser) GetId() (val *testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetRoles returns PointersQueryUser.Roles, and is useful for accessing the field via an interface.
-func (v *PointersQueryUser) GetRoles() []*Role { return v.Roles }
+func (v *PointersQueryUser) GetRoles() (val []*Role) {
+	if v == nil {
+		return
+	}
+	return v.Roles
+}
 
 // GetName returns PointersQueryUser.Name, and is useful for accessing the field via an interface.
-func (v *PointersQueryUser) GetName() *string { return v.Name }
+func (v *PointersQueryUser) GetName() (val *string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // GetEmails returns PointersQueryUser.Emails, and is useful for accessing the field via an interface.
-func (v *PointersQueryUser) GetEmails() []*string { return v.Emails }
+func (v *PointersQueryUser) GetEmails() (val []*string) {
+	if v == nil {
+		return
+	}
+	return v.Emails
+}
 
 // GetEmailsNoPtr returns PointersQueryUser.EmailsNoPtr, and is useful for accessing the field via an interface.
-func (v *PointersQueryUser) GetEmailsNoPtr() []string { return v.EmailsNoPtr }
+func (v *PointersQueryUser) GetEmailsNoPtr() (val []string) {
+	if v == nil {
+		return
+	}
+	return v.EmailsNoPtr
+}
 
 // Role is a type a user may have.
 type Role string
@@ -115,25 +160,60 @@ type UserQueryInput struct {
 }
 
 // GetEmail returns UserQueryInput.Email, and is useful for accessing the field via an interface.
-func (v *UserQueryInput) GetEmail() *string { return v.Email }
+func (v *UserQueryInput) GetEmail() (val *string) {
+	if v == nil {
+		return
+	}
+	return v.Email
+}
 
 // GetName returns UserQueryInput.Name, and is useful for accessing the field via an interface.
-func (v *UserQueryInput) GetName() *string { return v.Name }
+func (v *UserQueryInput) GetName() (val *string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // GetId returns UserQueryInput.Id, and is useful for accessing the field via an interface.
-func (v *UserQueryInput) GetId() testutil.ID { return v.Id }
+func (v *UserQueryInput) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetRole returns UserQueryInput.Role, and is useful for accessing the field via an interface.
-func (v *UserQueryInput) GetRole() *Role { return v.Role }
+func (v *UserQueryInput) GetRole() (val *Role) {
+	if v == nil {
+		return
+	}
+	return v.Role
+}
 
 // GetNames returns UserQueryInput.Names, and is useful for accessing the field via an interface.
-func (v *UserQueryInput) GetNames() []*string { return v.Names }
+func (v *UserQueryInput) GetNames() (val []*string) {
+	if v == nil {
+		return
+	}
+	return v.Names
+}
 
 // GetHasPokemon returns UserQueryInput.HasPokemon, and is useful for accessing the field via an interface.
-func (v *UserQueryInput) GetHasPokemon() *testutil.Pokemon { return v.HasPokemon }
+func (v *UserQueryInput) GetHasPokemon() (val *testutil.Pokemon) {
+	if v == nil {
+		return
+	}
+	return v.HasPokemon
+}
 
 // GetBirthdate returns UserQueryInput.Birthdate, and is useful for accessing the field via an interface.
-func (v *UserQueryInput) GetBirthdate() *time.Time { return v.Birthdate }
+func (v *UserQueryInput) GetBirthdate() (val *time.Time) {
+	if v == nil {
+		return
+	}
+	return v.Birthdate
+}
 
 func (v *UserQueryInput) UnmarshalJSON(b []byte) error {
 
@@ -227,13 +307,28 @@ type __PointersQueryInput struct {
 }
 
 // GetQuery returns __PointersQueryInput.Query, and is useful for accessing the field via an interface.
-func (v *__PointersQueryInput) GetQuery() *UserQueryInput { return v.Query }
+func (v *__PointersQueryInput) GetQuery() (val *UserQueryInput) {
+	if v == nil {
+		return
+	}
+	return v.Query
+}
 
 // GetDt returns __PointersQueryInput.Dt, and is useful for accessing the field via an interface.
-func (v *__PointersQueryInput) GetDt() time.Time { return v.Dt }
+func (v *__PointersQueryInput) GetDt() (val time.Time) {
+	if v == nil {
+		return
+	}
+	return v.Dt
+}
 
 // GetTz returns __PointersQueryInput.Tz, and is useful for accessing the field via an interface.
-func (v *__PointersQueryInput) GetTz() *string { return v.Tz }
+func (v *__PointersQueryInput) GetTz() (val *string) {
+	if v == nil {
+		return
+	}
+	return v.Tz
+}
 
 // The query executed by PointersQuery.
 const PointersQuery_Operation = `

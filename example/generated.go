@@ -15,7 +15,12 @@ type __getUserInput struct {
 }
 
 // GetLogin returns __getUserInput.Login, and is useful for accessing the field via an interface.
-func (v *__getUserInput) GetLogin() string { return v.Login }
+func (v *__getUserInput) GetLogin() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Login
+}
 
 // getUserResponse is returned by getUser on success.
 type getUserResponse struct {
@@ -24,7 +29,12 @@ type getUserResponse struct {
 }
 
 // GetUser returns getUserResponse.User, and is useful for accessing the field via an interface.
-func (v *getUserResponse) GetUser() getUserUser { return v.User }
+func (v *getUserResponse) GetUser() (val getUserUser) {
+	if v == nil {
+		return
+	}
+	return v.User
+}
 
 // getUserUser includes the requested fields of the GraphQL type User.
 // The GraphQL type's documentation follows.
@@ -38,10 +48,20 @@ type getUserUser struct {
 }
 
 // GetTheirName returns getUserUser.TheirName, and is useful for accessing the field via an interface.
-func (v *getUserUser) GetTheirName() string { return v.TheirName }
+func (v *getUserUser) GetTheirName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.TheirName
+}
 
 // GetCreatedAt returns getUserUser.CreatedAt, and is useful for accessing the field via an interface.
-func (v *getUserUser) GetCreatedAt() time.Time { return v.CreatedAt }
+func (v *getUserUser) GetCreatedAt() (val time.Time) {
+	if v == nil {
+		return
+	}
+	return v.CreatedAt
+}
 
 // getViewerResponse is returned by getViewer on success.
 type getViewerResponse struct {
@@ -50,7 +70,12 @@ type getViewerResponse struct {
 }
 
 // GetViewer returns getViewerResponse.Viewer, and is useful for accessing the field via an interface.
-func (v *getViewerResponse) GetViewer() getViewerViewerUser { return v.Viewer }
+func (v *getViewerResponse) GetViewer() (val getViewerViewerUser) {
+	if v == nil {
+		return
+	}
+	return v.Viewer
+}
 
 // getViewerViewerUser includes the requested fields of the GraphQL type User.
 // The GraphQL type's documentation follows.
@@ -64,10 +89,20 @@ type getViewerViewerUser struct {
 }
 
 // GetMyName returns getViewerViewerUser.MyName, and is useful for accessing the field via an interface.
-func (v *getViewerViewerUser) GetMyName() string { return v.MyName }
+func (v *getViewerViewerUser) GetMyName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.MyName
+}
 
 // GetCreatedAt returns getViewerViewerUser.CreatedAt, and is useful for accessing the field via an interface.
-func (v *getViewerViewerUser) GetCreatedAt() time.Time { return v.CreatedAt }
+func (v *getViewerViewerUser) GetCreatedAt() (val time.Time) {
+	if v == nil {
+		return
+	}
+	return v.CreatedAt
+}
 
 // The query executed by getUser.
 const getUser_Operation = `
