@@ -425,7 +425,7 @@ func (typ *goStructType) WriteDefinition(w io.Writer, g *generator) error {
 			"Get%s returns %s.%s, and is useful for accessing the field via an interface.",
 			field.GoName, typ.GoName, field.GoName)
 		writeDescription(w, description)
-		fmt.Fprintf(w, "func (v *%s) Get%s() %s { return v.%s }\n",
+		fmt.Fprintf(w, "func (v *%s) Get%s() (val %s) { if v == nil { return }; return v.%s }\n",
 			typ.GoName, field.GoName, field.GoType.Reference(), field.Selector)
 	}
 

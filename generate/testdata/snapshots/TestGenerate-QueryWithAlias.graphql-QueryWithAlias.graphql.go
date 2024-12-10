@@ -17,7 +17,12 @@ type QueryWithAliasResponse struct {
 }
 
 // GetUser returns QueryWithAliasResponse.User, and is useful for accessing the field via an interface.
-func (v *QueryWithAliasResponse) GetUser() QueryWithAliasUser { return v.User }
+func (v *QueryWithAliasResponse) GetUser() (val QueryWithAliasUser) {
+	if v == nil {
+		return
+	}
+	return v.User
+}
 
 // QueryWithAliasUser includes the requested fields of the GraphQL type User.
 // The GraphQL type's documentation follows.
@@ -35,10 +40,20 @@ type QueryWithAliasUser struct {
 }
 
 // GetID returns QueryWithAliasUser.ID, and is useful for accessing the field via an interface.
-func (v *QueryWithAliasUser) GetID() testutil.ID { return v.ID }
+func (v *QueryWithAliasUser) GetID() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.ID
+}
 
 // GetOtherID returns QueryWithAliasUser.OtherID, and is useful for accessing the field via an interface.
-func (v *QueryWithAliasUser) GetOtherID() testutil.ID { return v.OtherID }
+func (v *QueryWithAliasUser) GetOtherID() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.OtherID
+}
 
 // The query executed by QueryWithAlias.
 const QueryWithAlias_Operation = `

@@ -14,7 +14,10 @@ type InputEnumQueryResponse struct {
 }
 
 // GetUsersWithRole returns InputEnumQueryResponse.UsersWithRole, and is useful for accessing the field via an interface.
-func (v *InputEnumQueryResponse) GetUsersWithRole() []InputEnumQueryUsersWithRoleUser {
+func (v *InputEnumQueryResponse) GetUsersWithRole() (val []InputEnumQueryUsersWithRoleUser) {
+	if v == nil {
+		return
+	}
 	return v.UsersWithRole
 }
 
@@ -30,7 +33,12 @@ type InputEnumQueryUsersWithRoleUser struct {
 }
 
 // GetId returns InputEnumQueryUsersWithRoleUser.Id, and is useful for accessing the field via an interface.
-func (v *InputEnumQueryUsersWithRoleUser) GetId() testutil.ID { return v.Id }
+func (v *InputEnumQueryUsersWithRoleUser) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // Role is a type a user may have.
 type Role string
@@ -57,7 +65,12 @@ type __InputEnumQueryInput struct {
 }
 
 // GetRole returns __InputEnumQueryInput.Role, and is useful for accessing the field via an interface.
-func (v *__InputEnumQueryInput) GetRole() Role { return v.Role }
+func (v *__InputEnumQueryInput) GetRole() (val Role) {
+	if v == nil {
+		return
+	}
+	return v.Role
+}
 
 // The query executed by InputEnumQuery.
 const InputEnumQuery_Operation = `

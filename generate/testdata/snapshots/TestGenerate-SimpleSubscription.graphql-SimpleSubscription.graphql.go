@@ -15,7 +15,12 @@ type SimpleSubscriptionResponse struct {
 }
 
 // GetCount returns SimpleSubscriptionResponse.Count, and is useful for accessing the field via an interface.
-func (v *SimpleSubscriptionResponse) GetCount() int { return v.Count }
+func (v *SimpleSubscriptionResponse) GetCount() (val int) {
+	if v == nil {
+		return
+	}
+	return v.Count
+}
 
 // The subscription executed by SimpleSubscription.
 const SimpleSubscription_Operation = `
