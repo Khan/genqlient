@@ -140,7 +140,7 @@ return resp.User.Name, err
 
 // handle different errors differently:
 resp, err := getUser(...)
-var errList *gqlerror.List
+var errList gqlerror.List
 if errors.As(err, &errList) {
   for _, err := range errList {
     fmt.Printf("%v at %v\n", err.Message, err.Path)
