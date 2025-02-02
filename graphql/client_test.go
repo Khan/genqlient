@@ -12,7 +12,26 @@ import (
 	"github.com/vektah/gqlparser/v2/gqlerror"
 )
 
-func TestMakeRequest_HTTPError(t *testing.T) {
+func makeServer(t *testing.T, responseCode int, responseBody any) *httptest.Server {
+	return httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(responseCode)
+		err := json.NewEncoder(w).Encode(responseBody)
+		if err != nil {
+			t.Fatalf("Failed to write response: %v", err)
+		}
+	}))
+}
+
+func makeRequest(server *httptest.Server) (*Response, error) {
+	client := NewClient(server.URL, server.Client())
+	req := &Request{Query: "query { test }"}
+	resp := &Response{}
+
+	err := client.MakeRequest(context.Background(), req, resp)
+	return resp, err
+}
+
+func TestMakeRequestHTTPError(t *testing.T) {
 	testCases := []struct {
 		expectedError      *HTTPError
 		serverResponseBody any
@@ -20,7 +39,7 @@ func TestMakeRequest_HTTPError(t *testing.T) {
 		serverResponseCode int
 	}{
 		{
-			name:               "plain_text_error",
+			name:               "PlainTextError",
 			serverResponseCode: http.StatusBadRequest,
 			serverResponseBody: "Bad Request",
 			expectedError: &HTTPError{
@@ -35,7 +54,7 @@ func TestMakeRequest_HTTPError(t *testing.T) {
 			},
 		},
 		{
-			name:               "json_error_with_extensions",
+			name:               "JSONErrorWithExtensions",
 			serverResponseCode: http.StatusTooManyRequests,
 			serverResponseBody: Response{
 				Errors: gqlerror.List{
@@ -65,22 +84,9 @@ func TestMakeRequest_HTTPError(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-				w.WriteHeader(tc.serverResponseCode)
-				err := json.NewEncoder(w).Encode(tc.serverResponseBody)
-				if err != nil {
-					t.Fatalf("Failed to write response: %v", err)
-				}
-			}))
+			server := makeServer(t, tc.serverResponseCode, tc.serverResponseBody)
 			defer server.Close()
-
-			client := NewClient(server.URL, server.Client())
-			req := &Request{
-				Query: "query { test }",
-			}
-			resp := &Response{}
-
-			err := client.MakeRequest(context.Background(), req, resp)
+			_, err := makeRequest(server)
 
 			assert.Error(t, err)
 			var httpErr *HTTPError
@@ -90,27 +96,25 @@ func TestMakeRequest_HTTPError(t *testing.T) {
 	}
 }
 
-func TestMakeRequest_Success(t *testing.T) {
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
-		err := json.NewEncoder(w).Encode(map[string]interface{}{
-			"data": map[string]string{
-				"test": "success",
-			},
-		})
-		if err != nil {
-			t.Fatalf("Failed to encode response: %v", err)
-		}
-	}))
+func TestMakeRequestHTTPErrors(t *testing.T) {
+	server := makeServer(t, http.StatusOK, Response{
+		Errors: gqlerror.List{&gqlerror.Error{Message: "Rate limit exceeded"}},
+	})
 	defer server.Close()
+	_, err := makeRequest(server)
 
-	client := NewClient(server.URL, server.Client())
-	req := &Request{
-		Query: "query { test }",
-	}
-	resp := &Response{}
+	assert.Error(t, err)
+	var gqlErr gqlerror.List
+	assert.True(t, errors.As(err, &gqlErr), "Error should be of type *gqlerror.List")
+	assert.Equal(t, gqlerror.List{&gqlerror.Error{Message: "Rate limit exceeded"}}, gqlErr)
+}
 
-	err := client.MakeRequest(context.Background(), req, resp)
+func TestMakeRequestSuccess(t *testing.T) {
+	server := makeServer(t, http.StatusOK, map[string]interface{}{
+		"data": map[string]string{"test": "success"},
+	})
+	defer server.Close()
+	resp, err := makeRequest(server)
 
 	assert.NoError(t, err)
 	assert.Equal(t, map[string]interface{}{"test": "success"}, resp.Data)
