@@ -17,7 +17,10 @@ type SimpleQueryWithPointerFalseOverrideResponse struct {
 }
 
 // GetUser returns SimpleQueryWithPointerFalseOverrideResponse.User, and is useful for accessing the field via an interface.
-func (v *SimpleQueryWithPointerFalseOverrideResponse) GetUser() SimpleQueryWithPointerFalseOverrideUser {
+func (v *SimpleQueryWithPointerFalseOverrideResponse) GetUser() (val SimpleQueryWithPointerFalseOverrideUser) {
+	if v == nil {
+		return
+	}
 	return v.User
 }
 
@@ -34,10 +37,20 @@ type SimpleQueryWithPointerFalseOverrideUser struct {
 }
 
 // GetId returns SimpleQueryWithPointerFalseOverrideUser.Id, and is useful for accessing the field via an interface.
-func (v *SimpleQueryWithPointerFalseOverrideUser) GetId() testutil.ID { return v.Id }
+func (v *SimpleQueryWithPointerFalseOverrideUser) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns SimpleQueryWithPointerFalseOverrideUser.Name, and is useful for accessing the field via an interface.
-func (v *SimpleQueryWithPointerFalseOverrideUser) GetName() string { return v.Name }
+func (v *SimpleQueryWithPointerFalseOverrideUser) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // The query executed by SimpleQueryWithPointerFalseOverride.
 const SimpleQueryWithPointerFalseOverride_Operation = `

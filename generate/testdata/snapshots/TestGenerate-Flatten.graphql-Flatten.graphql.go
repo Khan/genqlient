@@ -18,10 +18,20 @@ type ChildVideoFields struct {
 }
 
 // GetId returns ChildVideoFields.Id, and is useful for accessing the field via an interface.
-func (v *ChildVideoFields) GetId() testutil.ID { return v.Id }
+func (v *ChildVideoFields) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns ChildVideoFields.Name, and is useful for accessing the field via an interface.
-func (v *ChildVideoFields) GetName() string { return v.Name }
+func (v *ChildVideoFields) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // ContentFields includes the GraphQL fields of Content requested by the fragment ContentFields.
 // The GraphQL type's documentation follows.
@@ -122,10 +132,20 @@ type ContentFieldsArticle struct {
 }
 
 // GetName returns ContentFieldsArticle.Name, and is useful for accessing the field via an interface.
-func (v *ContentFieldsArticle) GetName() string { return v.Name }
+func (v *ContentFieldsArticle) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // GetUrl returns ContentFieldsArticle.Url, and is useful for accessing the field via an interface.
-func (v *ContentFieldsArticle) GetUrl() string { return v.Url }
+func (v *ContentFieldsArticle) GetUrl() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Url
+}
 
 // ContentFields includes the GraphQL fields of Topic requested by the fragment ContentFields.
 // The GraphQL type's documentation follows.
@@ -137,10 +157,20 @@ type ContentFieldsTopic struct {
 }
 
 // GetName returns ContentFieldsTopic.Name, and is useful for accessing the field via an interface.
-func (v *ContentFieldsTopic) GetName() string { return v.Name }
+func (v *ContentFieldsTopic) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // GetUrl returns ContentFieldsTopic.Url, and is useful for accessing the field via an interface.
-func (v *ContentFieldsTopic) GetUrl() string { return v.Url }
+func (v *ContentFieldsTopic) GetUrl() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Url
+}
 
 // ContentFields includes the GraphQL fields of Video requested by the fragment ContentFields.
 // The GraphQL type's documentation follows.
@@ -152,10 +182,20 @@ type ContentFieldsVideo struct {
 }
 
 // GetName returns ContentFieldsVideo.Name, and is useful for accessing the field via an interface.
-func (v *ContentFieldsVideo) GetName() string { return v.Name }
+func (v *ContentFieldsVideo) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // GetUrl returns ContentFieldsVideo.Url, and is useful for accessing the field via an interface.
-func (v *ContentFieldsVideo) GetUrl() string { return v.Url }
+func (v *ContentFieldsVideo) GetUrl() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Url
+}
 
 // InnerQueryFragment includes the GraphQL fields of Query requested by the fragment InnerQueryFragment.
 // The GraphQL type's documentation follows.
@@ -168,13 +208,28 @@ type InnerQueryFragment struct {
 }
 
 // GetRandomVideo returns InnerQueryFragment.RandomVideo, and is useful for accessing the field via an interface.
-func (v *InnerQueryFragment) GetRandomVideo() VideoFields { return v.RandomVideo }
+func (v *InnerQueryFragment) GetRandomVideo() (val VideoFields) {
+	if v == nil {
+		return
+	}
+	return v.RandomVideo
+}
 
 // GetRandomItem returns InnerQueryFragment.RandomItem, and is useful for accessing the field via an interface.
-func (v *InnerQueryFragment) GetRandomItem() ContentFields { return v.RandomItem }
+func (v *InnerQueryFragment) GetRandomItem() (val ContentFields) {
+	if v == nil {
+		return
+	}
+	return v.RandomItem
+}
 
 // GetOtherVideo returns InnerQueryFragment.OtherVideo, and is useful for accessing the field via an interface.
-func (v *InnerQueryFragment) GetOtherVideo() ContentFieldsVideo { return v.OtherVideo }
+func (v *InnerQueryFragment) GetOtherVideo() (val ContentFieldsVideo) {
+	if v == nil {
+		return
+	}
+	return v.OtherVideo
+}
 
 func (v *InnerQueryFragment) UnmarshalJSON(b []byte) error {
 
@@ -253,10 +308,20 @@ type VideoFields struct {
 }
 
 // GetId returns VideoFields.Id, and is useful for accessing the field via an interface.
-func (v *VideoFields) GetId() testutil.ID { return v.Id }
+func (v *VideoFields) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetParent returns VideoFields.Parent, and is useful for accessing the field via an interface.
-func (v *VideoFields) GetParent() VideoFieldsParentTopic { return v.Parent }
+func (v *VideoFields) GetParent() (val VideoFieldsParentTopic) {
+	if v == nil {
+		return
+	}
+	return v.Parent
+}
 
 // VideoFieldsParentTopic includes the requested fields of the GraphQL type Topic.
 type VideoFieldsParentTopic struct {
@@ -264,7 +329,12 @@ type VideoFieldsParentTopic struct {
 }
 
 // GetVideoChildren returns VideoFieldsParentTopic.VideoChildren, and is useful for accessing the field via an interface.
-func (v *VideoFieldsParentTopic) GetVideoChildren() []ChildVideoFields { return v.VideoChildren }
+func (v *VideoFieldsParentTopic) GetVideoChildren() (val []ChildVideoFields) {
+	if v == nil {
+		return
+	}
+	return v.VideoChildren
+}
 
 // The query executed by ComplexNamedFragments.
 const ComplexNamedFragments_Operation = `
