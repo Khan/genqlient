@@ -192,6 +192,7 @@ type Query {
   default(input: InputWithDefaults! = {field: "input omitted"}): Boolean
   omitempty(input: OmitemptyInput): Boolean
   useStructReferencesInput(input: UseStructReferencesInput!): Boolean
+  snake_case_type: snake_case_type
 }
 
 type Mutation {
@@ -244,4 +245,9 @@ input UseStructReferencesInput {
   list: [StructInput!]!
   listOfNullable: [StructInput]!
   nullableList: [StructInput!]
+}
+
+type snake_case_type {
+  id: ID!
+  name: String
 }

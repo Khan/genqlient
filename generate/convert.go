@@ -349,7 +349,7 @@ func (g *generator) convertDefinition(
 			// name-prefix, append the type-name anyway.  This happens when you
 			// assign a type name to an interface type, and we are generating
 			// one of its implementations.
-			name = makeLongTypeName(namePrefix, def.Name)
+			name = makeLongTypeName(namePrefix, def.Name, g.Config.AutoCamelCase)
 		}
 		// (But the prefix is shared.)
 		namePrefix = newPrefixList(options.TypeName)
@@ -358,11 +358,15 @@ func (g *generator) convertDefinition(
 		// ever possibly generate for this type, so we don't need any of the
 		// qualifiers.  This is especially helpful because the caller is very
 		// likely to need to reference these types in their code.
-		name = upperFirst(def.Name)
+		if g.Config.AutoCamelCase {
+			name = upperFirst(snakeToCamel(def.Name))
+		} else {
+			name = upperFirst(def.Name)
+		}
 		// (namePrefix is ignored in this case.)
 	} else {
 		// Else, construct a name using the usual algorithm (see names.go).
-		name = makeTypeName(namePrefix, def.Name)
+		name = makeTypeName(namePrefix, def.Name, g.Config.AutoCamelCase)
 	}
 
 	// If we already generated the type, we can skip it as long as it matches
@@ -936,7 +940,7 @@ func (g *generator) convertField(
 
 	goName = upperFirst(goName)
 
-	namePrefix = nextPrefix(namePrefix, field)
+	namePrefix = nextPrefix(namePrefix, field, g.Config.AutoCamelCase)
 
 	fieldGoType, err := g.convertType(
 		namePrefix, field.Definition.Type, field.SelectionSet,

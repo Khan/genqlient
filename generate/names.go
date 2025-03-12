@@ -139,7 +139,11 @@ func joinPrefixList(prefix *prefixList) string {
 // prefix-list, since it ends with a type, not a field (see top-of-file
 // comment), but it's used to construct both the type-names from the input and
 // the next prefix-list.
-func typeNameParts(prefix *prefixList, typeName string) *prefixList {
+func typeNameParts(prefix *prefixList, typeName string, autoCamelCase bool) *prefixList {
+	// If auto_camel_case is enabled, convert snake_case to camelCase before uppercasing
+	if autoCamelCase {
+		typeName = snakeToCamel(typeName)
+	}
 	// GraphQL types are conventionally UpperCamelCase, but it's not required;
 	// our names will look best if they are.
 	typeName = upperFirst(typeName)
@@ -156,9 +160,9 @@ func typeNameParts(prefix *prefixList, typeName string) *prefixList {
 
 // Given a prefix-list, and a field, compute the next prefix-list, which will
 // be used for that field's selections.
-func nextPrefix(prefix *prefixList, field *ast.Field) *prefixList {
+func nextPrefix(prefix *prefixList, field *ast.Field, autoCamelCase bool) *prefixList {
 	// Add the type.
-	prefix = typeNameParts(prefix, field.ObjectDefinition.Name)
+	prefix = typeNameParts(prefix, field.ObjectDefinition.Name, autoCamelCase)
 	// Add the field (there's no shortening here, see top-of-file comment).
 	prefix = &prefixList{upperFirst(field.Alias), prefix}
 	return prefix
@@ -166,8 +170,8 @@ func nextPrefix(prefix *prefixList, field *ast.Field) *prefixList {
 
 // Given a prefix-list, and the GraphQL of the current type, compute the name
 // we should give it in Go.
-func makeTypeName(prefix *prefixList, typeName string) string {
-	return joinPrefixList(typeNameParts(prefix, typeName))
+func makeTypeName(prefix *prefixList, typeName string, autoCamelCase bool) string {
+	return joinPrefixList(typeNameParts(prefix, typeName, autoCamelCase))
 }
 
 // Like makeTypeName, but append typeName unconditionally.
@@ -175,7 +179,10 @@ func makeTypeName(prefix *prefixList, typeName string) string {
 // This is used for when you specify a type-name for a field of interface
 // type; we use YourName for the interface, but need to do YourNameImplName for
 // the implementations.
-func makeLongTypeName(prefix *prefixList, typeName string) string {
+func makeLongTypeName(prefix *prefixList, typeName string, autoCamelCase bool) string {
+	if autoCamelCase {
+		typeName = snakeToCamel(typeName)
+	}
 	typeName = upperFirst(typeName)
 	return joinPrefixList(&prefixList{typeName, prefix})
 }

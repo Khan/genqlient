@@ -60,9 +60,9 @@ func TestTypeNames(t *testing.T) {
 		t.Run(test.expectedTypeName, func(t *testing.T) {
 			prefix := newPrefixList("Operation")
 			for _, field := range test.fields {
-				prefix = nextPrefix(prefix, field)
+				prefix = nextPrefix(prefix, field, false)
 			}
-			actualTypeName := makeTypeName(prefix, test.leafTypeName)
+			actualTypeName := makeTypeName(prefix, test.leafTypeName, false)
 			if actualTypeName != test.expectedTypeName {
 				t.Errorf("name mismatch:\ngot:  %s\nwant: %s",
 					actualTypeName, test.expectedTypeName)
@@ -92,9 +92,9 @@ func TestTypeNameCollisions(t *testing.T) {
 	for i, test := range tests {
 		prefix := newPrefixList("Operation")
 		for _, field := range test.fields {
-			prefix = nextPrefix(prefix, field)
+			prefix = nextPrefix(prefix, field, false)
 		}
-		actualTypeName := makeTypeName(prefix, test.leafTypeName)
+		actualTypeName := makeTypeName(prefix, test.leafTypeName, false)
 
 		otherIndex, ok := seen[actualTypeName]
 		if ok {

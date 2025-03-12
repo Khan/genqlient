@@ -245,7 +245,7 @@ func TestGenerateWithConfig(t *testing.T) {
 			},
 		},
 		{
-			"AutoCamelCase", "", []string{"SnakeCaseFields.graphql"}, &Config{
+			"AutoCamelCase", "", []string{"SnakeCaseFields.graphql", "SnakeCaseType.graphql"}, &Config{
 				AutoCamelCase: true,
 			},
 		},
