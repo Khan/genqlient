@@ -193,6 +193,7 @@ type Query {
   omitempty(input: OmitemptyInput): Boolean
   useStructReferencesInput(input: UseStructReferencesInput!): Boolean
   snake_case_type: snake_case_type
+  object: ObjectType!
 }
 
 type Mutation {
@@ -250,4 +251,9 @@ input UseStructReferencesInput {
 type snake_case_type {
   id: ID!
   name: String
+}
+
+type ObjectType {
+  id: ID!
+  snake_case_field: snake_case_type
 }

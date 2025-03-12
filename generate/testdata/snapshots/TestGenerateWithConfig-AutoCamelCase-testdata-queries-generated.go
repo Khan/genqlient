@@ -37,25 +37,23 @@ func (v *SnakeCaseFieldsUser) GetDisplayName() string { return v.DisplayName }
 
 // SnakeCaseTypeResponse is returned by SnakeCaseType on success.
 type SnakeCaseTypeResponse struct {
-	SnakeCaseType SnakeCaseTypeSnake_case_typeSnakeCaseType `json:"snake_case_type"`
+	SnakeCaseType SnakeCaseTypeSnakeCaseType `json:"snake_case_type"`
 }
 
 // GetSnakeCaseType returns SnakeCaseTypeResponse.SnakeCaseType, and is useful for accessing the field via an interface.
-func (v *SnakeCaseTypeResponse) GetSnakeCaseType() SnakeCaseTypeSnake_case_typeSnakeCaseType {
-	return v.SnakeCaseType
-}
+func (v *SnakeCaseTypeResponse) GetSnakeCaseType() SnakeCaseTypeSnakeCaseType { return v.SnakeCaseType }
 
-// SnakeCaseTypeSnake_case_typeSnakeCaseType includes the requested fields of the GraphQL type snake_case_type.
-type SnakeCaseTypeSnake_case_typeSnakeCaseType struct {
+// SnakeCaseTypeSnakeCaseType includes the requested fields of the GraphQL type snake_case_type.
+type SnakeCaseTypeSnakeCaseType struct {
 	Id   string `json:"id"`
 	Name string `json:"name"`
 }
 
-// GetId returns SnakeCaseTypeSnake_case_typeSnakeCaseType.Id, and is useful for accessing the field via an interface.
-func (v *SnakeCaseTypeSnake_case_typeSnakeCaseType) GetId() string { return v.Id }
+// GetId returns SnakeCaseTypeSnakeCaseType.Id, and is useful for accessing the field via an interface.
+func (v *SnakeCaseTypeSnakeCaseType) GetId() string { return v.Id }
 
-// GetName returns SnakeCaseTypeSnake_case_typeSnakeCaseType.Name, and is useful for accessing the field via an interface.
-func (v *SnakeCaseTypeSnake_case_typeSnakeCaseType) GetName() string { return v.Name }
+// GetName returns SnakeCaseTypeSnakeCaseType.Name, and is useful for accessing the field via an interface.
+func (v *SnakeCaseTypeSnakeCaseType) GetName() string { return v.Name }
 
 // The query executed by SnakeCaseFields.
 const SnakeCaseFields_Operation = `

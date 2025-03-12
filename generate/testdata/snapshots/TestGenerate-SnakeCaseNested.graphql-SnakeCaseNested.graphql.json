@@ -1,0 +1,9 @@
+{
+  "operations": [
+    {
+      "operationName": "SnakeCaseNested",
+      "query": "\nquery SnakeCaseNested {\n\tobject {\n\t\tsnake_case_field {\n\t\t\tid\n\t\t\tname\n\t\t}\n\t}\n}\n",
+      "sourceLocation": "testdata/queries/SnakeCaseNested.graphql"
+    }
+  ]
+}

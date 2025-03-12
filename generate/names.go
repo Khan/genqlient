@@ -164,7 +164,11 @@ func nextPrefix(prefix *prefixList, field *ast.Field, autoCamelCase bool) *prefi
 	// Add the type.
 	prefix = typeNameParts(prefix, field.ObjectDefinition.Name, autoCamelCase)
 	// Add the field (there's no shortening here, see top-of-file comment).
-	prefix = &prefixList{upperFirst(field.Alias), prefix}
+	fieldAlias := field.Alias
+	if autoCamelCase {
+		fieldAlias = snakeToCamel(fieldAlias)
+	}
+	prefix = &prefixList{upperFirst(fieldAlias), prefix}
 	return prefix
 }
 
