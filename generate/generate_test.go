@@ -244,6 +244,11 @@ func TestGenerateWithConfig(t *testing.T) {
 				StructReferences: true,
 			},
 		},
+		{
+			"AutoCamelCase", "", []string{"SnakeCaseFields.graphql"}, &Config{
+				AutoCamelCase: true,
+			},
+		},
 	}
 
 	sourceFilename := "SimpleQuery.graphql"

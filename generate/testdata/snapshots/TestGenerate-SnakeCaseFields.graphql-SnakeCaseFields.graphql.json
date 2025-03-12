@@ -1,0 +1,9 @@
+{
+  "operations": [
+    {
+      "operationName": "SnakeCaseFields",
+      "query": "\nquery SnakeCaseFields {\n\tuser {\n\t\tuser_id\n\t\tdisplay_name\n\t}\n}\n",
+      "sourceLocation": "testdata/queries/SnakeCaseFields.graphql"
+    }
+  ]
+}

@@ -16,6 +16,7 @@
   OptionalGenericType: (string) "",
   StructReferences: (bool) false,
   Extensions: (bool) false,
+  AutoCamelCase: (bool) false,
   baseDir: (string) (len=20) "testdata/validConfig",
   pkgPath: (string) (len=55) "github.com/Khan/genqlient/generate/testdata/validConfig"
 })

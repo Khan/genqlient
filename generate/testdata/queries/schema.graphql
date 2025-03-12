@@ -65,6 +65,8 @@ type User {
   emailsOrNull: [String!]
   emailsWithNulls: [String]!
   emailsWithNullsOrNull: [String]
+  user_id: String
+  display_name: String
   authMethods: [AuthMethod!]!
   pokemon: [Pokemon!]
   greeting: Clip

@@ -36,6 +36,7 @@ type Config struct {
 	OptionalGenericType string                  `yaml:"optional_generic_type"`
 	StructReferences    bool                    `yaml:"use_struct_references"`
 	Extensions          bool                    `yaml:"use_extensions"`
+	AutoCamelCase       bool                    `yaml:"auto_camel_case"`
 
 	// The directory of the config-file (relative to which all the other paths
 	// are resolved).  Set by ValidateAndFillDefaults.

@@ -171,7 +171,11 @@ func (g *generator) convertArguments(
 			return nil, err
 		}
 
-		goName := upperFirst(arg.Variable)
+		goName := arg.Variable
+		if g.Config.AutoCamelCase {
+			goName = snakeToCamel(goName)
+		}
+		goName = upperFirst(goName)
 		// Some of the arguments don't apply here, namely the name-prefix (see
 		// names.go) and the selection-set (we use all the input type's fields,
 		// and so on recursively).  See also the `case ast.InputObject` in
@@ -433,7 +437,11 @@ func (g *generator) convertDefinition(
 				return nil, err
 			}
 
-			goName := upperFirst(field.Name)
+			goName := field.Name
+			if g.Config.AutoCamelCase {
+				goName = snakeToCamel(goName)
+			}
+			goName = upperFirst(goName)
 			// Several of the arguments don't really make sense here:
 			// (note field.Type is necessarily a scalar, input, or enum)
 			//  - namePrefix is ignored for input types and enums (see
@@ -917,10 +925,16 @@ func (g *generator) convertField(
 			field.Position, "undefined field %v", field.Alias)
 	}
 
-	goName := upperFirst(field.Alias)
+	goName := field.Alias
 	if fieldOptions.Alias != "" {
-		goName = upperFirst(fieldOptions.Alias)
+		goName = fieldOptions.Alias
 	}
+
+	if g.Config.AutoCamelCase {
+		goName = snakeToCamel(goName)
+	}
+
+	goName = upperFirst(goName)
 
 	namePrefix = nextPrefix(namePrefix, field)
 
