@@ -192,6 +192,11 @@ const (
 	RoleTeacher Role = "TEACHER"
 )
 
+var AllRole = []Role{
+	RoleStudent,
+	RoleTeacher,
+}
+
 // UserQueryInput is the argument to Query.users.
 //
 // Ideally this would support anything and everything!
@@ -325,7 +330,7 @@ func (v *__MultipleDirectivesInput) GetQuery() MyInput { return v.Query }
 // GetQueries returns __MultipleDirectivesInput.Queries, and is useful for accessing the field via an interface.
 func (v *__MultipleDirectivesInput) GetQueries() []*UserQueryInput { return v.Queries }
 
-// The query or mutation executed by MultipleDirectives.
+// The query executed by MultipleDirectives.
 const MultipleDirectives_Operation = `
 query MultipleDirectives ($query: UserQueryInput, $queries: [UserQueryInput]) {
 	user(query: $query) {
@@ -341,7 +346,7 @@ func MultipleDirectives(
 	client_ graphql.Client,
 	query MyInput,
 	queries []*UserQueryInput,
-) (*MyMultipleDirectivesResponse, error) {
+) (data_ *MyMultipleDirectivesResponse, err_ error) {
 	req_ := &graphql.Request{
 		OpName: "MultipleDirectives",
 		Query:  MultipleDirectives_Operation,
@@ -350,10 +355,9 @@ func MultipleDirectives(
 			Queries: queries,
 		},
 	}
-	var err_ error
 
-	var data_ MyMultipleDirectivesResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &MyMultipleDirectivesResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		nil,
@@ -361,6 +365,6 @@ func MultipleDirectives(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 

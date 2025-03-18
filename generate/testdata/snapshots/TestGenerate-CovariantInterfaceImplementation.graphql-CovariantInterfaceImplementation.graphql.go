@@ -2346,7 +2346,7 @@ type TopicFieldsRelatedTopic struct {
 // GetId returns TopicFieldsRelatedTopic.Id, and is useful for accessing the field via an interface.
 func (v *TopicFieldsRelatedTopic) GetId() testutil.ID { return v.Id }
 
-// The query or mutation executed by CovariantInterfaceImplementation.
+// The query executed by CovariantInterfaceImplementation.
 const CovariantInterfaceImplementation_Operation = `
 query CovariantInterfaceImplementation {
 	randomItem {
@@ -2394,15 +2394,14 @@ fragment TopicFields on Topic {
 
 func CovariantInterfaceImplementation(
 	client_ graphql.Client,
-) (*CovariantInterfaceImplementationResponse, error) {
+) (data_ *CovariantInterfaceImplementationResponse, err_ error) {
 	req_ := &graphql.Request{
 		OpName: "CovariantInterfaceImplementation",
 		Query:  CovariantInterfaceImplementation_Operation,
 	}
-	var err_ error
 
-	var data_ CovariantInterfaceImplementationResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &CovariantInterfaceImplementationResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		nil,
@@ -2410,6 +2409,6 @@ func CovariantInterfaceImplementation(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 

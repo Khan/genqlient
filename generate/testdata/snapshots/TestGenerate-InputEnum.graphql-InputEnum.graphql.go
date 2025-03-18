@@ -46,6 +46,11 @@ const (
 	RoleTeacher Role = "TEACHER"
 )
 
+var AllRole = []Role{
+	RoleStudent,
+	RoleTeacher,
+}
+
 // __InputEnumQueryInput is used internally by genqlient
 type __InputEnumQueryInput struct {
 	Role Role `json:"role"`
@@ -54,7 +59,7 @@ type __InputEnumQueryInput struct {
 // GetRole returns __InputEnumQueryInput.Role, and is useful for accessing the field via an interface.
 func (v *__InputEnumQueryInput) GetRole() Role { return v.Role }
 
-// The query or mutation executed by InputEnumQuery.
+// The query executed by InputEnumQuery.
 const InputEnumQuery_Operation = `
 query InputEnumQuery ($role: Role!) {
 	usersWithRole(role: $role) {
@@ -66,7 +71,7 @@ query InputEnumQuery ($role: Role!) {
 func InputEnumQuery(
 	client_ graphql.Client,
 	role Role,
-) (*InputEnumQueryResponse, error) {
+) (data_ *InputEnumQueryResponse, err_ error) {
 	req_ := &graphql.Request{
 		OpName: "InputEnumQuery",
 		Query:  InputEnumQuery_Operation,
@@ -74,10 +79,9 @@ func InputEnumQuery(
 			Role: role,
 		},
 	}
-	var err_ error
 
-	var data_ InputEnumQueryResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &InputEnumQueryResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		nil,
@@ -85,6 +89,6 @@ func InputEnumQuery(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 

@@ -1,0 +1,7 @@
+# The specific input field is non-nullable -> cannot omit it
+# @genqlient(for: "OmitemptyInput.field", omitempty: true)
+query OmitemptyDirective (
+  $input: OmitemptyInput
+) {
+  omitempty(input: $input)
+}

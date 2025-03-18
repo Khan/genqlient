@@ -20,6 +20,11 @@ const (
 	RoleTeacher Role = "TEACHER"
 )
 
+var AllRole = []Role{
+	RoleStudent,
+	RoleTeacher,
+}
+
 // UsesEnumTwiceQueryMeUser includes the requested fields of the GraphQL type User.
 // The GraphQL type's documentation follows.
 //
@@ -62,7 +67,7 @@ func (v *UsesEnumTwiceQueryResponse) GetMe() UsesEnumTwiceQueryMeUser { return v
 // GetOtherUser returns UsesEnumTwiceQueryResponse.OtherUser, and is useful for accessing the field via an interface.
 func (v *UsesEnumTwiceQueryResponse) GetOtherUser() UsesEnumTwiceQueryOtherUser { return v.OtherUser }
 
-// The query or mutation executed by UsesEnumTwiceQuery.
+// The query executed by UsesEnumTwiceQuery.
 const UsesEnumTwiceQuery_Operation = `
 query UsesEnumTwiceQuery {
 	Me: user {
@@ -76,15 +81,14 @@ query UsesEnumTwiceQuery {
 
 func UsesEnumTwiceQuery(
 	client_ graphql.Client,
-) (*UsesEnumTwiceQueryResponse, error) {
+) (data_ *UsesEnumTwiceQueryResponse, err_ error) {
 	req_ := &graphql.Request{
 		OpName: "UsesEnumTwiceQuery",
 		Query:  UsesEnumTwiceQuery_Operation,
 	}
-	var err_ error
 
-	var data_ UsesEnumTwiceQueryResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &UsesEnumTwiceQueryResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		nil,
@@ -92,6 +96,6 @@ func UsesEnumTwiceQuery(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 

@@ -64,7 +64,12 @@ const (
 	Role_TEACHER Role = "TEACHER"
 )
 
-// The query or mutation executed by QueryWithEnums.
+var AllRole = []Role{
+	Role_STUDENT,
+	Role_TEACHER,
+}
+
+// The query executed by QueryWithEnums.
 const QueryWithEnums_Operation = `
 query QueryWithEnums {
 	user {
@@ -79,15 +84,14 @@ query QueryWithEnums {
 func QueryWithEnums(
 	ctx_ context.Context,
 	client_ graphql.Client,
-) (*QueryWithEnumsResponse, error) {
+) (data_ *QueryWithEnumsResponse, err_ error) {
 	req_ := &graphql.Request{
 		OpName: "QueryWithEnums",
 		Query:  QueryWithEnums_Operation,
 	}
-	var err_ error
 
-	var data_ QueryWithEnumsResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &QueryWithEnumsResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		ctx_,
@@ -95,6 +99,6 @@ func QueryWithEnums(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 

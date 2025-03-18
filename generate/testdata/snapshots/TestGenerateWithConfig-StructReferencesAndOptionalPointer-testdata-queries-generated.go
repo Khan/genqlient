@@ -100,6 +100,11 @@ const (
 	RoleTeacher Role = "TEACHER"
 )
 
+var AllRole = []Role{
+	RoleStudent,
+	RoleTeacher,
+}
+
 // UserQueryInput is the argument to Query.users.
 //
 // Ideally this would support anything and everything!
@@ -229,7 +234,7 @@ type __InputObjectQueryInput struct {
 // GetQuery returns __InputObjectQueryInput.Query, and is useful for accessing the field via an interface.
 func (v *__InputObjectQueryInput) GetQuery() *UserQueryInput { return v.Query }
 
-// The query or mutation executed by InputObjectQuery.
+// The query executed by InputObjectQuery.
 const InputObjectQuery_Operation = `
 query InputObjectQuery ($query: UserQueryInput) {
 	user(query: $query) {
@@ -242,7 +247,7 @@ func InputObjectQuery(
 	ctx_ context.Context,
 	client_ graphql.Client,
 	query *UserQueryInput,
-) (*InputObjectQueryResponse, error) {
+) (data_ *InputObjectQueryResponse, err_ error) {
 	req_ := &graphql.Request{
 		OpName: "InputObjectQuery",
 		Query:  InputObjectQuery_Operation,
@@ -250,10 +255,9 @@ func InputObjectQuery(
 			Query: query,
 		},
 	}
-	var err_ error
 
-	var data_ InputObjectQueryResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &InputObjectQueryResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		ctx_,
@@ -261,10 +265,10 @@ func InputObjectQuery(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 
-// The query or mutation executed by QueryWithStructs.
+// The query executed by QueryWithStructs.
 const QueryWithStructs_Operation = `
 query QueryWithStructs {
 	user {
@@ -279,15 +283,14 @@ query QueryWithStructs {
 func QueryWithStructs(
 	ctx_ context.Context,
 	client_ graphql.Client,
-) (*QueryWithStructsResponse, error) {
+) (data_ *QueryWithStructsResponse, err_ error) {
 	req_ := &graphql.Request{
 		OpName: "QueryWithStructs",
 		Query:  QueryWithStructs_Operation,
 	}
-	var err_ error
 
-	var data_ QueryWithStructsResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &QueryWithStructsResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		ctx_,
@@ -295,6 +298,6 @@ func QueryWithStructs(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 

@@ -99,7 +99,6 @@ func TestGenerate(t *testing.T) {
 					},
 					"PokemonInput": {Type: "github.com/Khan/genqlient/internal/testutil.Pokemon"},
 				},
-				AllowBrokenFeatures: true,
 			})
 			if err != nil {
 				t.Fatal(err)
@@ -261,6 +260,11 @@ func TestGenerateWithConfig(t *testing.T) {
 				},
 			},
 		}},
+		{
+			"UseStructReference", "", []string{"UseStructReference.graphql"}, &Config{
+				StructReferences: true,
+			},
+		},
 	}
 
 	sourceFilename := "SimpleQuery.graphql"
@@ -361,7 +365,6 @@ func TestGenerateErrors(t *testing.T) {
 						ExpectExactFields: "{ species level }",
 					},
 				},
-				AllowBrokenFeatures: true,
 			})
 			if err == nil {
 				t.Fatal("expected an error")

@@ -185,6 +185,11 @@ type Query {
   recur(input: RecursiveInput!): Recursive
   acceptsListOfListOfListsOfDates(datesss: [[[Date!]!]!]!): Boolean
   getPokemon(where: getPokemonBoolExp): [Pokemon!]!
+  # The top-level default is currently not used - there is no query that would not specify the input argument.
+  # But it is here for completeness - maybe it will be used in future or cause some other unexpected issues.
+  default(input: InputWithDefaults! = {field: "input omitted"}): Boolean
+  omitempty(input: OmitemptyInput): Boolean
+  useStructReferencesInput(input: UseStructReferencesInput!): Boolean
 }
 
 type Mutation {
@@ -211,4 +216,30 @@ input IntComparisonExp {
   _lte: Int
   _neq: Int
   _nin: [Int!]
+}
+
+type Subscription {
+  count: Int!
+}
+
+input InputWithDefaults {
+  field: String! = "input field omitted"
+  nullableField: String = "nullable input field omitted"
+}
+
+input OmitemptyInput {
+  field: String!
+  nullableField: String
+}
+
+input StructInput {
+  field: String
+}
+
+input UseStructReferencesInput {
+  struct: StructInput!
+  nullableStruct: StructInput
+  list: [StructInput!]!
+  listOfNullable: [StructInput]!
+  nullableList: [StructInput!]
 }

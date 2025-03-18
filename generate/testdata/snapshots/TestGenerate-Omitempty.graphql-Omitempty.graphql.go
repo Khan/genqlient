@@ -77,6 +77,11 @@ const (
 	RoleTeacher Role = "TEACHER"
 )
 
+var AllRole = []Role{
+	RoleStudent,
+	RoleTeacher,
+}
+
 // UserQueryInput is the argument to Query.users.
 //
 // Ideally this would support anything and everything!
@@ -219,7 +224,7 @@ func (v *__OmitEmptyQueryInput) GetTz() string { return v.Tz }
 // GetTzNoOmitEmpty returns __OmitEmptyQueryInput.TzNoOmitEmpty, and is useful for accessing the field via an interface.
 func (v *__OmitEmptyQueryInput) GetTzNoOmitEmpty() string { return v.TzNoOmitEmpty }
 
-// The query or mutation executed by OmitEmptyQuery.
+// The query executed by OmitEmptyQuery.
 const OmitEmptyQuery_Operation = `
 query OmitEmptyQuery ($query: UserQueryInput, $queries: [UserQueryInput], $dt: DateTime, $tz: String, $tzNoOmitEmpty: String) {
 	user(query: $query) {
@@ -240,7 +245,7 @@ func OmitEmptyQuery(
 	dt time.Time,
 	tz string,
 	tzNoOmitEmpty string,
-) (*OmitEmptyQueryResponse, error) {
+) (data_ *OmitEmptyQueryResponse, err_ error) {
 	req_ := &graphql.Request{
 		OpName: "OmitEmptyQuery",
 		Query:  OmitEmptyQuery_Operation,
@@ -252,10 +257,9 @@ func OmitEmptyQuery(
 			TzNoOmitEmpty: tzNoOmitEmpty,
 		},
 	}
-	var err_ error
 
-	var data_ OmitEmptyQueryResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &OmitEmptyQueryResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		nil,
@@ -263,6 +267,6 @@ func OmitEmptyQuery(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 

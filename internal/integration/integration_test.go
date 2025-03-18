@@ -7,12 +7,15 @@ package integration
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"net/http"
 	"testing"
 	"time"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/vektah/gqlparser/v2/gqlerror"
 
 	"github.com/Khan/genqlient/graphql"
 	"github.com/Khan/genqlient/internal/integration/server"
@@ -56,6 +59,189 @@ func TestMutation(t *testing.T) {
 	require.Errorf(t, err, "client does not support mutations")
 }
 
+type subscriptionResult struct {
+	clientUnsubscribed  bool
+	serverChannelClosed bool
+}
+
+func TestSubscription(t *testing.T) {
+	_ = `# @genqlient
+	subscription count { count }`
+
+	ctx := context.Background()
+	server := server.RunServer()
+	defer server.Close()
+
+	cases := []struct {
+		name           string
+		unsubThreshold time.Duration
+		expected       subscriptionResult
+	}{
+		{
+			name:           "server_closed_channel",
+			unsubThreshold: 5 * time.Second,
+			expected: subscriptionResult{
+				clientUnsubscribed:  false,
+				serverChannelClosed: true,
+			},
+		},
+		{
+			name:           "client_unsubscribed",
+			unsubThreshold: 300 * time.Millisecond,
+			expected: subscriptionResult{
+				clientUnsubscribed:  true,
+				serverChannelClosed: false,
+			},
+		},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			wsClient := newRoundtripWebSocketClient(t, server.URL)
+
+			errChan, err := wsClient.Start(ctx)
+			require.NoError(t, err)
+
+			dataChan, subscriptionID, err := count(ctx, wsClient)
+			require.NoError(t, err)
+			defer wsClient.Close()
+
+			var (
+				counter = 0
+				start   = time.Now()
+				result  = subscriptionResult{}
+			)
+
+			for loop := true; loop; {
+				select {
+				case resp, more := <-dataChan:
+					if !more {
+						result.serverChannelClosed = true
+						loop = false
+						break
+					}
+
+					require.NotNil(t, resp.Data)
+					assert.Equal(t, counter, resp.Data.Count)
+					require.Nil(t, resp.Errors)
+
+					if time.Since(start) > tc.unsubThreshold {
+						err := wsClient.Unsubscribe(subscriptionID)
+						require.NoError(t, err)
+						result.clientUnsubscribed = true
+						loop = false
+					}
+
+					counter++
+
+				case err := <-errChan:
+					require.NoError(t, err)
+
+				case <-time.After(10 * time.Second):
+					require.NoError(t, fmt.Errorf("subscription timed out"))
+				}
+			}
+
+			assert.Equal(t, tc.expected, result)
+		})
+	}
+}
+
+func TestSubscriptionConnectionParams(t *testing.T) {
+	_ = `# @genqlient
+	subscription countAuthorized { countAuthorized }`
+
+	authKey := server.AuthKey
+
+	ctx := context.Background()
+	server := server.RunServer()
+	defer server.Close()
+
+	cases := []struct {
+		connParams    map[string]interface{}
+		name          string
+		expectedError string
+		opts          []graphql.WebSocketOption
+	}{
+		{
+			name: "connection_params_authorized_user_gets_counter",
+			opts: []graphql.WebSocketOption{
+				graphql.WithConnectionParams(map[string]interface{}{
+					authKey: "authorized-user-token",
+				}),
+			},
+		},
+		{
+			name: "http_header_authorized_user_gets_counter",
+			opts: []graphql.WebSocketOption{
+				graphql.WithWebsocketHeader(http.Header{
+					authKey: []string{"authorized-user-token"},
+				}),
+			},
+		},
+		{
+			name:          "unauthorized_user_gets_error",
+			expectedError: "input: countAuthorized unauthorized\n",
+		},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			wsClient := newRoundtripWebSocketClient(
+				t,
+				server.URL,
+				tc.opts...,
+			)
+
+			errChan, err := wsClient.Start(ctx)
+			require.NoError(t, err)
+
+			dataChan, subscriptionID, err := countAuthorized(ctx, wsClient)
+			require.NoError(t, err)
+			defer wsClient.Close()
+
+			var (
+				counter = 0
+				start   = time.Now()
+			)
+
+			for loop := true; loop; {
+				select {
+				case resp, more := <-dataChan:
+					if !more {
+						loop = false
+						break
+					}
+
+					if tc.expectedError != "" {
+						require.Error(t, resp.Errors)
+						assert.Equal(t, tc.expectedError, resp.Errors.Error())
+						continue
+					}
+
+					require.NotNil(t, resp.Data)
+					assert.Equal(t, counter, resp.Data.CountAuthorized)
+					require.Nil(t, resp.Errors)
+
+					if time.Since(start) > 5*time.Second {
+						err := wsClient.Unsubscribe(subscriptionID)
+						require.NoError(t, err)
+						loop = false
+					}
+
+					counter++
+
+				case err := <-errChan:
+					require.NoError(t, err)
+
+				case <-time.After(10 * time.Second):
+					require.NoError(t, fmt.Errorf("subscription timed out"))
+				}
+			}
+		})
+	}
+}
+
 func TestServerError(t *testing.T) {
 	_ = `# @genqlient
 	query failingQuery { fail me { id } }`
@@ -71,6 +257,15 @@ func TestServerError(t *testing.T) {
 		// response -- and indeed in this case it should even have another field
 		// (which didn't err) set.
 		assert.Error(t, err)
+		t.Logf("Full error: %+v", err)
+		var gqlErrors gqlerror.List
+		if !assert.True(t, errors.As(err, &gqlErrors), "Error should be of type gqlerror.List") {
+			t.Logf("Actual error type: %T", err)
+			t.Logf("Error message: %v", err)
+		} else {
+			assert.Len(t, gqlErrors, 1, "Expected one GraphQL error")
+			assert.Equal(t, "oh no", gqlErrors[0].Message)
+		}
 		assert.NotNil(t, resp)
 		assert.Equal(t, "1", resp.Me.Id)
 	}
@@ -88,6 +283,8 @@ func TestNetworkError(t *testing.T) {
 		//	return resp.Me.Id, err
 		// without a bunch of extra ceremony.
 		assert.Error(t, err)
+		var gqlErrors gqlerror.List
+		assert.False(t, errors.As(err, &gqlErrors), "Error should not be of type gqlerror.List for network errors")
 		assert.NotNil(t, resp)
 		assert.Equal(t, new(failingQueryResponse), resp)
 	}
@@ -732,9 +929,6 @@ func TestFlatten(t *testing.T) {
 }
 
 func TestGeneratedCode(t *testing.T) {
-	// TODO(benkraft): Check that gqlgen is up to date too.  In practice that's
-	// less likely to be a problem, since it should only change if you update
-	// the schema, likely too add something new, in which case you'll notice.
 	RunGenerateTest(t, "internal/integration/genqlient.yaml")
 }
 

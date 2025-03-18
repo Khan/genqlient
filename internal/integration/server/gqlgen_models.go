@@ -39,8 +39,17 @@ type Hair struct {
 	Color *string `json:"color,omitempty"`
 }
 
+type Mutation struct {
+}
+
 type NewUser struct {
 	Name string `json:"name"`
+}
+
+type Query struct {
+}
+
+type Subscription struct {
 }
 
 type User struct {
