@@ -384,6 +384,11 @@ const (
 	RoleTeacher Role = "TEACHER"
 )
 
+var AllRole = []Role{
+	RoleStudent,
+	RoleTeacher,
+}
+
 // UserQueryInput is the argument to Query.users.
 //
 // Ideally this would support anything and everything!
@@ -708,7 +713,7 @@ func (v *__PointersQueryInput) __premarshalJSON() (*__premarshal__PointersQueryI
 	return &retval, nil
 }
 
-// The query or mutation executed by InputObjectQuery.
+// The query executed by InputObjectQuery.
 const InputObjectQuery_Operation = `
 query InputObjectQuery ($query: UserQueryInput) {
 	user(query: $query) {
@@ -721,7 +726,7 @@ func InputObjectQuery(
 	ctx_ context.Context,
 	client_ graphql.Client,
 	query *UserQueryInput,
-) (*InputObjectQueryResponse, error) {
+) (data_ *InputObjectQueryResponse, err_ error) {
 	req_ := &graphql.Request{
 		OpName: "InputObjectQuery",
 		Query:  InputObjectQuery_Operation,
@@ -729,10 +734,9 @@ func InputObjectQuery(
 			Query: query,
 		},
 	}
-	var err_ error
 
-	var data_ InputObjectQueryResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &InputObjectQueryResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		ctx_,
@@ -740,10 +744,10 @@ func InputObjectQuery(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 
-// The query or mutation executed by ListInputQuery.
+// The query executed by ListInputQuery.
 const ListInputQuery_Operation = `
 query ListInputQuery ($names: [String]) {
 	user(query: {names:$names}) {
@@ -756,7 +760,7 @@ func ListInputQuery(
 	ctx_ context.Context,
 	client_ graphql.Client,
 	names []*string,
-) (*ListInputQueryResponse, error) {
+) (data_ *ListInputQueryResponse, err_ error) {
 	req_ := &graphql.Request{
 		OpName: "ListInputQuery",
 		Query:  ListInputQuery_Operation,
@@ -764,10 +768,9 @@ func ListInputQuery(
 			Names: names,
 		},
 	}
-	var err_ error
 
-	var data_ ListInputQueryResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &ListInputQueryResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		ctx_,
@@ -775,10 +778,10 @@ func ListInputQuery(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 
-// The query or mutation executed by OmitEmptyQuery.
+// The query executed by OmitEmptyQuery.
 const OmitEmptyQuery_Operation = `
 query OmitEmptyQuery ($query: UserQueryInput, $queries: [UserQueryInput], $dt: DateTime, $tz: String, $tzNoOmitEmpty: String) {
 	user(query: $query) {
@@ -800,7 +803,7 @@ func OmitEmptyQuery(
 	dt *time.Time,
 	tz *string,
 	tzNoOmitEmpty *string,
-) (*OmitEmptyQueryResponse, error) {
+) (data_ *OmitEmptyQueryResponse, err_ error) {
 	req_ := &graphql.Request{
 		OpName: "OmitEmptyQuery",
 		Query:  OmitEmptyQuery_Operation,
@@ -812,10 +815,9 @@ func OmitEmptyQuery(
 			TzNoOmitEmpty: tzNoOmitEmpty,
 		},
 	}
-	var err_ error
 
-	var data_ OmitEmptyQueryResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &OmitEmptyQueryResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		ctx_,
@@ -823,10 +825,10 @@ func OmitEmptyQuery(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 
-// The query or mutation executed by PointersQuery.
+// The query executed by PointersQuery.
 const PointersQuery_Operation = `
 query PointersQuery ($query: UserQueryInput, $dt: DateTime, $tz: String) {
 	user(query: $query) {
@@ -849,7 +851,7 @@ func PointersQuery(
 	query *UserQueryInput,
 	dt time.Time,
 	tz *string,
-) (*PointersQueryResponse, error) {
+) (data_ *PointersQueryResponse, err_ error) {
 	req_ := &graphql.Request{
 		OpName: "PointersQuery",
 		Query:  PointersQuery_Operation,
@@ -859,10 +861,9 @@ func PointersQuery(
 			Tz:    tz,
 		},
 	}
-	var err_ error
 
-	var data_ PointersQueryResponse
-	resp_ := &graphql.Response{Data: &data_}
+	data_ = &PointersQueryResponse{}
+	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
 		ctx_,
@@ -870,6 +871,6 @@ func PointersQuery(
 		resp_,
 	)
 
-	return &data_, err_
+	return data_, err_
 }
 
