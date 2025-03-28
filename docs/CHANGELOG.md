@@ -26,6 +26,8 @@ When releasing a new version:
 
 ### Bug fixes:
 
+- `documentation` link in `introduction.md` now links absolutely to ensure no 404 page
+
 ## v0.8.0
 
 This release adds support for genqlient subscriptions; see the [documentation](subscriptions.md) for more, and thanks to @matthieu4294967296moineau for the original implementation and @HaraldNordgren for additional testing and improvements.
