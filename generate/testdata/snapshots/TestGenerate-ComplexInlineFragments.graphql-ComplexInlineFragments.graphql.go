@@ -17,10 +17,18 @@ type ComplexInlineFragmentsConflictingStuffArticle struct {
 }
 
 // GetTypename returns ComplexInlineFragmentsConflictingStuffArticle.Typename, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsConflictingStuffArticle) GetTypename() string { return v.Typename }
+func (v *ComplexInlineFragmentsConflictingStuffArticle) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetThumbnail returns ComplexInlineFragmentsConflictingStuffArticle.Thumbnail, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsConflictingStuffArticle) GetThumbnail() ComplexInlineFragmentsConflictingStuffArticleThumbnailStuffThumbnail {
+func (v *ComplexInlineFragmentsConflictingStuffArticle) GetThumbnail() (val ComplexInlineFragmentsConflictingStuffArticleThumbnailStuffThumbnail) {
+	if v == nil {
+		return
+	}
 	return v.Thumbnail
 }
 
@@ -31,12 +39,18 @@ type ComplexInlineFragmentsConflictingStuffArticleThumbnailStuffThumbnail struct
 }
 
 // GetId returns ComplexInlineFragmentsConflictingStuffArticleThumbnailStuffThumbnail.Id, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsConflictingStuffArticleThumbnailStuffThumbnail) GetId() testutil.ID {
+func (v *ComplexInlineFragmentsConflictingStuffArticleThumbnailStuffThumbnail) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
 	return v.Id
 }
 
 // GetThumbnailUrl returns ComplexInlineFragmentsConflictingStuffArticleThumbnailStuffThumbnail.ThumbnailUrl, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsConflictingStuffArticleThumbnailStuffThumbnail) GetThumbnailUrl() string {
+func (v *ComplexInlineFragmentsConflictingStuffArticleThumbnailStuffThumbnail) GetThumbnailUrl() (val string) {
+	if v == nil {
+		return
+	}
 	return v.ThumbnailUrl
 }
 
@@ -136,7 +150,12 @@ type ComplexInlineFragmentsConflictingStuffTopic struct {
 }
 
 // GetTypename returns ComplexInlineFragmentsConflictingStuffTopic.Typename, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsConflictingStuffTopic) GetTypename() string { return v.Typename }
+func (v *ComplexInlineFragmentsConflictingStuffTopic) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // ComplexInlineFragmentsConflictingStuffVideo includes the requested fields of the GraphQL type Video.
 type ComplexInlineFragmentsConflictingStuffVideo struct {
@@ -145,10 +164,18 @@ type ComplexInlineFragmentsConflictingStuffVideo struct {
 }
 
 // GetTypename returns ComplexInlineFragmentsConflictingStuffVideo.Typename, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsConflictingStuffVideo) GetTypename() string { return v.Typename }
+func (v *ComplexInlineFragmentsConflictingStuffVideo) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetThumbnail returns ComplexInlineFragmentsConflictingStuffVideo.Thumbnail, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsConflictingStuffVideo) GetThumbnail() ComplexInlineFragmentsConflictingStuffVideoThumbnail {
+func (v *ComplexInlineFragmentsConflictingStuffVideo) GetThumbnail() (val ComplexInlineFragmentsConflictingStuffVideoThumbnail) {
+	if v == nil {
+		return
+	}
 	return v.Thumbnail
 }
 
@@ -159,10 +186,18 @@ type ComplexInlineFragmentsConflictingStuffVideoThumbnail struct {
 }
 
 // GetId returns ComplexInlineFragmentsConflictingStuffVideoThumbnail.Id, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsConflictingStuffVideoThumbnail) GetId() testutil.ID { return v.Id }
+func (v *ComplexInlineFragmentsConflictingStuffVideoThumbnail) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetTimestampSec returns ComplexInlineFragmentsConflictingStuffVideoThumbnail.TimestampSec, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsConflictingStuffVideoThumbnail) GetTimestampSec() int {
+func (v *ComplexInlineFragmentsConflictingStuffVideoThumbnail) GetTimestampSec() (val int) {
+	if v == nil {
+		return
+	}
 	return v.TimestampSec
 }
 
@@ -172,7 +207,12 @@ type ComplexInlineFragmentsNestedStuffArticle struct {
 }
 
 // GetTypename returns ComplexInlineFragmentsNestedStuffArticle.Typename, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsNestedStuffArticle) GetTypename() string { return v.Typename }
+func (v *ComplexInlineFragmentsNestedStuffArticle) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // ComplexInlineFragmentsNestedStuffContent includes the requested fields of the GraphQL interface Content.
 //
@@ -275,10 +315,18 @@ type ComplexInlineFragmentsNestedStuffTopic struct {
 }
 
 // GetTypename returns ComplexInlineFragmentsNestedStuffTopic.Typename, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsNestedStuffTopic) GetTypename() string { return v.Typename }
+func (v *ComplexInlineFragmentsNestedStuffTopic) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetChildren returns ComplexInlineFragmentsNestedStuffTopic.Children, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsNestedStuffTopic) GetChildren() []ComplexInlineFragmentsNestedStuffTopicChildrenContent {
+func (v *ComplexInlineFragmentsNestedStuffTopic) GetChildren() (val []ComplexInlineFragmentsNestedStuffTopicChildrenContent) {
+	if v == nil {
+		return
+	}
 	return v.Children
 }
 
@@ -370,18 +418,34 @@ type ComplexInlineFragmentsNestedStuffTopicChildrenArticle struct {
 }
 
 // GetTypename returns ComplexInlineFragmentsNestedStuffTopicChildrenArticle.Typename, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticle) GetTypename() string {
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticle) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
 	return v.Typename
 }
 
 // GetId returns ComplexInlineFragmentsNestedStuffTopicChildrenArticle.Id, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticle) GetId() testutil.ID { return v.Id }
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticle) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetText returns ComplexInlineFragmentsNestedStuffTopicChildrenArticle.Text, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticle) GetText() string { return v.Text }
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticle) GetText() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Text
+}
 
 // GetParent returns ComplexInlineFragmentsNestedStuffTopicChildrenArticle.Parent, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticle) GetParent() ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentTopic {
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticle) GetParent() (val ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentTopic) {
+	if v == nil {
+		return
+	}
 	return v.Parent
 }
 
@@ -391,7 +455,10 @@ type ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTop
 }
 
 // GetChildren returns ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopic.Children, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopic) GetChildren() []ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent {
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopic) GetChildren() (val []ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenContent) {
+	if v == nil {
+		return
+	}
 	return v.Children
 }
 
@@ -479,17 +546,26 @@ type ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTop
 }
 
 // GetTypename returns ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenArticle.Typename, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenArticle) GetTypename() string {
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenArticle) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
 	return v.Typename
 }
 
 // GetId returns ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenArticle.Id, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenArticle) GetId() testutil.ID {
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenArticle) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
 	return v.Id
 }
 
 // GetName returns ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenArticle.Name, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenArticle) GetName() string {
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenArticle) GetName() (val string) {
+	if v == nil {
+		return
+	}
 	return v.Name
 }
 
@@ -599,17 +675,26 @@ type ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTop
 }
 
 // GetTypename returns ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenTopic.Typename, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenTopic) GetTypename() string {
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenTopic) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
 	return v.Typename
 }
 
 // GetId returns ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenTopic.Id, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenTopic) GetId() testutil.ID {
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenTopic) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
 	return v.Id
 }
 
 // GetName returns ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenTopic.Name, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenTopic) GetName() string {
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenTopic) GetName() (val string) {
+	if v == nil {
+		return
+	}
 	return v.Name
 }
 
@@ -622,17 +707,26 @@ type ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTop
 }
 
 // GetTypename returns ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenVideo.Typename, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenVideo) GetTypename() string {
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenVideo) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
 	return v.Typename
 }
 
 // GetId returns ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenVideo.Id, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenVideo) GetId() testutil.ID {
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenVideo) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
 	return v.Id
 }
 
 // GetName returns ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenVideo.Name, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenVideo) GetName() string {
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopicChildrenVideo) GetName() (val string) {
+	if v == nil {
+		return
+	}
 	return v.Name
 }
 
@@ -643,12 +737,18 @@ type ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentTopic struct {
 }
 
 // GetName returns ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentTopic.Name, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentTopic) GetName() string {
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentTopic) GetName() (val string) {
+	if v == nil {
+		return
+	}
 	return v.Name
 }
 
 // GetParent returns ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentTopic.Parent, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentTopic) GetParent() ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopic {
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentTopic) GetParent() (val ComplexInlineFragmentsNestedStuffTopicChildrenArticleParentContentParentTopic) {
+	if v == nil {
+		return
+	}
 	return v.Parent
 }
 
@@ -755,10 +855,20 @@ type ComplexInlineFragmentsNestedStuffTopicChildrenTopic struct {
 }
 
 // GetTypename returns ComplexInlineFragmentsNestedStuffTopicChildrenTopic.Typename, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsNestedStuffTopicChildrenTopic) GetTypename() string { return v.Typename }
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenTopic) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns ComplexInlineFragmentsNestedStuffTopicChildrenTopic.Id, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsNestedStuffTopicChildrenTopic) GetId() testutil.ID { return v.Id }
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenTopic) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // ComplexInlineFragmentsNestedStuffTopicChildrenVideo includes the requested fields of the GraphQL type Video.
 type ComplexInlineFragmentsNestedStuffTopicChildrenVideo struct {
@@ -768,10 +878,20 @@ type ComplexInlineFragmentsNestedStuffTopicChildrenVideo struct {
 }
 
 // GetTypename returns ComplexInlineFragmentsNestedStuffTopicChildrenVideo.Typename, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsNestedStuffTopicChildrenVideo) GetTypename() string { return v.Typename }
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenVideo) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns ComplexInlineFragmentsNestedStuffTopicChildrenVideo.Id, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsNestedStuffTopicChildrenVideo) GetId() testutil.ID { return v.Id }
+func (v *ComplexInlineFragmentsNestedStuffTopicChildrenVideo) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // ComplexInlineFragmentsNestedStuffVideo includes the requested fields of the GraphQL type Video.
 type ComplexInlineFragmentsNestedStuffVideo struct {
@@ -779,7 +899,12 @@ type ComplexInlineFragmentsNestedStuffVideo struct {
 }
 
 // GetTypename returns ComplexInlineFragmentsNestedStuffVideo.Typename, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsNestedStuffVideo) GetTypename() string { return v.Typename }
+func (v *ComplexInlineFragmentsNestedStuffVideo) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // ComplexInlineFragmentsRandomItemArticle includes the requested fields of the GraphQL type Article.
 type ComplexInlineFragmentsRandomItemArticle struct {
@@ -791,16 +916,36 @@ type ComplexInlineFragmentsRandomItemArticle struct {
 }
 
 // GetTypename returns ComplexInlineFragmentsRandomItemArticle.Typename, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsRandomItemArticle) GetTypename() string { return v.Typename }
+func (v *ComplexInlineFragmentsRandomItemArticle) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns ComplexInlineFragmentsRandomItemArticle.Id, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsRandomItemArticle) GetId() testutil.ID { return v.Id }
+func (v *ComplexInlineFragmentsRandomItemArticle) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetText returns ComplexInlineFragmentsRandomItemArticle.Text, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsRandomItemArticle) GetText() string { return v.Text }
+func (v *ComplexInlineFragmentsRandomItemArticle) GetText() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Text
+}
 
 // GetName returns ComplexInlineFragmentsRandomItemArticle.Name, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsRandomItemArticle) GetName() string { return v.Name }
+func (v *ComplexInlineFragmentsRandomItemArticle) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // ComplexInlineFragmentsRandomItemContent includes the requested fields of the GraphQL interface Content.
 //
@@ -908,13 +1053,28 @@ type ComplexInlineFragmentsRandomItemTopic struct {
 }
 
 // GetTypename returns ComplexInlineFragmentsRandomItemTopic.Typename, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsRandomItemTopic) GetTypename() string { return v.Typename }
+func (v *ComplexInlineFragmentsRandomItemTopic) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns ComplexInlineFragmentsRandomItemTopic.Id, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsRandomItemTopic) GetId() testutil.ID { return v.Id }
+func (v *ComplexInlineFragmentsRandomItemTopic) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns ComplexInlineFragmentsRandomItemTopic.Name, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsRandomItemTopic) GetName() string { return v.Name }
+func (v *ComplexInlineFragmentsRandomItemTopic) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // ComplexInlineFragmentsRandomItemVideo includes the requested fields of the GraphQL type Video.
 type ComplexInlineFragmentsRandomItemVideo struct {
@@ -926,16 +1086,36 @@ type ComplexInlineFragmentsRandomItemVideo struct {
 }
 
 // GetTypename returns ComplexInlineFragmentsRandomItemVideo.Typename, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsRandomItemVideo) GetTypename() string { return v.Typename }
+func (v *ComplexInlineFragmentsRandomItemVideo) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns ComplexInlineFragmentsRandomItemVideo.Id, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsRandomItemVideo) GetId() testutil.ID { return v.Id }
+func (v *ComplexInlineFragmentsRandomItemVideo) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns ComplexInlineFragmentsRandomItemVideo.Name, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsRandomItemVideo) GetName() string { return v.Name }
+func (v *ComplexInlineFragmentsRandomItemVideo) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // GetDuration returns ComplexInlineFragmentsRandomItemVideo.Duration, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsRandomItemVideo) GetDuration() int { return v.Duration }
+func (v *ComplexInlineFragmentsRandomItemVideo) GetDuration() (val int) {
+	if v == nil {
+		return
+	}
+	return v.Duration
+}
 
 // ComplexInlineFragmentsRepeatedStuffArticle includes the requested fields of the GraphQL type Article.
 type ComplexInlineFragmentsRepeatedStuffArticle struct {
@@ -951,25 +1131,60 @@ type ComplexInlineFragmentsRepeatedStuffArticle struct {
 }
 
 // GetTypename returns ComplexInlineFragmentsRepeatedStuffArticle.Typename, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsRepeatedStuffArticle) GetTypename() string { return v.Typename }
+func (v *ComplexInlineFragmentsRepeatedStuffArticle) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns ComplexInlineFragmentsRepeatedStuffArticle.Id, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsRepeatedStuffArticle) GetId() testutil.ID { return v.Id }
+func (v *ComplexInlineFragmentsRepeatedStuffArticle) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetUrl returns ComplexInlineFragmentsRepeatedStuffArticle.Url, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsRepeatedStuffArticle) GetUrl() string { return v.Url }
+func (v *ComplexInlineFragmentsRepeatedStuffArticle) GetUrl() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Url
+}
 
 // GetOtherId returns ComplexInlineFragmentsRepeatedStuffArticle.OtherId, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsRepeatedStuffArticle) GetOtherId() testutil.ID { return v.OtherId }
+func (v *ComplexInlineFragmentsRepeatedStuffArticle) GetOtherId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.OtherId
+}
 
 // GetName returns ComplexInlineFragmentsRepeatedStuffArticle.Name, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsRepeatedStuffArticle) GetName() string { return v.Name }
+func (v *ComplexInlineFragmentsRepeatedStuffArticle) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // GetText returns ComplexInlineFragmentsRepeatedStuffArticle.Text, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsRepeatedStuffArticle) GetText() string { return v.Text }
+func (v *ComplexInlineFragmentsRepeatedStuffArticle) GetText() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Text
+}
 
 // GetOtherName returns ComplexInlineFragmentsRepeatedStuffArticle.OtherName, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsRepeatedStuffArticle) GetOtherName() string { return v.OtherName }
+func (v *ComplexInlineFragmentsRepeatedStuffArticle) GetOtherName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.OtherName
+}
 
 // ComplexInlineFragmentsRepeatedStuffContent includes the requested fields of the GraphQL interface Content.
 //
@@ -1090,22 +1305,52 @@ type ComplexInlineFragmentsRepeatedStuffTopic struct {
 }
 
 // GetTypename returns ComplexInlineFragmentsRepeatedStuffTopic.Typename, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsRepeatedStuffTopic) GetTypename() string { return v.Typename }
+func (v *ComplexInlineFragmentsRepeatedStuffTopic) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns ComplexInlineFragmentsRepeatedStuffTopic.Id, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsRepeatedStuffTopic) GetId() testutil.ID { return v.Id }
+func (v *ComplexInlineFragmentsRepeatedStuffTopic) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetUrl returns ComplexInlineFragmentsRepeatedStuffTopic.Url, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsRepeatedStuffTopic) GetUrl() string { return v.Url }
+func (v *ComplexInlineFragmentsRepeatedStuffTopic) GetUrl() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Url
+}
 
 // GetOtherId returns ComplexInlineFragmentsRepeatedStuffTopic.OtherId, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsRepeatedStuffTopic) GetOtherId() testutil.ID { return v.OtherId }
+func (v *ComplexInlineFragmentsRepeatedStuffTopic) GetOtherId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.OtherId
+}
 
 // GetName returns ComplexInlineFragmentsRepeatedStuffTopic.Name, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsRepeatedStuffTopic) GetName() string { return v.Name }
+func (v *ComplexInlineFragmentsRepeatedStuffTopic) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // GetOtherName returns ComplexInlineFragmentsRepeatedStuffTopic.OtherName, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsRepeatedStuffTopic) GetOtherName() string { return v.OtherName }
+func (v *ComplexInlineFragmentsRepeatedStuffTopic) GetOtherName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.OtherName
+}
 
 // ComplexInlineFragmentsRepeatedStuffVideo includes the requested fields of the GraphQL type Video.
 type ComplexInlineFragmentsRepeatedStuffVideo struct {
@@ -1121,25 +1366,60 @@ type ComplexInlineFragmentsRepeatedStuffVideo struct {
 }
 
 // GetTypename returns ComplexInlineFragmentsRepeatedStuffVideo.Typename, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsRepeatedStuffVideo) GetTypename() string { return v.Typename }
+func (v *ComplexInlineFragmentsRepeatedStuffVideo) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns ComplexInlineFragmentsRepeatedStuffVideo.Id, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsRepeatedStuffVideo) GetId() testutil.ID { return v.Id }
+func (v *ComplexInlineFragmentsRepeatedStuffVideo) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetUrl returns ComplexInlineFragmentsRepeatedStuffVideo.Url, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsRepeatedStuffVideo) GetUrl() string { return v.Url }
+func (v *ComplexInlineFragmentsRepeatedStuffVideo) GetUrl() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Url
+}
 
 // GetOtherId returns ComplexInlineFragmentsRepeatedStuffVideo.OtherId, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsRepeatedStuffVideo) GetOtherId() testutil.ID { return v.OtherId }
+func (v *ComplexInlineFragmentsRepeatedStuffVideo) GetOtherId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.OtherId
+}
 
 // GetName returns ComplexInlineFragmentsRepeatedStuffVideo.Name, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsRepeatedStuffVideo) GetName() string { return v.Name }
+func (v *ComplexInlineFragmentsRepeatedStuffVideo) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // GetOtherName returns ComplexInlineFragmentsRepeatedStuffVideo.OtherName, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsRepeatedStuffVideo) GetOtherName() string { return v.OtherName }
+func (v *ComplexInlineFragmentsRepeatedStuffVideo) GetOtherName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.OtherName
+}
 
 // GetDuration returns ComplexInlineFragmentsRepeatedStuffVideo.Duration, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsRepeatedStuffVideo) GetDuration() int { return v.Duration }
+func (v *ComplexInlineFragmentsRepeatedStuffVideo) GetDuration() (val int) {
+	if v == nil {
+		return
+	}
+	return v.Duration
+}
 
 // ComplexInlineFragmentsResponse is returned by ComplexInlineFragments on success.
 type ComplexInlineFragmentsResponse struct {
@@ -1151,25 +1431,42 @@ type ComplexInlineFragmentsResponse struct {
 }
 
 // GetRoot returns ComplexInlineFragmentsResponse.Root, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsResponse) GetRoot() ComplexInlineFragmentsRootTopic { return v.Root }
+func (v *ComplexInlineFragmentsResponse) GetRoot() (val ComplexInlineFragmentsRootTopic) {
+	if v == nil {
+		return
+	}
+	return v.Root
+}
 
 // GetRandomItem returns ComplexInlineFragmentsResponse.RandomItem, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsResponse) GetRandomItem() ComplexInlineFragmentsRandomItemContent {
+func (v *ComplexInlineFragmentsResponse) GetRandomItem() (val ComplexInlineFragmentsRandomItemContent) {
+	if v == nil {
+		return
+	}
 	return v.RandomItem
 }
 
 // GetRepeatedStuff returns ComplexInlineFragmentsResponse.RepeatedStuff, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsResponse) GetRepeatedStuff() ComplexInlineFragmentsRepeatedStuffContent {
+func (v *ComplexInlineFragmentsResponse) GetRepeatedStuff() (val ComplexInlineFragmentsRepeatedStuffContent) {
+	if v == nil {
+		return
+	}
 	return v.RepeatedStuff
 }
 
 // GetConflictingStuff returns ComplexInlineFragmentsResponse.ConflictingStuff, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsResponse) GetConflictingStuff() ComplexInlineFragmentsConflictingStuffContent {
+func (v *ComplexInlineFragmentsResponse) GetConflictingStuff() (val ComplexInlineFragmentsConflictingStuffContent) {
+	if v == nil {
+		return
+	}
 	return v.ConflictingStuff
 }
 
 // GetNestedStuff returns ComplexInlineFragmentsResponse.NestedStuff, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsResponse) GetNestedStuff() ComplexInlineFragmentsNestedStuffContent {
+func (v *ComplexInlineFragmentsResponse) GetNestedStuff() (val ComplexInlineFragmentsNestedStuffContent) {
+	if v == nil {
+		return
+	}
 	return v.NestedStuff
 }
 
@@ -1332,13 +1629,28 @@ type ComplexInlineFragmentsRootTopic struct {
 }
 
 // GetId returns ComplexInlineFragmentsRootTopic.Id, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsRootTopic) GetId() testutil.ID { return v.Id }
+func (v *ComplexInlineFragmentsRootTopic) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetSchoolGrade returns ComplexInlineFragmentsRootTopic.SchoolGrade, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsRootTopic) GetSchoolGrade() string { return v.SchoolGrade }
+func (v *ComplexInlineFragmentsRootTopic) GetSchoolGrade() (val string) {
+	if v == nil {
+		return
+	}
+	return v.SchoolGrade
+}
 
 // GetName returns ComplexInlineFragmentsRootTopic.Name, and is useful for accessing the field via an interface.
-func (v *ComplexInlineFragmentsRootTopic) GetName() string { return v.Name }
+func (v *ComplexInlineFragmentsRootTopic) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // The query executed by ComplexInlineFragments.
 const ComplexInlineFragments_Operation = `

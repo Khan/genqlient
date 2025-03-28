@@ -18,7 +18,12 @@ type ListInputQueryResponse struct {
 }
 
 // GetUser returns ListInputQueryResponse.User, and is useful for accessing the field via an interface.
-func (v *ListInputQueryResponse) GetUser() ListInputQueryUser { return v.User }
+func (v *ListInputQueryResponse) GetUser() (val ListInputQueryUser) {
+	if v == nil {
+		return
+	}
+	return v.User
+}
 
 // ListInputQueryUser includes the requested fields of the GraphQL type User.
 // The GraphQL type's documentation follows.
@@ -32,7 +37,12 @@ type ListInputQueryUser struct {
 }
 
 // GetId returns ListInputQueryUser.Id, and is useful for accessing the field via an interface.
-func (v *ListInputQueryUser) GetId() string { return v.Id }
+func (v *ListInputQueryUser) GetId() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // QueryWithSlicesResponse is returned by QueryWithSlices on success.
 type QueryWithSlicesResponse struct {
@@ -44,7 +54,12 @@ type QueryWithSlicesResponse struct {
 }
 
 // GetUser returns QueryWithSlicesResponse.User, and is useful for accessing the field via an interface.
-func (v *QueryWithSlicesResponse) GetUser() QueryWithSlicesUser { return v.User }
+func (v *QueryWithSlicesResponse) GetUser() (val QueryWithSlicesUser) {
+	if v == nil {
+		return
+	}
+	return v.User
+}
 
 // QueryWithSlicesUser includes the requested fields of the GraphQL type User.
 // The GraphQL type's documentation follows.
@@ -58,16 +73,36 @@ type QueryWithSlicesUser struct {
 }
 
 // GetEmails returns QueryWithSlicesUser.Emails, and is useful for accessing the field via an interface.
-func (v *QueryWithSlicesUser) GetEmails() []string { return v.Emails }
+func (v *QueryWithSlicesUser) GetEmails() (val []string) {
+	if v == nil {
+		return
+	}
+	return v.Emails
+}
 
 // GetEmailsOrNull returns QueryWithSlicesUser.EmailsOrNull, and is useful for accessing the field via an interface.
-func (v *QueryWithSlicesUser) GetEmailsOrNull() []string { return v.EmailsOrNull }
+func (v *QueryWithSlicesUser) GetEmailsOrNull() (val []string) {
+	if v == nil {
+		return
+	}
+	return v.EmailsOrNull
+}
 
 // GetEmailsWithNulls returns QueryWithSlicesUser.EmailsWithNulls, and is useful for accessing the field via an interface.
-func (v *QueryWithSlicesUser) GetEmailsWithNulls() []string { return v.EmailsWithNulls }
+func (v *QueryWithSlicesUser) GetEmailsWithNulls() (val []string) {
+	if v == nil {
+		return
+	}
+	return v.EmailsWithNulls
+}
 
 // GetEmailsWithNullsOrNull returns QueryWithSlicesUser.EmailsWithNullsOrNull, and is useful for accessing the field via an interface.
-func (v *QueryWithSlicesUser) GetEmailsWithNullsOrNull() []string { return v.EmailsWithNullsOrNull }
+func (v *QueryWithSlicesUser) GetEmailsWithNullsOrNull() (val []string) {
+	if v == nil {
+		return
+	}
+	return v.EmailsWithNullsOrNull
+}
 
 // __ListInputQueryInput is used internally by genqlient
 type __ListInputQueryInput struct {
@@ -75,7 +110,12 @@ type __ListInputQueryInput struct {
 }
 
 // GetNames returns __ListInputQueryInput.Names, and is useful for accessing the field via an interface.
-func (v *__ListInputQueryInput) GetNames() []string { return v.Names }
+func (v *__ListInputQueryInput) GetNames() (val []string) {
+	if v == nil {
+		return
+	}
+	return v.Names
+}
 
 // The query executed by ListInputQuery.
 const ListInputQuery_Operation = `
