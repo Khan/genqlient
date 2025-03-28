@@ -1,6 +1,6 @@
 # Getting started with genqlient
 
-This document describes how to set up genqlient and use it for simple queries.  See also the full worked [example](../example), the [FAQ](faq.md), and the rest of the [documentation](docs).
+This document describes how to set up genqlient and use it for simple queries.  See also the full worked [example](../example), the [FAQ](faq.md), and the rest of the [documentation](https://github.com/Khan/genqlient/blob/main/docs/).
 
 ## Step 1: Download your schema
 
