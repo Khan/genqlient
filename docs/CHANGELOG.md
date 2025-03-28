@@ -26,7 +26,7 @@ When releasing a new version:
 
 ### Bug fixes:
 
-- `documentation` link in `introduction.md` now links absolutely to ensure no 404 page
+- fixed documentation link in `introduction.md`
 
 ## v0.8.0
 
