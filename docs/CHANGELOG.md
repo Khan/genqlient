@@ -27,6 +27,7 @@ When releasing a new version:
 ### Bug fixes:
 
 - fixed documentation link in `introduction.md`
+- upgrade version of alexflint/go-arg from 1.4.2 to 1.5.1
 
 ## v0.8.0
 
