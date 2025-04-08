@@ -6,7 +6,7 @@ toolchain go1.23.3
 
 require (
 	github.com/99designs/gqlgen v0.17.57
-	github.com/alexflint/go-arg v1.4.2
+	github.com/alexflint/go-arg v1.5.1
 	github.com/bmatcuk/doublestar/v4 v4.6.1
 	github.com/bradleyjkemp/cupaloy/v2 v2.6.0
 	github.com/google/uuid v1.6.0
@@ -19,7 +19,7 @@ require (
 
 require (
 	github.com/agnivade/levenshtein v1.1.1 // indirect
-	github.com/alexflint/go-scalar v1.0.0 // indirect
+	github.com/alexflint/go-scalar v1.2.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/go-viper/mapstructure/v2 v2.2.1 // indirect
 	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
