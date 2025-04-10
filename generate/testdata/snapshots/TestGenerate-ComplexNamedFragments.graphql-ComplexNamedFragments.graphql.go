@@ -16,17 +16,26 @@ type ComplexNamedFragmentsResponse struct {
 }
 
 // GetRandomItem returns ComplexNamedFragmentsResponse.RandomItem, and is useful for accessing the field via an interface.
-func (v *ComplexNamedFragmentsResponse) GetRandomItem() InnerQueryFragmentRandomItemContent {
+func (v *ComplexNamedFragmentsResponse) GetRandomItem() (val InnerQueryFragmentRandomItemContent) {
+	if v == nil {
+		return
+	}
 	return v.QueryFragment.InnerQueryFragment.RandomItem
 }
 
 // GetRandomLeaf returns ComplexNamedFragmentsResponse.RandomLeaf, and is useful for accessing the field via an interface.
-func (v *ComplexNamedFragmentsResponse) GetRandomLeaf() InnerQueryFragmentRandomLeafLeafContent {
+func (v *ComplexNamedFragmentsResponse) GetRandomLeaf() (val InnerQueryFragmentRandomLeafLeafContent) {
+	if v == nil {
+		return
+	}
 	return v.QueryFragment.InnerQueryFragment.RandomLeaf
 }
 
 // GetOtherLeaf returns ComplexNamedFragmentsResponse.OtherLeaf, and is useful for accessing the field via an interface.
-func (v *ComplexNamedFragmentsResponse) GetOtherLeaf() InnerQueryFragmentOtherLeafLeafContent {
+func (v *ComplexNamedFragmentsResponse) GetOtherLeaf() (val InnerQueryFragmentOtherLeafLeafContent) {
+	if v == nil {
+		return
+	}
 	return v.QueryFragment.InnerQueryFragment.OtherLeaf
 }
 
@@ -124,12 +133,18 @@ type ComplexNamedFragmentsWithInlineUnionResponse struct {
 }
 
 // GetUser returns ComplexNamedFragmentsWithInlineUnionResponse.User, and is useful for accessing the field via an interface.
-func (v *ComplexNamedFragmentsWithInlineUnionResponse) GetUser() ComplexNamedFragmentsWithInlineUnionUser {
+func (v *ComplexNamedFragmentsWithInlineUnionResponse) GetUser() (val ComplexNamedFragmentsWithInlineUnionUser) {
+	if v == nil {
+		return
+	}
 	return v.User
 }
 
 // GetRoot returns ComplexNamedFragmentsWithInlineUnionResponse.Root, and is useful for accessing the field via an interface.
-func (v *ComplexNamedFragmentsWithInlineUnionResponse) GetRoot() ComplexNamedFragmentsWithInlineUnionRootTopic {
+func (v *ComplexNamedFragmentsWithInlineUnionResponse) GetRoot() (val ComplexNamedFragmentsWithInlineUnionRootTopic) {
+	if v == nil {
+		return
+	}
 	return v.Root
 }
 
@@ -139,7 +154,10 @@ type ComplexNamedFragmentsWithInlineUnionRootTopic struct {
 }
 
 // GetNewestContent returns ComplexNamedFragmentsWithInlineUnionRootTopic.NewestContent, and is useful for accessing the field via an interface.
-func (v *ComplexNamedFragmentsWithInlineUnionRootTopic) GetNewestContent() TopicNewestContentNewestContentLeafContent {
+func (v *ComplexNamedFragmentsWithInlineUnionRootTopic) GetNewestContent() (val TopicNewestContentNewestContentLeafContent) {
+	if v == nil {
+		return
+	}
 	return v.TopicNewestContent.NewestContent
 }
 
@@ -207,7 +225,10 @@ type ComplexNamedFragmentsWithInlineUnionUser struct {
 }
 
 // GetLastContent returns ComplexNamedFragmentsWithInlineUnionUser.LastContent, and is useful for accessing the field via an interface.
-func (v *ComplexNamedFragmentsWithInlineUnionUser) GetLastContent() UserLastContentLastContentLeafContent {
+func (v *ComplexNamedFragmentsWithInlineUnionUser) GetLastContent() (val UserLastContentLastContentLeafContent) {
+	if v == nil {
+		return
+	}
 	return v.UserLastContent.LastContent
 }
 
@@ -365,10 +386,20 @@ type ContentFieldsArticle struct {
 }
 
 // GetName returns ContentFieldsArticle.Name, and is useful for accessing the field via an interface.
-func (v *ContentFieldsArticle) GetName() string { return v.Name }
+func (v *ContentFieldsArticle) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // GetUrl returns ContentFieldsArticle.Url, and is useful for accessing the field via an interface.
-func (v *ContentFieldsArticle) GetUrl() string { return v.Url }
+func (v *ContentFieldsArticle) GetUrl() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Url
+}
 
 // ContentFields includes the GraphQL fields of Topic requested by the fragment ContentFields.
 // The GraphQL type's documentation follows.
@@ -380,10 +411,20 @@ type ContentFieldsTopic struct {
 }
 
 // GetName returns ContentFieldsTopic.Name, and is useful for accessing the field via an interface.
-func (v *ContentFieldsTopic) GetName() string { return v.Name }
+func (v *ContentFieldsTopic) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // GetUrl returns ContentFieldsTopic.Url, and is useful for accessing the field via an interface.
-func (v *ContentFieldsTopic) GetUrl() string { return v.Url }
+func (v *ContentFieldsTopic) GetUrl() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Url
+}
 
 // ContentFields includes the GraphQL fields of Video requested by the fragment ContentFields.
 // The GraphQL type's documentation follows.
@@ -395,10 +436,20 @@ type ContentFieldsVideo struct {
 }
 
 // GetName returns ContentFieldsVideo.Name, and is useful for accessing the field via an interface.
-func (v *ContentFieldsVideo) GetName() string { return v.Name }
+func (v *ContentFieldsVideo) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // GetUrl returns ContentFieldsVideo.Url, and is useful for accessing the field via an interface.
-func (v *ContentFieldsVideo) GetUrl() string { return v.Url }
+func (v *ContentFieldsVideo) GetUrl() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Url
+}
 
 // InnerQueryFragment includes the GraphQL fields of Query requested by the fragment InnerQueryFragment.
 // The GraphQL type's documentation follows.
@@ -411,15 +462,26 @@ type InnerQueryFragment struct {
 }
 
 // GetRandomItem returns InnerQueryFragment.RandomItem, and is useful for accessing the field via an interface.
-func (v *InnerQueryFragment) GetRandomItem() InnerQueryFragmentRandomItemContent { return v.RandomItem }
+func (v *InnerQueryFragment) GetRandomItem() (val InnerQueryFragmentRandomItemContent) {
+	if v == nil {
+		return
+	}
+	return v.RandomItem
+}
 
 // GetRandomLeaf returns InnerQueryFragment.RandomLeaf, and is useful for accessing the field via an interface.
-func (v *InnerQueryFragment) GetRandomLeaf() InnerQueryFragmentRandomLeafLeafContent {
+func (v *InnerQueryFragment) GetRandomLeaf() (val InnerQueryFragmentRandomLeafLeafContent) {
+	if v == nil {
+		return
+	}
 	return v.RandomLeaf
 }
 
 // GetOtherLeaf returns InnerQueryFragment.OtherLeaf, and is useful for accessing the field via an interface.
-func (v *InnerQueryFragment) GetOtherLeaf() InnerQueryFragmentOtherLeafLeafContent {
+func (v *InnerQueryFragment) GetOtherLeaf() (val InnerQueryFragmentOtherLeafLeafContent) {
+	if v == nil {
+		return
+	}
 	return v.OtherLeaf
 }
 
@@ -549,13 +611,28 @@ type InnerQueryFragmentOtherLeafArticle struct {
 }
 
 // GetTypename returns InnerQueryFragmentOtherLeafArticle.Typename, and is useful for accessing the field via an interface.
-func (v *InnerQueryFragmentOtherLeafArticle) GetTypename() string { return v.Typename }
+func (v *InnerQueryFragmentOtherLeafArticle) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetName returns InnerQueryFragmentOtherLeafArticle.Name, and is useful for accessing the field via an interface.
-func (v *InnerQueryFragmentOtherLeafArticle) GetName() string { return v.ContentFieldsArticle.Name }
+func (v *InnerQueryFragmentOtherLeafArticle) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.ContentFieldsArticle.Name
+}
 
 // GetUrl returns InnerQueryFragmentOtherLeafArticle.Url, and is useful for accessing the field via an interface.
-func (v *InnerQueryFragmentOtherLeafArticle) GetUrl() string { return v.ContentFieldsArticle.Url }
+func (v *InnerQueryFragmentOtherLeafArticle) GetUrl() (val string) {
+	if v == nil {
+		return
+	}
+	return v.ContentFieldsArticle.Url
+}
 
 func (v *InnerQueryFragmentOtherLeafArticle) UnmarshalJSON(b []byte) error {
 
@@ -699,21 +776,44 @@ type InnerQueryFragmentOtherLeafVideo struct {
 }
 
 // GetTypename returns InnerQueryFragmentOtherLeafVideo.Typename, and is useful for accessing the field via an interface.
-func (v *InnerQueryFragmentOtherLeafVideo) GetTypename() string { return v.Typename }
+func (v *InnerQueryFragmentOtherLeafVideo) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns InnerQueryFragmentOtherLeafVideo.Id, and is useful for accessing the field via an interface.
-func (v *InnerQueryFragmentOtherLeafVideo) GetId() *testutil.ID { return v.MoreVideoFields.Id }
+func (v *InnerQueryFragmentOtherLeafVideo) GetId() (val *testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.MoreVideoFields.Id
+}
 
 // GetParent returns InnerQueryFragmentOtherLeafVideo.Parent, and is useful for accessing the field via an interface.
-func (v *InnerQueryFragmentOtherLeafVideo) GetParent() *MoreVideoFieldsParentTopic {
+func (v *InnerQueryFragmentOtherLeafVideo) GetParent() (val *MoreVideoFieldsParentTopic) {
+	if v == nil {
+		return
+	}
 	return v.MoreVideoFields.Parent
 }
 
 // GetName returns InnerQueryFragmentOtherLeafVideo.Name, and is useful for accessing the field via an interface.
-func (v *InnerQueryFragmentOtherLeafVideo) GetName() string { return v.ContentFieldsVideo.Name }
+func (v *InnerQueryFragmentOtherLeafVideo) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.ContentFieldsVideo.Name
+}
 
 // GetUrl returns InnerQueryFragmentOtherLeafVideo.Url, and is useful for accessing the field via an interface.
-func (v *InnerQueryFragmentOtherLeafVideo) GetUrl() string { return v.ContentFieldsVideo.Url }
+func (v *InnerQueryFragmentOtherLeafVideo) GetUrl() (val string) {
+	if v == nil {
+		return
+	}
+	return v.ContentFieldsVideo.Url
+}
 
 func (v *InnerQueryFragmentOtherLeafVideo) UnmarshalJSON(b []byte) error {
 
@@ -786,16 +886,36 @@ type InnerQueryFragmentRandomItemArticle struct {
 }
 
 // GetTypename returns InnerQueryFragmentRandomItemArticle.Typename, and is useful for accessing the field via an interface.
-func (v *InnerQueryFragmentRandomItemArticle) GetTypename() string { return v.Typename }
+func (v *InnerQueryFragmentRandomItemArticle) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns InnerQueryFragmentRandomItemArticle.Id, and is useful for accessing the field via an interface.
-func (v *InnerQueryFragmentRandomItemArticle) GetId() testutil.ID { return v.Id }
+func (v *InnerQueryFragmentRandomItemArticle) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns InnerQueryFragmentRandomItemArticle.Name, and is useful for accessing the field via an interface.
-func (v *InnerQueryFragmentRandomItemArticle) GetName() string { return v.Name }
+func (v *InnerQueryFragmentRandomItemArticle) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // GetUrl returns InnerQueryFragmentRandomItemArticle.Url, and is useful for accessing the field via an interface.
-func (v *InnerQueryFragmentRandomItemArticle) GetUrl() string { return v.ContentFieldsArticle.Url }
+func (v *InnerQueryFragmentRandomItemArticle) GetUrl() (val string) {
+	if v == nil {
+		return
+	}
+	return v.ContentFieldsArticle.Url
+}
 
 func (v *InnerQueryFragmentRandomItemArticle) UnmarshalJSON(b []byte) error {
 
@@ -970,16 +1090,36 @@ type InnerQueryFragmentRandomItemTopic struct {
 }
 
 // GetTypename returns InnerQueryFragmentRandomItemTopic.Typename, and is useful for accessing the field via an interface.
-func (v *InnerQueryFragmentRandomItemTopic) GetTypename() string { return v.Typename }
+func (v *InnerQueryFragmentRandomItemTopic) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns InnerQueryFragmentRandomItemTopic.Id, and is useful for accessing the field via an interface.
-func (v *InnerQueryFragmentRandomItemTopic) GetId() testutil.ID { return v.Id }
+func (v *InnerQueryFragmentRandomItemTopic) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns InnerQueryFragmentRandomItemTopic.Name, and is useful for accessing the field via an interface.
-func (v *InnerQueryFragmentRandomItemTopic) GetName() string { return v.Name }
+func (v *InnerQueryFragmentRandomItemTopic) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // GetUrl returns InnerQueryFragmentRandomItemTopic.Url, and is useful for accessing the field via an interface.
-func (v *InnerQueryFragmentRandomItemTopic) GetUrl() string { return v.ContentFieldsTopic.Url }
+func (v *InnerQueryFragmentRandomItemTopic) GetUrl() (val string) {
+	if v == nil {
+		return
+	}
+	return v.ContentFieldsTopic.Url
+}
 
 func (v *InnerQueryFragmentRandomItemTopic) UnmarshalJSON(b []byte) error {
 
@@ -1045,22 +1185,50 @@ type InnerQueryFragmentRandomItemVideo struct {
 }
 
 // GetTypename returns InnerQueryFragmentRandomItemVideo.Typename, and is useful for accessing the field via an interface.
-func (v *InnerQueryFragmentRandomItemVideo) GetTypename() string { return v.Typename }
+func (v *InnerQueryFragmentRandomItemVideo) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns InnerQueryFragmentRandomItemVideo.Id, and is useful for accessing the field via an interface.
-func (v *InnerQueryFragmentRandomItemVideo) GetId() testutil.ID { return v.Id }
+func (v *InnerQueryFragmentRandomItemVideo) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns InnerQueryFragmentRandomItemVideo.Name, and is useful for accessing the field via an interface.
-func (v *InnerQueryFragmentRandomItemVideo) GetName() string { return v.Name }
+func (v *InnerQueryFragmentRandomItemVideo) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // GetUrl returns InnerQueryFragmentRandomItemVideo.Url, and is useful for accessing the field via an interface.
-func (v *InnerQueryFragmentRandomItemVideo) GetUrl() string { return v.VideoFields.Url }
+func (v *InnerQueryFragmentRandomItemVideo) GetUrl() (val string) {
+	if v == nil {
+		return
+	}
+	return v.VideoFields.Url
+}
 
 // GetDuration returns InnerQueryFragmentRandomItemVideo.Duration, and is useful for accessing the field via an interface.
-func (v *InnerQueryFragmentRandomItemVideo) GetDuration() int { return v.VideoFields.Duration }
+func (v *InnerQueryFragmentRandomItemVideo) GetDuration() (val int) {
+	if v == nil {
+		return
+	}
+	return v.VideoFields.Duration
+}
 
 // GetThumbnail returns InnerQueryFragmentRandomItemVideo.Thumbnail, and is useful for accessing the field via an interface.
-func (v *InnerQueryFragmentRandomItemVideo) GetThumbnail() VideoFieldsThumbnail {
+func (v *InnerQueryFragmentRandomItemVideo) GetThumbnail() (val VideoFieldsThumbnail) {
+	if v == nil {
+		return
+	}
 	return v.VideoFields.Thumbnail
 }
 
@@ -1135,13 +1303,28 @@ type InnerQueryFragmentRandomLeafArticle struct {
 }
 
 // GetTypename returns InnerQueryFragmentRandomLeafArticle.Typename, and is useful for accessing the field via an interface.
-func (v *InnerQueryFragmentRandomLeafArticle) GetTypename() string { return v.Typename }
+func (v *InnerQueryFragmentRandomLeafArticle) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetName returns InnerQueryFragmentRandomLeafArticle.Name, and is useful for accessing the field via an interface.
-func (v *InnerQueryFragmentRandomLeafArticle) GetName() string { return v.ContentFieldsArticle.Name }
+func (v *InnerQueryFragmentRandomLeafArticle) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.ContentFieldsArticle.Name
+}
 
 // GetUrl returns InnerQueryFragmentRandomLeafArticle.Url, and is useful for accessing the field via an interface.
-func (v *InnerQueryFragmentRandomLeafArticle) GetUrl() string { return v.ContentFieldsArticle.Url }
+func (v *InnerQueryFragmentRandomLeafArticle) GetUrl() (val string) {
+	if v == nil {
+		return
+	}
+	return v.ContentFieldsArticle.Url
+}
 
 func (v *InnerQueryFragmentRandomLeafArticle) UnmarshalJSON(b []byte) error {
 
@@ -1286,27 +1469,58 @@ type InnerQueryFragmentRandomLeafVideo struct {
 }
 
 // GetTypename returns InnerQueryFragmentRandomLeafVideo.Typename, and is useful for accessing the field via an interface.
-func (v *InnerQueryFragmentRandomLeafVideo) GetTypename() string { return v.Typename }
+func (v *InnerQueryFragmentRandomLeafVideo) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns InnerQueryFragmentRandomLeafVideo.Id, and is useful for accessing the field via an interface.
-func (v *InnerQueryFragmentRandomLeafVideo) GetId() testutil.ID { return v.VideoFields.Id }
+func (v *InnerQueryFragmentRandomLeafVideo) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.VideoFields.Id
+}
 
 // GetName returns InnerQueryFragmentRandomLeafVideo.Name, and is useful for accessing the field via an interface.
-func (v *InnerQueryFragmentRandomLeafVideo) GetName() string { return v.VideoFields.Name }
+func (v *InnerQueryFragmentRandomLeafVideo) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.VideoFields.Name
+}
 
 // GetUrl returns InnerQueryFragmentRandomLeafVideo.Url, and is useful for accessing the field via an interface.
-func (v *InnerQueryFragmentRandomLeafVideo) GetUrl() string { return v.VideoFields.Url }
+func (v *InnerQueryFragmentRandomLeafVideo) GetUrl() (val string) {
+	if v == nil {
+		return
+	}
+	return v.VideoFields.Url
+}
 
 // GetDuration returns InnerQueryFragmentRandomLeafVideo.Duration, and is useful for accessing the field via an interface.
-func (v *InnerQueryFragmentRandomLeafVideo) GetDuration() int { return v.VideoFields.Duration }
+func (v *InnerQueryFragmentRandomLeafVideo) GetDuration() (val int) {
+	if v == nil {
+		return
+	}
+	return v.VideoFields.Duration
+}
 
 // GetThumbnail returns InnerQueryFragmentRandomLeafVideo.Thumbnail, and is useful for accessing the field via an interface.
-func (v *InnerQueryFragmentRandomLeafVideo) GetThumbnail() VideoFieldsThumbnail {
+func (v *InnerQueryFragmentRandomLeafVideo) GetThumbnail() (val VideoFieldsThumbnail) {
+	if v == nil {
+		return
+	}
 	return v.VideoFields.Thumbnail
 }
 
 // GetParent returns InnerQueryFragmentRandomLeafVideo.Parent, and is useful for accessing the field via an interface.
-func (v *InnerQueryFragmentRandomLeafVideo) GetParent() *MoreVideoFieldsParentTopic {
+func (v *InnerQueryFragmentRandomLeafVideo) GetParent() (val *MoreVideoFieldsParentTopic) {
+	if v == nil {
+		return
+	}
 	return v.MoreVideoFields.Parent
 }
 
@@ -1390,10 +1604,20 @@ type MoreVideoFields struct {
 }
 
 // GetId returns MoreVideoFields.Id, and is useful for accessing the field via an interface.
-func (v *MoreVideoFields) GetId() *testutil.ID { return v.Id }
+func (v *MoreVideoFields) GetId() (val *testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetParent returns MoreVideoFields.Parent, and is useful for accessing the field via an interface.
-func (v *MoreVideoFields) GetParent() *MoreVideoFieldsParentTopic { return v.Parent }
+func (v *MoreVideoFields) GetParent() (val *MoreVideoFieldsParentTopic) {
+	if v == nil {
+		return
+	}
+	return v.Parent
+}
 
 // MoreVideoFieldsParentTopic includes the requested fields of the GraphQL type Topic.
 type MoreVideoFieldsParentTopic struct {
@@ -1404,13 +1628,26 @@ type MoreVideoFieldsParentTopic struct {
 }
 
 // GetName returns MoreVideoFieldsParentTopic.Name, and is useful for accessing the field via an interface.
-func (v *MoreVideoFieldsParentTopic) GetName() *string { return v.Name }
+func (v *MoreVideoFieldsParentTopic) GetName() (val *string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // GetUrl returns MoreVideoFieldsParentTopic.Url, and is useful for accessing the field via an interface.
-func (v *MoreVideoFieldsParentTopic) GetUrl() *string { return v.Url }
+func (v *MoreVideoFieldsParentTopic) GetUrl() (val *string) {
+	if v == nil {
+		return
+	}
+	return v.Url
+}
 
 // GetChildren returns MoreVideoFieldsParentTopic.Children, and is useful for accessing the field via an interface.
-func (v *MoreVideoFieldsParentTopic) GetChildren() []MoreVideoFieldsParentTopicChildrenContent {
+func (v *MoreVideoFieldsParentTopic) GetChildren() (val []MoreVideoFieldsParentTopicChildrenContent) {
+	if v == nil {
+		return
+	}
 	return v.Children
 }
 
@@ -1507,7 +1744,12 @@ type MoreVideoFieldsParentTopicChildrenArticle struct {
 }
 
 // GetTypename returns MoreVideoFieldsParentTopicChildrenArticle.Typename, and is useful for accessing the field via an interface.
-func (v *MoreVideoFieldsParentTopicChildrenArticle) GetTypename() *string { return v.Typename }
+func (v *MoreVideoFieldsParentTopicChildrenArticle) GetTypename() (val *string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // MoreVideoFieldsParentTopicChildrenContent includes the requested fields of the GraphQL interface Content.
 //
@@ -1609,7 +1851,12 @@ type MoreVideoFieldsParentTopicChildrenTopic struct {
 }
 
 // GetTypename returns MoreVideoFieldsParentTopicChildrenTopic.Typename, and is useful for accessing the field via an interface.
-func (v *MoreVideoFieldsParentTopicChildrenTopic) GetTypename() *string { return v.Typename }
+func (v *MoreVideoFieldsParentTopicChildrenTopic) GetTypename() (val *string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // MoreVideoFieldsParentTopicChildrenVideo includes the requested fields of the GraphQL type Video.
 type MoreVideoFieldsParentTopicChildrenVideo struct {
@@ -1618,22 +1865,50 @@ type MoreVideoFieldsParentTopicChildrenVideo struct {
 }
 
 // GetTypename returns MoreVideoFieldsParentTopicChildrenVideo.Typename, and is useful for accessing the field via an interface.
-func (v *MoreVideoFieldsParentTopicChildrenVideo) GetTypename() *string { return v.Typename }
+func (v *MoreVideoFieldsParentTopicChildrenVideo) GetTypename() (val *string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns MoreVideoFieldsParentTopicChildrenVideo.Id, and is useful for accessing the field via an interface.
-func (v *MoreVideoFieldsParentTopicChildrenVideo) GetId() testutil.ID { return v.VideoFields.Id }
+func (v *MoreVideoFieldsParentTopicChildrenVideo) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.VideoFields.Id
+}
 
 // GetName returns MoreVideoFieldsParentTopicChildrenVideo.Name, and is useful for accessing the field via an interface.
-func (v *MoreVideoFieldsParentTopicChildrenVideo) GetName() string { return v.VideoFields.Name }
+func (v *MoreVideoFieldsParentTopicChildrenVideo) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.VideoFields.Name
+}
 
 // GetUrl returns MoreVideoFieldsParentTopicChildrenVideo.Url, and is useful for accessing the field via an interface.
-func (v *MoreVideoFieldsParentTopicChildrenVideo) GetUrl() string { return v.VideoFields.Url }
+func (v *MoreVideoFieldsParentTopicChildrenVideo) GetUrl() (val string) {
+	if v == nil {
+		return
+	}
+	return v.VideoFields.Url
+}
 
 // GetDuration returns MoreVideoFieldsParentTopicChildrenVideo.Duration, and is useful for accessing the field via an interface.
-func (v *MoreVideoFieldsParentTopicChildrenVideo) GetDuration() int { return v.VideoFields.Duration }
+func (v *MoreVideoFieldsParentTopicChildrenVideo) GetDuration() (val int) {
+	if v == nil {
+		return
+	}
+	return v.VideoFields.Duration
+}
 
 // GetThumbnail returns MoreVideoFieldsParentTopicChildrenVideo.Thumbnail, and is useful for accessing the field via an interface.
-func (v *MoreVideoFieldsParentTopicChildrenVideo) GetThumbnail() VideoFieldsThumbnail {
+func (v *MoreVideoFieldsParentTopicChildrenVideo) GetThumbnail() (val VideoFieldsThumbnail) {
+	if v == nil {
+		return
+	}
 	return v.VideoFields.Thumbnail
 }
 
@@ -1705,17 +1980,26 @@ type QueryFragment struct {
 }
 
 // GetRandomItem returns QueryFragment.RandomItem, and is useful for accessing the field via an interface.
-func (v *QueryFragment) GetRandomItem() InnerQueryFragmentRandomItemContent {
+func (v *QueryFragment) GetRandomItem() (val InnerQueryFragmentRandomItemContent) {
+	if v == nil {
+		return
+	}
 	return v.InnerQueryFragment.RandomItem
 }
 
 // GetRandomLeaf returns QueryFragment.RandomLeaf, and is useful for accessing the field via an interface.
-func (v *QueryFragment) GetRandomLeaf() InnerQueryFragmentRandomLeafLeafContent {
+func (v *QueryFragment) GetRandomLeaf() (val InnerQueryFragmentRandomLeafLeafContent) {
+	if v == nil {
+		return
+	}
 	return v.InnerQueryFragment.RandomLeaf
 }
 
 // GetOtherLeaf returns QueryFragment.OtherLeaf, and is useful for accessing the field via an interface.
-func (v *QueryFragment) GetOtherLeaf() InnerQueryFragmentOtherLeafLeafContent {
+func (v *QueryFragment) GetOtherLeaf() (val InnerQueryFragmentOtherLeafLeafContent) {
+	if v == nil {
+		return
+	}
 	return v.InnerQueryFragment.OtherLeaf
 }
 
@@ -1878,7 +2162,12 @@ type SimpleLeafContentArticle struct {
 }
 
 // GetId returns SimpleLeafContentArticle.Id, and is useful for accessing the field via an interface.
-func (v *SimpleLeafContentArticle) GetId() testutil.ID { return v.Id }
+func (v *SimpleLeafContentArticle) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // # two fragments of different types with fields containing the same inline named fragment of a union
 type SimpleLeafContentVideo struct {
@@ -1887,7 +2176,12 @@ type SimpleLeafContentVideo struct {
 }
 
 // GetId returns SimpleLeafContentVideo.Id, and is useful for accessing the field via an interface.
-func (v *SimpleLeafContentVideo) GetId() testutil.ID { return v.Id }
+func (v *SimpleLeafContentVideo) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // TopicNewestContent includes the GraphQL fields of Topic requested by the fragment TopicNewestContent.
 type TopicNewestContent struct {
@@ -1895,7 +2189,10 @@ type TopicNewestContent struct {
 }
 
 // GetNewestContent returns TopicNewestContent.NewestContent, and is useful for accessing the field via an interface.
-func (v *TopicNewestContent) GetNewestContent() TopicNewestContentNewestContentLeafContent {
+func (v *TopicNewestContent) GetNewestContent() (val TopicNewestContentNewestContentLeafContent) {
+	if v == nil {
+		return
+	}
 	return v.NewestContent
 }
 
@@ -1969,10 +2266,18 @@ type TopicNewestContentNewestContentArticle struct {
 }
 
 // GetTypename returns TopicNewestContentNewestContentArticle.Typename, and is useful for accessing the field via an interface.
-func (v *TopicNewestContentNewestContentArticle) GetTypename() string { return v.Typename }
+func (v *TopicNewestContentNewestContentArticle) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns TopicNewestContentNewestContentArticle.Id, and is useful for accessing the field via an interface.
-func (v *TopicNewestContentNewestContentArticle) GetId() testutil.ID {
+func (v *TopicNewestContentNewestContentArticle) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
 	return v.SimpleLeafContentArticle.Id
 }
 
@@ -2115,10 +2420,18 @@ type TopicNewestContentNewestContentVideo struct {
 }
 
 // GetTypename returns TopicNewestContentNewestContentVideo.Typename, and is useful for accessing the field via an interface.
-func (v *TopicNewestContentNewestContentVideo) GetTypename() string { return v.Typename }
+func (v *TopicNewestContentNewestContentVideo) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns TopicNewestContentNewestContentVideo.Id, and is useful for accessing the field via an interface.
-func (v *TopicNewestContentNewestContentVideo) GetId() testutil.ID {
+func (v *TopicNewestContentNewestContentVideo) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
 	return v.SimpleLeafContentVideo.Id
 }
 
@@ -2178,7 +2491,10 @@ type UserLastContent struct {
 }
 
 // GetLastContent returns UserLastContent.LastContent, and is useful for accessing the field via an interface.
-func (v *UserLastContent) GetLastContent() UserLastContentLastContentLeafContent {
+func (v *UserLastContent) GetLastContent() (val UserLastContentLastContentLeafContent) {
+	if v == nil {
+		return
+	}
 	return v.LastContent
 }
 
@@ -2252,10 +2568,20 @@ type UserLastContentLastContentArticle struct {
 }
 
 // GetTypename returns UserLastContentLastContentArticle.Typename, and is useful for accessing the field via an interface.
-func (v *UserLastContentLastContentArticle) GetTypename() string { return v.Typename }
+func (v *UserLastContentLastContentArticle) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns UserLastContentLastContentArticle.Id, and is useful for accessing the field via an interface.
-func (v *UserLastContentLastContentArticle) GetId() testutil.ID { return v.SimpleLeafContentArticle.Id }
+func (v *UserLastContentLastContentArticle) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.SimpleLeafContentArticle.Id
+}
 
 func (v *UserLastContentLastContentArticle) UnmarshalJSON(b []byte) error {
 
@@ -2396,10 +2722,20 @@ type UserLastContentLastContentVideo struct {
 }
 
 // GetTypename returns UserLastContentLastContentVideo.Typename, and is useful for accessing the field via an interface.
-func (v *UserLastContentLastContentVideo) GetTypename() string { return v.Typename }
+func (v *UserLastContentLastContentVideo) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns UserLastContentLastContentVideo.Id, and is useful for accessing the field via an interface.
-func (v *UserLastContentLastContentVideo) GetId() testutil.ID { return v.SimpleLeafContentVideo.Id }
+func (v *UserLastContentLastContentVideo) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.SimpleLeafContentVideo.Id
+}
 
 func (v *UserLastContentLastContentVideo) UnmarshalJSON(b []byte) error {
 
@@ -2460,19 +2796,44 @@ type VideoFields struct {
 }
 
 // GetId returns VideoFields.Id, and is useful for accessing the field via an interface.
-func (v *VideoFields) GetId() testutil.ID { return v.Id }
+func (v *VideoFields) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns VideoFields.Name, and is useful for accessing the field via an interface.
-func (v *VideoFields) GetName() string { return v.Name }
+func (v *VideoFields) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // GetUrl returns VideoFields.Url, and is useful for accessing the field via an interface.
-func (v *VideoFields) GetUrl() string { return v.Url }
+func (v *VideoFields) GetUrl() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Url
+}
 
 // GetDuration returns VideoFields.Duration, and is useful for accessing the field via an interface.
-func (v *VideoFields) GetDuration() int { return v.Duration }
+func (v *VideoFields) GetDuration() (val int) {
+	if v == nil {
+		return
+	}
+	return v.Duration
+}
 
 // GetThumbnail returns VideoFields.Thumbnail, and is useful for accessing the field via an interface.
-func (v *VideoFields) GetThumbnail() VideoFieldsThumbnail { return v.Thumbnail }
+func (v *VideoFields) GetThumbnail() (val VideoFieldsThumbnail) {
+	if v == nil {
+		return
+	}
+	return v.Thumbnail
+}
 
 func (v *VideoFields) UnmarshalJSON(b []byte) error {
 
@@ -2536,7 +2897,12 @@ type VideoFieldsThumbnail struct {
 }
 
 // GetId returns VideoFieldsThumbnail.Id, and is useful for accessing the field via an interface.
-func (v *VideoFieldsThumbnail) GetId() testutil.ID { return v.Id }
+func (v *VideoFieldsThumbnail) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // The query executed by ComplexNamedFragments.
 const ComplexNamedFragments_Operation = `
