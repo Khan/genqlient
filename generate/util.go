@@ -68,6 +68,33 @@ func goConstName(s string) string {
 	}, s)
 }
 
+// ApplyCasing applies a specific casing algorithm to a string.
+// It handles the different casing transformations based on the algorithm.
+// The forceUpperFirst flag is used to make the first character uppercase regardless
+// of the algorithm.
+func ApplyCasing(s string, algo CasingAlgorithm, forceUpperFirst bool) string {
+	var result string
+
+	switch algo {
+	case CasingAutoCamelCase:
+		result = snakeToCamel(s)
+	case CasingRaw:
+		result = s
+	case CasingDefault:
+		// Default casing implementation
+		result = s
+	default:
+		// Unknown algorithm - treat as default
+		result = s
+	}
+
+	if forceUpperFirst {
+		result = upperFirst(result)
+	}
+
+	return result
+}
+
 // https://go.dev/ref/spec#Keywords
 var goKeywords = map[string]bool{
 	"break":       true,

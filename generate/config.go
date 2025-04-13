@@ -385,8 +385,7 @@ func findCfgInDir(dir string) string {
 	return ""
 }
 
-// IsAutoCamelCase returns true if auto_camel_case is enabled.
-// This happens when the casing.default is set to auto_camel_case.
-func (c *Config) IsAutoCamelCase() bool {
-	return c.Casing.getDefault() == CasingAutoCamelCase
+// GetDefaultCasingAlgorithm returns the default casing algorithm for the config.
+func (c *Config) GetDefaultCasingAlgorithm() CasingAlgorithm {
+	return c.Casing.getDefault()
 }

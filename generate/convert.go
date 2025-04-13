@@ -172,10 +172,7 @@ func (g *generator) convertArguments(
 		}
 
 		goName := arg.Variable
-		if g.Config.IsAutoCamelCase() {
-			goName = snakeToCamel(goName)
-		}
-		goName = upperFirst(goName)
+		goName = ApplyCasing(goName, g.Config.GetDefaultCasingAlgorithm(), true)
 		// Some of the arguments don't apply here, namely the name-prefix (see
 		// names.go) and the selection-set (we use all the input type's fields,
 		// and so on recursively).  See also the `case ast.InputObject` in
@@ -349,7 +346,7 @@ func (g *generator) convertDefinition(
 			// name-prefix, append the type-name anyway.  This happens when you
 			// assign a type name to an interface type, and we are generating
 			// one of its implementations.
-			name = makeLongTypeName(namePrefix, def.Name, g.Config.IsAutoCamelCase())
+			name = makeLongTypeName(namePrefix, def.Name, g.Config.GetDefaultCasingAlgorithm())
 		}
 		// (But the prefix is shared.)
 		namePrefix = newPrefixList(options.TypeName)
@@ -358,15 +355,11 @@ func (g *generator) convertDefinition(
 		// ever possibly generate for this type, so we don't need any of the
 		// qualifiers.  This is especially helpful because the caller is very
 		// likely to need to reference these types in their code.
-		if g.Config.IsAutoCamelCase() {
-			name = upperFirst(snakeToCamel(def.Name))
-		} else {
-			name = upperFirst(def.Name)
-		}
+		name = ApplyCasing(def.Name, g.Config.GetDefaultCasingAlgorithm(), true)
 		// (namePrefix is ignored in this case.)
 	} else {
 		// Else, construct a name using the usual algorithm (see names.go).
-		name = makeTypeName(namePrefix, def.Name, g.Config.IsAutoCamelCase())
+		name = makeTypeName(namePrefix, def.Name, g.Config.GetDefaultCasingAlgorithm())
 	}
 
 	// If we already generated the type, we can skip it as long as it matches
@@ -442,10 +435,7 @@ func (g *generator) convertDefinition(
 			}
 
 			goName := field.Name
-			if g.Config.IsAutoCamelCase() {
-				goName = snakeToCamel(goName)
-			}
-			goName = upperFirst(goName)
+			goName = ApplyCasing(goName, g.Config.GetDefaultCasingAlgorithm(), true)
 			// Several of the arguments don't really make sense here:
 			// (note field.Type is necessarily a scalar, input, or enum)
 			//  - namePrefix is ignored for input types and enums (see
@@ -934,13 +924,9 @@ func (g *generator) convertField(
 		goName = fieldOptions.Alias
 	}
 
-	if g.Config.IsAutoCamelCase() {
-		goName = snakeToCamel(goName)
-	}
+	goName = ApplyCasing(goName, g.Config.GetDefaultCasingAlgorithm(), true)
 
-	goName = upperFirst(goName)
-
-	namePrefix = nextPrefix(namePrefix, field, g.Config.IsAutoCamelCase())
+	namePrefix = nextPrefix(namePrefix, field, g.Config.GetDefaultCasingAlgorithm())
 
 	fieldGoType, err := g.convertType(
 		namePrefix, field.Definition.Type, field.SelectionSet,

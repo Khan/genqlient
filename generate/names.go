@@ -139,14 +139,10 @@ func joinPrefixList(prefix *prefixList) string {
 // prefix-list, since it ends with a type, not a field (see top-of-file
 // comment), but it's used to construct both the type-names from the input and
 // the next prefix-list.
-func typeNameParts(prefix *prefixList, typeName string, autoCamelCase bool) *prefixList {
-	// If auto_camel_case is enabled, convert snake_case to camelCase before uppercasing
-	if autoCamelCase {
-		typeName = snakeToCamel(typeName)
-	}
-	// GraphQL types are conventionally UpperCamelCase, but it's not required;
-	// our names will look best if they are.
-	typeName = upperFirst(typeName)
+func typeNameParts(prefix *prefixList, typeName string, algorithm CasingAlgorithm) *prefixList {
+	// Apply the specified casing algorithm with uppercase first letter
+	typeName = ApplyCasing(typeName, algorithm, true)
+
 	// If the prefix has just one part, that's the operation-name.  There's no
 	// need to add "Query" or "Mutation".  (Zero should never happen.)
 	if prefix == nil || prefix.tail == nil ||
@@ -160,22 +156,19 @@ func typeNameParts(prefix *prefixList, typeName string, autoCamelCase bool) *pre
 
 // Given a prefix-list, and a field, compute the next prefix-list, which will
 // be used for that field's selections.
-func nextPrefix(prefix *prefixList, field *ast.Field, autoCamelCase bool) *prefixList {
+func nextPrefix(prefix *prefixList, field *ast.Field, algorithm CasingAlgorithm) *prefixList {
 	// Add the type.
-	prefix = typeNameParts(prefix, field.ObjectDefinition.Name, autoCamelCase)
+	prefix = typeNameParts(prefix, field.ObjectDefinition.Name, algorithm)
 	// Add the field (there's no shortening here, see top-of-file comment).
-	fieldAlias := field.Alias
-	if autoCamelCase {
-		fieldAlias = snakeToCamel(fieldAlias)
-	}
-	prefix = &prefixList{upperFirst(fieldAlias), prefix}
+	fieldAlias := ApplyCasing(field.Alias, algorithm, true)
+	prefix = &prefixList{fieldAlias, prefix}
 	return prefix
 }
 
 // Given a prefix-list, and the GraphQL of the current type, compute the name
 // we should give it in Go.
-func makeTypeName(prefix *prefixList, typeName string, autoCamelCase bool) string {
-	return joinPrefixList(typeNameParts(prefix, typeName, autoCamelCase))
+func makeTypeName(prefix *prefixList, typeName string, algorithm CasingAlgorithm) string {
+	return joinPrefixList(typeNameParts(prefix, typeName, algorithm))
 }
 
 // Like makeTypeName, but append typeName unconditionally.
@@ -183,11 +176,8 @@ func makeTypeName(prefix *prefixList, typeName string, autoCamelCase bool) strin
 // This is used for when you specify a type-name for a field of interface
 // type; we use YourName for the interface, but need to do YourNameImplName for
 // the implementations.
-func makeLongTypeName(prefix *prefixList, typeName string, autoCamelCase bool) string {
-	if autoCamelCase {
-		typeName = snakeToCamel(typeName)
-	}
-	typeName = upperFirst(typeName)
+func makeLongTypeName(prefix *prefixList, typeName string, algorithm CasingAlgorithm) string {
+	typeName = ApplyCasing(typeName, algorithm, true)
 	return joinPrefixList(&prefixList{typeName, prefix})
 }
 
@@ -198,7 +188,7 @@ func (casing *Casing) enumValueName(goTypeName string, enum *ast.Definition, val
 	case CasingRaw:
 		return goTypeName + "_" + val.Name
 	case CasingAutoCamelCase:
-		return goTypeName + upperFirst(snakeToCamel(val.Name))
+		return goTypeName + ApplyCasing(val.Name, algo, true)
 	default:
 		// Should already be caught by validation.
 		panic(fmt.Sprintf("unknown casing algorithm %s", algo))

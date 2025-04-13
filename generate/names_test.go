@@ -60,9 +60,9 @@ func TestTypeNames(t *testing.T) {
 		t.Run(test.expectedTypeName, func(t *testing.T) {
 			prefix := newPrefixList("Operation")
 			for _, field := range test.fields {
-				prefix = nextPrefix(prefix, field, false)
+				prefix = nextPrefix(prefix, field, CasingDefault)
 			}
-			actualTypeName := makeTypeName(prefix, test.leafTypeName, false)
+			actualTypeName := makeTypeName(prefix, test.leafTypeName, CasingDefault)
 			if actualTypeName != test.expectedTypeName {
 				t.Errorf("name mismatch:\ngot:  %s\nwant: %s",
 					actualTypeName, test.expectedTypeName)
@@ -108,10 +108,15 @@ func TestSnakeToTypeNames(t *testing.T) {
 		test := test
 		t.Run(test.expectedTypeName, func(t *testing.T) {
 			prefix := newPrefixList("ServiceIPs")
-			for _, field := range test.fields {
-				prefix = nextPrefix(prefix, field, test.autoCamelCase)
+			algorithm := CasingDefault
+			if test.autoCamelCase {
+				algorithm = CasingAutoCamelCase
 			}
-			actualTypeName := makeTypeName(prefix, test.leafTypeName, test.autoCamelCase)
+
+			for _, field := range test.fields {
+				prefix = nextPrefix(prefix, field, algorithm)
+			}
+			actualTypeName := makeTypeName(prefix, test.leafTypeName, algorithm)
 			if actualTypeName != test.expectedTypeName {
 				t.Errorf("name mismatch:\ngot:  %s\nwant: %s",
 					actualTypeName, test.expectedTypeName)
@@ -141,9 +146,9 @@ func TestTypeNameCollisions(t *testing.T) {
 	for i, test := range tests {
 		prefix := newPrefixList("Operation")
 		for _, field := range test.fields {
-			prefix = nextPrefix(prefix, field, false)
+			prefix = nextPrefix(prefix, field, CasingDefault)
 		}
-		actualTypeName := makeTypeName(prefix, test.leafTypeName, false)
+		actualTypeName := makeTypeName(prefix, test.leafTypeName, CasingDefault)
 
 		otherIndex, ok := seen[actualTypeName]
 		if ok {
