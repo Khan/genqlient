@@ -24,6 +24,8 @@ When releasing a new version:
 
 ### New features:
 
+- Added `@genqlient(alias)` directive to customize field names without requiring GraphQL aliases (fixes #367)
+
 ### Bug fixes:
 
 - fixed documentation link in `introduction.md`
