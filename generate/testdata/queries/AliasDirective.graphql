@@ -1,0 +1,9 @@
+query AliasDirective {
+  # @genqlient(alias: "MyUser")
+  user {
+    # @genqlient(alias: "UserID")
+    id
+    # @genqlient(alias: "UserName")
+    name
+  }
+}

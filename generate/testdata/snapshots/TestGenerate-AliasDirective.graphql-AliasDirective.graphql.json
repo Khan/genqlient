@@ -1,0 +1,9 @@
+{
+  "operations": [
+    {
+      "operationName": "AliasDirective",
+      "query": "\nquery AliasDirective {\n\tuser {\n\t\tid\n\t\tname\n\t}\n}\n",
+      "sourceLocation": "testdata/queries/AliasDirective.graphql"
+    }
+  ]
+}

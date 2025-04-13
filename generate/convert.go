@@ -918,6 +918,10 @@ func (g *generator) convertField(
 	}
 
 	goName := upperFirst(field.Alias)
+	if fieldOptions.Alias != "" {
+		goName = upperFirst(fieldOptions.Alias)
+	}
+
 	namePrefix = nextPrefix(namePrefix, field)
 
 	fieldGoType, err := g.convertType(
