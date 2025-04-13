@@ -197,6 +197,8 @@ func (casing *Casing) enumValueName(goTypeName string, enum *ast.Definition, val
 		return goTypeName + goConstName(val.Name)
 	case CasingRaw:
 		return goTypeName + "_" + val.Name
+	case CasingAutoCamelCase:
+		return goTypeName + upperFirst(snakeToCamel(val.Name))
 	default:
 		// Should already be caught by validation.
 		panic(fmt.Sprintf("unknown casing algorithm %s", algo))

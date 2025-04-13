@@ -241,23 +241,6 @@ bindings:
 package_bindings:
 - package: github.com/you/yourpkg/models
 
-# Configuration for genqlient's smart-casing.
-#
-# If set to true, genqlient will automatically convert snake_case names to camelCase 
-# before applying the standard capitalization for Go exports. This applies to both 
-# field names and type names. The GraphQL query will still use the original names 
-# for compatibility with the server.
-#
-# This is useful when working with GraphQL servers that use snake_case naming
-# conventions, while maintaining idiomatic Go struct field and type names.
-#
-# For example, with this option enabled:
-# - A GraphQL field named "user_id" will be named "UserId" in the generated Go struct
-# - A GraphQL type named "user_profile" will be named "UserProfile" in Go
-# - All original names are preserved in the GraphQL request
-#
-# Defaults to false.
-auto_camel_case: false
 
 # By default genqlient tries to convert GraphQL type names to Go style
 # automatically. Sometimes it doesn't do a great job; this suite of options
@@ -270,7 +253,11 @@ auto_camel_case: false
 # - raw: map the GraphQL type exactly; don't try to convert it to Go style.
 #   This is usually best for schemas with casing conflicts, e.g. enums with
 #   values which differ only in casing.
+# - auto_camel_case: automatically convert snake_case to camelCase names before
+#   standard processing. This applies to field names, type names and enum values.
 casing:
+  # The default casing algorithm to use for all GraphQL names (fields, types, etc.).
+  default: auto_camel_case
   # Use the given casing-style (see above) for all GraphQL enum values.
   all_enums: raw
   # Use the given casing-style (see above) for the enum values in the given
