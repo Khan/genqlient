@@ -25,6 +25,7 @@ When releasing a new version:
 ### New features:
 
 - Added `@genqlient(alias)` directive to customize field names without requiring GraphQL aliases (fixes #367)
+- Added `auto_camel_case` config option to automatically convert snake_case to camelCase in both field names and type names
 
 ### Bug fixes:
 

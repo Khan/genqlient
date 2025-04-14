@@ -1,0 +1,9 @@
+{
+  "operations": [
+    {
+      "operationName": "SnakeCaseType",
+      "query": "\nquery SnakeCaseType {\n\tsnake_case_type {\n\t\tid\n\t\tname\n\t}\n}\n",
+      "sourceLocation": "testdata/queries/SnakeCaseType.graphql"
+    }
+  ]
+}
