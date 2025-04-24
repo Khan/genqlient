@@ -13,10 +13,18 @@ type EmptyInterfaceResponse struct {
 }
 
 // GetGetJunk returns EmptyInterfaceResponse.GetJunk, and is useful for accessing the field via an interface.
-func (v *EmptyInterfaceResponse) GetGetJunk() interface{} { return v.GetJunk }
+func (v *EmptyInterfaceResponse) GetGetJunk() (val interface{}) {
+	if v == nil {
+		return
+	}
+	return v.GetJunk
+}
 
 // GetGetComplexJunk returns EmptyInterfaceResponse.GetComplexJunk, and is useful for accessing the field via an interface.
-func (v *EmptyInterfaceResponse) GetGetComplexJunk() []map[string]*[]*map[string]interface{} {
+func (v *EmptyInterfaceResponse) GetGetComplexJunk() (val []map[string]*[]*map[string]interface{}) {
+	if v == nil {
+		return
+	}
 	return v.GetComplexJunk
 }
 

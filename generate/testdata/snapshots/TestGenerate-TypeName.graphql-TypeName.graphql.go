@@ -17,7 +17,12 @@ type TypeNameQueryResponse struct {
 }
 
 // GetUser returns TypeNameQueryResponse.User, and is useful for accessing the field via an interface.
-func (v *TypeNameQueryResponse) GetUser() TypeNameQueryUser { return v.User }
+func (v *TypeNameQueryResponse) GetUser() (val TypeNameQueryUser) {
+	if v == nil {
+		return
+	}
+	return v.User
+}
 
 // TypeNameQueryUser includes the requested fields of the GraphQL type User.
 // The GraphQL type's documentation follows.
@@ -32,10 +37,20 @@ type TypeNameQueryUser struct {
 }
 
 // GetTypename returns TypeNameQueryUser.Typename, and is useful for accessing the field via an interface.
-func (v *TypeNameQueryUser) GetTypename() string { return v.Typename }
+func (v *TypeNameQueryUser) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns TypeNameQueryUser.Id, and is useful for accessing the field via an interface.
-func (v *TypeNameQueryUser) GetId() testutil.ID { return v.Id }
+func (v *TypeNameQueryUser) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // The query executed by TypeNameQuery.
 const TypeNameQuery_Operation = `

@@ -47,25 +47,60 @@ type UserQueryInput struct {
 }
 
 // GetEmail returns UserQueryInput.Email, and is useful for accessing the field via an interface.
-func (v *UserQueryInput) GetEmail() string { return v.Email }
+func (v *UserQueryInput) GetEmail() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Email
+}
 
 // GetName returns UserQueryInput.Name, and is useful for accessing the field via an interface.
-func (v *UserQueryInput) GetName() string { return v.Name }
+func (v *UserQueryInput) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // GetId returns UserQueryInput.Id, and is useful for accessing the field via an interface.
-func (v *UserQueryInput) GetId() testutil.ID { return v.Id }
+func (v *UserQueryInput) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetRole returns UserQueryInput.Role, and is useful for accessing the field via an interface.
-func (v *UserQueryInput) GetRole() Role { return v.Role }
+func (v *UserQueryInput) GetRole() (val Role) {
+	if v == nil {
+		return
+	}
+	return v.Role
+}
 
 // GetNames returns UserQueryInput.Names, and is useful for accessing the field via an interface.
-func (v *UserQueryInput) GetNames() []string { return v.Names }
+func (v *UserQueryInput) GetNames() (val []string) {
+	if v == nil {
+		return
+	}
+	return v.Names
+}
 
 // GetHasPokemon returns UserQueryInput.HasPokemon, and is useful for accessing the field via an interface.
-func (v *UserQueryInput) GetHasPokemon() testutil.Pokemon { return v.HasPokemon }
+func (v *UserQueryInput) GetHasPokemon() (val testutil.Pokemon) {
+	if v == nil {
+		return
+	}
+	return v.HasPokemon
+}
 
 // GetBirthdate returns UserQueryInput.Birthdate, and is useful for accessing the field via an interface.
-func (v *UserQueryInput) GetBirthdate() time.Time { return v.Birthdate }
+func (v *UserQueryInput) GetBirthdate() (val time.Time) {
+	if v == nil {
+		return
+	}
+	return v.Birthdate
+}
 
 func (v *UserQueryInput) UnmarshalJSON(b []byte) error {
 
@@ -154,7 +189,12 @@ type __unexportedInput struct {
 }
 
 // GetQuery returns __unexportedInput.Query, and is useful for accessing the field via an interface.
-func (v *__unexportedInput) GetQuery() UserQueryInput { return v.Query }
+func (v *__unexportedInput) GetQuery() (val UserQueryInput) {
+	if v == nil {
+		return
+	}
+	return v.Query
+}
 
 // unexportedResponse is returned by unexported on success.
 type unexportedResponse struct {
@@ -166,7 +206,12 @@ type unexportedResponse struct {
 }
 
 // GetUser returns unexportedResponse.User, and is useful for accessing the field via an interface.
-func (v *unexportedResponse) GetUser() unexportedUser { return v.User }
+func (v *unexportedResponse) GetUser() (val unexportedUser) {
+	if v == nil {
+		return
+	}
+	return v.User
+}
 
 // unexportedUser includes the requested fields of the GraphQL type User.
 // The GraphQL type's documentation follows.
@@ -180,7 +225,12 @@ type unexportedUser struct {
 }
 
 // GetId returns unexportedUser.Id, and is useful for accessing the field via an interface.
-func (v *unexportedUser) GetId() testutil.ID { return v.Id }
+func (v *unexportedUser) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // The query executed by unexported.
 const unexported_Operation = `

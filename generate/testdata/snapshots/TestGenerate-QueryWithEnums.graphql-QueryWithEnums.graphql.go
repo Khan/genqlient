@@ -15,7 +15,12 @@ type QueryWithEnumsOtherUser struct {
 }
 
 // GetRoles returns QueryWithEnumsOtherUser.Roles, and is useful for accessing the field via an interface.
-func (v *QueryWithEnumsOtherUser) GetRoles() []Role { return v.Roles }
+func (v *QueryWithEnumsOtherUser) GetRoles() (val []Role) {
+	if v == nil {
+		return
+	}
+	return v.Roles
+}
 
 // QueryWithEnumsResponse is returned by QueryWithEnums on success.
 type QueryWithEnumsResponse struct {
@@ -32,10 +37,20 @@ type QueryWithEnumsResponse struct {
 }
 
 // GetUser returns QueryWithEnumsResponse.User, and is useful for accessing the field via an interface.
-func (v *QueryWithEnumsResponse) GetUser() QueryWithEnumsUser { return v.User }
+func (v *QueryWithEnumsResponse) GetUser() (val QueryWithEnumsUser) {
+	if v == nil {
+		return
+	}
+	return v.User
+}
 
 // GetOtherUser returns QueryWithEnumsResponse.OtherUser, and is useful for accessing the field via an interface.
-func (v *QueryWithEnumsResponse) GetOtherUser() QueryWithEnumsOtherUser { return v.OtherUser }
+func (v *QueryWithEnumsResponse) GetOtherUser() (val QueryWithEnumsOtherUser) {
+	if v == nil {
+		return
+	}
+	return v.OtherUser
+}
 
 // QueryWithEnumsUser includes the requested fields of the GraphQL type User.
 // The GraphQL type's documentation follows.
@@ -46,7 +61,12 @@ type QueryWithEnumsUser struct {
 }
 
 // GetRoles returns QueryWithEnumsUser.Roles, and is useful for accessing the field via an interface.
-func (v *QueryWithEnumsUser) GetRoles() []Role { return v.Roles }
+func (v *QueryWithEnumsUser) GetRoles() (val []Role) {
+	if v == nil {
+		return
+	}
+	return v.Roles
+}
 
 // Role is a type a user may have.
 type Role string

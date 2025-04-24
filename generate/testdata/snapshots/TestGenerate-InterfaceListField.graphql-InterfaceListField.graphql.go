@@ -17,10 +17,18 @@ type InterfaceListFieldResponse struct {
 }
 
 // GetRoot returns InterfaceListFieldResponse.Root, and is useful for accessing the field via an interface.
-func (v *InterfaceListFieldResponse) GetRoot() InterfaceListFieldRootTopic { return v.Root }
+func (v *InterfaceListFieldResponse) GetRoot() (val InterfaceListFieldRootTopic) {
+	if v == nil {
+		return
+	}
+	return v.Root
+}
 
 // GetWithPointer returns InterfaceListFieldResponse.WithPointer, and is useful for accessing the field via an interface.
-func (v *InterfaceListFieldResponse) GetWithPointer() *InterfaceListFieldWithPointerTopic {
+func (v *InterfaceListFieldResponse) GetWithPointer() (val *InterfaceListFieldWithPointerTopic) {
+	if v == nil {
+		return
+	}
 	return v.WithPointer
 }
 
@@ -33,13 +41,26 @@ type InterfaceListFieldRootTopic struct {
 }
 
 // GetId returns InterfaceListFieldRootTopic.Id, and is useful for accessing the field via an interface.
-func (v *InterfaceListFieldRootTopic) GetId() testutil.ID { return v.Id }
+func (v *InterfaceListFieldRootTopic) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns InterfaceListFieldRootTopic.Name, and is useful for accessing the field via an interface.
-func (v *InterfaceListFieldRootTopic) GetName() string { return v.Name }
+func (v *InterfaceListFieldRootTopic) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // GetChildren returns InterfaceListFieldRootTopic.Children, and is useful for accessing the field via an interface.
-func (v *InterfaceListFieldRootTopic) GetChildren() []InterfaceListFieldRootTopicChildrenContent {
+func (v *InterfaceListFieldRootTopic) GetChildren() (val []InterfaceListFieldRootTopicChildrenContent) {
+	if v == nil {
+		return
+	}
 	return v.Children
 }
 
@@ -133,13 +154,28 @@ type InterfaceListFieldRootTopicChildrenArticle struct {
 }
 
 // GetTypename returns InterfaceListFieldRootTopicChildrenArticle.Typename, and is useful for accessing the field via an interface.
-func (v *InterfaceListFieldRootTopicChildrenArticle) GetTypename() string { return v.Typename }
+func (v *InterfaceListFieldRootTopicChildrenArticle) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns InterfaceListFieldRootTopicChildrenArticle.Id, and is useful for accessing the field via an interface.
-func (v *InterfaceListFieldRootTopicChildrenArticle) GetId() testutil.ID { return v.Id }
+func (v *InterfaceListFieldRootTopicChildrenArticle) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns InterfaceListFieldRootTopicChildrenArticle.Name, and is useful for accessing the field via an interface.
-func (v *InterfaceListFieldRootTopicChildrenArticle) GetName() string { return v.Name }
+func (v *InterfaceListFieldRootTopicChildrenArticle) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // InterfaceListFieldRootTopicChildrenContent includes the requested fields of the GraphQL interface Content.
 //
@@ -247,13 +283,28 @@ type InterfaceListFieldRootTopicChildrenTopic struct {
 }
 
 // GetTypename returns InterfaceListFieldRootTopicChildrenTopic.Typename, and is useful for accessing the field via an interface.
-func (v *InterfaceListFieldRootTopicChildrenTopic) GetTypename() string { return v.Typename }
+func (v *InterfaceListFieldRootTopicChildrenTopic) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns InterfaceListFieldRootTopicChildrenTopic.Id, and is useful for accessing the field via an interface.
-func (v *InterfaceListFieldRootTopicChildrenTopic) GetId() testutil.ID { return v.Id }
+func (v *InterfaceListFieldRootTopicChildrenTopic) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns InterfaceListFieldRootTopicChildrenTopic.Name, and is useful for accessing the field via an interface.
-func (v *InterfaceListFieldRootTopicChildrenTopic) GetName() string { return v.Name }
+func (v *InterfaceListFieldRootTopicChildrenTopic) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // InterfaceListFieldRootTopicChildrenVideo includes the requested fields of the GraphQL type Video.
 type InterfaceListFieldRootTopicChildrenVideo struct {
@@ -264,13 +315,28 @@ type InterfaceListFieldRootTopicChildrenVideo struct {
 }
 
 // GetTypename returns InterfaceListFieldRootTopicChildrenVideo.Typename, and is useful for accessing the field via an interface.
-func (v *InterfaceListFieldRootTopicChildrenVideo) GetTypename() string { return v.Typename }
+func (v *InterfaceListFieldRootTopicChildrenVideo) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns InterfaceListFieldRootTopicChildrenVideo.Id, and is useful for accessing the field via an interface.
-func (v *InterfaceListFieldRootTopicChildrenVideo) GetId() testutil.ID { return v.Id }
+func (v *InterfaceListFieldRootTopicChildrenVideo) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns InterfaceListFieldRootTopicChildrenVideo.Name, and is useful for accessing the field via an interface.
-func (v *InterfaceListFieldRootTopicChildrenVideo) GetName() string { return v.Name }
+func (v *InterfaceListFieldRootTopicChildrenVideo) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // InterfaceListFieldWithPointerTopic includes the requested fields of the GraphQL type Topic.
 type InterfaceListFieldWithPointerTopic struct {
@@ -281,13 +347,26 @@ type InterfaceListFieldWithPointerTopic struct {
 }
 
 // GetId returns InterfaceListFieldWithPointerTopic.Id, and is useful for accessing the field via an interface.
-func (v *InterfaceListFieldWithPointerTopic) GetId() testutil.ID { return v.Id }
+func (v *InterfaceListFieldWithPointerTopic) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns InterfaceListFieldWithPointerTopic.Name, and is useful for accessing the field via an interface.
-func (v *InterfaceListFieldWithPointerTopic) GetName() string { return v.Name }
+func (v *InterfaceListFieldWithPointerTopic) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // GetChildren returns InterfaceListFieldWithPointerTopic.Children, and is useful for accessing the field via an interface.
-func (v *InterfaceListFieldWithPointerTopic) GetChildren() []InterfaceListFieldWithPointerTopicChildrenContent {
+func (v *InterfaceListFieldWithPointerTopic) GetChildren() (val []InterfaceListFieldWithPointerTopicChildrenContent) {
+	if v == nil {
+		return
+	}
 	return v.Children
 }
 
@@ -381,13 +460,28 @@ type InterfaceListFieldWithPointerTopicChildrenArticle struct {
 }
 
 // GetTypename returns InterfaceListFieldWithPointerTopicChildrenArticle.Typename, and is useful for accessing the field via an interface.
-func (v *InterfaceListFieldWithPointerTopicChildrenArticle) GetTypename() string { return v.Typename }
+func (v *InterfaceListFieldWithPointerTopicChildrenArticle) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns InterfaceListFieldWithPointerTopicChildrenArticle.Id, and is useful for accessing the field via an interface.
-func (v *InterfaceListFieldWithPointerTopicChildrenArticle) GetId() testutil.ID { return v.Id }
+func (v *InterfaceListFieldWithPointerTopicChildrenArticle) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns InterfaceListFieldWithPointerTopicChildrenArticle.Name, and is useful for accessing the field via an interface.
-func (v *InterfaceListFieldWithPointerTopicChildrenArticle) GetName() string { return v.Name }
+func (v *InterfaceListFieldWithPointerTopicChildrenArticle) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // InterfaceListFieldWithPointerTopicChildrenContent includes the requested fields of the GraphQL interface Content.
 //
@@ -495,13 +589,28 @@ type InterfaceListFieldWithPointerTopicChildrenTopic struct {
 }
 
 // GetTypename returns InterfaceListFieldWithPointerTopicChildrenTopic.Typename, and is useful for accessing the field via an interface.
-func (v *InterfaceListFieldWithPointerTopicChildrenTopic) GetTypename() string { return v.Typename }
+func (v *InterfaceListFieldWithPointerTopicChildrenTopic) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns InterfaceListFieldWithPointerTopicChildrenTopic.Id, and is useful for accessing the field via an interface.
-func (v *InterfaceListFieldWithPointerTopicChildrenTopic) GetId() testutil.ID { return v.Id }
+func (v *InterfaceListFieldWithPointerTopicChildrenTopic) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns InterfaceListFieldWithPointerTopicChildrenTopic.Name, and is useful for accessing the field via an interface.
-func (v *InterfaceListFieldWithPointerTopicChildrenTopic) GetName() string { return v.Name }
+func (v *InterfaceListFieldWithPointerTopicChildrenTopic) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // InterfaceListFieldWithPointerTopicChildrenVideo includes the requested fields of the GraphQL type Video.
 type InterfaceListFieldWithPointerTopicChildrenVideo struct {
@@ -512,13 +621,28 @@ type InterfaceListFieldWithPointerTopicChildrenVideo struct {
 }
 
 // GetTypename returns InterfaceListFieldWithPointerTopicChildrenVideo.Typename, and is useful for accessing the field via an interface.
-func (v *InterfaceListFieldWithPointerTopicChildrenVideo) GetTypename() string { return v.Typename }
+func (v *InterfaceListFieldWithPointerTopicChildrenVideo) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns InterfaceListFieldWithPointerTopicChildrenVideo.Id, and is useful for accessing the field via an interface.
-func (v *InterfaceListFieldWithPointerTopicChildrenVideo) GetId() testutil.ID { return v.Id }
+func (v *InterfaceListFieldWithPointerTopicChildrenVideo) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns InterfaceListFieldWithPointerTopicChildrenVideo.Name, and is useful for accessing the field via an interface.
-func (v *InterfaceListFieldWithPointerTopicChildrenVideo) GetName() string { return v.Name }
+func (v *InterfaceListFieldWithPointerTopicChildrenVideo) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // The query executed by InterfaceListField.
 const InterfaceListField_Operation = `

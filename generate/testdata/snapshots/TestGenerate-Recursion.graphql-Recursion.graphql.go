@@ -13,7 +13,12 @@ type RecursionRecurRecursive struct {
 }
 
 // GetRec returns RecursionRecurRecursive.Rec, and is useful for accessing the field via an interface.
-func (v *RecursionRecurRecursive) GetRec() RecursionRecurRecursiveRecRecursive { return v.Rec }
+func (v *RecursionRecurRecursive) GetRec() (val RecursionRecurRecursiveRecRecursive) {
+	if v == nil {
+		return
+	}
+	return v.Rec
+}
 
 // RecursionRecurRecursiveRecRecursive includes the requested fields of the GraphQL type Recursive.
 type RecursionRecurRecursiveRecRecursive struct {
@@ -21,7 +26,10 @@ type RecursionRecurRecursiveRecRecursive struct {
 }
 
 // GetRec returns RecursionRecurRecursiveRecRecursive.Rec, and is useful for accessing the field via an interface.
-func (v *RecursionRecurRecursiveRecRecursive) GetRec() RecursionRecurRecursiveRecRecursiveRecRecursive {
+func (v *RecursionRecurRecursiveRecRecursive) GetRec() (val RecursionRecurRecursiveRecRecursiveRecRecursive) {
+	if v == nil {
+		return
+	}
 	return v.Rec
 }
 
@@ -31,7 +39,10 @@ type RecursionRecurRecursiveRecRecursiveRecRecursive struct {
 }
 
 // GetRec returns RecursionRecurRecursiveRecRecursiveRecRecursive.Rec, and is useful for accessing the field via an interface.
-func (v *RecursionRecurRecursiveRecRecursiveRecRecursive) GetRec() RecursionRecurRecursiveRecRecursiveRecRecursiveRecRecursive {
+func (v *RecursionRecurRecursiveRecRecursiveRecRecursive) GetRec() (val RecursionRecurRecursiveRecRecursiveRecRecursiveRecRecursive) {
+	if v == nil {
+		return
+	}
 	return v.Rec
 }
 
@@ -41,7 +52,10 @@ type RecursionRecurRecursiveRecRecursiveRecRecursiveRecRecursive struct {
 }
 
 // GetId returns RecursionRecurRecursiveRecRecursiveRecRecursiveRecRecursive.Id, and is useful for accessing the field via an interface.
-func (v *RecursionRecurRecursiveRecRecursiveRecRecursiveRecRecursive) GetId() testutil.ID {
+func (v *RecursionRecurRecursiveRecRecursiveRecRecursiveRecRecursive) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
 	return v.Id
 }
 
@@ -51,14 +65,24 @@ type RecursionResponse struct {
 }
 
 // GetRecur returns RecursionResponse.Recur, and is useful for accessing the field via an interface.
-func (v *RecursionResponse) GetRecur() RecursionRecurRecursive { return v.Recur }
+func (v *RecursionResponse) GetRecur() (val RecursionRecurRecursive) {
+	if v == nil {
+		return
+	}
+	return v.Recur
+}
 
 type RecursiveInput struct {
 	Rec []RecursiveInput `json:"rec"`
 }
 
 // GetRec returns RecursiveInput.Rec, and is useful for accessing the field via an interface.
-func (v *RecursiveInput) GetRec() []RecursiveInput { return v.Rec }
+func (v *RecursiveInput) GetRec() (val []RecursiveInput) {
+	if v == nil {
+		return
+	}
+	return v.Rec
+}
 
 // __RecursionInput is used internally by genqlient
 type __RecursionInput struct {
@@ -66,7 +90,12 @@ type __RecursionInput struct {
 }
 
 // GetInput returns __RecursionInput.Input, and is useful for accessing the field via an interface.
-func (v *__RecursionInput) GetInput() RecursiveInput { return v.Input }
+func (v *__RecursionInput) GetInput() (val RecursiveInput) {
+	if v == nil {
+		return
+	}
+	return v.Input
+}
 
 // The query executed by Recursion.
 const Recursion_Operation = `
