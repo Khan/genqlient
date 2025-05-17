@@ -241,7 +241,7 @@ func (dir *genqlientDirective) validate(node interface{}, schema *ast.Schema) er
 		}
 
 		if dir.Struct != nil {
-			return errorf(dir.pos, "struct is only applicable to fields, not frragment-definitions")
+			return errorf(dir.pos, "struct is only applicable to fields, not fragment-definitions")
 		}
 
 		// Like operations, anything else will just apply to the entire
