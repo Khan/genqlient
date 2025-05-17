@@ -24,11 +24,20 @@ When releasing a new version:
 
 ### New features:
 
+### Bug fixes:
+
+## v0.8.1
+
+This release fixes a bug introduced in v0.8.0 breaking path resolution on Windows, along with some other small features and bugs.
+
+### New features:
+
 - Added `@genqlient(alias)` directive to customize field names without requiring GraphQL aliases (fixes #367)
 - Added `auto_camel_case` config option to automatically convert snake_case to camelCase in both field names and type names
 
 ### Bug fixes:
 
+- fixed path resolution on Windows
 - fixed documentation link in `introduction.md`
 - upgraded version of alexflint/go-arg from 1.4.2 to 1.5.1
 - fixed a typo in the struct + fragment error message
