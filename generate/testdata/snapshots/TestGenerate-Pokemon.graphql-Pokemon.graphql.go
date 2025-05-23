@@ -17,7 +17,12 @@ type GetPokemonSiblingsResponse struct {
 }
 
 // GetUser returns GetPokemonSiblingsResponse.User, and is useful for accessing the field via an interface.
-func (v *GetPokemonSiblingsResponse) GetUser() GetPokemonSiblingsUser { return v.User }
+func (v *GetPokemonSiblingsResponse) GetUser() (val GetPokemonSiblingsUser) {
+	if v == nil {
+		return
+	}
+	return v.User
+}
 
 // GetPokemonSiblingsUser includes the requested fields of the GraphQL type User.
 // The GraphQL type's documentation follows.
@@ -35,19 +40,42 @@ type GetPokemonSiblingsUser struct {
 }
 
 // GetId returns GetPokemonSiblingsUser.Id, and is useful for accessing the field via an interface.
-func (v *GetPokemonSiblingsUser) GetId() string { return v.Id }
+func (v *GetPokemonSiblingsUser) GetId() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetRoles returns GetPokemonSiblingsUser.Roles, and is useful for accessing the field via an interface.
-func (v *GetPokemonSiblingsUser) GetRoles() []string { return v.Roles }
+func (v *GetPokemonSiblingsUser) GetRoles() (val []string) {
+	if v == nil {
+		return
+	}
+	return v.Roles
+}
 
 // GetName returns GetPokemonSiblingsUser.Name, and is useful for accessing the field via an interface.
-func (v *GetPokemonSiblingsUser) GetName() string { return v.Name }
+func (v *GetPokemonSiblingsUser) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // GetPokemon returns GetPokemonSiblingsUser.Pokemon, and is useful for accessing the field via an interface.
-func (v *GetPokemonSiblingsUser) GetPokemon() []testutil.Pokemon { return v.Pokemon }
+func (v *GetPokemonSiblingsUser) GetPokemon() (val []testutil.Pokemon) {
+	if v == nil {
+		return
+	}
+	return v.Pokemon
+}
 
 // GetGenqlientPokemon returns GetPokemonSiblingsUser.GenqlientPokemon, and is useful for accessing the field via an interface.
-func (v *GetPokemonSiblingsUser) GetGenqlientPokemon() []GetPokemonSiblingsUserGenqlientPokemon {
+func (v *GetPokemonSiblingsUser) GetGenqlientPokemon() (val []GetPokemonSiblingsUserGenqlientPokemon) {
+	if v == nil {
+		return
+	}
 	return v.GenqlientPokemon
 }
 
@@ -58,10 +86,20 @@ type GetPokemonSiblingsUserGenqlientPokemon struct {
 }
 
 // GetSpecies returns GetPokemonSiblingsUserGenqlientPokemon.Species, and is useful for accessing the field via an interface.
-func (v *GetPokemonSiblingsUserGenqlientPokemon) GetSpecies() string { return v.Species }
+func (v *GetPokemonSiblingsUserGenqlientPokemon) GetSpecies() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Species
+}
 
 // GetLevel returns GetPokemonSiblingsUserGenqlientPokemon.Level, and is useful for accessing the field via an interface.
-func (v *GetPokemonSiblingsUserGenqlientPokemon) GetLevel() int { return v.Level }
+func (v *GetPokemonSiblingsUserGenqlientPokemon) GetLevel() (val int) {
+	if v == nil {
+		return
+	}
+	return v.Level
+}
 
 // __GetPokemonSiblingsInput is used internally by genqlient
 type __GetPokemonSiblingsInput struct {
@@ -69,7 +107,12 @@ type __GetPokemonSiblingsInput struct {
 }
 
 // GetInput returns __GetPokemonSiblingsInput.Input, and is useful for accessing the field via an interface.
-func (v *__GetPokemonSiblingsInput) GetInput() testutil.Pokemon { return v.Input }
+func (v *__GetPokemonSiblingsInput) GetInput() (val testutil.Pokemon) {
+	if v == nil {
+		return
+	}
+	return v.Input
+}
 
 // The query executed by GetPokemonSiblings.
 const GetPokemonSiblings_Operation = `
