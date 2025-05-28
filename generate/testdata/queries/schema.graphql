@@ -65,6 +65,8 @@ type User {
   emailsOrNull: [String!]
   emailsWithNulls: [String]!
   emailsWithNullsOrNull: [String]
+  user_id: String
+  display_name: String
   authMethods: [AuthMethod!]!
   pokemon: [Pokemon!]
   greeting: Clip
@@ -190,6 +192,8 @@ type Query {
   default(input: InputWithDefaults! = {field: "input omitted"}): Boolean
   omitempty(input: OmitemptyInput): Boolean
   useStructReferencesInput(input: UseStructReferencesInput!): Boolean
+  snake_case_type: snake_case_type
+  object: ObjectType!
 }
 
 type Mutation {
@@ -242,4 +246,14 @@ input UseStructReferencesInput {
   list: [StructInput!]!
   listOfNullable: [StructInput]!
   nullableList: [StructInput!]
+}
+
+type snake_case_type {
+  id: ID!
+  name: String
+}
+
+type ObjectType {
+  id: ID!
+  snake_case_field: snake_case_type
 }

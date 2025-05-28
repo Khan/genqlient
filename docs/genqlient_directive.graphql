@@ -151,6 +151,25 @@ directive genqlient(
   # of MyField; what if we got back the other type?).
   flatten: Boolean
 
+  # If set, this field will use the provided name as the Go field name,
+  # without creating an alias in the GraphQL query.
+  #
+  # For example, given a query like
+  #  query MyQuery {
+  #    # @genqlient(alias: "MyGreatName")
+  #    myField
+  #  }
+  # genqlient will generate:
+  #  type MyQueryResponse struct {
+  #    MyGreatName <type> `json:"myField"`
+  #  }
+  #
+  # This is similar to the GraphQL alias syntax (e.g. `myGreatName: myField`),
+  # but it only affects the Go field name, not the GraphQL query. This is
+  # especially useful when working with GraphQL servers that limit the number
+  # of aliases you can use in a query.
+  alias: String
+
   # If set, this argument or field will use the given Go type instead of a
   # genqlient-generated type.
   #

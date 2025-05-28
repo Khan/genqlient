@@ -9,6 +9,7 @@
   Bindings: (map[string]*generate.TypeBinding) <nil>,
   PackageBindings: ([]*generate.PackageBinding) <nil>,
   Casing: (generate.Casing) {
+    Default: (generate.CasingAlgorithm) "",
     AllEnums: (generate.CasingAlgorithm) "",
     Enums: (map[string]generate.CasingAlgorithm) <nil>
   },
