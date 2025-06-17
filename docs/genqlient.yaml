@@ -116,6 +116,9 @@ use_extensions: boolean
 #   pointers-to-slices, so the GraphQL type `[String]` will map to the Go
 #   type `[]*string`, not `*[]*string`; GraphQL null and empty list simply
 #   map to Go nil- and empty-slice.
+# - pointer_omitempty: optional fields are generated as pointers, as described above.
+#   Additionally, the fields are annotated with omitempty. Fields that are not defined,
+#   will not be exposed.
 # - generic: optional fields are generated as type parameters to a generic type
 #   specified by `optional_generic_type`. E.g. fields with GraphQL type `String`
 #   will map to the Go type `generic.Type[string]`. This is useful if you have a
