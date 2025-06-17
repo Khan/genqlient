@@ -60,6 +60,11 @@ func (md *MyDialer) DialContext(ctx context.Context, urlStr string, requestHeade
 	}
 	config.Dialer = md.dialer
 	config.Protocol = append(config.Protocol, "graphql-transport-ws")
+	for key, values := range requestHeader {
+		for _, value := range values {
+			config.Header.Add(key, value)
+		}
+	}
 
 	// Connect to the WebSocket server
 	conn, err := websocket.DialConfig(config)
@@ -110,13 +115,45 @@ a loop for incoming messages and errors:
 		case err = <-errChan:
 			return
 		case <-time.After(time.Minute):
-			err = wsClient.Unsubscribe(subscriptionID)
+			err = graphqlClient.Unsubscribe(subscriptionID)
 			loop = false
 		}
 	}
 ```
 
 To change the websocket protocol from its default value `graphql-transport-ws`, add the following header before calling `graphql.NewClientUsingWebSocket()`:
+
 ```go
 	headers.Add("Sec-WebSocket-Protocol", "graphql-ws")
+```
+
+## Authenticate subscriptions
+
+Graphql allows to authenticate subscriptions using HTTP headers (inside the http upgrade request) or using connection parameters (first message inside the websocket connection).
+To authenticate using both methods, you need to add a `graphql.WebSocketOption` to the `graphql.NewClientUsingWebSocket` method.
+
+### Example using HTTP headers
+
+```go
+graphql.NewClientUsingWebSocket(
+	endpoint,
+	&MyDialer{Dialer: dialer},
+	graphql.WithConnectionParams(map[string]interface{}{
+		"headers": map[string]string{
+			"Authorization": "Bearer " + token.AccessToken,
+		},
+	}),
+)
+```
+
+### Example using connection parameters
+
+```go
+graphql.NewClientUsingWebSocket(
+	endpoint,
+	&MyDialer{Dialer: dialer},
+	graphql.WithWebsocketHeader(http.Header{
+		"Authorization": []string{"Bearer " + token.AccessToken,},
+	}),
+)
 ```
