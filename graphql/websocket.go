@@ -136,6 +136,9 @@ func (w *webSocketClient) forwardWebSocketData(message []byte) error {
 	if err != nil {
 		return err
 	}
+	if wsMsg.ID == "" {
+		return nil
+	}
 	sub, ok := w.subscriptions.Read(wsMsg.ID)
 	if !ok {
 		return fmt.Errorf("received message for unknown subscription ID '%s'", wsMsg.ID)
