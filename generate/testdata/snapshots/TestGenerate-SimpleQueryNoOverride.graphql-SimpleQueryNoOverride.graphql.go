@@ -17,7 +17,12 @@ type SimpleQueryNoOverrideResponse struct {
 }
 
 // GetUser returns SimpleQueryNoOverrideResponse.User, and is useful for accessing the field via an interface.
-func (v *SimpleQueryNoOverrideResponse) GetUser() SimpleQueryNoOverrideUser { return v.User }
+func (v *SimpleQueryNoOverrideResponse) GetUser() (val SimpleQueryNoOverrideUser) {
+	if v == nil {
+		return
+	}
+	return v.User
+}
 
 // SimpleQueryNoOverrideUser includes the requested fields of the GraphQL type User.
 // The GraphQL type's documentation follows.
@@ -32,10 +37,20 @@ type SimpleQueryNoOverrideUser struct {
 }
 
 // GetId returns SimpleQueryNoOverrideUser.Id, and is useful for accessing the field via an interface.
-func (v *SimpleQueryNoOverrideUser) GetId() testutil.ID { return v.Id }
+func (v *SimpleQueryNoOverrideUser) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns SimpleQueryNoOverrideUser.Name, and is useful for accessing the field via an interface.
-func (v *SimpleQueryNoOverrideUser) GetName() string { return v.Name }
+func (v *SimpleQueryNoOverrideUser) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // The query executed by SimpleQueryNoOverride.
 const SimpleQueryNoOverride_Operation = `
