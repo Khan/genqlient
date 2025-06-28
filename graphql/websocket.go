@@ -136,7 +136,7 @@ func (w *webSocketClient) forwardWebSocketData(message []byte) error {
 	if err != nil {
 		return err
 	}
-	if wsMsg.ID == "" {
+	if wsMsg.ID == "" { // e.g. keep-alive messages
 		return nil
 	}
 	sub, ok := w.subscriptions.Read(wsMsg.ID)
