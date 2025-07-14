@@ -390,19 +390,36 @@ func (typ *goStructType) WriteDefinition(w io.Writer, g *generator) error {
 	fmt.Fprintf(w, "type %s struct {\n", typ.GoName)
 	for _, field := range typ.Fields {
 		writeDescription(w, field.Description)
-		jsonTag := `"` + field.JSONName
+		var tags string
+
+		jsonTag := `json:"` + field.JSONName
 		if field.Omitempty {
 			jsonTag += ",omitempty"
 		}
 		jsonTag += `"`
+
 		if field.NeedsMarshaling() {
 			// certain types are handled in our (Un)MarshalJSON (see below)
-			jsonTag = `"-"`
+			jsonTag = `json:"-"`
 		}
+
+		tags = jsonTag
+
+		pluginInput := PluginInput{field.GraphQLName, field.Description}
+		for _, plugin := range typ.Generator.Config.Plugins.fieldTagPlugins {
+			res, err := plugin.ValueFunc(pluginInput)
+			if err != nil {
+				return fmt.Errorf("error running plugin %s on field %s: %w", plugin.Name, field.GoName, err)
+			}
+			if res == nil {
+				continue
+			}
+			tags += fmt.Sprintf(` %s:%q`, plugin.Name, *res)
+		}
+
 		// Note for embedded types field.GoName is "", which produces the code
 		// we want!
-		fmt.Fprintf(w, "\t%s %s `json:%s`\n",
-			field.GoName, field.GoType.Reference(), jsonTag)
+		fmt.Fprintf(w, "\t%s %s `%s`\n", field.GoName, field.GoType.Reference(), tags)
 	}
 	fmt.Fprintf(w, "}\n")
 
