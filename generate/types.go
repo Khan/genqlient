@@ -411,7 +411,10 @@ func (typ *goStructType) WriteDefinition(w io.Writer, g *generator) error {
 			if err != nil {
 				return fmt.Errorf("error running plugin %s on field %s: %w", plugin.Name, field.GoName, err)
 			}
-			tags += fmt.Sprintf(` %s:%q`, plugin.Name, res)
+			if res == nil {
+				continue
+			}
+			tags += fmt.Sprintf(` %s:%q`, plugin.Name, *res)
 		}
 
 		// Note for embedded types field.GoName is "", which produces the code

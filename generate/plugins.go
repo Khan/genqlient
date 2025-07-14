@@ -7,7 +7,7 @@ import (
 
 type FieldTagPlugin struct {
 	Name      string
-	ValueFunc func(PluginInput) (string, error)
+	ValueFunc func(PluginInput) (*string, error)
 }
 
 type PluginInput struct {
@@ -26,7 +26,7 @@ func LoadFieldTagPlugins(name string, path string) (*FieldTagPlugin, error) {
 		return nil, err
 	}
 
-	castedFunc, ok := funcF.(func(PluginInput) (string, error))
+	castedFunc, ok := funcF.(func(PluginInput) (*string, error))
 	if !ok {
 		return nil, fmt.Errorf("expected 'func(PluginInput) (string, error)' function, got %T", funcF)
 	}
