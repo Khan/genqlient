@@ -219,56 +219,58 @@ type OmitEmptyQueryUsersUser struct {
 // GetId returns OmitEmptyQueryUsersUser.Id, and is useful for accessing the field via an interface.
 func (v *OmitEmptyQueryUsersUser) GetId() string { return v.Id }
 
-// PointersQueryOtherUser includes the requested fields of the GraphQL type User.
+// PointersOmitEmptyQueryOtherUser includes the requested fields of the GraphQL type User.
 // The GraphQL type's documentation follows.
 //
 // A User is a user!
-type PointersQueryOtherUser struct {
+type PointersOmitEmptyQueryOtherUser struct {
 	// id is the user's ID.
 	//
 	// It is stable, unique, and opaque, like all good IDs.
 	Id string `json:"id"`
 }
 
-// GetId returns PointersQueryOtherUser.Id, and is useful for accessing the field via an interface.
-func (v *PointersQueryOtherUser) GetId() string { return v.Id }
+// GetId returns PointersOmitEmptyQueryOtherUser.Id, and is useful for accessing the field via an interface.
+func (v *PointersOmitEmptyQueryOtherUser) GetId() string { return v.Id }
 
-// PointersQueryResponse is returned by PointersQuery on success.
-type PointersQueryResponse struct {
+// PointersOmitEmptyQueryResponse is returned by PointersOmitEmptyQuery on success.
+type PointersOmitEmptyQueryResponse struct {
 	// user looks up a user by some stuff.
 	//
 	// See UserQueryInput for what stuff is supported.
 	// If query is null, returns the current user.
-	User *PointersQueryUser `json:"user"`
+	User *PointersOmitEmptyQueryUser `json:"user"`
 	// user looks up a user by some stuff.
 	//
 	// See UserQueryInput for what stuff is supported.
 	// If query is null, returns the current user.
-	OtherUser    *PointersQueryOtherUser `json:"otherUser"`
-	MaybeConvert *time.Time              `json:"-"`
+	OtherUser    *PointersOmitEmptyQueryOtherUser `json:"otherUser"`
+	MaybeConvert *time.Time                       `json:"-"`
 }
 
-// GetUser returns PointersQueryResponse.User, and is useful for accessing the field via an interface.
-func (v *PointersQueryResponse) GetUser() *PointersQueryUser { return v.User }
+// GetUser returns PointersOmitEmptyQueryResponse.User, and is useful for accessing the field via an interface.
+func (v *PointersOmitEmptyQueryResponse) GetUser() *PointersOmitEmptyQueryUser { return v.User }
 
-// GetOtherUser returns PointersQueryResponse.OtherUser, and is useful for accessing the field via an interface.
-func (v *PointersQueryResponse) GetOtherUser() *PointersQueryOtherUser { return v.OtherUser }
+// GetOtherUser returns PointersOmitEmptyQueryResponse.OtherUser, and is useful for accessing the field via an interface.
+func (v *PointersOmitEmptyQueryResponse) GetOtherUser() *PointersOmitEmptyQueryOtherUser {
+	return v.OtherUser
+}
 
-// GetMaybeConvert returns PointersQueryResponse.MaybeConvert, and is useful for accessing the field via an interface.
-func (v *PointersQueryResponse) GetMaybeConvert() *time.Time { return v.MaybeConvert }
+// GetMaybeConvert returns PointersOmitEmptyQueryResponse.MaybeConvert, and is useful for accessing the field via an interface.
+func (v *PointersOmitEmptyQueryResponse) GetMaybeConvert() *time.Time { return v.MaybeConvert }
 
-func (v *PointersQueryResponse) UnmarshalJSON(b []byte) error {
+func (v *PointersOmitEmptyQueryResponse) UnmarshalJSON(b []byte) error {
 
 	if string(b) == "null" {
 		return nil
 	}
 
 	var firstPass struct {
-		*PointersQueryResponse
+		*PointersOmitEmptyQueryResponse
 		MaybeConvert json.RawMessage `json:"maybeConvert"`
 		graphql.NoUnmarshalJSON
 	}
-	firstPass.PointersQueryResponse = v
+	firstPass.PointersOmitEmptyQueryResponse = v
 
 	err := json.Unmarshal(b, &firstPass)
 	if err != nil {
@@ -284,22 +286,22 @@ func (v *PointersQueryResponse) UnmarshalJSON(b []byte) error {
 				src, *dst)
 			if err != nil {
 				return fmt.Errorf(
-					"unable to unmarshal PointersQueryResponse.MaybeConvert: %w", err)
+					"unable to unmarshal PointersOmitEmptyQueryResponse.MaybeConvert: %w", err)
 			}
 		}
 	}
 	return nil
 }
 
-type __premarshalPointersQueryResponse struct {
-	User *PointersQueryUser `json:"user"`
+type __premarshalPointersOmitEmptyQueryResponse struct {
+	User *PointersOmitEmptyQueryUser `json:"user"`
 
-	OtherUser *PointersQueryOtherUser `json:"otherUser"`
+	OtherUser *PointersOmitEmptyQueryOtherUser `json:"otherUser"`
 
 	MaybeConvert json.RawMessage `json:"maybeConvert"`
 }
 
-func (v *PointersQueryResponse) MarshalJSON() ([]byte, error) {
+func (v *PointersOmitEmptyQueryResponse) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -307,8 +309,8 @@ func (v *PointersQueryResponse) MarshalJSON() ([]byte, error) {
 	return json.Marshal(premarshaled)
 }
 
-func (v *PointersQueryResponse) __premarshalJSON() (*__premarshalPointersQueryResponse, error) {
-	var retval __premarshalPointersQueryResponse
+func (v *PointersOmitEmptyQueryResponse) __premarshalJSON() (*__premarshalPointersOmitEmptyQueryResponse, error) {
+	var retval __premarshalPointersOmitEmptyQueryResponse
 
 	retval.User = v.User
 	retval.OtherUser = v.OtherUser
@@ -322,42 +324,42 @@ func (v *PointersQueryResponse) __premarshalJSON() (*__premarshalPointersQueryRe
 				src)
 			if err != nil {
 				return nil, fmt.Errorf(
-					"unable to marshal PointersQueryResponse.MaybeConvert: %w", err)
+					"unable to marshal PointersOmitEmptyQueryResponse.MaybeConvert: %w", err)
 			}
 		}
 	}
 	return &retval, nil
 }
 
-// PointersQueryUser includes the requested fields of the GraphQL type User.
+// PointersOmitEmptyQueryUser includes the requested fields of the GraphQL type User.
 // The GraphQL type's documentation follows.
 //
 // A User is a user!
-type PointersQueryUser struct {
+type PointersOmitEmptyQueryUser struct {
 	// id is the user's ID.
 	//
 	// It is stable, unique, and opaque, like all good IDs.
-	Id          *string   `json:"id"`
-	Roles       []*Role   `json:"roles"`
-	Name        *string   `json:"name"`
-	Emails      []*string `json:"emails"`
-	EmailsNoPtr []string  `json:"emailsNoPtr"`
+	Id          *string  `json:"id"`
+	Roles       []Role   `json:"roles"`
+	Name        *string  `json:"name"`
+	Emails      []string `json:"emails"`
+	EmailsNoPtr []string `json:"emailsNoPtr"`
 }
 
-// GetId returns PointersQueryUser.Id, and is useful for accessing the field via an interface.
-func (v *PointersQueryUser) GetId() *string { return v.Id }
+// GetId returns PointersOmitEmptyQueryUser.Id, and is useful for accessing the field via an interface.
+func (v *PointersOmitEmptyQueryUser) GetId() *string { return v.Id }
 
-// GetRoles returns PointersQueryUser.Roles, and is useful for accessing the field via an interface.
-func (v *PointersQueryUser) GetRoles() []*Role { return v.Roles }
+// GetRoles returns PointersOmitEmptyQueryUser.Roles, and is useful for accessing the field via an interface.
+func (v *PointersOmitEmptyQueryUser) GetRoles() []Role { return v.Roles }
 
-// GetName returns PointersQueryUser.Name, and is useful for accessing the field via an interface.
-func (v *PointersQueryUser) GetName() *string { return v.Name }
+// GetName returns PointersOmitEmptyQueryUser.Name, and is useful for accessing the field via an interface.
+func (v *PointersOmitEmptyQueryUser) GetName() *string { return v.Name }
 
-// GetEmails returns PointersQueryUser.Emails, and is useful for accessing the field via an interface.
-func (v *PointersQueryUser) GetEmails() []*string { return v.Emails }
+// GetEmails returns PointersOmitEmptyQueryUser.Emails, and is useful for accessing the field via an interface.
+func (v *PointersOmitEmptyQueryUser) GetEmails() []string { return v.Emails }
 
-// GetEmailsNoPtr returns PointersQueryUser.EmailsNoPtr, and is useful for accessing the field via an interface.
-func (v *PointersQueryUser) GetEmailsNoPtr() []string { return v.EmailsNoPtr }
+// GetEmailsNoPtr returns PointersOmitEmptyQueryUser.EmailsNoPtr, and is useful for accessing the field via an interface.
+func (v *PointersOmitEmptyQueryUser) GetEmailsNoPtr() []string { return v.EmailsNoPtr }
 
 type PokemonInput struct {
 	Species string `json:"species"`
@@ -628,34 +630,34 @@ func (v *__OmitEmptyQueryInput) __premarshalJSON() (*__premarshal__OmitEmptyQuer
 	return &retval, nil
 }
 
-// __PointersQueryInput is used internally by genqlient
-type __PointersQueryInput struct {
+// __PointersOmitEmptyQueryInput is used internally by genqlient
+type __PointersOmitEmptyQueryInput struct {
 	Query *UserQueryInput `json:"query,omitempty"`
-	Dt    time.Time       `json:"-"`
-	Tz    *string         `json:"tz,omitempty"`
+	Dt    *time.Time      `json:"-"`
+	Tz    string          `json:"tz,omitempty"`
 }
 
-// GetQuery returns __PointersQueryInput.Query, and is useful for accessing the field via an interface.
-func (v *__PointersQueryInput) GetQuery() *UserQueryInput { return v.Query }
+// GetQuery returns __PointersOmitEmptyQueryInput.Query, and is useful for accessing the field via an interface.
+func (v *__PointersOmitEmptyQueryInput) GetQuery() *UserQueryInput { return v.Query }
 
-// GetDt returns __PointersQueryInput.Dt, and is useful for accessing the field via an interface.
-func (v *__PointersQueryInput) GetDt() time.Time { return v.Dt }
+// GetDt returns __PointersOmitEmptyQueryInput.Dt, and is useful for accessing the field via an interface.
+func (v *__PointersOmitEmptyQueryInput) GetDt() *time.Time { return v.Dt }
 
-// GetTz returns __PointersQueryInput.Tz, and is useful for accessing the field via an interface.
-func (v *__PointersQueryInput) GetTz() *string { return v.Tz }
+// GetTz returns __PointersOmitEmptyQueryInput.Tz, and is useful for accessing the field via an interface.
+func (v *__PointersOmitEmptyQueryInput) GetTz() string { return v.Tz }
 
-func (v *__PointersQueryInput) UnmarshalJSON(b []byte) error {
+func (v *__PointersOmitEmptyQueryInput) UnmarshalJSON(b []byte) error {
 
 	if string(b) == "null" {
 		return nil
 	}
 
 	var firstPass struct {
-		*__PointersQueryInput
+		*__PointersOmitEmptyQueryInput
 		Dt json.RawMessage `json:"dt"`
 		graphql.NoUnmarshalJSON
 	}
-	firstPass.__PointersQueryInput = v
+	firstPass.__PointersOmitEmptyQueryInput = v
 
 	err := json.Unmarshal(b, &firstPass)
 	if err != nil {
@@ -666,26 +668,27 @@ func (v *__PointersQueryInput) UnmarshalJSON(b []byte) error {
 		dst := &v.Dt
 		src := firstPass.Dt
 		if len(src) != 0 && string(src) != "null" {
+			*dst = new(time.Time)
 			err = testutil.UnmarshalDate(
-				src, dst)
+				src, *dst)
 			if err != nil {
 				return fmt.Errorf(
-					"unable to unmarshal __PointersQueryInput.Dt: %w", err)
+					"unable to unmarshal __PointersOmitEmptyQueryInput.Dt: %w", err)
 			}
 		}
 	}
 	return nil
 }
 
-type __premarshal__PointersQueryInput struct {
+type __premarshal__PointersOmitEmptyQueryInput struct {
 	Query *UserQueryInput `json:"query,omitempty"`
 
-	Dt json.RawMessage `json:"dt"`
+	Dt json.RawMessage `json:"dt,omitempty"`
 
-	Tz *string `json:"tz,omitempty"`
+	Tz string `json:"tz,omitempty"`
 }
 
-func (v *__PointersQueryInput) MarshalJSON() ([]byte, error) {
+func (v *__PointersOmitEmptyQueryInput) MarshalJSON() ([]byte, error) {
 	premarshaled, err := v.__premarshalJSON()
 	if err != nil {
 		return nil, err
@@ -693,20 +696,22 @@ func (v *__PointersQueryInput) MarshalJSON() ([]byte, error) {
 	return json.Marshal(premarshaled)
 }
 
-func (v *__PointersQueryInput) __premarshalJSON() (*__premarshal__PointersQueryInput, error) {
-	var retval __premarshal__PointersQueryInput
+func (v *__PointersOmitEmptyQueryInput) __premarshalJSON() (*__premarshal__PointersOmitEmptyQueryInput, error) {
+	var retval __premarshal__PointersOmitEmptyQueryInput
 
 	retval.Query = v.Query
 	{
 
 		dst := &retval.Dt
 		src := v.Dt
-		var err error
-		*dst, err = testutil.MarshalDate(
-			&src)
-		if err != nil {
-			return nil, fmt.Errorf(
-				"unable to marshal __PointersQueryInput.Dt: %w", err)
+		if src != nil {
+			var err error
+			*dst, err = testutil.MarshalDate(
+				src)
+			if err != nil {
+				return nil, fmt.Errorf(
+					"unable to marshal __PointersOmitEmptyQueryInput.Dt: %w", err)
+			}
 		}
 	}
 	retval.Tz = v.Tz
@@ -828,9 +833,9 @@ func OmitEmptyQuery(
 	return data_, err_
 }
 
-// The query executed by PointersQuery.
-const PointersQuery_Operation = `
-query PointersQuery ($query: UserQueryInput, $dt: DateTime, $tz: String) {
+// The query executed by PointersOmitEmptyQuery.
+const PointersOmitEmptyQuery_Operation = `
+query PointersOmitEmptyQuery ($query: UserQueryInput, $dt: DateTime, $tz: String) {
 	user(query: $query) {
 		id
 		roles
@@ -845,24 +850,24 @@ query PointersQuery ($query: UserQueryInput, $dt: DateTime, $tz: String) {
 }
 `
 
-func PointersQuery(
+func PointersOmitEmptyQuery(
 	ctx_ context.Context,
 	client_ graphql.Client,
 	query *UserQueryInput,
-	dt time.Time,
-	tz *string,
-) (data_ *PointersQueryResponse, err_ error) {
+	dt *time.Time,
+	tz string,
+) (data_ *PointersOmitEmptyQueryResponse, err_ error) {
 	req_ := &graphql.Request{
-		OpName: "PointersQuery",
-		Query:  PointersQuery_Operation,
-		Variables: &__PointersQueryInput{
+		OpName: "PointersOmitEmptyQuery",
+		Query:  PointersOmitEmptyQuery_Operation,
+		Variables: &__PointersOmitEmptyQueryInput{
 			Query: query,
 			Dt:    dt,
 			Tz:    tz,
 		},
 	}
 
-	data_ = &PointersQueryResponse{}
+	data_ = &PointersOmitEmptyQueryResponse{}
 	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(

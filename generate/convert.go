@@ -258,8 +258,10 @@ func (g *generator) convertType(
 			oe := true
 			options.Omitempty = &oe
 		}
-	} else if !options.PointerIsFalse() && (options.GetPointer() || !typ.NonNull) && g.Config.Optional == "pointer_omitempty" {
-		goTyp = &goPointerType{Elem: goTyp}
+	} else if g.Config.Optional == "pointer_omitempty" && (options.GetPointer() || !typ.NonNull) {
+		if !options.PointerIsFalse() {
+			goTyp = &goPointerType{Elem: goTyp}
+		}
 
 		if options.Omitempty == nil {
 			oe := true

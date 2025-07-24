@@ -242,7 +242,7 @@ func TestGenerateWithConfig(t *testing.T) {
 		}},
 		{"OptionalPointerOmitEmpty", "", []string{
 			"InputObject.graphql",
-			"Pointers.graphql",
+			"PointersOmitEmpty.graphql",
 			"Omitempty.graphql",
 			"ListInput.graphql",
 		}, &Config{
