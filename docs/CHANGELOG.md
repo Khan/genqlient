@@ -41,6 +41,8 @@ This release fixes a bug introduced in v0.8.0 breaking path resolution on Window
 - fixed documentation link in `introduction.md`
 - upgraded version of alexflint/go-arg from 1.4.2 to 1.5.1
 - fixed a typo in the struct + fragment error message
+- avoid error when a subscription message is received without a subscription ID
+- avoid closing subscription channels more than once, which could cause a panic in some cases
 
 ## v0.8.0
 
