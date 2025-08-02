@@ -243,6 +243,7 @@ func TestGenerateWithConfig(t *testing.T) {
 		{"OptionalPointerOmitEmpty", "", []string{
 			"InputObject.graphql",
 			"PointersOmitEmpty.graphql",
+			"Omitempty.graphql",
 			"ListInput.graphql",
 		}, &Config{
 			Optional: "pointer_omitempty",
@@ -257,6 +258,7 @@ func TestGenerateWithConfig(t *testing.T) {
 					Marshaler:   "github.com/Khan/genqlient/internal/testutil.MarshalDate",
 					Unmarshaler: "github.com/Khan/genqlient/internal/testutil.UnmarshalDate",
 				},
+				"PokemonInput": {Type: "github.com/Khan/genqlient/internal/testutil.Pokemon"},
 			},
 		}},
 		{
