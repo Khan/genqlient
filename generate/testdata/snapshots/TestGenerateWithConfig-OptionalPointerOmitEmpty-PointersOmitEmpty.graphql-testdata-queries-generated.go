@@ -154,17 +154,6 @@ func (v *PointersOmitEmptyQueryUser) GetEmails() []string { return v.Emails }
 // GetEmailsNoPtr returns PointersOmitEmptyQueryUser.EmailsNoPtr, and is useful for accessing the field via an interface.
 func (v *PointersOmitEmptyQueryUser) GetEmailsNoPtr() []string { return v.EmailsNoPtr }
 
-type PokemonInput struct {
-	Species string `json:"species"`
-	Level   int    `json:"level"`
-}
-
-// GetSpecies returns PokemonInput.Species, and is useful for accessing the field via an interface.
-func (v *PokemonInput) GetSpecies() string { return v.Species }
-
-// GetLevel returns PokemonInput.Level, and is useful for accessing the field via an interface.
-func (v *PokemonInput) GetLevel() int { return v.Level }
-
 // Role is a type a user may have.
 type Role string
 
@@ -193,11 +182,11 @@ type UserQueryInput struct {
 	Email *string `json:"email,omitempty"`
 	Name  *string `json:"name,omitempty"`
 	// id looks the user up by ID.  It's a great way to look up users.
-	Id         string        `json:"id,omitempty"`
-	Role       *Role         `json:"role,omitempty"`
-	Names      []*string     `json:"names,omitempty"`
-	HasPokemon *PokemonInput `json:"hasPokemon,omitempty"`
-	Birthdate  *time.Time    `json:"-"`
+	Id         string            `json:"id,omitempty"`
+	Role       *Role             `json:"role,omitempty"`
+	Names      []*string         `json:"names,omitempty"`
+	HasPokemon *testutil.Pokemon `json:"hasPokemon,omitempty"`
+	Birthdate  *time.Time        `json:"-"`
 }
 
 // GetEmail returns UserQueryInput.Email, and is useful for accessing the field via an interface.
@@ -216,7 +205,7 @@ func (v *UserQueryInput) GetRole() *Role { return v.Role }
 func (v *UserQueryInput) GetNames() []*string { return v.Names }
 
 // GetHasPokemon returns UserQueryInput.HasPokemon, and is useful for accessing the field via an interface.
-func (v *UserQueryInput) GetHasPokemon() *PokemonInput { return v.HasPokemon }
+func (v *UserQueryInput) GetHasPokemon() *testutil.Pokemon { return v.HasPokemon }
 
 // GetBirthdate returns UserQueryInput.Birthdate, and is useful for accessing the field via an interface.
 func (v *UserQueryInput) GetBirthdate() *time.Time { return v.Birthdate }
@@ -266,7 +255,7 @@ type __premarshalUserQueryInput struct {
 
 	Names []*string `json:"names,omitempty"`
 
-	HasPokemon *PokemonInput `json:"hasPokemon,omitempty"`
+	HasPokemon *testutil.Pokemon `json:"hasPokemon,omitempty"`
 
 	Birthdate json.RawMessage `json:"birthdate,omitempty"`
 }
