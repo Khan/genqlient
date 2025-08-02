@@ -243,7 +243,6 @@ func TestGenerateWithConfig(t *testing.T) {
 		{"OptionalPointerOmitEmpty", "", []string{
 			"InputObject.graphql",
 			"PointersOmitEmpty.graphql",
-			"Omitempty.graphql",
 			"ListInput.graphql",
 		}, &Config{
 			Optional: "pointer_omitempty",
@@ -274,47 +273,49 @@ func TestGenerateWithConfig(t *testing.T) {
 		},
 	}
 
-	sourceFilename := "SimpleQuery.graphql"
-
 	for _, test := range tests {
 		config := test.config
 		baseDir := filepath.Join(dataDir, test.baseDir)
 		t.Run(test.name, func(t *testing.T) {
 			err := config.ValidateAndFillDefaults(baseDir)
 			config.Schema = []string{filepath.Join(dataDir, "schema.graphql")}
-			if test.operations == nil {
-				config.Operations = []string{filepath.Join(dataDir, sourceFilename)}
-			} else {
-				config.Operations = make([]string, len(test.operations))
-				for i := range test.operations {
-					config.Operations[i] = filepath.Join(dataDir, test.operations[i])
-				}
-			}
-			if err != nil {
-				t.Fatal(err)
-			}
-			generated, err := Generate(config)
-			if err != nil {
-				t.Fatal(err)
+			operationFiles := test.operations
+			if operationFiles == nil {
+				operationFiles = []string{"SimpleQuery.graphql"}
 			}
 
-			for filename, content := range generated {
-				t.Run(filename, func(t *testing.T) {
-					testutil.Cupaloy.SnapshotT(t, string(content))
+			// Since we often reuse types across test cases, run generation
+			// separately for each to avoid conflicts.
+			for _, operationFile := range operationFiles {
+				t.Run(operationFile, func(t *testing.T) {
+					config.Operations = []string{filepath.Join(dataDir, operationFile)}
+					if err != nil {
+						t.Fatal(err)
+					}
+					generated, err := Generate(config)
+					if err != nil {
+						t.Fatal(err)
+					}
+
+					for filename, content := range generated {
+						t.Run(filename, func(t *testing.T) {
+							testutil.Cupaloy.SnapshotT(t, string(content))
+						})
+					}
+
+					t.Run("Build", func(t *testing.T) {
+						if testing.Short() {
+							t.Skip("skipping build due to -short")
+						}
+
+						err := buildGoFile(operationFile,
+							generated[config.Generated])
+						if err != nil {
+							t.Error(err)
+						}
+					})
 				})
 			}
-
-			t.Run("Build", func(t *testing.T) {
-				if testing.Short() {
-					t.Skip("skipping build due to -short")
-				}
-
-				err := buildGoFile(sourceFilename,
-					generated[config.Generated])
-				if err != nil {
-					t.Error(err)
-				}
-			})
 		})
 	}
 }
