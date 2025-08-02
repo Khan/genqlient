@@ -1,0 +1,22 @@
+# @genqlient(for: "UserQueryInput.id", pointer: false)
+# @genqlient(for: "User.id", pointer: false)
+query PointersOmitEmptyQuery(
+  $query: UserQueryInput,
+  $dt: DateTime,
+  # @genqlient(pointer: false)
+  $tz: String,
+) {
+  user(query: $query) {
+    # @genqlient(pointer: true)
+    id
+    roles
+    name
+    emails
+    # @genqlient(pointer: false)
+    emailsNoPtr: emails
+  }
+  otherUser: user(query: $query) {
+    id
+  }
+  maybeConvert(dt: $dt, tz: $tz)
+}

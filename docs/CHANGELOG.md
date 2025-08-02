@@ -78,6 +78,7 @@ In addition to several new features and bugfixes, along with this release comes 
 ### New features:
 
 - The new `optional: generic` allows using a generic type to represent optionality. See the [documentation](genqlient.yaml) for details.
+- The new `optional: pointer_omitempty` allows using a pointer that is also annotated with `omitempty`. See the [documentation](genqlient.yaml) for details.
 - For schemas with enum values that differ only in casing, it's now possible to disable smart-casing in genqlient.yaml; see the [documentation](genqlient.yaml) for `casing` for details.
 - genqlient now supports .graphqls and .gql file extensions for schemas and queries.
 - More accurately guess the package name for generated code (and warn if the config option -- now almost never needed -- looks wrong).
