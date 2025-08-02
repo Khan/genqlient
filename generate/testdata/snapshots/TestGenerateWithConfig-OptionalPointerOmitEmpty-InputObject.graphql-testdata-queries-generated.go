@@ -38,54 +38,6 @@ type InputObjectQueryUser struct {
 // GetId returns InputObjectQueryUser.Id, and is useful for accessing the field via an interface.
 func (v *InputObjectQueryUser) GetId() string { return v.Id }
 
-type PokemonInput struct {
-	Species string `json:"species"`
-	Level   int    `json:"level"`
-}
-
-// GetSpecies returns PokemonInput.Species, and is useful for accessing the field via an interface.
-func (v *PokemonInput) GetSpecies() string { return v.Species }
-
-// GetLevel returns PokemonInput.Level, and is useful for accessing the field via an interface.
-func (v *PokemonInput) GetLevel() int { return v.Level }
-
-// QueryWithStructsResponse is returned by QueryWithStructs on success.
-type QueryWithStructsResponse struct {
-	// user looks up a user by some stuff.
-	//
-	// See UserQueryInput for what stuff is supported.
-	// If query is null, returns the current user.
-	User *QueryWithStructsUser `json:"user"`
-}
-
-// GetUser returns QueryWithStructsResponse.User, and is useful for accessing the field via an interface.
-func (v *QueryWithStructsResponse) GetUser() *QueryWithStructsUser { return v.User }
-
-// QueryWithStructsUser includes the requested fields of the GraphQL type User.
-// The GraphQL type's documentation follows.
-//
-// A User is a user!
-type QueryWithStructsUser struct {
-	AuthMethods []*QueryWithStructsUserAuthMethodsAuthMethod `json:"authMethods"`
-}
-
-// GetAuthMethods returns QueryWithStructsUser.AuthMethods, and is useful for accessing the field via an interface.
-func (v *QueryWithStructsUser) GetAuthMethods() []*QueryWithStructsUserAuthMethodsAuthMethod {
-	return v.AuthMethods
-}
-
-// QueryWithStructsUserAuthMethodsAuthMethod includes the requested fields of the GraphQL type AuthMethod.
-type QueryWithStructsUserAuthMethodsAuthMethod struct {
-	Provider string `json:"provider"`
-	Email    string `json:"email"`
-}
-
-// GetProvider returns QueryWithStructsUserAuthMethodsAuthMethod.Provider, and is useful for accessing the field via an interface.
-func (v *QueryWithStructsUserAuthMethodsAuthMethod) GetProvider() string { return v.Provider }
-
-// GetEmail returns QueryWithStructsUserAuthMethodsAuthMethod.Email, and is useful for accessing the field via an interface.
-func (v *QueryWithStructsUserAuthMethodsAuthMethod) GetEmail() string { return v.Email }
-
 // Role is a type a user may have.
 type Role string
 
@@ -111,36 +63,36 @@ var AllRole = []Role{
 // Or maybe ideally it wouldn't.
 // Really I'm just talking to make this documentation longer.
 type UserQueryInput struct {
-	Email string `json:"email"`
-	Name  string `json:"name"`
+	Email *string `json:"email,omitempty"`
+	Name  *string `json:"name,omitempty"`
 	// id looks the user up by ID.  It's a great way to look up users.
-	Id         string        `json:"id"`
-	Role       Role          `json:"role"`
-	Names      []string      `json:"names"`
-	HasPokemon *PokemonInput `json:"hasPokemon,omitempty"`
-	Birthdate  time.Time     `json:"-"`
+	Id         *string           `json:"id,omitempty"`
+	Role       *Role             `json:"role,omitempty"`
+	Names      []*string         `json:"names,omitempty"`
+	HasPokemon *testutil.Pokemon `json:"hasPokemon,omitempty"`
+	Birthdate  *time.Time        `json:"-"`
 }
 
 // GetEmail returns UserQueryInput.Email, and is useful for accessing the field via an interface.
-func (v *UserQueryInput) GetEmail() string { return v.Email }
+func (v *UserQueryInput) GetEmail() *string { return v.Email }
 
 // GetName returns UserQueryInput.Name, and is useful for accessing the field via an interface.
-func (v *UserQueryInput) GetName() string { return v.Name }
+func (v *UserQueryInput) GetName() *string { return v.Name }
 
 // GetId returns UserQueryInput.Id, and is useful for accessing the field via an interface.
-func (v *UserQueryInput) GetId() string { return v.Id }
+func (v *UserQueryInput) GetId() *string { return v.Id }
 
 // GetRole returns UserQueryInput.Role, and is useful for accessing the field via an interface.
-func (v *UserQueryInput) GetRole() Role { return v.Role }
+func (v *UserQueryInput) GetRole() *Role { return v.Role }
 
 // GetNames returns UserQueryInput.Names, and is useful for accessing the field via an interface.
-func (v *UserQueryInput) GetNames() []string { return v.Names }
+func (v *UserQueryInput) GetNames() []*string { return v.Names }
 
 // GetHasPokemon returns UserQueryInput.HasPokemon, and is useful for accessing the field via an interface.
-func (v *UserQueryInput) GetHasPokemon() *PokemonInput { return v.HasPokemon }
+func (v *UserQueryInput) GetHasPokemon() *testutil.Pokemon { return v.HasPokemon }
 
 // GetBirthdate returns UserQueryInput.Birthdate, and is useful for accessing the field via an interface.
-func (v *UserQueryInput) GetBirthdate() time.Time { return v.Birthdate }
+func (v *UserQueryInput) GetBirthdate() *time.Time { return v.Birthdate }
 
 func (v *UserQueryInput) UnmarshalJSON(b []byte) error {
 
@@ -164,8 +116,9 @@ func (v *UserQueryInput) UnmarshalJSON(b []byte) error {
 		dst := &v.Birthdate
 		src := firstPass.Birthdate
 		if len(src) != 0 && string(src) != "null" {
+			*dst = new(time.Time)
 			err = testutil.UnmarshalDate(
-				src, dst)
+				src, *dst)
 			if err != nil {
 				return fmt.Errorf(
 					"unable to unmarshal UserQueryInput.Birthdate: %w", err)
@@ -176,19 +129,19 @@ func (v *UserQueryInput) UnmarshalJSON(b []byte) error {
 }
 
 type __premarshalUserQueryInput struct {
-	Email string `json:"email"`
+	Email *string `json:"email,omitempty"`
 
-	Name string `json:"name"`
+	Name *string `json:"name,omitempty"`
 
-	Id string `json:"id"`
+	Id *string `json:"id,omitempty"`
 
-	Role Role `json:"role"`
+	Role *Role `json:"role,omitempty"`
 
-	Names []string `json:"names"`
+	Names []*string `json:"names,omitempty"`
 
-	HasPokemon *PokemonInput `json:"hasPokemon,omitempty"`
+	HasPokemon *testutil.Pokemon `json:"hasPokemon,omitempty"`
 
-	Birthdate json.RawMessage `json:"birthdate"`
+	Birthdate json.RawMessage `json:"birthdate,omitempty"`
 }
 
 func (v *UserQueryInput) MarshalJSON() ([]byte, error) {
@@ -212,12 +165,14 @@ func (v *UserQueryInput) __premarshalJSON() (*__premarshalUserQueryInput, error)
 
 		dst := &retval.Birthdate
 		src := v.Birthdate
-		var err error
-		*dst, err = testutil.MarshalDate(
-			&src)
-		if err != nil {
-			return nil, fmt.Errorf(
-				"unable to marshal UserQueryInput.Birthdate: %w", err)
+		if src != nil {
+			var err error
+			*dst, err = testutil.MarshalDate(
+				src)
+			if err != nil {
+				return nil, fmt.Errorf(
+					"unable to marshal UserQueryInput.Birthdate: %w", err)
+			}
 		}
 	}
 	return &retval, nil
@@ -254,39 +209,6 @@ func InputObjectQuery(
 	}
 
 	data_ = &InputObjectQueryResponse{}
-	resp_ := &graphql.Response{Data: data_}
-
-	err_ = client_.MakeRequest(
-		ctx_,
-		req_,
-		resp_,
-	)
-
-	return data_, err_
-}
-
-// The query executed by QueryWithStructs.
-const QueryWithStructs_Operation = `
-query QueryWithStructs {
-	user {
-		authMethods {
-			provider
-			email
-		}
-	}
-}
-`
-
-func QueryWithStructs(
-	ctx_ context.Context,
-	client_ graphql.Client,
-) (data_ *QueryWithStructsResponse, err_ error) {
-	req_ := &graphql.Request{
-		OpName: "QueryWithStructs",
-		Query:  QueryWithStructs_Operation,
-	}
-
-	data_ = &QueryWithStructsResponse{}
 	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
