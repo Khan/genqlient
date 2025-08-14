@@ -20,6 +20,10 @@ When releasing a new version:
 
 <!-- Add new changes in this section! -->
 
+This release adds support for Go 1.25.
+
+Note that genqlient now requires Go 1.23 or higher, and is tested through Go 1.23, 1.24 and 1.25.
+
 ### Breaking changes:
 
 ### New features:
@@ -57,7 +61,7 @@ Note that genqlient now requires Go 1.22.5 or higher, and is tested through Go 1
 
 ### New features:
 
-- genqlient now supports subscriptions; the websocket protocol is by default `graphql-transport-ws` but can be set to another value.  
+- genqlient now supports subscriptions; the websocket protocol is by default `graphql-transport-ws` but can be set to another value.
   See the [documentation](subscriptions.md) for more details on how to use subscriptions.
 - genqlient now supports double-star globs for schema and query files; see [`genqlient.yaml` docs](genqlient.yaml) for more.
 - genqlient now generates slices containing all enum values for each enum type.
