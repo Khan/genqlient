@@ -15,7 +15,12 @@ type UnionNoFragmentsQueryRandomLeafArticle struct {
 }
 
 // GetTypename returns UnionNoFragmentsQueryRandomLeafArticle.Typename, and is useful for accessing the field via an interface.
-func (v *UnionNoFragmentsQueryRandomLeafArticle) GetTypename() string { return v.Typename }
+func (v *UnionNoFragmentsQueryRandomLeafArticle) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // UnionNoFragmentsQueryRandomLeafLeafContent includes the requested fields of the GraphQL interface LeafContent.
 //
@@ -99,7 +104,12 @@ type UnionNoFragmentsQueryRandomLeafVideo struct {
 }
 
 // GetTypename returns UnionNoFragmentsQueryRandomLeafVideo.Typename, and is useful for accessing the field via an interface.
-func (v *UnionNoFragmentsQueryRandomLeafVideo) GetTypename() string { return v.Typename }
+func (v *UnionNoFragmentsQueryRandomLeafVideo) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // UnionNoFragmentsQueryResponse is returned by UnionNoFragmentsQuery on success.
 type UnionNoFragmentsQueryResponse struct {
@@ -107,7 +117,10 @@ type UnionNoFragmentsQueryResponse struct {
 }
 
 // GetRandomLeaf returns UnionNoFragmentsQueryResponse.RandomLeaf, and is useful for accessing the field via an interface.
-func (v *UnionNoFragmentsQueryResponse) GetRandomLeaf() UnionNoFragmentsQueryRandomLeafLeafContent {
+func (v *UnionNoFragmentsQueryResponse) GetRandomLeaf() (val UnionNoFragmentsQueryRandomLeafLeafContent) {
+	if v == nil {
+		return
+	}
 	return v.RandomLeaf
 }
 

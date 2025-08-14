@@ -113,13 +113,28 @@ type ItemArticle struct {
 }
 
 // GetTypename returns ItemArticle.Typename, and is useful for accessing the field via an interface.
-func (v *ItemArticle) GetTypename() string { return v.Typename }
+func (v *ItemArticle) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns ItemArticle.Id, and is useful for accessing the field via an interface.
-func (v *ItemArticle) GetId() testutil.ID { return v.Id }
+func (v *ItemArticle) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns ItemArticle.Name, and is useful for accessing the field via an interface.
-func (v *ItemArticle) GetName() NameType { return v.Name }
+func (v *ItemArticle) GetName() (val NameType) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // ItemTopic includes the requested fields of the GraphQL type Topic.
 type ItemTopic struct {
@@ -130,13 +145,28 @@ type ItemTopic struct {
 }
 
 // GetTypename returns ItemTopic.Typename, and is useful for accessing the field via an interface.
-func (v *ItemTopic) GetTypename() string { return v.Typename }
+func (v *ItemTopic) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns ItemTopic.Id, and is useful for accessing the field via an interface.
-func (v *ItemTopic) GetId() testutil.ID { return v.Id }
+func (v *ItemTopic) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns ItemTopic.Name, and is useful for accessing the field via an interface.
-func (v *ItemTopic) GetName() NameType { return v.Name }
+func (v *ItemTopic) GetName() (val NameType) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // ItemVideo includes the requested fields of the GraphQL type Video.
 type ItemVideo struct {
@@ -147,13 +177,28 @@ type ItemVideo struct {
 }
 
 // GetTypename returns ItemVideo.Typename, and is useful for accessing the field via an interface.
-func (v *ItemVideo) GetTypename() string { return v.Typename }
+func (v *ItemVideo) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns ItemVideo.Id, and is useful for accessing the field via an interface.
-func (v *ItemVideo) GetId() testutil.ID { return v.Id }
+func (v *ItemVideo) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns ItemVideo.Name, and is useful for accessing the field via an interface.
-func (v *ItemVideo) GetName() NameType { return v.Name }
+func (v *ItemVideo) GetName() (val NameType) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 type NameType string
 
@@ -169,13 +214,28 @@ type Resp struct {
 }
 
 // GetUser returns Resp.User, and is useful for accessing the field via an interface.
-func (v *Resp) GetUser() User { return v.User }
+func (v *Resp) GetUser() (val User) {
+	if v == nil {
+		return
+	}
+	return v.User
+}
 
 // GetRandomItem returns Resp.RandomItem, and is useful for accessing the field via an interface.
-func (v *Resp) GetRandomItem() Item { return v.RandomItem }
+func (v *Resp) GetRandomItem() (val Item) {
+	if v == nil {
+		return
+	}
+	return v.RandomItem
+}
 
 // GetUsers returns Resp.Users, and is useful for accessing the field via an interface.
-func (v *Resp) GetUsers() []User { return v.Users }
+func (v *Resp) GetUsers() (val []User) {
+	if v == nil {
+		return
+	}
+	return v.Users
+}
 
 func (v *Resp) UnmarshalJSON(b []byte) error {
 
@@ -259,10 +319,20 @@ type User struct {
 }
 
 // GetId returns User.Id, and is useful for accessing the field via an interface.
-func (v *User) GetId() testutil.ID { return v.Id }
+func (v *User) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns User.Name, and is useful for accessing the field via an interface.
-func (v *User) GetName() string { return v.Name }
+func (v *User) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // The query executed by TypeNames.
 const TypeNames_Operation = `

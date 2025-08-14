@@ -18,12 +18,20 @@ type CustomMarshalSliceResponse struct {
 }
 
 // GetAcceptsListOfListOfListsOfDates returns CustomMarshalSliceResponse.AcceptsListOfListOfListsOfDates, and is useful for accessing the field via an interface.
-func (v *CustomMarshalSliceResponse) GetAcceptsListOfListOfListsOfDates() bool {
+func (v *CustomMarshalSliceResponse) GetAcceptsListOfListOfListsOfDates() (val bool) {
+	if v == nil {
+		return
+	}
 	return v.AcceptsListOfListOfListsOfDates
 }
 
 // GetWithPointer returns CustomMarshalSliceResponse.WithPointer, and is useful for accessing the field via an interface.
-func (v *CustomMarshalSliceResponse) GetWithPointer() bool { return v.WithPointer }
+func (v *CustomMarshalSliceResponse) GetWithPointer() (val bool) {
+	if v == nil {
+		return
+	}
+	return v.WithPointer
+}
 
 // __CustomMarshalSliceInput is used internally by genqlient
 type __CustomMarshalSliceInput struct {
@@ -32,10 +40,20 @@ type __CustomMarshalSliceInput struct {
 }
 
 // GetDatesss returns __CustomMarshalSliceInput.Datesss, and is useful for accessing the field via an interface.
-func (v *__CustomMarshalSliceInput) GetDatesss() [][][]time.Time { return v.Datesss }
+func (v *__CustomMarshalSliceInput) GetDatesss() (val [][][]time.Time) {
+	if v == nil {
+		return
+	}
+	return v.Datesss
+}
 
 // GetDatesssp returns __CustomMarshalSliceInput.Datesssp, and is useful for accessing the field via an interface.
-func (v *__CustomMarshalSliceInput) GetDatesssp() [][][]*time.Time { return v.Datesssp }
+func (v *__CustomMarshalSliceInput) GetDatesssp() (val [][][]*time.Time) {
+	if v == nil {
+		return
+	}
+	return v.Datesssp
+}
 
 func (v *__CustomMarshalSliceInput) UnmarshalJSON(b []byte) error {
 

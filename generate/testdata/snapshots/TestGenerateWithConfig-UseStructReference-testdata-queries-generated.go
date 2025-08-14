@@ -13,7 +13,12 @@ type StructInput struct {
 }
 
 // GetField returns StructInput.Field, and is useful for accessing the field via an interface.
-func (v *StructInput) GetField() string { return v.Field }
+func (v *StructInput) GetField() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Field
+}
 
 // UseStructReferenceResponse is returned by UseStructReference on success.
 type UseStructReferenceResponse struct {
@@ -21,7 +26,10 @@ type UseStructReferenceResponse struct {
 }
 
 // GetUseStructReferencesInput returns UseStructReferenceResponse.UseStructReferencesInput, and is useful for accessing the field via an interface.
-func (v *UseStructReferenceResponse) GetUseStructReferencesInput() bool {
+func (v *UseStructReferenceResponse) GetUseStructReferencesInput() (val bool) {
+	if v == nil {
+		return
+	}
 	return v.UseStructReferencesInput
 }
 
@@ -34,19 +42,44 @@ type UseStructReferencesInput struct {
 }
 
 // GetStruct returns UseStructReferencesInput.Struct, and is useful for accessing the field via an interface.
-func (v *UseStructReferencesInput) GetStruct() *StructInput { return v.Struct }
+func (v *UseStructReferencesInput) GetStruct() (val *StructInput) {
+	if v == nil {
+		return
+	}
+	return v.Struct
+}
 
 // GetNullableStruct returns UseStructReferencesInput.NullableStruct, and is useful for accessing the field via an interface.
-func (v *UseStructReferencesInput) GetNullableStruct() *StructInput { return v.NullableStruct }
+func (v *UseStructReferencesInput) GetNullableStruct() (val *StructInput) {
+	if v == nil {
+		return
+	}
+	return v.NullableStruct
+}
 
 // GetList returns UseStructReferencesInput.List, and is useful for accessing the field via an interface.
-func (v *UseStructReferencesInput) GetList() []*StructInput { return v.List }
+func (v *UseStructReferencesInput) GetList() (val []*StructInput) {
+	if v == nil {
+		return
+	}
+	return v.List
+}
 
 // GetListOfNullable returns UseStructReferencesInput.ListOfNullable, and is useful for accessing the field via an interface.
-func (v *UseStructReferencesInput) GetListOfNullable() []*StructInput { return v.ListOfNullable }
+func (v *UseStructReferencesInput) GetListOfNullable() (val []*StructInput) {
+	if v == nil {
+		return
+	}
+	return v.ListOfNullable
+}
 
 // GetNullableList returns UseStructReferencesInput.NullableList, and is useful for accessing the field via an interface.
-func (v *UseStructReferencesInput) GetNullableList() []*StructInput { return v.NullableList }
+func (v *UseStructReferencesInput) GetNullableList() (val []*StructInput) {
+	if v == nil {
+		return
+	}
+	return v.NullableList
+}
 
 // __UseStructReferenceInput is used internally by genqlient
 type __UseStructReferenceInput struct {
@@ -54,7 +87,12 @@ type __UseStructReferenceInput struct {
 }
 
 // GetInput returns __UseStructReferenceInput.Input, and is useful for accessing the field via an interface.
-func (v *__UseStructReferenceInput) GetInput() *UseStructReferencesInput { return v.Input }
+func (v *__UseStructReferenceInput) GetInput() (val *UseStructReferencesInput) {
+	if v == nil {
+		return
+	}
+	return v.Input
+}
 
 // The query executed by UseStructReference.
 const UseStructReference_Operation = `

@@ -12,7 +12,12 @@ type OmitemptyFalseResponse struct {
 }
 
 // GetOmitempty returns OmitemptyFalseResponse.Omitempty, and is useful for accessing the field via an interface.
-func (v *OmitemptyFalseResponse) GetOmitempty() bool { return v.Omitempty }
+func (v *OmitemptyFalseResponse) GetOmitempty() (val bool) {
+	if v == nil {
+		return
+	}
+	return v.Omitempty
+}
 
 type OmitemptyInput struct {
 	Field         string `json:"field"`
@@ -20,10 +25,20 @@ type OmitemptyInput struct {
 }
 
 // GetField returns OmitemptyInput.Field, and is useful for accessing the field via an interface.
-func (v *OmitemptyInput) GetField() string { return v.Field }
+func (v *OmitemptyInput) GetField() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Field
+}
 
 // GetNullableField returns OmitemptyInput.NullableField, and is useful for accessing the field via an interface.
-func (v *OmitemptyInput) GetNullableField() string { return v.NullableField }
+func (v *OmitemptyInput) GetNullableField() (val string) {
+	if v == nil {
+		return
+	}
+	return v.NullableField
+}
 
 // __OmitemptyFalseInput is used internally by genqlient
 type __OmitemptyFalseInput struct {
@@ -31,7 +46,12 @@ type __OmitemptyFalseInput struct {
 }
 
 // GetInput returns __OmitemptyFalseInput.Input, and is useful for accessing the field via an interface.
-func (v *__OmitemptyFalseInput) GetInput() OmitemptyInput { return v.Input }
+func (v *__OmitemptyFalseInput) GetInput() (val OmitemptyInput) {
+	if v == nil {
+		return
+	}
+	return v.Input
+}
 
 // The query executed by OmitemptyFalse.
 const OmitemptyFalse_Operation = `

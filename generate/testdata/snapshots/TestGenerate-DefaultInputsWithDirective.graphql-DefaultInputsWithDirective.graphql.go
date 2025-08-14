@@ -12,7 +12,12 @@ type DefaultInputsResponse struct {
 }
 
 // GetDefault returns DefaultInputsResponse.Default, and is useful for accessing the field via an interface.
-func (v *DefaultInputsResponse) GetDefault() bool { return v.Default }
+func (v *DefaultInputsResponse) GetDefault() (val bool) {
+	if v == nil {
+		return
+	}
+	return v.Default
+}
 
 type InputWithDefaults struct {
 	Field         string `json:"field,omitempty"`
@@ -20,10 +25,20 @@ type InputWithDefaults struct {
 }
 
 // GetField returns InputWithDefaults.Field, and is useful for accessing the field via an interface.
-func (v *InputWithDefaults) GetField() string { return v.Field }
+func (v *InputWithDefaults) GetField() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Field
+}
 
 // GetNullableField returns InputWithDefaults.NullableField, and is useful for accessing the field via an interface.
-func (v *InputWithDefaults) GetNullableField() string { return v.NullableField }
+func (v *InputWithDefaults) GetNullableField() (val string) {
+	if v == nil {
+		return
+	}
+	return v.NullableField
+}
 
 // __DefaultInputsInput is used internally by genqlient
 type __DefaultInputsInput struct {
@@ -31,7 +46,12 @@ type __DefaultInputsInput struct {
 }
 
 // GetInput returns __DefaultInputsInput.Input, and is useful for accessing the field via an interface.
-func (v *__DefaultInputsInput) GetInput() InputWithDefaults { return v.Input }
+func (v *__DefaultInputsInput) GetInput() (val InputWithDefaults) {
+	if v == nil {
+		return
+	}
+	return v.Input
+}
 
 // The query executed by DefaultInputs.
 const DefaultInputs_Operation = `

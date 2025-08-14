@@ -20,16 +20,36 @@ type SimpleInlineFragmentRandomItemArticle struct {
 }
 
 // GetTypename returns SimpleInlineFragmentRandomItemArticle.Typename, and is useful for accessing the field via an interface.
-func (v *SimpleInlineFragmentRandomItemArticle) GetTypename() string { return v.Typename }
+func (v *SimpleInlineFragmentRandomItemArticle) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns SimpleInlineFragmentRandomItemArticle.Id, and is useful for accessing the field via an interface.
-func (v *SimpleInlineFragmentRandomItemArticle) GetId() testutil.ID { return v.Id }
+func (v *SimpleInlineFragmentRandomItemArticle) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns SimpleInlineFragmentRandomItemArticle.Name, and is useful for accessing the field via an interface.
-func (v *SimpleInlineFragmentRandomItemArticle) GetName() string { return v.Name }
+func (v *SimpleInlineFragmentRandomItemArticle) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // GetText returns SimpleInlineFragmentRandomItemArticle.Text, and is useful for accessing the field via an interface.
-func (v *SimpleInlineFragmentRandomItemArticle) GetText() string { return v.Text }
+func (v *SimpleInlineFragmentRandomItemArticle) GetText() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Text
+}
 
 // SimpleInlineFragmentRandomItemContent includes the requested fields of the GraphQL interface Content.
 //
@@ -137,13 +157,28 @@ type SimpleInlineFragmentRandomItemTopic struct {
 }
 
 // GetTypename returns SimpleInlineFragmentRandomItemTopic.Typename, and is useful for accessing the field via an interface.
-func (v *SimpleInlineFragmentRandomItemTopic) GetTypename() string { return v.Typename }
+func (v *SimpleInlineFragmentRandomItemTopic) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns SimpleInlineFragmentRandomItemTopic.Id, and is useful for accessing the field via an interface.
-func (v *SimpleInlineFragmentRandomItemTopic) GetId() testutil.ID { return v.Id }
+func (v *SimpleInlineFragmentRandomItemTopic) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns SimpleInlineFragmentRandomItemTopic.Name, and is useful for accessing the field via an interface.
-func (v *SimpleInlineFragmentRandomItemTopic) GetName() string { return v.Name }
+func (v *SimpleInlineFragmentRandomItemTopic) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // SimpleInlineFragmentRandomItemVideo includes the requested fields of the GraphQL type Video.
 type SimpleInlineFragmentRandomItemVideo struct {
@@ -155,16 +190,36 @@ type SimpleInlineFragmentRandomItemVideo struct {
 }
 
 // GetTypename returns SimpleInlineFragmentRandomItemVideo.Typename, and is useful for accessing the field via an interface.
-func (v *SimpleInlineFragmentRandomItemVideo) GetTypename() string { return v.Typename }
+func (v *SimpleInlineFragmentRandomItemVideo) GetTypename() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Typename
+}
 
 // GetId returns SimpleInlineFragmentRandomItemVideo.Id, and is useful for accessing the field via an interface.
-func (v *SimpleInlineFragmentRandomItemVideo) GetId() testutil.ID { return v.Id }
+func (v *SimpleInlineFragmentRandomItemVideo) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // GetName returns SimpleInlineFragmentRandomItemVideo.Name, and is useful for accessing the field via an interface.
-func (v *SimpleInlineFragmentRandomItemVideo) GetName() string { return v.Name }
+func (v *SimpleInlineFragmentRandomItemVideo) GetName() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Name
+}
 
 // GetDuration returns SimpleInlineFragmentRandomItemVideo.Duration, and is useful for accessing the field via an interface.
-func (v *SimpleInlineFragmentRandomItemVideo) GetDuration() int { return v.Duration }
+func (v *SimpleInlineFragmentRandomItemVideo) GetDuration() (val int) {
+	if v == nil {
+		return
+	}
+	return v.Duration
+}
 
 // SimpleInlineFragmentResponse is returned by SimpleInlineFragment on success.
 type SimpleInlineFragmentResponse struct {
@@ -172,7 +227,10 @@ type SimpleInlineFragmentResponse struct {
 }
 
 // GetRandomItem returns SimpleInlineFragmentResponse.RandomItem, and is useful for accessing the field via an interface.
-func (v *SimpleInlineFragmentResponse) GetRandomItem() SimpleInlineFragmentRandomItemContent {
+func (v *SimpleInlineFragmentResponse) GetRandomItem() (val SimpleInlineFragmentRandomItemContent) {
+	if v == nil {
+		return
+	}
 	return v.RandomItem
 }
 

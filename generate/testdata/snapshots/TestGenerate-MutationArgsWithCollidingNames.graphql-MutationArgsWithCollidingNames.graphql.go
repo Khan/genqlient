@@ -13,7 +13,10 @@ type MutationArgsWithCollidingNamesResponse struct {
 }
 
 // GetUpdateUser returns MutationArgsWithCollidingNamesResponse.UpdateUser, and is useful for accessing the field via an interface.
-func (v *MutationArgsWithCollidingNamesResponse) GetUpdateUser() MutationArgsWithCollidingNamesUpdateUser {
+func (v *MutationArgsWithCollidingNamesResponse) GetUpdateUser() (val MutationArgsWithCollidingNamesUpdateUser) {
+	if v == nil {
+		return
+	}
 	return v.UpdateUser
 }
 
@@ -29,7 +32,12 @@ type MutationArgsWithCollidingNamesUpdateUser struct {
 }
 
 // GetId returns MutationArgsWithCollidingNamesUpdateUser.Id, and is useful for accessing the field via an interface.
-func (v *MutationArgsWithCollidingNamesUpdateUser) GetId() testutil.ID { return v.Id }
+func (v *MutationArgsWithCollidingNamesUpdateUser) GetId() (val testutil.ID) {
+	if v == nil {
+		return
+	}
+	return v.Id
+}
 
 // __MutationArgsWithCollidingNamesInput is used internally by genqlient
 type __MutationArgsWithCollidingNamesInput struct {
@@ -40,16 +48,36 @@ type __MutationArgsWithCollidingNamesInput struct {
 }
 
 // GetData returns __MutationArgsWithCollidingNamesInput.Data, and is useful for accessing the field via an interface.
-func (v *__MutationArgsWithCollidingNamesInput) GetData() string { return v.Data }
+func (v *__MutationArgsWithCollidingNamesInput) GetData() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Data
+}
 
 // GetReq returns __MutationArgsWithCollidingNamesInput.Req, and is useful for accessing the field via an interface.
-func (v *__MutationArgsWithCollidingNamesInput) GetReq() int { return v.Req }
+func (v *__MutationArgsWithCollidingNamesInput) GetReq() (val int) {
+	if v == nil {
+		return
+	}
+	return v.Req
+}
 
 // GetResp returns __MutationArgsWithCollidingNamesInput.Resp, and is useful for accessing the field via an interface.
-func (v *__MutationArgsWithCollidingNamesInput) GetResp() int { return v.Resp }
+func (v *__MutationArgsWithCollidingNamesInput) GetResp() (val int) {
+	if v == nil {
+		return
+	}
+	return v.Resp
+}
 
 // GetClient returns __MutationArgsWithCollidingNamesInput.Client, and is useful for accessing the field via an interface.
-func (v *__MutationArgsWithCollidingNamesInput) GetClient() string { return v.Client }
+func (v *__MutationArgsWithCollidingNamesInput) GetClient() (val string) {
+	if v == nil {
+		return
+	}
+	return v.Client
+}
 
 // The mutation executed by MutationArgsWithCollidingNames.
 const MutationArgsWithCollidingNames_Operation = `
