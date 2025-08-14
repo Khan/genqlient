@@ -35,26 +35,6 @@ func (v *SnakeCaseFieldsUser) GetUserId() string { return v.UserId }
 // GetDisplayName returns SnakeCaseFieldsUser.DisplayName, and is useful for accessing the field via an interface.
 func (v *SnakeCaseFieldsUser) GetDisplayName() string { return v.DisplayName }
 
-// SnakeCaseTypeResponse is returned by SnakeCaseType on success.
-type SnakeCaseTypeResponse struct {
-	SnakeCaseType SnakeCaseTypeSnakeCaseType `json:"snake_case_type"`
-}
-
-// GetSnakeCaseType returns SnakeCaseTypeResponse.SnakeCaseType, and is useful for accessing the field via an interface.
-func (v *SnakeCaseTypeResponse) GetSnakeCaseType() SnakeCaseTypeSnakeCaseType { return v.SnakeCaseType }
-
-// SnakeCaseTypeSnakeCaseType includes the requested fields of the GraphQL type snake_case_type.
-type SnakeCaseTypeSnakeCaseType struct {
-	Id   string `json:"id"`
-	Name string `json:"name"`
-}
-
-// GetId returns SnakeCaseTypeSnakeCaseType.Id, and is useful for accessing the field via an interface.
-func (v *SnakeCaseTypeSnakeCaseType) GetId() string { return v.Id }
-
-// GetName returns SnakeCaseTypeSnakeCaseType.Name, and is useful for accessing the field via an interface.
-func (v *SnakeCaseTypeSnakeCaseType) GetName() string { return v.Name }
-
 // The query executed by SnakeCaseFields.
 const SnakeCaseFields_Operation = `
 query SnakeCaseFields {
@@ -75,37 +55,6 @@ func SnakeCaseFields(
 	}
 
 	data_ = &SnakeCaseFieldsResponse{}
-	resp_ := &graphql.Response{Data: data_}
-
-	err_ = client_.MakeRequest(
-		ctx_,
-		req_,
-		resp_,
-	)
-
-	return data_, err_
-}
-
-// The query executed by SnakeCaseType.
-const SnakeCaseType_Operation = `
-query SnakeCaseType {
-	snake_case_type {
-		id
-		name
-	}
-}
-`
-
-func SnakeCaseType(
-	ctx_ context.Context,
-	client_ graphql.Client,
-) (data_ *SnakeCaseTypeResponse, err_ error) {
-	req_ := &graphql.Request{
-		OpName: "SnakeCaseType",
-		Query:  SnakeCaseType_Operation,
-	}
-
-	data_ = &SnakeCaseTypeResponse{}
 	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
