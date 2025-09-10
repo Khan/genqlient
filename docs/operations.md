@@ -355,7 +355,7 @@ and genqlient will generate a Go field `MyGreatName string`.  Note that the alia
 
 ### Type names
 
-genqlient generates quite verbose type names in many cases. (In short, this is because the same `User` GraphQL type must map to different Go types depending which fields are requested; see the FAQ for [more](faq.md#why-does-genqlient-generate-such-complicated-type-names-).
+genqlient generates quite verbose type names in many cases. (In short, this is because the same `User` GraphQL type must map to different Go types depending on which fields are requested; see the FAQ for [more](faq.md#why-does-genqlient-generate-such-complicated-type-names-).
 
 For example, in the following query there are two different user structs.
 ```graphql
@@ -400,7 +400,7 @@ For any GraphQL types or fields with documentation in the GraphQL schema, genqli
 # This query gets the current user.
 #
 # If you also need to specify options on the query, you can put
-# the @genqlient directive after the docuentation, like this:
+# the @genqlient directive after the documentation, like this:
 #
 # @genqlient(omitempty: true)
 query GetUser { ... }

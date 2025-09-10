@@ -7691,12 +7691,12 @@ input EnablePullRequestAutoMergeInput {
   clientMutationId: String
 
   """
-  Commit body to use for the commit when the PR is mergable; if omitted, a default message will be used.
+  Commit body to use for the commit when the PR is mergeable; if omitted, a default message will be used.
   """
   commitBody: String
 
   """
-  Commit headline to use for the commit when the PR is mergable; if omitted, a default message will be used.
+  Commit headline to use for the commit when the PR is mergeable; if omitted, a default message will be used.
   """
   commitHeadline: String
 
@@ -26960,7 +26960,7 @@ type ReferencedEvent implements Node {
 }
 
 """
-Any referencable object
+Any referenceable object
 """
 union ReferencedSubject = Issue | PullRequest
 
@@ -27055,7 +27055,7 @@ type Release implements Node & UniformResourceLocatable {
   isDraft: Boolean!
 
   """
-  Whether or not the release is the latest releast
+  Whether or not the release is the latest release
   """
   isLatest: Boolean!
 

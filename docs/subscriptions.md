@@ -129,7 +129,7 @@ To change the websocket protocol from its default value `graphql-transport-ws`, 
 
 ## Authenticate subscriptions
 
-Graphql allows to authenticate subscriptions using HTTP headers (inside the http upgrade request) or using connection parameters (first message inside the websocket connection).
+Graphql supports authenticated subscriptions using HTTP headers (inside the http upgrade request) or using connection parameters (first message inside the websocket connection).
 To authenticate using both methods, you need to add a `graphql.WebSocketOption` to the `graphql.NewClientUsingWebSocket` method.
 
 ### Example using HTTP headers

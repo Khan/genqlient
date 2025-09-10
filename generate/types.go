@@ -235,7 +235,7 @@ func (field *goStructField) Unmarshaler(g *generator) (string, error) {
 
 // marshaler returns:
 //   - the fully-qualified name of the function to use to marshal this field
-//   - true if we need to generate an marshaler at all, false if the default
+//   - true if we need to generate a marshaler at all, false if the default
 //     behavior will suffice
 func (field *goStructField) marshaler() (qualifiedName string, needsImport bool, needsMarshaler bool) {
 	switch typ := field.GoType.Unwrap().(type) {

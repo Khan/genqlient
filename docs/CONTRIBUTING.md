@@ -56,4 +56,4 @@ See the [versioning strategy](versioning.md) for when to make a release. To make
 - Add a new section to the changelog for the release (see comments in the changelog for instructions), and add a brief summary of the release at the top.
 - Make a PR with the above. (Example: [#208](https://github.com/Khan/genqlient/pull/208).)
 - After it merges, tag it as the new release, e.g. `git checkout main && git pull && git tag v0.X.Y && git push origin v0.X.Y`.
-- Then, create a release in github, either [on the web](https://github.com/Khan/genqlient/releases/new) or with `export VERSION=v0.6.0; gh release create $VERSION --latest --verify-tag --generate-notes --title $VERSION`. (TODO(benkraft): Figure out how to pull in the changelog we've already written instead!)
+- Then, create a release in GitHub, either [on the web](https://github.com/Khan/genqlient/releases/new) or with `export VERSION=v0.6.0; gh release create $VERSION --latest --verify-tag --generate-notes --title $VERSION`. (TODO(benkraft): Figure out how to pull in the changelog we've already written instead!)

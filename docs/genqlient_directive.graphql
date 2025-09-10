@@ -222,7 +222,7 @@ directive genqlient(
   #      name
   #    }
   #  }
-  # will cause gnqlient to generate:
+  # will cause genqlient to generate:
   #  type Resp struct {
   #    User User
   #  }

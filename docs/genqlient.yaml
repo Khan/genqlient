@@ -232,7 +232,7 @@ bindings:
     # unmarshaler and marshaler are also valid here, see above for details.
 
 # A list of packages for which genqlient should automatically generate
-# bindings.  This is equivalent to adding a entry
+# bindings.  This is equivalent to adding an entry
 #   TypeName:
 #       type: github.com/you/yourpkg/models.TypeName
 # to the bindings map, above, for each exported type in the package.  Multiple

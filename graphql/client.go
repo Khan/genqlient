@@ -24,12 +24,12 @@ type Client interface {
 	// context.Background().
 	//
 	// req contains the data to be sent to the GraphQL server.  Typically GraphQL
-	// APIs will expect it to simply be marshalled as JSON, but MakeRequest may
+	// APIs will expect it to simply be marshaled as JSON, but MakeRequest may
 	// customize this.
 	//
 	// resp is the Response object into which the server's response will be
-	// unmarshalled. Typically GraphQL APIs will return JSON which can be
-	// unmarshalled directly into resp, but MakeRequest can customize it.
+	// unmarshaled. Typically GraphQL APIs will return JSON which can be
+	// unmarshaled directly into resp, but MakeRequest can customize it.
 	// If the response contains an error, this must also be returned by
 	// MakeRequest.  The field resp.Data will be prepopulated with a pointer
 	// to an empty struct of the correct generated type (e.g. MyQueryResponse).
@@ -56,7 +56,7 @@ type WebSocketClient interface {
 
 	// Subscribe must subscribe to an endpoint of the client's GraphQL API.
 	//
-	// req contains the data to be sent to the GraphQL server. Will be marshalled
+	// req contains the data to be sent to the GraphQL server. Will be marshaled
 	// into JSON bytes.
 	//
 	// interfaceChan is a channel used to send the data that arrives via the
