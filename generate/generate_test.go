@@ -325,7 +325,7 @@ func TestGenerateWithConfig(t *testing.T) {
 // TestGenerateErrors is a snapshot-based test of error text.
 //
 // For each .go or .graphql file in testdata/errors, it asserts that the given
-// query returns an error, and that that error's string-text matches the
+// query returns an error, and that the error's string-text matches the
 // snapshot.  The snapshotting is useful to ensure we don't accidentally make
 // the text less readable, drop the line numbers, etc.  We include both .go and
 // .graphql tests for some of the test cases, to make sure the line numbers

@@ -269,7 +269,7 @@ func (g *generator) convertType(
 		}
 	} else if !options.PointerIsFalse() && (options.GetPointer() || (!typ.NonNull && g.Config.Optional == "pointer")) {
 		// Whatever we get, wrap it in a pointer.  (Because of the way the
-		// options work, recursing here isn't as connvenient.)
+		// options work, recursing here isn't as convenient.)
 		// Note this does []*T or [][]*T, not e.g. *[][]T.  See #16.
 		goTyp = &goPointerType{goTyp}
 	} else if !typ.NonNull && g.Config.Optional == "generic" {
@@ -463,10 +463,10 @@ func (g *generator) convertDefinition(
 			}
 
 			if !g.Config.StructReferences {
-				// Only do these validation when StructReferences are not used, as that can generate types that would not
+				// Only do this validation when StructReferences are not used, as that can generate types that would not
 				// pass these validations. See https://github.com/Khan/genqlient/issues/342
 
-				// Try to protect against generating field type that has possibility to send `null` to non-nullable graphQL
+				// Try to protect against generating a field type that could send `null` to a non-nullable graphQL
 				// type. This does not protect against lists/slices, as Go zero-slices are already serialized as `null`
 				// (which can therefore currently send invalid graphQL value - e.g. `null` for [String!]!).
 				// And does not protect against custom MarshalJSON.
@@ -653,7 +653,7 @@ func (g *generator) convertSelectionSet(
 		// us.  (See also the special handling for IsEmbedded in
 		// unmarshal.go.tmpl.)
 		//
-		// But if you spread the samenamed fragment twice, e.g.
+		// But if you spread the same named fragment twice, e.g.
 		//	{ ...MyFragment, ... on SubType { ...MyFragment } }
 		// we'll still deduplicate that.
 		if field.JSONName == "" {

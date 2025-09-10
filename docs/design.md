@@ -89,7 +89,7 @@ type User2 struct {
 }
 ```
 
-Moreover, these types names should be as stable as possible: changing one part of a query (or another query) shouldn't change the type-names.  And ideally, we might deduplicate: in a query like `{ self { id } myChildren { id } }` we'd be able to use a single type for both `self` and `myChildren`.  Although maybe, if you want that, you have to use a fragment; it's clearly in conflict with having stable names.  Or we can actually make this configurable!
+Moreover, these type names should be as stable as possible: changing one part of a query (or another query) shouldn't change the type-names.  And ideally, we might deduplicate: in a query like `{ self { id } myChildren { id } }` we'd be able to use a single type for both `self` and `myChildren`.  Although maybe, if you want that, you have to use a fragment; it's clearly in conflict with having stable names.  Or we can actually make this configurable!
 
 In other tools:
 - Apollo mostly uses named types (except alternatives of an interface/fragment are inline in TypeScript, but not in Flow), and in the above example names them, respectively, `MyQuery_user_User` and `MyQuery_user_User_children_User`, or maybe in some versions `MyQuery_user` and `MyQuery_user_children` in Flow/TypeScript.  In Java and Scala in some cases they use nested types, e.g. `MyQuery.User.Children`.

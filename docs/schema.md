@@ -96,7 +96,7 @@ The GraphQL spec officially defines the `Int` type to be a [signed 32-bit intege
 - [Apollo Client](https://github.com/apollographql/apollo-client) doesn't check (but implicitly is limited to 53 bits by JavaScript)
 - [shurcooL/graphql](https://github.com/shurcooL/graphql) requires integers be passed as a `graphql.Int`, defined to be an `int32`
 
-By default, genqlient maps GraphQL `Int`s to Go's `int`, meaning that on 64 bit systems there's no client-side restriction. This is convenient for most use cases, but means the client won't prevent you from passing a 64-bit integer to a server that will reject or truncate it.
+By default, genqlient maps GraphQL `Int`s to Go's `int`, meaning that on 64-bit systems there's no client-side restriction. This is convenient for most use cases, but means the client won't prevent you from passing a 64-bit integer to a server that will reject or truncate it.
 
 If you prefer to limit integers to `int32`, you can set a binding in your `genqlient.yaml`:
 

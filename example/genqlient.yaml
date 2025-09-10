@@ -3,7 +3,7 @@ operations:
 - genqlient.graphql
 generated: generated.go
 
-# We bind github's DateTime scalar type to Go's time.Time (which conveniently
+# We bind GitHub's DateTime scalar type to Go's time.Time (which conveniently
 # already defines MarshalJSON and UnmarshalJSON).  This means genqlient will
 # use time.Time when a query requests a DateTime, and is required for custom
 # scalars.

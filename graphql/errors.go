@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-// HTTPError represents an HTTP error with status coqgqde and response body.
+// HTTPError represents an HTTP error with status code and response body.
 type HTTPError struct {
 	Response   Response
 	StatusCode int

@@ -131,8 +131,8 @@ func (casing *Casing) forEnum(graphQLTypeName string) CasingAlgorithm {
 	return casing.getDefault()
 }
 
-// pathJoin is like filepath.Join but 1) it only takes two argsuments,
-// and b) if the second argument is an absolute path the first argument
+// pathJoin is like filepath.Join but 1) it only takes two arguments,
+// and 2) if the second argument is an absolute path the first argument
 // is ignored (similar to how python's os.path.join() works).
 func pathJoin(a, b string) string {
 	if filepath.IsAbs(b) {
@@ -292,7 +292,7 @@ func (c *Config) ValidateAndFillDefaults(baseDir string) error {
 
 				for _, typ := range p.Scope().Names() {
 					if token.IsExported(typ) {
-						// Check if type is manual bindings
+						// Check if type is a manual binding
 						_, exist := c.Bindings[typ]
 						if !exist {
 							pathType := fmt.Sprintf("%s.%s", p.Path(), typ)

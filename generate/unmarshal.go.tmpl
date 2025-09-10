@@ -31,7 +31,7 @@ func (v *{{.GoName}}) UnmarshalJSON(b []byte) error {
          json.Unmarshal on the receiver (v).  But if we do that naively on a
          value of type <.GoName>, it will call this function again, and recurse
          infinitely.  So we make a wrapper type which embeds both this type and
-         NoUmnarshalJSON, which prevents either's UnmarshalJSON method from
+         NoUnmarshalJSON, which prevents either's UnmarshalJSON method from
          being promoted.  For more on why this is so difficult, see
          https://github.com/benjaminjkraft/notes/blob/master/go-json-interfaces.md.
          (Note there are a few different ways "hide" the method, but this one

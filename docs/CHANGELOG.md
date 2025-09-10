@@ -30,6 +30,8 @@ Note that genqlient now requires Go 1.23 or higher, and is tested through Go 1.2
 
 ### Bug fixes:
 
+- fixed minor typos and grammatical issues across the project
+
 ## v0.8.1
 
 This release fixes a bug introduced in v0.8.0 breaking path resolution on Windows, along with some other small features and bugs.
