@@ -194,13 +194,13 @@ func (w *webSocketClient) Close() error {
 	if w.conn == nil {
 		return nil
 	}
-	err := w.conn.WriteMessage(closeMessage, formatCloseMessage(closeNormalClosure, ""))
-	if err != nil {
-		return fmt.Errorf("failed to send closure message: %w", err)
-	}
-	err = w.UnsubscribeAll()
+	err := w.UnsubscribeAll()
 	if err != nil {
 		return fmt.Errorf("failed to unsubscribe: %w", err)
+	}
+	err = w.conn.WriteMessage(closeMessage, formatCloseMessage(closeNormalClosure, ""))
+	if err != nil {
+		return fmt.Errorf("failed to send closure message: %w", err)
 	}
 	w.Lock()
 	defer w.Unlock()

@@ -242,6 +242,49 @@ func TestSubscriptionConnectionParams(t *testing.T) {
 	}
 }
 
+func TestSubscriptionClose(t *testing.T) {
+	_ = `# @genqlient
+	subscription count { count }`
+
+	ctx := context.Background()
+	server := server.RunServer()
+	defer server.Close()
+
+	cases := []struct {
+		name  string
+		unsub bool
+	}{
+		{
+			name:  "unsubscribed_manually",
+			unsub: true,
+		},
+		{
+			name:  "unsubscribed_automatically",
+			unsub: false,
+		},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			wsClient := newRoundtripWebSocketClient(t, server.URL)
+
+			_, err := wsClient.Start(ctx)
+			require.NoError(t, err)
+
+			_, subscriptionID, err := count(ctx, wsClient)
+			require.NoError(t, err)
+
+			if tc.unsub {
+				err = wsClient.Unsubscribe(subscriptionID)
+				require.NoError(t, err)
+			}
+
+			err = wsClient.Close()
+			require.NoError(t, err)
+		})
+	}
+}
+
 func TestServerError(t *testing.T) {
 	_ = `# @genqlient
 	query failingQuery { fail me { id } }`
