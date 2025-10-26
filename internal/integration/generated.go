@@ -1319,6 +1319,14 @@ type countAuthorizedResponse struct {
 // GetCountAuthorized returns countAuthorizedResponse.CountAuthorized, and is useful for accessing the field via an interface.
 func (v *countAuthorizedResponse) GetCountAuthorized() int { return v.CountAuthorized }
 
+// countCloseResponse is returned by countClose on success.
+type countCloseResponse struct {
+	CountClose int `json:"countClose"`
+}
+
+// GetCountClose returns countCloseResponse.CountClose, and is useful for accessing the field via an interface.
+func (v *countCloseResponse) GetCountClose() int { return v.CountClose }
+
 // countResponse is returned by count on success.
 type countResponse struct {
 	Count int `json:"count"`
@@ -3195,6 +3203,54 @@ func countAuthorizedForwardData(interfaceChan interface{}, jsonRawMsg json.RawMe
 	dataChan_, ok := interfaceChan.(chan countAuthorizedWsResponse)
 	if !ok {
 		return errors.New("failed to cast interface into 'chan countAuthorizedWsResponse'")
+	}
+	dataChan_ <- wsResp
+	return nil
+}
+
+// The subscription executed by countClose.
+const countClose_Operation = `
+subscription countClose {
+	countClose
+}
+`
+
+// To unsubscribe, use [graphql.WebSocketClient.Unsubscribe]
+func countClose(
+	ctx_ context.Context,
+	client_ graphql.WebSocketClient,
+) (dataChan_ chan countCloseWsResponse, subscriptionID_ string, err_ error) {
+	req_ := &graphql.Request{
+		OpName: "countClose",
+		Query:  countClose_Operation,
+	}
+
+	dataChan_ = make(chan countCloseWsResponse)
+	subscriptionID_, err_ = client_.Subscribe(req_, dataChan_, countCloseForwardData)
+
+	return dataChan_, subscriptionID_, err_
+}
+
+type countCloseWsResponse graphql.BaseResponse[*countCloseResponse]
+
+func countCloseForwardData(interfaceChan interface{}, jsonRawMsg json.RawMessage) error {
+	var gqlResp graphql.Response
+	var wsResp countCloseWsResponse
+	err := json.Unmarshal(jsonRawMsg, &gqlResp)
+	if err != nil {
+		return err
+	}
+	if len(gqlResp.Errors) == 0 {
+		err = json.Unmarshal(jsonRawMsg, &wsResp)
+		if err != nil {
+			return err
+		}
+	} else {
+		wsResp.Errors = gqlResp.Errors
+	}
+	dataChan_, ok := interfaceChan.(chan countCloseWsResponse)
+	if !ok {
+		return errors.New("failed to cast interface into 'chan countCloseWsResponse'")
 	}
 	dataChan_ <- wsResp
 	return nil

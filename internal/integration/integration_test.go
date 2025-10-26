@@ -244,7 +244,7 @@ func TestSubscriptionConnectionParams(t *testing.T) {
 
 func TestSubscriptionClose(t *testing.T) {
 	_ = `# @genqlient
-	subscription count { count }`
+	subscription countClose { countClose }`
 
 	ctx := context.Background()
 	server := server.RunServer()
@@ -271,7 +271,7 @@ func TestSubscriptionClose(t *testing.T) {
 			_, err := wsClient.Start(ctx)
 			require.NoError(t, err)
 
-			_, subscriptionID, err := count(ctx, wsClient)
+			_, subscriptionID, err := countClose(ctx, wsClient)
 			require.NoError(t, err)
 
 			if tc.unsub {
