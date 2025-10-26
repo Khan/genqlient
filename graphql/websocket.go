@@ -147,6 +147,7 @@ func (w *webSocketClient) forwardWebSocketData(message []byte) error {
 		return nil
 	}
 	if wsMsg.Type == webSocketTypeComplete {
+		w.subscriptions.markUnsubscribed(wsMsg.ID)
 		reflect.ValueOf(sub.interfaceChan).Close()
 		return nil
 	}
