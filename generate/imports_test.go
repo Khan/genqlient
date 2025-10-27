@@ -28,7 +28,6 @@ func TestMakeIdentifier(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		test := test
 		t.Run(test.testName, func(t *testing.T) {
 			actual := makeIdentifier(test.input)
 			if actual != test.expected {

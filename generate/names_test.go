@@ -56,7 +56,6 @@ func TestTypeNames(t *testing.T) {
 		"lower",
 	}}
 	for _, test := range tests {
-		test := test
 		t.Run(test.expectedTypeName, func(t *testing.T) {
 			prefix := newPrefixList("Operation")
 			for _, field := range test.fields {
@@ -105,7 +104,6 @@ func TestSnakeToTypeNames(t *testing.T) {
 	}}
 
 	for _, test := range tests {
-		test := test
 		t.Run(test.expectedTypeName, func(t *testing.T) {
 			prefix := newPrefixList("ServiceIPs")
 			algorithm := CasingDefault

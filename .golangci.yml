@@ -20,7 +20,7 @@ linters:
     - depguard
     - durationcheck
     - errorlint
-    - exportloopref
+    - copyloopvar
     - gocritic
     - nakedret
     - stylecheck
@@ -37,7 +37,6 @@ linters-settings:
     errorf: false   # it's valid to use %v instead of %w
 
   govet:
-    check-shadowing: true
     enable-all: true
 
   # We have a ton of test-only packages; but make sure we keep prod deps small.

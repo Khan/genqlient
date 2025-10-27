@@ -10,7 +10,6 @@ type test struct {
 
 func testStringFunc(t *testing.T, f func(string) string, tests []test) {
 	for _, test := range tests {
-		test := test
 		t.Run(test.name, func(t *testing.T) {
 			got := f(test.in)
 			if got != test.out {
