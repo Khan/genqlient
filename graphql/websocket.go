@@ -139,15 +139,18 @@ func (w *webSocketClient) forwardWebSocketData(message []byte) error {
 	if wsMsg.ID == "" { // e.g. keep-alive messages
 		return nil
 	}
-	sub, ok := w.subscriptions.Read(wsMsg.ID)
-	if !ok {
+	w.subscriptions.Lock()
+	defer w.subscriptions.Unlock()
+	sub, success := w.subscriptions.map_[wsMsg.ID]
+	if !success {
 		return fmt.Errorf("received message for unknown subscription ID '%s'", wsMsg.ID)
 	}
 	if sub.hasBeenUnsubscribed {
 		return nil
 	}
 	if wsMsg.Type == webSocketTypeComplete {
-		w.subscriptions.markUnsubscribed(wsMsg.ID)
+		sub.hasBeenUnsubscribed = true
+		w.subscriptions.map_[wsMsg.ID] = sub
 		reflect.ValueOf(sub.interfaceChan).Close()
 		return nil
 	}

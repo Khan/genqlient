@@ -104,7 +104,10 @@ func TestSubscription(t *testing.T) {
 
 			dataChan, subscriptionID, err := count(ctx, wsClient)
 			require.NoError(t, err)
-			defer wsClient.Close()
+			defer func() {
+				err := wsClient.Close()
+				require.NoError(t, err)
+			}()
 
 			var (
 				counter = 0
@@ -198,7 +201,10 @@ func TestSubscriptionConnectionParams(t *testing.T) {
 
 			dataChan, subscriptionID, err := countAuthorized(ctx, wsClient)
 			require.NoError(t, err)
-			defer wsClient.Close()
+			defer func() {
+				err := wsClient.Close()
+				require.NoError(t, err)
+			}()
 
 			var (
 				counter = 0

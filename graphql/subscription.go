@@ -30,22 +30,6 @@ func (s *subscriptionMap) Create(subscriptionID string, interfaceChan interface{
 	}
 }
 
-func (s *subscriptionMap) Read(subscriptionID string) (sub subscription, success bool) {
-	s.RLock()
-	defer s.RUnlock()
-	sub, success = s.map_[subscriptionID]
-	return sub, success
-}
-
-func (s *subscriptionMap) markUnsubscribed(subscriptionID string) {
-	s.Lock()
-	defer s.Unlock()
-	if sub, ok := s.map_[subscriptionID]; ok {
-		sub.hasBeenUnsubscribed = true
-		s.map_[subscriptionID] = sub
-	}
-}
-
 func (s *subscriptionMap) Unsubscribe(subscriptionID string) error {
 	s.Lock()
 	defer s.Unlock()
