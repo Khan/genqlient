@@ -139,14 +139,18 @@ func (w *webSocketClient) forwardWebSocketData(message []byte) error {
 	if wsMsg.ID == "" { // e.g. keep-alive messages
 		return nil
 	}
-	sub, ok := w.subscriptions.Read(wsMsg.ID)
-	if !ok {
+	w.subscriptions.Lock()
+	defer w.subscriptions.Unlock()
+	sub, success := w.subscriptions.map_[wsMsg.ID]
+	if !success {
 		return fmt.Errorf("received message for unknown subscription ID '%s'", wsMsg.ID)
 	}
 	if sub.hasBeenUnsubscribed {
 		return nil
 	}
 	if wsMsg.Type == webSocketTypeComplete {
+		sub.hasBeenUnsubscribed = true
+		w.subscriptions.map_[wsMsg.ID] = sub
 		reflect.ValueOf(sub.interfaceChan).Close()
 		return nil
 	}
@@ -194,13 +198,13 @@ func (w *webSocketClient) Close() error {
 	if w.conn == nil {
 		return nil
 	}
-	err := w.conn.WriteMessage(closeMessage, formatCloseMessage(closeNormalClosure, ""))
-	if err != nil {
-		return fmt.Errorf("failed to send closure message: %w", err)
-	}
-	err = w.UnsubscribeAll()
+	err := w.UnsubscribeAll()
 	if err != nil {
 		return fmt.Errorf("failed to unsubscribe: %w", err)
+	}
+	err = w.conn.WriteMessage(closeMessage, formatCloseMessage(closeNormalClosure, ""))
+	if err != nil {
+		return fmt.Errorf("failed to send closure message: %w", err)
 	}
 	w.Lock()
 	defer w.Unlock()

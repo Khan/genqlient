@@ -104,7 +104,10 @@ func TestSubscription(t *testing.T) {
 
 			dataChan, subscriptionID, err := count(ctx, wsClient)
 			require.NoError(t, err)
-			defer wsClient.Close()
+			defer func() {
+				err := wsClient.Close()
+				require.NoError(t, err)
+			}()
 
 			var (
 				counter = 0
@@ -198,7 +201,10 @@ func TestSubscriptionConnectionParams(t *testing.T) {
 
 			dataChan, subscriptionID, err := countAuthorized(ctx, wsClient)
 			require.NoError(t, err)
-			defer wsClient.Close()
+			defer func() {
+				err := wsClient.Close()
+				require.NoError(t, err)
+			}()
 
 			var (
 				counter = 0
@@ -238,6 +244,49 @@ func TestSubscriptionConnectionParams(t *testing.T) {
 					require.NoError(t, fmt.Errorf("subscription timed out"))
 				}
 			}
+		})
+	}
+}
+
+func TestSubscriptionClose(t *testing.T) {
+	_ = `# @genqlient
+	subscription countClose { countClose }`
+
+	ctx := context.Background()
+	server := server.RunServer()
+	defer server.Close()
+
+	cases := []struct {
+		name  string
+		unsub bool
+	}{
+		{
+			name:  "unsubscribed_manually",
+			unsub: true,
+		},
+		{
+			name:  "unsubscribed_automatically",
+			unsub: false,
+		},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			wsClient := newRoundtripWebSocketClient(t, server.URL)
+
+			_, err := wsClient.Start(ctx)
+			require.NoError(t, err)
+
+			_, subscriptionID, err := countClose(ctx, wsClient)
+			require.NoError(t, err)
+
+			if tc.unsub {
+				err = wsClient.Unsubscribe(subscriptionID)
+				require.NoError(t, err)
+			}
+
+			err = wsClient.Close()
+			require.NoError(t, err)
 		})
 	}
 }

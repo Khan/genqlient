@@ -182,6 +182,10 @@ func (s *subscriptionResolver) CountAuthorized(ctx context.Context) (<-chan int,
 	return s.Count(ctx)
 }
 
+func (s *subscriptionResolver) CountClose(ctx context.Context) (<-chan int, error) {
+	return s.Count(ctx)
+}
+
 const AuthKey = "authToken"
 
 type (
