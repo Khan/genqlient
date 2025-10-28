@@ -363,10 +363,3 @@ func (c *client) createGetRequest(req *Request) (*http.Request, error) {
 
 	return httpReq, nil
 }
-
-func WriteToChannelOrRecover[T any](dataChan_ chan T, wsResp T) {
-	defer func() {
-		_ = recover()
-	}()
-	dataChan_ <- wsResp
-}

@@ -74,7 +74,7 @@ func {{.Name}}ForwardData(interfaceChan interface{}, jsonRawMsg json.RawMessage)
 	if !ok {
 		return errors.New("failed to cast interface into 'chan {{.Name}}WsResponse'")
 	}
-	graphql.WriteToChannelOrRecover(dataChan_, wsResp)
+	dataChan_ <- wsResp
 	return nil
 }
 {{end}}

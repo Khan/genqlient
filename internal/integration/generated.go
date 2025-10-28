@@ -3156,7 +3156,7 @@ func countForwardData(interfaceChan interface{}, jsonRawMsg json.RawMessage) err
 	if !ok {
 		return errors.New("failed to cast interface into 'chan countWsResponse'")
 	}
-	graphql.WriteToChannelOrRecover(dataChan_, wsResp)
+	dataChan_ <- wsResp
 	return nil
 }
 
@@ -3204,7 +3204,7 @@ func countAuthorizedForwardData(interfaceChan interface{}, jsonRawMsg json.RawMe
 	if !ok {
 		return errors.New("failed to cast interface into 'chan countAuthorizedWsResponse'")
 	}
-	graphql.WriteToChannelOrRecover(dataChan_, wsResp)
+	dataChan_ <- wsResp
 	return nil
 }
 
@@ -3252,7 +3252,7 @@ func countCloseForwardData(interfaceChan interface{}, jsonRawMsg json.RawMessage
 	if !ok {
 		return errors.New("failed to cast interface into 'chan countCloseWsResponse'")
 	}
-	graphql.WriteToChannelOrRecover(dataChan_, wsResp)
+	dataChan_ <- wsResp
 	return nil
 }
 
