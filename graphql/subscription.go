@@ -2,7 +2,6 @@ package graphql
 
 import (
 	"fmt"
-	"reflect"
 	"sync"
 )
 
@@ -37,13 +36,8 @@ func (s *subscriptionMap) Unsubscribe(subscriptionID string) error {
 	if !success {
 		return fmt.Errorf("tried to unsubscribe from unknown subscription with ID '%s'", subscriptionID)
 	}
-	hasBeenUnsubscribed := unsub.hasBeenUnsubscribed
 	unsub.hasBeenUnsubscribed = true
 	s.map_[subscriptionID] = unsub
-
-	if !hasBeenUnsubscribed {
-		reflect.ValueOf(s.map_[subscriptionID].interfaceChan).Close()
-	}
 	return nil
 }
 
