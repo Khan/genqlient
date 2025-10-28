@@ -157,20 +157,26 @@ func (m mutationResolver) CreateUser(ctx context.Context, input NewUser) (*User,
 	return &newUser, nil
 }
 
-func countTo(stopCount int) (<-chan int, error) {
+func countTo(ctx context.Context, stopCount int) (<-chan int, error) {
 	respChan := make(chan int, 1)
 	go func(respChan chan int) {
 		defer close(respChan)
 		for counter := range stopCount {
-			respChan <- counter
-			time.Sleep(100 * time.Millisecond)
+			select {
+			case <-ctx.Done():
+				fmt.Println("ctx done:", ctx.Err())
+				return
+			default:
+				respChan <- counter
+				time.Sleep(100 * time.Millisecond)
+			}
 		}
 	}(respChan)
 	return respChan, nil
 }
 
 func (s *subscriptionResolver) Count(ctx context.Context) (<-chan int, error) {
-	return countTo(10)
+	return countTo(ctx, 10)
 }
 
 func (s *subscriptionResolver) CountAuthorized(ctx context.Context) (<-chan int, error) {
@@ -178,11 +184,11 @@ func (s *subscriptionResolver) CountAuthorized(ctx context.Context) (<-chan int,
 		return nil, fmt.Errorf("unauthorized")
 	}
 
-	return countTo(10)
+	return countTo(ctx, 10)
 }
 
 func (s *subscriptionResolver) CountClose(ctx context.Context) (<-chan int, error) {
-	return countTo(1000)
+	return countTo(ctx, 1000)
 }
 
 const AuthKey = "authToken"
