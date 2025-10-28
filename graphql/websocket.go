@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"reflect"
 	"strings"
 	"sync"
 	"sync/atomic"
@@ -131,26 +130,6 @@ func (w *webSocketClient) listenWebSocket() {
 	}
 }
 
-func (w *webSocketClient) getSubscriptionOrHandleComplete(subscriptionID string, subscriptionType string) (*subscription, error) {
-	w.subscriptions.Lock()
-	defer w.subscriptions.Unlock()
-	sub, success := w.subscriptions.map_[subscriptionID]
-	if !success {
-		return nil, fmt.Errorf("received message for unknown subscription ID '%s'", subscriptionID)
-	}
-	if sub.hasBeenUnsubscribed {
-		return nil, nil
-	}
-	if subscriptionType == webSocketTypeComplete {
-		sub.hasBeenUnsubscribed = true
-		w.subscriptions.map_[subscriptionID] = sub
-		reflect.ValueOf(sub.interfaceChan).Close()
-		return nil, nil
-	}
-
-	return &sub, nil
-}
-
 func (w *webSocketClient) forwardWebSocketData(message []byte) error {
 	var wsMsg webSocketReceiveMessage
 	err := json.Unmarshal(message, &wsMsg)
@@ -160,7 +139,7 @@ func (w *webSocketClient) forwardWebSocketData(message []byte) error {
 	if wsMsg.ID == "" { // e.g. keep-alive messages
 		return nil
 	}
-	sub, err := w.getSubscriptionOrHandleComplete(wsMsg.ID, wsMsg.Type)
+	sub, err := w.subscriptions.GetOrClose(wsMsg.ID, wsMsg.Type)
 	if err != nil {
 		return err
 	}

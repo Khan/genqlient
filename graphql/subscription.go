@@ -2,6 +2,7 @@ package graphql
 
 import (
 	"fmt"
+	"reflect"
 	"sync"
 )
 
@@ -54,4 +55,24 @@ func (s *subscriptionMap) Delete(subscriptionID string) {
 	s.Lock()
 	defer s.Unlock()
 	delete(s.map_, subscriptionID)
+}
+
+func (s *subscriptionMap) GetOrClose(subscriptionID string, subscriptionType string) (*subscription, error) {
+	s.Lock()
+	defer s.Unlock()
+	sub, success := s.map_[subscriptionID]
+	if !success {
+		return nil, fmt.Errorf("received message for unknown subscription ID '%s'", subscriptionID)
+	}
+	if sub.hasBeenUnsubscribed {
+		return nil, nil
+	}
+	if subscriptionType == webSocketTypeComplete {
+		sub.hasBeenUnsubscribed = true
+		s.map_[subscriptionID] = sub
+		reflect.ValueOf(sub.interfaceChan).Close()
+		return nil, nil
+	}
+
+	return &sub, nil
 }

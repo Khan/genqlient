@@ -60,7 +60,7 @@ func SimpleSubscriptionForwardData(interfaceChan interface{}, jsonRawMsg json.Ra
 	if !ok {
 		return errors.New("failed to cast interface into 'chan SimpleSubscriptionWsResponse'")
 	}
-	graphql.WriteToChannelOrRecover(dataChan_, wsResp)
+	graphql.SafeSend(dataChan_, wsResp)
 	return nil
 }
 
