@@ -164,7 +164,6 @@ func countTo(ctx context.Context, stopCount int) (<-chan int, error) {
 		for counter := range stopCount {
 			select {
 			case <-ctx.Done():
-				fmt.Println("ctx done:", ctx.Err())
 				return
 			default:
 				respChan <- counter
