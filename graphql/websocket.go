@@ -9,6 +9,7 @@ import (
 	"reflect"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	"github.com/google/uuid"
@@ -51,7 +52,7 @@ type webSocketClient struct {
 	connParams    map[string]interface{}
 	errChan       chan error
 	subscriptions subscriptionMap
-	isClosing     bool
+	isClosing     atomic.Bool
 	sync.Mutex
 }
 
@@ -107,14 +108,14 @@ func (w *webSocketClient) waitForConnAck() error {
 func (w *webSocketClient) handleErr(err error) {
 	w.Lock()
 	defer w.Unlock()
-	if !w.isClosing {
+	if !w.isClosing.Load() {
 		w.errChan <- err
 	}
 }
 
 func (w *webSocketClient) listenWebSocket() {
 	for {
-		if w.isClosing {
+		if w.isClosing.Load() {
 			return
 		}
 		_, message, err := w.conn.ReadMessage()
@@ -208,7 +209,7 @@ func (w *webSocketClient) Close() error {
 	}
 	w.Lock()
 	defer w.Unlock()
-	w.isClosing = true
+	w.isClosing.Store(true)
 	close(w.errChan)
 	return w.conn.Close()
 }
