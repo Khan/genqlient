@@ -37,8 +37,14 @@ func (s *subscriptionMap) Unsubscribe(subscriptionID string) error {
 	if !success {
 		return fmt.Errorf("tried to unsubscribe from unknown subscription with ID '%s'", subscriptionID)
 	}
+	hasBeenUnsubscribed := unsub.hasBeenUnsubscribed
 	unsub.hasBeenUnsubscribed = true
 	s.map_[subscriptionID] = unsub
+
+	if !hasBeenUnsubscribed {
+		safeClose(unsub.interfaceChan)
+	}
+
 	return nil
 }
 

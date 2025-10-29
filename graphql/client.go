@@ -9,6 +9,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"reflect"
 	"strings"
 
 	"github.com/vektah/gqlparser/v2/gqlerror"
@@ -369,4 +370,11 @@ func SafeSend[T any](dataChan_ chan T, wsResp T) {
 		_ = recover()
 	}()
 	dataChan_ <- wsResp
+}
+
+func safeClose(interfaceChan any) {
+	defer func() {
+		_ = recover()
+	}()
+	reflect.ValueOf(interfaceChan).Close()
 }

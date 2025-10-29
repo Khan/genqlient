@@ -146,6 +146,7 @@ func (w *webSocketClient) forwardWebSocketData(message []byte) error {
 	if sub == nil {
 		return nil
 	}
+
 	return sub.forwardDataFunc(sub.interfaceChan, wsMsg.Payload)
 }
 
