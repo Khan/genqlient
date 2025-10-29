@@ -252,10 +252,6 @@ func TestSubscriptionClose(t *testing.T) {
 	_ = `# @genqlient
 	subscription countClose { countClose }`
 
-	ctx := context.Background()
-	server := server.RunServer()
-	defer server.Close()
-
 	cases := []struct {
 		name  string
 		unsub bool
@@ -272,6 +268,12 @@ func TestSubscriptionClose(t *testing.T) {
 
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
+			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+			defer cancel()
+
+			server := server.RunServer()
+			defer server.Close()
+
 			wsClient := newRoundtripWebSocketClient(t, server.URL)
 
 			_, err := wsClient.Start(ctx)
