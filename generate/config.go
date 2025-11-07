@@ -36,12 +36,23 @@ type Config struct {
 	OptionalGenericType string                  `yaml:"optional_generic_type"`
 	StructReferences    bool                    `yaml:"use_struct_references"`
 	Extensions          bool                    `yaml:"use_extensions"`
+	Plugins             Plugins                 `yaml:"plugins"`
 
 	// The directory of the config-file (relative to which all the other paths
 	// are resolved).  Set by ValidateAndFillDefaults.
 	baseDir string
 	// The package-path into which we are generating.
 	pkgPath string
+}
+
+type Plugins struct {
+	FieldTags       []FieldTagPluginConfig `yaml:"field_tags"`
+	fieldTagPlugins []FieldTagPlugin       `yaml:"-"`
+}
+
+type FieldTagPluginConfig struct {
+	Name          string `yaml:"name"`
+	ValueFuncPath string `yaml:"path"`
 }
 
 // A TypeBinding represents a Go type to which genqlient will bind a particular
@@ -309,6 +320,16 @@ func (c *Config) ValidateAndFillDefaults(baseDir string) error {
 	if err := c.Casing.validate(); err != nil {
 		return err
 	}
+
+	fieldTagPlugins := make([]FieldTagPlugin, len(c.Plugins.FieldTags))
+	for i, pluginConfig := range c.Plugins.FieldTags {
+		loadedFieldTagFunc, err := LoadFieldTagPlugins(pluginConfig.Name, pluginConfig.ValueFuncPath)
+		if err != nil {
+			return errorf(nil, "unable to load field_tags plugin %v %v: %v", pluginConfig.Name, pluginConfig.ValueFuncPath, err)
+		}
+		fieldTagPlugins[i] = *loadedFieldTagFunc
+	}
+	c.Plugins.fieldTagPlugins = fieldTagPlugins
 
 	return nil
 }
