@@ -28,6 +28,8 @@ Note that genqlient now requires Go 1.23 or higher, and is tested through Go 1.2
 
 ### New features:
 
+- Added `--version` flag to print version information including commit hash and build date
+
 ### Bug fixes:
 
 - fixed minor typos and grammatical issues across the project
