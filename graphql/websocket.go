@@ -6,9 +6,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"reflect"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	"github.com/google/uuid"
@@ -51,7 +51,7 @@ type webSocketClient struct {
 	connParams    map[string]interface{}
 	errChan       chan error
 	subscriptions subscriptionMap
-	isClosing     bool
+	isClosing     atomic.Bool
 	sync.Mutex
 }
 
@@ -107,14 +107,14 @@ func (w *webSocketClient) waitForConnAck() error {
 func (w *webSocketClient) handleErr(err error) {
 	w.Lock()
 	defer w.Unlock()
-	if !w.isClosing {
+	if !w.isClosing.Load() {
 		w.errChan <- err
 	}
 }
 
 func (w *webSocketClient) listenWebSocket() {
 	for {
-		if w.isClosing {
+		if w.isClosing.Load() {
 			return
 		}
 		_, message, err := w.conn.ReadMessage()
@@ -139,22 +139,13 @@ func (w *webSocketClient) forwardWebSocketData(message []byte) error {
 	if wsMsg.ID == "" { // e.g. keep-alive messages
 		return nil
 	}
-	w.subscriptions.Lock()
-	defer w.subscriptions.Unlock()
-	sub, success := w.subscriptions.map_[wsMsg.ID]
-	if !success {
-		return fmt.Errorf("received message for unknown subscription ID '%s'", wsMsg.ID)
+	sub, err := w.subscriptions.GetOrClose(wsMsg.ID, wsMsg.Type)
+	if err != nil {
+		return err
 	}
-	if sub.hasBeenUnsubscribed {
+	if sub == nil {
 		return nil
 	}
-	if wsMsg.Type == webSocketTypeComplete {
-		sub.hasBeenUnsubscribed = true
-		w.subscriptions.map_[wsMsg.ID] = sub
-		reflect.ValueOf(sub.interfaceChan).Close()
-		return nil
-	}
-
 	return sub.forwardDataFunc(sub.interfaceChan, wsMsg.Payload)
 }
 
@@ -208,7 +199,7 @@ func (w *webSocketClient) Close() error {
 	}
 	w.Lock()
 	defer w.Unlock()
-	w.isClosing = true
+	w.isClosing.Store(true)
 	close(w.errChan)
 	return w.conn.Close()
 }
