@@ -45,11 +45,11 @@ const (
 type webSocketClient struct {
 	Dialer        Dialer
 	header        http.Header
-	endpoint      string
 	conn          WSConn
 	connParams    map[string]interface{}
 	errChan       chan error
 	subscriptions subscriptionMap
+	endpoint      string
 	isClosing     bool
 	sync.Mutex
 }
@@ -105,9 +105,10 @@ func (w *webSocketClient) waitForConnAck() error {
 
 func (w *webSocketClient) handleErr(err error) {
 	w.Lock()
-	isClosing := w.isClosing
-	w.Unlock()
-	if !isClosing {
+	defer w.Unlock()
+	if !w.isClosing {
+		// Send while holding lock to prevent Close() from closing
+		// the channel between our check and our send
 		w.errChan <- err
 	}
 }
