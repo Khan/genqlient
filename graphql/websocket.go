@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"reflect"
 	"strings"
 	"sync"
 	"time"
@@ -106,15 +105,19 @@ func (w *webSocketClient) waitForConnAck() error {
 
 func (w *webSocketClient) handleErr(err error) {
 	w.Lock()
-	defer w.Unlock()
-	if !w.isClosing {
+	isClosing := w.isClosing
+	w.Unlock()
+	if !isClosing {
 		w.errChan <- err
 	}
 }
 
 func (w *webSocketClient) listenWebSocket() {
 	for {
-		if w.isClosing {
+		w.Lock()
+		isClosing := w.isClosing
+		w.Unlock()
+		if isClosing {
 			return
 		}
 		_, message, err := w.conn.ReadMessage()
@@ -139,22 +142,31 @@ func (w *webSocketClient) forwardWebSocketData(message []byte) error {
 	if wsMsg.ID == "" { // e.g. keep-alive messages
 		return nil
 	}
-	w.subscriptions.Lock()
-	defer w.subscriptions.Unlock()
-	sub, success := w.subscriptions.map_[wsMsg.ID]
-	if !success {
+
+	w.Lock()
+	sub := w.subscriptions.get(wsMsg.ID)
+	if sub == nil {
+		w.Unlock()
 		return fmt.Errorf("received message for unknown subscription ID '%s'", wsMsg.ID)
 	}
-	if sub.hasBeenUnsubscribed {
-		return nil
-	}
-	if wsMsg.Type == webSocketTypeComplete {
-		sub.hasBeenUnsubscribed = true
-		w.subscriptions.map_[wsMsg.ID] = sub
-		reflect.ValueOf(sub.interfaceChan).Close()
+	if sub.closed {
+		// Already closed, ignore message
+		w.Unlock()
 		return nil
 	}
 
+	if wsMsg.Type == webSocketTypeComplete {
+		// Server is telling us the subscription is complete
+		w.subscriptions.closeChannel(wsMsg.ID)
+		w.subscriptions.delete(wsMsg.ID)
+		w.Unlock()
+		return nil
+	}
+
+	// Forward the data to the subscription channel.
+	// We release the lock while calling the forward function to avoid holding
+	// the lock while doing potentially slow user code.
+	w.Unlock()
 	return sub.forwardDataFunc(sub.interfaceChan, wsMsg.Payload)
 }
 
@@ -224,7 +236,11 @@ func (w *webSocketClient) Subscribe(req *Request, interfaceChan interface{}, for
 	}
 
 	subscriptionID := uuid.NewString()
-	w.subscriptions.Create(subscriptionID, interfaceChan, forwardDataFunc)
+
+	w.Lock()
+	w.subscriptions.create(subscriptionID, interfaceChan, forwardDataFunc)
+	w.Unlock()
+
 	subscriptionMsg := webSocketSendMessage{
 		Type:    webSocketTypeSubscribe,
 		Payload: req,
@@ -232,7 +248,9 @@ func (w *webSocketClient) Subscribe(req *Request, interfaceChan interface{}, for
 	}
 	err := w.sendStructAsJSON(subscriptionMsg)
 	if err != nil {
-		w.subscriptions.Delete(subscriptionID)
+		w.Lock()
+		w.subscriptions.delete(subscriptionID)
+		w.Unlock()
 		return "", err
 	}
 	return subscriptionID, nil
@@ -247,15 +265,19 @@ func (w *webSocketClient) Unsubscribe(subscriptionID string) error {
 	if err != nil {
 		return err
 	}
-	err = w.subscriptions.Unsubscribe(subscriptionID)
-	if err != nil {
-		return err
-	}
+
+	w.Lock()
+	defer w.Unlock()
+	w.subscriptions.closeChannel(subscriptionID)
+	w.subscriptions.delete(subscriptionID)
 	return nil
 }
 
 func (w *webSocketClient) UnsubscribeAll() error {
-	subscriptionIDs := w.subscriptions.GetAllIDs()
+	w.Lock()
+	subscriptionIDs := w.subscriptions.getAllIDs()
+	w.Unlock()
+
 	for _, subscriptionID := range subscriptionIDs {
 		err := w.Unsubscribe(subscriptionID)
 		if err != nil {

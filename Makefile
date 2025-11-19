@@ -7,7 +7,7 @@ lint:
 	internal/lint/golangci-lint run ./... --fix
 
 check: lint
-	go test -cover ./...
+	go test -race -cover ./...
 	go mod tidy
 
 .PHONY: example

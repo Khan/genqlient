@@ -2,20 +2,18 @@ package graphql
 
 import (
 	"encoding/json"
-	"sync"
 	"testing"
 )
 
 const testSubscriptionID = "test-subscription-id"
 
-func forgeTestWebSocketClient(hasBeenUnsubscribed bool) *webSocketClient {
+func forgeTestWebSocketClient(closed bool) *webSocketClient {
 	return &webSocketClient{
 		subscriptions: subscriptionMap{
-			RWMutex: sync.RWMutex{},
 			map_: map[string]subscription{
 				testSubscriptionID: {
-					hasBeenUnsubscribed: hasBeenUnsubscribed,
-					interfaceChan:       make(chan any),
+					closed:        closed,
+					interfaceChan: make(chan any),
 					forwardDataFunc: func(interfaceChan any, jsonRawMsg json.RawMessage) error {
 						return nil
 					},
@@ -60,7 +58,7 @@ func Test_webSocketClient_forwardWebSocketData(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name:    "unsubscribed subscription",
+			name:    "closed subscription",
 			args:    args{message: []byte(`{"type":"next","id":"test-subscription-id","payload":{}}`)},
 			wc:      forgeTestWebSocketClient(true),
 			wantErr: false,
