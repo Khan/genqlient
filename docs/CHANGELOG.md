@@ -20,10 +20,6 @@ When releasing a new version:
 
 <!-- Add new changes in this section! -->
 
-This release adds support for Go 1.25.
-
-Note that genqlient now requires Go 1.23 or higher, and is tested through Go 1.23, 1.24 and 1.25.
-
 ### Breaking changes:
 
 ### New features:
@@ -32,7 +28,21 @@ Note that genqlient now requires Go 1.23 or higher, and is tested through Go 1.2
 
 ### Bug fixes:
 
-- fixed minor typos and grammatical issues across the project
+## v0.9.0
+
+This release adds support for Go 1.25.
+
+Note that genqlient now requires Go 1.23 or higher, and is tested through Go 1.23, 1.24 and 1.25.
+
+### New features:
+
+- The new `optional: pointer_omitempty` allows using a pointer that is also annotated with `omitempty`. See the [documentation](genqlient.yaml) for details.
+
+### Bug fixes:
+
+- Fixed two bugs in websocket connection closure.
+- Fixed handling of keep-alive messages in websockets.
+- Fixed minor typos and grammatical issues across the project.
 
 ## v0.8.1
 
@@ -86,7 +96,6 @@ In addition to several new features and bugfixes, along with this release comes 
 ### New features:
 
 - The new `optional: generic` allows using a generic type to represent optionality. See the [documentation](genqlient.yaml) for details.
-- The new `optional: pointer_omitempty` allows using a pointer that is also annotated with `omitempty`. See the [documentation](genqlient.yaml) for details.
 - For schemas with enum values that differ only in casing, it's now possible to disable smart-casing in genqlient.yaml; see the [documentation](genqlient.yaml) for `casing` for details.
 - genqlient now supports .graphqls and .gql file extensions for schemas and queries.
 - More accurately guess the package name for generated code (and warn if the config option -- now almost never needed -- looks wrong).
