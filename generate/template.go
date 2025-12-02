@@ -12,7 +12,7 @@ var templates embed.FS
 
 func repeat(n int, s string) string {
 	var builder strings.Builder
-	for i := 0; i < n; i++ {
+	for range n {
 		builder.WriteString(s)
 	}
 	return builder.String()
@@ -20,7 +20,7 @@ func repeat(n int, s string) string {
 
 func intRange(n int) []int {
 	ret := make([]int, n)
-	for i := 0; i < n; i++ {
+	for i := range n {
 		ret[i] = i
 	}
 	return ret
