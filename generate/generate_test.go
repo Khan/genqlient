@@ -245,6 +245,7 @@ func TestGenerateWithConfig(t *testing.T) {
 			"PointersOmitEmpty.graphql",
 			"Omitempty.graphql",
 			"ListInput.graphql",
+			"ListInputOmitempty.graphql",
 		}, &Config{
 			Optional: "pointer_omitempty",
 			Bindings: map[string]*TypeBinding{
