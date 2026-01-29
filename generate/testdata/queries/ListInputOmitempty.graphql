@@ -1,0 +1,5 @@
+query ListInputOmitemptyQuery($names: [String!]) {
+  user(query: {names: $names}) {
+    id
+  }
+}
