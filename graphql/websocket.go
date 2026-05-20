@@ -44,15 +44,19 @@ const (
 )
 
 type webSocketClient struct {
-	Dialer        Dialer
-	header        http.Header
-	endpoint      string
-	conn          WSConn
-	connParams    map[string]interface{}
+	Dialer     Dialer
+	conn       WSConn
+	header     http.Header
+	connParams map[string]interface{}
+	// Closed when exiting the receive loop in listenWebSocket
 	errChan       chan error
+	endpoint      string
 	subscriptions subscriptionMap
-	isClosing     bool
-	sync.Mutex
+
+	// Hold when accessing `exitListenWebSocket`
+	exitListenWebSocketMu sync.Mutex
+	// Set to indicate the listenWebSocket should exit
+	exitListenWebSocket bool
 }
 
 type webSocketInitMessage struct {
@@ -104,14 +108,6 @@ func (w *webSocketClient) waitForConnAck() error {
 	return nil
 }
 
-func (w *webSocketClient) handleErr(err error) {
-	w.Lock()
-	defer w.Unlock()
-	if !w.isClosing {
-		w.errChan <- err
-	}
-}
-
 func (w *webSocketClient) listenWebSocket() {
 	for {
 		// The listenWebSocket goroutine "owns" interfaceChan. Both sending
@@ -126,17 +122,20 @@ func (w *webSocketClient) listenWebSocket() {
 				sub.interfaceChan = nil
 			}
 		})
-		if w.isClosing {
+		w.exitListenWebSocketMu.Lock()
+		if w.exitListenWebSocket {
+			close(w.errChan)
 			return
 		}
+		w.exitListenWebSocketMu.Unlock()
 		_, message, err := w.conn.ReadMessage()
 		if err != nil {
-			w.handleErr(err)
+			w.errChan <- err
 			return
 		}
 		err = w.forwardWebSocketData(message)
 		if err != nil {
-			w.handleErr(err)
+			w.errChan <- err
 			return
 		}
 	}
@@ -216,10 +215,11 @@ func (w *webSocketClient) Close() error {
 	if err != nil {
 		return fmt.Errorf("failed to send closure message: %w", err)
 	}
-	w.Lock()
-	defer w.Unlock()
-	w.isClosing = true
-	close(w.errChan)
+
+	w.exitListenWebSocketMu.Lock()
+	w.exitListenWebSocket = true
+	w.exitListenWebSocketMu.Unlock()
+
 	return w.conn.Close()
 }
 
