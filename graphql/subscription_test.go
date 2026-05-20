@@ -17,11 +17,11 @@ func Test_subscriptionMap_Unsubscribe(t *testing.T) {
 		{
 			name: "unsubscribe existing subscription",
 			sm: subscriptionMap{
-				map_: map[string]subscription{
+				map_: map[string]*subscription{
 					"sub1": {
-						id:                  "sub1",
-						interfaceChan:       make(chan struct{}),
-						forwardDataFunc:     nil,
+						id:                   "sub1",
+						interfaceChan:        make(chan struct{}),
+						forwardDataFunc:      nil,
 						_hasBeenUnsubscribed: false,
 					},
 				},
@@ -32,7 +32,7 @@ func Test_subscriptionMap_Unsubscribe(t *testing.T) {
 		{
 			name: "unsubscribe non-existent subscription",
 			sm: subscriptionMap{
-				map_: map[string]subscription{},
+				map_: map[string]*subscription{},
 			},
 			args:    args{subscriptionID: "doesnotexist"},
 			wantErr: true,
@@ -40,11 +40,11 @@ func Test_subscriptionMap_Unsubscribe(t *testing.T) {
 		{
 			name: "unsubscribe already unsubscribed subscription",
 			sm: subscriptionMap{
-				map_: map[string]subscription{
+				map_: map[string]*subscription{
 					"sub2": {
-						id:                  "sub2",
-						interfaceChan:       nil,
-						forwardDataFunc:     nil,
+						id:                   "sub2",
+						interfaceChan:        nil,
+						forwardDataFunc:      nil,
 						_hasBeenUnsubscribed: true,
 					},
 				},

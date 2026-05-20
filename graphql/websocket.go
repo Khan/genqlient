@@ -120,7 +120,7 @@ func (w *webSocketClient) listenWebSocket() {
 		//
 		// interfaceChan's are closed at the top of listenWebSocket to
 		// guarantee the channels are closed even if listenWebSocket will exit.
-		w.subscriptions.forEachSubscription(func(sub subscription) {
+		w.subscriptions.forEachSubscription(func(sub *subscription) {
 			if sub.hasBeenUnsubscribed() {
 				reflect.ValueOf(sub.interfaceChan).Close()
 			}
@@ -156,7 +156,7 @@ func (w *webSocketClient) forwardWebSocketData(message []byte) error {
 
 	sub, ok := w.subscriptions.GetSubscription(wsMsg.ID)
 	if !ok {
-		return fmt.Errorf("received message for unknown subscription ID '%s'", sub.id)
+		return fmt.Errorf("received message for unknown subscription ID '%s'", wsMsg.ID)
 	}
 	// Note: there's no data race between hasBeenUnsubscribed and the closed
 	// state of interfaceChan because interfaceChan is only closed by the

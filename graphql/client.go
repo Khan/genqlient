@@ -139,7 +139,7 @@ func NewClientUsingWebSocket(endpoint string, wsDialer Dialer, opts ...WebSocket
 		header:        http.Header{},
 		errChan:       make(chan error),
 		endpoint:      endpoint,
-		subscriptions: subscriptionMap{map_: make(map[string]subscription)},
+		subscriptions: subscriptionMap{map_: make(map[string]*subscription)},
 	}
 
 	for _, opt := range opts {
