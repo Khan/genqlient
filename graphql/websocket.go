@@ -121,8 +121,9 @@ func (w *webSocketClient) listenWebSocket() {
 		// interfaceChan's are closed at the top of listenWebSocket to
 		// guarantee the channels are closed even if listenWebSocket will exit.
 		w.subscriptions.forEachSubscription(func(sub *subscription) {
-			if sub.hasBeenUnsubscribed() {
+			if sub.hasBeenUnsubscribed() && sub.interfaceChan != nil {
 				reflect.ValueOf(sub.interfaceChan).Close()
+				sub.interfaceChan = nil
 			}
 		})
 		if w.isClosing {
