@@ -114,6 +114,17 @@ func (w *webSocketClient) handleErr(err error) {
 
 func (w *webSocketClient) listenWebSocket() {
 	for {
+		// The listenWebSocket goroutine "owns" interfaceChan. Both sending
+		// (in forwardWebSocketData below) and closure (here) happen in this
+		// goroutine, so there is no possibility of races between send and close.
+		//
+		// interfaceChan's are closed at the top of listenWebSocket to
+		// guarantee the channels are closed even if listenWebSocket will exit.
+		w.subscriptions.forEachSubscription(func(sub subscription) {
+			if sub.hasBeenUnsubscribed() {
+				reflect.ValueOf(sub.interfaceChan).Close()
+			}
+		})
 		if w.isClosing {
 			return
 		}
@@ -139,22 +150,20 @@ func (w *webSocketClient) forwardWebSocketData(message []byte) error {
 	if wsMsg.ID == "" { // e.g. keep-alive messages
 		return nil
 	}
-	w.subscriptions.Lock()
-	defer w.subscriptions.Unlock()
-	sub, success := w.subscriptions.map_[wsMsg.ID]
-	if !success {
-		return fmt.Errorf("received message for unknown subscription ID '%s'", wsMsg.ID)
-	}
-	if sub.hasBeenUnsubscribed {
-		return nil
-	}
 	if wsMsg.Type == webSocketTypeComplete {
-		sub.hasBeenUnsubscribed = true
-		w.subscriptions.map_[wsMsg.ID] = sub
-		reflect.ValueOf(sub.interfaceChan).Close()
-		return nil
+		return w.subscriptions.Unsubscribe(wsMsg.ID)
 	}
 
+	sub, ok := w.subscriptions.GetSubscription(wsMsg.ID)
+	if !ok {
+		return fmt.Errorf("received message for unknown subscription ID '%s'", sub.id)
+	}
+	// Note: there's no data race between hasBeenUnsubscribed and the closed
+	// state of interfaceChan because interfaceChan is only closed by the
+	// caller of this function.
+	if sub.hasBeenUnsubscribed() {
+		return nil
+	}
 	return sub.forwardDataFunc(sub.interfaceChan, wsMsg.Payload)
 }
 
