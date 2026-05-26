@@ -1,0 +1,9 @@
+{
+  "operations": [
+    {
+      "operationName": "ListInputOmitemptyQuery",
+      "query": "\nquery ListInputOmitemptyQuery ($names: [String!]) {\n\tuser(query: {names:$names}) {\n\t\tid\n\t}\n}\n",
+      "sourceLocation": "testdata/queries/ListInputOmitempty.graphql"
+    }
+  ]
+}
