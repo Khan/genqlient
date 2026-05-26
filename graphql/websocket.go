@@ -125,6 +125,7 @@ func (w *webSocketClient) listenWebSocket() {
 		w.exitListenWebSocketMu.Lock()
 		if w.exitListenWebSocket {
 			close(w.errChan)
+			w.exitListenWebSocketMu.Unlock()
 			return
 		}
 		w.exitListenWebSocketMu.Unlock()
