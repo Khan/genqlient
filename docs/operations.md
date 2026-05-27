@@ -173,6 +173,8 @@ type GetBooksFavoriteBook struct {
 
 Keep in mind that if you later want to add fragments to your selection, you won't be able to use `struct` anymore; when you remove it you may need to update your code to replace `.Title` with `.GetTitle()` and so on.
 
+If your interface or union has many implementations and your query only fragments a few, set [`omit_unreferenced_implementations`](genqlient.yaml) in `genqlient.yaml`.  genqlient will then generate per-type structs only for the implementations actually referenced by a fragment; everything else decodes into a single catch-all struct (`<…>GenqlientOther`) carrying just the interface's shared fields.  This dramatically reduces generated code size for Relay-style `Node` interfaces, and unknown `__typename` values from the server (e.g. implementations added after the client was generated) decode into the catch-all rather than failing.
+
 ## Sharing types
 
 By default, genqlient generates a different type for each part of each query, [even those which are structurally the same](faq.md#why-does-genqlient-generate-such-complicated-type-names-). Sometimes, however, you want to have some common code that can accept data from several queries or parts of queries.

@@ -29,6 +29,7 @@ Note that genqlient now requires Go 1.23 or higher, and is tested through Go 1.2
 ### New features:
 
 - Added `--version` flag to print version information including commit hash and build date
+- Added `omit_unreferenced_implementations` config option to collapse unfragmented interface/union implementations into a single catch-all struct (fixes [#416](https://github.com/Khan/genqlient/issues/416)).
 
 ### Bug fixes:
 

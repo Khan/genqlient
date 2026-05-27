@@ -60,9 +60,12 @@ func structDescription(typ *goStructType) string {
 }
 
 func interfaceDescription(typ *goInterfaceType) string {
-	goImplNames := make([]string, len(typ.Implementations))
-	for i, impl := range typ.Implementations {
-		goImplNames[i] = impl.Reference()
+	goImplNames := make([]string, 0, len(typ.Implementations)+1)
+	for _, impl := range typ.Implementations {
+		goImplNames = append(goImplNames, impl.Reference())
+	}
+	if typ.OtherImplementation != nil {
+		goImplNames = append(goImplNames, typ.OtherImplementation.Reference())
 	}
 	implementationList := fmt.Sprintf(
 		"\n\n%v is implemented by the following types:\n\t%v",

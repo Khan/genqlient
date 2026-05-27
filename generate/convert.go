@@ -11,6 +11,7 @@ package generate
 
 import (
 	"fmt"
+	"slices"
 	"sort"
 
 	"github.com/vektah/gqlparser/v2/ast"
@@ -522,15 +523,17 @@ func (g *generator) convertDefinition(
 		implementationTypes := g.schema.GetPossibleTypes(def)
 		// Make sure we generate stable output by sorting the types by name when we get them
 		sort.Slice(implementationTypes, func(i, j int) bool { return implementationTypes[i].Name < implementationTypes[j].Name })
+
+		filteredImpls := g.filterReferencedImpls(implementationTypes, selectionSet)
+
 		goType := &goInterfaceType{
 			GoName:          name,
 			SharedFields:    sharedFields,
-			Implementations: make([]*goStructType, len(implementationTypes)),
 			Selection:       selectionSet,
 			descriptionInfo: desc,
 		}
 
-		for i, implDef := range implementationTypes {
+		for _, implDef := range filteredImpls {
 			// TODO(benkraft): In principle we should skip generating a Go
 			// field for __typename each of these impl-defs if you didn't
 			// request it (and it was automatically added by
@@ -548,8 +551,13 @@ func (g *generator) convertDefinition(
 					pos, "interface %s had non-object implementation %s",
 					def.Name, implDef.Name)
 			}
-			goType.Implementations[i] = implStructTyp
+			goType.Implementations = append(goType.Implementations, implStructTyp)
 		}
+
+		if err := g.attachCatchAll(goType, def.Name, pos); err != nil {
+			return nil, err
+		}
+
 		return g.addType(goType, goType.GoName, pos)
 
 	case ast.Enum:
@@ -713,6 +721,105 @@ func (g *generator) convertSelectionSet(
 	return uniqFields, nil
 }
 
+// filterReferencedImpls returns the implementations actually referenced by a
+// fragment in selSet. When OmitUnreferencedImplementations is disabled, impls
+// is returned unchanged.
+//
+// A type condition that names an interface or union doesn't reference any
+// concrete type directly — only its (transitive) fragment body can.
+func (g *generator) filterReferencedImpls(impls []*ast.Definition, selSet ast.SelectionSet) []*ast.Definition {
+	if !g.Config.OmitUnreferencedImplementations {
+		return impls
+	}
+	referenced := map[string]bool{}
+	queue := []ast.SelectionSet{selSet}
+	for len(queue) > 0 {
+		ss := queue[0]
+		queue = queue[1:]
+		for _, s := range ss {
+			var condName string
+			var fragSet ast.SelectionSet
+			switch s := s.(type) {
+			case *ast.InlineFragment:
+				condName = s.TypeCondition
+				fragSet = s.SelectionSet
+			case *ast.FragmentSpread:
+				if s.Definition == nil {
+					continue
+				}
+				condName = s.Definition.TypeCondition
+				fragSet = s.Definition.SelectionSet
+			default:
+				continue
+			}
+			if d := g.schema.Types[condName]; d != nil && d.Kind == ast.Object {
+				referenced[condName] = true
+			}
+			queue = append(queue, fragSet)
+		}
+	}
+
+	return slices.DeleteFunc(slices.Clone(impls), func(impl *ast.Definition) bool {
+		return !referenced[impl.Name]
+	})
+}
+
+// attachCatchAll, when OmitUnreferencedImplementations is enabled,
+// builds a catch-all struct for iface (registering it via g.addType) and
+// assigns it to iface.OtherImplementation. The catch-all carries iface's
+// SharedFields (which always include __typename); the unmarshal-helper
+// instantiates it whenever the server returns a __typename without an
+// explicitly-referenced implementation.
+//
+// Embedded fragment-spreads whose GoType is itself a *goInterfaceType are
+// swapped for that fragment's catch-all, so the result is a valid Go
+// struct embedding only structs.
+func (g *generator) attachCatchAll(iface *goInterfaceType, graphQLName string, pos *ast.Position) error {
+	if !g.Config.OmitUnreferencedImplementations {
+		return nil
+	}
+
+	catchAllFields := make([]*goStructField, 0, len(iface.SharedFields))
+	for _, f := range iface.SharedFields {
+		if f.GoName != "" {
+			catchAllFields = append(catchAllFields, f)
+			continue
+		}
+		embedded, ok := f.GoType.(*goInterfaceType)
+		if !ok {
+			catchAllFields = append(catchAllFields, f)
+			continue
+		}
+		// embedded.OtherImplementation is guaranteed non-nil here:
+		// maybeAttachCatchAll only runs under
+		// OmitUnreferencedImplementations, and the same option ensures
+		// every embedded fragment-interface has its own catch-all.
+		swapped := *f
+		swapped.GoType = embedded.OtherImplementation
+		catchAllFields = append(catchAllFields, &swapped)
+	}
+
+	catchAll := &goStructType{
+		GoName:    iface.GoName + "GenqlientOther",
+		Fields:    catchAllFields,
+		Selection: iface.Selection,
+		descriptionInfo: descriptionInfo{
+			GraphQLName: graphQLName,
+			CommentOverride: fmt.Sprintf(
+				"%sGenqlientOther is the catch-all for %s implementations "+
+					"that aren't explicitly fragmented; the concrete "+
+					"type-name is in __typename.",
+				iface.GoName, iface.GoName),
+		},
+		Generator: g,
+	}
+	if _, err := g.addType(catchAll, catchAll.GoName, pos); err != nil {
+		return err
+	}
+	iface.OtherImplementation = catchAll
+	return nil
+}
+
 // fragmentMatches returns true if the given fragment is "active" when applied
 // to the given type.
 //
@@ -824,10 +931,19 @@ func (g *generator) convertFragmentSpread(
 		//  type FA struct { ... }
 		//  // (other implementations)
 		// when you spread F into a context of type A, we embed FA, not F.
+		matched := false
 		for _, impl := range iface.Implementations {
 			if impl.GraphQLName == containingTypedef.Name {
 				typ = impl
+				matched = true
+				break
 			}
+		}
+		if !matched && iface.OtherImplementation != nil {
+			// The per-implementation struct may have been omitted by
+			// OmitUnreferencedImplementations; fall back to the catch-all,
+			// which is a real struct with the same shared fields.
+			typ = iface.OtherImplementation
 		}
 	}
 
@@ -886,16 +1002,18 @@ func (g *generator) convertNamedFragment(fragment *ast.FragmentDefinition) (goTy
 		implementationTypes := g.schema.GetPossibleTypes(typ)
 		// Make sure we generate stable output by sorting the types by name when we get them
 		sort.Slice(implementationTypes, func(i, j int) bool { return implementationTypes[i].Name < implementationTypes[j].Name })
+
+		filteredImpls := g.filterReferencedImpls(implementationTypes, fragment.SelectionSet)
+
 		goType := &goInterfaceType{
 			GoName:          fragment.Name,
 			SharedFields:    fields,
-			Implementations: make([]*goStructType, len(implementationTypes)),
 			Selection:       fragment.SelectionSet,
 			descriptionInfo: desc,
 		}
 		g.typeMap[fragment.Name] = goType
 
-		for i, implDef := range implementationTypes {
+		for _, implDef := range filteredImpls {
 			implFields, err := g.convertSelectionSet(
 				newPrefixList(fragment.Name), fragment.SelectionSet, implDef, directive)
 			if err != nil {
@@ -912,8 +1030,12 @@ func (g *generator) convertNamedFragment(fragment *ast.FragmentDefinition) (goTy
 				descriptionInfo: implDesc,
 				Generator:       g,
 			}
-			goType.Implementations[i] = implTyp
+			goType.Implementations = append(goType.Implementations, implTyp)
 			g.typeMap[implTyp.GoName] = implTyp
+		}
+
+		if err := g.attachCatchAll(goType, typ.Name, fragment.Position); err != nil {
+			return nil, err
 		}
 
 		return goType, nil

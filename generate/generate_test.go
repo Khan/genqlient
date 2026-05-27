@@ -274,6 +274,19 @@ func TestGenerateWithConfig(t *testing.T) {
 				},
 			},
 		},
+		{
+			"OmitUnreferencedImplementations", "", []string{
+				"SimpleInlineFragment.graphql",
+				"SimpleNamedFragment.graphql",
+				"InterfaceNoFragments.graphql",
+				"OmitImplsNamedFragmentOnInterface.graphql",
+				"OmitImplsUnion.graphql",
+				"OmitImplsAbstractFragmentInConcrete.graphql",
+				"OmitImplsAllImplsReferenced.graphql",
+			}, &Config{
+				OmitUnreferencedImplementations: true,
+			},
+		},
 	}
 
 	for _, test := range tests {

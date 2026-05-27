@@ -6,7 +6,9 @@
 func __marshal{{.GoName}}(v *{{.GoName}}) ([]byte, error) {
     {{/* Determine the GraphQL typename, which the unmarshaler will need should
          it be called on our output. */}}
+    {{if .Implementations -}}
     var typename string
+    {{end -}}
     switch v := (*v).(type) {
     {{range .Implementations -}}
     case *{{.GoName}}:
@@ -34,6 +36,21 @@ func __marshal{{.GoName}}(v *{{.GoName}}) ([]byte, error) {
         }{typename, v}
         {{end -}}
         return json.Marshal(result)
+    {{end -}}
+    {{if .OtherImplementation -}}
+    case *{{.OtherImplementation.GoName}}:
+        {{/* Catch-all from OmitUnreferencedImplementations.  Its own
+             __typename field carries the GraphQL type-name, so no
+             wrapper struct is needed. */ -}}
+        {{if .OtherImplementation.NeedsMarshaling -}}
+        premarshaled, err := v.__premarshalJSON()
+        if err != nil {
+            return nil, err
+        }
+        return json.Marshal(premarshaled)
+        {{else -}}
+        return json.Marshal(v)
+        {{end -}}
     {{end -}}
     case nil:
         return []byte("null"), nil

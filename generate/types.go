@@ -484,9 +484,10 @@ type goInterfaceType struct {
 	GoName string
 	// Fields shared by all the interface's implementations;
 	// we'll generate getter methods for each.
-	SharedFields    []*goStructField
-	Implementations []*goStructType
-	Selection       ast.SelectionSet
+	SharedFields        []*goStructField
+	Implementations     []*goStructType
+	OtherImplementation *goStructType
+	Selection           ast.SelectionSet
 	descriptionInfo
 }
 
@@ -529,6 +530,10 @@ func (typ *goInterfaceType) WriteDefinition(w io.Writer, g *generator) error {
 	for _, impl := range typ.Implementations {
 		fmt.Fprintf(w, "func (v *%s) %s() {}\n",
 			impl.Reference(), implementsMethodName)
+	}
+	if typ.OtherImplementation != nil {
+		fmt.Fprintf(w, "func (v *%s) %s() {}\n",
+			typ.OtherImplementation.Reference(), implementsMethodName)
 	}
 
 	// Finally, write the marshal- and unmarshal-helpers, which

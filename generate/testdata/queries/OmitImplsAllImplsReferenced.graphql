@@ -1,0 +1,13 @@
+query OmitImplsAllImplsReferenced {
+  randomLeaf {
+    __typename
+    ... on Article {
+      id
+      text
+    }
+    ... on Video {
+      id
+      duration
+    }
+  }
+}

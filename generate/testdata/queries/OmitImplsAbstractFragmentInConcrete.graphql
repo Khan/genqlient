@@ -1,0 +1,14 @@
+fragment ContentBasics on Content {
+  id
+  name
+}
+
+query OmitImplsAbstractFragmentInConcrete {
+  randomItem {
+    id
+    ... on Article {
+      text
+      ...ContentBasics
+    }
+  }
+}

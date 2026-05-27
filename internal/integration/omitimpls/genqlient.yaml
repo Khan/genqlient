@@ -1,0 +1,11 @@
+schema: ../schema.graphql
+operations: "*_test.go"
+generated: generated.go
+omit_unreferenced_implementations: true
+bindings:
+  Date:
+    type: time.Time
+    marshaler: "github.com/Khan/genqlient/internal/testutil.MarshalDate"
+    unmarshaler: "github.com/Khan/genqlient/internal/testutil.UnmarshalDate"
+  MyGreatScalar:
+    type: github.com/Khan/genqlient/internal/integration.MyGreatScalar

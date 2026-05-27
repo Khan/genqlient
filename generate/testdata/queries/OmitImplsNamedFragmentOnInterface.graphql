@@ -1,0 +1,13 @@
+fragment NamedContentFields on Content {
+  id
+  name
+  ... on Article {
+    text
+  }
+}
+
+query OmitImplsNamedFragmentOnInterface {
+  randomItem {
+    ...NamedContentFields
+  }
+}

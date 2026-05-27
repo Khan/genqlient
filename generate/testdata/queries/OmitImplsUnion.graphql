@@ -1,0 +1,9 @@
+query OmitImplsUnion {
+  randomLeaf {
+    __typename
+    ... on Article {
+      id
+      text
+    }
+  }
+}

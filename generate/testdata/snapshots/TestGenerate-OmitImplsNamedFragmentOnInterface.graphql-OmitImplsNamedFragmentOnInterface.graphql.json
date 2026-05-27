@@ -1,0 +1,9 @@
+{
+  "operations": [
+    {
+      "operationName": "OmitImplsNamedFragmentOnInterface",
+      "query": "\nquery OmitImplsNamedFragmentOnInterface {\n\trandomItem {\n\t\t__typename\n\t\t... NamedContentFields\n\t}\n}\nfragment NamedContentFields on Content {\n\tid\n\tname\n\t... on Article {\n\t\ttext\n\t}\n}\n",
+      "sourceLocation": "testdata/queries/OmitImplsNamedFragmentOnInterface.graphql"
+    }
+  ]
+}
