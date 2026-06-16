@@ -505,7 +505,15 @@ func (g *generator) parsePrecedingComment(
 		}
 	}
 
-	if queryOptions != nil {
+	if queryOptions == nil {
+		// We are parsing the directive on the entire operation or fragment;
+		// apply any project-wide defaults from genqlient.yaml.  (Per-node
+		// options always win, since fillDefault is a no-op if already set.)
+		if g.Config != nil && g.Config.Flatten {
+			t := true
+			fillDefaultBool(&directive.Flatten, &t)
+		}
+	} else {
 		// If we are part of an operation/fragment, merge its options in.
 		directive.mergeOperationDirective(node, parentIfInputField, queryOptions)
 
