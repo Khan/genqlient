@@ -32,6 +32,7 @@ Note that genqlient now requires Go 1.23 or higher, and is tested through Go 1.2
 
 ### Bug fixes:
 
+- replaced the archived `gopkg.in/yaml.v2` dependency with the maintained `go.yaml.in/yaml/v3` (the YAML organization's successor to `gopkg.in/yaml.v3`) for config parsing.
 - fixed `pointer_omitempty` not being applied to list types when `use_struct_references` is enabled. List fields like `[String!]` now correctly get the `omitempty` JSON tag.
 - fixed minor typos and grammatical issues across the project
 

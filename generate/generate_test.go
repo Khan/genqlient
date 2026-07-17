@@ -1,6 +1,7 @@
 package generate
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"os"
@@ -9,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	"gopkg.in/yaml.v2"
+	"go.yaml.in/yaml/v3"
 
 	"github.com/Khan/genqlient/internal/testutil"
 )
@@ -133,7 +134,9 @@ func getDefaultConfig(t *testing.T) *Config {
 		t.Fatal(err)
 	}
 
-	err = yaml.UnmarshalStrict(b, &config)
+	dec := yaml.NewDecoder(bytes.NewReader(b))
+	dec.KnownFields(true)
+	err = dec.Decode(&config)
 	if err != nil {
 		t.Fatal(err)
 	}

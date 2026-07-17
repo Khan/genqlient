@@ -1,15 +1,18 @@
 package generate
 
 import (
+	"bytes"
 	_ "embed"
+	"errors"
 	"fmt"
 	"go/token"
+	"io"
 	"os"
 	"path/filepath"
 	"strings"
 
+	"go.yaml.in/yaml/v3"
 	"golang.org/x/tools/go/packages"
-	"gopkg.in/yaml.v2"
 )
 
 var cfgFilenames = []string{".genqlient.yml", ".genqlient.yaml", "genqlient.yml", "genqlient.yaml"}
@@ -322,8 +325,13 @@ func ReadAndValidateConfig(filename string) (*Config, error) {
 	}
 
 	var config Config
-	err = yaml.UnmarshalStrict(text, &config)
-	if err != nil {
+	// yaml.v3 has no UnmarshalStrict; a decoder with KnownFields(true) is the
+	// equivalent, rejecting unknown fields. An empty file decodes to io.EOF,
+	// which we treat as an empty config (as yaml.v2's UnmarshalStrict did).
+	dec := yaml.NewDecoder(bytes.NewReader(text))
+	dec.KnownFields(true)
+	err = dec.Decode(&config)
+	if err != nil && !errors.Is(err, io.EOF) {
 		return nil, errorf(nil, "invalid config file %v: %v", filename, err)
 	}
 
