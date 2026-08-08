@@ -28,6 +28,7 @@ Note that genqlient now requires Go 1.23 or higher, and is tested through Go 1.2
 
 ### New features:
 
+- Added a global `flatten` option to `genqlient.yaml` that applies `@genqlient(flatten: true)` to every operation and named fragment, so flattenable fragment-spreads are flattened project-wide without per-query directives (fixes #404). It is only applied where flattening is valid, so it is safe to enable globally.
 - Added `--version` flag to print version information including commit hash and build date
 
 ### Bug fixes:

@@ -1,0 +1,18 @@
+fragment VideoFields on Video {
+  id name url duration thumbnail { id }
+}
+
+# This query has no @genqlient(flatten: ...) directives; flattening is
+# expected to be applied automatically via the global `flatten: true`
+# config option.  The fragment-spread on `randomVideo` (which returns a
+# Video) is flattenable and should be flattened; `randomItem` mixes a
+# fragment-spread with other fields and so is left alone.
+query FlattenConfig {
+  randomVideo {
+    ...VideoFields
+  }
+  randomItem {
+    id name
+    ...VideoFields
+  }
+}
