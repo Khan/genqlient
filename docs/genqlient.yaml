@@ -94,7 +94,21 @@ client_getter: "github.com/you/yourpkg.GetClient"
 # Defaults to false.
 use_struct_references: boolean
 
-# If set, generated code will have a third return parameter of type 
+# If set, all fragment-spreads will default to having the
+# "flatten: true" flag, as if `# @genqlient(flatten: true)` were applied
+# to every operation and named fragment.  The flag is only applied where
+# it is valid (i.e. to fields whose selection is a single fragment-spread
+# of a compatible type); other fields are unaffected, so it is safe to
+# enable project-wide.  Per-node `# @genqlient(flatten: ...)` directives
+# still take precedence.
+#
+# See the flatten documentation in docs/genqlient_directive.graphql for
+# details on what flattening does.
+#
+# Defaults to false.
+flatten: boolean
+
+# If set, generated code will have a third return parameter of type
 # map[string]interface{}. This will contain the optional values
 # of the Extensions field send from Servers.
 # ref.: https://spec.graphql.org/October2021/#sec-Response-Format

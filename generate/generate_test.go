@@ -277,6 +277,11 @@ func TestGenerateWithConfig(t *testing.T) {
 				},
 			},
 		},
+		{
+			"Flatten", "", []string{"FlattenConfig.graphql"}, &Config{
+				Flatten: true,
+			},
+		},
 	}
 
 	for _, test := range tests {
