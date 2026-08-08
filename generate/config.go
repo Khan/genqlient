@@ -325,9 +325,6 @@ func ReadAndValidateConfig(filename string) (*Config, error) {
 	}
 
 	var config Config
-	// yaml.v3 has no UnmarshalStrict; a decoder with KnownFields(true) is the
-	// equivalent, rejecting unknown fields. An empty file decodes to io.EOF,
-	// which we treat as an empty config (as yaml.v2's UnmarshalStrict did).
 	dec := yaml.NewDecoder(bytes.NewReader(text))
 	dec.KnownFields(true)
 	err = dec.Decode(&config)
