@@ -47,10 +47,15 @@ linters-settings:
         files: $all
         allow:
           - $gostd
+          # depguard resolves imports by longest-prefix match, so the
+          # "go.yaml.in/..." entry below registers a "go" prefix that shadows
+          # the shorter $gostd-provided stdlib "go/..." packages (go/token,
+          # go/ast, ...). Re-allow them explicitly.
+          - go/
           - github.com/Khan/genqlient
           - github.com/vektah/gqlparser/v2
           - golang.org/x/tools
-          - gopkg.in/yaml.v2
+          - go.yaml.in/yaml/v3
           - github.com/alexflint/go-arg
           - github.com/bmatcuk/doublestar/v4
           - github.com/google/uuid

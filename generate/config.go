@@ -1,15 +1,18 @@
 package generate
 
 import (
+	"bytes"
 	_ "embed"
+	"errors"
 	"fmt"
 	"go/token"
+	"io"
 	"os"
 	"path/filepath"
 	"strings"
 
+	"go.yaml.in/yaml/v3"
 	"golang.org/x/tools/go/packages"
-	"gopkg.in/yaml.v2"
 )
 
 var cfgFilenames = []string{".genqlient.yml", ".genqlient.yaml", "genqlient.yml", "genqlient.yaml"}
@@ -323,8 +326,10 @@ func ReadAndValidateConfig(filename string) (*Config, error) {
 	}
 
 	var config Config
-	err = yaml.UnmarshalStrict(text, &config)
-	if err != nil {
+	dec := yaml.NewDecoder(bytes.NewReader(text))
+	dec.KnownFields(true)
+	err = dec.Decode(&config)
+	if err != nil && !errors.Is(err, io.EOF) {
 		return nil, errorf(nil, "invalid config file %v: %v", filename, err)
 	}
 

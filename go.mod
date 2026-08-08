@@ -13,8 +13,8 @@ require (
 	github.com/gorilla/websocket v1.5.0
 	github.com/stretchr/testify v1.9.0
 	github.com/vektah/gqlparser/v2 v2.5.19
+	go.yaml.in/yaml/v3 v3.0.4
 	golang.org/x/tools v0.36.0
-	gopkg.in/yaml.v2 v2.4.0
 )
 
 require (
