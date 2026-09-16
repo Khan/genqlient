@@ -31,7 +31,7 @@ type subscription struct {
 	id              string
 
 	// Hold when accessing _hasBeenUnsubscribed or interfaceChan.
-	hasBeenUnsubscribedMu sync.Mutex
+	hasBeenUnsubscribedMu sync.RWMutex
 	_hasBeenUnsubscribed  bool
 }
 
@@ -43,8 +43,8 @@ func (s *subscription) unsubscribe() {
 }
 
 func (s *subscription) hasBeenUnsubscribed() bool {
-	s.hasBeenUnsubscribedMu.Lock()
-	defer s.hasBeenUnsubscribedMu.Unlock()
+	s.hasBeenUnsubscribedMu.RLock()
+	defer s.hasBeenUnsubscribedMu.RUnlock()
 
 	return s._hasBeenUnsubscribed
 }
@@ -60,8 +60,8 @@ func (s *subscription) closeInterfaceChan() {
 }
 
 func (s *subscription) getInterfaceChan() interface{} {
-	s.hasBeenUnsubscribedMu.Lock()
-	defer s.hasBeenUnsubscribedMu.Unlock()
+	s.hasBeenUnsubscribedMu.RLock()
+	defer s.hasBeenUnsubscribedMu.RUnlock()
 
 	return s.interfaceChan
 }
