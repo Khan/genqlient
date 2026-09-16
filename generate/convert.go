@@ -239,7 +239,20 @@ func (g *generator) convertType(
 		// Type is a list.
 		elem, err := g.convertType(
 			namePrefix, typ.Elem, selectionSet, options, queryOptions)
-		return &goSliceType{elem}, err
+		// For list types, we need to handle pointer_omitempty here because
+		// the code below won't be executed for slices.
+		// If the list itself is nullable (e.g., [String!] vs [String!]!),
+		// and pointer_omitempty is configured, we should set omitempty.
+		if err != nil {
+			return nil, err
+		}
+		if g.Config.Optional == "pointer_omitempty" && !typ.NonNull {
+			if options.Omitempty == nil {
+				oe := true
+				options.Omitempty = &oe
+			}
+		}
+		return &goSliceType{elem}, nil
 	}
 
 	// If this is a builtin type or custom scalar, just refer to it.

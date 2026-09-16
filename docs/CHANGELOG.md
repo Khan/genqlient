@@ -24,7 +24,14 @@ When releasing a new version:
 
 ### New features:
 
+- Added a global `flatten` option to `genqlient.yaml` that applies `@genqlient(flatten: true)` to every operation and named fragment, so flattenable fragment-spreads are flattened project-wide without per-query directives (fixes #404). It is only applied where flattening is valid, so it is safe to enable globally.
+- Added `--version` flag to print version information including commit hash and build date
+
 ### Bug fixes:
+
+- replaced the archived `gopkg.in/yaml.v2` dependency with the maintained `go.yaml.in/yaml/v3` (the YAML organization's successor to `gopkg.in/yaml.v3`) for config parsing.
+- fixed `pointer_omitempty` not being applied to list types when `use_struct_references` is enabled. List fields like `[String!]` now correctly get the `omitempty` JSON tag.
+- fixed minor typos and grammatical issues across the project
 
 ## v0.9.0
 

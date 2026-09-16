@@ -44,15 +44,19 @@ const (
 )
 
 type webSocketClient struct {
-	Dialer        Dialer
-	header        http.Header
-	endpoint      string
-	conn          WSConn
-	connParams    map[string]interface{}
+	Dialer     Dialer
+	conn       WSConn
+	header     http.Header
+	connParams map[string]interface{}
+	// Closed when exiting the receive loop in listenWebSocket
 	errChan       chan error
+	endpoint      string
 	subscriptions subscriptionMap
-	isClosing     bool
-	sync.Mutex
+
+	// Hold when accessing `exitListenWebSocket`
+	exitListenWebSocketMu sync.Mutex
+	// Set to indicate the listenWebSocket should exit
+	exitListenWebSocket bool
 }
 
 type webSocketInitMessage struct {
@@ -104,27 +108,35 @@ func (w *webSocketClient) waitForConnAck() error {
 	return nil
 }
 
-func (w *webSocketClient) handleErr(err error) {
-	w.Lock()
-	defer w.Unlock()
-	if !w.isClosing {
-		w.errChan <- err
-	}
-}
-
 func (w *webSocketClient) listenWebSocket() {
 	for {
-		if w.isClosing {
+		// The listenWebSocket goroutine "owns" interfaceChan. Both sending
+		// (in forwardWebSocketData below) and closure (here) happen in this
+		// goroutine, so there is no possibility of races between send and close.
+		//
+		// interfaceChan's are closed at the top of listenWebSocket to
+		// guarantee the channels are closed even if listenWebSocket will exit.
+		w.subscriptions.forEachSubscription(func(sub *subscription) {
+			if sub.hasBeenUnsubscribed() && sub.interfaceChan != nil {
+				reflect.ValueOf(sub.interfaceChan).Close()
+				sub.interfaceChan = nil
+			}
+		})
+		w.exitListenWebSocketMu.Lock()
+		if w.exitListenWebSocket {
+			close(w.errChan)
+			w.exitListenWebSocketMu.Unlock()
 			return
 		}
+		w.exitListenWebSocketMu.Unlock()
 		_, message, err := w.conn.ReadMessage()
 		if err != nil {
-			w.handleErr(err)
+			w.errChan <- err
 			return
 		}
 		err = w.forwardWebSocketData(message)
 		if err != nil {
-			w.handleErr(err)
+			w.errChan <- err
 			return
 		}
 	}
@@ -139,22 +151,20 @@ func (w *webSocketClient) forwardWebSocketData(message []byte) error {
 	if wsMsg.ID == "" { // e.g. keep-alive messages
 		return nil
 	}
-	w.subscriptions.Lock()
-	defer w.subscriptions.Unlock()
-	sub, success := w.subscriptions.map_[wsMsg.ID]
-	if !success {
-		return fmt.Errorf("received message for unknown subscription ID '%s'", wsMsg.ID)
-	}
-	if sub.hasBeenUnsubscribed {
-		return nil
-	}
 	if wsMsg.Type == webSocketTypeComplete {
-		sub.hasBeenUnsubscribed = true
-		w.subscriptions.map_[wsMsg.ID] = sub
-		reflect.ValueOf(sub.interfaceChan).Close()
-		return nil
+		return w.subscriptions.Unsubscribe(wsMsg.ID)
 	}
 
+	sub, ok := w.subscriptions.GetSubscription(wsMsg.ID)
+	if !ok {
+		return fmt.Errorf("received message for unknown subscription ID '%s'", wsMsg.ID)
+	}
+	// Note: there's no data race between hasBeenUnsubscribed and the closed
+	// state of interfaceChan because interfaceChan is only closed by the
+	// caller of this function.
+	if sub.hasBeenUnsubscribed() {
+		return nil
+	}
 	return sub.forwardDataFunc(sub.interfaceChan, wsMsg.Payload)
 }
 
@@ -206,10 +216,11 @@ func (w *webSocketClient) Close() error {
 	if err != nil {
 		return fmt.Errorf("failed to send closure message: %w", err)
 	}
-	w.Lock()
-	defer w.Unlock()
-	w.isClosing = true
-	close(w.errChan)
+
+	w.exitListenWebSocketMu.Lock()
+	w.exitListenWebSocket = true
+	w.exitListenWebSocketMu.Unlock()
+
 	return w.conn.Close()
 }
 

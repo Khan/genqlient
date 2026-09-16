@@ -12,10 +12,10 @@ func forgeTestWebSocketClient(hasBeenUnsubscribed bool) *webSocketClient {
 	return &webSocketClient{
 		subscriptions: subscriptionMap{
 			RWMutex: sync.RWMutex{},
-			map_: map[string]subscription{
+			map_: map[string]*subscription{
 				testSubscriptionID: {
-					hasBeenUnsubscribed: hasBeenUnsubscribed,
-					interfaceChan:       make(chan any),
+					_hasBeenUnsubscribed: hasBeenUnsubscribed,
+					interfaceChan:        make(chan any),
 					forwardDataFunc: func(interfaceChan any, jsonRawMsg json.RawMessage) error {
 						return nil
 					},

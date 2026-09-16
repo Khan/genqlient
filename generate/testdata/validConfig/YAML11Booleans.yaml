@@ -1,0 +1,10 @@
+schema: schema.graphql
+operations: operations.graphql
+
+# YAML 1.1 boolean spellings (yes/no/on/off) must still decode to bools, as
+# they did under gopkg.in/yaml.v2, to avoid breaking existing config files.
+use_struct_references: yes
+use_extensions: on
+
+# Octal-looking strings must stay strings (e.g. "0777", not 511).
+export_operations: 0777

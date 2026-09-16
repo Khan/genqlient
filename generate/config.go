@@ -1,15 +1,18 @@
 package generate
 
 import (
+	"bytes"
 	_ "embed"
+	"errors"
 	"fmt"
 	"go/token"
+	"io"
 	"os"
 	"path/filepath"
 	"strings"
 
+	"go.yaml.in/yaml/v3"
 	"golang.org/x/tools/go/packages"
-	"gopkg.in/yaml.v2"
 )
 
 var cfgFilenames = []string{".genqlient.yml", ".genqlient.yaml", "genqlient.yml", "genqlient.yaml"}
@@ -36,6 +39,7 @@ type Config struct {
 	OptionalGenericType string                  `yaml:"optional_generic_type"`
 	StructReferences    bool                    `yaml:"use_struct_references"`
 	Extensions          bool                    `yaml:"use_extensions"`
+	Flatten             bool                    `yaml:"flatten"`
 
 	// The directory of the config-file (relative to which all the other paths
 	// are resolved).  Set by ValidateAndFillDefaults.
@@ -322,8 +326,10 @@ func ReadAndValidateConfig(filename string) (*Config, error) {
 	}
 
 	var config Config
-	err = yaml.UnmarshalStrict(text, &config)
-	if err != nil {
+	dec := yaml.NewDecoder(bytes.NewReader(text))
+	dec.KnownFields(true)
+	err = dec.Decode(&config)
+	if err != nil && !errors.Is(err, io.EOF) {
 		return nil, errorf(nil, "invalid config file %v: %v", filename, err)
 	}
 
