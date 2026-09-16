@@ -226,10 +226,6 @@ func (w *webSocketClient) Close() error {
 		return fmt.Errorf("failed to unsubscribe: %w", err)
 	}
 
-	w.exitListenWebSocketMu.Lock()
-	w.exitListenWebSocket = true
-	w.exitListenWebSocketMu.Unlock()
-
 	err = w.conn.WriteMessage(closeMessage, formatCloseMessage(closeNormalClosure, ""))
 	if err != nil {
 		closeErr := w.conn.Close()
@@ -238,6 +234,10 @@ func (w *webSocketClient) Close() error {
 		}
 		return fmt.Errorf("failed to send closure message: %w", err)
 	}
+
+	w.exitListenWebSocketMu.Lock()
+	w.exitListenWebSocket = true
+	w.exitListenWebSocketMu.Unlock()
 
 	return w.conn.Close()
 }
