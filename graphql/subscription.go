@@ -73,8 +73,8 @@ func (s *subscriptionMap) Unsubscribe(subscriptionID string) error {
 }
 
 func (s *subscriptionMap) forEachSubscription(fn func(sub *subscription)) {
-	s.Lock()
-	defer s.Unlock()
+	s.RLock()
+	defer s.RUnlock()
 
 	for id := range s.map_ {
 		fn(s.map_[id])
@@ -82,8 +82,8 @@ func (s *subscriptionMap) forEachSubscription(fn func(sub *subscription)) {
 }
 
 func (s *subscriptionMap) GetSubscription(subscriptionID string) (*subscription, bool) {
-	s.Lock()
-	defer s.Unlock()
+	s.RLock()
+	defer s.RUnlock()
 	sub, ok := s.map_[subscriptionID]
 	return sub, ok
 }

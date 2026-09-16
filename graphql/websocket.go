@@ -122,24 +122,35 @@ func (w *webSocketClient) listenWebSocket() {
 				sub.interfaceChan = nil
 			}
 		})
-		w.exitListenWebSocketMu.Lock()
-		if w.exitListenWebSocket {
+		if w.isClosing() {
 			close(w.errChan)
-			w.exitListenWebSocketMu.Unlock()
 			return
 		}
-		w.exitListenWebSocketMu.Unlock()
 		_, message, err := w.conn.ReadMessage()
 		if err != nil {
+			if w.isClosing() {
+				close(w.errChan)
+				return
+			}
 			w.errChan <- err
 			return
 		}
 		err = w.forwardWebSocketData(message)
 		if err != nil {
+			if w.isClosing() {
+				close(w.errChan)
+				return
+			}
 			w.errChan <- err
 			return
 		}
 	}
+}
+
+func (w *webSocketClient) isClosing() bool {
+	w.exitListenWebSocketMu.Lock()
+	defer w.exitListenWebSocketMu.Unlock()
+	return w.exitListenWebSocket
 }
 
 func (w *webSocketClient) forwardWebSocketData(message []byte) error {
@@ -212,14 +223,15 @@ func (w *webSocketClient) Close() error {
 	if err != nil {
 		return fmt.Errorf("failed to unsubscribe: %w", err)
 	}
-	err = w.conn.WriteMessage(closeMessage, formatCloseMessage(closeNormalClosure, ""))
-	if err != nil {
-		return fmt.Errorf("failed to send closure message: %w", err)
-	}
 
 	w.exitListenWebSocketMu.Lock()
 	w.exitListenWebSocket = true
 	w.exitListenWebSocketMu.Unlock()
+
+	err = w.conn.WriteMessage(closeMessage, formatCloseMessage(closeNormalClosure, ""))
+	if err != nil {
+		return fmt.Errorf("failed to send closure message: %w", err)
+	}
 
 	return w.conn.Close()
 }
