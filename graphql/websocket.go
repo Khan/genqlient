@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"reflect"
 	"strings"
 	"sync"
 	"time"
@@ -117,29 +116,39 @@ func (w *webSocketClient) listenWebSocket() {
 		// interfaceChan's are closed at the top of listenWebSocket to
 		// guarantee the channels are closed even if listenWebSocket will exit.
 		w.subscriptions.forEachSubscription(func(sub *subscription) {
-			if sub.hasBeenUnsubscribed() && sub.interfaceChan != nil {
-				reflect.ValueOf(sub.interfaceChan).Close()
-				sub.interfaceChan = nil
+			if sub.hasBeenUnsubscribed() {
+				sub.closeInterfaceChan()
 			}
 		})
-		w.exitListenWebSocketMu.Lock()
-		if w.exitListenWebSocket {
+		if w.isClosing() {
 			close(w.errChan)
-			w.exitListenWebSocketMu.Unlock()
 			return
 		}
-		w.exitListenWebSocketMu.Unlock()
 		_, message, err := w.conn.ReadMessage()
 		if err != nil {
+			if w.isClosing() {
+				close(w.errChan)
+				return
+			}
 			w.errChan <- err
 			return
 		}
 		err = w.forwardWebSocketData(message)
 		if err != nil {
+			if w.isClosing() {
+				close(w.errChan)
+				return
+			}
 			w.errChan <- err
 			return
 		}
 	}
+}
+
+func (w *webSocketClient) isClosing() bool {
+	w.exitListenWebSocketMu.Lock()
+	defer w.exitListenWebSocketMu.Unlock()
+	return w.exitListenWebSocket
 }
 
 func (w *webSocketClient) forwardWebSocketData(message []byte) error {
@@ -165,7 +174,11 @@ func (w *webSocketClient) forwardWebSocketData(message []byte) error {
 	if sub.hasBeenUnsubscribed() {
 		return nil
 	}
-	return sub.forwardDataFunc(sub.interfaceChan, wsMsg.Payload)
+	interfaceChan := sub.getInterfaceChan()
+	if interfaceChan == nil {
+		return nil
+	}
+	return sub.forwardDataFunc(interfaceChan, wsMsg.Payload)
 }
 
 func (w *webSocketClient) receiveWebSocketConnAck() (bool, error) {
@@ -212,8 +225,13 @@ func (w *webSocketClient) Close() error {
 	if err != nil {
 		return fmt.Errorf("failed to unsubscribe: %w", err)
 	}
+
 	err = w.conn.WriteMessage(closeMessage, formatCloseMessage(closeNormalClosure, ""))
 	if err != nil {
+		closeErr := w.conn.Close()
+		if closeErr != nil {
+			return fmt.Errorf("failed to send closure message: %w; additionally failed to close websocket: %v", err, closeErr)
+		}
 		return fmt.Errorf("failed to send closure message: %w", err)
 	}
 
