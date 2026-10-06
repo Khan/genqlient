@@ -950,8 +950,18 @@ func (g *generator) convertField(
 
 	namePrefix = nextPrefix(namePrefix, field, g.Config.GetDefaultCasingAlgorithm())
 
+	// A field with @skip or @include may be absent from the response even when
+	// its schema type is non-null, so treat it as nullable (like `id: ID` rather
+	// than `id: ID!`) and let the usual optional-handling decide.
+	fieldType := field.Definition.Type
+	if field.Directives.ForName("skip") != nil || field.Directives.ForName("include") != nil {
+		nullableType := *fieldType
+		nullableType.NonNull = false
+		fieldType = &nullableType
+	}
+
 	fieldGoType, err := g.convertType(
-		namePrefix, field.Definition.Type, field.SelectionSet,
+		namePrefix, fieldType, field.SelectionSet,
 		fieldOptions, queryOptions)
 	if err != nil {
 		return nil, err

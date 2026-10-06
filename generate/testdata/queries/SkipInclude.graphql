@@ -1,0 +1,7 @@
+query SkipInclude($skipId: Boolean!, $includeEmails: Boolean!) {
+  user {
+    id @skip(if: $skipId)
+    name
+    emails @include(if: $includeEmails)
+  }
+}
