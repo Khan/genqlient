@@ -226,6 +226,7 @@ func TestGenerateWithConfig(t *testing.T) {
 			"QueryWithSlices.graphql",
 			"SimpleQueryWithPointerFalseOverride.graphql",
 			"SimpleQueryNoOverride.graphql",
+			"SkipInclude.graphql",
 		}, &Config{
 			Optional: "pointer",
 		}},
