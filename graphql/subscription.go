@@ -2,6 +2,7 @@ package graphql
 
 import (
 	"fmt"
+	"reflect"
 	"sync"
 )
 
@@ -29,8 +30,8 @@ type subscription struct {
 	forwardDataFunc ForwardDataFunction
 	id              string
 
-	// Hold when accessing _hasBeenUnsubscribed
-	hasBeenUnsubscribedMu sync.Mutex
+	// Hold when accessing _hasBeenUnsubscribed or interfaceChan.
+	hasBeenUnsubscribedMu sync.RWMutex
 	_hasBeenUnsubscribed  bool
 }
 
@@ -42,10 +43,27 @@ func (s *subscription) unsubscribe() {
 }
 
 func (s *subscription) hasBeenUnsubscribed() bool {
+	s.hasBeenUnsubscribedMu.RLock()
+	defer s.hasBeenUnsubscribedMu.RUnlock()
+
+	return s._hasBeenUnsubscribed
+}
+
+func (s *subscription) closeInterfaceChan() {
 	s.hasBeenUnsubscribedMu.Lock()
 	defer s.hasBeenUnsubscribedMu.Unlock()
 
-	return s._hasBeenUnsubscribed
+	if s.interfaceChan != nil {
+		reflect.ValueOf(s.interfaceChan).Close()
+		s.interfaceChan = nil
+	}
+}
+
+func (s *subscription) getInterfaceChan() interface{} {
+	s.hasBeenUnsubscribedMu.RLock()
+	defer s.hasBeenUnsubscribedMu.RUnlock()
+
+	return s.interfaceChan
 }
 
 func (s *subscriptionMap) Create(subscriptionID string, interfaceChan interface{}, forwardDataFunc ForwardDataFunction) {
@@ -73,17 +91,21 @@ func (s *subscriptionMap) Unsubscribe(subscriptionID string) error {
 }
 
 func (s *subscriptionMap) forEachSubscription(fn func(sub *subscription)) {
-	s.Lock()
-	defer s.Unlock()
+	s.RLock()
+	subscriptions := make([]*subscription, 0, len(s.map_))
+	for _, sub := range s.map_ {
+		subscriptions = append(subscriptions, sub)
+	}
+	s.RUnlock()
 
-	for id := range s.map_ {
-		fn(s.map_[id])
+	for _, sub := range subscriptions {
+		fn(sub)
 	}
 }
 
 func (s *subscriptionMap) GetSubscription(subscriptionID string) (*subscription, bool) {
-	s.Lock()
-	defer s.Unlock()
+	s.RLock()
+	defer s.RUnlock()
 	sub, ok := s.map_[subscriptionID]
 	return sub, ok
 }
