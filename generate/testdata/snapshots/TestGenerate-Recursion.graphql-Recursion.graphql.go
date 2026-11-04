@@ -54,11 +54,15 @@ type RecursionResponse struct {
 func (v *RecursionResponse) GetRecur() RecursionRecurRecursive { return v.Recur }
 
 type RecursiveInput struct {
-	Rec []RecursiveInput `json:"rec"`
+	Rec    []RecursiveInput `json:"rec"`
+	Direct *RecursiveInput  `json:"direct"`
 }
 
 // GetRec returns RecursiveInput.Rec, and is useful for accessing the field via an interface.
 func (v *RecursiveInput) GetRec() []RecursiveInput { return v.Rec }
+
+// GetDirect returns RecursiveInput.Direct, and is useful for accessing the field via an interface.
+func (v *RecursiveInput) GetDirect() *RecursiveInput { return v.Direct }
 
 // __RecursionInput is used internally by genqlient
 type __RecursionInput struct {

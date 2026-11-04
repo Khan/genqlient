@@ -99,6 +99,12 @@ directive genqlient(
   # This can be useful if it's a type you'll need to pass around (and want a
   # pointer to save copies) or if you wish to distinguish between the Go
   # zero value and null (for nullable fields).
+  #
+  # A generated input struct's direct reference to itself automatically uses
+  # a pointer, since Go does not allow a struct to contain itself by value.
+  # Setting pointer: false on such a field is an error. This does not change
+  # lists, bindings, or generic wrappers, or handle cycles between distinct
+  # input structs; those may still need explicit pointer directives.
   pointer: Boolean
 
   # If set, this field will use a struct type in Go, even if it's an interface.

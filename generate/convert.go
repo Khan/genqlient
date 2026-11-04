@@ -475,6 +475,16 @@ func (g *generator) convertDefinition(
 				return nil, err
 			}
 
+			// A struct cannot contain itself by value. Only adjust a direct
+			// reference: slices, pointers, and user-provided types may already
+			// provide the indirection needed for recursive inputs.
+			if fieldGoType == goType {
+				if fieldOptions.PointerIsFalse() {
+					return nil, errorf(field.Position, "pointer: false is not allowed on a self-recursive input field: %s.%s", name, field.Name)
+				}
+				fieldGoType = &goPointerType{Elem: fieldGoType}
+			}
+
 			if !g.Config.StructReferences {
 				// Only do this validation when StructReferences are not used, as that can generate types that would not
 				// pass these validations. See https://github.com/Khan/genqlient/issues/342
