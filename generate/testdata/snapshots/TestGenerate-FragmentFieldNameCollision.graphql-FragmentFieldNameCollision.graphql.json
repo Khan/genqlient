@@ -1,0 +1,9 @@
+{
+  "operations": [
+    {
+      "operationName": "FragmentFieldNameCollision",
+      "query": "\nquery FragmentFieldNameCollision {\n\troot {\n\t\t... Children\n\t}\n}\nfragment Children on Topic {\n\tname\n\tchildren {\n\t\t__typename\n\t\tid\n\t}\n}\n",
+      "sourceLocation": "testdata/queries/FragmentFieldNameCollision.graphql"
+    }
+  ]
+}

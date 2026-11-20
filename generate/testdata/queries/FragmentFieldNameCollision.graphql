@@ -1,0 +1,12 @@
+fragment Children on Topic {
+  name
+  children {
+    id
+  }
+}
+
+query FragmentFieldNameCollision {
+  root {
+    ...Children
+  }
+}
