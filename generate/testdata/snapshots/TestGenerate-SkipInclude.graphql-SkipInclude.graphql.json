@@ -1,0 +1,9 @@
+{
+  "operations": [
+    {
+      "operationName": "SkipInclude",
+      "query": "\nquery SkipInclude ($skipId: Boolean!, $includeEmails: Boolean!) {\n\tuser {\n\t\tid @skip(if: $skipId)\n\t\tname\n\t\temails @include(if: $includeEmails)\n\t}\n}\n",
+      "sourceLocation": "testdata/queries/SkipInclude.graphql"
+    }
+  ]
+}

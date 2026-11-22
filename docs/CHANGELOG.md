@@ -14,6 +14,7 @@ When releasing a new version:
 
 ### Bug fixes:
 
+- fields with `@skip` or `@include` are now treated as nullable: under `optional: pointer` or `optional: generic` they generate as a pointer or `Option` and can represent an absent value, instead of silently decoding an absent field to the zero value (#424). This is technically a breaking change for non-null fields with `@skip`/`@include` under those configs.
 -->
 
 ## next
