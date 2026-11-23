@@ -34,6 +34,7 @@ Note that genqlient now requires Go 1.23 or higher, and is tested through Go 1.2
 
 ### Bug fixes:
 
+- Fix invalid generated Go when a named fragment and a field requiring custom JSON decoding share a Go name (#415).
 - Automatically use pointers for direct self-references in generated input structs, instead of generating invalid recursive Go types (#152). An explicit `pointer: false` on such a field now reports an error.
 - replaced the archived `gopkg.in/yaml.v2` dependency with the maintained `go.yaml.in/yaml/v3` (the YAML organization's successor to `gopkg.in/yaml.v3`) for config parsing.
 - fixed `pointer_omitempty` not being applied to list types when `use_struct_references` is enabled. List fields like `[String!]` now correctly get the `omitempty` JSON tag.

@@ -41,8 +41,19 @@ func (v *{{.GoName}}) UnmarshalJSON(b []byte) error {
 
     {{/* TODO(benkraft): Omit/simplify the first pass if all fields are
          embedded/abstract. */ -}}
+    {{/* An embedded field takes its name from its type. Use a local alias
+         if that name is already used by a raw JSON field. */ -}}
+    {{$embeddedType := .GoName -}}
+    {{range .Fields -}}
+    {{if and .NeedsMarshaling (eq .GoName $.GoName) -}}
+    {{$embeddedType = "__genqlientTarget" -}}
+    {{end -}}
+    {{end -}}
+    {{if ne $embeddedType .GoName -}}
+    type {{$embeddedType}} = {{.GoName}}
+    {{end -}}
     var firstPass struct{
-        *{{.GoName}}
+        *{{$embeddedType}}
         {{range .Fields -}}
         {{if and .NeedsMarshaling (not .IsEmbedded) -}}
         {{.GoName}} {{repeat .GoType.SliceDepth "[]"}}{{ref "encoding/json.RawMessage"}} `json:"{{.JSONName}}"`
@@ -52,7 +63,7 @@ func (v *{{.GoName}}) UnmarshalJSON(b []byte) error {
              conflicts with this one; avoid that. */ -}}
         {{ref "github.com/Khan/genqlient/graphql.NoUnmarshalJSON"}}
     }
-    firstPass.{{.GoName}} = v
+    firstPass.{{$embeddedType}} = v
 
     err := {{ref "encoding/json.Unmarshal"}}(b, &firstPass)
     if err != nil {
